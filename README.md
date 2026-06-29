@@ -1,62 +1,98 @@
-# kudbee-music — "Hermes" music-video studio
+<div align="center">
 
-An agent-driven studio that turns a song + reference assets into a finished
-**1080p music video**, rendered entirely from code (headless Chromium + ffmpeg).
-No paid software. Built for *Stay There × Fuck Em × Poverty Porn (Mashup)* by Dom Shady / kudbee.
+# 🎬 HERMES
 
-> The repo is the "brain": the song, its analysis, the creative treatment, the
-> shot list, and the render engine all live here, so the video is fully
-> reproducible and re-renderable.
+### Turn a song into a finished music video — entirely from code.
 
-## Output
-`out/kudbee-music-video-1080p.mp4` — 1920×1080, 30fps, H.264+AAC, 2:38.
-(Git-ignored to keep the repo light; run the render to regenerate.)
+Agent-driven. Headless Chromium + ffmpeg. **No paid software, no editor, $0.**
 
-## The "Hermes" agents (`.claude/agents/`)
-Each owns one stage of the pipeline:
+<img src="media/demo-intro.gif" width="49%" alt="cinematic studio intro"/> <img src="media/demo-hook.gif" width="49%" alt="kinetic-typography hook"/>
 
-| Agent | Stage | Output |
-|-------|-------|--------|
-| **hermes-director** | concept & palette | `brain/treatment.md` |
-| **hermes-analyst**  | audio analysis | `song/analysis.json` |
-| **hermes-lyricist** | lyric timing | `song/sync-map.json` |
-| **hermes-art**      | scene visuals | `studio/player.html` scenes |
-| **hermes-editor**   | arrangement / cuts | `studio/config.json` |
-| **hermes-render**   | render & mux | `out/*.mp4` |
-| **hermes-qa**       | review | issue list |
+[**▶ Watch the full demo video**](media/kudbee-music-video-1080p.mp4) · [How it works](#how-it-works) · [Quickstart](#quickstart) · [Scene packs](#scene-packs) · [Roadmap](#roadmap)
 
-## How it works
-1. **Analyze** — `studio/analyze.mjs` decodes the track and derives duration, BPM,
-   a beat grid, and a per-frame loudness envelope → `song/analysis.json`.
-2. **Arrange** — `studio/build-timeline.mjs` lays out scenes + distributes lyric
-   lines across each section (beat-snapped) → `studio/config.json`, `song/sync-map.json`.
-3. **Composite** — `studio/player.html` is a frame-driven `<canvas>` that draws
-   hero footage + procedural neo-noir scenes (neon arches, spinning vortex, glitch,
-   warped hallway) + kinetic-typography lyrics, all in the locked amber↔magenta palette.
-4. **Render** — `studio/render.mjs` drives headless Chromium frame-by-frame,
-   supplies the right hero frame per scene, screenshots each frame, and pipes them
-   into ffmpeg, muxing the original audio.
+</div>
 
-## Assets
-- `song/track.mp3` — the mashup (user owns the copyright).
-- `assets/hero-still.png` — defining frame + master palette reference.
-- `assets/hero-clip-01.mp4`, `assets/hero-clip-02.mp4` — hero footage (VIDEO-ONLY;
-  audio stripped — the mashup is the only soundtrack).
+---
 
-## Build it yourself
+HERMES is a small studio that turns **a song + a few reference clips** into a
+real, vocal-synced **1080p music video** — composited frame-by-frame in a
+headless browser and encoded with ffmpeg. A roster of "Hermes" agents handles
+each stage (analyze the audio, align the lyrics, design the look, cut the
+timeline, render, QA), so the whole thing runs from one command.
+
+The flagship demo is a finished 2:38 video for *"Stay There × Fuck Em × Poverty
+Porn"* by **Dom Shady / kudbee** — cinematic neo-noir, forced-aligned lyrics,
+25 hero shots cut to the beat.
+
+## Why it's different
+- **Code, not a timeline editor.** The whole video is a deterministic program —
+  reproducible, diffable, re-renderable. Change a line, re-run, done.
+- **Agent-driven.** Each pipeline stage is an explicit agent you can read, swap, or extend.
+- **Free + self-contained.** Headless Chromium (frames) + ffmpeg (encode). No SaaS, no GPU required.
+- **Lyric-accurate.** Whisper word-timestamps are force-aligned to your exact lyrics, so on-screen text lands on the vocal — even when ASR struggles on a hook (it recovers).
+
+## Quickstart
 ```bash
-npm install                 # playwright
+git clone https://github.com/KudbeeZero/kudbee-music && cd kudbee-music
+npm install
 # ffmpeg: a static build is expected at .bin/ffmpeg (or set $FFMPEG / $FFPROBE)
-node studio/prep-frames.mjs # extract hero clip frames -> assets/frames/
-pip install faster-whisper  # optional: forced lyric alignment
-python studio/transcribe.py # optional: -> song/whisper.json (word timestamps)
-npm run build               # analyze -> timeline -> full render
-# or a quick look:
-npm run render:preview      # renders the 40-56s hook slice
+
+node bin/hermes prep        # extract hero-clip frames
+node bin/hermes preview     # render a short slice -> out/preview.mp4
+node bin/hermes build       # full render -> out/kudbee-music-video-1080p.mp4
 ```
 
-## Tuning
-- **Lyric sync:** edit `song/sync-map.json` (`start`/`end` per line) — current
-  timing is a structural first pass to nudge against the vocal.
-- **Pacing / scene order:** edit `SECTIONS` in `studio/build-timeline.mjs`, re-run it.
-- **Look of a scene:** edit the scene fns in `studio/player.html`.
+To use your own track: drop `song/track.mp3`, your lyrics in `song/lyrics.md`,
+and reference clips as `assets/hero-clip-NN.mp4`, then `hermes build`.
+
+## How it works
+```
+song + clips
+   │
+   ├─ hermes-analyst   audio → duration, BPM, beat grid, per-frame loudness   (analyze.mjs)
+   ├─ hermes-lyricist  Whisper word-times → force-aligned lyric sync-map       (transcribe.py + align.mjs)
+   ├─ hermes-director  reference look → treatment (palette, mood)              (brain/treatment.md)
+   ├─ hermes-editor    sections + per-line sub-shots, beat-snapped             (build-timeline.mjs)
+   ├─ hermes-art       procedural scenes + hero footage + kinetic type         (player.html)
+   ├─ hermes-render    headless Chromium → JPEG frames → ffmpeg (H.264+AAC)     (render.mjs)
+   └─ hermes-qa        spot-check frames, sync drift, palette                  (review)
+   │
+   ▼  out/*.mp4  (1920×1080, muxed with your audio)
+```
+The compositor (`studio/player.html`) is a **frame-driven `<canvas>`**: each
+frame is a pure function of its index + the audio loudness, so renders are
+deterministic. It draws hero footage *or* procedural scenes (neon corridor,
+spinning vortex, glitch, warped hallway), then a split-tone grade, film grain,
+vignette, and word-by-word kinetic-typography lyrics.
+
+## The Hermes agents (`.claude/agents/`)
+| Agent | Stage | Output |
+|-------|-------|--------|
+| hermes-director | concept & palette | `brain/treatment.md` |
+| hermes-analyst  | audio analysis | `song/analysis.json` |
+| hermes-lyricist | lyric timing | `song/sync-map.json` |
+| hermes-art      | scene visuals | `studio/player.html` |
+| hermes-editor   | arrangement / cuts | `studio/config.json` |
+| hermes-render   | render & mux | `out/*.mp4` |
+| hermes-qa       | review | issue list |
+
+## Scene packs
+A **scene pack** is a visual style — a palette, fonts, and a set of scene
+modules. The built-in pack is [`neo-noir`](scene-packs/neo-noir/pack.json).
+Adding a pack is the best way to contribute: see
+[CONTRIBUTING](CONTRIBUTING.md). (The pluggable pack interface is on the roadmap;
+the manifest documents the current look and is the template for new packs.)
+
+## Roadmap
+- [ ] Pluggable **scene-pack** interface + 3–4 packs (retrowave, vhs-lofi, lyric-minimal)
+- [ ] `hermes new` project scaffold + `hermes.json` project model
+- [ ] Auto song-structure detection (no hand-authored sections)
+- [ ] **9:16 / 1:1** aspect ratios for Shorts/Reels/TikTok
+- [ ] Generative **music** agents — prompt → lyrics → audio (MusicGen) → video
+- [ ] Docs site + examples gallery
+
+## Built with
+Node 22 · headless Chromium (Playwright) · ffmpeg (libx264/AAC) · faster-whisper (optional) · Anton/Oswald (Google Fonts). No paid services.
+
+## License
+[MIT](LICENSE). Demo song © kudbee.
