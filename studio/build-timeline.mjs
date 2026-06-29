@@ -72,11 +72,20 @@ const SECTIONS = [
     "Roll the credits—let the chaos begin." ] },
 ];
 
+// per-section hero footage (keyed by section label). null = procedural scene.
 const HERO = {
-  intro:    { clip: 'clip02', mode: 'slow', factor: 0.5 },
-  corridor: { clip: 'clip02', mode: 'loop' },
-  desk:     { clip: 'clip01', mode: 'loop' },
-  filmnoir: { clip: 'clip01', mode: 'slow', factor: 0.6 },
+  'Intro':      { clip: 'clip03', mode: 'slow', factor: 0.5 }, // corridor push-in
+  'Verse 1a':   { clip: 'clip04', mode: 'loop' },              // writer at desk
+  'Verse 1b':   { clip: 'clip05', mode: 'loop' },              // figure in corridor
+  'Pre-Hook':   { clip: 'clip06', mode: 'loop' },              // orbit light-trails
+  'Hook 1':     { clip: 'clip02', mode: 'loop' },              // corridor walk
+  'Verse 2a':   { clip: 'clip07', mode: 'loop' },              // evidence board
+  'Verse 2b':   { clip: 'clip08', mode: 'loop' },              // film projector
+  'Verse 2c':   { clip: 'clip09', mode: 'loop' },              // doorway whispers
+  'Pre-Hook 2': { clip: 'clip06', mode: 'loop' },              // orbit light-trails
+  'Hook 2':     { clip: 'clip02', mode: 'loop' },              // corridor walk
+  'Bridge':     { clip: 'clip10', mode: 'loop' },              // blue hallway desk
+  'Outro':      { clip: 'clip11', mode: 'loop' },              // cassette tape
 };
 
 // flatten lines in order, with a back-reference to their section
@@ -118,7 +127,7 @@ if (aligned) {
 
 // ---- section windows ----
 const MINLEN = 6.0, LEAD = 1.0;
-const sections = SECTIONS.map(s => ({ scene: s.scene, label: s.label, big: !!s.big, lines: s.lines, start: 0, end: 0 }));
+const sections = SECTIONS.map(s => ({ scene: s.scene, label: s.label, big: !!s.big, hero: HERO[s.label] || null, lines: s.lines, start: 0, end: 0 }));
 if (aligned) {
   // first aligned line index per section
   const firstIdx = {};
@@ -158,7 +167,6 @@ if (aligned) {
 
 const config = {
   fps: analysis.fps, width: 1920, height: 1080, durationSec: DUR, totalFrames: analysis.totalFrames,
-  hero: HERO,
   sections: sections.map(({ lines, ...rest }) => rest),
 };
 // de-crowd: guarantee a minimum on-screen time by spreading any crammed run

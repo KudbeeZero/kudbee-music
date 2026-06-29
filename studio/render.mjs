@@ -45,21 +45,12 @@ function clipFrameDataUrl(clip, localFrame) {
   }
   return { id, dataUrl: url };
 }
-let stillUrl = null;
 function heroFor(t) {
   let sec = C.sections[0]; for (const s of C.sections) if (t >= s.start) sec = s;
-  const lt = t - sec.start;
-  switch (sec.scene) {
-    case 'intro':    return clipFrameDataUrl('clip02', Math.floor(lt * 24 * 0.5));
-    case 'corridor': return clipFrameDataUrl('clip02', Math.floor(lt * 24));
-    case 'desk':     return clipFrameDataUrl('clip01', Math.floor(lt * 24));
-    case 'filmnoir': return clipFrameDataUrl('clip01', Math.floor(lt * 24 * 0.6));
-    case 'glitch':   return clipFrameDataUrl('clip02', Math.floor(lt * 24) + 120);
-    case 'outro':
-      if (!stillUrl) stillUrl = fileToDataUrl(resolve(ROOT, 'assets/hero-still.png'), 'image/png');
-      return { id: 'still', dataUrl: stillUrl };
-    default: return null; // procedural
-  }
+  const h = sec.hero; if (!h) return null;          // procedural scene
+  const factor = h.mode === 'slow' ? (h.factor || 0.5) : 1;
+  const local = Math.floor((t - sec.start) * 24 * factor) + (h.offset || 0);
+  return clipFrameDataUrl(h.clip, local);
 }
 
 function drain(stream){ return new Promise(r => stream.write('') ? r() : stream.once('drain', r)); }
