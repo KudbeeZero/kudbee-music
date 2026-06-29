@@ -198,112 +198,112 @@
   {
     "text": "Dom Shady pacing like a scene on tape,",
     "start": 97.65,
-    "end": 99.14,
+    "end": 98.66,
     "scene": "vortex",
     "big": false
   },
   {
     "text": "Filling each moment with sarcastic shape.",
-    "start": 99.19,
-    "end": 100.69,
+    "start": 98.71,
+    "end": 99.71,
     "scene": "vortex",
     "big": false
   },
   {
     "text": "Drama in the room that nobody escapes,",
-    "start": 100.74,
+    "start": 99.76,
     "end": 101.44,
     "scene": "vortex",
     "big": false
   },
   {
     "text": "Nothing here follows the usual way.",
-    "start": 101.49,
-    "end": 102.19,
+    "start": 101.37,
+    "end": 103.05,
     "scene": "vortex",
     "big": false
   },
   {
     "text": "We go round and round…",
-    "start": 102.12,
-    "end": 106.5,
+    "start": 102.98,
+    "end": 106.26,
     "scene": "corridor",
     "big": true
   },
   {
     "text": "Drop the wrong step, end up underground…",
-    "start": 106.8,
-    "end": 111.19,
+    "start": 106.82,
+    "end": 109.54,
     "scene": "corridor",
     "big": true
   },
   {
     "text": "Gone from the map, never be found…",
-    "start": 111.49,
-    "end": 115.88,
+    "start": 110.3,
+    "end": 113.45,
     "scene": "corridor",
     "big": true
   },
   {
     "text": "Dom Shady hums low with a playful sound.",
-    "start": 116.18,
-    "end": 120.56,
+    "start": 113.36,
+    "end": 120.89,
     "scene": "corridor",
     "big": true
   },
   {
     "text": "Every thought loops back like a hallway bend,",
-    "start": 120.87,
-    "end": 125.25,
+    "start": 120.8,
+    "end": 124.13,
     "scene": "bridge",
     "big": false
   },
   {
     "text": "Every claim they toss twists without an end.",
-    "start": 125.56,
-    "end": 129.94,
+    "start": 124.04,
+    "end": 127.01,
     "scene": "bridge",
     "big": false
   },
   {
     "text": "Rumors bounce wild—none of them blend,",
-    "start": 130.25,
-    "end": 134.63,
+    "start": 126.92,
+    "end": 129.57,
     "scene": "bridge",
     "big": false
   },
   {
     "text": "Dom Shady just wants the script to amend.",
-    "start": 134.93,
-    "end": 139.32,
+    "start": 129.48,
+    "end": 132.24,
     "scene": "bridge",
     "big": false
   },
   {
     "text": "Camera pans out on a crooked grin,",
-    "start": 139.62,
-    "end": 144,
+    "start": 132.56,
+    "end": 135.22,
     "scene": "outro",
     "big": false
   },
   {
     "text": "Pen hits paper like trouble's twin.",
-    "start": 144.31,
-    "end": 148.69,
+    "start": 135.4,
+    "end": 137.96,
     "scene": "outro",
     "big": false
   },
   {
     "text": "Story keeps spinning from within,",
-    "start": 149,
-    "end": 153.38,
+    "start": 138.12,
+    "end": 140.7,
     "scene": "outro",
     "big": false
   },
   {
     "text": "Roll the credits—let the chaos begin.",
-    "start": 153.69,
-    "end": 158.07,
+    "start": 140.88,
+    "end": 144.68,
     "scene": "outro",
     "big": false
   }
