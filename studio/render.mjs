@@ -47,9 +47,14 @@ function clipFrameDataUrl(clip, localFrame) {
 }
 function heroFor(t) {
   let sec = C.sections[0]; for (const s of C.sections) if (t >= s.start) sec = s;
-  const h = sec.hero; if (!h) return null;          // procedural scene
+  let h = sec.hero, originStart = sec.start;         // default: one clip per section
+  if (sec.shots && sec.shots.length) {               // sub-shots that cut on lyric lines
+    let cur = sec.shots[0]; for (const sh of sec.shots) if (t >= sh.start) cur = sh;
+    h = cur; originStart = cur.start;
+  }
+  if (!h) return null;                               // procedural scene
   const factor = h.mode === 'slow' ? (h.factor || 0.5) : 1;
-  const local = Math.floor((t - sec.start) * 24 * factor) + (h.offset || 0);
+  const local = Math.floor((t - originStart) * 24 * factor) + (h.offset || 0);
   return clipFrameDataUrl(h.clip, local);
 }
 

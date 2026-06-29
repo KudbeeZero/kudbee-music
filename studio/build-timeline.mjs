@@ -165,6 +165,24 @@ if (aligned) {
   }
 }
 
+// ---- per-line sub-shots: footage that cuts in on a specific lyric line ----
+const SHOTS = {
+  'Verse 2a': [ {clip:'clip12'}, {clip:'clip07', line:1}, {clip:'clip14', line:2} ], // footprint, evidence, TV wall
+  'Verse 2b': [ {clip:'clip08'}, {clip:'clip13', line:3} ],                          // projector, then doc pull-in on "Cut to me"
+  'Verse 2c': [ {clip:'clip09'}, {clip:'clip15', line:3} ],                          // doorway, then clapperboard on "jump cut"
+};
+const firstFlatBySi = {}; flat.forEach((f, i) => { if (firstFlatBySi[f.si] === undefined) firstFlatBySi[f.si] = i; });
+sections.forEach((sec, si) => {
+  const sh = SHOTS[sec.label]; if (!sh) return;
+  const base = firstFlatBySi[si];
+  sec.shots = sh.map(x => {
+    const ln = x.line || 0;
+    const st = (base !== undefined && syncMap[base + ln]) ? Math.max(sec.start, syncMap[base + ln].start - 0.2) : sec.start;
+    return { clip: x.clip, mode: x.mode || 'loop', factor: x.factor, start: +st.toFixed(2) };
+  });
+  console.log(`shots ${sec.label}: ` + sec.shots.map(s => `${s.clip}@${s.start}`).join(' -> '));
+});
+
 const config = {
   fps: analysis.fps, width: 1920, height: 1080, durationSec: DUR, totalFrames: analysis.totalFrames,
   sections: sections.map(({ lines, ...rest }) => rest),
