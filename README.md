@@ -48,6 +48,8 @@ Each owns one stage of the pipeline:
 npm install                 # playwright
 # ffmpeg: a static build is expected at .bin/ffmpeg (or set $FFMPEG / $FFPROBE)
 node studio/prep-frames.mjs # extract hero clip frames -> assets/frames/
+pip install faster-whisper  # optional: forced lyric alignment
+python studio/transcribe.py # optional: -> song/whisper.json (word timestamps)
 npm run build               # analyze -> timeline -> full render
 # or a quick look:
 npm run render:preview      # renders the 40-56s hook slice
