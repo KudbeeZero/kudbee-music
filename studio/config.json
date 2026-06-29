@@ -125,7 +125,7 @@
         "mode": "loop"
       },
       "start": 119.877,
-      "end": 138.735
+      "end": 131.535
     },
     {
       "scene": "outro",
@@ -135,7 +135,7 @@
         "clip": "clip11",
         "mode": "loop"
       },
-      "start": 138.735,
+      "start": 131.535,
       "end": 158.12
     }
   ]
