@@ -289,7 +289,7 @@ window.__frame=async function(f,hero){
     let img=heroCache.get(hero.id);
     if(!img){img=new Image();img.src=hero.dataUrl;try{await img.decode();}catch(e){};heroCache.set(hero.id,img);if(heroCache.size>120){const k=heroCache.keys().next().value;heroCache.delete(k);}}
     curHero={img,id:hero.id};
-  }
+  } else { curHero=null; }
   ctx.fillStyle='#000'; ctx.fillRect(0,0,W,H);
 
   const beatPulse=1+loud*0.04;
@@ -307,9 +307,9 @@ window.__frame=async function(f,hero){
       }
       grade(loud);
       break; }
-    case 'neon':   sceneNeon(t,f,loud); grade(loud); break;
-    case 'vortex': sceneVortex(t,f,loud); grade(loud); break;
-    case 'bridge': sceneBridge(t,f,loud); grade(loud); break;
+    case 'neon':   if(curHero) drawCover(curHero.img,(1.05+Math.sin(t*0.18)*0.03)*beatPulse,Math.sin(t*0.22)*18,Math.cos(t*0.17)*10); else sceneNeon(t,f,loud); grade(loud); break;
+    case 'vortex': if(curHero) drawCover(curHero.img,(1.05+Math.sin(t*0.2)*0.03)*beatPulse,Math.sin(t*0.25)*16,Math.cos(t*0.2)*10); else sceneVortex(t,f,loud); grade(loud); break;
+    case 'bridge': if(curHero) drawCover(curHero.img,(1.05+Math.sin(t*0.16)*0.03)*beatPulse,Math.sin(t*0.2)*16,0); else sceneBridge(t,f,loud); grade(loud); break;
     case 'glitch': {
       if(curHero) drawCover(curHero.img,1.06*beatPulse,0,0); else sceneNeon(t,f,loud);
       sceneGlitchOver(t,f,loud);

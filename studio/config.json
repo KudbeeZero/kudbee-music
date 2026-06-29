@@ -4,31 +4,16 @@
   "height": 1080,
   "durationSec": 158.12,
   "totalFrames": 4744,
-  "hero": {
-    "intro": {
-      "clip": "clip02",
-      "mode": "slow",
-      "factor": 0.5
-    },
-    "corridor": {
-      "clip": "clip02",
-      "mode": "loop"
-    },
-    "desk": {
-      "clip": "clip01",
-      "mode": "loop"
-    },
-    "filmnoir": {
-      "clip": "clip01",
-      "mode": "slow",
-      "factor": 0.6
-    }
-  },
   "sections": [
     {
       "scene": "intro",
       "label": "Intro",
       "big": false,
+      "hero": {
+        "clip": "clip03",
+        "mode": "slow",
+        "factor": 0.5
+      },
       "start": 0.2,
       "end": 12.22
     },
@@ -36,6 +21,10 @@
       "scene": "desk",
       "label": "Verse 1a",
       "big": false,
+      "hero": {
+        "clip": "clip04",
+        "mode": "loop"
+      },
       "start": 12.22,
       "end": 21.135
     },
@@ -43,6 +32,10 @@
       "scene": "neon",
       "label": "Verse 1b",
       "big": false,
+      "hero": {
+        "clip": "clip05",
+        "mode": "loop"
+      },
       "start": 21.135,
       "end": 33.135
     },
@@ -50,6 +43,10 @@
       "scene": "vortex",
       "label": "Pre-Hook",
       "big": false,
+      "hero": {
+        "clip": "clip06",
+        "mode": "loop"
+      },
       "start": 33.135,
       "end": 42.392
     },
@@ -57,6 +54,10 @@
       "scene": "corridor",
       "label": "Hook 1",
       "big": true,
+      "hero": {
+        "clip": "clip02",
+        "mode": "loop"
+      },
       "start": 42.392,
       "end": 59.535
     },
@@ -64,6 +65,10 @@
       "scene": "filmnoir",
       "label": "Verse 2a",
       "big": false,
+      "hero": {
+        "clip": "clip07",
+        "mode": "loop"
+      },
       "start": 59.535,
       "end": 69.82
     },
@@ -71,6 +76,10 @@
       "scene": "desk",
       "label": "Verse 2b",
       "big": false,
+      "hero": {
+        "clip": "clip08",
+        "mode": "loop"
+      },
       "start": 69.82,
       "end": 80.449
     },
@@ -78,6 +87,10 @@
       "scene": "glitch",
       "label": "Verse 2c",
       "big": false,
+      "hero": {
+        "clip": "clip09",
+        "mode": "loop"
+      },
       "start": 80.449,
       "end": 96.906
     },
@@ -85,6 +98,10 @@
       "scene": "vortex",
       "label": "Pre-Hook 2",
       "big": false,
+      "hero": {
+        "clip": "clip06",
+        "mode": "loop"
+      },
       "start": 96.906,
       "end": 103.077
     },
@@ -92,6 +109,10 @@
       "scene": "corridor",
       "label": "Hook 2",
       "big": true,
+      "hero": {
+        "clip": "clip02",
+        "mode": "loop"
+      },
       "start": 103.077,
       "end": 119.877
     },
@@ -99,6 +120,10 @@
       "scene": "bridge",
       "label": "Bridge",
       "big": false,
+      "hero": {
+        "clip": "clip10",
+        "mode": "loop"
+      },
       "start": 119.877,
       "end": 138.735
     },
@@ -106,6 +131,10 @@
       "scene": "outro",
       "label": "Outro",
       "big": false,
+      "hero": {
+        "clip": "clip11",
+        "mode": "loop"
+      },
       "start": 138.735,
       "end": 158.12
     }
