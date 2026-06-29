@@ -70,7 +70,24 @@
         "mode": "loop"
       },
       "start": 59.535,
-      "end": 69.82
+      "end": 69.82,
+      "shots": [
+        {
+          "clip": "clip12",
+          "mode": "loop",
+          "start": 60.28
+        },
+        {
+          "clip": "clip07",
+          "mode": "loop",
+          "start": 62.34
+        },
+        {
+          "clip": "clip14",
+          "mode": "loop",
+          "start": 65.8
+        }
+      ]
     },
     {
       "scene": "desk",
@@ -81,7 +98,19 @@
         "mode": "loop"
       },
       "start": 69.82,
-      "end": 80.449
+      "end": 80.449,
+      "shots": [
+        {
+          "clip": "clip08",
+          "mode": "loop",
+          "start": 70.52
+        },
+        {
+          "clip": "clip13",
+          "mode": "loop",
+          "start": 78.32
+        }
+      ]
     },
     {
       "scene": "glitch",
@@ -92,7 +121,19 @@
         "mode": "loop"
       },
       "start": 80.449,
-      "end": 96.906
+      "end": 96.906,
+      "shots": [
+        {
+          "clip": "clip09",
+          "mode": "loop",
+          "start": 81.14
+        },
+        {
+          "clip": "clip15",
+          "mode": "loop",
+          "start": 90.93
+        }
+      ]
     },
     {
       "scene": "vortex",
