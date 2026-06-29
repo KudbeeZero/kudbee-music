@@ -1,0 +1,15 @@
+{
+  "name": "retrowave",
+  "title": "Retrowave",
+  "description": "80s synthwave: a banded chrome sun, neon perspective grid, starfield, hot-pink/cyan palette, scanlines.",
+  "palette": {
+    "bg": ["#1a0033", "#2d004d", "#3d0a5e"],
+    "accent": ["#ff2e88", "#ff6ac1", "#21d4fd", "#ffe24a"],
+    "ink": "#ffffff"
+  },
+  "fonts": { "display": "Anton", "body": "Oswald" },
+  "scenes": ["retrowave-sun-grid"],
+  "post": ["scanlines", "beat-glow"],
+  "implementedIn": "studio/player.html (sceneRetrowave)",
+  "usage": "node bin/hermes render --pack retrowave"
+}
