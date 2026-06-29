@@ -82,7 +82,7 @@ const HERO = {
   'Verse 2a':   { clip: 'clip07', mode: 'loop' },              // evidence board
   'Verse 2b':   { clip: 'clip08', mode: 'loop' },              // film projector
   'Verse 2c':   { clip: 'clip09', mode: 'loop' },              // doorway whispers
-  'Pre-Hook 2': { clip: 'clip06', mode: 'loop' },              // orbit light-trails
+  'Pre-Hook 2': { clip: 'clip21', mode: 'loop' },              // rotating film-set (was orbit)
   'Hook 2':     { clip: 'clip02', mode: 'loop' },              // corridor walk
   'Bridge':     { clip: 'clip10', mode: 'loop' },              // blue hallway desk
   'Outro':      { clip: 'clip11', mode: 'loop' },              // cassette tape
@@ -167,9 +167,13 @@ if (aligned) {
 
 // ---- per-line sub-shots: footage that cuts in on a specific lyric line ----
 const SHOTS = {
+  'Verse 1b': [ {clip:'clip05'}, {clip:'clip25', line:2} ],                          // corridor figure, rooftop breath mid-verse
+  'Hook 1':   [ {clip:'clip17'}, {clip:'clip19', line:1}, {clip:'clip20', line:2}, {clip:'clip02', line:3} ], // spin+choir / underground / dissolve / walk
   'Verse 2a': [ {clip:'clip12'}, {clip:'clip07', line:1}, {clip:'clip14', line:2} ], // footprint, evidence, TV wall
   'Verse 2b': [ {clip:'clip08'}, {clip:'clip13', line:3} ],                          // projector, then doc pull-in on "Cut to me"
-  'Verse 2c': [ {clip:'clip09'}, {clip:'clip15', line:3} ],                          // doorway, then clapperboard on "jump cut"
+  'Verse 2c': [ {clip:'clip24'}, {clip:'clip09', line:1}, {clip:'clip15', line:3} ], // mirrors, doorway, clapperboard on "jump cut"
+  'Hook 2':   [ {clip:'clip18'}, {clip:'clip17', line:1}, {clip:'clip20', line:2}, {clip:'clip16', line:3} ], // choir kids / spin / dissolve / grin (different from Hook 1)
+  'Outro':    [ {clip:'clip16'}, {clip:'clip23', line:1}, {clip:'clip17', line:2}, {clip:'clip22', line:3} ], // grin / pen / spinning / film-reel credits
 };
 const firstFlatBySi = {}; flat.forEach((f, i) => { if (firstFlatBySi[f.si] === undefined) firstFlatBySi[f.si] = i; });
 sections.forEach((sec, si) => {

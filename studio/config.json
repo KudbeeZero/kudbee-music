@@ -37,7 +37,19 @@
         "mode": "loop"
       },
       "start": 21.135,
-      "end": 33.135
+      "end": 33.135,
+      "shots": [
+        {
+          "clip": "clip05",
+          "mode": "loop",
+          "start": 21.77
+        },
+        {
+          "clip": "clip25",
+          "mode": "loop",
+          "start": 27.15
+        }
+      ]
     },
     {
       "scene": "vortex",
@@ -59,7 +71,29 @@
         "mode": "loop"
       },
       "start": 42.392,
-      "end": 59.535
+      "end": 59.535,
+      "shots": [
+        {
+          "clip": "clip17",
+          "mode": "loop",
+          "start": 43.19
+        },
+        {
+          "clip": "clip19",
+          "mode": "loop",
+          "start": 47.71
+        },
+        {
+          "clip": "clip20",
+          "mode": "loop",
+          "start": 50.4
+        },
+        {
+          "clip": "clip02",
+          "mode": "loop",
+          "start": 54.31
+        }
+      ]
     },
     {
       "scene": "filmnoir",
@@ -124,9 +158,14 @@
       "end": 96.906,
       "shots": [
         {
-          "clip": "clip09",
+          "clip": "clip24",
           "mode": "loop",
           "start": 81.14
+        },
+        {
+          "clip": "clip09",
+          "mode": "loop",
+          "start": 82.74
         },
         {
           "clip": "clip15",
@@ -140,7 +179,7 @@
       "label": "Pre-Hook 2",
       "big": false,
       "hero": {
-        "clip": "clip06",
+        "clip": "clip21",
         "mode": "loop"
       },
       "start": 96.906,
@@ -155,7 +194,29 @@
         "mode": "loop"
       },
       "start": 103.077,
-      "end": 119.877
+      "end": 119.877,
+      "shots": [
+        {
+          "clip": "clip18",
+          "mode": "loop",
+          "start": 103.08
+        },
+        {
+          "clip": "clip17",
+          "mode": "loop",
+          "start": 106.62
+        },
+        {
+          "clip": "clip20",
+          "mode": "loop",
+          "start": 110.1
+        },
+        {
+          "clip": "clip16",
+          "mode": "loop",
+          "start": 113.16
+        }
+      ]
     },
     {
       "scene": "bridge",
@@ -177,7 +238,29 @@
         "mode": "loop"
       },
       "start": 131.535,
-      "end": 158.12
+      "end": 158.12,
+      "shots": [
+        {
+          "clip": "clip16",
+          "mode": "loop",
+          "start": 132.36
+        },
+        {
+          "clip": "clip23",
+          "mode": "loop",
+          "start": 135.2
+        },
+        {
+          "clip": "clip17",
+          "mode": "loop",
+          "start": 137.92
+        },
+        {
+          "clip": "clip22",
+          "mode": "loop",
+          "start": 140.68
+        }
+      ]
     }
   ]
 }
