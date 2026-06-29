@@ -77,14 +77,22 @@ vignette, and word-by-word kinetic-typography lyrics.
 | hermes-qa       | review | issue list |
 
 ## Scene packs
-A **scene pack** is a visual style — a palette, fonts, and a set of scene
-modules. The built-in pack is [`neo-noir`](scene-packs/neo-noir/pack.json).
-Adding a pack is the best way to contribute: see
-[CONTRIBUTING](CONTRIBUTING.md). (The pluggable pack interface is on the roadmap;
-the manifest documents the current look and is the template for new packs.)
+A **scene pack** is a visual style. Switch with `--pack` — the *same song*, a
+totally different look:
+
+| `neo-noir` (default) | `retrowave` |
+|----------------------|-------------|
+| <img src="media/demo-hook.gif" width="380"/> | <img src="media/demo-retrowave.gif" width="380"/> |
+| `hermes render` | `hermes render --pack retrowave` |
+
+Each pack = a palette + fonts + scene modules
+([`scene-packs/neo-noir`](scene-packs/neo-noir/pack.json),
+[`scene-packs/retrowave`](scene-packs/retrowave/pack.json)). **Adding a pack is the
+best way to contribute** — see [CONTRIBUTING](CONTRIBUTING.md) and the
+[build-a-pack guide](docs/scene-packs.md).
 
 ## Roadmap
-- [ ] Pluggable **scene-pack** interface + 3–4 packs (retrowave, vhs-lofi, lyric-minimal)
+- [x] Pluggable **scene packs** + a 2nd style (`retrowave`); more welcome (vhs-lofi, lyric-minimal)
 - [ ] `hermes new` project scaffold + `hermes.json` project model
 - [ ] Auto song-structure detection (no hand-authored sections)
 - [x] **9:16 / 1:1** aspect ratios for Shorts/Reels/TikTok

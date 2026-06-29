@@ -25,6 +25,7 @@ const CRF = opt('crf', '18');
 const PRESET = opt('preset', 'medium');
 const ASPECTS = { '16:9': [1920,1080], '9:16': [1080,1920], '1:1': [1080,1080], '4:5': [1080,1350] };
 const aspect = opt('aspect', null);
+const PACK = opt('pack', 'neo-noir');
 const WIDTH = parseInt(opt('width', aspect ? ASPECTS[aspect][0] : (C.width || 1920)));
 const HEIGHT = parseInt(opt('height', aspect ? ASPECTS[aspect][1] : (C.height || 1080)));
 const startF = Math.floor(startSec * FPS);
@@ -84,7 +85,7 @@ function drain(stream){ return new Promise(r => stream.write('') ? r() : stream.
   await page.goto(pathToFileURL(resolve(ROOT, 'studio/player.html')).href);
   await page.waitForFunction('window.__ready === true');
   const firstHero = heroFor(startF / FPS);
-  await page.evaluate(p => window.__setup(p), { analysis: A, config: C, syncMap: S, firstHero, width: WIDTH, height: HEIGHT });
+  await page.evaluate(p => window.__setup(p), { analysis: A, config: C, syncMap: S, firstHero, width: WIDTH, height: HEIGHT, pack: PACK });
 
   for (let f = startF; f < endF; f++) {
     const t = f / FPS;

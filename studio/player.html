@@ -21,11 +21,18 @@ const heroCache=new Map();        // id -> HTMLImageElement
 let curHero=null;                 // {img,id}
 
 // ---------- palette ----------
-const PAL={
+let PACK='neo-noir';
+let PAL={
   bg0:'#070611', bg1:'#0d0a1e',
   amber:'#ffb14e', amber2:'#ff8a3d', glow:'#ffd9a0',
   violet:'#7a3cff', magenta:'#c64bff', deep:'#3a1d6e',
-  ink:'#f3ecff'
+  ink:'#f3ecff', lyricGlow:'rgba(255,150,70,0.95)'
+};
+const PAL_RETRO={
+  bg0:'#1a0033', bg1:'#2d004d',
+  amber:'#ff2e88', amber2:'#ff6ac1', glow:'#21d4fd',
+  violet:'#7a3cff', magenta:'#ff2e88', deep:'#3d0a5e',
+  ink:'#ffffff', lyricGlow:'rgba(33,212,253,0.95)'
 };
 
 // ---------- deterministic noise ----------
@@ -239,7 +246,7 @@ function drawLyric(line,t){
       const rise=(1-ease(clamp(wp,0,1)))*(big?24:16);
       if(wa>0.01){
         ctx.save(); ctx.globalAlpha=wa;
-        ctx.shadowColor='rgba(255,150,70,0.95)'; ctx.shadowBlur=big?30:15;
+        ctx.shadowColor=PAL.lyricGlow; ctx.shadowBlur=big?30:15;
         ctx.fillStyle=big?'#ffe7c4':'#ffffff';
         ctx.fillText(words[i],x+wWid[i]/2,y+rise);
         ctx.shadowBlur=0; ctx.fillStyle=big?'#fff6e8':'#ffffff';
@@ -333,6 +340,36 @@ function drawCredits(t,localT,dur){
 // ---------- main frame ----------
 function sectionAt(t){let cur=C.sections[0];for(const s of C.sections){if(t>=s.start)cur=s;}return cur;}
 
+// ---------- retrowave scene pack (procedural synthwave) ----------
+function sceneRetrowave(t,f,loud){
+  const g=ctx.createLinearGradient(0,0,0,H);
+  g.addColorStop(0,'#1a0033'); g.addColorStop(0.5,'#3d0a5e'); g.addColorStop(0.6,'#ff2e88'); g.addColorStop(0.68,'#ff6ac1'); g.addColorStop(1,'#2d004d');
+  ctx.fillStyle=g; ctx.fillRect(0,0,W,H);
+  const hy=H*0.6, cx=W/2, sr=Math.min(W,H)*0.22;
+  // stars
+  ctx.save(); ctx.globalCompositeOperation='screen';
+  for(let i=0;i<80;i++){const x=hash(i,1,2)*W, y=hash(i,3,4)*hy*0.9; const tw=0.4+0.6*Math.sin(t*1.5+i); ctx.fillStyle='rgba(255,255,255,'+(0.5*tw).toFixed(2)+')'; ctx.fillRect(x,y,2,2);}
+  ctx.restore();
+  // banded sun
+  ctx.save();
+  const sg=ctx.createLinearGradient(0,hy-sr,0,hy+sr); sg.addColorStop(0,'#ffe24a'); sg.addColorStop(0.5,'#ff7b3d'); sg.addColorStop(1,'#ff2e88');
+  ctx.fillStyle=sg; ctx.beginPath(); ctx.arc(cx,hy,sr,0,7); ctx.fill();
+  ctx.globalCompositeOperation='destination-out';
+  for(let i=0;i<7;i++){const by=hy - sr*0.05 + i*(sr*0.17); ctx.fillStyle='#000'; ctx.fillRect(cx-sr,by,sr*2,Math.max(2,i*1.7));}
+  ctx.restore();
+  // grid floor
+  ctx.save(); ctx.globalCompositeOperation='screen'; ctx.strokeStyle='rgba(33,212,253,0.55)'; ctx.lineWidth=2;
+  const scroll=(t*0.4)%1;
+  for(let i=0;i<18;i++){ const p=(i+scroll)/18; const y=hy+Math.pow(p,2)*(H-hy); ctx.globalAlpha=0.12+0.5*(1-p); ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(W,y);ctx.stroke(); }
+  ctx.globalAlpha=0.4;
+  for(let i=-12;i<=12;i++){ const fx=cx+i*(W*0.085); ctx.beginPath(); ctx.moveTo(cx,hy); ctx.lineTo(cx+(fx-cx)*6,H); ctx.stroke(); }
+  ctx.restore();
+  // beat glow
+  ctx.save(); ctx.globalCompositeOperation='screen'; const gg=ctx.createRadialGradient(cx,hy,0,cx,hy,W*0.5);
+  gg.addColorStop(0,'rgba(255,46,136,'+(0.12+loud*0.2).toFixed(3)+')'); gg.addColorStop(1,'rgba(255,46,136,0)'); ctx.fillStyle=gg; ctx.fillRect(0,0,W,H); ctx.restore();
+}
+function gradeRetro(){ ctx.save(); ctx.globalAlpha=0.08; ctx.fillStyle='#000'; for(let y=0;y<H;y+=4) ctx.fillRect(0,y,W,2); ctx.restore(); }
+
 window.__frame=async function(f,hero){
   const t=f/A.fps, loud=A.loudness[Math.min(f,A.loudness.length-1)]||0;
   const sec=sectionAt(t); const localT=t-sec.start, dur=sec.end-sec.start;
@@ -345,6 +382,7 @@ window.__frame=async function(f,hero){
   ctx.fillStyle='#000'; ctx.fillRect(0,0,W,H);
 
   const beatPulse=1+loud*0.04;
+  if(PACK==='retrowave'){ sceneRetrowave(t,f,loud); gradeRetro(); } else
   switch(sec.scene){
     case 'intro': {
       if(curHero){const z=lerp(1.18,1.06,clamp(localT/dur,0,1)); drawCover(curHero.img,z*beatPulse,Math.sin(t*0.3)*16,0);} else sceneNeon(t,f,loud);
@@ -388,6 +426,7 @@ window.__frame=async function(f,hero){
 
 window.__setup=async function(payload){
   A=payload.analysis; C=payload.config; S=payload.syncMap;
+  if(payload.pack==='retrowave'){ PACK='retrowave'; PAL=PAL_RETRO; }
   if(payload.width){ W=payload.width; H=payload.height; cv.width=W; cv.height=H; }
   try{ await document.fonts.load('100px Anton'); await document.fonts.load('80px Oswald'); await document.fonts.load('80px Archivo'); await document.fonts.ready; }catch(e){}
   // warm a frame

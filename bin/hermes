@@ -28,6 +28,7 @@ Commands:
   build                prep -> analyze -> timeline -> render (the whole thing)
 
 Render options:  --start <s> --end <s> --out <path> --preset <x> --crf <n>
+                 --pack <neo-noir|retrowave>  --aspect <16:9|9:16|1:1|4:5>
 
 Examples:
   hermes build
