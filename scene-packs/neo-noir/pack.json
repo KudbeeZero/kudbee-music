@@ -1,0 +1,22 @@
+{
+  "name": "neo-noir",
+  "title": "Neo-Noir",
+  "description": "Cinematic detective-film look: warm amber neon + magenta/violet haze on near-black, film grain, split-tone grade, kinetic typography.",
+  "palette": {
+    "bg": ["#070611", "#0d0a1e"],
+    "amber": ["#ffb14e", "#ff8a3d", "#ffd9a0"],
+    "magenta": ["#c64bff", "#7a3cff", "#3a1d6e"],
+    "ink": "#ffffff"
+  },
+  "fonts": {
+    "display": "Anton",
+    "body": "Oswald"
+  },
+  "scenes": [
+    "intro", "desk", "neon", "vortex", "corridor",
+    "filmnoir", "glitch", "bridge", "outro"
+  ],
+  "post": ["split-tone grade", "film grain", "vignette", "beat-reactive pulse"],
+  "implementedIn": "studio/player.html",
+  "note": "The built-in pack. The pluggable scene-pack interface is on the roadmap; this manifest documents the current look and is the template for new packs."
+}

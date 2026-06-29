@@ -1,0 +1,51 @@
+#!/usr/bin/env node
+// HERMES — agent-driven music-video studio CLI.
+// Thin wrapper over the studio pipeline (analyze -> timeline -> render).
+import { spawnSync } from 'node:child_process';
+import { existsSync } from 'node:fs';
+import { fileURLToPath } from 'node:url';
+import { dirname, resolve } from 'node:path';
+
+const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..');
+const run = (file, args = []) => {
+  const r = spawnSync('node', [resolve(ROOT, 'studio', file), ...args], { stdio: 'inherit' });
+  if (r.status !== 0) process.exit(r.status || 1);
+};
+const py = (file, args = []) => spawnSync('python3', [resolve(ROOT, 'studio', file), ...args], { stdio: 'inherit' });
+
+const [cmd, ...rest] = process.argv.slice(2);
+const help = `HERMES — turn a song into a music video, from code.
+
+Usage: hermes <command> [options]
+
+Commands:
+  prep                 Extract hero-clip frames               (studio/prep-frames.mjs)
+  analyze              Detect duration / BPM / beats / loudness (studio/analyze.mjs)
+  transcribe           Forced-align lyrics via Whisper (optional, needs faster-whisper)
+  timeline             Build the scene timeline + lyric sync-map (studio/build-timeline.mjs)
+  render [opts]        Render the video                        (studio/render.mjs)
+  preview              Render a short slice for a quick look
+  build                prep -> analyze -> timeline -> render (the whole thing)
+
+Render options:  --start <s> --end <s> --out <path> --preset <x> --crf <n>
+
+Examples:
+  hermes build
+  hermes preview
+  hermes render --preset medium --crf 18 --out out/video.mp4
+`;
+
+switch (cmd) {
+  case 'prep':       run('prep-frames.mjs'); break;
+  case 'analyze':    run('analyze.mjs'); break;
+  case 'transcribe': py('transcribe.py'); break;
+  case 'timeline':   run('build-timeline.mjs'); break;
+  case 'render':     run('render.mjs', rest); break;
+  case 'preview':    run('render.mjs', ['--start','40','--end','56','--out','out/preview.mp4','--preset','fast','--crf','20', ...rest]); break;
+  case 'build':
+    run('prep-frames.mjs'); run('analyze.mjs'); run('build-timeline.mjs');
+    run('render.mjs', ['--out','out/kudbee-music-video-1080p.mp4','--preset','medium','--crf','18', ...rest]);
+    break;
+  case '-h': case '--help': case 'help': case undefined: console.log(help); break;
+  default: console.error(`Unknown command: ${cmd}\n`); console.log(help); process.exit(1);
+}
