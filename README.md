@@ -8,7 +8,7 @@ Agent-driven. Headless Chromium + ffmpeg. **No paid software, no editor, $0.**
 
 <img src="media/demo-intro.gif" width="49%" alt="cinematic studio intro"/> <img src="media/demo-hook.gif" width="49%" alt="kinetic-typography hook"/>
 
-[**▶ Watch the full demo video**](media/kudbee-music-video-1080p.mp4) · [How it works](#how-it-works) · [Quickstart](#quickstart) · [Scene packs](#scene-packs) · [Roadmap](#roadmap)
+[**▶ Watch the full demo video**](media/kudbee-music-video-1080p.mp4) · [How it works](#how-it-works) · [Quickstart](#quickstart) · [Scene packs](#scene-packs) · [Docs](docs/) · [Roadmap](#roadmap)
 
 </div>
 
@@ -87,12 +87,15 @@ the manifest documents the current look and is the template for new packs.)
 - [ ] Pluggable **scene-pack** interface + 3–4 packs (retrowave, vhs-lofi, lyric-minimal)
 - [ ] `hermes new` project scaffold + `hermes.json` project model
 - [ ] Auto song-structure detection (no hand-authored sections)
-- [ ] **9:16 / 1:1** aspect ratios for Shorts/Reels/TikTok
+- [x] **9:16 / 1:1** aspect ratios for Shorts/Reels/TikTok
 - [ ] Generative **music** agents — prompt → lyrics → audio (MusicGen) → video
-- [ ] Docs site + examples gallery
+- [x] Docs site + examples gallery
 
 ## Built with
 Node 22 · headless Chromium (Playwright) · ffmpeg (libx264/AAC) · faster-whisper (optional) · Anton/Oswald (Google Fonts). No paid services.
+
+## Documentation
+[Quickstart](docs/quickstart.md) · [Concepts](docs/concepts.md) · [Build a scene pack](docs/scene-packs.md) · [CLI reference](docs/cli.md) · [Examples](examples/)
 
 ## License
 [MIT](LICENSE). Demo song © kudbee.
