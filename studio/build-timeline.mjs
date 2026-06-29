@@ -165,27 +165,55 @@ if (aligned) {
   }
 }
 
-// ---- per-line sub-shots: footage that cuts in on a specific lyric line ----
+// ---- sub-shots: footage that cuts in on a specific lyric line (line) or time (at) ----
 const SHOTS = {
-  'Verse 1b': [ {clip:'clip05'}, {clip:'clip25', line:2} ],                          // corridor figure, rooftop breath mid-verse
-  'Hook 1':   [ {clip:'clip17'}, {clip:'clip19', line:1}, {clip:'clip20', line:2}, {clip:'clip02', line:3} ], // spin+choir / underground / dissolve / walk
-  'Verse 2a': [ {clip:'clip12'}, {clip:'clip07', line:1}, {clip:'clip14', line:2} ], // footprint, evidence, TV wall
-  'Verse 2b': [ {clip:'clip08'}, {clip:'clip13', line:3} ],                          // projector, then doc pull-in on "Cut to me"
-  'Verse 2c': [ {clip:'clip24'}, {clip:'clip09', line:1}, {clip:'clip15', line:3} ], // mirrors, doorway, clapperboard on "jump cut"
-  'Hook 2':   [ {clip:'clip18'}, {clip:'clip17', line:1}, {clip:'clip20', line:2}, {clip:'clip16', line:3} ], // choir kids / spin / dissolve / grin (different from Hook 1)
-  'Outro':    [ {clip:'clip16'}, {clip:'clip23', line:1}, {clip:'clip17', line:2}, {clip:'clip22', line:3} ], // grin / pen / spinning / film-reel credits
+  'Verse 1b': [ {clip:'clip05'}, {clip:'clip25', line:2} ],
+  'Hook 1':   [ {clip:'clip17'}, {clip:'clip19', line:1}, {clip:'clip20', line:2}, {clip:'clip02', line:3} ],
+  'Verse 2a': [ {clip:'clip12'}, {clip:'clip07', line:1}, {clip:'clip14', line:2} ],
+  'Verse 2b': [ {clip:'clip08'}, {clip:'clip13', line:3} ],
+  'Verse 2c': [ {clip:'clip24'}, {clip:'clip09', line:1}, {clip:'clip15', line:3} ],
+  'Hook 2':   [ {clip:'clip18'}, {clip:'clip17', line:1}, {clip:'clip20', line:2}, {clip:'clip16', line:3} ],
+  'Bridge':   [ {clip:'clip10'}, {clip:'clip24', line:1}, {clip:'clip20', line:2}, {clip:'clip10', line:3} ],
+  // Outro: lyric-aligned, then keep flipping through the instrumental tail (no static hold)
+  'Outro':    [ {clip:'clip16'}, {clip:'clip23', line:1}, {clip:'clip17', line:2}, {clip:'clip22', line:3},
+                {clip:'clip11', at:144.5}, {clip:'clip20', at:148}, {clip:'clip16', at:151.5}, {clip:'clip22', at:155} ],
 };
 const firstFlatBySi = {}; flat.forEach((f, i) => { if (firstFlatBySi[f.si] === undefined) firstFlatBySi[f.si] = i; });
 sections.forEach((sec, si) => {
   const sh = SHOTS[sec.label]; if (!sh) return;
   const base = firstFlatBySi[si];
   sec.shots = sh.map(x => {
-    const ln = x.line || 0;
-    const st = (base !== undefined && syncMap[base + ln]) ? Math.max(sec.start, syncMap[base + ln].start - 0.2) : sec.start;
+    let st = x.at !== undefined ? x.at
+           : (base !== undefined && syncMap[base + (x.line||0)]) ? syncMap[base + (x.line||0)].start - 0.2
+           : sec.start;
+    st = Math.min(Math.max(st, sec.start), sec.end - 0.2);
     return { clip: x.clip, mode: x.mode || 'loop', factor: x.factor, start: +st.toFixed(2) };
-  });
-  console.log(`shots ${sec.label}: ` + sec.shots.map(s => `${s.clip}@${s.start}`).join(' -> '));
+  }).sort((a, b) => a.start - b.start);
 });
+
+// ---- keep it moving: split any shot that would hold longer than MAXHOLD ----
+// (intro is left whole — its title sequence animates over the push-in)
+const MAXHOLD = 4.6, JUMP = 90;
+sections.forEach(sec => {
+  if (sec.scene === 'intro') return;
+  let content = sec.shots && sec.shots.length ? sec.shots
+              : sec.hero ? [{ clip: sec.hero.clip, mode: sec.hero.mode, factor: sec.hero.factor, start: sec.start }]
+              : null;
+  if (!content) return;                       // procedural scene — nothing to cut
+  const out = [];
+  for (let i = 0; i < content.length; i++) {
+    const a = content[i].start;
+    const b = (i + 1 < content.length) ? content[i + 1].start : sec.end;
+    const k = Math.max(1, Math.ceil((b - a) / MAXHOLD - 1e-3));
+    const piece = (b - a) / k;
+    for (let j = 0; j < k; j++) {
+      out.push({ clip: content[i].clip, mode: content[i].mode || 'loop', factor: content[i].factor,
+                 start: +(a + j * piece).toFixed(2), offset: (content[i].offset || 0) + j * JUMP });
+    }
+  }
+  sec.shots = out;
+});
+sections.forEach(s => { if (s.shots) console.log(`shots ${s.label} (${s.shots.length}x ≤${MAXHOLD}s): ${s.shots.map(x => x.clip + '@' + x.start).join(' ')}`); });
 
 const config = {
   fps: analysis.fps, width: 1920, height: 1080, durationSec: DUR, totalFrames: analysis.totalFrames,

@@ -23,6 +23,10 @@ const endSec = parseFloat(opt('end', String(A.durationSec)));
 const OUT = resolve(ROOT, opt('out', 'out/kudbee-music-video-1080p.mp4'));
 const CRF = opt('crf', '18');
 const PRESET = opt('preset', 'medium');
+const ASPECTS = { '16:9': [1920,1080], '9:16': [1080,1920], '1:1': [1080,1080], '4:5': [1080,1350] };
+const aspect = opt('aspect', null);
+const WIDTH = parseInt(opt('width', aspect ? ASPECTS[aspect][0] : (C.width || 1920)));
+const HEIGHT = parseInt(opt('height', aspect ? ASPECTS[aspect][1] : (C.height || 1080)));
 const startF = Math.floor(startSec * FPS);
 const endF = Math.min(A.totalFrames, Math.ceil(endSec * FPS));
 mkdirSync(dirname(OUT), { recursive: true });
@@ -76,11 +80,11 @@ function drain(stream){ return new Promise(r => stream.write('') ? r() : stream.
   ], { stdio: ['pipe', 'inherit', 'inherit'] });
 
   const browser = await chromium.launch({ args: ['--no-sandbox', '--disable-gpu', '--force-color-profile=srgb'] });
-  const page = await browser.newPage({ viewport: { width: 1920, height: 1080 }, deviceScaleFactor: 1 });
+  const page = await browser.newPage({ viewport: { width: WIDTH, height: HEIGHT }, deviceScaleFactor: 1 });
   await page.goto(pathToFileURL(resolve(ROOT, 'studio/player.html')).href);
   await page.waitForFunction('window.__ready === true');
   const firstHero = heroFor(startF / FPS);
-  await page.evaluate(p => window.__setup(p), { analysis: A, config: C, syncMap: S, firstHero });
+  await page.evaluate(p => window.__setup(p), { analysis: A, config: C, syncMap: S, firstHero, width: WIDTH, height: HEIGHT });
 
   for (let f = startF; f < endF; f++) {
     const t = f / FPS;

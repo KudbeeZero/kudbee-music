@@ -13,7 +13,7 @@
 <body>
 <canvas id="c" width="1920" height="1080"></canvas>
 <script>
-const W=1920, H=1080;
+let W=1920, H=1080;
 const cv=document.getElementById('c');
 const ctx=cv.getContext('2d',{alpha:false});
 let A=null, C=null, S=null;       // analysis, config, syncMap
@@ -388,6 +388,7 @@ window.__frame=async function(f,hero){
 
 window.__setup=async function(payload){
   A=payload.analysis; C=payload.config; S=payload.syncMap;
+  if(payload.width){ W=payload.width; H=payload.height; cv.width=W; cv.height=H; }
   try{ await document.fonts.load('100px Anton'); await document.fonts.load('80px Oswald'); await document.fonts.load('80px Archivo'); await document.fonts.ready; }catch(e){}
   // warm a frame
   await window.__frame(0,payload.firstHero||null);
