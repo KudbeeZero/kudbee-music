@@ -9,15 +9,17 @@ import styles from './hermes.module.css';
 
 export default function RecommendationsPanel({
   songs,
+  taste,
   onAddExclusion,
   onApplyPack,
 }: {
   songs: SongPackage[];
+  taste?: import('@/lib/hermes/storage').Taste;
   onAddExclusion: (word: string) => void;
   onApplyPack?: (pack: ExpansionPack) => void;
 }) {
   const profile = useMemo(() => learnProfile(songs), [songs]);
-  const recs = useMemo(() => recommend(profile, songs), [profile, songs]);
+  const recs = useMemo(() => recommend(profile, songs, taste), [profile, songs, taste]);
   const [copied, setCopied] = useState<string | null>(null);
 
   return (

@@ -12,6 +12,9 @@ export default function UniquenessReportView({ report }: { report: UniquenessRep
         <span className={styles.uniqScore} style={{ color: hue }}>{report.score}</span>
         <span className={styles.scoreOf}>/ 100 original</span>
       </div>
+      <div className={styles.hint} style={{ marginTop: 4 }}>
+        Local check — vs your vault + cliché/avoid lists, not the whole internet. A uniqueness guard for your own catalog.
+      </div>
 
       {report.bannedWordsHit.length > 0 && (
         <div style={{ marginTop: 10 }}>

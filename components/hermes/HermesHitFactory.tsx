@@ -4,8 +4,9 @@ import { useEffect, useRef, useState } from 'react';
 import type { SongInputs, SongPackage, AgentOutput } from '@/lib/hermes/types';
 import { AGENT_DEFINITIONS } from '@/lib/hermes/agents';
 import { runPipeline } from '@/lib/hermes/pipeline';
-import { listSongs, saveSong, getSong, deleteSong, priorSongsForOriginality, loadBannedWords, saveBannedWords, listAlbums, saveAlbum, deleteAlbum } from '@/lib/hermes/storage';
+import { listSongs, saveSong, getSong, deleteSong, priorSongsForOriginality, loadBannedWords, saveBannedWords, listAlbums, saveAlbum, deleteAlbum, loadTaste, recordTaste, type Taste } from '@/lib/hermes/storage';
 import { allAvoidWords } from '@/lib/hermes/memory';
+import { diffEdit, parseSections } from '@/lib/hermes/edits';
 import type { Album } from '@/lib/hermes/album';
 import type { ExpansionPack } from '@/lib/hermes/expansionPacks';
 import SongLabForm from './SongLabForm';
@@ -32,6 +33,7 @@ export default function HermesHitFactory() {
   const [albums, setAlbums] = useState<Album[]>([]);
   const [albumOpen, setAlbumOpen] = useState(false);
   const [preset, setPreset] = useState<Partial<{ genre: string; mood: string; references: string }> | null>(null);
+  const [taste, setTaste] = useState<Taste | undefined>(undefined);
   const regenRef = useRef(0); // bumps each run so the same idea yields a fresh take
 
   // hydrate from local storage on mount (client only — avoids SSR mismatch)
@@ -39,7 +41,19 @@ export default function HermesHitFactory() {
     setVault(listSongs());
     setAlbums(listAlbums());
     setBanned(loadBannedWords(allAvoidWords()));
+    setTaste(loadTaste());
   }, []);
+
+  // learn-from-edits: diff the rewrite into taste signals, update the song + vault
+  function saveLyricEdit(newText: string) {
+    if (!pkg) return;
+    const edit = diffEdit(pkg.finalLyrics, newText);
+    if (edit.changed) setTaste(recordTaste(edit.added, edit.removed));
+    const updated = { ...pkg, finalLyrics: newText, sections: parseSections(newText) };
+    saveSong(updated);
+    setVault(listSongs());
+    setPkg(getSong(updated.id) ?? updated);
+  }
 
   function applyPack(pack: ExpansionPack) {
     setPreset({ genre: pack.style.split(',')[0].trim(), mood: pack.description, references: `${pack.title} expansion — ${pack.hookGuidance}` });
@@ -173,14 +187,14 @@ export default function HermesHitFactory() {
             )}
           </div>
 
-          <RecommendationsPanel songs={vault} onAddExclusion={addExclusion} onApplyPack={applyPack} />
+          <RecommendationsPanel songs={vault} taste={taste} onAddExclusion={addExclusion} onApplyPack={applyPack} />
         </div>
 
         {/* center column — agent board + package */}
         <div className={styles.col}>
           <AgentBoard outputs={outputs} />
           {pkg ? (
-            <SongPackageView pkg={pkg} />
+            <SongPackageView pkg={pkg} onSaveEdit={saveLyricEdit} />
           ) : (
             <div className={styles.panel}>
               <div className={styles.emptyState}>
@@ -225,6 +239,7 @@ export default function HermesHitFactory() {
           onOpen={openFromVault}
           onClose={() => setVaultOpen(false)}
           onDelete={removeFromVault}
+          onImported={() => { setVault(listSongs()); setAlbums(listAlbums()); }}
         />
       )}
 

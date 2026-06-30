@@ -2,7 +2,7 @@
 // vault and a set of heuristics, then scores 0–100 with warnings + rewrites.
 import type { UniquenessReport, UniquenessFlag } from './types';
 import { DEFAULT_BANNED_WORDS, suggestReplacement } from './bannedWords';
-import { normalizeLine, ngrams, lineSimilarity, hashString } from './text';
+import { normalizeLine, ngrams, lineSimilarity, tokenSetSimilarity, hashString } from './text';
 
 export interface PriorSong {
   id: string;
@@ -109,16 +109,21 @@ export function checkOriginality(lyrics: string, opts: OriginalityOptions = {}):
         detail: `${overlap} lines identical to a prior song ("${prior.title}")`,
       });
     }
-    // near-duplicate (and exact-duplicate) lines vs the prior song
+    // near-duplicate lines vs the prior song. Two views: bigram similarity
+    // (order-sensitive) AND token-set overlap (order-insensitive) so a reordered
+    // or reworded paraphrase that reuses the same words is still caught.
     for (const l of lines) {
       if (l.length < 8) continue;
       for (const pl of priorLines) {
-        const sim = lineSimilarity(l, pl);
+        const bigram = lineSimilarity(l, pl);
+        const tokenSet = tokenSetSimilarity(l, pl);
+        const sim = Math.max(bigram, tokenSet);
         if (sim >= simThreshold) {
           const exact = normalizeLine(l) === normalizeLine(pl);
+          const how = exact ? 'identical to' : bigram >= simThreshold ? `${(sim * 100) | 0}% similar to` : `${(sim * 100) | 0}% reworded from`;
           flags.push({
             kind: 'too-similar',
-            detail: exact ? `line is identical to "${prior.title}"` : `line is ${(sim * 100) | 0}% similar to "${prior.title}"`,
+            detail: `line is ${how} "${prior.title}"`,
             line: l,
             suggestion: 'rephrase with your own image',
           });
