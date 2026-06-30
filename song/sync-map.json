@@ -1,0 +1,310 @@
+[
+  {
+    "text": "Why's it tough for anyone to see?",
+    "start": 12.99,
+    "end": 14.36,
+    "scene": "desk",
+    "big": false
+  },
+  {
+    "text": "This isn't some grand philosophy.",
+    "start": 14.29,
+    "end": 16.67,
+    "scene": "desk",
+    "big": false
+  },
+  {
+    "text": "Words tossed fast like broken debris,",
+    "start": 17.17,
+    "end": 19.77,
+    "scene": "desk",
+    "big": false
+  },
+  {
+    "text": "Knocking the calm right outta the day.",
+    "start": 20.07,
+    "end": 21.87,
+    "scene": "desk",
+    "big": false
+  },
+  {
+    "text": "Said something reckless—five minutes prior,",
+    "start": 21.97,
+    "end": 24.18,
+    "scene": "neon",
+    "big": false
+  },
+  {
+    "text": "Now flames rise higher like a midnight fryer.",
+    "start": 24.09,
+    "end": 26.93,
+    "scene": "neon",
+    "big": false
+  },
+  {
+    "text": "Thoughts keep spinning in a busted dryer,",
+    "start": 27.35,
+    "end": 29.84,
+    "scene": "neon",
+    "big": false
+  },
+  {
+    "text": "Wish somebody'd speak straight for once, okay?",
+    "start": 29.75,
+    "end": 32.31,
+    "scene": "neon",
+    "big": false
+  },
+  {
+    "text": "Talking circles like a worn-out tire,",
+    "start": 33.93,
+    "end": 35.74,
+    "scene": "vortex",
+    "big": false
+  },
+  {
+    "text": "Messing with timing like a novice liar.",
+    "start": 35.67,
+    "end": 36.63,
+    "scene": "vortex",
+    "big": false
+  },
+  {
+    "text": "Every line thrown feels more bizarre,",
+    "start": 37.71,
+    "end": 40.59,
+    "scene": "vortex",
+    "big": false
+  },
+  {
+    "text": "Guess honesty's never part of the play.",
+    "start": 40.81,
+    "end": 42.85,
+    "scene": "vortex",
+    "big": false
+  },
+  {
+    "text": "We go round and round…",
+    "start": 43.39,
+    "end": 45.35,
+    "scene": "corridor",
+    "big": true
+  },
+  {
+    "text": "Drop the wrong step, end up underground…",
+    "start": 47.91,
+    "end": 50.67,
+    "scene": "corridor",
+    "big": true
+  },
+  {
+    "text": "Gone from the map, never be found…",
+    "start": 50.6,
+    "end": 51.6,
+    "scene": "corridor",
+    "big": true
+  },
+  {
+    "text": "Dom Shady laughs soft with a subtle rebound.",
+    "start": 54.51,
+    "end": 55.69,
+    "scene": "corridor",
+    "big": true
+  },
+  {
+    "text": "They spotted a footprint—nah, not factual,",
+    "start": 60.48,
+    "end": 62.63,
+    "scene": "filmnoir",
+    "big": false
+  },
+  {
+    "text": "Dom Shady's tactics stay supernatural.",
+    "start": 62.54,
+    "end": 65.32,
+    "scene": "filmnoir",
+    "big": false
+  },
+  {
+    "text": "Hours of those shows where detectives track",
+    "start": 66,
+    "end": 67.89,
+    "scene": "filmnoir",
+    "big": false
+  },
+  {
+    "text": "All the methods amateurs lack.",
+    "start": 67.8,
+    "end": 68.74,
+    "scene": "filmnoir",
+    "big": false
+  },
+  {
+    "text": "Documentaries teaching what not to reveal,",
+    "start": 70.72,
+    "end": 73.01,
+    "scene": "desk",
+    "big": false
+  },
+  {
+    "text": "How to keep every angle harder to peel.",
+    "start": 72.92,
+    "end": 75.92,
+    "scene": "desk",
+    "big": false
+  },
+  {
+    "text": "Host says evidence always tells what's real…",
+    "start": 76.32,
+    "end": 78.61,
+    "scene": "desk",
+    "big": false
+  },
+  {
+    "text": "Cut to me scribbling notes during every ordeal.",
+    "start": 78.52,
+    "end": 81.43,
+    "scene": "desk",
+    "big": false
+  },
+  {
+    "text": "Neighbors whisper like they're part of a cast,",
+    "start": 81.34,
+    "end": 83.03,
+    "scene": "glitch",
+    "big": false
+  },
+  {
+    "text": "Claiming my movement's a little too fast.",
+    "start": 82.94,
+    "end": 86.98,
+    "scene": "glitch",
+    "big": false
+  },
+  {
+    "text": "Narrator pops in: “That theory won't last.”",
+    "start": 87.03,
+    "end": 91.08,
+    "scene": "glitch",
+    "big": false
+  },
+  {
+    "text": "Fade to black—jump cut—back to the task.",
+    "start": 91.13,
+    "end": 91.65,
+    "scene": "glitch",
+    "big": false
+  },
+  {
+    "text": "Dom Shady pacing like a scene on tape,",
+    "start": 97.65,
+    "end": 98.66,
+    "scene": "vortex",
+    "big": false
+  },
+  {
+    "text": "Filling each moment with sarcastic shape.",
+    "start": 98.71,
+    "end": 99.71,
+    "scene": "vortex",
+    "big": false
+  },
+  {
+    "text": "Drama in the room that nobody escapes,",
+    "start": 99.76,
+    "end": 101.44,
+    "scene": "vortex",
+    "big": false
+  },
+  {
+    "text": "Nothing here follows the usual way.",
+    "start": 101.37,
+    "end": 103.05,
+    "scene": "vortex",
+    "big": false
+  },
+  {
+    "text": "We go round and round…",
+    "start": 102.98,
+    "end": 106.26,
+    "scene": "corridor",
+    "big": true
+  },
+  {
+    "text": "Drop the wrong step, end up underground…",
+    "start": 106.82,
+    "end": 109.54,
+    "scene": "corridor",
+    "big": true
+  },
+  {
+    "text": "Gone from the map, never be found…",
+    "start": 110.3,
+    "end": 113.45,
+    "scene": "corridor",
+    "big": true
+  },
+  {
+    "text": "Dom Shady hums low with a playful sound.",
+    "start": 113.36,
+    "end": 120.89,
+    "scene": "corridor",
+    "big": true
+  },
+  {
+    "text": "Every thought loops back like a hallway bend,",
+    "start": 120.8,
+    "end": 124.13,
+    "scene": "bridge",
+    "big": false
+  },
+  {
+    "text": "Every claim they toss twists without an end.",
+    "start": 124.04,
+    "end": 127.01,
+    "scene": "bridge",
+    "big": false
+  },
+  {
+    "text": "Rumors bounce wild—none of them blend,",
+    "start": 126.92,
+    "end": 129.57,
+    "scene": "bridge",
+    "big": false
+  },
+  {
+    "text": "Dom Shady just wants the script to amend.",
+    "start": 129.48,
+    "end": 132.24,
+    "scene": "bridge",
+    "big": false
+  },
+  {
+    "text": "Camera pans out on a crooked grin,",
+    "start": 132.56,
+    "end": 135.22,
+    "scene": "outro",
+    "big": false
+  },
+  {
+    "text": "Pen hits paper like trouble's twin.",
+    "start": 135.4,
+    "end": 137.96,
+    "scene": "outro",
+    "big": false
+  },
+  {
+    "text": "Story keeps spinning from within,",
+    "start": 138.12,
+    "end": 140.7,
+    "scene": "outro",
+    "big": false
+  },
+  {
+    "text": "Roll the credits—let the chaos begin.",
+    "start": 140.88,
+    "end": 144.68,
+    "scene": "outro",
+    "big": false
+  }
+]

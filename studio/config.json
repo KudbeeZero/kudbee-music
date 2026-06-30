@@ -1,0 +1,428 @@
+{
+  "fps": 30,
+  "width": 1920,
+  "height": 1080,
+  "durationSec": 158.12,
+  "totalFrames": 4744,
+  "sections": [
+    {
+      "scene": "intro",
+      "label": "Intro",
+      "big": false,
+      "hero": {
+        "clip": "clip03",
+        "mode": "slow",
+        "factor": 0.5
+      },
+      "start": 0.2,
+      "end": 12.22
+    },
+    {
+      "scene": "desk",
+      "label": "Verse 1a",
+      "big": false,
+      "hero": {
+        "clip": "clip04",
+        "mode": "loop"
+      },
+      "start": 12.22,
+      "end": 21.135,
+      "shots": [
+        {
+          "clip": "clip04",
+          "mode": "loop",
+          "start": 12.22,
+          "offset": 0
+        },
+        {
+          "clip": "clip04",
+          "mode": "loop",
+          "start": 16.68,
+          "offset": 90
+        }
+      ]
+    },
+    {
+      "scene": "neon",
+      "label": "Verse 1b",
+      "big": false,
+      "hero": {
+        "clip": "clip05",
+        "mode": "loop"
+      },
+      "start": 21.135,
+      "end": 33.135,
+      "shots": [
+        {
+          "clip": "clip05",
+          "mode": "loop",
+          "start": 21.77,
+          "offset": 0
+        },
+        {
+          "clip": "clip05",
+          "mode": "loop",
+          "start": 24.46,
+          "offset": 90
+        },
+        {
+          "clip": "clip25",
+          "mode": "loop",
+          "start": 27.15,
+          "offset": 0
+        },
+        {
+          "clip": "clip25",
+          "mode": "loop",
+          "start": 30.14,
+          "offset": 90
+        }
+      ]
+    },
+    {
+      "scene": "vortex",
+      "label": "Pre-Hook",
+      "big": false,
+      "hero": {
+        "clip": "clip06",
+        "mode": "loop"
+      },
+      "start": 33.135,
+      "end": 42.392,
+      "shots": [
+        {
+          "clip": "clip06",
+          "mode": "loop",
+          "start": 33.13,
+          "offset": 0
+        },
+        {
+          "clip": "clip06",
+          "mode": "loop",
+          "start": 36.22,
+          "offset": 90
+        },
+        {
+          "clip": "clip06",
+          "mode": "loop",
+          "start": 39.31,
+          "offset": 180
+        }
+      ]
+    },
+    {
+      "scene": "corridor",
+      "label": "Hook 1",
+      "big": true,
+      "hero": {
+        "clip": "clip02",
+        "mode": "loop"
+      },
+      "start": 42.392,
+      "end": 59.535,
+      "shots": [
+        {
+          "clip": "clip17",
+          "mode": "loop",
+          "start": 43.19,
+          "offset": 0
+        },
+        {
+          "clip": "clip19",
+          "mode": "loop",
+          "start": 47.71,
+          "offset": 0
+        },
+        {
+          "clip": "clip20",
+          "mode": "loop",
+          "start": 50.4,
+          "offset": 0
+        },
+        {
+          "clip": "clip02",
+          "mode": "loop",
+          "start": 54.31,
+          "offset": 0
+        },
+        {
+          "clip": "clip02",
+          "mode": "loop",
+          "start": 56.92,
+          "offset": 90
+        }
+      ]
+    },
+    {
+      "scene": "filmnoir",
+      "label": "Verse 2a",
+      "big": false,
+      "hero": {
+        "clip": "clip07",
+        "mode": "loop"
+      },
+      "start": 59.535,
+      "end": 69.82,
+      "shots": [
+        {
+          "clip": "clip12",
+          "mode": "loop",
+          "start": 60.28,
+          "offset": 0
+        },
+        {
+          "clip": "clip07",
+          "mode": "loop",
+          "start": 62.34,
+          "offset": 0
+        },
+        {
+          "clip": "clip14",
+          "mode": "loop",
+          "start": 65.8,
+          "offset": 0
+        }
+      ]
+    },
+    {
+      "scene": "desk",
+      "label": "Verse 2b",
+      "big": false,
+      "hero": {
+        "clip": "clip08",
+        "mode": "loop"
+      },
+      "start": 69.82,
+      "end": 80.449,
+      "shots": [
+        {
+          "clip": "clip08",
+          "mode": "loop",
+          "start": 70.52,
+          "offset": 0
+        },
+        {
+          "clip": "clip08",
+          "mode": "loop",
+          "start": 74.42,
+          "offset": 90
+        },
+        {
+          "clip": "clip13",
+          "mode": "loop",
+          "start": 78.32,
+          "offset": 0
+        }
+      ]
+    },
+    {
+      "scene": "glitch",
+      "label": "Verse 2c",
+      "big": false,
+      "hero": {
+        "clip": "clip09",
+        "mode": "loop"
+      },
+      "start": 80.449,
+      "end": 96.906,
+      "shots": [
+        {
+          "clip": "clip24",
+          "mode": "loop",
+          "start": 81.14,
+          "offset": 0
+        },
+        {
+          "clip": "clip09",
+          "mode": "loop",
+          "start": 82.74,
+          "offset": 0
+        },
+        {
+          "clip": "clip09",
+          "mode": "loop",
+          "start": 86.84,
+          "offset": 90
+        },
+        {
+          "clip": "clip15",
+          "mode": "loop",
+          "start": 90.93,
+          "offset": 0
+        },
+        {
+          "clip": "clip15",
+          "mode": "loop",
+          "start": 93.92,
+          "offset": 90
+        }
+      ]
+    },
+    {
+      "scene": "vortex",
+      "label": "Pre-Hook 2",
+      "big": false,
+      "hero": {
+        "clip": "clip21",
+        "mode": "loop"
+      },
+      "start": 96.906,
+      "end": 103.077,
+      "shots": [
+        {
+          "clip": "clip21",
+          "mode": "loop",
+          "start": 96.91,
+          "offset": 0
+        },
+        {
+          "clip": "clip21",
+          "mode": "loop",
+          "start": 99.99,
+          "offset": 90
+        }
+      ]
+    },
+    {
+      "scene": "corridor",
+      "label": "Hook 2",
+      "big": true,
+      "hero": {
+        "clip": "clip02",
+        "mode": "loop"
+      },
+      "start": 103.077,
+      "end": 119.877,
+      "shots": [
+        {
+          "clip": "clip18",
+          "mode": "loop",
+          "start": 103.08,
+          "offset": 0
+        },
+        {
+          "clip": "clip17",
+          "mode": "loop",
+          "start": 106.62,
+          "offset": 0
+        },
+        {
+          "clip": "clip20",
+          "mode": "loop",
+          "start": 110.1,
+          "offset": 0
+        },
+        {
+          "clip": "clip16",
+          "mode": "loop",
+          "start": 113.16,
+          "offset": 0
+        },
+        {
+          "clip": "clip16",
+          "mode": "loop",
+          "start": 116.52,
+          "offset": 90
+        }
+      ]
+    },
+    {
+      "scene": "bridge",
+      "label": "Bridge",
+      "big": false,
+      "hero": {
+        "clip": "clip10",
+        "mode": "loop"
+      },
+      "start": 119.877,
+      "end": 131.535,
+      "shots": [
+        {
+          "clip": "clip10",
+          "mode": "loop",
+          "start": 120.6,
+          "offset": 0
+        },
+        {
+          "clip": "clip24",
+          "mode": "loop",
+          "start": 123.84,
+          "offset": 0
+        },
+        {
+          "clip": "clip20",
+          "mode": "loop",
+          "start": 126.72,
+          "offset": 0
+        },
+        {
+          "clip": "clip10",
+          "mode": "loop",
+          "start": 129.28,
+          "offset": 0
+        }
+      ]
+    },
+    {
+      "scene": "outro",
+      "label": "Outro",
+      "big": false,
+      "hero": {
+        "clip": "clip11",
+        "mode": "loop"
+      },
+      "start": 131.535,
+      "end": 158.12,
+      "shots": [
+        {
+          "clip": "clip16",
+          "mode": "loop",
+          "start": 132.36,
+          "offset": 0
+        },
+        {
+          "clip": "clip23",
+          "mode": "loop",
+          "start": 135.2,
+          "offset": 0
+        },
+        {
+          "clip": "clip17",
+          "mode": "loop",
+          "start": 137.92,
+          "offset": 0
+        },
+        {
+          "clip": "clip22",
+          "mode": "loop",
+          "start": 140.68,
+          "offset": 0
+        },
+        {
+          "clip": "clip11",
+          "mode": "loop",
+          "start": 144.5,
+          "offset": 0
+        },
+        {
+          "clip": "clip20",
+          "mode": "loop",
+          "start": 148,
+          "offset": 0
+        },
+        {
+          "clip": "clip16",
+          "mode": "loop",
+          "start": 151.5,
+          "offset": 0
+        },
+        {
+          "clip": "clip22",
+          "mode": "loop",
+          "start": 155,
+          "offset": 0
+        }
+      ]
+    }
+  ]
+}
