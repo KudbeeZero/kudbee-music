@@ -64,10 +64,21 @@ it by default — so once a word/phrase is excluded or a preference is set, it
 ## Learning brain & recommendations
 `lib/hermes/learn.ts` derives an evolving **ArtistProfile** from the vault
 (genres, moods, recurring themes, craft strengths, overused words, dark-lean).
-`lib/hermes/recommend.ts` turns that profile + memory into concrete suggestions
-shown in the **Brain · Recommendations** panel: the emotional contrast to take
-next, words to retire (one-tap → exclusion), album readiness, your signature
-sound, weak-hook craft notes, and the best-fit production pack.
+`lib/hermes/recommend.ts` turns that profile + memory + **taste** into concrete
+suggestions shown in the **Brain · Recommendations** panel: the emotional
+contrast to take next, words to retire (one-tap → exclusion), album readiness,
+your signature sound, weak-hook craft notes, and the best-fit production pack.
+
+**Learn from edits.** Rewrite the final lyrics in the Song Package and hit
+"Save — teach the brain": `lib/hermes/edits.ts` diffs the change into a **taste
+model** (`storage.recordTaste`) — words you add are your voice, words you cut are
+rejected. A word you keep cutting becomes a one-tap exclusion recommendation, and
+your signature vocabulary surfaces back. The brain gets more *you* over time.
+
+**Durability.** The Vault drawer can **export/import** the whole vault as JSON
+(`storage.exportVault`/`importVault`) so clearing the browser never loses your
+catalog. Scores are honest heuristics (directional signal), and the uniqueness
+check is explicitly a *local* guard (vs your vault + clichés, not the internet).
 
 ## Expansion packs
 The Hit Factory analog of the video studio's scene packs:

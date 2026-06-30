@@ -4,6 +4,7 @@
 // fits. Pure + deterministic so it's testable and trustworthy.
 import type { SongPackage } from './types';
 import type { ArtistProfile } from './learn';
+import type { Taste } from './storage';
 import { MEMORY } from './memory';
 import { EXPANSION_PACKS } from './expansionPacks';
 
@@ -18,8 +19,25 @@ export interface Recommendation {
   action?: { type: 'add-exclusion' | 'apply-pack' | 'start-album'; value: string };
 }
 
-export function recommend(profile: ArtistProfile, songs: SongPackage[]): Recommendation[] {
+export function recommend(profile: ArtistProfile, songs: SongPackage[], taste?: Taste): Recommendation[] {
   const recs: Recommendation[] = [];
+
+  // learned-from-edits: a word the writer keeps CUTTING is a real exclusion signal
+  if (taste && taste.edits > 0) {
+    const cut = Object.entries(taste.disliked).filter(([, c]) => c >= 2).sort((a, b) => b[1] - a[1])[0];
+    if (cut) {
+      recs.push({
+        kind: 'exclusion', title: `You keep cutting "${cut[0]}"`,
+        detail: `Across your edits you've removed "${cut[0]}" ${cut[1]}× — the brain learned it's not your voice. Add it to the exclusion list?`,
+        action: { type: 'add-exclusion', value: cut[0] },
+      });
+    }
+    const kept = Object.entries(taste.liked).filter(([, c]) => c >= 2).sort((a, b) => b[1] - a[1]).slice(0, 3).map(([w]) => w);
+    if (kept.length) {
+      recs.push({ kind: 'craft', title: 'Your voice is forming', detail: `From your edits, you reach for ${kept.map((w) => `"${w}"`).join(', ')}. Lean into that signature — the brain now weights it.` });
+    }
+  }
+
   if (!profile.songCount) {
     recs.push({
       kind: 'craft', title: 'Write your first one',
