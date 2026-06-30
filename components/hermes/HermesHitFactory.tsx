@@ -5,7 +5,7 @@ import type { SongInputs, SongPackage, AgentOutput } from '@/lib/hermes/types';
 import { AGENT_DEFINITIONS } from '@/lib/hermes/agents';
 import { runPipeline } from '@/lib/hermes/pipeline';
 import { listSongs, saveSong, getSong, deleteSong, priorSongsForOriginality, loadBannedWords, saveBannedWords } from '@/lib/hermes/storage';
-import { DEFAULT_BANNED_WORDS } from '@/lib/hermes/bannedWords';
+import { allAvoidWords } from '@/lib/hermes/memory';
 import SongLabForm from './SongLabForm';
 import AgentBoard from './AgentBoard';
 import SongPackageView from './SongPackageView';
@@ -22,7 +22,7 @@ export default function HermesHitFactory() {
   const [pkg, setPkg] = useState<SongPackage | null>(null);
   const [vault, setVault] = useState<SongPackage[]>([]);
   const [vaultOpen, setVaultOpen] = useState(false);
-  const [banned, setBanned] = useState<string[]>(DEFAULT_BANNED_WORDS);
+  const [banned, setBanned] = useState<string[]>(() => allAvoidWords());
   const [showAvoid, setShowAvoid] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const regenRef = useRef(0); // bumps each run so the same idea yields a fresh take
@@ -30,7 +30,7 @@ export default function HermesHitFactory() {
   // hydrate from local storage on mount (client only — avoids SSR mismatch)
   useEffect(() => {
     setVault(listSongs());
-    setBanned(loadBannedWords(DEFAULT_BANNED_WORDS));
+    setBanned(loadBannedWords(allAvoidWords()));
   }, []);
 
   async function run(inputs: SongInputs) {

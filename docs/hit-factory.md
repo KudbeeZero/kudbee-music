@@ -53,6 +53,14 @@ and runs exactly as before.
 hook strength (20) · emotional clarity (20) · originality (20) · replay value (15)
 · visual identity (10) · short-form potential (10) · release readiness (5).
 
+## Memory layer
+`brain/memory.json` is the **semantic-memory tier** of the brain — a persistent,
+version-controlled store of the user's creative preferences and a growing
+**exclusion list**. `lib/hermes/memory.ts` `allAvoidWords()` merges it with the
+generic clichés (`bannedWords.ts`) and any per-song words, and the pipeline reads
+it by default — so once a word/phrase is excluded or a preference is set, it
+**sticks without re-specifying**. Edit `brain/memory.json` to grow the list.
+
 ## Safety
 Original content only — no copyrighted lyrics, artist mimicry, or scraped
 material. The avoid-word list **warns, never blocks**, and is editable in the UI.

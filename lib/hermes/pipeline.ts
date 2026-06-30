@@ -9,7 +9,7 @@ import type { ProviderBundle } from './providers/providerTypes';
 import { mockProviders } from './providers/mockProviders';
 import { checkOriginality, fingerprintLyrics, type PriorSong } from './originality';
 import { scoreSong } from './scoring';
-import { DEFAULT_BANNED_WORDS } from './bannedWords';
+import { allAvoidWords } from './memory';
 import { keywords, titleCase } from './text';
 
 export interface RunOptions {
@@ -49,7 +49,8 @@ function emotionClarity(inputs: SongInputs, sections: SongSection[]): number {
 export async function runPipeline(inputs: SongInputs, opts: RunOptions = {}): Promise<PipelineResult> {
   const providers = opts.providers ?? mockProviders;
   const seed = opts.seed ?? 0;
-  const banned = (opts.bannedWords ?? DEFAULT_BANNED_WORDS).concat(inputs.doNotUse ?? []);
+  // memory layer: generic clichés + remembered exclusions + this song's words
+  const banned = opts.bannedWords ?? allAvoidWords(inputs.doNotUse ?? []);
   const outputs: AgentOutput[] = [];
   const emit = (o: AgentOutput) => {
     outputs.push(o);

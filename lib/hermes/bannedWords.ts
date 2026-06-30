@@ -1,12 +1,12 @@
-// Default avoid-list. These are WARN-only: a hit never blocks generation, it
-// just surfaces a suggestion. Editable in the UI (persisted via storage).
+// Generic cliché avoid-list (WARN-only — a hit never blocks generation, just
+// surfaces a suggestion). The user's PERSONAL, growing exclusion list lives in
+// the memory layer (brain/memory.json) and is merged in via lib/hermes/memory.ts
+// `allAvoidWords()`.
 export const DEFAULT_BANNED_WORDS: string[] = [
   'echo', 'shadow', 'fire', 'flame', 'highs', 'lows', 'whisper', 'scars',
   'pain', 'fade', 'bonding', 'villain', 'pivot', 'every', 'diamond', 'crown',
-  'mirror', 'mirrors', 'regrets', 'twisted', 'broken', 'rise', 'soldier of truth',
+  'mirror', 'regrets', 'twisted', 'broken', 'rise', 'soldier of truth',
   'dreaming', 'chest', 'cement', 'flutter',
-  // kudbee's growing exclusion list
-  'concrete', 'sharpen', 'sharpened', 'chain', 'chains', 'chained', 'bed', 'bedroom',
 ];
 
 // A few non-corny stand-ins offered when an avoid-word shows up. Intentionally
