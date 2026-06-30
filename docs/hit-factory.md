@@ -96,6 +96,23 @@ prompts in one copy-paste block** (`lib/hermes/suno.ts` `albumSunoExport` —
 per-track title + Style of Music + tagged lyrics). `sunoStyle`/`sunoLyrics` also
 power single-track export.
 
+## Song → video (the bridge)
+The two studios fuse via `hermes from-song`. From a finished package, hit
+**"🎬 Export for video studio"** to download the song JSON, then:
+
+```bash
+hermes from-song cold-hard-gold.json   # scaffolds cold-hard-gold/ (lyrics + pack/aspect/brain prefilled)
+# render the audio in Suno (the Hit Factory gave you the prompts), save it as
+# cold-hard-gold/song/track.mp3
+hermes build cold-hard-gold            # -> cold-hard-gold/out/cold-hard-gold.mp4
+```
+
+`studio/from-song.mjs` maps the song's genre/mood to a fitting scene pack
+(`boom-bap → vhs-lofi`, `retro → retrowave`, …) and dark/aggressive moods to the
+`left` brain, writes `song/lyrics.md` from the package sections, and stashes the
+Suno style + music-video direction in the project README. The lyrics you wrote in
+the Hit Factory become the on-screen, vocal-synced text of the video.
+
 ## Safety
 Original content only — no copyrighted lyrics, artist mimicry, or scraped
 material. The avoid-word list **warns, never blocks**, and is editable in the UI.

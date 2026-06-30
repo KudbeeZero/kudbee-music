@@ -52,7 +52,10 @@ function fill(frame: string, inputs: SongInputs, rng: () => number): string {
   const verbs = shuffle(VERBS, rng);
   const adjs = shuffle(ADJ, rng);
   let ni = 0, vi = 0, ai = 0;
-  const who = inputs.audience ? inputs.audience.split(/\s+/)[0] : 'mine';
+  // pick a meaningful audience word — skip leading articles ("the lonely" -> "lonely")
+  const WHO_STOP = new Set(['the', 'a', 'an', 'my', 'for', 'to', 'of', 'all']);
+  const whoTokens = (inputs.audience || '').split(/\s+/).filter(Boolean);
+  const who = whoTokens.find((w) => !WHO_STOP.has(w.toLowerCase())) || whoTokens[whoTokens.length - 1] || 'mine';
   const out = frame
     .replace(/\{k\}/g, () => titleCase(nouns[ni++ % nouns.length]))
     .replace(/\{noun\}/g, () => nouns[ni++ % nouns.length])
