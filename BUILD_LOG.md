@@ -4,12 +4,30 @@ An autonomous build loop works through the backlog below: each iteration builds
 one item, verifies it, commits, and records it here.
 
 ## Up next
-- [ ] Project-targeted build — make `hermes build <dir>` render a scaffolded project (read its `hermes.json`)
-- [ ] Auto song-structure detection (segment from beats + energy novelty, fewer hand-authored sections)
-- [ ] `hermes-composer`: optional MusicGen wiring (opt-in, documented heavy deps)
 - [ ] Tiny test suite + a smoke-render CI job
+- [ ] Audio-novelty song-structure detection (segment from beats + energy when a
+      project has no structured `lyrics.md` headers; today sections come from headers)
+- [ ] `hermes-composer`: optional MusicGen wiring (opt-in, documented heavy deps)
+- [ ] Per-pack scene variety for generic projects (more than the shared scene cycle)
 
 ## Done
+### Iteration 3 — project-targeted build (`hermes build <dir>`)
+The studio now runs against any scaffolded project, not just the flagship.
+- **Data-root override:** a `HERMES_DATA` env var points `analyze` / `prep-frames`
+  / `build-timeline` / `render` at a project folder (defaults to repo root, so the
+  flagship build is byte-identical — verified).
+- **Generic timeline:** when building a project, `build-timeline` parses the
+  project's own `lyrics.md` (`[Verse]`/`# Hook` headers → sections, spread across
+  the song by line count), assigns procedural scenes (skipping the flagship's
+  branded intro/outro cards), and emits a compatible `config.json` + sync-map —
+  no hero footage required, so any `--pack` renders out of the box.
+- **CLI:** `hermes build <dir>` reads `<dir>/hermes.json` (`pack`, `aspect`),
+  builds from the project's `song/` + `assets/`, writes `<dir>/out/<name>.mp4`.
+- Verified end-to-end: scaffolded a project with its own 20s track + custom
+  lyrics, `hermes build proj` → finished `vhs-lofi` video with the project's own
+  words rendering in sync. (closes the project-targeted-build backlog item)
+
+### Iteration 2 — two new scene packs (`vhs-lofi` + `lyric-minimal`)
 ### Iteration 2 — two new scene packs (`vhs-lofi` + `lyric-minimal`)
 Two fully-procedural styles, gated on `PACK` exactly like `retrowave`, each a
 `scene<Name>` + `grade<Name>` in `studio/player.html` plus a `pack.json`.

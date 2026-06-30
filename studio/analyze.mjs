@@ -6,8 +6,11 @@ import { fileURLToPath } from 'node:url';
 import { dirname, resolve } from 'node:path';
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..');
+// HERMES_DATA points the pipeline at a project folder (hermes build <dir>);
+// defaults to the repo root so the built-in flagship build is unchanged.
+const DATA = process.env.HERMES_DATA ? resolve(process.env.HERMES_DATA) : ROOT;
 const FFMPEG = resolve(ROOT, '.bin/ffmpeg');
-const TRACK = resolve(ROOT, 'song/track.mp3');
+const TRACK = resolve(DATA, 'song/track.mp3');
 const FPS = 30;
 const SR = 22050; // analysis sample rate (mono)
 
@@ -94,5 +97,5 @@ const out = {
   onsets: onsetTimes.map(t => +t.toFixed(3)),
   loudness: perFrame,
 };
-writeFileSync(resolve(ROOT, 'song/analysis.json'), JSON.stringify(out));
+writeFileSync(resolve(DATA, 'song/analysis.json'), JSON.stringify(out));
 console.log(`duration=${out.durationSec}s frames=${out.totalFrames} bpm=${out.bpm} beats=${beats.length} onsets=${onsetTimes.length}`);
