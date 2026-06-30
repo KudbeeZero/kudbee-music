@@ -79,6 +79,18 @@ who the writer is from their vault (reusing `learn.ts`), so the room is informed
 everything they've made. **Assistant, not autopilot** — the artist makes every real
 choice; the brain sharpens the voice instead of replacing it.
 
+## Persona map (anonymized craft-DNA)
+`brain/personas.json` + `lib/hermes/personas.ts` map **how a kind of lyrical mind
+works** — its subjects, rhyme density, cadence, structure, register, and appetite for
+novelty — as craft **archetypes** (*The Confessional Storyteller, The Battle
+Technician, The Soul Poet, The Street Documentarian, The Melodic Minimalist, The
+Conscious Visionary*). The artist describes the **feel** they're chasing;
+`matchPersona()`/`suggestPersona()` map it to the closest archetype, and
+`personaOverlay()` weaves that craft-DNA into each Writers-Room step (a tailored
+option + coaching). **No real artist is ever named, no lyrics are ever used** — we
+map the brain and the persona, never the identity (enforced by the `original-only`
+belief). This is framework Part 1 ("deconstruct the influences"), done original-only.
+
 ## Memory layer
 `brain/memory.json` is the **semantic-memory tier** of the brain — a persistent,
 version-controlled store of the user's creative preferences and a growing

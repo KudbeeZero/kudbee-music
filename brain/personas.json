@@ -1,0 +1,80 @@
+{
+  "version": 1,
+  "name": "HERMES Persona Map — anonymized lyrical craft-DNA",
+  "updated": "2026-06-30",
+  "note": "We map how a kind of lyrical MIND works — its subjects, rhyme density, cadence, structure, register, and appetite for novelty — never a real person's name, voice, or words. These are craft archetypes the algorithm can wear. Original-only by design (see brain/beliefs.json).",
+  "personas": [
+    {
+      "id": "confessional-storyteller",
+      "name": "The Confessional Storyteller",
+      "essence": "Turns a private truth into a scene you can walk through.",
+      "themePalette": ["family", "regret", "growing up", "the cost of choices", "home"],
+      "rhyme": { "density": "moderate", "internal": false, "scheme": "AABB couplets" },
+      "cadence": "conversational, behind-the-beat, lets lines breathe",
+      "structure": ["scene-first verses", "a bridge that reframes the opening", "quiet hook"],
+      "register": "plainspoken, concrete nouns over abstractions",
+      "novelty": 0.4,
+      "craftFocus": "emotional truth and narrative arc"
+    },
+    {
+      "id": "battle-technician",
+      "name": "The Battle Technician",
+      "essence": "Engineers rhyme like clockwork — every bar is a mechanism.",
+      "themePalette": ["skill", "proving it", "the come-up", "doubters", "legacy"],
+      "rhyme": { "density": "dense", "internal": true, "scheme": "multisyllabic chains" },
+      "cadence": "on-beat, percussive, breath-controlled runs",
+      "structure": ["punchline-loaded verses", "escalating hook", "no wasted bars"],
+      "register": "sharp, wordplay-heavy, double meanings",
+      "novelty": 0.7,
+      "craftFocus": "technical density and the quotable punchline"
+    },
+    {
+      "id": "soul-poet",
+      "name": "The Soul Poet",
+      "essence": "Writes warm, literary lines over sampled grief and hope.",
+      "themePalette": ["faith", "love", "struggle into grace", "memory", "the block"],
+      "rhyme": { "density": "moderate", "internal": true, "scheme": "ABAB with internal echoes" },
+      "cadence": "melodic, legato, rides the sample",
+      "structure": ["builds to a lifted hook", "call-and-response", "outro that resolves"],
+      "register": "literary, metaphor-rich, spiritual imagery",
+      "novelty": 0.55,
+      "craftFocus": "imagery and emotional uplift"
+    },
+    {
+      "id": "street-documentarian",
+      "name": "The Street Documentarian",
+      "essence": "Reports the block in cinematic, unflinching detail.",
+      "themePalette": ["survival", "the neighborhood", "loyalty", "consequence", "ambition"],
+      "rhyme": { "density": "moderate", "internal": false, "scheme": "AABB, end-stopped" },
+      "cadence": "steady, deliberate, every word lands",
+      "structure": ["vivid first-person reportage", "a turn at verse two", "stark hook"],
+      "register": "gritty, concrete, slang-grounded but clear",
+      "novelty": 0.45,
+      "craftFocus": "vivid scene and moral weight"
+    },
+    {
+      "id": "melodic-minimalist",
+      "name": "The Melodic Minimalist",
+      "essence": "Says less, repeats the right thing, lets melody carry it.",
+      "themePalette": ["longing", "nights", "money and emptiness", "distance", "feeling"],
+      "rhyme": { "density": "sparse", "internal": false, "scheme": "simple end-rhyme, repetition" },
+      "cadence": "melodic, spacious, hook-first",
+      "structure": ["hook-led", "short verses", "repetition as the payoff"],
+      "register": "simple, emotional, few words doing a lot",
+      "novelty": 0.35,
+      "craftFocus": "earworm hook and mood"
+    },
+    {
+      "id": "conscious-visionary",
+      "name": "The Conscious Visionary",
+      "essence": "Stacks imagery into a bigger argument about the world.",
+      "themePalette": ["society", "identity", "power", "history", "liberation"],
+      "rhyme": { "density": "dense", "internal": true, "scheme": "layered, enjambed" },
+      "cadence": "urgent, rhythmically restless, run-on phrasing",
+      "structure": ["thesis hook", "verses that widen the lens", "bridge as the reckoning"],
+      "register": "dense, allusive, big abstractions earned by detail",
+      "novelty": 0.8,
+      "craftFocus": "layered meaning and social arc"
+    }
+  ]
+}
