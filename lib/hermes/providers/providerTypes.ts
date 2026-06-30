@@ -3,11 +3,14 @@
 // touching the agents or pipeline.
 import type { SongInputs, HookOption, SongSection, ProductionNotes } from '../types';
 
+// `seed` is an optional regeneration nonce — same seed reproduces the same draft
+// (stable tests + meaningful vault), a new seed yields a fresh take on the same
+// brief. A live provider may ignore it or fold it into its own sampling.
 export interface LyricsProvider {
   readonly id: string;
   readonly live: boolean; // false = mock/local
-  generateHooks(inputs: SongInputs, count: number): Promise<HookOption[]>;
-  generateSections(inputs: SongInputs, hook: HookOption): Promise<SongSection[]>;
+  generateHooks(inputs: SongInputs, count: number, seed?: number): Promise<HookOption[]>;
+  generateSections(inputs: SongInputs, hook: HookOption, seed?: number): Promise<SongSection[]>;
 }
 
 export interface AudioProvider {

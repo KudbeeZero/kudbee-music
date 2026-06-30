@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import type { SongInputs, SongPackage, AgentOutput } from '@/lib/hermes/types';
 import { AGENT_DEFINITIONS } from '@/lib/hermes/agents';
 import { runPipeline } from '@/lib/hermes/pipeline';
@@ -25,6 +25,7 @@ export default function HermesHitFactory() {
   const [banned, setBanned] = useState<string[]>(DEFAULT_BANNED_WORDS);
   const [showAvoid, setShowAvoid] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const regenRef = useRef(0); // bumps each run so the same idea yields a fresh take
 
   // hydrate from local storage on mount (client only — avoids SSR mismatch)
   useEffect(() => {
@@ -43,7 +44,8 @@ export default function HermesHitFactory() {
       const priorSongs = priorSongsForOriginality().filter(
         (s) => s.title.trim().toLowerCase() !== inputs.title.trim().toLowerCase(),
       );
-      const { pkg: result } = await runPipeline(inputs, { priorSongs, bannedWords: banned });
+      const seed = (Date.now() ^ (regenRef.current++ * 0x9e3779b1)) >>> 0;
+      const { pkg: result } = await runPipeline(inputs, { priorSongs, bannedWords: banned, seed });
 
       // play the pipeline back so the board updates agent-by-agent
       for (const o of result.agentOutputs) {
@@ -140,10 +142,12 @@ export default function HermesHitFactory() {
               <>
                 <p className={styles.hint}>Warned, never blocked. Edit freely — saved locally.</p>
                 <textarea
+                  key={banned.join('|')}
                   className={styles.textarea}
                   style={{ minHeight: 110 }}
                   defaultValue={banned.join(', ')}
                   onBlur={(e) => saveAvoid(e.target.value)}
+                  aria-label="Avoid-words, comma separated"
                 />
               </>
             )}

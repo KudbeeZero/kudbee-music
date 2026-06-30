@@ -5,12 +5,12 @@
 // uniqueness vault).
 import type { LyricsProvider } from './providerTypes';
 import type { SongInputs, HookOption, SongSection } from '../types';
-import { makeRng, hashString, pick, keywords, titleCase } from '../text';
+import { makeRng, hashString, pick, keywords, titleCase, shuffle } from '../text';
 
-function seedOf(inputs: SongInputs, salt = ''): number {
+function seedOf(inputs: SongInputs, salt = '', seed = 0): number {
   return hashString(
     [inputs.title, inputs.theme, inputs.mood, inputs.genre, inputs.voice, salt].join('|'),
-  );
+  ) ^ (seed >>> 0);
 }
 
 // Scaffolds are abstract frames; {k}=keyword, {who}=audience, {place}=ref token.
@@ -71,9 +71,9 @@ export const mockLyricsProvider: LyricsProvider = {
   id: 'mock-lyrics',
   live: false,
 
-  async generateHooks(inputs, count) {
-    const rng = makeRng(seedOf(inputs, 'hooks'));
-    const frames = [...HOOK_FRAMES].sort(() => rng() - 0.5);
+  async generateHooks(inputs, count, seed = 0) {
+    const rng = makeRng(seedOf(inputs, 'hooks', seed));
+    const frames = shuffle(HOOK_FRAMES, rng);
     const out: HookOption[] = [];
     for (let i = 0; i < count && i < frames.length; i++) {
       const text = capitalize(fill(frames[i], inputs, rng));
@@ -91,9 +91,9 @@ export const mockLyricsProvider: LyricsProvider = {
     return out;
   },
 
-  async generateSections(inputs, hook) {
-    const rng = makeRng(seedOf(inputs, 'verse'));
-    const frames = [...VERSE_FRAMES].sort(() => rng() - 0.5);
+  async generateSections(inputs, hook, seed = 0) {
+    const rng = makeRng(seedOf(inputs, 'verse', seed));
+    const frames = shuffle(VERSE_FRAMES, rng);
     const v1 = dedupe(frames.slice(0, 4).map((f) => capitalize(fill(f, inputs, rng))));
     const v2 = dedupe(frames.slice(4, 8).map((f) => capitalize(fill(f, inputs, rng))));
     const bridge = dedupe(frames.slice(8).concat(frames.slice(0, 2)).slice(0, 2).map((f) => capitalize(fill(f, inputs, rng))));

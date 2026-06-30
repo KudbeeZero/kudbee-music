@@ -20,6 +20,9 @@ export interface RunOptions {
   /** stable id + timestamp injection (tests pass fixed values) */
   id?: string;
   now?: string;
+  /** regeneration nonce — omit for a deterministic draft, pass a fresh value
+   *  (e.g. from the UI) to get a different take on the same brief */
+  seed?: number;
 }
 
 const ORDER: AgentId[] = [
@@ -45,6 +48,7 @@ function emotionClarity(inputs: SongInputs, sections: SongSection[]): number {
 
 export async function runPipeline(inputs: SongInputs, opts: RunOptions = {}): Promise<PipelineResult> {
   const providers = opts.providers ?? mockProviders;
+  const seed = opts.seed ?? 0;
   const banned = (opts.bannedWords ?? DEFAULT_BANNED_WORDS).concat(inputs.doNotUse ?? []);
   const outputs: AgentOutput[] = [];
   const emit = (o: AgentOutput) => {
@@ -76,7 +80,7 @@ export async function runPipeline(inputs: SongInputs, opts: RunOptions = {}): Pr
 
   // 2) Hooksmith — hooks
   announce('hooksmith');
-  const hookOptions: HookOption[] = await providers.lyrics.generateHooks(inputs, 5);
+  const hookOptions: HookOption[] = await providers.lyrics.generateHooks(inputs, 5, seed);
   const chosenHook = hookOptions.slice().sort((a, b) => b.score - a.score)[0] ?? null;
   emit({
     id: 'hooksmith', name: 'Hooksmith', status: hookOptions.length ? 'done' : 'warning',
@@ -90,7 +94,7 @@ export async function runPipeline(inputs: SongInputs, opts: RunOptions = {}): Pr
   // 3) Lyric Chemist — sections + lyrics
   announce('lyric-chemist');
   const sections: SongSection[] = chosenHook
-    ? await providers.lyrics.generateSections(inputs, chosenHook)
+    ? await providers.lyrics.generateSections(inputs, chosenHook, seed)
     : [];
   const finalLyrics = lyricsText(sections);
   emit({

@@ -46,11 +46,19 @@ describe('pipeline', () => {
     expect(pkg.score.originality).toBeGreaterThan(5); // out of 20
   });
 
-  it('is deterministic for the same input', async () => {
+  it('is deterministic for the same input (no seed)', async () => {
     const a = await runPipeline(idea, { id: 'x', now: '2026-01-01T00:00:00Z' });
     const b = await runPipeline(idea, { id: 'x', now: '2026-01-01T00:00:00Z' });
     expect(a.pkg.finalLyrics).toBe(b.pkg.finalLyrics);
     expect(a.pkg.score.total).toBe(b.pkg.score.total);
+  });
+
+  it('reproduces a seeded draft but varies across seeds', async () => {
+    const a = await runPipeline(idea, { id: 'a', now: '2026-01-01T00:00:00Z', seed: 1 });
+    const b = await runPipeline(idea, { id: 'b', now: '2026-01-01T00:00:00Z', seed: 1 });
+    const c = await runPipeline(idea, { id: 'c', now: '2026-01-01T00:00:00Z', seed: 2 });
+    expect(a.pkg.finalLyrics).toBe(b.pkg.finalLyrics);        // same seed → same draft
+    expect(a.pkg.finalLyrics).not.toBe(c.pkg.finalLyrics);    // new seed → fresh take
   });
 
   it('reports progress for each step', async () => {

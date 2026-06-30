@@ -47,51 +47,51 @@ export default function SongLabForm({
     <div className={styles.panel}>
       <div className={styles.panelTitle}>Song Lab</div>
 
-      <Field label="Song title">
-        <input className={styles.input} value={v.title} onChange={(e) => set('title', e.target.value)} placeholder="Working title" />
+      <Field label="Song title" htmlFor="hf-title">
+        <input id="hf-title" className={styles.input} value={v.title} onChange={(e) => set('title', e.target.value)} placeholder="Working title" />
       </Field>
 
-      <Field label="Theme / idea">
-        <textarea className={styles.textarea} value={v.theme} onChange={(e) => set('theme', e.target.value)} placeholder="What's the song about?" />
+      <Field label="Theme / idea" htmlFor="hf-theme">
+        <textarea id="hf-theme" className={styles.textarea} value={v.theme} onChange={(e) => set('theme', e.target.value)} placeholder="What's the song about?" />
       </Field>
 
       <div className={styles.row2}>
-        <Field label="Mood">
-          <input className={styles.input} value={v.mood} onChange={(e) => set('mood', e.target.value)} />
+        <Field label="Mood" htmlFor="hf-mood">
+          <input id="hf-mood" className={styles.input} value={v.mood} onChange={(e) => set('mood', e.target.value)} />
         </Field>
-        <Field label="Genre">
-          <input className={styles.input} value={v.genre} onChange={(e) => set('genre', e.target.value)} />
+        <Field label="Genre" htmlFor="hf-genre">
+          <input id="hf-genre" className={styles.input} value={v.genre} onChange={(e) => set('genre', e.target.value)} />
         </Field>
       </div>
 
       <div className={styles.row2}>
-        <Field label="Tempo min (BPM)">
-          <input className={styles.input} type="number" value={v.tempoMin} onChange={(e) => set('tempoMin', Number(e.target.value))} />
+        <Field label="Tempo min (BPM)" htmlFor="hf-tmin">
+          <input id="hf-tmin" className={styles.input} type="number" value={v.tempoMin} onChange={(e) => set('tempoMin', Number(e.target.value))} />
         </Field>
-        <Field label="Tempo max (BPM)">
-          <input className={styles.input} type="number" value={v.tempoMax} onChange={(e) => set('tempoMax', Number(e.target.value))} />
+        <Field label="Tempo max (BPM)" htmlFor="hf-tmax">
+          <input id="hf-tmax" className={styles.input} type="number" value={v.tempoMax} onChange={(e) => set('tempoMax', Number(e.target.value))} />
         </Field>
       </div>
 
       <div className={styles.row2}>
-        <Field label="Voice / persona">
-          <input className={styles.input} value={v.voice} onChange={(e) => set('voice', e.target.value)} />
+        <Field label="Voice / persona" htmlFor="hf-voice">
+          <input id="hf-voice" className={styles.input} value={v.voice} onChange={(e) => set('voice', e.target.value)} />
         </Field>
-        <Field label="Audience">
-          <input className={styles.input} value={v.audience} onChange={(e) => set('audience', e.target.value)} />
+        <Field label="Audience" htmlFor="hf-audience">
+          <input id="hf-audience" className={styles.input} value={v.audience} onChange={(e) => set('audience', e.target.value)} />
         </Field>
       </div>
 
-      <Field label="References / inspiration (feel only — never copied)">
-        <textarea className={styles.textarea} value={v.references} onChange={(e) => set('references', e.target.value)} />
+      <Field label="References / inspiration (feel only — never copied)" htmlFor="hf-refs">
+        <textarea id="hf-refs" className={styles.textarea} value={v.references} onChange={(e) => set('references', e.target.value)} />
       </Field>
 
-      <Field label="Do-not-use words (comma separated)">
-        <input className={styles.input} value={doNotUseRaw} onChange={(e) => setDoNotUseRaw(e.target.value)} placeholder="corny, generic, ..." />
+      <Field label="Do-not-use words (comma separated)" htmlFor="hf-dnu">
+        <input id="hf-dnu" className={styles.input} value={doNotUseRaw} onChange={(e) => setDoNotUseRaw(e.target.value)} placeholder="corny, generic, ..." />
       </Field>
 
-      <Field label="Structure">
-        <select className={styles.select} value={v.structure} onChange={(e) => set('structure', e.target.value as SongStructure)}>
+      <Field label="Structure" htmlFor="hf-structure">
+        <select id="hf-structure" className={styles.select} value={v.structure} onChange={(e) => set('structure', e.target.value as SongStructure)}>
           {STRUCTURES.map((s) => <option key={s.value} value={s.value}>{s.label}</option>)}
         </select>
       </Field>
@@ -106,10 +106,10 @@ export default function SongLabForm({
   );
 }
 
-function Field({ label, children }: { label: string; children: React.ReactNode }) {
+function Field({ label, htmlFor, children }: { label: string; htmlFor?: string; children: React.ReactNode }) {
   return (
     <div className={styles.field}>
-      <span className={styles.label}>{label}</span>
+      <label className={styles.label} htmlFor={htmlFor}>{label}</label>
       {children}
     </div>
   );
