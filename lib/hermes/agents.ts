@@ -1,0 +1,100 @@
+// The 10 HERMES Hit Factory agents — static definitions the Agent Board renders.
+// Run logic lives in pipeline.ts (each agent emits a typed AgentOutput).
+import type { AgentDefinition } from './types';
+
+export const AGENT_DEFINITIONS: AgentDefinition[] = [
+  {
+    id: 'conductor',
+    name: 'HERMES Conductor',
+    role: 'Orchestrator',
+    mission: 'Turn the raw idea into a structured creative brief and run the pipeline.',
+    hemisphere: 'left',
+    inputRequirements: ['theme', 'mood', 'genre', 'audience'],
+    outputSchema: 'brief + concept summary',
+  },
+  {
+    id: 'hooksmith',
+    name: 'Hooksmith',
+    role: 'Hook designer',
+    mission: 'Generate sticky, repeatable, emotional hooks — original, never copied.',
+    hemisphere: 'right',
+    inputRequirements: ['theme', 'mood', 'voice'],
+    outputSchema: 'hookOptions[] with angle, cadence, score',
+  },
+  {
+    id: 'lyric-chemist',
+    name: 'Lyric Chemist',
+    role: 'Lyricist',
+    mission: 'Build original verses with internal rhyme, clarity, and story progression.',
+    hemisphere: 'right',
+    inputRequirements: ['chosen hook', 'theme', 'structure'],
+    outputSchema: 'sections[] + final lyrics',
+  },
+  {
+    id: 'beat-oracle',
+    name: 'Beat Oracle',
+    role: 'Producer',
+    mission: 'Direct tempo, drums, bass, instrumentation, arrangement, and energy curve.',
+    hemisphere: 'left',
+    inputRequirements: ['genre', 'tempo range', 'mood'],
+    outputSchema: 'production notes',
+  },
+  {
+    id: 'emotion-scanner',
+    name: 'Emotion Scanner',
+    role: 'Resonance check',
+    mission: 'Confirm a clear problem, tension, payoff, and a memorable identity.',
+    hemisphere: 'left',
+    inputRequirements: ['lyrics', 'theme'],
+    outputSchema: 'emotion arc + clarity score',
+  },
+  {
+    id: 'originality-auditor',
+    name: 'Originality Auditor',
+    role: 'Uniqueness & safety',
+    mission: 'Flag repeats, clichés, banned words, and similarity to prior songs.',
+    hemisphere: 'left',
+    inputRequirements: ['lyrics', 'vault', 'banned words'],
+    outputSchema: 'uniqueness report (0–100)',
+  },
+  {
+    id: 'ar-judge',
+    name: 'A&R Judge',
+    role: 'Commercial QC',
+    mission: 'Score memorability, replayability, clarity, and marketability.',
+    hemisphere: 'left',
+    inputRequirements: ['full package'],
+    outputSchema: 'banger score (0–100)',
+  },
+  {
+    id: 'visual-director',
+    name: 'Visual Director',
+    role: 'Album & video direction',
+    mission: 'Generate cinematic 16:9 video prompts, cover art, and scene ideas.',
+    hemisphere: 'right',
+    inputRequirements: ['concept', 'mood'],
+    outputSchema: 'visual package',
+  },
+  {
+    id: 'viral-clip-scout',
+    name: 'Viral Clip Scout',
+    role: 'Short-form',
+    mission: 'Find the best 10–20s moments and write captions/hooks for them.',
+    hemisphere: 'right',
+    inputRequirements: ['sections', 'hook'],
+    outputSchema: 'viral clips[]',
+  },
+  {
+    id: 'rights-release-guard',
+    name: 'Rights & Release Guard',
+    role: 'Safety & readiness',
+    mission: 'Warn on risky references, missing metadata, and unclear ownership.',
+    hemisphere: 'left',
+    inputRequirements: ['inputs', 'uniqueness'],
+    outputSchema: 'release checklist + warnings',
+  },
+];
+
+export function getAgent(id: string): AgentDefinition | undefined {
+  return AGENT_DEFINITIONS.find((a) => a.id === id);
+}

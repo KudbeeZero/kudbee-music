@@ -1,0 +1,55 @@
+:root {
+  --bg-0: #07070b;
+  --bg-1: #0d0d14;
+  --bg-2: #14141f;
+  --panel: rgba(22, 22, 34, 0.72);
+  --panel-solid: #161622;
+  --line: rgba(255, 255, 255, 0.08);
+  --line-strong: rgba(255, 255, 255, 0.16);
+  --ink: #f3f1fb;
+  --ink-dim: #a8a6bd;
+  --ink-faint: #6f6d86;
+  --amber: #ffb14e;
+  --amber-2: #ff8a3d;
+  --violet: #8b5cff;
+  --magenta: #d24bff;
+  --cyan: #36e0d4;
+  --good: #57d98a;
+  --warn: #ffce5a;
+  --bad: #ff5d6c;
+  --glow-amber: 0 0 24px rgba(255, 150, 70, 0.35);
+  --radius: 14px;
+  --maxw: 1480px;
+  font-synthesis-weight: none;
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  padding: 0;
+  background:
+    radial-gradient(1200px 700px at 80% -10%, rgba(139, 92, 255, 0.16), transparent 60%),
+    radial-gradient(900px 600px at 0% 0%, rgba(255, 138, 61, 0.10), transparent 55%),
+    var(--bg-0);
+  color: var(--ink);
+  font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  min-height: 100vh;
+}
+
+a { color: inherit; }
+
+h1, h2, h3, h4 { font-weight: 800; letter-spacing: -0.02em; margin: 0; }
+
+::selection { background: rgba(255, 177, 78, 0.3); }
+
+input, textarea, select, button { font-family: inherit; }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+}
