@@ -53,6 +53,38 @@ and runs exactly as before.
 hook strength (20) · emotional clarity (20) · originality (20) · replay value (15)
 · visual identity (10) · short-form potential (10) · release readiness (5).
 
+## Memory layer
+`brain/memory.json` is the **semantic-memory tier** of the brain — a persistent,
+version-controlled store of the user's creative preferences and a growing
+**exclusion list**. `lib/hermes/memory.ts` `allAvoidWords()` merges it with the
+generic clichés (`bannedWords.ts`) and any per-song words, and the pipeline reads
+it by default — so once a word/phrase is excluded or a preference is set, it
+**sticks without re-specifying**. Edit `brain/memory.json` to grow the list.
+
+## Learning brain & recommendations
+`lib/hermes/learn.ts` derives an evolving **ArtistProfile** from the vault
+(genres, moods, recurring themes, craft strengths, overused words, dark-lean).
+`lib/hermes/recommend.ts` turns that profile + memory into concrete suggestions
+shown in the **Brain · Recommendations** panel: the emotional contrast to take
+next, words to retire (one-tap → exclusion), album readiness, your signature
+sound, weak-hook craft notes, and the best-fit production pack.
+
+## Expansion packs
+The Hit Factory analog of the video studio's scene packs:
+`expansion-packs/<name>/pack.json` is a production/style preset with a
+ready-to-paste **Suno style string**. Three ship (`drill-dark`, `soul-sample`,
+`trap-ballad`); the recommender suggests the one that fits your profile, and
+"→ send to Song Lab" prefills a new track from it. Add one by dropping a new
+`pack.json` and importing it in `lib/hermes/expansionPacks.ts`.
+
+## Albums & Suno export
+`lib/hermes/album.ts` groups vault songs into an album (`buildAlbum`), flags the
+arc/length **gaps** (`albumGaps`), and proposes a running order
+(`suggestSequence`). The **Albums** drawer creates albums and exports **all Suno
+prompts in one copy-paste block** (`lib/hermes/suno.ts` `albumSunoExport` —
+per-track title + Style of Music + tagged lyrics). `sunoStyle`/`sunoLyrics` also
+power single-track export.
+
 ## Safety
 Original content only — no copyrighted lyrics, artist mimicry, or scraped
 material. The avoid-word list **warns, never blocks**, and is editable in the UI.

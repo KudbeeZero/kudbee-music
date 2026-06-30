@@ -1,5 +1,7 @@
-// Default avoid-list. These are WARN-only: a hit never blocks generation, it
-// just surfaces a suggestion. Editable in the UI (persisted via storage).
+// Generic cliché avoid-list (WARN-only — a hit never blocks generation, just
+// surfaces a suggestion). The user's PERSONAL, growing exclusion list lives in
+// the memory layer (brain/memory.json) and is merged in via lib/hermes/memory.ts
+// `allAvoidWords()`.
 export const DEFAULT_BANNED_WORDS: string[] = [
   'echo', 'shadow', 'fire', 'flame', 'highs', 'lows', 'whisper', 'scars',
   'pain', 'fade', 'bonding', 'villain', 'pivot', 'every', 'diamond', 'crown',
@@ -20,6 +22,10 @@ export const REPLACEMENT_HINTS: Record<string, string[]> = {
   mirror: ['the glass', 'my reflection', 'the window'],
   dreaming: ['planning', 'building it', 'awake on it'],
   scars: ['the marks', 'old stitches', 'the proof'],
+  concrete: ['the pavement', 'the asphalt', 'the gravel'],
+  chain: ['the weight', 'the lock', 'the leash'],
+  bed: ['the floor', 'the empty room', 'the cold side'],
+  bedroom: ['the empty room', 'the four walls', 'the dark'],
 };
 
 export function suggestReplacement(word: string): string | undefined {

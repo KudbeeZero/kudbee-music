@@ -4,14 +4,18 @@ import { useEffect, useRef, useState } from 'react';
 import type { SongInputs, SongPackage, AgentOutput } from '@/lib/hermes/types';
 import { AGENT_DEFINITIONS } from '@/lib/hermes/agents';
 import { runPipeline } from '@/lib/hermes/pipeline';
-import { listSongs, saveSong, getSong, deleteSong, priorSongsForOriginality, loadBannedWords, saveBannedWords } from '@/lib/hermes/storage';
-import { DEFAULT_BANNED_WORDS } from '@/lib/hermes/bannedWords';
+import { listSongs, saveSong, getSong, deleteSong, priorSongsForOriginality, loadBannedWords, saveBannedWords, listAlbums, saveAlbum, deleteAlbum } from '@/lib/hermes/storage';
+import { allAvoidWords } from '@/lib/hermes/memory';
+import type { Album } from '@/lib/hermes/album';
+import type { ExpansionPack } from '@/lib/hermes/expansionPacks';
 import SongLabForm from './SongLabForm';
 import AgentBoard from './AgentBoard';
 import SongPackageView from './SongPackageView';
 import BangerScoreCard from './BangerScoreCard';
 import UniquenessReportView from './UniquenessReport';
 import VaultDrawer from './VaultDrawer';
+import RecommendationsPanel from './RecommendationsPanel';
+import AlbumView from './AlbumView';
 import styles from './hermes.module.css';
 
 const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
@@ -22,16 +26,24 @@ export default function HermesHitFactory() {
   const [pkg, setPkg] = useState<SongPackage | null>(null);
   const [vault, setVault] = useState<SongPackage[]>([]);
   const [vaultOpen, setVaultOpen] = useState(false);
-  const [banned, setBanned] = useState<string[]>(DEFAULT_BANNED_WORDS);
+  const [banned, setBanned] = useState<string[]>(() => allAvoidWords());
   const [showAvoid, setShowAvoid] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [albums, setAlbums] = useState<Album[]>([]);
+  const [albumOpen, setAlbumOpen] = useState(false);
+  const [preset, setPreset] = useState<Partial<{ genre: string; mood: string; references: string }> | null>(null);
   const regenRef = useRef(0); // bumps each run so the same idea yields a fresh take
 
   // hydrate from local storage on mount (client only — avoids SSR mismatch)
   useEffect(() => {
     setVault(listSongs());
-    setBanned(loadBannedWords(DEFAULT_BANNED_WORDS));
+    setAlbums(listAlbums());
+    setBanned(loadBannedWords(allAvoidWords()));
   }, []);
+
+  function applyPack(pack: ExpansionPack) {
+    setPreset({ genre: pack.style.split(',')[0].trim(), mood: pack.description, references: `${pack.title} expansion — ${pack.hookGuidance}` });
+  }
 
   async function run(inputs: SongInputs) {
     setRunning(true);
@@ -89,6 +101,13 @@ export default function HermesHitFactory() {
     saveBannedWords(words);
   }
 
+  // recommendation action: remember a new exclusion the brain suggested
+  function addExclusion(word: string) {
+    const next = Array.from(new Set([...banned, word.toLowerCase()]));
+    setBanned(next);
+    saveBannedWords(next);
+  }
+
   const doneCount = Object.values(outputs).filter((o) => o.status === 'done' || o.status === 'warning').length;
 
   return (
@@ -102,6 +121,7 @@ export default function HermesHitFactory() {
         </div>
         <div className={styles.headerSpacer} />
         <span className={styles.modeBadge}>● V1 · local mock — no API key</span>
+        <button className={styles.ghostBtn} onClick={() => setAlbumOpen(true)}>Albums ({albums.length})</button>
         <button className={styles.ghostBtn} onClick={() => setVaultOpen(true)}>Vault ({vault.length})</button>
       </header>
 
@@ -131,7 +151,7 @@ export default function HermesHitFactory() {
       <div className={styles.deck}>
         {/* left column — input + avoid words */}
         <div className={styles.col}>
-          <SongLabForm running={running} onRun={run} />
+          <SongLabForm running={running} onRun={run} preset={preset} />
 
           <div className={styles.panel}>
             <div className={styles.panelTitle} style={{ display: 'flex', justifyContent: 'space-between', cursor: 'pointer' }} onClick={() => setShowAvoid((s) => !s)}>
@@ -152,6 +172,8 @@ export default function HermesHitFactory() {
               </>
             )}
           </div>
+
+          <RecommendationsPanel songs={vault} onAddExclusion={addExclusion} onApplyPack={applyPack} />
         </div>
 
         {/* center column — agent board + package */}
@@ -203,6 +225,16 @@ export default function HermesHitFactory() {
           onOpen={openFromVault}
           onClose={() => setVaultOpen(false)}
           onDelete={removeFromVault}
+        />
+      )}
+
+      {albumOpen && (
+        <AlbumView
+          songs={vault}
+          albums={albums}
+          onClose={() => setAlbumOpen(false)}
+          onSave={(a) => { saveAlbum(a); setAlbums(listAlbums()); }}
+          onDelete={(id) => { deleteAlbum(id); setAlbums(listAlbums()); }}
         />
       )}
     </div>
