@@ -85,14 +85,22 @@ totally different look:
 | <img src="media/demo-hook.gif" width="380"/> | <img src="media/demo-retrowave.gif" width="380"/> |
 | `hermes render` | `hermes render --pack retrowave` |
 
+Four ship today:
+
+| pack | the look |
+|------|----------|
+| `neo-noir` *(default)* | cinematic detective film — amber neon, film grain, split-tone |
+| `retrowave` | 80s synthwave — chrome sun, neon perspective grid, hot pink/cyan |
+| `vhs-lofi` | faded analog tape — teal/cream wash, scanlines, sliding head-switch noise |
+| `lyric-minimal` | type-forward — near-black canvas, one warm accent orb, lots of air |
+
 Each pack = a palette + fonts + scene modules
-([`scene-packs/neo-noir`](scene-packs/neo-noir/pack.json),
-[`scene-packs/retrowave`](scene-packs/retrowave/pack.json)). **Adding a pack is the
+([`scene-packs/`](scene-packs/)). **Adding a pack is the
 best way to contribute** — see [CONTRIBUTING](CONTRIBUTING.md) and the
 [build-a-pack guide](docs/scene-packs.md).
 
 ## Roadmap
-- [x] Pluggable **scene packs** + a 2nd style (`retrowave`); more welcome (vhs-lofi, lyric-minimal)
+- [x] Pluggable **scene packs** — 4 styles ship (`neo-noir`, `retrowave`, `vhs-lofi`, `lyric-minimal`); more welcome
 - [x] `hermes new` project scaffold + `hermes.json` (project-targeted build: next)
 - [ ] Auto song-structure detection (no hand-authored sections)
 - [x] **9:16 / 1:1** aspect ratios for Shorts/Reels/TikTok
