@@ -1,0 +1,29 @@
+{
+  "owner": "kudbee",
+  "updated": "2026-06-30",
+  "note": "Persistent creative memory for the HERMES Hit Factory — the semantic-memory tier of the brain. The algorithm always reads this so preferences and exclusions stick without re-specifying. Edit freely; it's version-controlled.",
+  "exclusions": {
+    "words": [
+      "concrete", "sharpen", "sharpened",
+      "chain", "chains", "chained",
+      "bed", "bedroom",
+      "mirror", "mirrors"
+    ],
+    "notes": [
+      "no chain / chains imagery",
+      "no bedroom scenes or mirrors-on-the-wall clichés",
+      "avoid 'concrete' and 'sharpen'"
+    ]
+  },
+  "preferences": {
+    "genres": ["aggressive boom-bap hip-hop", "dark trap"],
+    "moodLean": "darker",
+    "vocals": "gritty raw male rap, no autotune",
+    "hooks": "melodic, chantable, with a dark turn and a title callback",
+    "notes": [
+      "darker is better",
+      "keep an emotional core underneath the aggression",
+      "not corny — grounded and specific"
+    ]
+  }
+}
