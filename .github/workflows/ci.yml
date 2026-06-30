@@ -36,3 +36,16 @@ jobs:
         run: npx playwright install --with-deps chromium
       - name: Smoke render + QA eval gate
         run: npm run smoke
+
+  # HERMES Hit Factory web app — engine tests + production build (no API key).
+  web:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: '22' }
+      - run: npm ci || npm install
+      - name: Engine tests (vitest)
+        run: npm run test:web
+      - name: Next.js production build
+        run: npm run web:build
