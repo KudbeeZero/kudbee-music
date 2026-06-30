@@ -11,6 +11,7 @@ import { makeRng, hashString, shuffle, keywords, tidyLine, titleCase } from './t
 import { learnProfile } from './learn';
 import { allAvoidWords } from './memory';
 import { belief, type Belief } from './beliefs';
+import { personaOverlay, type Persona } from './personas';
 
 /** One stage of the songwriting craft. */
 export interface CraftStep {
@@ -182,7 +183,7 @@ const MAKERS: Record<string, Maker> = {
  */
 export function guideStep(
   stepId: string,
-  ctx: { inputs: SongInputs; artist: ArtistContext; seed?: number },
+  ctx: { inputs: SongInputs; artist: ArtistContext; seed?: number; persona?: Persona },
 ): StepGuidance {
   const step = stepById(stepId);
   if (!step) throw new Error(`unknown step: ${stepId}`);
@@ -191,15 +192,18 @@ export function guideStep(
   const rng = makeRng(seed >>> 0);
   const made = MAKERS[stepId](kw, ctx.artist, ctx.inputs, rng);
 
-  // tidy + avoid-word aware; options stay in a stable-but-seed-varied order
-  const avoid = new Set(ctx.artist.avoid.map((w) => w.toLowerCase()));
-  const options = shuffle(made.options, rng).map((o) => ({
-    text: tidyLine(o.text),
-    why: o.why,
-    flagged: o.text.toLowerCase().split(/\W+/).some((w) => w && avoid.has(w)),
-  })).map(({ text, why }) => ({ text, why }));
+  // tidy; options stay in a stable-but-seed-varied order
+  let options = shuffle(made.options, rng).map((o) => ({ text: tidyLine(o.text), why: o.why }));
+  let coaching = made.coaching;
 
-  return { step, belief: step.belief ? belief(step.belief) : undefined, prompt: made.prompt, coaching: made.coaching, options };
+  // a chosen persona "wears" its craft-DNA into the step (no names, just craft)
+  if (ctx.persona) {
+    const overlay = personaOverlay(ctx.persona, stepId, ctx.inputs);
+    coaching = overlay.coaching;
+    if (overlay.option) options = [overlay.option, ...options].slice(0, 3);
+  }
+
+  return { step, belief: step.belief ? belief(step.belief) : undefined, prompt: made.prompt, coaching, options };
 }
 
 /** Progress helper: the next step after the given id (or the first). */

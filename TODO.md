@@ -61,6 +61,11 @@ Board** governance / Solana / token / NFT layer integrates with this engine via 
 later (kept out of this repo's core so it stays free + local).
 
 ## ✅ Shipped (newest first)
+- [x] **Persona engine — anonymized craft-DNA** (framework Part 1, original-only) —
+      `brain/personas.json` + `lib/hermes/personas.ts`: 6 lyrical-mind archetypes
+      (subjects, rhyme density, cadence, structure, register, novelty); `matchPersona`
+      / `suggestPersona` map a *described feel* (never a name) to the closest archetype;
+      `personaOverlay` steers each Writers-Room step. No artist names, no lyrics. _(this PR)_
 - [x] **Writers-Room engine + belief system** — `lib/hermes/process.ts` (the 9-step
       craft assistant: concept→truth→perspective→hook→rhyme→draft→revise→arc, options
       *with reasons*, voice-signal capture) + `brain/beliefs.json` constitution
