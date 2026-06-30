@@ -3,8 +3,10 @@
 export const DEFAULT_BANNED_WORDS: string[] = [
   'echo', 'shadow', 'fire', 'flame', 'highs', 'lows', 'whisper', 'scars',
   'pain', 'fade', 'bonding', 'villain', 'pivot', 'every', 'diamond', 'crown',
-  'mirror', 'regrets', 'twisted', 'broken', 'rise', 'soldier of truth',
+  'mirror', 'mirrors', 'regrets', 'twisted', 'broken', 'rise', 'soldier of truth',
   'dreaming', 'chest', 'cement', 'flutter',
+  // kudbee's growing exclusion list
+  'concrete', 'sharpen', 'sharpened', 'chain', 'chains', 'chained', 'bed', 'bedroom',
 ];
 
 // A few non-corny stand-ins offered when an avoid-word shows up. Intentionally
@@ -20,6 +22,10 @@ export const REPLACEMENT_HINTS: Record<string, string[]> = {
   mirror: ['the glass', 'my reflection', 'the window'],
   dreaming: ['planning', 'building it', 'awake on it'],
   scars: ['the marks', 'old stitches', 'the proof'],
+  concrete: ['the pavement', 'the asphalt', 'the gravel'],
+  chain: ['the weight', 'the lock', 'the leash'],
+  bed: ['the floor', 'the empty room', 'the cold side'],
+  bedroom: ['the empty room', 'the four walls', 'the dark'],
 };
 
 export function suggestReplacement(word: string): string | undefined {
