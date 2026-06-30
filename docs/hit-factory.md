@@ -61,6 +61,24 @@ build prints exactly what to do instead of failing.
 hook strength (20) · emotional clarity (20) · originality (20) · replay value (15)
 · visual identity (10) · short-form potential (10) · release readiness (5).
 
+## The belief system (the brain's constitution)
+`brain/beliefs.json` is the **values tier** of memory — hard-coded operating
+principles the brain reads: *always a green loop · craft over one-shot generation ·
+assistant not autopilot · learn the artist's voice · use every tool · original only ·
+truth first*. `lib/hermes/beliefs.ts` exposes them (`belief(id)`, `beliefsFor(area)`)
+and the writers-room cites the belief each step embodies.
+
+## The Writers-Room (the proprietary edge)
+`lib/hermes/process.ts` is what separates HERMES from a one-shot lyric generator: a
+**step-by-step craft assistant**. It walks the artist through the real process —
+concept → truth → perspective → title/metaphor → hook → rhyme & cadence → verse
+draft → revise → arc — and at each step poses the craft question, proposes a few
+starting options **with reasons** (`guideStep`), and turns the artist's choices into
+voice signals (`choiceSignals`) the brain learns from. `artistContext()` summarizes
+who the writer is from their vault (reusing `learn.ts`), so the room is informed by
+everything they've made. **Assistant, not autopilot** — the artist makes every real
+choice; the brain sharpens the voice instead of replacing it.
+
 ## Memory layer
 `brain/memory.json` is the **semantic-memory tier** of the brain — a persistent,
 version-controlled store of the user's creative preferences and a growing
