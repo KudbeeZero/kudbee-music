@@ -79,6 +79,15 @@ who the writer is from their vault (reusing `learn.ts`), so the room is informed
 everything they've made. **Assistant, not autopilot** — the artist makes every real
 choice; the brain sharpens the voice instead of replacing it.
 
+## Brain Scan (the brain, made visible)
+`components/hermes/BrainScan.tsx` renders an anatomical brain whose **functional
+regions light up** as the agents fire — cyan for the analytical left hemisphere,
+magenta for the generative right, amber for the center (intent, values, decision,
+memory). Crucially, **each region is one of the brain's knowledge files** (the
+Obsidian-style vault on the file system: `brain/beliefs.json`, `brain/memory.json`,
+`brain/personas.json`, the Writers-Room) — tap a region to see the file behind it. A
+*Language & Culture* region sits dim as the next area to wire. Reduced-motion aware.
+
 ## Lyric Lab (the Writers-Room, in the app)
 The **✍️ Lyric Lab** button (header) opens the writers-room as a drawer
 (`components/hermes/LyricLab.tsx`): set a brief, pick a craft **persona**, then walk the

@@ -16,7 +16,12 @@ Status key: 💭 captured · ✏️ designing · 🔨 building · ✅ shipped
 
 ## 🧠 Flagship visions (the big ones)
 
-### 1. The Brain Scan — a living brain that lights up as it thinks  💭
+### 1. The Brain Scan — a living brain that lights up as it thinks  ✅ (v1 shipped)
+**Shipped:** `components/hermes/BrainScan.tsx` — an anatomical brain whose functional
+regions light up (cyan=analytical/left, magenta=generative/right, amber=center) as the
+agents fire; **each region is a knowledge file** you can tap. Language & Culture sits
+dim as the next area to wire. Next: drive it live off the per-agent stream during a run
+(currently lights from the result state), add the scan boot-sequence, and wire Language.
 Make the brain **visible**. An anatomical brain (SVG/Canvas) whose regions map to the
 real subsystems, and that **pings and lights up like an fMRI/EEG scan** as the process
 runs — so the artist watches their song being thought into existence and *feels* the
@@ -75,6 +80,15 @@ were brought up**. Add a layer that maps:
 - Maps to real brain regions: language cortex (word formation) + limbic/emotion +
   memory — all of which the Brain Scan should show lighting up. Candidate home:
   `lib/hermes/language.ts` + a `culture` field on the brief.
+
+### 7. The brain IS the file system (Obsidian-style knowledge vault)  ✏️
+The brain is already a vault of plain markdown + JSON files Claude reads, writes, and
+cross-links directly — no external API (the `brain/` folder: `beliefs.json`,
+`memory.json`, `personas.json`, `hemispheres.md`, plus `IDEAS.md`/`TODO.md`). It's the
+"second brain" pattern, **version-controlled in git** (better than a plain Obsidian
+vault). Lean into it: add an explicit **artist-identity file**, **cross-link** the
+docs into a navigable web, and adopt an **ingest → research → save** loop. Crucially,
+**each knowledge file = one region of the Brain Scan** — click a region, open its file.
 
 ### 6. Create-your-own-artist — a living world  💭
 The big game: anyone can **build their own artist**, choose its path and identity,
