@@ -4,7 +4,19 @@ import { useState } from 'react';
 import type { SongPackage } from '@/lib/hermes/types';
 import styles from './hermes.module.css';
 
-export default function SongPackageView({ pkg }: { pkg: SongPackage }) {
+export default function SongPackageView({ pkg, onSaveEdit }: { pkg: SongPackage; onSaveEdit?: (newText: string) => void }) {
+  const rawLyrics = pkg.sections.map((s) => `[${s.label}]\n${s.lines.join('\n')}`).join('\n\n');
+  const [editing, setEditing] = useState(false);
+  const [draft, setDraft] = useState(rawLyrics);
+  const [learned, setLearned] = useState(false);
+
+  function save() {
+    onSaveEdit?.(draft);
+    setEditing(false);
+    setLearned(true);
+    setTimeout(() => setLearned(false), 2600);
+  }
+
   return (
     <div className={styles.panel}>
       <div className={styles.panelTitle}>Song Package · “{pkg.title}” · v{pkg.version}</div>
@@ -26,16 +38,34 @@ export default function SongPackageView({ pkg }: { pkg: SongPackage }) {
         ))}
       </Section>
 
-      <Section label="Final lyrics" copy={pkg.finalLyrics}>
-        <div className={styles.lyricBlock}>
-          {pkg.sections.map((s, i) => (
-            <div key={i} style={{ marginBottom: 12 }}>
-              <span className={styles.sectionTag}>[{s.label}]</span>
-              {'\n'}{s.lines.join('\n')}
-            </div>
-          ))}
+      <div className={styles.pkgSection}>
+        <div className={styles.pkgLabel}>
+          Final lyrics
+          {onSaveEdit && !editing && (
+            <button className={styles.copyBtn} onClick={() => { setDraft(rawLyrics); setEditing(true); }}>edit</button>
+          )}
+          {learned && <span className={styles.copyBtn} style={{ color: 'var(--cyan)', borderColor: 'var(--cyan)' }}>🧠 brain learned from your edit</span>}
         </div>
-      </Section>
+        {editing ? (
+          <>
+            <textarea className={styles.lyricBlock} style={{ width: '100%', minHeight: 280, color: 'var(--ink)' }}
+              value={draft} onChange={(e) => setDraft(e.target.value)} aria-label="Edit lyrics" />
+            <div style={{ display: 'flex', gap: 8, marginTop: 8 }}>
+              <button className={styles.runBtn} style={{ width: 'auto', flex: 1, padding: 10 }} onClick={save}>Save — teach the brain</button>
+              <button className={styles.ghostBtn} onClick={() => setEditing(false)}>Cancel</button>
+            </div>
+          </>
+        ) : (
+          <div className={styles.lyricBlock}>
+            {pkg.sections.map((s, i) => (
+              <div key={i} style={{ marginBottom: 12 }}>
+                <span className={styles.sectionTag}>[{s.label}]</span>
+                {'\n'}{s.lines.join('\n')}
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
 
       <Section label="Production notes">
         <div className={styles.kv}>

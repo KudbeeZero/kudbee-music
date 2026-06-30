@@ -7,6 +7,7 @@ import type { Album } from './album';
 const KEY = 'hermes.vault.v1';
 const ALBUM_KEY = 'hermes.albums.v1';
 const BANNED_KEY = 'hermes.bannedWords.v1';
+const TASTE_KEY = 'hermes.taste.v1';
 
 interface KV {
   getItem(k: string): string | null;
@@ -105,6 +106,44 @@ export function deleteAlbum(id: string): void {
   writeAlbums(readAlbums().filter((a) => a.id !== id));
 }
 
+// ---- vault export / import (durability beyond a single browser) ----
+export function exportVault(): string {
+  return JSON.stringify({ kind: 'hermes-vault', version: 1, songs: readAll(), albums: readAlbums() }, null, 2);
+}
+export function importVault(json: string, mode: 'merge' | 'replace' = 'merge'): { songs: number; albums: number } {
+  let data: { songs?: SongPackage[]; albums?: Album[] };
+  try { data = JSON.parse(json); } catch { return { songs: 0, albums: 0 }; }
+  const songs = Array.isArray(data.songs) ? data.songs : [];
+  const albums = Array.isArray(data.albums) ? data.albums : [];
+  if (mode === 'replace') {
+    writeAll(songs); writeAlbums(albums);
+  } else {
+    const sIds = new Set(readAll().map((s) => s.id));
+    writeAll([...readAll(), ...songs.filter((s) => !sIds.has(s.id))]);
+    const aIds = new Set(readAlbums().map((a) => a.id));
+    writeAlbums([...readAlbums(), ...albums.filter((a) => !aIds.has(a.id))]);
+  }
+  return { songs: songs.length, albums: albums.length };
+}
+
+// ---- taste model (learn-from-edits): words the writer adds vs removes ----
+export interface Taste { liked: Record<string, number>; disliked: Record<string, number>; edits: number; }
+export function loadTaste(): Taste {
+  try {
+    const raw = kv().getItem(TASTE_KEY);
+    if (raw) { const t = JSON.parse(raw); if (t && t.liked && t.disliked) return t as Taste; }
+  } catch { /* ignore */ }
+  return { liked: {}, disliked: {}, edits: 0 };
+}
+export function recordTaste(added: string[], removed: string[]): Taste {
+  const t = loadTaste();
+  for (const w of added) t.liked[w] = (t.liked[w] ?? 0) + 1;
+  for (const w of removed) t.disliked[w] = (t.disliked[w] ?? 0) + 1;
+  t.edits += 1;
+  try { kv().setItem(TASTE_KEY, JSON.stringify(t)); } catch { /* ignore */ }
+  return t;
+}
+
 // ---- editable banned-words list ----
 export function loadBannedWords(fallback: string[]): string[] {
   try {
@@ -128,5 +167,5 @@ export function saveBannedWords(words: string[]): void {
 /** test-only reset */
 export function __clearVault(): void {
   memory.clear();
-  try { kv().setItem(KEY, '[]'); kv().setItem(ALBUM_KEY, '[]'); } catch { /* ignore */ }
+  try { kv().setItem(KEY, '[]'); kv().setItem(ALBUM_KEY, '[]'); kv().setItem(TASTE_KEY, JSON.stringify({ liked: {}, disliked: {}, edits: 0 })); } catch { /* ignore */ }
 }

@@ -5,7 +5,7 @@
 // uniqueness vault).
 import type { LyricsProvider } from './providerTypes';
 import type { SongInputs, HookOption, SongSection } from '../types';
-import { makeRng, hashString, pick, keywords, titleCase, shuffle } from '../text';
+import { makeRng, hashString, pick, keywords, titleCase, shuffle, tidyLine } from '../text';
 
 function seedOf(inputs: SongInputs, salt = '', seed = 0): number {
   return hashString(
@@ -37,8 +37,8 @@ const VERSE_FRAMES = [
   'carry the name like it weighs a ton',
 ];
 
-const VERBS = ['climb', 'carry', 'build', 'fight', 'hold on', 'keep moving', 'pray', 'grind'];
-const ADJ = ['cold', 'quiet', 'heavy', 'restless', 'patient', 'stubborn', 'grounded'];
+const VERBS = ['climb', 'carry', 'build', 'fight', 'hold on', 'keep moving', 'pray', 'grind', 'crawl', 'rebuild', 'reach', 'hustle', 'survive', 'push'];
+const ADJ = ['cold', 'quiet', 'heavy', 'restless', 'patient', 'stubborn', 'grounded', 'hollow', 'guarded', 'weathered', 'relentless', 'distant'];
 
 // words that read badly in a noun slot ("where the OUT used to be") — keep them
 // out of the {noun}/{k} pool so the combinator stays grammatical.
@@ -46,15 +46,21 @@ const NOUN_STOP = new Set(['made', 'out', 'still', 'got', 'get', 'keep', 'let', 
 
 function fill(frame: string, inputs: SongInputs, rng: () => number): string {
   const ks = keywords([inputs.theme, inputs.mood, inputs.references].join(' ')).filter((k) => !NOUN_STOP.has(k));
-  const nouns = ks.length ? ks : ['block', 'name', 'road', 'weight', 'city'];
+  // shuffled pools, consumed in order, so a single line never repeats the same
+  // filler word ("the road and the road") — distinct, grammatical output.
+  const nouns = shuffle(ks.length ? ks : ['block', 'name', 'road', 'weight', 'city', 'street'], rng);
+  const verbs = shuffle(VERBS, rng);
+  const adjs = shuffle(ADJ, rng);
+  let ni = 0, vi = 0, ai = 0;
   const who = inputs.audience ? inputs.audience.split(/\s+/)[0] : 'mine';
-  return frame
-    .replace(/\{k\}/g, () => titleCase(pick(nouns, rng)))
-    .replace(/\{noun\}/g, () => pick(nouns, rng))
-    .replace(/\{verb\}/g, () => pick(VERBS, rng))
-    .replace(/\{adj\}/g, () => pick(ADJ, rng))
+  const out = frame
+    .replace(/\{k\}/g, () => titleCase(nouns[ni++ % nouns.length]))
+    .replace(/\{noun\}/g, () => nouns[ni++ % nouns.length])
+    .replace(/\{verb\}/g, () => verbs[vi++ % verbs.length])
+    .replace(/\{adj\}/g, () => adjs[ai++ % adjs.length])
     .replace(/\{who\}/g, () => who)
-    .replace(/\{place\}/g, () => pick(nouns, rng));
+    .replace(/\{place\}/g, () => nouns[ni++ % nouns.length]);
+  return tidyLine(out);
 }
 
 function dedupe(lines: string[]): string[] {

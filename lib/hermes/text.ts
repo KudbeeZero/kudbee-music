@@ -57,7 +57,7 @@ export function ngrams(tokens: string[], n: number): string[] {
   return out;
 }
 
-/** Jaccard similarity over token-bigram sets (0–1). */
+/** Jaccard similarity over token-bigram sets (0–1) — order-sensitive. */
 export function lineSimilarity(a: string, b: string): number {
   const A = new Set(ngrams(tokenize(a), 2));
   const B = new Set(ngrams(tokenize(b), 2));
@@ -66,6 +66,26 @@ export function lineSimilarity(a: string, b: string): number {
   for (const g of A) if (B.has(g)) inter++;
   const union = A.size + B.size - inter;
   return union ? inter / union : 0;
+}
+
+/** Jaccard over the word SET (0–1) — order-insensitive, so it catches a line
+ *  that was reworded/reordered but reuses the same vocabulary (a paraphrase the
+ *  bigram check misses). */
+export function tokenSetSimilarity(a: string, b: string): number {
+  const A = new Set(tokenize(a));
+  const B = new Set(tokenize(b));
+  if (!A.size || !B.size) return 0;
+  let inter = 0;
+  for (const t of A) if (B.has(t)) inter++;
+  return inter / (A.size + B.size - inter);
+}
+
+/** Clean a generated line: collapse spaces, fix a/an agreement, capitalize. */
+export function tidyLine(s: string): string {
+  let out = s.replace(/\s+/g, ' ').trim();
+  out = out.replace(/\b([Aa])\s+([aeiou])/g, (_m, a, v) => `${a}n ${v}`);   // a apple -> an apple
+  out = out.replace(/\b([Aa])n\s+([^aeiou\s])/g, (_m, a, c) => `${a} ${c}`); // an dog -> a dog
+  return out.charAt(0).toUpperCase() + out.slice(1);
 }
 
 export function titleCase(s: string): string {
