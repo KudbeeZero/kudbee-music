@@ -7,6 +7,7 @@ import { runPipeline } from '@/lib/hermes/pipeline';
 import { listSongs, saveSong, getSong, deleteSong, priorSongsForOriginality, loadBannedWords, saveBannedWords, listAlbums, saveAlbum, deleteAlbum, loadTaste, recordTaste, type Taste } from '@/lib/hermes/storage';
 import { allAvoidWords } from '@/lib/hermes/memory';
 import { diffEdit, parseSections } from '@/lib/hermes/edits';
+import { demoSong } from '@/lib/hermes/exampleSong';
 import type { Album } from '@/lib/hermes/album';
 import type { ExpansionPack } from '@/lib/hermes/expansionPacks';
 import SongLabForm from './SongLabForm';
@@ -91,6 +92,19 @@ export default function HermesHitFactory() {
     } finally {
       setRunning(false);
     }
+  }
+
+  // Seed the deck with the flagship example so a first-time visitor sees a real,
+  // finished package (scores, agents, lyrics) before generating their own.
+  function loadDemo() {
+    const existing = getSong('example-cold-hard-gold');
+    const s = existing ?? saveSong(demoSong());
+    setVault(listSongs());
+    setError(null);
+    setPkg(s);
+    const map: Record<string, AgentOutput> = {};
+    for (const o of s.agentOutputs) map[o.id] = o;
+    setOutputs(map);
   }
 
   function openFromVault(id: string) {
@@ -200,6 +214,18 @@ export default function HermesHitFactory() {
               <div className={styles.emptyState}>
                 Enter a song idea and hit <b>Generate</b>.<br />
                 HERMES will route it through all {AGENT_DEFINITIONS.length} agents and assemble a full song package here.
+                <div style={{ marginTop: 16 }}>
+                  <button
+                    className={styles.runBtn}
+                    onClick={loadDemo}
+                    style={{ width: 'auto', padding: '11px 18px', fontSize: 13.5 }}
+                  >
+                    ▶ See a finished example — “Cold Hard Gold” (99/100)
+                  </button>
+                  <div className={styles.hint} style={{ marginTop: 8 }}>
+                    A real package from this engine — hooks, lyrics, production, scores. No setup.
+                  </div>
+                </div>
               </div>
             </div>
           )}

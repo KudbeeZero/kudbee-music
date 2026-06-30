@@ -23,7 +23,7 @@ export default function BangerScoreCard({ score }: { score: BangerScore }) {
         <span className={styles.scoreOf}>/ 100</span>
       </div>
       <div className={styles.verdict}>{score.verdict}</div>
-      <div className={styles.hint} style={{ marginTop: 4 }}>Heuristic signal — a directional read on the craft, not A&R gospel.</div>
+      <div className={styles.hint} style={{ marginTop: 4 }}>Heuristic craft signal — a directional read on the songwriting structure (hook, arc, variety). Not a market or A&R prediction.</div>
       <div className={styles.cat}>
         {CATS.map((c) => {
           const val = score[c.key] as number;
