@@ -62,6 +62,10 @@ Board** governance / Solana / token / NFT layer integrates with this engine via 
 later (kept out of this repo's core so it stays free + local).
 
 ## ✅ Shipped (newest first)
+- [x] **Lyric Lab** — the Writers-Room made visible (`components/hermes/LyricLab.tsx`):
+      pick a craft persona, walk the 9 steps with options *and reasons*, commit choices;
+      the committed **hook becomes the song's real hook** (pipeline `forcedHook`), and
+      every choice **trains the voice** (`recordTaste`). _(this PR)_
 - [x] **Persona engine — anonymized craft-DNA** (framework Part 1, original-only) —
       `brain/personas.json` + `lib/hermes/personas.ts`: 6 lyrical-mind archetypes
       (subjects, rhyme density, cadence, structure, register, novelty); `matchPersona`

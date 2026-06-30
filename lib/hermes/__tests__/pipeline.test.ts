@@ -61,6 +61,17 @@ describe('pipeline', () => {
     expect(a.pkg.finalLyrics).not.toBe(c.pkg.finalLyrics);    // new seed → fresh take
   });
 
+  it('uses a hook written in the Lyric Lab as the real hook (the writers-room made real)', async () => {
+    const myHook = 'I carried the weight til the weight made the man';
+    const { pkg } = await runPipeline(idea, { id: 'h', now: '2026-01-01T00:00:00Z', forcedHook: myHook });
+    expect(pkg.chosenHook?.text).toBe(myHook);
+    expect(pkg.hookOptions[0].text).toBe(myHook);          // artist's hook leads the options
+    expect(pkg.finalLyrics).toContain(myHook);              // and lands in the actual lyrics
+    // without a forced hook the engine picks its own
+    const { pkg: auto } = await runPipeline(idea, { id: 'h2', now: '2026-01-01T00:00:00Z' });
+    expect(auto.chosenHook?.text).not.toBe(myHook);
+  });
+
   it('reports progress for each step', async () => {
     const seen: string[] = [];
     await runPipeline(idea, { id: 't', now: '2026-01-01T00:00:00Z', onProgress: (p) => { if (p.status === 'running') seen.push(p.agentId); } });
