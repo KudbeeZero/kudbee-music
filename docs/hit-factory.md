@@ -1,0 +1,63 @@
+# HERMES Hit Factory — Lyrical Combinator Brain (V1)
+
+A multi-agent **song-creation** studio that lives alongside the music-**video**
+studio in this repo. Enter a rough idea — *"Chicago pain song for my daughter,
+melodic hook, street but emotional, 808 trap, not corny"* — and HERMES routes it
+through 10 specialized agents into a complete, original **song package**.
+
+V1 runs **fully local with mock generation — no API key, no copyrighted material.**
+
+## Run it
+```bash
+npm install
+npm run web:build      # production build
+npm run web:start      # serve on http://localhost:3000
+# open /hermes  (or /hit-factory)
+npm run test:web       # engine tests (vitest)
+```
+Dev: `npm run web:dev`. The video studio (`bin/hermes`, `studio/*`) is untouched
+and runs exactly as before.
+
+## The 10 agents (right brain proposes, left brain disposes)
+| Agent | Hemisphere | Output |
+|-------|-----------|--------|
+| HERMES Conductor | left | creative brief + concept |
+| Hooksmith | right | 3–5 hook options |
+| Lyric Chemist | right | sections + final lyrics |
+| Beat Oracle | left | production notes |
+| Emotion Scanner | left | emotional-arc clarity |
+| Originality Auditor | left | uniqueness report (0–100) |
+| A&R Judge | left | banger score (0–100) |
+| Visual Director | right | album cover + 16:9 video prompts |
+| Viral Clip Scout | right | short-form clip moments |
+| Rights & Release Guard | left | release checklist + warnings |
+
+## Architecture
+- `lib/hermes/types.ts` — typed contracts (agents, song package, scores, reports).
+- `lib/hermes/agents.ts` — the 10 agent definitions the board renders.
+- `lib/hermes/pipeline.ts` — runs the agents in order, assembles the `SongPackage`.
+- `lib/hermes/originality.ts` — local uniqueness checker (n-grams, vault similarity,
+  banned/avoid words, clichés → 0–100 + rewrites). A repeating chorus is *not*
+  penalized; cross-song similarity and clichés are the real signals.
+- `lib/hermes/scoring.ts` — 7-category banger score summing to 100.
+- `lib/hermes/storage.ts` — local vault (localStorage in the browser, in-memory on
+  the server), with per-title version history.
+- `lib/hermes/providers/*` — vendor-neutral seams (`LyricsProvider`,
+  `AudioProvider`, `ImagePromptProvider`, `VideoPromptProvider`). V1 ships mock
+  implementations; a future lane drops in a real vendor behind the same interfaces.
+- `components/hermes/*` — the cinematic command deck (Song Lab, Agent Board, Song
+  Package, Banger Score, Uniqueness, Release Readiness, Vault).
+- `app/hermes`, `app/hit-factory` — the routes.
+
+## Banger score (out of 100)
+hook strength (20) · emotional clarity (20) · originality (20) · replay value (15)
+· visual identity (10) · short-form potential (10) · release readiness (5).
+
+## Safety
+Original content only — no copyrighted lyrics, artist mimicry, or scraped
+material. The avoid-word list **warns, never blocks**, and is editable in the UI.
+
+## Next lane (not built yet)
+Real AI/music provider behind the adapters, Suno/Udio-style prompt export, the
+16:9 scene builder wired to the existing video studio, artist/project vault,
+release calendar, Stripe credits, team/agent marketplace.
