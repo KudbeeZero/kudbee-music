@@ -6,14 +6,53 @@ import { readFileSync, writeFileSync, existsSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { dirname, resolve } from 'node:path';
 import { alignLines } from './align.mjs';
+import { resolveBrain } from './brain.mjs';
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..');
-const analysis = JSON.parse(readFileSync(resolve(ROOT, 'song/analysis.json')));
+// HERMES_DATA points at a project folder; defaults to repo root (flagship build).
+const DATA = process.env.HERMES_DATA ? resolve(process.env.HERMES_DATA) : ROOT;
+const PROJECT = !!process.env.HERMES_DATA;
+// HERMES_BRAIN biases the cut/timing knobs (balanced|right|left). balanced is
+// byte-identical to the original constants, so the flagship build is unchanged.
+const brain = resolveBrain(process.env.HERMES_BRAIN);
+const analysis = JSON.parse(readFileSync(resolve(DATA, 'song/analysis.json')));
 const DUR = analysis.durationSec;
 const beats = analysis.beats;
 const snap = (t, tol=0.25) => { let best=t,d=1e9; for(const b of beats){const e=Math.abs(b-t);if(e<d){d=e;best=b;}} return d<tol?+best.toFixed(3):+t.toFixed(3); };
 
-const SECTIONS = [
+// ---- generic timeline: parse a project's own lyrics.md into sections ----
+// Headers are [Bracketed] or # Markdown lines; lines underneath are the lyric.
+// Sections are spread across the song proportionally to their line counts, and
+// assigned procedural scenes (intro/outro are skipped to avoid the flagship's
+// branded title cards). No hero footage / sub-shots — projects are procedural,
+// so any scene pack (--pack) renders cleanly out of the box.
+function genericSections() {
+  const path = resolve(DATA, 'song/lyrics.md');
+  const md = existsSync(path) ? readFileSync(path, 'utf8') : '';
+  const blocks = []; let cur = null;
+  for (const raw of md.split(/\r?\n/)) {
+    const line = raw.trim();
+    const h = line.match(/^\[(.+)\]$/) || line.match(/^#+\s*(.+)$/);
+    if (h) { cur = { label: h[1].replace(/\s*[—-]\s*lyrics?\s*$/i, '').trim() || 'Section', lines: [] }; blocks.push(cur); continue; }
+    if (!line || line === '...' || /^[-=_*]{3,}$/.test(line)) continue;
+    if (!cur) { cur = { label: 'Verse', lines: [] }; blocks.push(cur); }
+    cur.lines.push(line);
+  }
+  let secs = blocks.filter(b => b.lines.length);
+  if (!secs.length) secs = [{ label: 'Track', lines: [] }];
+  const scenePool = ['neon', 'vortex', 'corridor', 'filmnoir', 'bridge', 'desk', 'glitch'];
+  const totalLines = secs.reduce((a, b) => a + b.lines.length, 0) || 1;
+  const LEAD = 2.0; let t = LEAD;
+  return secs.map((b, i) => {
+    const out = { t: +Math.min(t, DUR - 3).toFixed(2), scene: scenePool[i % scenePool.length],
+                  label: b.label + (secs.filter(x => x.label === b.label).length > 1 ? ` ${secs.slice(0, i + 1).filter(x => x.label === b.label).length}` : ''),
+                  big: /hook|chorus|drop/i.test(b.label), lines: b.lines };
+    t += (b.lines.length / totalLines) * (DUR - LEAD);
+    return out;
+  });
+}
+
+const FLAGSHIP_SECTIONS = [
   { t: 0.0,   scene: 'intro',    label: 'Intro',     lines: [] },
   { t: 8.0,   scene: 'desk',     label: 'Verse 1a',  lines: [
     "Why's it tough for anyone to see?",
@@ -72,8 +111,10 @@ const SECTIONS = [
     "Roll the credits—let the chaos begin." ] },
 ];
 
+const SECTIONS = PROJECT ? genericSections() : FLAGSHIP_SECTIONS;
+
 // per-section hero footage (keyed by section label). null = procedural scene.
-const HERO = {
+const FLAGSHIP_HERO = {
   'Intro':      { clip: 'clip03', mode: 'slow', factor: 0.5 }, // corridor push-in
   'Verse 1a':   { clip: 'clip04', mode: 'loop' },              // writer at desk
   'Verse 1b':   { clip: 'clip05', mode: 'loop' },              // figure in corridor
@@ -87,15 +128,16 @@ const HERO = {
   'Bridge':     { clip: 'clip10', mode: 'loop' },              // blue hallway desk
   'Outro':      { clip: 'clip11', mode: 'loop' },              // cassette tape
 };
+const HERO = PROJECT ? {} : FLAGSHIP_HERO;
 
 // flatten lines in order, with a back-reference to their section
 const flat = [];
 SECTIONS.forEach((s, si) => s.lines.forEach(text => flat.push({ text, si, big: !!s.big })));
 
 let aligned = null;
-const haveWhisper = existsSync(resolve(ROOT, 'song/whisper.json'));
+const haveWhisper = existsSync(resolve(DATA, 'song/whisper.json'));
 if (haveWhisper) {
-  const whisper = JSON.parse(readFileSync(resolve(ROOT, 'song/whisper.json')));
+  const whisper = JSON.parse(readFileSync(resolve(DATA, 'song/whisper.json')));
   aligned = alignLines(flat.map(f => f.text), whisper);
 }
 
@@ -126,7 +168,7 @@ if (aligned) {
 }
 
 // ---- section windows ----
-const MINLEN = 6.0, LEAD = 1.0;
+const MINLEN = 6.0, LEAD = brain.lead;
 const sections = SECTIONS.map(s => ({ scene: s.scene, label: s.label, big: !!s.big, hero: HERO[s.label] || null, lines: s.lines, start: 0, end: 0 }));
 if (aligned) {
   // first aligned line index per section
@@ -150,7 +192,7 @@ sections.forEach((s, i) => { s.end = i + 1 < sections.length ? sections[i + 1].s
 // ---- lyric sync-map ----
 const syncMap = [];
 if (aligned) {
-  const LYRIC_LEAD = 0.12;
+  const LYRIC_LEAD = brain.lyricLead;
   flat.forEach((f, i) => {
     const start = Math.max(0, +(aligned[i].start - LYRIC_LEAD).toFixed(2));
     const end = +Math.max(aligned[i].end, start + 0.4).toFixed(2);
@@ -166,7 +208,7 @@ if (aligned) {
 }
 
 // ---- sub-shots: footage that cuts in on a specific lyric line (line) or time (at) ----
-const SHOTS = {
+const FLAGSHIP_SHOTS = {
   'Verse 1b': [ {clip:'clip05'}, {clip:'clip25', line:2} ],
   'Hook 1':   [ {clip:'clip17'}, {clip:'clip19', line:1}, {clip:'clip20', line:2}, {clip:'clip02', line:3} ],
   'Verse 2a': [ {clip:'clip12'}, {clip:'clip07', line:1}, {clip:'clip14', line:2} ],
@@ -178,6 +220,7 @@ const SHOTS = {
   'Outro':    [ {clip:'clip16'}, {clip:'clip23', line:1}, {clip:'clip17', line:2}, {clip:'clip22', line:3},
                 {clip:'clip11', at:144.5}, {clip:'clip20', at:148}, {clip:'clip16', at:151.5}, {clip:'clip22', at:155} ],
 };
+const SHOTS = PROJECT ? {} : FLAGSHIP_SHOTS;
 const firstFlatBySi = {}; flat.forEach((f, i) => { if (firstFlatBySi[f.si] === undefined) firstFlatBySi[f.si] = i; });
 sections.forEach((sec, si) => {
   const sh = SHOTS[sec.label]; if (!sh) return;
@@ -193,7 +236,7 @@ sections.forEach((sec, si) => {
 
 // ---- keep it moving: split any shot that would hold longer than MAXHOLD ----
 // (intro is left whole — its title sequence animates over the push-in)
-const MAXHOLD = 4.6, JUMP = 90;
+const MAXHOLD = brain.maxhold, JUMP = brain.jump;
 sections.forEach(sec => {
   if (sec.scene === 'intro') return;
   let content = sec.shots && sec.shots.length ? sec.shots
@@ -217,11 +260,12 @@ sections.forEach(s => { if (s.shots) console.log(`shots ${s.label} (${s.shots.le
 
 const config = {
   fps: analysis.fps, width: 1920, height: 1080, durationSec: DUR, totalFrames: analysis.totalFrames,
+  brain: brain.name,
   sections: sections.map(({ lines, ...rest }) => rest),
 };
 // de-crowd: guarantee a minimum on-screen time by spreading any crammed run
 // of lyric lines across the time available before the next line / section end.
-const MINGAP = 0.75;
+const MINGAP = brain.mingap;
 const secEnd = t => { let e = DUR; for (const s of sections) if (t >= s.start) e = s.end; return e; };
 for (let i = 0; i < syncMap.length; i++) {
   let j = i;
@@ -235,8 +279,8 @@ for (let i = 0; i < syncMap.length; i++) {
   }
 }
 
-writeFileSync(resolve(ROOT, 'studio/config.json'), JSON.stringify(config, null, 2));
-writeFileSync(resolve(ROOT, 'song/sync-map.json'), JSON.stringify(syncMap, null, 2));
+writeFileSync(PROJECT ? resolve(DATA, 'config.json') : resolve(ROOT, 'studio/config.json'), JSON.stringify(config, null, 2));
+writeFileSync(resolve(DATA, 'song/sync-map.json'), JSON.stringify(syncMap, null, 2));
 console.log(`aligned=${!!aligned} sections=${sections.length} lyricLines=${syncMap.length}`);
 console.log(sections.map(s => `${s.start.toFixed(1)}-${s.end.toFixed(1)} ${s.scene}`).join('  '));
 console.log('first lyric starts:', syncMap.slice(0,6).map(l=>l.start).join(', '));

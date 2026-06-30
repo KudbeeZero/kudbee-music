@@ -1,0 +1,15 @@
+{
+  "name": "vhs-lofi",
+  "title": "VHS Lo-Fi",
+  "description": "Warm faded analog tape: cream/teal wash with a magenta bleed, floating dust, scanlines, a sliding head-switching noise band, and tracking-tear flicker.",
+  "palette": {
+    "bg": ["#13201f", "#1d3330", "#0a1413"],
+    "accent": ["#f4d9a0", "#7fe3d4", "#ff5b7f", "#e8b27a"],
+    "ink": "#f2efe2"
+  },
+  "fonts": { "display": "Anton", "body": "Oswald" },
+  "scenes": ["vhs-bloom-dust"],
+  "post": ["scanlines", "head-switch-noise", "warm-cast", "tracking-tear"],
+  "implementedIn": "studio/player.html (sceneVhsLofi + gradeVhs)",
+  "usage": "node bin/hermes render --pack vhs-lofi"
+}

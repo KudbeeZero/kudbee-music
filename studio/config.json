@@ -4,6 +4,7 @@
   "height": 1080,
   "durationSec": 158.12,
   "totalFrames": 4744,
+  "brain": "balanced",
   "sections": [
     {
       "scene": "intro",
