@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import type { SongInputs, SongStructure } from '@/lib/hermes/types';
 import styles from './hermes.module.css';
 
@@ -29,14 +29,21 @@ const DEFAULTS: SongInputs = {
 export default function SongLabForm({
   running,
   onRun,
+  preset,
 }: {
   running: boolean;
   onRun: (inputs: SongInputs) => void;
+  preset?: Partial<Pick<SongInputs, 'genre' | 'mood' | 'references'>> | null;
 }) {
   const [v, setV] = useState<SongInputs>(DEFAULTS);
   const [doNotUseRaw, setDoNotUseRaw] = useState('');
 
   const set = <K extends keyof SongInputs>(k: K, val: SongInputs[K]) => setV((p) => ({ ...p, [k]: val }));
+
+  // a recommendation (e.g. an expansion pack) can prefill the lab
+  useEffect(() => {
+    if (preset) setV((p) => ({ ...p, ...preset }));
+  }, [preset]);
 
   function submit() {
     const doNotUse = doNotUseRaw.split(',').map((s) => s.trim()).filter(Boolean);

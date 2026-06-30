@@ -4,15 +4,17 @@ import { useMemo, useState } from 'react';
 import type { SongPackage } from '@/lib/hermes/types';
 import { learnProfile } from '@/lib/hermes/learn';
 import { recommend } from '@/lib/hermes/recommend';
-import { getExpansionPack } from '@/lib/hermes/expansionPacks';
+import { getExpansionPack, type ExpansionPack } from '@/lib/hermes/expansionPacks';
 import styles from './hermes.module.css';
 
 export default function RecommendationsPanel({
   songs,
   onAddExclusion,
+  onApplyPack,
 }: {
   songs: SongPackage[];
   onAddExclusion: (word: string) => void;
+  onApplyPack?: (pack: ExpansionPack) => void;
 }) {
   const profile = useMemo(() => learnProfile(songs), [songs]);
   const recs = useMemo(() => recommend(profile, songs), [profile, songs]);
@@ -46,10 +48,17 @@ export default function RecommendationsPanel({
             const pack = getExpansionPack(r.action!.value);
             if (!pack) return null;
             return (
-              <button className={styles.copyBtn} style={{ marginLeft: 0, marginTop: 7 }}
-                onClick={() => { navigator.clipboard?.writeText(pack.style).then(() => { setCopied(pack.name); setTimeout(() => setCopied(null), 1400); }).catch(() => {}); }}>
-                {copied === pack.name ? 'Suno style copied ✓' : `copy “${pack.title}” Suno style`}
-              </button>
+              <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap', marginTop: 7 }}>
+                <button className={styles.copyBtn} style={{ marginLeft: 0 }}
+                  onClick={() => { navigator.clipboard?.writeText(pack.style).then(() => { setCopied(pack.name); setTimeout(() => setCopied(null), 1400); }).catch(() => {}); }}>
+                  {copied === pack.name ? 'Suno style copied ✓' : `copy “${pack.title}” Suno style`}
+                </button>
+                {onApplyPack && (
+                  <button className={styles.copyBtn} style={{ marginLeft: 0 }} onClick={() => onApplyPack(pack)}>
+                    → send to Song Lab
+                  </button>
+                )}
+              </div>
             );
           })()}
         </div>

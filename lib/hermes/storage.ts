@@ -2,8 +2,10 @@
 // the browser; falls back to an in-memory store on the server / in tests so it
 // never throws. Keeps a small version history per title.
 import type { SongPackage } from './types';
+import type { Album } from './album';
 
 const KEY = 'hermes.vault.v1';
+const ALBUM_KEY = 'hermes.albums.v1';
 const BANNED_KEY = 'hermes.bannedWords.v1';
 
 interface KV {
@@ -73,6 +75,36 @@ export function priorSongsForOriginality(excludeId?: string) {
     .map((s) => ({ id: s.id, title: s.title, finalLyrics: s.finalLyrics, fingerprints: s.uniqueness.fingerprints }));
 }
 
+// ---- albums ----
+function readAlbums(): Album[] {
+  try {
+    const raw = kv().getItem(ALBUM_KEY);
+    if (!raw) return [];
+    const parsed = JSON.parse(raw);
+    return Array.isArray(parsed) ? (parsed as Album[]) : [];
+  } catch {
+    return [];
+  }
+}
+function writeAlbums(list: Album[]): void {
+  try { kv().setItem(ALBUM_KEY, JSON.stringify(list)); } catch { /* ignore */ }
+}
+export function listAlbums(): Album[] {
+  return readAlbums().sort((a, b) => (a.createdAt < b.createdAt ? 1 : -1));
+}
+export function getAlbum(id: string): Album | undefined {
+  return readAlbums().find((a) => a.id === id);
+}
+export function saveAlbum(album: Album): Album {
+  const next = readAlbums().filter((a) => a.id !== album.id);
+  next.push(album);
+  writeAlbums(next);
+  return album;
+}
+export function deleteAlbum(id: string): void {
+  writeAlbums(readAlbums().filter((a) => a.id !== id));
+}
+
 // ---- editable banned-words list ----
 export function loadBannedWords(fallback: string[]): string[] {
   try {
@@ -96,5 +128,5 @@ export function saveBannedWords(words: string[]): void {
 /** test-only reset */
 export function __clearVault(): void {
   memory.clear();
-  try { kv().setItem(KEY, '[]'); } catch { /* ignore */ }
+  try { kv().setItem(KEY, '[]'); kv().setItem(ALBUM_KEY, '[]'); } catch { /* ignore */ }
 }
