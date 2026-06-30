@@ -157,6 +157,12 @@
 .brainNode[data-state="done"] { opacity: 0.95; filter: drop-shadow(0 0 8px var(--rc)); }
 .brainNode[data-state="running"] { opacity: 1; filter: drop-shadow(0 0 12px var(--rc)); animation: brainPulse 1s ease-in-out infinite; }
 .brainNode[data-state="soon"] { opacity: 0.16; stroke: var(--line-strong); stroke-width: 1; }
+.brainNerve { stroke: var(--line-strong); stroke-width: 1.2; opacity: 0.25; transition: opacity 0.3s ease, stroke 0.3s ease; }
+.brainNerve[data-on="true"] {
+  stroke: var(--amber); opacity: 0.85; stroke-width: 1.8; stroke-dasharray: 5 6;
+  filter: drop-shadow(0 0 4px var(--amber)); animation: brainNerveFlow 0.6s linear infinite;
+}
+@keyframes brainNerveFlow { to { stroke-dashoffset: -11; } }
 .brainLabel { fill: var(--ink-faint); font-size: 11px; font-weight: 600; transition: fill 0.3s ease; }
 .brainLabel[data-on="true"] { fill: var(--ink); }
 .brainBody[data-scan="true"] { animation: brainScanFade 2s ease-in-out infinite; }
@@ -165,7 +171,7 @@
 @keyframes brainPulse { 0%, 100% { opacity: 0.7; } 50% { opacity: 1; } }
 @keyframes brainScanFade { 0%, 100% { opacity: 0.85; } 50% { opacity: 1; } }
 @media (prefers-reduced-motion: reduce) {
-  .brainNode[data-state="running"], .brainBody[data-scan="true"] { animation: none; }
+  .brainNode[data-state="running"], .brainBody[data-scan="true"], .brainNerve[data-on="true"] { animation: none; }
 }
 
 /* ---- Lyric Lab (the Writers-Room drawer) ---- */

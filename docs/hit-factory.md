@@ -79,6 +79,17 @@ who the writer is from their vault (reusing `learn.ts`), so the room is informed
 everything they've made. **Assistant, not autopilot** — the artist makes every real
 choice; the brain sharpens the voice instead of replacing it.
 
+## Nervous system & memory tiers
+The brain has a **signalling layer** and two **memory systems**.
+`lib/hermes/brainMap.ts` is the anatomy — the **regions** (functional areas, each a
+knowledge file) and the **nerves** (`PATHWAYS`) between them — the single source of
+truth the Brain Scan renders. `lib/hermes/nervousSystem.ts` is a small pub/sub
+**signal bus**: as each agent fires, a signal travels its region's nerves.
+`lib/hermes/workingMemory.ts` is **short-term memory** — a decaying ring buffer that
+holds the current session and **consolidates** its salient words into **long-term
+memory** (the taste/voice model) when a song is saved. Short-term feels the moment,
+the nervous system carries the signal, long-term keeps what mattered.
+
 ## Brain Scan (the brain, made visible)
 `components/hermes/BrainScan.tsx` renders an anatomical brain whose **functional
 regions light up** as the agents fire — cyan for the analytical left hemisphere,
