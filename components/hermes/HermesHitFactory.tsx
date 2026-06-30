@@ -24,6 +24,7 @@ export default function HermesHitFactory() {
   const [vaultOpen, setVaultOpen] = useState(false);
   const [banned, setBanned] = useState<string[]>(DEFAULT_BANNED_WORDS);
   const [showAvoid, setShowAvoid] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   // hydrate from local storage on mount (client only — avoids SSR mismatch)
   useEffect(() => {
@@ -35,21 +36,33 @@ export default function HermesHitFactory() {
     setRunning(true);
     setPkg(null);
     setOutputs({});
-    const priorSongs = priorSongsForOriginality();
-    const { pkg: result } = await runPipeline(inputs, { priorSongs, bannedWords: banned });
+    setError(null);
+    try {
+      // Compare against the vault, but never against earlier versions of THIS
+      // song — regenerating the same title shouldn't read as copying itself.
+      const priorSongs = priorSongsForOriginality().filter(
+        (s) => s.title.trim().toLowerCase() !== inputs.title.trim().toLowerCase(),
+      );
+      const { pkg: result } = await runPipeline(inputs, { priorSongs, bannedWords: banned });
 
-    // play the pipeline back so the board updates agent-by-agent
-    for (const o of result.agentOutputs) {
-      setOutputs((prev) => ({ ...prev, [o.id]: { ...o, status: 'running' } }));
-      await sleep(150);
-      setOutputs((prev) => ({ ...prev, [o.id]: o }));
-      await sleep(110);
+      // play the pipeline back so the board updates agent-by-agent
+      for (const o of result.agentOutputs) {
+        setOutputs((prev) => ({ ...prev, [o.id]: { ...o, status: 'running' } }));
+        await sleep(150);
+        setOutputs((prev) => ({ ...prev, [o.id]: o }));
+        await sleep(110);
+      }
+
+      const saved = saveSong(result);
+      setPkg(saved);
+      setVault(listSongs());
+    } catch (e) {
+      // never leave the deck stuck on "working…" — surface the failure
+      console.error('HERMES pipeline failed', e);
+      setError(e instanceof Error ? e.message : 'Generation failed — please try again.');
+    } finally {
+      setRunning(false);
     }
-
-    const saved = saveSong(result);
-    setPkg(saved);
-    setVault(listSongs());
-    setRunning(false);
   }
 
   function openFromVault(id: string) {
@@ -100,6 +113,18 @@ export default function HermesHitFactory() {
         ))}
         {running && <span className={styles.railDot}>{doneCount}/{AGENT_DEFINITIONS.length}</span>}
       </div>
+
+      {error && (
+        <div
+          role="alert"
+          style={{
+            border: '1px solid rgba(255,93,108,0.5)', background: 'rgba(255,93,108,0.10)',
+            color: 'var(--bad)', borderRadius: 12, padding: '10px 14px', margin: '4px 0 14px', fontSize: 13,
+          }}
+        >
+          ⚠ {error}
+        </div>
+      )}
 
       <div className={styles.deck}>
         {/* left column — input + avoid words */}
