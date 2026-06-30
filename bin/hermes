@@ -72,6 +72,22 @@ switch (cmd) {
       const cfgPath = resolve(projDir, 'hermes.json');
       if (!existsSync(cfgPath)) { console.error(`no hermes.json found in ${dirArg}/`); process.exit(1); }
       const cfg = JSON.parse(readFileSync(cfgPath, 'utf8'));
+      // The bridge scaffolds everything but the audio. If the track isn't here
+      // yet, say exactly what to do instead of failing cryptically in analyze.
+      const audioPath = resolve(projDir, cfg.audio || 'song/track.mp3');
+      if (!existsSync(audioPath)) {
+        const rel = cfg.audio || 'song/track.mp3';
+        console.error(
+          `\n✗ No audio yet — "${dirArg}/${rel}" is missing.\n\n` +
+          `Finish the loop:\n` +
+          `  1. Render the song in Suno (the Suno "Style of Music" + lyrics are in\n` +
+          `     ${dirArg}/README.md and ${dirArg}/song/lyrics.md).\n` +
+          `  2. Download the MP3 and save it as  ${dirArg}/${rel}\n` +
+          `  3. Re-run:  hermes build ${dirArg}\n\n` +
+          `(Bring-your-own audio — any full stereo mix works, not just Suno.)\n`,
+        );
+        process.exit(1);
+      }
       const brain = flagBrain || cfg.brain;       // --brain overrides hermes.json
       const env = { HERMES_DATA: projDir };        // HERMES_BRAIN reaches timeline + render
       if (brain) env.HERMES_BRAIN = brain;

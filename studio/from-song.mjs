@@ -53,18 +53,29 @@ const lyrics = `# ${song.title || name} — lyrics\n\n` +
 writeFileSync(resolve(dir, 'song', 'lyrics.md'), lyrics);
 writeFileSync(resolve(dir, 'assets', '.gitkeep'), '');
 
-const tempo = song.production?.tempoBpm ? `${song.production.tempoBpm} BPM` : '';
-const sunoStyle = [song.inputs?.genre, song.inputs?.mood, tempo, song.production?.drums, song.production?.bass]
-  .filter(Boolean).join(', ');
+const tempo = song.production?.tempoBpm ? `~${song.production.tempoBpm} BPM` : '';
+const sunoStyle = [song.inputs?.genre, song.inputs?.mood, tempo, song.production?.drums, song.production?.bass,
+  ...(song.production?.instrumentation || []), song.inputs?.voice ? `${song.inputs.voice} male vocal` : '', 'no autotune', 'cinematic']
+  .filter(Boolean).map((s) => String(s).trim()).filter(Boolean).join(', ');
+const sunoLyrics = song.sections.map((s) => `[${s.label}]\n${(s.lines || []).join('\n')}`).join('\n\n');
+const sunoLink = `https://suno.com/create?prompt=${encodeURIComponent(sunoStyle)}`;
 writeFileSync(resolve(dir, 'README.md'),
   `# ${song.title || name}\n\nA video project scaffolded from a HERMES Hit Factory song.\n\n` +
-  `## Finish the video\n` +
-  `1. Render the audio (e.g. in Suno) and save it as \`song/track.mp3\`.\n` +
-  `   - Suno style: \`${sunoStyle}\`\n` +
-  `2. (Optional) drop reference clips as \`assets/hero-clip-01.mp4\`, \`-02\`, … or leave it fully procedural.\n` +
-  `3. \`hermes build ${name}\` → \`${name}/out/${name}.mp4\`  (pack: ${pack}, aspect: ${aspect}, brain: ${brain})\n\n` +
+  `## 1. Render the audio in Suno\n` +
+  `Open **[Suno](${sunoLink})** (or suno.com), paste the **Style of Music** and the **lyrics** below,\n` +
+  `generate, then download the MP3 and save it as **\`song/track.mp3\`**.\n\n` +
+  `**Style of Music**\n\n\`\`\`\n${sunoStyle}\n\`\`\`\n\n` +
+  `**Lyrics**\n\n\`\`\`\n${sunoLyrics}\n\`\`\`\n\n` +
+  `## 2. (Optional) add reference clips\n` +
+  `Drop \`assets/hero-clip-01.mp4\`, \`-02\`, … or leave it fully procedural.\n\n` +
+  `## 3. Build the video\n` +
+  `\`hermes build ${name}\` → \`${name}/out/${name}.mp4\`  (pack: ${pack}, aspect: ${aspect}, brain: ${brain})\n\n` +
   (song.visuals?.musicVideoPrompt ? `## Music-video direction\n${song.visuals.musicVideoPrompt}\n` : ''));
 
 console.log(`Created video project ${name}/ from "${song.title || name}"`);
 console.log(`  pack=${pack}  aspect=${aspect}  brain=${brain}  · lyrics: ${song.sections.length} sections`);
-console.log(`Next: add ${name}/song/track.mp3 (render it in Suno), then  hermes build ${name}`);
+console.log(`\nNext — finish the loop:`);
+console.log(`  1. Render in Suno (style + lyrics are in ${name}/README.md):`);
+console.log(`     ${sunoLink}`);
+console.log(`  2. Save the MP3 as ${name}/song/track.mp3`);
+console.log(`  3. hermes build ${name}`);
