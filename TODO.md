@@ -32,6 +32,9 @@ _Nothing actively in flight — pick the next item from **Up next**._
 - [ ] **Docs site on GitHub Pages** — Astro Starlight (folds into Phase 4).
 
 ## 💡 Backlog (unordered ideas)
+- [ ] **Live preview = the review path** — deploy to **Vercel** (free, instant
+      `*.vercel.app` URL) so the founder can review each change in a browser; point
+      **wifidj.xyz** at it later as the branded home. No domain needed to start.
 - [ ] **16:9 scene builder wired to the video studio** straight from a Hit Factory package
       (today `hermes from-song` scaffolds the project; this would auto-pick shots).
 - [ ] **Artist/project vault** server-side (today the vault is localStorage only).
@@ -62,6 +65,10 @@ Board** governance / Solana / token / NFT layer integrates with this engine via 
 later (kept out of this repo's core so it stays free + local).
 
 ## ✅ Shipped (newest first)
+- [x] **Brain Scan (v1)** — `components/hermes/BrainScan.tsx`: an anatomical brain whose
+      functional regions light up as the agents fire (cyan=left/analytical,
+      magenta=right/generative, amber=center). **Each region is a knowledge file** you
+      can tap (the Obsidian-style vault, made visual). Language & Culture region pending. _(this PR)_
 - [x] **Lyric Lab** — the Writers-Room made visible (`components/hermes/LyricLab.tsx`):
       pick a craft persona, walk the 9 steps with options *and reasons*, commit choices;
       the committed **hook becomes the song's real hook** (pipeline `forcedHook`), and

@@ -19,6 +19,7 @@ import VaultDrawer from './VaultDrawer';
 import RecommendationsPanel from './RecommendationsPanel';
 import AlbumView from './AlbumView';
 import LyricLab from './LyricLab';
+import BrainScan from './BrainScan';
 import styles from './hermes.module.css';
 
 const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
@@ -207,8 +208,9 @@ export default function HermesHitFactory() {
           <RecommendationsPanel songs={vault} taste={taste} onAddExclusion={addExclusion} onApplyPack={applyPack} />
         </div>
 
-        {/* center column — agent board + package */}
+        {/* center column — brain scan + agent board + package */}
         <div className={styles.col}>
+          <BrainScan outputs={outputs} running={running} />
           <AgentBoard outputs={outputs} />
           {pkg ? (
             <SongPackageView pkg={pkg} onSaveEdit={saveLyricEdit} />
