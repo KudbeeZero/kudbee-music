@@ -24,16 +24,14 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with: { node-version: '22' }
-      - uses: actions/setup-python@v5
-        with: { python-version: '3.12' }
       - run: npm ci || npm install
-      - name: Install ffmpeg (static-ffmpeg) + link to .bin
+      - name: Install ffmpeg + link to .bin
         run: |
-          pip install static-ffmpeg
+          sudo apt-get update && sudo apt-get install -y ffmpeg
           mkdir -p .bin
-          ln -sf "$(python -c "import shutil,static_ffmpeg; static_ffmpeg.add_paths(); print(shutil.which('ffmpeg'))")" .bin/ffmpeg
-          ln -sf "$(python -c "import shutil,static_ffmpeg; static_ffmpeg.add_paths(); print(shutil.which('ffprobe'))")" .bin/ffprobe
-          .bin/ffmpeg -version | head -1
+          ln -sf "$(command -v ffmpeg)" .bin/ffmpeg
+          ln -sf "$(command -v ffprobe)" .bin/ffprobe
+          test -x .bin/ffmpeg && .bin/ffmpeg -version | head -1
       - name: Install Chromium for Playwright
         run: npx playwright install --with-deps chromium
       - name: Smoke render + QA eval gate
