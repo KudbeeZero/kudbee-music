@@ -65,6 +65,12 @@ Board** governance / Solana / token / NFT layer integrates with this engine via 
 later (kept out of this repo's core so it stays free + local).
 
 ## ✅ Shipped (newest first)
+- [x] **Nervous system + memory tiers** — the brain's signalling + memory layer:
+      `lib/hermes/brainMap.ts` (regions + nerves, single source of truth),
+      `lib/hermes/nervousSystem.ts` (a signal bus), `lib/hermes/workingMemory.ts`
+      (decaying short-term memory that **consolidates** into long-term on save). The
+      Brain Scan draws the nerves and **pulses them live** as signals travel; Short-term
+      and Long-term are now distinct regions. _(this PR)_
 - [x] **Brain Scan (v1)** — `components/hermes/BrainScan.tsx`: an anatomical brain whose
       functional regions light up as the agents fire (cyan=left/analytical,
       magenta=right/generative, amber=center). **Each region is a knowledge file** you

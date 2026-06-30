@@ -20,6 +20,8 @@ import RecommendationsPanel from './RecommendationsPanel';
 import AlbumView from './AlbumView';
 import LyricLab from './LyricLab';
 import BrainScan from './BrainScan';
+import { createNervousSystem, signalForAgent } from '@/lib/hermes/nervousSystem';
+import { createWorkingMemory } from '@/lib/hermes/workingMemory';
 import styles from './hermes.module.css';
 
 const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
@@ -39,6 +41,9 @@ export default function HermesHitFactory() {
   const [preset, setPreset] = useState<Partial<{ genre: string; mood: string; references: string }> | null>(null);
   const [taste, setTaste] = useState<Taste | undefined>(undefined);
   const regenRef = useRef(0); // bumps each run so the same idea yields a fresh take
+  const nsRef = useRef(createNervousSystem());      // the nervous system (signal bus)
+  const wmRef = useRef(createWorkingMemory(16));     // short-term (working) memory
+  const [wmSize, setWmSize] = useState(0);
 
   // hydrate from local storage on mount (client only — avoids SSR mismatch)
   useEffect(() => {
@@ -77,9 +82,17 @@ export default function HermesHitFactory() {
       const seed = (Date.now() ^ (regenRef.current++ * 0x9e3779b1)) >>> 0;
       const { pkg: result } = await runPipeline(inputs, { priorSongs, bannedWords: banned, seed, forcedHook: runOpts?.forcedHook });
 
-      // play the pipeline back so the board updates agent-by-agent
+      // new session: clear working memory, seed it with the committed hook
+      const wm = wmRef.current; const ns = nsRef.current;
+      wm.clear(); setWmSize(0);
+      if (result.chosenHook?.text) wm.note({ kind: 'choice', text: result.chosenHook.text });
+
+      // play the pipeline back so the board + brain scan update agent-by-agent;
+      // each firing sends a signal down the nervous system into working memory
       for (const o of result.agentOutputs) {
         setOutputs((prev) => ({ ...prev, [o.id]: { ...o, status: 'running' } }));
+        const sig = signalForAgent(o.id, o.finding || o.name);
+        if (sig) { ns.fire(sig); wm.note({ kind: 'signal', text: `${sig.region}: ${sig.note}` }); setWmSize(wm.size()); }
         await sleep(150);
         setOutputs((prev) => ({ ...prev, [o.id]: o }));
         await sleep(110);
@@ -88,6 +101,9 @@ export default function HermesHitFactory() {
       const saved = saveSong(result);
       setPkg(saved);
       setVault(listSongs());
+      // consolidate short-term → long-term: the session's salient words become voice
+      const { keep } = wm.consolidate();
+      if (keep.length) setTaste(recordTaste(keep, []));
     } catch (e) {
       // never leave the deck stuck on "working…" — surface the failure
       console.error('HERMES pipeline failed', e);
@@ -210,7 +226,7 @@ export default function HermesHitFactory() {
 
         {/* center column — brain scan + agent board + package */}
         <div className={styles.col}>
-          <BrainScan outputs={outputs} running={running} />
+          <BrainScan outputs={outputs} running={running} workingMemory={wmSize} />
           <AgentBoard outputs={outputs} />
           {pkg ? (
             <SongPackageView pkg={pkg} onSaveEdit={saveLyricEdit} />

@@ -142,6 +142,11 @@ contribution loop are the seeds of this.
 ---
 
 ## ✅ Captured → shipped
+- ✅ **Nervous system + short-term/long-term memory** — `brain map` (regions + nerves,
+  `lib/hermes/brainMap.ts`), a signal bus (`lib/hermes/nervousSystem.ts`), and decaying
+  working memory that **consolidates** into long-term on save (`lib/hermes/workingMemory.ts`).
+  The Brain Scan now draws the nerves and **pulses them live** as signals travel, with
+  Short-term and Long-term as distinct regions. _(this PR)_
 - ✅ **Lyric Lab** (the Writers-Room made visible; artist's hook → real song; trains
   the voice) → `components/hermes/LyricLab.tsx` _(this PR)_
 - ✅ **Belief system** (the brain's values) → `brain/beliefs.json` _(#13)_
