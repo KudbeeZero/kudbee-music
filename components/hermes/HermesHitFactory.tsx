@@ -18,6 +18,7 @@ import UniquenessReportView from './UniquenessReport';
 import VaultDrawer from './VaultDrawer';
 import RecommendationsPanel from './RecommendationsPanel';
 import AlbumView from './AlbumView';
+import LyricLab from './LyricLab';
 import styles from './hermes.module.css';
 
 const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
@@ -33,6 +34,7 @@ export default function HermesHitFactory() {
   const [error, setError] = useState<string | null>(null);
   const [albums, setAlbums] = useState<Album[]>([]);
   const [albumOpen, setAlbumOpen] = useState(false);
+  const [labOpen, setLabOpen] = useState(false);
   const [preset, setPreset] = useState<Partial<{ genre: string; mood: string; references: string }> | null>(null);
   const [taste, setTaste] = useState<Taste | undefined>(undefined);
   const regenRef = useRef(0); // bumps each run so the same idea yields a fresh take
@@ -60,7 +62,7 @@ export default function HermesHitFactory() {
     setPreset({ genre: pack.style.split(',')[0].trim(), mood: pack.description, references: `${pack.title} expansion — ${pack.hookGuidance}` });
   }
 
-  async function run(inputs: SongInputs) {
+  async function run(inputs: SongInputs, runOpts?: { forcedHook?: string }) {
     setRunning(true);
     setPkg(null);
     setOutputs({});
@@ -72,7 +74,7 @@ export default function HermesHitFactory() {
         (s) => s.title.trim().toLowerCase() !== inputs.title.trim().toLowerCase(),
       );
       const seed = (Date.now() ^ (regenRef.current++ * 0x9e3779b1)) >>> 0;
-      const { pkg: result } = await runPipeline(inputs, { priorSongs, bannedWords: banned, seed });
+      const { pkg: result } = await runPipeline(inputs, { priorSongs, bannedWords: banned, seed, forcedHook: runOpts?.forcedHook });
 
       // play the pipeline back so the board updates agent-by-agent
       for (const o of result.agentOutputs) {
@@ -149,6 +151,7 @@ export default function HermesHitFactory() {
         </div>
         <div className={styles.headerSpacer} />
         <span className={styles.modeBadge}>● V1 · local mock — no API key</span>
+        <button className={styles.ghostBtn} onClick={() => setLabOpen(true)}>✍️ Lyric Lab</button>
         <button className={styles.ghostBtn} onClick={() => setAlbumOpen(true)}>Albums ({albums.length})</button>
         <button className={styles.ghostBtn} onClick={() => setVaultOpen(true)}>Vault ({vault.length})</button>
       </header>
@@ -276,6 +279,15 @@ export default function HermesHitFactory() {
           onClose={() => setAlbumOpen(false)}
           onSave={(a) => { saveAlbum(a); setAlbums(listAlbums()); }}
           onDelete={(id) => { deleteAlbum(id); setAlbums(listAlbums()); }}
+        />
+      )}
+
+      {labOpen && (
+        <LyricLab
+          songs={vault}
+          onClose={() => setLabOpen(false)}
+          onRecordTaste={(kept, dropped) => setTaste(recordTaste(kept, dropped))}
+          onGenerate={({ inputs, forcedHook }) => { setLabOpen(false); run(inputs, { forcedHook }); }}
         />
       )}
     </div>

@@ -23,6 +23,9 @@ export interface RunOptions {
   /** regeneration nonce — omit for a deterministic draft, pass a fresh value
    *  (e.g. from the UI) to get a different take on the same brief */
   seed?: number;
+  /** a hook the artist committed in the Lyric Lab — when set, it becomes the
+   *  chosen hook and the verses are written from it (the writers-room made real). */
+  forcedHook?: string;
 }
 
 const ORDER: AgentId[] = [
@@ -79,10 +82,15 @@ export async function runPipeline(inputs: SongInputs, opts: RunOptions = {}): Pr
     data: { brief, concept },
   });
 
-  // 2) Hooksmith — hooks
+  // 2) Hooksmith — hooks. A hook written in the Lyric Lab wins outright; the
+  // generated options still show on the board as alternates.
   announce('hooksmith');
-  const hookOptions: HookOption[] = await providers.lyrics.generateHooks(inputs, 5, seed);
-  const chosenHook = hookOptions.slice().sort((a, b) => b.score - a.score)[0] ?? null;
+  const generatedHooks: HookOption[] = await providers.lyrics.generateHooks(inputs, 5, seed);
+  const labHook: HookOption | null = opts.forcedHook?.trim()
+    ? { text: opts.forcedHook.trim(), angle: 'written by the artist in the Lyric Lab', cadence: 'the artist’s own pocket', score: 96 }
+    : null;
+  const hookOptions: HookOption[] = labHook ? [labHook, ...generatedHooks] : generatedHooks;
+  const chosenHook = labHook ?? hookOptions.slice().sort((a, b) => b.score - a.score)[0] ?? null;
   emit({
     id: 'hooksmith', name: 'Hooksmith', status: hookOptions.length ? 'done' : 'warning',
     finding: chosenHook ? `Lead hook: "${chosenHook.text}"` : 'No hook generated.',
