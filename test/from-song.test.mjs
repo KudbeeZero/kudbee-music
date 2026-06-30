@@ -10,6 +10,7 @@ import { fileURLToPath } from 'node:url';
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const FROM_SONG = resolve(ROOT, 'studio/from-song.mjs');
+const HERMES = resolve(ROOT, 'bin/hermes');
 
 const SONG = {
   id: 's1', title: 'Cold Hard Gold', version: 1,
@@ -46,7 +47,26 @@ test('from-song scaffolds a video project from a Hit Factory song', () => {
     assert.match(lyrics, /\[Verse 1\]/);
 
     const readme = readFileSync(resolve(proj, 'README.md'), 'utf8');
-    assert.match(readme, /Suno style/);      // carries the production/style reference
+    assert.match(readme, /Style of Music/);          // Suno style block
+    assert.match(readme, /suno\.com\/create/);        // one-click render link
+    assert.match(readme, /song\/track\.mp3/);         // tells you where the audio goes
+  } finally {
+    rmSync(dir, { recursive: true, force: true });
+  }
+});
+
+test('build on a scaffolded project with no audio gives clear guidance, not a cryptic failure', () => {
+  const dir = mkdtempSync(resolve(tmpdir(), 'hermes-noaudio-'));
+  try {
+    const songFile = resolve(dir, 'song.json');
+    writeFileSync(songFile, JSON.stringify(SONG));
+    const proj = resolve(dir, 'proj');
+    spawnSync('node', [FROM_SONG, songFile, '--name', proj], { encoding: 'utf8' });
+    // No song/track.mp3 yet — build should bail early with the Suno handoff steps.
+    const r = spawnSync('node', [HERMES, 'build', proj], { encoding: 'utf8' });
+    assert.equal(r.status, 1, 'build exits non-zero without audio');
+    assert.match(r.stderr, /No audio yet/);
+    assert.match(r.stderr, /song\/track\.mp3/);
   } finally {
     rmSync(dir, { recursive: true, force: true });
   }

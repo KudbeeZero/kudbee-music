@@ -18,6 +18,14 @@ npm run test:web       # engine tests (vitest)
 Dev: `npm run web:dev`. The video studio (`bin/hermes`, `studio/*`) is untouched
 and runs exactly as before.
 
+**Instant demo (no typing).** On the empty deck, click **"▶ See a finished example
+— Cold Hard Gold"** to load a real 99/100 package the engine produced
+(`examples/cold-hard-gold/song.json`). Then take it to the video studio:
+`hermes from-song examples/cold-hard-gold/song.json` scaffolds a project whose README
+carries a **one-click Suno link + Style of Music + lyrics**; render the audio in Suno,
+drop it at `song/track.mp3`, and `hermes build`. If the audio isn't placed yet, the
+build prints exactly what to do instead of failing.
+
 ## The 10 agents (right brain proposes, left brain disposes)
 | Agent | Hemisphere | Output |
 |-------|-----------|--------|

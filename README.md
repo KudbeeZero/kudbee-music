@@ -60,6 +60,11 @@ npm install
 npm run web:dev          # http://localhost:3000/hermes  (or /hit-factory)
 ```
 
+> **No setup? Click _"▶ See a finished example — Cold Hard Gold"_** on the empty
+> deck to load a real, 99/100 package (hooks, lyrics, production, scores) the engine
+> actually produced — then run it through the video studio with one command. See
+> [`examples/cold-hard-gold/`](examples/cold-hard-gold/).
+
 **The 10 agents (right proposes, left disposes):**
 
 | Right | Left |
@@ -181,6 +186,7 @@ docs/                    quickstart, concepts, CLI ref, scene-pack guide, hit-fa
 - [x] **Learn from edits** — rewrite a line, the brain learns your taste
 - [x] **Song → video** — `hermes from-song` turns a Hit Factory song into a renderable video project (both studios fused)
 - [x] **Public testing URL** — Vercel-ready (`vercel.json`) + deploy guide ([`docs/testing.md`](docs/testing.md))
+- [x] **Flagship example + one-click Suno handoff** — load *Cold Hard Gold* in-app; `from-song` emits a ready-to-paste Suno link, and `build` guides you if the audio isn't placed yet
 
 **Next** — the full, living backlog lives in [`TODO.md`](TODO.md).
 - [ ] Per-track **Suno structure hints** (stems, `[Intro]`/`[Bridge]` pacing, BPM/key tags)
