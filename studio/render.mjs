@@ -6,26 +6,34 @@ import { spawn } from 'node:child_process';
 import { chromium } from 'playwright';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 import { dirname, resolve } from 'node:path';
+import { resolveBrain } from './brain.mjs';
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..');
+// HERMES_DATA points at a project folder (hermes build <dir>); defaults to the
+// repo root, so the built-in flagship render path is unchanged.
+const DATA = process.env.HERMES_DATA ? resolve(process.env.HERMES_DATA) : ROOT;
+const PROJECT = !!process.env.HERMES_DATA;
 const FFMPEG = resolve(ROOT, '.bin/ffmpeg');
 const argv = process.argv.slice(2);
 const opt = (k, d) => { const i = argv.indexOf('--' + k); return i >= 0 ? argv[i + 1] : d; };
 
-const A = JSON.parse(readFileSync(resolve(ROOT, 'song/analysis.json')));
-const C = JSON.parse(readFileSync(resolve(ROOT, 'studio/config.json')));
-const S = JSON.parse(readFileSync(resolve(ROOT, 'song/sync-map.json')));
-const FM = JSON.parse(readFileSync(resolve(ROOT, 'assets/frames/meta.json')));
+const A = JSON.parse(readFileSync(resolve(DATA, 'song/analysis.json')));
+const C = JSON.parse(readFileSync(PROJECT ? resolve(DATA, 'config.json') : resolve(ROOT, 'studio/config.json')));
+const S = JSON.parse(readFileSync(resolve(DATA, 'song/sync-map.json')));
+// frames manifest is optional — a fully procedural pack (no hero footage) renders without it
+const FM_PATH = resolve(DATA, 'assets/frames/meta.json');
+const FM = existsSync(FM_PATH) ? JSON.parse(readFileSync(FM_PATH)) : {};
 
 const FPS = A.fps;
 const startSec = parseFloat(opt('start', '0'));
 const endSec = parseFloat(opt('end', String(A.durationSec)));
-const OUT = resolve(ROOT, opt('out', 'out/kudbee-music-video-1080p.mp4'));
+const OUT = resolve(DATA, opt('out', 'out/kudbee-music-video-1080p.mp4'));
 const CRF = opt('crf', '18');
 const PRESET = opt('preset', 'medium');
 const ASPECTS = { '16:9': [1920,1080], '9:16': [1080,1920], '1:1': [1080,1080], '4:5': [1080,1350] };
 const aspect = opt('aspect', null);
 const PACK = opt('pack', 'neo-noir');
+const BRAIN = resolveBrain(opt('brain', process.env.HERMES_BRAIN));
 const WIDTH = parseInt(opt('width', aspect ? ASPECTS[aspect][0] : (C.width || 1920)));
 const HEIGHT = parseInt(opt('height', aspect ? ASPECTS[aspect][1] : (C.height || 1080)));
 const startF = Math.floor(startSec * FPS);
@@ -44,7 +52,7 @@ function clipFrameDataUrl(clip, localFrame) {
   const id = `${clip}:${idx}`;
   let url = fileCache.get(id);
   if (!url) {
-    url = fileToDataUrl(resolve(ROOT, `assets/frames/${clip}/${String(idx).padStart(4, '0')}.jpg`), 'image/jpeg');
+    url = fileToDataUrl(resolve(DATA, `assets/frames/${clip}/${String(idx).padStart(4, '0')}.jpg`), 'image/jpeg');
     if (fileCache.size > 400) fileCache.delete(fileCache.keys().next().value);
     fileCache.set(id, url);
   }
@@ -58,6 +66,7 @@ function heroFor(t) {
     h = cur; originStart = cur.start;
   }
   if (!h) return null;                               // procedural scene
+  if (!FM[h.clip]) return null;                      // no extracted frames -> procedural fallback
   const factor = h.mode === 'slow' ? (h.factor || 0.5) : 1;
   const local = Math.floor((t - originStart) * 24 * factor) + (h.offset || 0);
   return clipFrameDataUrl(h.clip, local);
@@ -72,7 +81,7 @@ function drain(stream){ return new Promise(r => stream.write('') ? r() : stream.
   const ff = spawn(FFMPEG, [
     '-y',
     '-f', 'image2pipe', '-framerate', String(FPS), '-i', '-',
-    '-ss', String(startSec), '-i', resolve(ROOT, 'song/track.mp3'),
+    '-ss', String(startSec), '-i', resolve(DATA, 'song/track.mp3'),
     '-map', '0:v', '-map', '1:a',
     '-t', String((endF - startF) / FPS),
     '-c:v', 'libx264', '-preset', PRESET, '-crf', String(CRF), '-pix_fmt', 'yuv420p',
@@ -85,7 +94,7 @@ function drain(stream){ return new Promise(r => stream.write('') ? r() : stream.
   await page.goto(pathToFileURL(resolve(ROOT, 'studio/player.html')).href);
   await page.waitForFunction('window.__ready === true');
   const firstHero = heroFor(startF / FPS);
-  await page.evaluate(p => window.__setup(p), { analysis: A, config: C, syncMap: S, firstHero, width: WIDTH, height: HEIGHT, pack: PACK });
+  await page.evaluate(p => window.__setup(p), { analysis: A, config: C, syncMap: S, firstHero, width: WIDTH, height: HEIGHT, pack: PACK, grade: BRAIN.grade });
 
   for (let f = startF; f < endF; f++) {
     const t = f / FPS;

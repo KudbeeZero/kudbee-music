@@ -3,6 +3,19 @@
 A **scene pack** is a visual style: a palette, fonts, and a set of scene modules.
 The built-in pack is [`neo-noir`](https://github.com/KudbeeZero/kudbee-music/blob/main/scene-packs/neo-noir/pack.json).
 
+Four packs ship today — switch with `--pack`:
+
+| pack | look | command |
+|------|------|---------|
+| `neo-noir` *(default)* | cinematic detective film — amber neon, film grain | `hermes render` |
+| `retrowave` | 80s synthwave — chrome sun, neon grid, hot pink/cyan | `hermes render --pack retrowave` |
+| `vhs-lofi` | faded analog tape — teal/cream wash, scanlines, head-switch noise | `hermes render --pack vhs-lofi` |
+| `lyric-minimal` | type-forward — near-black canvas, one warm accent orb, lots of air | `hermes render --pack lyric-minimal` |
+
+`vhs-lofi` and `lyric-minimal` are the newest and are the simplest to read as
+reference: both are fully procedural (no hero footage), each is one
+`scene<Name>` + one `grade<Name>` in `studio/player.html`, gated on `PACK`.
+
 ## Anatomy (`scene-packs/<name>/pack.json`)
 ```json
 {

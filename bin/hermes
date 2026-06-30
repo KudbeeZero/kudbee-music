@@ -2,13 +2,13 @@
 // HERMES — agent-driven music-video studio CLI.
 // Thin wrapper over the studio pipeline (analyze -> timeline -> render).
 import { spawnSync } from 'node:child_process';
-import { existsSync } from 'node:fs';
+import { existsSync, readFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { dirname, resolve } from 'node:path';
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..');
-const run = (file, args = []) => {
-  const r = spawnSync('node', [resolve(ROOT, 'studio', file), ...args], { stdio: 'inherit' });
+const run = (file, args = [], env = {}) => {
+  const r = spawnSync('node', [resolve(ROOT, 'studio', file), ...args], { stdio: 'inherit', env: { ...process.env, ...env } });
   if (r.status !== 0) process.exit(r.status || 1);
 };
 const py = (file, args = []) => spawnSync('python3', [resolve(ROOT, 'studio', file), ...args], { stdio: 'inherit' });
@@ -19,34 +19,74 @@ const help = `HERMES — turn a song into a music video, from code.
 Usage: hermes <command> [options]
 
 Commands:
+  new <name>           Scaffold a new project folder + hermes.json (studio/scaffold.mjs)
   prep                 Extract hero-clip frames               (studio/prep-frames.mjs)
   analyze              Detect duration / BPM / beats / loudness (studio/analyze.mjs)
   transcribe           Forced-align lyrics via Whisper (optional, needs faster-whisper)
+  master               Loudness-master the track to -14 LUFS (EBU R128)
   timeline             Build the scene timeline + lyric sync-map (studio/build-timeline.mjs)
   render [opts]        Render the video                        (studio/render.mjs)
   preview              Render a short slice for a quick look
-  build                prep -> analyze -> timeline -> render (the whole thing)
+  build [dir]          prep -> analyze -> timeline -> render (the whole thing).
+                       With a project dir, reads its hermes.json (pack/aspect)
+                       and renders to <dir>/out/<name>.mp4 from its own song/+assets/.
+
+  qa <video>           Eval gate: ffprobe + frame-sample a render, score it,
+                       exit non-zero on fail (the "left brain" check). (studio/qa.mjs)
 
 Render options:  --start <s> --end <s> --out <path> --preset <x> --crf <n>
-                 --pack <neo-noir|retrowave>  --aspect <16:9|9:16|1:1|4:5>
+                 --pack <neo-noir|retrowave|vhs-lofi|lyric-minimal>
+                 --brain <balanced|right|left>   (dominance dial: bias the cut +
+                     sync + grade — right=bold/loose, left=precise/legible)
+                 --aspect <16:9|9:16|1:1|4:5>
 
 Examples:
-  hermes build
-  hermes preview
-  hermes render --preset medium --crf 18 --out out/video.mp4
+  hermes new mysong && cd ..      # scaffold a project
+  hermes build mysong             # build that project (its hermes.json drives it)
+  hermes build                    # build the flagship in this repo
+  hermes build mysong --brain right   # let the right hemisphere lead
+  hermes render --pack vhs-lofi --aspect 9:16
+  hermes qa out/kudbee-music-video-1080p.mp4
 `;
 
 switch (cmd) {
+  case 'new':        run('scaffold.mjs', rest); break;
   case 'prep':       run('prep-frames.mjs'); break;
   case 'analyze':    run('analyze.mjs'); break;
   case 'transcribe': py('transcribe.py'); break;
-  case 'timeline':   run('build-timeline.mjs'); break;
+  case 'master':     run('master.mjs', rest); break;
+  case 'timeline': { const i = rest.indexOf('--brain'); run('build-timeline.mjs', [], i >= 0 ? { HERMES_BRAIN: rest[i + 1] } : {}); break; }
   case 'render':     run('render.mjs', rest); break;
   case 'preview':    run('render.mjs', ['--start','40','--end','56','--out','out/preview.mp4','--preset','fast','--crf','20', ...rest]); break;
-  case 'build':
-    run('prep-frames.mjs'); run('analyze.mjs'); run('build-timeline.mjs');
-    run('render.mjs', ['--out','out/kudbee-music-video-1080p.mp4','--preset','medium','--crf','18', ...rest]);
+  case 'qa':         run('qa.mjs', rest); break;
+  case 'build': {
+    const dirArg = rest[0] && !rest[0].startsWith('--') ? rest.shift() : null;
+    const flagBrain = (() => { const i = rest.indexOf('--brain'); return i >= 0 ? rest[i + 1] : null; })();
+    if (dirArg) {
+      const projDir = resolve(process.cwd(), dirArg);
+      const cfgPath = resolve(projDir, 'hermes.json');
+      if (!existsSync(cfgPath)) { console.error(`no hermes.json found in ${dirArg}/`); process.exit(1); }
+      const cfg = JSON.parse(readFileSync(cfgPath, 'utf8'));
+      const brain = flagBrain || cfg.brain;       // --brain overrides hermes.json
+      const env = { HERMES_DATA: projDir };        // HERMES_BRAIN reaches timeline + render
+      if (brain) env.HERMES_BRAIN = brain;
+      const flags = [];
+      if (cfg.pack) flags.push('--pack', cfg.pack);
+      if (cfg.aspect) flags.push('--aspect', cfg.aspect);
+      const out = `out/${cfg.name || 'video'}.mp4`;
+      console.log(`building project "${cfg.name || dirArg}"  pack=${cfg.pack || 'neo-noir'}  aspect=${cfg.aspect || '16:9'}  brain=${brain || 'balanced'}`);
+      run('prep-frames.mjs', [], env);
+      run('analyze.mjs', [], env);
+      run('build-timeline.mjs', [], env);
+      run('render.mjs', ['--out', out, '--preset', 'medium', '--crf', '18', ...flags, ...rest], env);
+      console.log(`\nDone -> ${dirArg}/${out}`);
+    } else {
+      const env = flagBrain ? { HERMES_BRAIN: flagBrain } : {};
+      run('prep-frames.mjs', [], env); run('analyze.mjs', [], env); run('build-timeline.mjs', [], env);
+      run('render.mjs', ['--out','out/kudbee-music-video-1080p.mp4','--preset','medium','--crf','18', ...rest], env);
+    }
     break;
+  }
   case '-h': case '--help': case 'help': case undefined: console.log(help); break;
   default: console.error(`Unknown command: ${cmd}\n`); console.log(help); process.exit(1);
 }

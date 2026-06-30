@@ -1,0 +1,15 @@
+{
+  "name": "lyric-minimal",
+  "title": "Lyric Minimal",
+  "description": "Type-forward and quiet: a near-black canvas, one soft warm accent orb drifting behind the words, a sparse dot grid, and a single baseline rule. Lets the kinetic typography carry the frame.",
+  "palette": {
+    "bg": ["#0c0c0e", "#141417"],
+    "accent": ["#e9603e", "#f5f3ee"],
+    "ink": "#f5f3ee"
+  },
+  "fonts": { "display": "Anton", "body": "Oswald" },
+  "scenes": ["minimal-orb"],
+  "post": ["soft-scanlines"],
+  "implementedIn": "studio/player.html (sceneLyricMin + gradeMin)",
+  "usage": "node bin/hermes render --pack lyric-minimal"
+}

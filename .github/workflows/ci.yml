@@ -1,6 +1,7 @@
 name: ci
 on: [push, pull_request]
 jobs:
+  # Left-brain check: fast, deterministic, no heavy deps. The reliable gate.
   check:
     runs-on: ubuntu-latest
     steps:
@@ -10,8 +11,31 @@ jobs:
       - run: npm ci || npm install
       - name: Syntax check studio + CLI
         run: npm run lint:check
-      - name: Validate timeline builds
-        run: node studio/build-timeline.mjs || true
+      - name: Unit tests (brain dial + scene-pack contract)
+        run: npm test
+      - name: Timeline builds (brain-wired)
+        run: npm run timeline
+
+  # The eval gate: a real 2s render through Chromium + ffmpeg, then hermes-qa
+  # scores it (container, not-black, not-frozen). "eval passed -> ship safely."
+  smoke:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: '22' }
+      - run: npm ci || npm install
+      - name: Install ffmpeg + link to .bin
+        run: |
+          sudo apt-get update && sudo apt-get install -y ffmpeg
+          mkdir -p .bin
+          ln -sf "$(command -v ffmpeg)" .bin/ffmpeg
+          ln -sf "$(command -v ffprobe)" .bin/ffprobe
+          test -x .bin/ffmpeg && .bin/ffmpeg -version | head -1
+      - name: Install Chromium for Playwright
+        run: npx playwright install --with-deps chromium
+      - name: Smoke render + QA eval gate
+        run: npm run smoke
 
   # HERMES Hit Factory web app — engine tests + production build (no API key).
   web:

@@ -22,6 +22,7 @@ let curHero=null;                 // {img,id}
 
 // ---------- palette ----------
 let PACK='neo-noir';
+let GRADE=1;   // brain dominance dial: split-tone intensity (1 = balanced)
 let PAL={
   bg0:'#070611', bg1:'#0d0a1e',
   amber:'#ffb14e', amber2:'#ff8a3d', glow:'#ffd9a0',
@@ -33,6 +34,20 @@ const PAL_RETRO={
   amber:'#ff2e88', amber2:'#ff6ac1', glow:'#21d4fd',
   violet:'#7a3cff', magenta:'#ff2e88', deep:'#3d0a5e',
   ink:'#ffffff', lyricGlow:'rgba(33,212,253,0.95)'
+};
+// faded analog tape — warm cream + teal with a magenta bleed
+const PAL_VHS={
+  bg0:'#13201f', bg1:'#1d3330',
+  amber:'#f4d9a0', amber2:'#e8b27a', glow:'#7fe3d4',
+  violet:'#3a8f86', magenta:'#ff5b7f', deep:'#0e1a19',
+  ink:'#f2efe2', lyricGlow:'rgba(127,227,212,0.9)'
+};
+// type-forward minimal — near-black canvas, one warm accent, lots of air
+const PAL_MIN={
+  bg0:'#0c0c0e', bg1:'#141417',
+  amber:'#f5f3ee', amber2:'#cfcdc7', glow:'#ffffff',
+  violet:'#e9603e', magenta:'#e9603e', deep:'#000000',
+  ink:'#f5f3ee', lyricGlow:'rgba(233,96,62,0.85)'
 };
 
 // ---------- deterministic noise ----------
@@ -181,7 +196,7 @@ function grade(loud){
   // amber highlights
   ctx.globalCompositeOperation='soft-light';
   let g=ctx.createLinearGradient(0,0,0,H);
-  g.addColorStop(0,'rgba(255,150,60,0.35)'); g.addColorStop(1,'rgba(120,60,255,0.30)');
+  g.addColorStop(0,'rgba(255,150,60,'+(0.35*GRADE).toFixed(3)+')'); g.addColorStop(1,'rgba(120,60,255,'+(0.30*GRADE).toFixed(3)+')');
   ctx.fillStyle=g; ctx.fillRect(0,0,W,H);
   ctx.restore();
 }
@@ -370,6 +385,75 @@ function sceneRetrowave(t,f,loud){
 }
 function gradeRetro(){ ctx.save(); ctx.globalAlpha=0.08; ctx.fillStyle='#000'; for(let y=0;y<H;y+=4) ctx.fillRect(0,y,W,2); ctx.restore(); }
 
+// ---------- pack: vhs-lofi (warm analog tape) ----------
+function sceneVhsLofi(t,f,loud){
+  // washed warm gradient base
+  const g=ctx.createLinearGradient(0,0,0,H);
+  g.addColorStop(0,PAL_VHS.bg1); g.addColorStop(0.55,PAL_VHS.bg0); g.addColorStop(1,'#0a1413');
+  ctx.fillStyle=g; ctx.fillRect(0,0,W,H);
+  // slow drifting soft light blooms (like tape phosphor)
+  ctx.save(); ctx.globalCompositeOperation='screen';
+  for(let i=0;i<3;i++){
+    const cx=W*(0.3+0.4*Math.sin(t*0.18+i*2.1))+ (i-1)*W*0.12;
+    const cy=H*(0.4+0.25*Math.cos(t*0.13+i*1.7));
+    const r=Math.min(W,H)*(0.32+0.06*Math.sin(t*0.5+i));
+    const rg=ctx.createRadialGradient(cx,cy,0,cx,cy,r);
+    const col=i===2?'255,91,127':'127,227,212';
+    rg.addColorStop(0,'rgba('+col+','+(0.10+loud*0.12).toFixed(3)+')'); rg.addColorStop(1,'rgba('+col+',0)');
+    ctx.fillStyle=rg; ctx.fillRect(0,0,W,H);
+  }
+  ctx.restore();
+  // floating dust motes
+  ctx.save(); ctx.globalCompositeOperation='screen';
+  for(let i=0;i<60;i++){ const x=(hash(i,7,3)*W+t*8*(0.4+hash(i,2,9)))%W; const y=(hash(i,4,1)*H - t*6)%H; const yy=(y+H)%H; const a=0.10+0.25*hash(i,5,6); ctx.fillStyle='rgba(244,217,160,'+a.toFixed(2)+')'; ctx.fillRect(x,yy,2,2);}
+  ctx.restore();
+  // chroma-shift edge bleed — thin magenta/teal fringes at the frame sides only
+  const jitter=(f%180<6)?(hash(f,1,2)*8-4):0;
+  ctx.save(); ctx.globalCompositeOperation='screen'; ctx.globalAlpha=0.30;
+  ctx.fillStyle='rgba(255,91,127,1)'; ctx.fillRect(jitter,0,4,H);
+  ctx.fillStyle='rgba(127,227,212,1)'; ctx.fillRect(W-4-jitter,0,4,H);
+  ctx.restore();
+}
+function gradeVhs(f){
+  ctx.save();
+  // scanlines
+  ctx.globalAlpha=0.10; ctx.fillStyle='#000'; for(let y=0;y<H;y+=3) ctx.fillRect(0,y,W,1);
+  ctx.restore();
+  // head-switching noise band sliding up from the bottom
+  ctx.save();
+  const band=H - ((f*5)%(H+60));
+  ctx.globalAlpha=0.5;
+  for(let y=band;y<band+8 && y<H;y++){ if(y<0)continue; for(let x=0;x<W;x+=2){ const v=hash(x,y,f)*255|0; ctx.fillStyle='rgba('+v+','+v+','+v+',0.5)'; ctx.fillRect(x,y,2,1);} }
+  ctx.restore();
+  // gentle warm cast — soft-light keeps highlights cream without crushing the teal
+  ctx.save(); ctx.globalCompositeOperation='soft-light'; ctx.globalAlpha=0.10; ctx.fillStyle='#f4d9a0'; ctx.fillRect(0,0,W,H); ctx.restore();
+  // tracking tear flicker
+  if(f%150<3){ ctx.save(); ctx.globalAlpha=0.18; ctx.fillStyle='#fff'; const ty=hash(f,9,9)*H; ctx.fillRect(0,ty,W,2); ctx.restore(); }
+}
+
+// ---------- pack: lyric-minimal (type-forward, lots of air) ----------
+function sceneLyricMin(t,f,loud){
+  ctx.fillStyle=PAL_MIN.bg0; ctx.fillRect(0,0,W,H);
+  // one large soft accent orb drifting slowly behind the type
+  const cx=W*(0.5+0.18*Math.sin(t*0.12));
+  const cy=H*(0.5+0.12*Math.cos(t*0.09));
+  const r=Math.min(W,H)*(0.42+loud*0.05);
+  const rg=ctx.createRadialGradient(cx,cy,0,cx,cy,r);
+  rg.addColorStop(0,'rgba(233,96,62,'+(0.16+loud*0.10).toFixed(3)+')');
+  rg.addColorStop(0.6,'rgba(233,96,62,0.04)');
+  rg.addColorStop(1,'rgba(233,96,62,0)');
+  ctx.save(); ctx.globalCompositeOperation='screen'; ctx.fillStyle=rg; ctx.fillRect(0,0,W,H); ctx.restore();
+  // a single thin moving baseline rule (anchors the type, very subtle)
+  ctx.save(); ctx.globalAlpha=0.10; ctx.strokeStyle=PAL_MIN.ink; ctx.lineWidth=1;
+  const ly=H*0.78; ctx.beginPath(); ctx.moveTo(W*0.12,ly); ctx.lineTo(W*0.88,ly); ctx.stroke(); ctx.restore();
+  // sparse drifting dot grid for depth
+  ctx.save(); ctx.globalAlpha=0.06; ctx.fillStyle=PAL_MIN.ink;
+  const step=Math.max(60,W/22); const off=(t*10)%step;
+  for(let x=-step+off;x<W;x+=step) for(let y=-step+off;y<H;y+=step) ctx.fillRect(x,y,2,2);
+  ctx.restore();
+}
+function gradeMin(){ ctx.save(); ctx.globalAlpha=0.05; ctx.fillStyle='#000'; for(let y=0;y<H;y+=5) ctx.fillRect(0,y,W,1); ctx.restore(); }
+
 window.__frame=async function(f,hero){
   const t=f/A.fps, loud=A.loudness[Math.min(f,A.loudness.length-1)]||0;
   const sec=sectionAt(t); const localT=t-sec.start, dur=sec.end-sec.start;
@@ -383,6 +467,8 @@ window.__frame=async function(f,hero){
 
   const beatPulse=1+loud*0.04;
   if(PACK==='retrowave'){ sceneRetrowave(t,f,loud); gradeRetro(); } else
+  if(PACK==='vhs-lofi'){ sceneVhsLofi(t,f,loud); gradeVhs(f); } else
+  if(PACK==='lyric-minimal'){ sceneLyricMin(t,f,loud); gradeMin(); } else
   switch(sec.scene){
     case 'intro': {
       if(curHero){const z=lerp(1.18,1.06,clamp(localT/dur,0,1)); drawCover(curHero.img,z*beatPulse,Math.sin(t*0.3)*16,0);} else sceneNeon(t,f,loud);
@@ -427,6 +513,9 @@ window.__frame=async function(f,hero){
 window.__setup=async function(payload){
   A=payload.analysis; C=payload.config; S=payload.syncMap;
   if(payload.pack==='retrowave'){ PACK='retrowave'; PAL=PAL_RETRO; }
+  else if(payload.pack==='vhs-lofi'){ PACK='vhs-lofi'; PAL=PAL_VHS; }
+  else if(payload.pack==='lyric-minimal'){ PACK='lyric-minimal'; PAL=PAL_MIN; }
+  if(payload.grade) GRADE=payload.grade;
   if(payload.width){ W=payload.width; H=payload.height; cv.width=W; cv.height=H; }
   try{ await document.fonts.load('100px Anton'); await document.fonts.load('80px Oswald'); await document.fonts.load('80px Archivo'); await document.fonts.ready; }catch(e){}
   // warm a frame
