@@ -31,6 +31,8 @@ Two studios, one brain. **No paid software. No GPU required. $0.**
 
 The flagship demo is a finished 2:38 video for *"Stay There × Fuck Em × Poverty Porn"* by **Dom Shady / kudbee** — cinematic neo-noir, forced-aligned lyrics, 25 hero shots cut to the beat.
 
+> **🔗 The full loop.** Write a song in the **Hit Factory** → it hands you Suno-ready prompts → render the audio in Suno → `hermes from-song song.json` scaffolds a **video project** with your lyrics already in place → drop the audio → `hermes build` → a finished **music video**. Both halves of HERMES, one pipeline.
+
 ---
 
 ## 🧠 The brain: two hemispheres, one dial
@@ -175,11 +177,12 @@ docs/                    quickstart, concepts, CLI ref, scene-pack guide, hit-fa
 - [x] **Learning brain** — artist profile + recommendations
 - [x] **Albums** + one-click **Suno export** + production **expansion packs**
 
+- [x] **Learn from edits** — rewrite a line, the brain learns your taste
+- [x] **Song → video** — `hermes from-song` turns a Hit Factory song into a renderable video project (both studios fused)
+
 **Next**
-- [ ] Learn from **edits** (when you rewrite a line, the brain learns your taste)
 - [ ] Per-track **Suno structure hints** (stems, `[Intro]`/`[Bridge]` pacing, BPM/key tags)
 - [ ] A real **AI/music provider** behind the adapters (lyrics + audio)
-- [ ] **Song → video** in one flow: a generated package → the video studio → a finished clip
 - [ ] Auto song-structure detection · docs site on GitHub Pages
 
 ---
