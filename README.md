@@ -65,16 +65,35 @@ deterministic. It draws hero footage *or* procedural scenes (neon corridor,
 spinning vortex, glitch, warped hallway), then a split-tone grade, film grain,
 vignette, and word-by-word kinetic-typography lyrics.
 
-## The Hermes agents (`.claude/agents/`)
-| Agent | Stage | Output |
-|-------|-------|--------|
-| hermes-director | concept & palette | `brain/treatment.md` |
-| hermes-analyst  | audio analysis | `song/analysis.json` |
-| hermes-lyricist | lyric timing | `song/sync-map.json` |
-| hermes-art      | scene visuals | `studio/player.html` |
-| hermes-editor   | arrangement / cuts | `studio/config.json` |
-| hermes-render   | render & mux | `out/*.mp4` |
-| hermes-qa       | review | issue list |
+## The brain: two hemispheres, one dial
+HERMES isn't just a pipeline — it's a **brain**. The agents split into a **right
+hemisphere** that dreams up the video (generative) and a **left hemisphere** that
+makes sure it's correct (analytical). Lateralization is a *bias, not a switch* —
+both always run — so a single dial leans the whole studio one way:
+
+```bash
+hermes build mysong --brain right   # bold: longer cuts, looser sync, richer grade
+hermes build mysong --brain left    # precise: short legible cuts, tight sync, strict QA
+hermes build mysong                 # balanced (default)
+```
+
+On the flagship song that's measurable: **left → 57 short legible cuts, right → 41
+that breathe** — same song, different temperament. The hemispheres never share
+state; they pass **artifacts** across a "corpus callosum" (`brain/treatment.md`,
+`config.json`, `sync-map.json`, `analysis.json`). Full write-up:
+[`brain/hemispheres.md`](brain/hemispheres.md) · machine-readable:
+[`brain/brain.json`](brain/brain.json).
+
+| Right — *generative* | Left — *analytical* |
+|----------------------|---------------------|
+| `hermes-director` concept & palette → `brain/treatment.md` | `hermes-analyst` audio → `song/analysis.json` |
+| `hermes-songwriter` lyrics from a prompt | `hermes-editor` arrangement / cuts → `studio/config.json` |
+| `hermes-lyricist` lyric timing → `song/sync-map.json` | `hermes-producer` master to −14 LUFS |
+| `hermes-art` scene visuals → `studio/player.html` | `hermes-render` render & mux → `out/*.mp4` |
+| `hermes-composer` music (optional) | `hermes-qa` the eval gate → pass/fail |
+
+**Right proposes; left disposes.** The left hemisphere's `hermes-qa`
+(`studio/qa.mjs`) scores every render and gates CI — the "ship it safely" step.
 
 ## Scene packs
 A **scene pack** is a visual style. Switch with `--pack` — the *same song*, a

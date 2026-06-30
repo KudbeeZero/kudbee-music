@@ -4,13 +4,34 @@ An autonomous build loop works through the backlog below: each iteration builds
 one item, verifies it, commits, and records it here.
 
 ## Up next
-- [ ] Tiny test suite + a smoke-render CI job
 - [ ] Audio-novelty song-structure detection (segment from beats + energy when a
       project has no structured `lyrics.md` headers; today sections come from headers)
 - [ ] `hermes-composer`: optional MusicGen wiring (opt-in, documented heavy deps)
 - [ ] Per-pack scene variety for generic projects (more than the shared scene cycle)
+- [ ] Right-brain variance: a `--seed` so the right hemisphere generates scene
+      variants and the left hemisphere (qa) picks the best-scoring one
 
 ## Done
+### Iteration 4 — the two-hemisphere brain model + eval gate
+Reframed the agent roster as a **brain** and made the model real (and shipped the
+test-suite + smoke-CI item as part of it — "right proposes, left disposes").
+- **Named the brain:** `brain/brain.json` (machine-readable) + `brain/hemispheres.md`
+  (the write-up); each `.claude/agents/hermes-*.md` tagged right/left.
+- **Dominance dial:** `studio/brain.mjs` presets real knobs (`maxhold`/`jump`/
+  `mingap`/`lead`/`lyricLead` in build-timeline, split-tone `grade` in player.html,
+  QA thresholds). `--brain <balanced|right|left>` + `hermes.json "brain"` +
+  `HERMES_BRAIN`, plumbed through `bin/hermes`. balanced is byte-identical
+  (verified: only a `brain` field added to config.json). Measurable on the
+  flagship: left → 57 short cuts, right → 41 longer cuts.
+- **Left-brain eval gate:** `studio/qa.mjs` (`hermes qa`) — ffprobe + frame-luma
+  sampling + legibility/bounds/pacing checks → score → non-zero exit on fail.
+  `--slice` mode for short renders. Verified: PASS on a good render, FAIL on a
+  black/silent clip.
+- **Tests + CI:** `test/brain.test.mjs` + `test/packs.test.mjs` (13 tests, assert
+  the dial's monotonic logic and that every scene pack is wired into the
+  compositor). CI now runs `lint:check` + `npm test` + `npm run timeline`, plus a
+  `smoke` job: a real 2s Chromium→ffmpeg render gated by `hermes qa --slice`.
+
 ### Iteration 3 — project-targeted build (`hermes build <dir>`)
 The studio now runs against any scaffolded project, not just the flagship.
 - **Data-root override:** a `HERMES_DATA` env var points `analyze` / `prep-frames`

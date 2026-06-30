@@ -6,11 +6,15 @@ import { readFileSync, writeFileSync, existsSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { dirname, resolve } from 'node:path';
 import { alignLines } from './align.mjs';
+import { resolveBrain } from './brain.mjs';
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 // HERMES_DATA points at a project folder; defaults to repo root (flagship build).
 const DATA = process.env.HERMES_DATA ? resolve(process.env.HERMES_DATA) : ROOT;
 const PROJECT = !!process.env.HERMES_DATA;
+// HERMES_BRAIN biases the cut/timing knobs (balanced|right|left). balanced is
+// byte-identical to the original constants, so the flagship build is unchanged.
+const brain = resolveBrain(process.env.HERMES_BRAIN);
 const analysis = JSON.parse(readFileSync(resolve(DATA, 'song/analysis.json')));
 const DUR = analysis.durationSec;
 const beats = analysis.beats;
@@ -164,7 +168,7 @@ if (aligned) {
 }
 
 // ---- section windows ----
-const MINLEN = 6.0, LEAD = 1.0;
+const MINLEN = 6.0, LEAD = brain.lead;
 const sections = SECTIONS.map(s => ({ scene: s.scene, label: s.label, big: !!s.big, hero: HERO[s.label] || null, lines: s.lines, start: 0, end: 0 }));
 if (aligned) {
   // first aligned line index per section
@@ -188,7 +192,7 @@ sections.forEach((s, i) => { s.end = i + 1 < sections.length ? sections[i + 1].s
 // ---- lyric sync-map ----
 const syncMap = [];
 if (aligned) {
-  const LYRIC_LEAD = 0.12;
+  const LYRIC_LEAD = brain.lyricLead;
   flat.forEach((f, i) => {
     const start = Math.max(0, +(aligned[i].start - LYRIC_LEAD).toFixed(2));
     const end = +Math.max(aligned[i].end, start + 0.4).toFixed(2);
@@ -232,7 +236,7 @@ sections.forEach((sec, si) => {
 
 // ---- keep it moving: split any shot that would hold longer than MAXHOLD ----
 // (intro is left whole — its title sequence animates over the push-in)
-const MAXHOLD = 4.6, JUMP = 90;
+const MAXHOLD = brain.maxhold, JUMP = brain.jump;
 sections.forEach(sec => {
   if (sec.scene === 'intro') return;
   let content = sec.shots && sec.shots.length ? sec.shots
@@ -256,11 +260,12 @@ sections.forEach(s => { if (s.shots) console.log(`shots ${s.label} (${s.shots.le
 
 const config = {
   fps: analysis.fps, width: 1920, height: 1080, durationSec: DUR, totalFrames: analysis.totalFrames,
+  brain: brain.name,
   sections: sections.map(({ lines, ...rest }) => rest),
 };
 // de-crowd: guarantee a minimum on-screen time by spreading any crammed run
 // of lyric lines across the time available before the next line / section end.
-const MINGAP = 0.75;
+const MINGAP = brain.mingap;
 const secEnd = t => { let e = DUR; for (const s of sections) if (t >= s.start) e = s.end; return e; };
 for (let i = 0; i < syncMap.length; i++) {
   let j = i;

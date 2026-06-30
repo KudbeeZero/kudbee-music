@@ -1,6 +1,7 @@
 name: ci
 on: [push, pull_request]
 jobs:
+  # Left-brain check: fast, deterministic, no heavy deps. The reliable gate.
   check:
     runs-on: ubuntu-latest
     steps:
@@ -10,5 +11,30 @@ jobs:
       - run: npm ci || npm install
       - name: Syntax check studio + CLI
         run: npm run lint:check
-      - name: Validate timeline builds
-        run: node studio/build-timeline.mjs || true
+      - name: Unit tests (brain dial + scene-pack contract)
+        run: npm test
+      - name: Timeline builds (brain-wired)
+        run: npm run timeline
+
+  # The eval gate: a real 2s render through Chromium + ffmpeg, then hermes-qa
+  # scores it (container, not-black, not-frozen). "eval passed -> ship safely."
+  smoke:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: '22' }
+      - uses: actions/setup-python@v5
+        with: { python-version: '3.12' }
+      - run: npm ci || npm install
+      - name: Install ffmpeg (static-ffmpeg) + link to .bin
+        run: |
+          pip install static-ffmpeg
+          mkdir -p .bin
+          ln -sf "$(python -c "import shutil,static_ffmpeg; static_ffmpeg.add_paths(); print(shutil.which('ffmpeg'))")" .bin/ffmpeg
+          ln -sf "$(python -c "import shutil,static_ffmpeg; static_ffmpeg.add_paths(); print(shutil.which('ffprobe'))")" .bin/ffprobe
+          .bin/ffmpeg -version | head -1
+      - name: Install Chromium for Playwright
+        run: npx playwright install --with-deps chromium
+      - name: Smoke render + QA eval gate
+        run: npm run smoke

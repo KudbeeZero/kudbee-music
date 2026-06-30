@@ -31,15 +31,22 @@ Commands:
                        With a project dir, reads its hermes.json (pack/aspect)
                        and renders to <dir>/out/<name>.mp4 from its own song/+assets/.
 
+  qa <video>           Eval gate: ffprobe + frame-sample a render, score it,
+                       exit non-zero on fail (the "left brain" check). (studio/qa.mjs)
+
 Render options:  --start <s> --end <s> --out <path> --preset <x> --crf <n>
                  --pack <neo-noir|retrowave|vhs-lofi|lyric-minimal>
+                 --brain <balanced|right|left>   (dominance dial: bias the cut +
+                     sync + grade — right=bold/loose, left=precise/legible)
                  --aspect <16:9|9:16|1:1|4:5>
 
 Examples:
   hermes new mysong && cd ..      # scaffold a project
   hermes build mysong             # build that project (its hermes.json drives it)
   hermes build                    # build the flagship in this repo
+  hermes build mysong --brain right   # let the right hemisphere lead
   hermes render --pack vhs-lofi --aspect 9:16
+  hermes qa out/kudbee-music-video-1080p.mp4
 `;
 
 switch (cmd) {
@@ -48,30 +55,35 @@ switch (cmd) {
   case 'analyze':    run('analyze.mjs'); break;
   case 'transcribe': py('transcribe.py'); break;
   case 'master':     run('master.mjs', rest); break;
-  case 'timeline':   run('build-timeline.mjs'); break;
+  case 'timeline': { const i = rest.indexOf('--brain'); run('build-timeline.mjs', [], i >= 0 ? { HERMES_BRAIN: rest[i + 1] } : {}); break; }
   case 'render':     run('render.mjs', rest); break;
   case 'preview':    run('render.mjs', ['--start','40','--end','56','--out','out/preview.mp4','--preset','fast','--crf','20', ...rest]); break;
+  case 'qa':         run('qa.mjs', rest); break;
   case 'build': {
     const dirArg = rest[0] && !rest[0].startsWith('--') ? rest.shift() : null;
+    const flagBrain = (() => { const i = rest.indexOf('--brain'); return i >= 0 ? rest[i + 1] : null; })();
     if (dirArg) {
       const projDir = resolve(process.cwd(), dirArg);
       const cfgPath = resolve(projDir, 'hermes.json');
       if (!existsSync(cfgPath)) { console.error(`no hermes.json found in ${dirArg}/`); process.exit(1); }
       const cfg = JSON.parse(readFileSync(cfgPath, 'utf8'));
-      const env = { HERMES_DATA: projDir };
+      const brain = flagBrain || cfg.brain;       // --brain overrides hermes.json
+      const env = { HERMES_DATA: projDir };        // HERMES_BRAIN reaches timeline + render
+      if (brain) env.HERMES_BRAIN = brain;
       const flags = [];
       if (cfg.pack) flags.push('--pack', cfg.pack);
       if (cfg.aspect) flags.push('--aspect', cfg.aspect);
       const out = `out/${cfg.name || 'video'}.mp4`;
-      console.log(`building project "${cfg.name || dirArg}"  pack=${cfg.pack || 'neo-noir'}  aspect=${cfg.aspect || '16:9'}`);
+      console.log(`building project "${cfg.name || dirArg}"  pack=${cfg.pack || 'neo-noir'}  aspect=${cfg.aspect || '16:9'}  brain=${brain || 'balanced'}`);
       run('prep-frames.mjs', [], env);
       run('analyze.mjs', [], env);
       run('build-timeline.mjs', [], env);
       run('render.mjs', ['--out', out, '--preset', 'medium', '--crf', '18', ...flags, ...rest], env);
       console.log(`\nDone -> ${dirArg}/${out}`);
     } else {
-      run('prep-frames.mjs'); run('analyze.mjs'); run('build-timeline.mjs');
-      run('render.mjs', ['--out','out/kudbee-music-video-1080p.mp4','--preset','medium','--crf','18', ...rest]);
+      const env = flagBrain ? { HERMES_BRAIN: flagBrain } : {};
+      run('prep-frames.mjs', [], env); run('analyze.mjs', [], env); run('build-timeline.mjs', [], env);
+      run('render.mjs', ['--out','out/kudbee-music-video-1080p.mp4','--preset','medium','--crf','18', ...rest], env);
     }
     break;
   }

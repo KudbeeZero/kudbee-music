@@ -15,11 +15,20 @@ hermes <command> [options]
 | `preview` | Render a short slice for a quick look |
 | `master` | Loudness-master the track to −14 LUFS (EBU R128) |
 | `build` | prep → analyze → timeline → render (the flagship in this repo) |
-| `build <dir>` | Build a scaffolded **project**: reads `<dir>/hermes.json` for `pack`/`aspect`, uses the project's own `song/` + `assets/`, writes `<dir>/out/<name>.mp4` |
+| `build <dir>` | Build a scaffolded **project**: reads `<dir>/hermes.json` for `pack`/`aspect`/`brain`, uses the project's own `song/` + `assets/`, writes `<dir>/out/<name>.mp4` |
+| `qa <video>` | The left-brain **eval gate** — ffprobe + frame-sample a render, score it, exit non-zero on fail (`--slice` for short renders) |
 
 **Render options:** `--start <s>` `--end <s>` `--out <path>` `--preset <x>`
 `--crf <n>` `--pack <neo-noir\|retrowave\|vhs-lofi\|lyric-minimal>`
-`--aspect <16:9\|9:16\|1:1\|4:5>` `--width <n>` `--height <n>`
+`--brain <balanced\|right\|left>` `--aspect <16:9\|9:16\|1:1\|4:5>`
+`--width <n>` `--height <n>`
+
+## The brain dial (`--brain`)
+HERMES is a two-hemisphere brain (see [`brain/hemispheres.md`](../brain/hemispheres.md)).
+`--brain` biases the whole studio: `right` = bolder/looser (longer cuts, richer
+grade), `left` = precise (short legible cuts, tight sync, stricter QA), `balanced`
+= the default. Settable per-project via `hermes.json` `"brain"` or the
+`HERMES_BRAIN` env var. The flagship/`balanced` output is unchanged.
 
 ## Build your own project
 ```bash
