@@ -43,7 +43,28 @@ _Nothing actively in flight — pick the next item from **Up next**._
 
 ---
 
+## 🧭 North star — the WIFI DJ "Lyrical Recombinator Framework"
+This repo is the **AI-engine pillar** of [WIFI DJ](https://wifidj.xyz). Our build maps
+onto the framework's three parts (we stay original-only — influences are *felt, never
+copied*; no living-artist mimicry):
+1. **Deconstruct the influences** — thematic cartography, lexical fingerprinting,
+   architectural blueprinting → an **Influence Studio** (describe an influence → craft
+   parameters; reuse `learn.ts` + originality fingerprints). *Guardrail: structure &
+   feel, never an artist's actual words.*
+2. **The generation engine** — probabilistic model + **syllabic constraint layer** +
+   **rhyme architect** → Phase 2 (rhyme/meter in `text.ts`/`mockLyricsProvider.ts`) +
+   Phase 3 (real LLM behind the adapter).
+3. **The ghost in the machine** — the ~20% novelty + community **prompting tags** →
+   `originality.ts` + seed/variety + steering hooks.
+The **Writers-Room** (`process.ts`) is the human-craft layer on top; the **Crossroads
+Board** governance / Solana / token / NFT layer integrates with this engine via API
+later (kept out of this repo's core so it stays free + local).
+
 ## ✅ Shipped (newest first)
+- [x] **Writers-Room engine + belief system** — `lib/hermes/process.ts` (the 9-step
+      craft assistant: concept→truth→perspective→hook→rhyme→draft→revise→arc, options
+      *with reasons*, voice-signal capture) + `brain/beliefs.json` constitution
+      (`lib/hermes/beliefs.ts`). The proprietary edge: assistant, not autopilot. _(this PR)_
 - [x] **Phase 1 — Proof & loop polish** — flagship **Cold Hard Gold** example
       (`examples/cold-hard-gold/`, minted by the real pipeline, 99/100) seeded into
       the app's empty state via a one-click "see a finished example" button; the
