@@ -22,6 +22,7 @@ Commands:
   prep                 Extract hero-clip frames               (studio/prep-frames.mjs)
   analyze              Detect duration / BPM / beats / loudness (studio/analyze.mjs)
   transcribe           Forced-align lyrics via Whisper (optional, needs faster-whisper)
+  master               Loudness-master the track to -14 LUFS (EBU R128)
   timeline             Build the scene timeline + lyric sync-map (studio/build-timeline.mjs)
   render [opts]        Render the video                        (studio/render.mjs)
   preview              Render a short slice for a quick look
@@ -40,6 +41,7 @@ switch (cmd) {
   case 'prep':       run('prep-frames.mjs'); break;
   case 'analyze':    run('analyze.mjs'); break;
   case 'transcribe': py('transcribe.py'); break;
+  case 'master':     run('master.mjs', rest); break;
   case 'timeline':   run('build-timeline.mjs'); break;
   case 'render':     run('render.mjs', rest); break;
   case 'preview':    run('render.mjs', ['--start','40','--end','56','--out','out/preview.mp4','--preset','fast','--crf','20', ...rest]); break;

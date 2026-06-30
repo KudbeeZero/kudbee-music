@@ -96,7 +96,7 @@ best way to contribute** — see [CONTRIBUTING](CONTRIBUTING.md) and the
 - [ ] `hermes new` project scaffold + `hermes.json` project model
 - [ ] Auto song-structure detection (no hand-authored sections)
 - [x] **9:16 / 1:1** aspect ratios for Shorts/Reels/TikTok
-- [ ] Generative **music** agents — prompt → lyrics → audio (MusicGen) → video
+- [~] Generative **music** agents — songwriter + **producer (mastering, done)**; composer (MusicGen) is opt-in/wip
 - [x] Docs site + examples gallery
 
 ## Built with
