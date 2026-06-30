@@ -61,17 +61,54 @@ Model real dual-process cognition explicitly (it already maps onto our two hemis
 Let the community add craft-DNA personas the same way they add scene packs — which
 feeds the WIFI DJ token/governance "steer the G-DJ" loop.
 
+### 5. The Language & Culture cortex (next engine layer)  ✏️
+The brain's **language area** — the part that actually shapes word choice. The best
+lyrics come from lived experience, and a huge part of that is **culture and how you
+were brought up**. Add a layer that maps:
+- **Vernacular / register / dialect** — regional and cultural speech patterns (as
+  craft traits, never an impersonation of a person).
+- **Cultural upbringing as input** — where the writer is from, what shaped them, fed
+  into word choice and imagery alongside the persona.
+- **Struggle → song.** The truest songs come from struggle, and channeling it is the
+  craft. In the game layer this becomes a channelable **"superpower"**: adversity, the
+  way it's processed, makes the work hit harder. *(Truth-first belief, made literal.)*
+- Maps to real brain regions: language cortex (word formation) + limbic/emotion +
+  memory — all of which the Brain Scan should show lighting up. Candidate home:
+  `lib/hermes/language.ts` + a `culture` field on the brief.
+
+### 6. Create-your-own-artist — a living world  💭
+The big game: anyone can **build their own artist**, choose its path and identity,
+visually show it, and **capture events like a living world** that evolves. Each user's
+artist is theirs; the brain becomes *them* over time. Personas + memory + the persona
+contribution loop are the seeds of this.
+
 ---
 
 ## 🌐 Platform / ecosystem
 - 💭 **wifidj.xyz as the front door** — point the (Cloudflare-fronted) domain at the
   Vercel deploy / docs site once we're ready to go public.
+- 💭 **WIFI DJ radio** — a **live radio** that streams the music this engine makes;
+  people **submit** tracks, the community **shapes** the project, and eventually each
+  person runs **their own agent**. The closed loop becomes a public, living station.
 - 💭 **Crossroads Board / Solana / token / NFT** — the Web3 governance layer integrates
   with this engine **via API**; kept out of the core so the brain stays free + local.
+  A token funds the ecosystem and powers community steering (the founding intent).
+- 💭 **Per-agent compute (Lightning AI, down the road)** — each agent could run on its
+  own minimal compute; default = minimal processing (cheap/free), with **paid tiers to
+  "advance your model"** (a bigger plan = more capable agents). A monetization + scaling
+  path, opt-in, never required for the free local core.
 - 💭 **Durable cloud brain** — optional Notion / Google Drive backing so a cleared
   browser never loses the vault (fixes the localStorage weakness).
 - 💭 **Reference study (opt-in)** — Spotify to study a *described* sound (never names),
   feeding the persona match.
+
+## 🧭 Founder narrative (privacy-guarded)
+- 💭 The founding use case is a **closed-loop personal studio** — built so the founder
+  can keep creating original music end-to-end with the right tools, when the old way
+  of making it wasn't available anymore. The public/launch story is about **resilience
+  and channeling adversity into creation** — a superpower, not a limitation.
+  **Privacy rule: do NOT publish the founder's personal/medical specifics anywhere**
+  (repo, PRs, marketing). Keep it to the resilience message only.
 
 ## 🧬 Brain / engine
 - ✏️ **Rhyme architect + syllabic constraint layer** (framework Part 2) — real rhyme
@@ -81,7 +118,9 @@ feeds the WIFI DJ token/governance "steer the G-DJ" loop.
   blueprint → craft parameters (original-only).
 
 ## 🎨 Visual / UX
-- 🔨 **Lyric Lab UI** — the Writers-Room + persona picker, made visible (next build).
+- ✅ **Lyric Lab UI** — the Writers-Room + persona picker, made visible. Pick a
+  persona, walk the 9 steps, commit choices (the hook becomes the song's real hook),
+  the brain learns your voice. _(see Shipped)_
 - 💭 **Brain-scan boot sequence** on song start (see flagship #1).
 - 💭 **"It's becoming you"** — surface, over time, how much of the current song came
   from the artist's own learned voice vs fresh suggestion.
@@ -89,6 +128,8 @@ feeds the WIFI DJ token/governance "steer the G-DJ" loop.
 ---
 
 ## ✅ Captured → shipped
+- ✅ **Lyric Lab** (the Writers-Room made visible; artist's hook → real song; trains
+  the voice) → `components/hermes/LyricLab.tsx` _(this PR)_
 - ✅ **Belief system** (the brain's values) → `brain/beliefs.json` _(#13)_
 - ✅ **Writers-Room** (step-by-step craft, assistant not autopilot) → `process.ts` _(#13)_
 - ✅ **Persona craft-DNA** (map the mind, never the name) → `brain/personas.json` _(#14)_

@@ -147,3 +147,28 @@
 .drawerWrap { position: fixed; inset: 0; z-index: 40; display: flex; justify-content: flex-end; }
 .scrim { position: absolute; inset: 0; background: rgba(0, 0, 0, 0.55); }
 .drawer { position: relative; width: min(380px, 92vw); height: 100%; background: var(--panel-solid); border-left: 1px solid var(--line-strong); padding: 18px; overflow-y: auto; }
+
+/* ---- Lyric Lab (the Writers-Room drawer) ---- */
+.labDrawer { width: min(560px, 96vw); }
+.personaChip {
+  font-size: 11px; padding: 5px 10px; border-radius: 999px; cursor: pointer;
+  border: 1px solid var(--line-strong); background: transparent; color: var(--ink-dim);
+}
+.personaChip:hover { border-color: var(--amber); color: var(--ink); }
+.personaChip[data-on="true"] { border-color: var(--amber); color: var(--amber); box-shadow: var(--glow-amber); }
+.stepRail { display: flex; gap: 6px; flex-wrap: wrap; }
+.stepDot {
+  width: 26px; height: 26px; border-radius: 50%; cursor: pointer; font-size: 11px; font-weight: 700;
+  border: 1px solid var(--line-strong); background: var(--bg-1); color: var(--ink-faint);
+}
+.stepDot[data-state="current"] { border-color: var(--amber); color: var(--amber); box-shadow: var(--glow-amber); }
+.stepDot[data-state="done"] { border-color: var(--good); color: var(--good); }
+.stepNum { font-size: 11px; color: var(--ink-faint); }
+.beliefChip {
+  font-size: 10px; padding: 2px 7px; border-radius: 999px; margin-left: auto;
+  border: 1px solid rgba(54, 224, 212, 0.4); color: var(--cyan);
+}
+.committedBox {
+  margin-top: 10px; padding: 9px 11px; border-radius: 9px; font-size: 12.5px;
+  border: 1px solid rgba(87, 217, 138, 0.4); background: rgba(87, 217, 138, 0.08); color: var(--ink);
+}

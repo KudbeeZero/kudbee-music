@@ -79,6 +79,14 @@ who the writer is from their vault (reusing `learn.ts`), so the room is informed
 everything they've made. **Assistant, not autopilot** — the artist makes every real
 choice; the brain sharpens the voice instead of replacing it.
 
+## Lyric Lab (the Writers-Room, in the app)
+The **✍️ Lyric Lab** button (header) opens the writers-room as a drawer
+(`components/hermes/LyricLab.tsx`): set a brief, pick a craft **persona**, then walk the
+**9 steps** — each poses the craft question, proposes options **with reasons**, and you
+commit a choice (or write your own). The **hook you commit becomes the song's real
+hook** (pipeline `forcedHook`), and every choice **trains your voice** (`recordTaste`),
+so the next song is more *you*. Assistant, not autopilot.
+
 ## Persona map (anonymized craft-DNA)
 `brain/personas.json` + `lib/hermes/personas.ts` map **how a kind of lyrical mind
 works** — its subjects, rhyme density, cadence, structure, register, and appetite for
