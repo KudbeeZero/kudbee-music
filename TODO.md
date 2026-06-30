@@ -2,7 +2,8 @@
 
 The living backlog. **Nothing gets stale, nothing gets mixed, nothing gets missed.**
 The README [Roadmap](README.md#-roadmap) is the highlight reel; this is the working
-list. Check items off here as they ship, and add new ideas under **Backlog**.
+list. Raw ideas land first in [`IDEAS.md`](IDEAS.md) (the capture net — nothing the
+artist says gets lost), then graduate here once designed. Check items off as they ship.
 
 > Convention: `[x]` done · `[~]` in progress · `[ ]` not started. Keep the most
 > recently shipped items at the top of **Shipped** so the history reads newest-first.
