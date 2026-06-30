@@ -93,7 +93,7 @@ best way to contribute** — see [CONTRIBUTING](CONTRIBUTING.md) and the
 
 ## Roadmap
 - [x] Pluggable **scene packs** + a 2nd style (`retrowave`); more welcome (vhs-lofi, lyric-minimal)
-- [ ] `hermes new` project scaffold + `hermes.json` project model
+- [x] `hermes new` project scaffold + `hermes.json` (project-targeted build: next)
 - [ ] Auto song-structure detection (no hand-authored sections)
 - [x] **9:16 / 1:1** aspect ratios for Shorts/Reels/TikTok
 - [~] Generative **music** agents — songwriter + **producer (mastering, done)**; composer (MusicGen) is opt-in/wip

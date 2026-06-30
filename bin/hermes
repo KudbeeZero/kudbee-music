@@ -19,6 +19,7 @@ const help = `HERMES — turn a song into a music video, from code.
 Usage: hermes <command> [options]
 
 Commands:
+  new <name>           Scaffold a new project folder + hermes.json (studio/scaffold.mjs)
   prep                 Extract hero-clip frames               (studio/prep-frames.mjs)
   analyze              Detect duration / BPM / beats / loudness (studio/analyze.mjs)
   transcribe           Forced-align lyrics via Whisper (optional, needs faster-whisper)
@@ -38,6 +39,7 @@ Examples:
 `;
 
 switch (cmd) {
+  case 'new':        run('scaffold.mjs', rest); break;
   case 'prep':       run('prep-frames.mjs'); break;
   case 'analyze':    run('analyze.mjs'); break;
   case 'transcribe': py('transcribe.py'); break;
