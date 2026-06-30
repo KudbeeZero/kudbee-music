@@ -142,6 +142,8 @@ node bin/hermes prep && node bin/hermes build
 
 To use your own track in the video studio: drop `song/track.mp3`, your lyrics in `song/lyrics.md`, and reference clips as `assets/hero-clip-NN.mp4`, then `hermes build`. To build your own project: `hermes new <name>` then `hermes build <name>`.
 
+**Want a public link to test the Hit Factory on your phone?** The app is Vercel-ready (`vercel.json`) — one-click import at [vercel.com/new](https://vercel.com/new) gives you a permanent `*.vercel.app` URL. Codespaces and a one-command local tunnel (`scripts/expose.sh`) also work — see [`docs/testing.md`](docs/testing.md).
+
 **Test everything:**
 ```bash
 npm test        # video studio — brain dial + scene-pack contract
