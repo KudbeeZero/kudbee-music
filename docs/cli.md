@@ -7,6 +7,7 @@ hermes <command> [options]
 | Command | What it does |
 |---------|--------------|
 | `new <name>` | Scaffold a new project folder + `hermes.json` |
+| `from-song <json>` | **Bridge**: scaffold a video project from a Hit Factory song export — lyrics + pack/aspect/brain prefilled. Then add `song/track.mp3` and `build`. |
 | `prep` | Extract hero-clip frames → `assets/frames/` |
 | `analyze` | Audio → duration, BPM, beat grid, per-frame loudness |
 | `transcribe` | Whisper word-timestamps (optional; needs faster-whisper) |

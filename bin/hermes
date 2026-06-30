@@ -20,6 +20,9 @@ Usage: hermes <command> [options]
 
 Commands:
   new <name>           Scaffold a new project folder + hermes.json (studio/scaffold.mjs)
+  from-song <json>     Scaffold a video project from a Hit Factory song export
+                       (lyrics + pack/aspect prefilled). Then add song/track.mp3
+                       and build. The bridge between the two studios. (studio/from-song.mjs)
   prep                 Extract hero-clip frames               (studio/prep-frames.mjs)
   analyze              Detect duration / BPM / beats / loudness (studio/analyze.mjs)
   transcribe           Forced-align lyrics via Whisper (optional, needs faster-whisper)
@@ -41,6 +44,7 @@ Render options:  --start <s> --end <s> --out <path> --preset <x> --crf <n>
                  --aspect <16:9|9:16|1:1|4:5>
 
 Examples:
+  hermes from-song song.json      # song you wrote in the Hit Factory -> a video project
   hermes new mysong && cd ..      # scaffold a project
   hermes build mysong             # build that project (its hermes.json drives it)
   hermes build                    # build the flagship in this repo
@@ -51,6 +55,7 @@ Examples:
 
 switch (cmd) {
   case 'new':        run('scaffold.mjs', rest); break;
+  case 'from-song':  run('from-song.mjs', rest); break;
   case 'prep':       run('prep-frames.mjs'); break;
   case 'analyze':    run('analyze.mjs'); break;
   case 'transcribe': py('transcribe.py'); break;

@@ -17,9 +17,20 @@ export default function SongPackageView({ pkg, onSaveEdit }: { pkg: SongPackage;
     setTimeout(() => setLearned(false), 2600);
   }
 
+  function exportForVideo() {
+    const blob = new Blob([JSON.stringify(pkg, null, 2)], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url; a.download = `${pkg.title.toLowerCase().replace(/[^a-z0-9]+/g, '-') || 'song'}.json`; a.click();
+    URL.revokeObjectURL(url);
+  }
+
   return (
     <div className={styles.panel}>
-      <div className={styles.panelTitle}>Song Package · “{pkg.title}” · v{pkg.version}</div>
+      <div className={styles.panelTitle} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+        <span>Song Package · “{pkg.title}” · v{pkg.version}</span>
+        <button className={styles.copyBtn} style={{ marginLeft: 0 }} onClick={exportForVideo} title="Download to scaffold a video project with `hermes from-song`">🎬 Export for video studio</button>
+      </div>
 
       <Section label="Concept">
         <div className={styles.kv}>{pkg.conceptSummary}</div>
