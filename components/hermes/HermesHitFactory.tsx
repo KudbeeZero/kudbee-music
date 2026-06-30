@@ -12,6 +12,7 @@ import SongPackageView from './SongPackageView';
 import BangerScoreCard from './BangerScoreCard';
 import UniquenessReportView from './UniquenessReport';
 import VaultDrawer from './VaultDrawer';
+import RecommendationsPanel from './RecommendationsPanel';
 import styles from './hermes.module.css';
 
 const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
@@ -89,6 +90,13 @@ export default function HermesHitFactory() {
     saveBannedWords(words);
   }
 
+  // recommendation action: remember a new exclusion the brain suggested
+  function addExclusion(word: string) {
+    const next = Array.from(new Set([...banned, word.toLowerCase()]));
+    setBanned(next);
+    saveBannedWords(next);
+  }
+
   const doneCount = Object.values(outputs).filter((o) => o.status === 'done' || o.status === 'warning').length;
 
   return (
@@ -152,6 +160,8 @@ export default function HermesHitFactory() {
               </>
             )}
           </div>
+
+          <RecommendationsPanel songs={vault} onAddExclusion={addExclusion} />
         </div>
 
         {/* center column — agent board + package */}

@@ -1,0 +1,15 @@
+{
+  "name": "soul-sample",
+  "title": "Soul Sample",
+  "description": "Warm chipmunk-soul flip — dusty vinyl loop, live drums, the sound of a confession on a stoop.",
+  "matches": ["soul", "boom-bap", "emotional", "warm", "vulnerable", "hope", "love", "lonely", "hip-hop"],
+  "style": "soul-sample boom-bap, pitched vintage vocal loop, dusty drums, upright bass, warm and emotional, ~88 BPM, gritty soulful male rap, no autotune",
+  "production": {
+    "tempoBpm": 88,
+    "drums": "boom-bap, dusty live-feel snares",
+    "bass": "upright/round bass",
+    "instrumentation": ["pitched soul vocal loop", "rhodes", "vinyl crackle"],
+    "mixVibe": "warm, analog, vocal up front and intimate"
+  },
+  "hookGuidance": "melodic, sung-rap, lean into the emotional turn"
+}

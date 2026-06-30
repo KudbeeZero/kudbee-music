@@ -1,0 +1,15 @@
+{
+  "name": "trap-ballad",
+  "title": "Trap Ballad",
+  "description": "Slow, melodic, heartbroken trap — rolling 808s under a tender, melancholy topline.",
+  "matches": ["trap", "ballad", "melodic", "sad", "lonely", "love", "emotional", "hope"],
+  "style": "melodic trap ballad, slow rolling 808s, soft hi-hat triplets, dreamy guitar, melancholy, ~72 BPM, emotional half-sung male vocal, light autotune optional",
+  "production": {
+    "tempoBpm": 72,
+    "drums": "trap kit, triplet hats, soft kick",
+    "bass": "rolling melodic 808",
+    "instrumentation": ["dreamy electric guitar", "ambient pad", "music box bell"],
+    "mixVibe": "spacious, reverbed, emotional and wide"
+  },
+  "hookGuidance": "sung, anthemic, repeatable — the part that makes people text their ex"
+}

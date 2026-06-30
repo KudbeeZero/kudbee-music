@@ -1,0 +1,15 @@
+{
+  "name": "drill-dark",
+  "title": "Dark Drill",
+  "description": "Menacing UK/Bronx-drill energy — sliding 808s, icy hats, and a cold, cinematic dread.",
+  "matches": ["drill", "dark", "aggress", "hard", "cold", "menac", "trap"],
+  "style": "dark drill, sliding 808 bass, icy hi-hats, eerie piano lead, ~140 BPM half-time, gritty raw male rap, menacing, cinematic, no autotune",
+  "production": {
+    "tempoBpm": 142,
+    "drums": "drill kit, skippy hats, rim-shot snares",
+    "bass": "sliding 808 with glide",
+    "instrumentation": ["icy bell lead", "minor-key piano", "string stabs"],
+    "mixVibe": "cold, wide, vocal slightly distant for dread"
+  },
+  "hookGuidance": "short, chanted, repeat the darkest line twice"
+}
