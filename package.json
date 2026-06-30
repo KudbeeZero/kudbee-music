@@ -3,7 +3,7 @@
   "private": true,
   "version": "1.0.0",
   "type": "module",
-  "description": "Hermes — an agent-driven music video studio (kudbee)",
+  "description": "Hermes — an agent-driven music video studio + HERMES Hit Factory song brain (kudbee)",
   "scripts": {
     "prep:frames": "node studio/prep-frames.mjs",
     "analyze": "node studio/analyze.mjs",
@@ -12,16 +12,33 @@
     "render:preview": "node studio/render.mjs --start 40 --end 56 --out out/preview-hook.mp4 --preset fast --crf 20",
     "build": "npm run analyze && npm run timeline && npm run render",
     "hermes": "node bin/hermes",
-    "lint:check": "node --check studio/render.mjs && node --check studio/build-timeline.mjs && node --check studio/analyze.mjs && node --check studio/align.mjs && node --check studio/prep-frames.mjs && node --check bin/hermes"
+    "lint:check": "node --check studio/render.mjs && node --check studio/build-timeline.mjs && node --check studio/analyze.mjs && node --check studio/align.mjs && node --check studio/prep-frames.mjs && node --check bin/hermes",
+    "web:dev": "next dev",
+    "web:build": "next build",
+    "web:start": "next start",
+    "web:lint": "next lint",
+    "test:web": "vitest run"
   },
   "dependencies": {
-    "playwright": "1.56.1"
+    "next": "^14.2.35",
+    "playwright": "1.56.1",
+    "react": "18.3.1",
+    "react-dom": "18.3.1"
+  },
+  "devDependencies": {
+    "@types/node": "22.7.5",
+    "@types/react": "18.3.11",
+    "@types/react-dom": "18.3.0",
+    "typescript": "5.6.3",
+    "vitest": "2.1.3"
   },
   "bin": {
     "hermes": "bin/hermes"
   },
   "keywords": [
     "music-video",
+    "music-creation",
+    "song-writing",
     "generative",
     "ffmpeg",
     "agents",

@@ -4,3 +4,8 @@ assets/frames/
 out/*.mp4
 out/*.log
 *.tmp
+
+# web app (Next.js)
+.next/
+next-env.d.ts
+*.tsbuildinfo
