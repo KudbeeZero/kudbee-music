@@ -178,11 +178,11 @@ docs/                    quickstart, concepts, CLI ref, scene-pack guide, hit-fa
 - [x] **Memory layer** — persistent preferences + growing exclusion list
 - [x] **Learning brain** — artist profile + recommendations
 - [x] **Albums** + one-click **Suno export** + production **expansion packs**
-
 - [x] **Learn from edits** — rewrite a line, the brain learns your taste
 - [x] **Song → video** — `hermes from-song` turns a Hit Factory song into a renderable video project (both studios fused)
+- [x] **Public testing URL** — Vercel-ready (`vercel.json`) + deploy guide ([`docs/testing.md`](docs/testing.md))
 
-**Next**
+**Next** — the full, living backlog lives in [`TODO.md`](TODO.md).
 - [ ] Per-track **Suno structure hints** (stems, `[Intro]`/`[Bridge]` pacing, BPM/key tags)
 - [ ] A real **AI/music provider** behind the adapters (lyrics + audio)
 - [ ] Auto song-structure detection · docs site on GitHub Pages
