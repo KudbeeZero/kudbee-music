@@ -101,6 +101,11 @@ Board** governance / Solana / token / NFT layer integrates with this engine via 
 later (kept out of this repo's core so it stays free + local).
 
 ## ✅ Shipped (newest first)
+- [x] **Living-Brain dNFT signature (near-term, $0)** — `lib/hermes/brainSignature.ts`:
+      `brainSignature()` → deterministic traits (dominant hemisphere, temperature, signature
+      rhyme, songs made, becoming-you, primary emotion) + `toNftMetadata()` → standard
+      ERC-721 metadata. The exact JSON a token points to — no chain, no network. A later
+      Solana/Metaplex mint becomes trivial. _(#45)_
 - [x] **Crossroads Board — Stage 1** — `lib/hermes/crossroads.ts` (the $0/local decision model:
       open a "crossing", weighted votes, tally, decide) + `brain/crossroads.json` (seeded
       crossings) + tests. The brain's "decision" region made social; community sync + token

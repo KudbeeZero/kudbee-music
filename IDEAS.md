@@ -221,13 +221,12 @@ A second-opinion review flagged real risks worth acting on (truth-first):
   generate the HERMES Studio "office/living world" scenes, a landing hero video, real clips.
   Opt-in, key-gated (`.env.local`, never committed), never in the free core. Scaffold a
   `studio/runway.mjs` adapter $0; founder runs it with their key. (ecosystem)
-- 💭 **Living Brain dNFT + token utility** *(founder idea)* — the particle brain as a
-  **dynamic NFT** that evolves as you create: `tokenURI` → metadata whose `animation_url`
-  is the live brain page + a snapshot; traits from the brain signature. **Value = utility**
-  (compute tier, Crossroads votes, roles, radio/curation) + evolving status/provenance +
-  portable G-DJ identity + song royalties. **Near-term $0:** `brainSignature()` + metadata
-  JSON + a `/brain/[id]` render URL (no chain yet) → a later Solana/Metaplex mint is trivial.
-  Free core stays free; utility/identity framing, not investment promises. (ecosystem)
+- 🔨 **Living Brain dNFT + token utility** *(founder idea)* — **near-term step shipped**
+  (`lib/hermes/brainSignature.ts`: `brainSignature()` traits + `toNftMetadata()` ERC-721
+  shape, $0/no-chain). Remaining: a `/brain/[id]` static render + the actual Solana/Metaplex
+  mint (founder). **Value = utility** (compute tier, Crossroads votes, roles, radio/curation)
+  + evolving status/provenance + portable G-DJ identity + song royalties. Free core stays
+  free; utility/identity framing, not investment promises. (ecosystem)
 - 💭 **Discord community server** (founder prefers it over Telegram) — a hub to learn the
   process + contribute; channels, roles, voice listening parties, and a GitHub→Discord
   webhook so repo activity streams in. I can draft the structure + wire the webhook on the
