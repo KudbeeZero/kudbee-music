@@ -20,7 +20,8 @@
     "web:build": "next build",
     "web:start": "next start",
     "web:lint": "next lint",
-    "test:web": "vitest run"
+    "test:web": "vitest run",
+    "eval": "vitest run eval --reporter=basic"
   },
   "dependencies": {
     "next": "^14.2.35",
