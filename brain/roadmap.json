@@ -82,7 +82,8 @@
   "ecosystem": {
     "note": "Bigger initiatives that integrate with the engine via API — kept OUT of the free local core so it stays $0. Tracked here so they don't get lost; built when the founder greenlights.",
     "crossroadsBoard": {
-      "status": "designing",
+      "status": "stage-1-shipped (#44)",
+      "stage1": "SHIPPED (#44): lib/hermes/crossroads.ts (openCrossing/vote/tally/leader/decide, pure+immutable) + brain/crossroads.json (3 seeded crossings) + tests. The $0/local decision model.",
       "what": "The WIFI DJ governance + community steering surface — the brain's 'decision' region made social. The community and the agents meet at the crossroads to steer creative + ecosystem direction.",
       "plan": [
         "1. Board model (local-first, $0): brain/crossroads.json + lib/hermes/crossroads.ts — a data model of 'crossings' (a decision/fork: creative choice, persona/pack addition, direction). Each crossing has options, rationales, weighted votes, and an outcome. Versioned in git, same pattern as beliefs/personas.",

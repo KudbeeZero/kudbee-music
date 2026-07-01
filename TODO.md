@@ -101,6 +101,10 @@ Board** governance / Solana / token / NFT layer integrates with this engine via 
 later (kept out of this repo's core so it stays free + local).
 
 ## ✅ Shipped (newest first)
+- [x] **Crossroads Board — Stage 1** — `lib/hermes/crossroads.ts` (the $0/local decision model:
+      open a "crossing", weighted votes, tally, decide) + `brain/crossroads.json` (seeded
+      crossings) + tests. The brain's "decision" region made social; community sync + token
+      voting (stages 4-5) integrate later via API, out of the free core. _(#44)_
 - [x] **Launch kit** — `LAUNCH.md` rewritten brain-first: pre-flight checklist, demo-recording
       script, draft X thread, channel sequence, guardrails. For the Twitter/YouTube launch. _(#43)_
 - [x] **Brain-scan boot sequence + live drive** — a scan-line boot sweep while running

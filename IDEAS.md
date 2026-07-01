@@ -119,7 +119,10 @@ contribution loop are the seeds of this.
 - 💭 **WIFI DJ radio** — a **live radio** that streams the music this engine makes;
   people **submit** tracks, the community **shapes** the project, and eventually each
   person runs **their own agent**. The closed loop becomes a public, living station.
-- ✏️ **Crossroads Board (extensive)** — the WIFI DJ governance/community steering surface:
+- 🔨 **Crossroads Board (extensive)** — **Stage 1 shipped** (`lib/hermes/crossroads.ts` +
+  `brain/crossroads.json`: the $0/local decision model — crossings, weighted votes, tally,
+  decide). Stages 2-5 (board UI → taste wiring → community API → token voting) ahead. —
+  the WIFI DJ governance/community steering surface:
   the brain's **"decision" region made social**, where the community and the agents meet at
   the crossroads to steer creative + ecosystem direction. **Staged plan in
   [`brain/roadmap.json`](brain/roadmap.json)** → (1) local `crossroads.json` model of
