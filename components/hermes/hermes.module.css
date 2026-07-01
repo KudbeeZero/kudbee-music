@@ -6,10 +6,10 @@
   width: 46px; height: 46px; border-radius: 12px; flex: none;
   background: radial-gradient(circle at 30% 25%, var(--amber), var(--amber-2) 55%, #6a2bd6);
   box-shadow: var(--glow-amber); display: grid; place-items: center;
-  font-weight: 900; color: #170d04; font-size: 20px;
+  font-family: var(--ff-display); font-weight: 700; color: #170d04; font-size: 22px;
 }
 .brandText { display: flex; flex-direction: column; }
-.kicker { letter-spacing: 0.42em; font-size: 10.5px; color: var(--amber); }
+.kicker { font-family: var(--ff-display); letter-spacing: 0.42em; font-size: 10.5px; color: var(--amber); }
 .title { font-size: clamp(20px, 3.2vw, 30px); line-height: 1; }
 .subtitle { color: var(--ink-faint); font-size: 12.5px; margin-top: 3px; }
 .headerSpacer { flex: 1; }
@@ -95,7 +95,7 @@
 
 /* ---------- banger score ---------- */
 .scoreHead { display: flex; align-items: baseline; gap: 10px; }
-.scoreBig { font-size: 46px; font-weight: 900; line-height: 1; letter-spacing: -0.03em; }
+.scoreBig { font-family: var(--ff-display); font-size: 46px; font-weight: 700; line-height: 1; letter-spacing: -0.03em; }
 .scoreOf { color: var(--ink-faint); font-size: 14px; }
 .verdict { font-size: 12.5px; color: var(--ink-dim); margin-top: 8px; line-height: 1.4; }
 .cat { margin-top: 11px; }
@@ -105,7 +105,7 @@
 
 /* ---------- uniqueness ---------- */
 .uniqHead { display: flex; align-items: center; gap: 10px; }
-.uniqScore { font-size: 30px; font-weight: 900; }
+.uniqScore { font-family: var(--ff-display); font-size: 30px; font-weight: 700; }
 .flag { font-size: 12px; padding: 8px 10px; border-radius: 9px; margin-top: 7px; border: 1px solid var(--line); background: var(--bg-1); }
 .flagKind { font-size: 9.5px; text-transform: uppercase; letter-spacing: 0.1em; color: var(--warn); }
 .flagLine { color: var(--ink-faint); font-style: italic; }
