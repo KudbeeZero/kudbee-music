@@ -1,14 +1,17 @@
 'use client';
 
 import { useState } from 'react';
-import type { SongPackage } from '@/lib/hermes/types';
+import type { HookOption, SongPackage } from '@/lib/hermes/types';
 import styles from './hermes.module.css';
 
-export default function SongPackageView({ pkg, onSaveEdit }: { pkg: SongPackage; onSaveEdit?: (newText: string) => void }) {
+export default function SongPackageView({ pkg, onSaveEdit, onChooseHook }: {
+  pkg: SongPackage; onSaveEdit?: (newText: string) => void; onChooseHook?: (h: HookOption) => void;
+}) {
   const rawLyrics = pkg.sections.map((s) => `[${s.label}]\n${s.lines.join('\n')}`).join('\n\n');
   const [editing, setEditing] = useState(false);
   const [draft, setDraft] = useState(rawLyrics);
   const [learned, setLearned] = useState(false);
+  const [copiedClip, setCopiedClip] = useState(-1);
 
   function save() {
     onSaveEdit?.(draft);
@@ -17,7 +20,7 @@ export default function SongPackageView({ pkg, onSaveEdit }: { pkg: SongPackage;
     setTimeout(() => setLearned(false), 2600);
   }
 
-  function exportForVideo() {
+  function exportSong() {
     const blob = new Blob([JSON.stringify(pkg, null, 2)], { type: 'application/json' });
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
@@ -25,11 +28,15 @@ export default function SongPackageView({ pkg, onSaveEdit }: { pkg: SongPackage;
     URL.revokeObjectURL(url);
   }
 
+  function copyClip(text: string, i: number) {
+    navigator.clipboard?.writeText(text).then(() => { setCopiedClip(i); setTimeout(() => setCopiedClip(-1), 1200); }).catch(() => {});
+  }
+
   return (
     <div className={styles.panel}>
       <div className={styles.panelTitle} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
         <span>Song Package · “{pkg.title}” · v{pkg.version}</span>
-        <button className={styles.copyBtn} style={{ marginLeft: 0 }} onClick={exportForVideo} title="Download to scaffold a video project with `hermes from-song`">🎬 Export for video studio</button>
+        <button className={styles.copyBtn} style={{ marginLeft: 0 }} onClick={exportSong} title="Download this song package as JSON (backup / re-import into your vault)">⬇ Export JSON</button>
       </div>
 
       <Section label="Concept">
@@ -40,13 +47,28 @@ export default function SongPackageView({ pkg, onSaveEdit }: { pkg: SongPackage;
         <div className={styles.kv}>{pkg.brief}</div>
       </Section>
 
-      <Section label="Hook options">
-        {pkg.hookOptions.map((h, i) => (
-          <div key={i} className={styles.hookCard} data-chosen={pkg.chosenHook?.text === h.text}>
-            <div className={styles.hookText}>“{h.text}”</div>
-            <div className={styles.hookMeta}>{h.angle} · {h.cadence} · stickiness {h.score}{pkg.chosenHook?.text === h.text ? ' · ★ lead' : ''}</div>
-          </div>
-        ))}
+      <Section label={onChooseHook ? 'Hook options — tap one to make it the lead' : 'Hook options'}>
+        {pkg.hookOptions.map((h, i) => {
+          const chosen = pkg.chosenHook?.text === h.text;
+          const pick = onChooseHook && !chosen ? () => onChooseHook(h) : undefined;
+          return (
+            <div
+              key={i}
+              className={styles.hookCard}
+              data-chosen={chosen}
+              onClick={pick}
+              role={pick ? 'button' : undefined}
+              tabIndex={pick ? 0 : undefined}
+              onKeyDown={pick ? (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); pick(); } } : undefined}
+              style={pick ? { cursor: 'pointer' } : undefined}
+              aria-pressed={onChooseHook ? chosen : undefined}
+              title={onChooseHook ? (chosen ? 'Current lead hook' : 'Set as the lead hook — the brain learns your pick and re-scores') : undefined}
+            >
+              <div className={styles.hookText}>“{h.text}”</div>
+              <div className={styles.hookMeta}>{h.angle} · {h.cadence} · stickiness {h.score}{chosen ? ' · ★ lead' : onChooseHook ? ' · tap to lead' : ''}</div>
+            </div>
+          );
+        })}
       </Section>
 
       <div className={styles.pkgSection}>
@@ -102,18 +124,20 @@ export default function SongPackageView({ pkg, onSaveEdit }: { pkg: SongPackage;
         <div className={styles.promptBox}>{pkg.visuals.albumCoverPrompt}</div>
       </Section>
 
-      <Section label="Music video prompt (16:9)" copy={pkg.visuals.musicVideoPrompt}>
-        <div className={styles.promptBox}>{pkg.visuals.musicVideoPrompt}</div>
-        <ul className={styles.list} style={{ marginTop: 8 }}>
-          {pkg.visuals.sceneIdeas.map((s, i) => <li key={i}>{s}</li>)}
-        </ul>
-      </Section>
-
-      <Section label="Short-form clips">
+      <Section label="Short-form clips — tap to copy the caption">
         {pkg.viralClips.map((c, i) => (
-          <div key={i} className={styles.hookCard}>
+          <div
+            key={i}
+            className={styles.hookCard}
+            onClick={() => copyClip(c.caption, i)}
+            role="button"
+            tabIndex={0}
+            onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); copyClip(c.caption, i); } }}
+            style={{ cursor: 'pointer' }}
+            title="Copy this clip's caption"
+          >
             <div className={styles.hookText}>{c.label} · ~{c.durationSec}s · {c.startHint}</div>
-            <div className={styles.hookMeta}>Caption: {c.caption}</div>
+            <div className={styles.hookMeta}>{copiedClip === i ? 'copied ✓' : `Caption: ${c.caption}`}</div>
           </div>
         ))}
       </Section>

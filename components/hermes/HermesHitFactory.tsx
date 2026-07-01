@@ -1,9 +1,11 @@
 'use client';
 
 import { useEffect, useRef, useState } from 'react';
-import type { SongInputs, SongPackage, AgentOutput } from '@/lib/hermes/types';
+import type { SongInputs, SongPackage, AgentOutput, HookOption } from '@/lib/hermes/types';
 import { AGENT_DEFINITIONS } from '@/lib/hermes/agents';
 import { runPipeline } from '@/lib/hermes/pipeline';
+import { withChosenHook } from '@/lib/hermes/rescore';
+import { keywords } from '@/lib/hermes/text';
 import { listSongs, saveSong, getSong, deleteSong, priorSongsForOriginality, loadBannedWords, saveBannedWords, listAlbums, saveAlbum, deleteAlbum, loadTaste, recordTaste, type Taste } from '@/lib/hermes/storage';
 import { allAvoidWords } from '@/lib/hermes/memory';
 import { diffEdit, parseSections } from '@/lib/hermes/edits';
@@ -60,6 +62,16 @@ export default function HermesHitFactory() {
     const edit = diffEdit(pkg.finalLyrics, newText);
     if (edit.changed) setTaste(recordTaste(edit.added, edit.removed));
     const updated = { ...pkg, finalLyrics: newText, sections: parseSections(newText) };
+    saveSong(updated);
+    setVault(listSongs());
+    setPkg(getSong(updated.id) ?? updated);
+  }
+
+  // choose-your-lead-hook: re-pick the hook, re-score honestly, learn the pick as voice
+  function chooseHook(h: HookOption) {
+    if (!pkg || pkg.chosenHook?.text === h.text) return;
+    const updated = withChosenHook(pkg, h);
+    setTaste(recordTaste(keywords(h.text), []));
     saveSong(updated);
     setVault(listSongs());
     setPkg(getSong(updated.id) ?? updated);
@@ -230,7 +242,7 @@ export default function HermesHitFactory() {
           <BrainScan outputs={outputs} running={running} workingMemory={wmSize} />
           <AgentBoard outputs={outputs} />
           {pkg ? (
-            <SongPackageView pkg={pkg} onSaveEdit={saveLyricEdit} />
+            <SongPackageView pkg={pkg} onSaveEdit={saveLyricEdit} onChooseHook={chooseHook} />
           ) : (
             <div className={styles.panel}>
               <div className={styles.emptyState}>

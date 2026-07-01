@@ -151,8 +151,14 @@ contribution loop are the seeds of this.
   persona, walk the 9 steps, commit choices (the hook becomes the song's real hook),
   the brain learns your voice. _(see Shipped)_
 - 💭 **Brain-scan boot sequence** on song start (see flagship #1).
-- 💭 **"It's becoming you"** — surface, over time, how much of the current song came
-  from the artist's own learned voice vs fresh suggestion.
+- ✅ **"It's becoming you"** — the 🪞 Becoming You panel surfaces how much of the current
+  song echoes the artist's learned voice vs fresh suggestion. _(#30)_
+- ✅ **Functional song deck + focus on lyrics/brain** — every control in the package is
+  now live: **hook options are selectable** (tap to set the lead → honest re-score +
+  the pick feeds the voice model), **short-form clips copy on tap**, and the export is a
+  plain **JSON** download. Pulled the **video framing** out of the web app (removed the
+  "video studio" export label + the music-video-prompt section) so the Hit Factory is
+  100% about lyrics + the brain. Video studio code stays intact (CLI) for later. _(this PR)_
 
 ---
 
