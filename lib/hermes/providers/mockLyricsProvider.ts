@@ -45,6 +45,10 @@ const NON_NOUN = new Set([
   'does', 'will', 'would', 'could', 'should', 'can', 'may', 'might', 'must', 'into',
   'onto', 'from', 'over', 'under', 'want', 'need', 'know', 'feel', 'take', 'give',
   'break', 'turn', 'grow', 'build', 'run', 'hold', 'find', 'lose', 'said', 'told',
+  // irregular past-tense verbs — no -ed, so the suffix rule misses them ("the BUILT")
+  'built', 'kept', 'held', 'found', 'lost', 'gave', 'took', 'went', 'brought', 'bought',
+  'caught', 'taught', 'fought', 'sought', 'thought', 'grew', 'drew', 'threw', 'knew',
+  'flew', 'stood', 'meant', 'sent', 'spent', 'lent', 'built', 'felt', 'dealt', 'swept',
   // common 3rd-person verbs that look like plural nouns ("grew up on KEEPS/SEES")
   'keeps', 'sees', 'drops', 'makes', 'takes', 'gives', 'goes', 'does', 'says', 'gets',
   'runs', 'feels', 'knows', 'wants', 'needs', 'breaks', 'turns', 'holds', 'finds', 'loses',
