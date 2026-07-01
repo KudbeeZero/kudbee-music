@@ -90,7 +90,12 @@ vault). Lean into it: add an explicit **artist-identity file**, **cross-link** t
 docs into a navigable web, and adopt an **ingest → research → save** loop. Crucially,
 **each knowledge file = one region of the Brain Scan** — click a region, open its file.
 
-### 8. The Emotional (limbic) layer  ✏️
+### 8. The Emotional (limbic) layer  ✅ (shipped — `lib/hermes/emotion.ts`)
+Shipped: reads mood into an affect model (valence + intensity + primary feeling),
+proposes the emotional **contrast** that adds depth, maps sections onto an emotional
+**arc**, and feeds the Writers-Room (concept + arc steps). Its own **Limbic brain
+region** (9/9) now lights up, driven by the Emotion Scanner. Next: use the affect to
+actually color word/imagery selection in generation (emotion → diction).
 Emotion is *analyzed* today (Emotion Scanner arc score, emotional-clarity banger
 category, mood input, dark-lean, emotional-contrast recs, struggle-as-depth). The next
 level is a true **limbic layer** that *shapes* feeling, not just scores it: its **own

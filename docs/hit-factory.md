@@ -90,6 +90,15 @@ It feeds the Writers-Room's truth/draft coaching and lights the Language & Cultu
 brain region. **Original-only — it maps the artist describing themselves, never a
 profile of a group and never an impersonation.**
 
+## Limbic layer (emotion, shaped not just scored)
+`lib/hermes/emotion.ts` is the brain's emotional core. `deriveEmotion(inputs)` reads
+the brief's mood into an **affect model** — valence (dark↔bright), intensity, a
+**primary feeling**, and the emotional **contrast** that gives a song depth (the turn).
+`emotionalArc(sections)` maps the song onto problem → tension → payoff. It feeds the
+Writers-Room's concept + arc steps, enriches the Emotion Scanner agent, and lights the
+**Limbic brain region**. Truth-first: render the honest feeling in a concrete image,
+don't just name it.
+
 ## Nervous system & memory tiers
 The brain has a **signalling layer** and two **memory systems**.
 `lib/hermes/brainMap.ts` is the anatomy — the **regions** (functional areas, each a

@@ -7,7 +7,7 @@ import type { AgentId, AgentOutput, AgentStatus } from './types';
 
 export type RegionId =
   | 'intent' | 'language' | 'values' | 'generative' | 'analytical'
-  | 'decision' | 'short-term' | 'long-term';
+  | 'decision' | 'limbic' | 'short-term' | 'long-term';
 
 export type RegionState = 'idle' | 'running' | 'done' | 'soon';
 
@@ -28,9 +28,10 @@ export const REGIONS: Region[] = [
   { id: 'language', label: 'Language & Culture', doc: 'lib/hermes/language.ts', side: 'left', agents: ['lyric-chemist'], x: 146, y: 96 },
   { id: 'values', label: 'Values', doc: 'brain/beliefs.json', side: 'center', agents: ['conductor'], x: 256, y: 104 },
   { id: 'generative', label: 'Generative (right)', doc: 'brain/personas.json', side: 'right', agents: ['hooksmith', 'lyric-chemist', 'visual-director', 'viral-clip-scout'], x: 338, y: 150 },
-  { id: 'analytical', label: 'Analytical (left)', doc: 'originality + scoring', side: 'left', agents: ['beat-oracle', 'emotion-scanner', 'originality-auditor'], x: 102, y: 156 },
-  { id: 'decision', label: 'Decision', doc: 'the Writers-Room (process.ts)', side: 'center', agents: ['ar-judge', 'rights-release-guard'], x: 220, y: 156 },
-  { id: 'short-term', label: 'Short-term', doc: 'working memory (this session)', side: 'center', agents: ['hooksmith', 'lyric-chemist'], x: 172, y: 220 },
+  { id: 'analytical', label: 'Analytical (left)', doc: 'originality + scoring', side: 'left', agents: ['beat-oracle', 'originality-auditor'], x: 100, y: 150 },
+  { id: 'decision', label: 'Decision', doc: 'the Writers-Room (process.ts)', side: 'center', agents: ['ar-judge', 'rights-release-guard'], x: 224, y: 150 },
+  { id: 'limbic', label: 'Limbic (emotion)', doc: 'lib/hermes/emotion.ts', side: 'right', agents: ['emotion-scanner'], x: 316, y: 196 },
+  { id: 'short-term', label: 'Short-term', doc: 'working memory (this session)', side: 'center', agents: ['hooksmith', 'lyric-chemist'], x: 150, y: 222 },
   { id: 'long-term', label: 'Long-term', doc: 'brain/memory.json + the vault', side: 'center', agents: ['originality-auditor'], x: 272, y: 222 },
 ];
 
@@ -40,6 +41,7 @@ export const PATHWAYS: [RegionId, RegionId][] = [
   ['values', 'decision'], ['decision', 'generative'], ['decision', 'analytical'],
   ['generative', 'short-term'], ['analytical', 'short-term'], ['analytical', 'long-term'],
   ['short-term', 'long-term'],
+  ['decision', 'limbic'], ['limbic', 'generative'], ['limbic', 'short-term'],
 ];
 
 export function region(id: RegionId): Region | undefined {
