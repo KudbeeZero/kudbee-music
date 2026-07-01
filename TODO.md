@@ -10,6 +10,41 @@ artist says gets lost), then graduate here once designed. Check items off as the
 
 ---
 
+## 🔑 Founder vision — everything you raised (one place, honest status)
+_A consolidated index of every big idea the founder brought up, so nothing lives only in
+chat. Detail for each is in [`brain/roadmap.json`](brain/roadmap.json) + [`IDEAS.md`](IDEAS.md)._
+
+**Shipped ($0/local):**
+- [x] **Particle Brain heat-map** — SVG brain + thermal particles, hot where *you* are as an artist _(#40)_
+- [x] **Create-your-own-artist + Story Mode** — alias, bio, chapters unlock as you make songs _(#46)_
+- [x] **dNFT signature (near-term $0 step)** — `brainSignature()` → deterministic traits + ERC-721 metadata _(#45)_
+- [x] **Pro Studio Rack** — DAW-style upgradeable engine "boxes"; free unit active, key/server slots locked _(#48)_
+- [x] **Crossroads Board — Stage 1** — local `crossroads.json` decision model _(#44)_
+- [x] **Notion live roadmap mirror** · **Grok agent-image prompts** (10, delivered in chat)
+
+**Blocked on you (needs a key / account / decision — I can scaffold the $0 parts, you flip the switch):**
+- [ ] **Runway Gen-4 video** (you have the key + ~1000 credits) → `studio/runway.mjs` behind `RUNWAY_API_KEY`
+   (`.env.local`, gitignored, never committed). Uses: agent avatars → living characters, the **HERMES office/world**
+   scenes (agents get bodies), a **landing-page hero video**, real video clips. I can build the adapter $0; you run it.
+- [ ] **Cool landing page** — hero (Runway video optional), Solana connect, live Brain-Scan. $0 static shell buildable now.
+- [ ] **Solana wallet connect + accounts** — identity for the Board + dNFT; needs the auth/DB decision.
+- [ ] **dNFT mint on-chain** (Solana/Metaplex) — the signature is $0-ready; minting is your call.
+- [ ] **Agent images → avatars** — wire the Grok-generated images onto each agent (once you generate them).
+- [ ] **Lightning AI spike** — one Studio running a HERMES agent behind **HTTPS/SSL** as an opt-in provider (you connect SSL).
+- [ ] **Discord server** (+ GitHub→Discord webhook) — channels/roles/listening parties; wire on your go-ahead.
+- [ ] **Real-AI Claude engine** — `claudeLyricsProvider` behind `ANTHROPIC_API_KEY` unlocks the locked rack slot (mock stays default).
+- [ ] **Cloud brain** — server-side vault/memory (Notion/Drive/Supabase creds) so it's not localStorage-only.
+- [ ] **Suno-Studio workspace** — section/arrangement timeline + rack + meter bridge ($0 read-only now; clip editing later).
+
+**$0/local, no key — I can just build these next:**
+- [ ] **Deeper lyric craft** — theme→imagery mapping + image-coherence scoring (the moat; lyrics are grammatical now, next is *good*).
+- [ ] **End-to-end app audit** — drive `/hermes` headless, confirm generate→select→edit→save→export actually works.
+- [ ] **Crossroads Stages 2–3** — `/crossroads` board UI → decisions feed the taste model.
+- [ ] **3 review cleanups** — stronger memory-id hash · independent "earns-it" critique · guaranteed vault mirror.
+- [ ] **Star-launch kit** — `LAUNCH.md` with a draft Twitter/X thread + a YouTube demo-recording script (you post it).
+
+---
+
 ## 🚧 In progress
 _The autonomous `/loop` is working the phased roadmap. **Source of truth:
 [`brain/roadmap.json`](brain/roadmap.json)** — it indexes every item + the PR that
