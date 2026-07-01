@@ -13,6 +13,7 @@ import { allAvoidWords } from './memory';
 import { keywords, titleCase } from './text';
 import { deriveEmotion, emotionalArc } from './emotion';
 import { divergentAngles } from './defaultMode';
+import { craveScore } from './reward';
 
 export interface RunOptions {
   providers?: ProviderBundle;
@@ -190,15 +191,16 @@ export async function runPipeline(inputs: SongInputs, opts: RunOptions = {}): Pr
     data: { viralClips },
   });
 
-  // 9) A&R Judge — banger score
+  // 9) A&R Judge — banger score + the reward circuit's crave-ability read
   announce('ar-judge');
   const score = scoreSong({ inputs, chosenHook, sections, uniqueness, visuals, viralClips, emotionClarity: clarity });
+  const crave = craveScore(chosenHook, sections);
   emit({
     id: 'ar-judge', name: 'A&R Judge', status: 'done',
-    finding: `Banger score ${score.total}/100 — ${score.verdict}`,
+    finding: `Banger ${score.total}/100 · crave-ability ${crave.score}/100 — ${score.verdict}`,
     confidence: 82, warnings: score.total < 55 ? ['Below release bar — rework hook/emotion.'] : [],
-    suggestedNextAction: score.total >= 70 ? 'Green-light.' : 'Iterate on the weakest category.',
-    data: { score },
+    suggestedNextAction: crave.score < 55 ? crave.note : score.total >= 70 ? 'Green-light.' : 'Iterate on the weakest category.',
+    data: { score, crave },
   });
 
   // 10) Rights & Release Guard
