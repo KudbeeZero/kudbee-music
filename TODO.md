@@ -205,6 +205,17 @@ Board** governance / Solana / token / NFT layer integrates with this engine via 
 later (kept out of this repo's core so it stays free + local).
 
 ## ✅ Shipped (newest first)
+- [x] **Responsive web UI (mobile + tablet)** — a scoped pass in the existing CSS-Modules +
+      CSS-variable system (no Tailwind migration) around two breakpoints: **≤1180 (stack)** and
+      **≤640 (touch)**. Touch targets ~44px, 16px inputs (no iOS focus-zoom), a glass budget that
+      drops `backdrop-filter` blur on phones, drawers → bottom sheets (safe-area aware), the
+      generation "moment" scrolls into view when the deck is stacked, and the generated trace
+      explorer gets a mobile media query. Verified headless at 375/768/1280 — no horizontal
+      scroll, zero console errors. _(#69)_
+- [x] **Lyric grammaticality — audit hardening** — the end-to-end app audit + the "No Permission"
+      song surfaced real bugs (`the carry`, `through the daughter`, `the built`). Fixed by excluding
+      the combinator's own action verbs, the audience token, and irregular past-tense verbs from
+      noun slots, with regression tests. _(#66 · #67 · #68)_
 - [x] **Pro Studio Rack** — `components/hermes/Rack.tsx` + `lib/hermes/engines.ts`: a DAW-style
       "🎛️ Engine Rack" — the free Local Combinator active, locked Claude/Lightning upgrade
       slots on the LyricsProvider seam (the professional-stack vision; premium units unlock
