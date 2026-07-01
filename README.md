@@ -231,6 +231,7 @@ docs/                    quickstart, concepts, CLI ref, scene-pack guide, hit-fa
 - [x] **Cognitive model** — first thought → second thought → decision on the lead hook (assistant, not autopilot)
 - [x] **Particle Brain heat-map** — the Brain Scan runs hot where *you* are as an artist (particles + thermal glow by region)
 - [x] **The Council** — the agents as a deliberating board: right proposes · left challenges · you decide
+- [x] **Brain-scan boot sequence** — a scan-line sweep + regions igniting live as each agent fires
 
 **Next** — the phased plan is the spine [`brain/roadmap.json`](brain/roadmap.json); the human backlog is [`TODO.md`](TODO.md).
 - [ ] **Deepen the visible brain** — cognitive model (first→second thought→decision); the Council; brain-scan boot sequence

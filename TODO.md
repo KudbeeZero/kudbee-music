@@ -101,6 +101,9 @@ Board** governance / Solana / token / NFT layer integrates with this engine via 
 later (kept out of this repo's core so it stays free + local).
 
 ## ✅ Shipped (newest first)
+- [x] **Brain-scan boot sequence + live drive** — a scan-line boot sweep while running
+      (reduced-motion aware) and regions/agents ignite in sequence live off the per-agent
+      stream. **Completes Phase 2 (deepen the visible brain).** _(#42)_
 - [x] **The Council** — `components/hermes/Council.tsx`: the agents as a deliberating board
       (right proposes · left challenges · you decide), reusing agent findings + the cognition
       loop. The WIFI DJ "Crossroads Board" made literal. Plus a `.env*` gitignore guard +
