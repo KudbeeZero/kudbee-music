@@ -101,6 +101,8 @@ Board** governance / Solana / token / NFT layer integrates with this engine via 
 later (kept out of this repo's core so it stays free + local).
 
 ## ✅ Shipped (newest first)
+- [x] **Launch kit** — `LAUNCH.md` rewritten brain-first: pre-flight checklist, demo-recording
+      script, draft X thread, channel sequence, guardrails. For the Twitter/YouTube launch. _(#43)_
 - [x] **Brain-scan boot sequence + live drive** — a scan-line boot sweep while running
       (reduced-motion aware) and regions/agents ignite in sequence live off the per-agent
       stream. **Completes Phase 2 (deepen the visible brain).** _(#42)_
