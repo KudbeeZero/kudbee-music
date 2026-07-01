@@ -21,41 +21,41 @@
   "conceptSummary": "Acoustic Folk-Rap record for the people back home: coming back to the town that raised you and made you leave — delivered nostalgic, heavy, warm, voiced as plain, honest.",
   "hookOptions": [
     {
-      "text": "Still standing where the curb used to be",
-      "angle": "confessional one-liner",
-      "cadence": "on-beat and punchy",
-      "score": 98
+      "text": "Still standing where the record used to be",
+      "angle": "anthem declaration",
+      "cadence": "bouncy triplets",
+      "score": 96
     },
     {
-      "text": "Tell people I made it out the hallway",
-      "angle": "confessional one-liner",
-      "cadence": "half-time, laid back",
-      "score": 91
+      "text": "Tell people I made it out the town",
+      "angle": "melodic question",
+      "cadence": "floating melodic",
+      "score": 96
     },
     {
-      "text": "For people, I keep moving through the engine",
+      "text": "For people, I pray through the town",
       "angle": "call-and-response chant",
-      "cadence": "half-time, laid back",
+      "cadence": "bouncy triplets",
       "score": 95
     },
     {
-      "text": "I been patient but I never let it show",
-      "angle": "confessional one-liner",
+      "text": "I been heavy but I never let it show",
+      "angle": "call-and-response chant",
       "cadence": "bouncy triplets",
-      "score": 83
+      "score": 81
     },
     {
-      "text": "This one's for the leave that raised me",
-      "angle": "confessional one-liner",
-      "cadence": "floating melodic",
-      "score": 97
+      "text": "This one's for the doorstep that raised me",
+      "angle": "call-and-response chant",
+      "cadence": "half-time, laid back",
+      "score": 95
     }
   ],
   "chosenHook": {
-    "text": "This one's for the leave that raised me",
-    "angle": "confessional one-liner",
+    "text": "Tell people I made it out the town",
+    "angle": "melodic question",
     "cadence": "floating melodic",
-    "score": 97
+    "score": 96
   },
   "sections": [
     {
@@ -67,57 +67,57 @@
     {
       "label": "Hook",
       "lines": [
-        "This one's for the leave that raised me",
-        "This one's for the leave that raised me",
-        "And people know I climb for it",
-        "This one's for the leave that raised me"
+        "Tell people I made it out the town",
+        "Tell people I made it out the town",
+        "And people know I hold on for it",
+        "Tell people I made it out the town"
       ]
     },
     {
       "label": "Verse 1",
       "lines": [
-        "Nothing in my hands but town and the part",
-        "Grew up on river, chasing the art",
-        "All I had was leave and the spark",
-        "Came up on leave, dreaming of the mark"
+        "Nothing in my hands but town and the glow",
+        "Came up on leave, dreaming of the flow",
+        "They handed me hallway instead of the sound",
+        "Grew up on town, chasing the ground"
       ]
     },
     {
       "label": "Hook",
       "lines": [
-        "This one's for the leave that raised me",
-        "This one's for the leave that raised me",
-        "And people know I climb for it",
-        "This one's for the leave that raised me"
+        "Tell people I made it out the town",
+        "Tell people I made it out the town",
+        "And people know I hold on for it",
+        "Tell people I made it out the town"
       ]
     },
     {
       "label": "Verse 2",
       "lines": [
-        "Everything changed, traded leave for the day",
-        "Put the town down, reaching for the way",
-        "Now I reach the bruise into the stream",
-        "Took that town and turned it to a team"
+        "Stakes got higher, leave became the art",
+        "Everything changed, traded leave for the part",
+        "No turning back, I want the railroad and the day",
+        "Took that echo and turned it to a way"
       ]
     },
     {
       "label": "Bridge",
       "lines": [
-        "Wouldn't trade the sunrise for a light",
-        "Made my peace with bruise and the sight"
+        "Somewhere in the keepsake I found the stream",
+        "Wouldn't trade the echo for a team"
       ]
     },
     {
       "label": "Hook",
       "lines": [
-        "This one's for the leave that raised me",
-        "This one's for the leave that raised me",
-        "And people know I climb for it",
-        "This one's for the leave that raised me"
+        "Tell people I made it out the town",
+        "Tell people I made it out the town",
+        "And people know I hold on for it",
+        "Tell people I made it out the town"
       ]
     }
   ],
-  "finalLyrics": "[Intro]\nPeople, this one's for you\n\n[Hook]\nThis one's for the leave that raised me\nThis one's for the leave that raised me\nAnd people know I climb for it\nThis one's for the leave that raised me\n\n[Verse 1]\nNothing in my hands but town and the part\nGrew up on river, chasing the art\nAll I had was leave and the spark\nCame up on leave, dreaming of the mark\n\n[Hook]\nThis one's for the leave that raised me\nThis one's for the leave that raised me\nAnd people know I climb for it\nThis one's for the leave that raised me\n\n[Verse 2]\nEverything changed, traded leave for the day\nPut the town down, reaching for the way\nNow I reach the bruise into the stream\nTook that town and turned it to a team\n\n[Bridge]\nWouldn't trade the sunrise for a light\nMade my peace with bruise and the sight\n\n[Hook]\nThis one's for the leave that raised me\nThis one's for the leave that raised me\nAnd people know I climb for it\nThis one's for the leave that raised me",
+  "finalLyrics": "[Intro]\nPeople, this one's for you\n\n[Hook]\nTell people I made it out the town\nTell people I made it out the town\nAnd people know I hold on for it\nTell people I made it out the town\n\n[Verse 1]\nNothing in my hands but town and the glow\nCame up on leave, dreaming of the flow\nThey handed me hallway instead of the sound\nGrew up on town, chasing the ground\n\n[Hook]\nTell people I made it out the town\nTell people I made it out the town\nAnd people know I hold on for it\nTell people I made it out the town\n\n[Verse 2]\nStakes got higher, leave became the art\nEverything changed, traded leave for the part\nNo turning back, I want the railroad and the day\nTook that echo and turned it to a way\n\n[Bridge]\nSomewhere in the keepsake I found the stream\nWouldn't trade the echo for a team\n\n[Hook]\nTell people I made it out the town\nTell people I made it out the town\nAnd people know I hold on for it\nTell people I made it out the town",
   "production": {
     "tempoBpm": 86,
     "drums": "minimal knock, heavy kick",
@@ -168,71 +168,77 @@
       "label": "Hook hit",
       "startHint": "first chorus",
       "durationSec": 15,
-      "caption": "“This one's for the leave that raised me” 🎧 #newmusic",
-      "hookLine": "This one's for the leave that raised me"
+      "caption": "“Tell people I made it out the town” 🎧 #newmusic",
+      "hookLine": "Tell people I made it out the town"
     },
     {
       "label": "Verse opener",
       "startHint": "verse 1, bar 1",
       "durationSec": 12,
       "caption": "the story starts here 👀",
-      "hookLine": "Nothing in my hands but town and the part"
+      "hookLine": "Nothing in my hands but town and the glow"
     },
     {
       "label": "Bridge turn",
       "startHint": "bridge",
       "durationSec": 18,
       "caption": "wait for it…",
-      "hookLine": "Wouldn't trade the sunrise for a light"
+      "hookLine": "Somewhere in the keepsake I found the stream"
     }
   ],
-  "promoCaption": "“This one's for the leave that raised me” — new one for the people back home. #coming #back #acousticfolk-rap",
+  "promoCaption": "“Tell people I made it out the town” — new one for the people back home. #coming #back #acousticfolk-rap",
   "uniqueness": {
-    "score": 100,
+    "score": 99,
     "flags": [
       {
         "kind": "banned-word",
+        "detail": "avoid-word \"echo\"",
+        "line": "Took that echo and turned it to a way"
+      },
+      {
+        "kind": "banned-word",
         "detail": "avoid-word \"dreaming\"",
-        "line": "Came up on leave, dreaming of the mark",
+        "line": "Came up on leave, dreaming of the flow",
         "suggestion": "planning"
       },
       {
         "kind": "repeated-hook",
         "detail": "hook line repeats 9× — consider varying one word",
-        "line": "This one's for the leave that raised me"
+        "line": "Tell people I made it out the town"
       }
     ],
     "fingerprints": [
       "34a8eba4",
-      "93474bab",
-      "93474bab",
-      "c9a252a6",
-      "93474bab",
-      "24dfd3f",
-      "5174f3b3",
-      "2dbf8047",
-      "d3355984",
-      "93474bab",
-      "93474bab",
-      "c9a252a6",
-      "93474bab",
-      "762a18c3",
-      "c00e3d5d",
-      "9aa88a31",
-      "d5f0c7d0",
-      "3c49b655",
-      "17b037d9",
-      "93474bab",
-      "93474bab",
-      "c9a252a6",
-      "93474bab"
+      "95d7e2e1",
+      "95d7e2e1",
+      "dcc2563b",
+      "95d7e2e1",
+      "a54b5003",
+      "51c96d91",
+      "a6240d16",
+      "402dc0a3",
+      "95d7e2e1",
+      "95d7e2e1",
+      "dcc2563b",
+      "95d7e2e1",
+      "d84b88e1",
+      "565d097a",
+      "ea36ea50",
+      "57626f63",
+      "1f6a6d67",
+      "952549bc",
+      "95d7e2e1",
+      "95d7e2e1",
+      "dcc2563b",
+      "95d7e2e1"
     ],
     "bannedWordsHit": [
+      "echo",
       "dreaming"
     ],
     "rewriteSuggestions": [
       {
-        "line": "Came up on leave, dreaming of the mark",
+        "line": "Came up on leave, dreaming of the flow",
         "suggestion": "try \"planning\" instead of \"dreaming\""
       }
     ]
@@ -270,7 +276,7 @@
     {
       "label": "Avoid-words reviewed",
       "ok": false,
-      "note": "1 avoid-word(s) present (warning only)"
+      "note": "2 avoid-word(s) present (warning only)"
     },
     {
       "label": "Ownership clear",
@@ -310,48 +316,48 @@
       "id": "hooksmith",
       "name": "Hooksmith",
       "status": "done",
-      "finding": "Lead hook: \"This one's for the leave that raised me\"",
+      "finding": "Lead hook: \"Tell people I made it out the town\"",
       "confidence": 95,
       "warnings": [],
       "suggestedNextAction": "Build verses from the lead hook.",
       "data": {
         "hookOptions": [
           {
-            "text": "Still standing where the curb used to be",
-            "angle": "confessional one-liner",
-            "cadence": "on-beat and punchy",
-            "score": 98
+            "text": "Still standing where the record used to be",
+            "angle": "anthem declaration",
+            "cadence": "bouncy triplets",
+            "score": 96
           },
           {
-            "text": "Tell people I made it out the hallway",
-            "angle": "confessional one-liner",
-            "cadence": "half-time, laid back",
-            "score": 91
+            "text": "Tell people I made it out the town",
+            "angle": "melodic question",
+            "cadence": "floating melodic",
+            "score": 96
           },
           {
-            "text": "For people, I keep moving through the engine",
+            "text": "For people, I pray through the town",
             "angle": "call-and-response chant",
-            "cadence": "half-time, laid back",
+            "cadence": "bouncy triplets",
             "score": 95
           },
           {
-            "text": "I been patient but I never let it show",
-            "angle": "confessional one-liner",
+            "text": "I been heavy but I never let it show",
+            "angle": "call-and-response chant",
             "cadence": "bouncy triplets",
-            "score": 83
+            "score": 81
           },
           {
-            "text": "This one's for the leave that raised me",
-            "angle": "confessional one-liner",
-            "cadence": "floating melodic",
-            "score": 97
+            "text": "This one's for the doorstep that raised me",
+            "angle": "call-and-response chant",
+            "cadence": "half-time, laid back",
+            "score": 95
           }
         ],
         "chosenHook": {
-          "text": "This one's for the leave that raised me",
-          "angle": "confessional one-liner",
+          "text": "Tell people I made it out the town",
+          "angle": "melodic question",
           "cadence": "floating melodic",
-          "score": 97
+          "score": 96
         }
       }
     },
@@ -374,53 +380,53 @@
           {
             "label": "Hook",
             "lines": [
-              "This one's for the leave that raised me",
-              "This one's for the leave that raised me",
-              "And people know I climb for it",
-              "This one's for the leave that raised me"
+              "Tell people I made it out the town",
+              "Tell people I made it out the town",
+              "And people know I hold on for it",
+              "Tell people I made it out the town"
             ]
           },
           {
             "label": "Verse 1",
             "lines": [
-              "Nothing in my hands but town and the part",
-              "Grew up on river, chasing the art",
-              "All I had was leave and the spark",
-              "Came up on leave, dreaming of the mark"
+              "Nothing in my hands but town and the glow",
+              "Came up on leave, dreaming of the flow",
+              "They handed me hallway instead of the sound",
+              "Grew up on town, chasing the ground"
             ]
           },
           {
             "label": "Hook",
             "lines": [
-              "This one's for the leave that raised me",
-              "This one's for the leave that raised me",
-              "And people know I climb for it",
-              "This one's for the leave that raised me"
+              "Tell people I made it out the town",
+              "Tell people I made it out the town",
+              "And people know I hold on for it",
+              "Tell people I made it out the town"
             ]
           },
           {
             "label": "Verse 2",
             "lines": [
-              "Everything changed, traded leave for the day",
-              "Put the town down, reaching for the way",
-              "Now I reach the bruise into the stream",
-              "Took that town and turned it to a team"
+              "Stakes got higher, leave became the art",
+              "Everything changed, traded leave for the part",
+              "No turning back, I want the railroad and the day",
+              "Took that echo and turned it to a way"
             ]
           },
           {
             "label": "Bridge",
             "lines": [
-              "Wouldn't trade the sunrise for a light",
-              "Made my peace with bruise and the sight"
+              "Somewhere in the keepsake I found the stream",
+              "Wouldn't trade the echo for a team"
             ]
           },
           {
             "label": "Hook",
             "lines": [
-              "This one's for the leave that raised me",
-              "This one's for the leave that raised me",
-              "And people know I climb for it",
-              "This one's for the leave that raised me"
+              "Tell people I made it out the town",
+              "Tell people I made it out the town",
+              "And people know I hold on for it",
+              "Tell people I made it out the town"
             ]
           }
         ]
@@ -509,60 +515,67 @@
       "id": "originality-auditor",
       "name": "Originality Auditor",
       "status": "done",
-      "finding": "Uniqueness 100/100 · 2 flag(s).",
+      "finding": "Uniqueness 99/100 · 3 flag(s).",
       "confidence": 90,
       "warnings": [
+        "avoid-word \"echo\"",
         "avoid-word \"dreaming\"",
         "hook line repeats 9× — consider varying one word"
       ],
       "suggestedNextAction": "Apply suggested rewrites before release.",
       "data": {
         "uniqueness": {
-          "score": 100,
+          "score": 99,
           "flags": [
             {
               "kind": "banned-word",
+              "detail": "avoid-word \"echo\"",
+              "line": "Took that echo and turned it to a way"
+            },
+            {
+              "kind": "banned-word",
               "detail": "avoid-word \"dreaming\"",
-              "line": "Came up on leave, dreaming of the mark",
+              "line": "Came up on leave, dreaming of the flow",
               "suggestion": "planning"
             },
             {
               "kind": "repeated-hook",
               "detail": "hook line repeats 9× — consider varying one word",
-              "line": "This one's for the leave that raised me"
+              "line": "Tell people I made it out the town"
             }
           ],
           "fingerprints": [
             "34a8eba4",
-            "93474bab",
-            "93474bab",
-            "c9a252a6",
-            "93474bab",
-            "24dfd3f",
-            "5174f3b3",
-            "2dbf8047",
-            "d3355984",
-            "93474bab",
-            "93474bab",
-            "c9a252a6",
-            "93474bab",
-            "762a18c3",
-            "c00e3d5d",
-            "9aa88a31",
-            "d5f0c7d0",
-            "3c49b655",
-            "17b037d9",
-            "93474bab",
-            "93474bab",
-            "c9a252a6",
-            "93474bab"
+            "95d7e2e1",
+            "95d7e2e1",
+            "dcc2563b",
+            "95d7e2e1",
+            "a54b5003",
+            "51c96d91",
+            "a6240d16",
+            "402dc0a3",
+            "95d7e2e1",
+            "95d7e2e1",
+            "dcc2563b",
+            "95d7e2e1",
+            "d84b88e1",
+            "565d097a",
+            "ea36ea50",
+            "57626f63",
+            "1f6a6d67",
+            "952549bc",
+            "95d7e2e1",
+            "95d7e2e1",
+            "dcc2563b",
+            "95d7e2e1"
           ],
           "bannedWordsHit": [
+            "echo",
             "dreaming"
           ],
           "rewriteSuggestions": [
             {
-              "line": "Came up on leave, dreaming of the mark",
+              "line": "Came up on leave, dreaming of the flow",
               "suggestion": "try \"planning\" instead of \"dreaming\""
             }
           ]
@@ -610,22 +623,22 @@
             "label": "Hook hit",
             "startHint": "first chorus",
             "durationSec": 15,
-            "caption": "“This one's for the leave that raised me” 🎧 #newmusic",
-            "hookLine": "This one's for the leave that raised me"
+            "caption": "“Tell people I made it out the town” 🎧 #newmusic",
+            "hookLine": "Tell people I made it out the town"
           },
           {
             "label": "Verse opener",
             "startHint": "verse 1, bar 1",
             "durationSec": 12,
             "caption": "the story starts here 👀",
-            "hookLine": "Nothing in my hands but town and the part"
+            "hookLine": "Nothing in my hands but town and the glow"
           },
           {
             "label": "Bridge turn",
             "startHint": "bridge",
             "durationSec": 18,
             "caption": "wait for it…",
-            "hookLine": "Wouldn't trade the sunrise for a light"
+            "hookLine": "Somewhere in the keepsake I found the stream"
           }
         ]
       }
@@ -656,7 +669,7 @@
             "returns": 1,
             "mutation": 0.5,
             "brevity": 0.75,
-            "singability": 0.77
+            "singability": 0.8
           },
           "note": "Compulsive — you'll want it again."
         }
@@ -695,7 +708,7 @@
           {
             "label": "Avoid-words reviewed",
             "ok": false,
-            "note": "1 avoid-word(s) present (warning only)"
+            "note": "2 avoid-word(s) present (warning only)"
           },
           {
             "label": "Ownership clear",
@@ -707,7 +720,7 @@
     }
   ],
   "cognition": {
-    "firstThought": "This one's for the leave that raised me",
+    "firstThought": "Tell people I made it out the town",
     "secondThought": [
       {
         "key": "true",

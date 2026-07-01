@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { mockLyricsProvider, nounable, themeNouns, themeImagery } from '../providers/mockLyricsProvider';
+import { mockLyricsProvider, nounable, themeNouns, themeImagery, verbPool, imageryCoherence } from '../providers/mockLyricsProvider';
 import { selfSimilarity, lineSkeleton, keywords } from '../text';
 import { slantKey, rhymeKey } from '../lexicon';
 import { rhymeFamily } from '../rhyme';
@@ -83,6 +83,54 @@ describe('imagery coherence — backfill nouns match the theme', () => {
   it('is deterministic — same brief routes to the same clusters', () => {
     const b = brief();
     expect(themeImagery(b)).toEqual(themeImagery(b));
+  });
+});
+
+describe('verb/noun agreement — verbs lean on the song\'s own imagery register', () => {
+  it('a street/struggle-themed brief favors those verbs over home/light ones', () => {
+    const inputs = brief({ theme: 'grinding on the cold block, fighting the struggle, carrying the weight', mood: 'hard', references: '' });
+    expect(themeImagery(inputs).slice(0, 2).sort()).toEqual(['street', 'struggle']);
+    const pool = verbPool(inputs);
+    expect(pool).toContain('hustle');
+    expect(pool).not.toContain('build');
+    expect(pool).not.toContain('pray');
+  });
+
+  it('falls back to the full verb list when too few verbs match the top clusters', () => {
+    // 'water' has no tagged verbs — the restriction must not starve the pool
+    const inputs = brief({ theme: 'loving someone across the ocean while the tide pulls us apart', mood: 'aching', references: '' });
+    expect(themeImagery(inputs)[0]).toBe('water');
+    expect(verbPool(inputs).length).toBe(14);
+  });
+
+  it('is deterministic — same brief yields the same pool', () => {
+    const b = brief();
+    expect(verbPool(b)).toEqual(verbPool(b));
+  });
+});
+
+describe('imagery-coherence scoring', () => {
+  it('scores 1 (vacuous) when no imagery-bank noun surfaces in the lines', () => {
+    expect(imageryCoherence(['a line with no bank nouns at all'], brief())).toBe(1);
+  });
+
+  it('scores high when every bank noun belongs to the top cluster', () => {
+    const inputs = brief({ theme: 'the ocean and the tide', mood: 'aching', references: '' });
+    expect(imageryCoherence(['the harbor and the tide', 'a river past the ocean'], inputs)).toBe(1);
+  });
+
+  it('scores lower when bank nouns scatter across unrelated clusters', () => {
+    const inputs = brief({ theme: 'the ocean and the tide', mood: 'aching', references: '' });
+    // 'harbor'/'tide' are on-image (water); 'kitchen'/'doorway' are off-image (home)
+    const mixed = imageryCoherence(['the harbor and the tide', 'the kitchen by the doorway'], inputs);
+    expect(mixed).toBeLessThan(1);
+    expect(mixed).toBeGreaterThan(0);
+  });
+
+  it('is deterministic for the same lines + brief', () => {
+    const inputs = brief();
+    const lines = ['it started with the block and the gold'];
+    expect(imageryCoherence(lines, inputs)).toBe(imageryCoherence(lines, inputs));
   });
 });
 

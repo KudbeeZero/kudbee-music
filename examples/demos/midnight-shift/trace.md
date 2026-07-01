@@ -15,19 +15,19 @@
 | **Language & Culture** | Register: mixed. Diction lean: mix plain talk with one or two vivid images per verse. Imagery seeds: working, graveyard, shift, build. |
 | **Limbic (emotion)** | Primary feeling: triumph (valence 0.40, intensity 0.85); contrast: the cost it took to get here. Colored word choice; arc: setup → tension → problem → tension → tension → payoff → tension. |
 | **Default-Mode Network** | Considered 3 divergent angles, incl. “Tell "working" through a conversation that never happened”. |
-| **Generative (right hemisphere)** | Wrote the hook from 5 candidates → “Still standing where the shift used to be”. |
+| **Generative (right hemisphere)** | Wrote the hook from 5 candidates → “Shift, that's the only thing I kept”. |
 | **Analytical (left hemisphere)** | Rhyme scheme AABB, density 100% across the verse; beat/BPM sanity checks. |
-| **Reward circuit** | Crave-ability 74/100 (returns 1, mutation 0.5, brevity 0.75, singability 0.66) — Catchy; a mutated return would push it higher. |
+| **Reward circuit** | Crave-ability 73/100 (returns 1, mutation 0.5, brevity 0.75, singability 0.59) — Catchy; a mutated return would push it higher. |
 | **Decision (corpus callosum)** | A&R verdict: Certified banger — ship it. (93/100). The artist gets the final choice. |
-| **Long-term memory** | Originality checked against the vault → 99/100 (3 flags). |
+| **Long-term memory** | Originality checked against the vault → 100/100 (2 flags). |
 | **Short-term memory** | Held the working set (hook + section drafts) live across the 10-agent run. |
 
 ## 🎯 The result
 
-- **Lead hook:** “Still standing where the shift used to be” _(chosen from 5 candidates)_
+- **Lead hook:** “Shift, that's the only thing I kept” _(chosen from 5 candidates)_
 - **Rhyme:** scheme AABB, 100% density
-- **Crave-ability:** 74/100
-- **Originality:** 99/100
+- **Crave-ability:** 73/100
+- **Originality:** 100/100
 - **Banger score:** **93/100** — _Certified banger — ship it._
 
 _Full package: [`song.json`](song.json). Load it in the app (`/hermes`) to see the whole deck._

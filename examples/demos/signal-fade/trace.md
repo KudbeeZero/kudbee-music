@@ -15,18 +15,18 @@
 | **Language & Culture** | Register: mixed. Diction lean: mix plain talk with one or two vivid images per verse. Imagery seeds: loving, someone, across, distance. |
 | **Limbic (emotion)** | Primary feeling: ambivalence (valence 0.00, intensity 0.50); contrast: a clear stance. Colored word choice; arc: setup → tension → problem → tension → tension → payoff → tension. |
 | **Default-Mode Network** | Considered 3 divergent angles, incl. “Tell "loving" through a letter you'll never send”. |
-| **Generative (right hemisphere)** | Wrote the hook from 5 candidates → “Still standing where the connection used to be”. |
+| **Generative (right hemisphere)** | Wrote the hook from 5 candidates → “For ones, I rebuild through the distance”. |
 | **Analytical (left hemisphere)** | Rhyme scheme AABB, density 100% across the verse; beat/BPM sanity checks. |
-| **Reward circuit** | Crave-ability 75/100 (returns 1, mutation 0.5, brevity 0.75, singability 0.7) — Compulsive — you'll want it again. |
+| **Reward circuit** | Crave-ability 76/100 (returns 1, mutation 0.5, brevity 0.75, singability 0.74) — Compulsive — you'll want it again. |
 | **Decision (corpus callosum)** | A&R verdict: Certified banger — ship it. (93/100). The artist gets the final choice. |
 | **Long-term memory** | Originality checked against the vault → 99/100 (3 flags). |
 | **Short-term memory** | Held the working set (hook + section drafts) live across the 10-agent run. |
 
 ## 🎯 The result
 
-- **Lead hook:** “Still standing where the connection used to be” _(chosen from 5 candidates)_
+- **Lead hook:** “For ones, I rebuild through the distance” _(chosen from 5 candidates)_
 - **Rhyme:** scheme AABB, 100% density
-- **Crave-ability:** 75/100
+- **Crave-ability:** 76/100
 - **Originality:** 99/100
 - **Banger score:** **93/100** — _Certified banger — ship it._
 

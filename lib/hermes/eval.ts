@@ -6,6 +6,7 @@
 import type { SongPackage } from './types';
 import { rhymeDensity } from './rhyme';
 import { selfSimilarity, keywords } from './text';
+import { imageryCoherence } from './providers/mockLyricsProvider';
 
 export interface EvalMetric {
   name: string;
@@ -35,6 +36,7 @@ export function evaluateSong(pkg: SongPackage): EvalReport {
   const coherent = verseSections.length
     ? verseSections.filter((s) => s.lines.some((l) => themeKw.some((k) => l.toLowerCase().includes(k)))).length / verseSections.length
     : 0;
+  const imagery = imageryCoherence(verseLines, pkg.inputs);
   const hook = Math.min(1, pkg.score.hookStrength / 20);
 
   const metric = (name: string, value: number, threshold: number, detail: string): EvalMetric =>
@@ -44,6 +46,7 @@ export function evaluateSong(pkg: SongPackage): EvalReport {
     metric('rhyme density', density, 0.4, 'fraction of verse lines that end-rhyme'),
     metric('line diversity', diversity, 0.7, 'inverse of repeated line shapes (anti-repetition)'),
     metric('thematic coherence', coherent, 0.5, 'verse sections that reference the theme'),
+    metric('imagery coherence', imagery, 0.5, 'imagery-bank nouns that share the song\'s top visual register'),
     metric('hook strength', hook, 0.5, "A&R hook score (honest signals), normalized"),
   ];
 
