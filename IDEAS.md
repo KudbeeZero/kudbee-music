@@ -175,6 +175,9 @@ contribution loop are the seeds of this.
   blueprint → craft parameters (original-only).
 
 ## 🎨 Visual / UX
+- ✅ **Interactive scrolling landing page** — shipped _(#86)_: scroll-scrubbed hero (reuses the
+  repo's own hero clips), hemispheres section, demo-proof table, honest loading states, full
+  reduced-motion fallback. Comment slots left for the founder-gated Runway hero + wallet connect.
 - ✅ **Lyric Lab UI** — the Writers-Room + persona picker, made visible. Pick a
   persona, walk the 9 steps, commit choices (the hook becomes the song's real hook),
   the brain learns your voice. _(see Shipped)_
