@@ -201,12 +201,14 @@ A second-opinion review flagged real risks worth acting on (truth-first):
   disclaimer in the README + Uniqueness panel. _(#37)_
 
 ## 🌱 Fresh captures
-- ✏️ **Particle Brain + artist heat-map** *(founder idea)* — render the Brain Scan as a
-  particle field flowing along the nerves, with a **thermal heat-map** that colors regions
-  by *the type of artist you are* (right/generative → hot magenta, analytical → cyan,
-  emotional intensity raises overall temp, more "becoming-you" → hotter/denser). Driven $0
-  from taste + persona + emotion + procedural. Reduced-motion aware. The prime demo/Twitter
-  visual. (roadmap 2.4)
+- ✅ **Particle Brain + artist heat-map** *(founder idea)* — shipped: canvas particle layer
+  over the SVG brain + a thermal heat-map (`lib/hermes/heat.ts`) coloring regions by the type
+  of artist you are; header shows artist type + brain temp. Reduced-motion aware. Feeds the
+  Living-Brain dNFT. _(#40)_
+- 💭 **Runway Gen-4 world/video** *(founder has key + ~1000 credits)* — animate agent avatars,
+  generate the HERMES Studio "office/living world" scenes, a landing hero video, real clips.
+  Opt-in, key-gated (`.env.local`, never committed), never in the free core. Scaffold a
+  `studio/runway.mjs` adapter $0; founder runs it with their key. (ecosystem)
 - 💭 **Living Brain dNFT + token utility** *(founder idea)* — the particle brain as a
   **dynamic NFT** that evolves as you create: `tokenURI` → metadata whose `animation_url`
   is the live brain page + a snapshot; traits from the brain signature. **Value = utility**
