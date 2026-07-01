@@ -23,7 +23,8 @@ _Nothing actively in flight — pick the next item from **Up next**._
 4. [x] **Default-Mode Network** — `lib/hermes/defaultMode.ts`: surfaces divergent
    angles on the brief (creativity-at-rest); the 10th brain region, coupled by nerves to
    generative + decision + analytical; feeds a divergent option into the concept step. _(shipped)_
-5. [ ] **Reward circuit** — model hook "crave-ability" / drive.
+5. [x] **Reward circuit** — `lib/hermes/reward.ts`: crave-ability score (returns +
+   mutation + brevity + singability); the 11th brain region, surfaced by the A&R Judge. _(shipped)_
 6. [ ] **Procedural memory** — the artist's recurring craft moves become reusable.
 7. [ ] **"Becoming you" self-portrait** — surface how much of a song is the learned voice.
 
