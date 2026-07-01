@@ -28,6 +28,23 @@
 @media (max-width: 1180px) { .deck { grid-template-columns: 1fr; } }
 .col { display: flex; flex-direction: column; gap: 16px; min-width: 0; }
 
+/* ---------- compose stage (pre-generation focal view) ---------- */
+.composeStage { display: flex; flex-direction: column; align-items: center; padding: clamp(20px, 6vh, 64px) 0 48px; }
+.composeHero { width: 100%; max-width: 620px; }
+.composeEyebrow {
+  text-align: center; font-family: var(--ff-display); text-transform: uppercase;
+  letter-spacing: 0.3em; font-size: 11px; color: var(--amber); margin-bottom: 12px;
+}
+.composeTitle {
+  text-align: center; font-family: var(--ff-display); font-weight: 700;
+  font-size: clamp(26px, 4.6vw, 40px); line-height: 1.06; letter-spacing: -0.02em; margin-bottom: 12px;
+}
+.composeSub { text-align: center; color: var(--ink-dim); font-size: 14.5px; line-height: 1.55; max-width: 520px; margin: 0 auto 26px; }
+.composeDemo { text-align: center; margin-top: 20px; }
+.composeDivider { display: flex; align-items: center; gap: 12px; color: var(--ink-faint); font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; margin: 22px auto 0; max-width: 620px; }
+.composeDivider::before, .composeDivider::after { content: ''; flex: 1; height: 1px; background: var(--line); }
+@media (max-width: 640px) { .composeStage { padding: 8px 0 32px; } }
+
 .panel {
   background: var(--panel); border: 1px solid var(--line); border-radius: var(--radius);
   padding: 16px; backdrop-filter: blur(8px);

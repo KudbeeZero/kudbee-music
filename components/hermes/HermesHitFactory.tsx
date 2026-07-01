@@ -203,6 +203,11 @@ export default function HermesHitFactory() {
   }
 
   const doneCount = Object.values(outputs).filter((o) => o.status === 'done' || o.status === 'warning').length;
+  // Compose (calm, focal input) until there's something to study; Studio (the full
+  // analytical deck) once a run is under way or a package exists.
+  const mode: 'compose' | 'studio' = running || pkg ? 'studio' : 'compose';
+
+  function newSong() { setPkg(null); setOutputs({}); setError(null); }
 
   return (
     <div className={styles.shell}>
@@ -215,11 +220,34 @@ export default function HermesHitFactory() {
         </div>
         <div className={styles.headerSpacer} />
         <span className={styles.modeBadge}>● V1 · local mock — no API key</span>
+        {mode === 'studio' && <button className={styles.ghostBtn} onClick={newSong}>✨ New</button>}
         <button className={styles.ghostBtn} onClick={() => setLabOpen(true)}>✍️ Lyric Lab</button>
         <button className={styles.ghostBtn} onClick={() => setAlbumOpen(true)}>Albums ({albums.length})</button>
         <button className={styles.ghostBtn} onClick={() => setVaultOpen(true)}>Vault ({vault.length})</button>
       </header>
 
+      {error && mode === 'compose' && (
+        <div role="alert" style={{ border: '1px solid rgba(255,93,108,0.5)', background: 'rgba(255,93,108,0.10)', color: 'var(--bad)', borderRadius: 12, padding: '10px 14px', margin: '4px auto 0', maxWidth: 620, fontSize: 13 }}>⚠ {error}</div>
+      )}
+
+      {mode === 'compose' ? (
+        <div className={styles.composeStage}>
+          <div className={styles.composeHero}>
+            <div className={styles.composeEyebrow}>Lyrical Combinator · {AGENT_DEFINITIONS.length} agents · $0 local</div>
+            <h2 className={styles.composeTitle}>What do you want to make?</h2>
+            <p className={styles.composeSub}>
+              Describe a song — a feeling, a story, a genre. {AGENT_DEFINITIONS.length} cross-checking
+              agents turn it into a complete original package: hooks, lyrics, production, and a Suno prompt.
+            </p>
+            <SongLabForm running={running} onRun={run} preset={preset} />
+            <div className={styles.composeDivider}>or</div>
+            <div className={styles.composeDemo}>
+              <button className={styles.ghostBtn} onClick={loadDemo}>▶ See a finished example — “Cold Hard Gold” (99/100)</button>
+            </div>
+          </div>
+        </div>
+      ) : (
+      <>
       {/* pipeline rail */}
       <div className={styles.rail}>
         {AGENT_DEFINITIONS.map((d) => (
@@ -284,20 +312,8 @@ export default function HermesHitFactory() {
           ) : (
             <div className={styles.panel}>
               <div className={styles.emptyState}>
-                Enter a song idea and hit <b>Generate</b>.<br />
-                HERMES will route it through all {AGENT_DEFINITIONS.length} agents and assemble a full song package here.
-                <div style={{ marginTop: 16 }}>
-                  <button
-                    className={styles.runBtn}
-                    onClick={loadDemo}
-                    style={{ width: 'auto', padding: '11px 18px', fontSize: 13.5 }}
-                  >
-                    ▶ See a finished example — “Cold Hard Gold” (99/100)
-                  </button>
-                  <div className={styles.hint} style={{ marginTop: 8 }}>
-                    A real package from this engine — hooks, lyrics, production, scores. No setup.
-                  </div>
-                </div>
+                The brain is composing — routing your idea through all {AGENT_DEFINITIONS.length} agents.
+                Your full song package will assemble here.
               </div>
             </div>
           )}
@@ -331,6 +347,8 @@ export default function HermesHitFactory() {
           )}
         </div>
       </div>
+      </>
+      )}
 
       {vaultOpen && (
         <VaultDrawer
