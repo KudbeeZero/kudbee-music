@@ -200,3 +200,61 @@ describe('diversity + slant primitives', () => {
     expect([...loose].some((w) => !tight.has(w))).toBe(true);
   });
 });
+
+describe('avoid-word enforcement — exclusions actually prevent generation, not just flag it', () => {
+  it('never generates a banned imagery-bank noun across many seeds', async () => {
+    const inputs = brief({ theme: 'chasing the light across the skyline', mood: 'hopeful', references: '' });
+    const banned = ['skyline', 'mirror', 'flame'];
+    for (let seed = 0; seed < 15; seed++) {
+      const hooks = await mockLyricsProvider.generateHooks(inputs, 5, seed, banned);
+      const secs = await mockLyricsProvider.generateSections(inputs, hooks[0], seed, banned);
+      const text = [...hooks.map((h) => h.text), ...secs.flatMap((s) => s.lines)].join(' ').toLowerCase();
+      for (const b of banned) expect(text).not.toMatch(new RegExp(`\\b${b}\\b`));
+    }
+  });
+
+  it('never picks a banned rhyme word (e.g. "crown"/"throne") even for a bright, triumphant brief', async () => {
+    const inputs = brief({ theme: 'the come-up, proving my worth, standing tall', mood: 'triumphant, proud, hopeful', references: '' });
+    const banned = ['crown', 'throne'];
+    for (let seed = 0; seed < 15; seed++) {
+      const hooks = await mockLyricsProvider.generateHooks(inputs, 5, seed, banned);
+      const secs = await mockLyricsProvider.generateSections(inputs, hooks[0], seed, banned);
+      const text = [...hooks.map((h) => h.text), ...secs.flatMap((s) => s.lines)].join(' ').toLowerCase();
+      expect(text).not.toMatch(/\bcrown\b/);
+      expect(text).not.toMatch(/\bthrone\b/);
+    }
+  });
+
+  it('drops a frame template outright when its own fixed wording is banned ("no turning back")', async () => {
+    const inputs = brief();
+    const banned = ['no turning back'];
+    for (let seed = 0; seed < 15; seed++) {
+      const hooks = await mockLyricsProvider.generateHooks(inputs, 5, seed, banned);
+      const secs = await mockLyricsProvider.generateSections(inputs, hooks[0], seed, banned);
+      const text = [...hooks.map((h) => h.text), ...secs.flatMap((s) => s.lines)].join(' ').toLowerCase();
+      expect(text).not.toMatch(/no turning back/);
+    }
+  });
+
+  it('never starves a pool when every word in a cluster is banned — still generates a full song', async () => {
+    const allLight = ['candle', 'ember', 'lantern', 'sunrise', 'horizon', 'skyline', 'spark', 'glow', 'beacon', 'flame'];
+    const inputs = brief({ theme: 'chasing the light', mood: 'hopeful', references: '' });
+    const hooks = await mockLyricsProvider.generateHooks(inputs, 5, 1, allLight);
+    const secs = await mockLyricsProvider.generateSections(inputs, hooks[0], 1, allLight);
+    expect(hooks.length).toBeGreaterThan(0);
+    expect(secs.flatMap((s) => s.lines).length).toBeGreaterThan(0);
+  });
+
+  it('verbPool/rhymeFamily accept a banned set directly and respect it', () => {
+    const inputs = brief({ theme: 'grinding on the cold block, fighting the struggle, carrying the weight', mood: 'hard', references: '' });
+    const pool = verbPool(inputs, new Set(['hustle', 'grind']));
+    expect(pool).not.toContain('hustle');
+    expect(pool).not.toContain('grind');
+
+    const rng = makeRng(7);
+    for (let i = 0; i < 20; i++) {
+      const fam = rhymeFamily(rng, 0.5, 2, 'balanced', new Set(['crown', 'throne']));
+      for (const e of fam) expect(['crown', 'throne']).not.toContain(e.w);
+    }
+  });
+});

@@ -82,7 +82,7 @@ export async function runPipeline(inputs: SongInputs, opts: RunOptions = {}): Pr
   // 2) Hooksmith — hooks. A hook written in the Lyric Lab wins outright; the
   // generated options still show on the board as alternates.
   announce('hooksmith');
-  const generatedHooks: HookOption[] = await providers.lyrics.generateHooks(inputs, 5, seed);
+  const generatedHooks: HookOption[] = await providers.lyrics.generateHooks(inputs, 5, seed, banned);
   const labHook: HookOption | null = opts.forcedHook?.trim()
     ? { text: opts.forcedHook.trim(), angle: 'written by the artist in the Lyric Lab', cadence: 'the artist’s own pocket', score: 96 }
     : null;
@@ -108,7 +108,7 @@ export async function runPipeline(inputs: SongInputs, opts: RunOptions = {}): Pr
   // 3) Lyric Chemist — sections + lyrics
   announce('lyric-chemist');
   const sections: SongSection[] = chosenHook
-    ? await providers.lyrics.generateSections(inputs, chosenHook, seed)
+    ? await providers.lyrics.generateSections(inputs, chosenHook, seed, banned)
     : [];
   const finalLyrics = lyricsText(sections);
   emit({

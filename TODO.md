@@ -211,6 +211,25 @@ Board** governance / Solana / token / NFT layer integrates with this engine via 
 later (kept out of this repo's core so it stays free + local).
 
 ## ✅ Shipped (newest first)
+- [x] **Avoid-words actually enforced during generation (the moat)** — the exclusion
+      system (`brain/memory.json` + `bannedWords.ts` generic clichés) was **warn-only**:
+      `checkOriginality()` flagged a banned word after the fact, but nothing in the
+      combinator (`nounPool`/`imageryNouns`/`verbPool`/`adjPool`, the frame-template pools,
+      or `rhymeFamily()`'s lexicon rhyme picks) ever filtered against it — so "fire",
+      "flame", "crown", and "mirror" kept surfacing even though they were already on the
+      generic avoid-list. Surfaced by generating "Second Wind" in the live app and getting
+      real artist feedback (skyline/flame/mirror/throne overused, plus the hard-coded
+      "no turning back" frame opener). Now every generation path takes a `banned: Set<string>`
+      and filters it out at the source (never starving a pool — falls back to the full list
+      when an exclusion would empty it); frame templates whose own fixed wording hits a
+      banned phrase are dropped from the pool outright. `LyricsProvider.generateHooks/
+      generateSections` gained an optional `bannedWords` param; `pipeline.ts` threads its
+      already-computed `banned` list through instead of only handing it to the originality
+      scan. Added "skyline", "throne", and the phrase "no turning back" to
+      `brain/memory.json`'s exclusions. Also fixed a related `imageryCoherence()` scoring
+      bug it surfaced: the metric only credited the top-2 imagery clusters as "on-image",
+      but the generator itself draws padding from *every* cluster with a nonzero signal
+      score — aligned the two. Demos regenerated; golden eval green on all 6 songs. _(this PR)_
 - [x] **Image-coherence scoring + verb/noun agreement (the moat, deeper lyric craft)** —
       a new `imageryCoherence()` eval metric measures whether a song's actual imagery-bank
       nouns share its top-ranked cluster, not just whether a theme keyword is mentioned
