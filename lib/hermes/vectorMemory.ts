@@ -77,24 +77,52 @@ export function cosineSimilarity(a: number[], b: number[]): number {
 }
 
 /**
+ * Fixed precision for ranking — 8 decimal places. Cosine values are compared as
+ * integers (similarity × 1e8, rounded) so tiny floating-point / BLAS differences across
+ * hardware (Intel, Apple Silicon, AMD) can't reorder results. Raw similarity is still
+ * returned to the caller; only the SORT KEY is quantized.
+ */
+export const RANK_PRECISION = 1e8;
+
+/** Quantize a similarity to an integer rank key (absorbs sub-1e-8 FP noise). */
+export function quantize(sim: number): number {
+  return Math.round(sim * RANK_PRECISION);
+}
+
+const cmp = (a: string, b: string): number => (a < b ? -1 : a > b ? 1 : 0);
+
+/**
  * Rank entries against a query vector: cosine-similarity each, optionally filter by
- * type + a minimum score, sort descending, and cap at topK. Pure — the heart of search.
+ * type + a minimum score, sort, and cap at topK. Pure — the heart of search.
+ *
+ * REPRODUCIBILITY: HERMES promises deterministic output, so search must be stable
+ * across machines. Two safeguards:
+ *   1. Sort by the QUANTIZED rank (similarity × 1e8, rounded), not the raw float — so
+ *      hardware/BLAS-level FP differences below 1e-8 never change the order.
+ *   2. Deterministic TIE-BREAK: when quantized ranks are equal (very close scores), fall
+ *      back to entry.id (then text) ascending — so a near-tie always resolves the same
+ *      way, run to run and machine to machine.
+ * The stored embeddings are the reproducible source of truth: given the same store, this
+ * function returns byte-identical ordering everywhere, even if the embedding MODEL's own
+ * math varies by hardware (the vectors are computed once, then persisted).
  *
  * WHY simple cosine (not HNSW/FAISS) right now: the memory set is small, so a linear
- * scan is instant and keeps us dependency-light and local-first — simplicity wins over
- * theoretical speed at this scale. UPGRADE PATH: when the store grows large enough for
- * linear scan to hurt, swap ONLY this function's body for an approximate-nearest-neighbor
- * index (e.g. hnswlib-node) built from the same `entries` — the public API
- * (addMemory / semanticSearch / SearchResult) stays identical, so callers never change.
+ * scan is instant and keeps us dependency-light and local-first. UPGRADE PATH: when the
+ * store grows large, swap ONLY this function's body for an ANN index (e.g. hnswlib-node)
+ * built from the same `entries` — the public API stays identical, so callers never change.
  */
 export function rankBySimilarity(queryVec: number[], entries: VectorEntry[], opts: SearchOptions = {}): SearchResult[] {
   const { topK = 5, minScore = 0, type } = opts;
   return entries
     .filter((e) => (type ? e.metadata.type === type : true))
-    .map((entry) => ({ entry, similarity: cosineSimilarity(queryVec, entry.embedding) }))
+    .map((entry) => {
+      const similarity = cosineSimilarity(queryVec, entry.embedding);
+      return { entry, similarity, rank: quantize(similarity) };
+    })
     .filter((r) => r.similarity >= minScore)
-    .sort((a, b) => b.similarity - a.similarity)
-    .slice(0, topK);
+    .sort((a, b) => (b.rank - a.rank) || cmp(a.entry.id, b.entry.id) || cmp(a.entry.text, b.entry.text))
+    .slice(0, topK)
+    .map(({ entry, similarity }) => ({ entry, similarity })); // public result keeps the RAW similarity
 }
 
 // ----------------------------------------------------------------------------

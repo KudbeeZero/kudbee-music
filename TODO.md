@@ -46,6 +46,22 @@ shipped it. This file is the human-readable view; keep the two in sync._
   default → $0); rhyme/BPM validation loop.
 - **Phase 6 — Influence Studio:** describe an influence (felt, never copied) → craft params.
 
+## 🚀 Traction Sprint (from the multi-agent audit — ranked, $0, 2–4 wks)
+The audit converged: turn **display-only** brain systems into **load-bearing** ones, wire in
+vector memory, and document the architecture — lifts output quality, dev appeal, and stars.
+- [x] **0. Vector-memory determinism hardening** — quantized rank + deterministic tie-break
+   (id, then text) so search is reproducible across Intel/Apple-Silicon/AMD (FP/BLAS-safe). _(#49)_
+- [ ] **1. Semantic originality** — wire `vectorMemory.searchSimilar` into `originality.ts`
+   (optional flag) to flag *meaning*-similar prior lines the fingerprint check misses.
+- [ ] **2. Close the cognition loop** — `keep|revise` verdict + failing critiques feed the
+   next generation (`pipeline.ts` `cognitionFeedback`); "Regenerate from these critiques" button.
+- [ ] **3. Interactive trace explorer + demo gallery** — `traceHtml.ts` → clickable region
+   heat-map traces + `docs/demo-gallery.html`. The top shareability/stars move.
+- [ ] **4. Council scoring → hook ranking** — the Council re-scores/ranks hooks; `learn.ts`
+   stores winners into vector memory + `recommend.ts` semantic recall (the brain as a coach).
+- [ ] **5. ARCHITECTURE.md + brain-wiring diagram + module headers** — attract senior-eng
+   contributors; speed PRs; reframe as "a modular agent brain."
+
 ## 🌐 Ecosystem (integrates via API — kept out of the free local core)
 - [~] **Crossroads Board** — the WIFI DJ governance/community steering surface (the brain's
    "decision" region, made social). Staged plan in [`brain/roadmap.json`](brain/roadmap.json):
