@@ -3,6 +3,9 @@
 import { useState } from 'react';
 import type { HookOption, SongPackage, CritiqueKey } from '@/lib/hermes/types';
 import { deliberationForHook } from '@/lib/hermes/cognition';
+import { buildTrace } from '@/lib/hermes/trace';
+import { renderTraceHtml } from '@/lib/hermes/traceHtml';
+import { sunoStyle, sunoLyrics } from '@/lib/hermes/suno';
 import styles from './hermes.module.css';
 
 export default function SongPackageView({ pkg, onSaveEdit, onChooseHook, onRegenerateFromCritiques }: {
@@ -30,6 +33,18 @@ export default function SongPackageView({ pkg, onSaveEdit, onChooseHook, onRegen
     URL.revokeObjectURL(url);
   }
 
+  // "Show your work" — build the per-region generation trace for THIS song and open the
+  // interactive explorer (brain heat-map + collapsible region cards + copy-paste Suno prompt)
+  // in a new tab. All client-side + deterministic: renders the same self-contained HTML the
+  // demo gallery ships, from the real brain modules — no server, no key.
+  function explainSong() {
+    const trace = buildTrace(pkg, pkg.inputs, 0);
+    const html = renderTraceHtml(trace, { sunoStyle: sunoStyle(pkg), sunoLyrics: sunoLyrics(pkg) });
+    const url = URL.createObjectURL(new Blob([html], { type: 'text/html' }));
+    window.open(url, '_blank', 'noopener');
+    setTimeout(() => URL.revokeObjectURL(url), 60_000); // let the new tab load before revoking
+  }
+
   function copyClip(text: string, i: number) {
     navigator.clipboard?.writeText(text).then(() => { setCopiedClip(i); setTimeout(() => setCopiedClip(-1), 1200); }).catch(() => {});
   }
@@ -38,7 +53,10 @@ export default function SongPackageView({ pkg, onSaveEdit, onChooseHook, onRegen
     <div className={styles.panel}>
       <div className={styles.panelTitle} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
         <span>Song Package · “{pkg.title}” · v{pkg.version}</span>
-        <button className={styles.copyBtn} style={{ marginLeft: 0 }} onClick={exportSong} title="Download this song package as JSON (backup / re-import into your vault)">⬇ Export JSON</button>
+        <span style={{ display: 'flex', gap: 6 }}>
+          <button className={styles.copyBtn} style={{ marginLeft: 0 }} onClick={explainSong} title="Open the interactive brain trace for this song — heat-map, what each region did, and a copy-paste Suno prompt">🔍 Explain this song</button>
+          <button className={styles.copyBtn} style={{ marginLeft: 0 }} onClick={exportSong} title="Download this song package as JSON (backup / re-import into your vault)">⬇ Export JSON</button>
+        </span>
       </div>
 
       <Section label="Concept">
