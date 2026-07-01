@@ -35,9 +35,59 @@ function adjPool(valence: number): string[] {
   return valence < -0.2 ? ADJ_DARK : valence > 0.2 ? ADJ_BRIGHT : ADJ_ALL;
 }
 
-// words that read badly in a noun slot ("where the OUT used to be") — keep them
-// out of the {noun}/{k} pool so the combinator stays grammatical.
-const NOUN_STOP = new Set(['made', 'out', 'still', 'got', 'get', 'keep', 'let', 'gone', 'been', 'came', 'through', 'about', 'song']);
+// Words that read badly in a NOUN slot ("where the OUT used to be", "handed me
+// GROWING") — verbs, auxiliaries, adjectives, adverbs, and bare abstractions. The
+// combinator drops these before filling {noun}/{k}/{place} so the line stays grammatical.
+const NON_NOUN = new Set([
+  // aux / linking / modal / common verbs
+  'made', 'make', 'out', 'still', 'got', 'get', 'keep', 'let', 'gone', 'been', 'came',
+  'come', 'through', 'about', 'song', 'was', 'were', 'are', 'has', 'had', 'have', 'did',
+  'does', 'will', 'would', 'could', 'should', 'can', 'may', 'might', 'must', 'into',
+  'onto', 'from', 'over', 'under', 'want', 'need', 'know', 'feel', 'take', 'give',
+  'break', 'turn', 'grow', 'build', 'run', 'hold', 'find', 'lose', 'said', 'told',
+  // adjectives / adverbs / abstractions that read wrong as a concrete noun
+  'supposed', 'beautiful', 'lonely', 'really', 'very', 'just', 'always', 'never',
+  'every', 'some', 'more', 'most', 'much', 'many', 'own', 'same', 'another', 'something',
+  'nothing', 'everything', 'anything', 'someone', 'anyone', 'everyone',
+]);
+
+// The few -ing / -ed words that ARE nouns (so the suffix heuristic doesn't reject them).
+const NOUN_ING = new Set(['morning', 'evening', 'feeling', 'ceiling', 'blessing', 'offering', 'lightning', 'building', 'crossing', 'longing']);
+const NOUN_ED = new Set(['shade', 'blade', 'grade', 'trade', 'creed', 'seed', 'weed', 'bed', 'bread', 'thread', 'road', 'load', 'code']);
+
+// A curated bank of concrete nouns — grounded, singable, genre-appropriate imagery.
+// BACKFILLS a {noun} slot when the theme doesn't yield enough real nouns, so a slot is
+// never starved into a broken word. Deterministic (shuffled by the song seed).
+const CONCRETE_NOUNS = [
+  'block', 'corner', 'concrete', 'pavement', 'city', 'street', 'road', 'alley', 'rooftop',
+  'window', 'doorway', 'hallway', 'engine', 'record', 'mirror', 'shadow', 'candle', 'ember',
+  'iron', 'chain', 'anchor', 'harbor', 'current', 'mountain', 'valley', 'garden', 'seed',
+  'root', 'thorn', 'gravel', 'dust', 'smoke', 'rain', 'thunder', 'horizon', 'skyline',
+  'ladder', 'bridge', 'river', 'hunger', 'name', 'weight', 'ghost', 'promise', 'fire',
+];
+
+/** True if a word can plausibly fill a concrete-noun slot. Heuristic, deterministic, $0. */
+export function nounable(w: string): boolean {
+  const s = w.toLowerCase();
+  if (s.length < 3 || NON_NOUN.has(s)) return false;
+  if (/ing$/.test(s) && !NOUN_ING.has(s)) return false;   // gerunds: growing, breaking
+  if (/ed$/.test(s) && !NOUN_ED.has(s)) return false;      // participles/adjectives: supposed, handed
+  if (/ly$/.test(s)) return false;                          // adverbs: quickly, really
+  return true;
+}
+
+/** Theme/reference words that pass as concrete nouns, in stable order (on-theme first). */
+export function themeNouns(inputs: SongInputs): string[] {
+  return keywords([inputs.theme, inputs.references].join(' '), 12).filter(nounable);
+}
+
+/** A guaranteed-full noun pool: on-theme nouns first, padded from the concrete bank. */
+function nounPool(inputs: SongInputs, rng: () => number): string[] {
+  const theme = themeNouns(inputs);
+  const pool = [...theme];
+  if (pool.length < 6) pool.push(...shuffle(CONCRETE_NOUNS, rng).filter((n) => !pool.includes(n)).slice(0, 6 - pool.length));
+  return pool;
+}
 
 // Couplet lines end on a {rhyme} slot so two of them land a real end-rhyme.
 // Hierarchical generation: each SECTION has a GOAL, and draws from a pool of frames
@@ -107,10 +157,10 @@ function buildRhymedVerse(inputs: SongInputs, rng: () => number, valence: number
 function fill(frame: string, inputs: SongInputs, rng: () => number, rhyme = '', valence = 0, anchor = ''): string {
   // nouns come from the theme + references (the "what"); mood drives adjectives
   // separately (adjPool), so keeping it out of the noun slots reads more grammatically.
-  const ks = keywords([inputs.theme, inputs.references].join(' ')).filter((k) => !NOUN_STOP.has(k));
-  // shuffled pools, consumed in order, so a single line never repeats the same
-  // filler word ("the road and the road") — distinct, grammatical output.
-  const nouns = shuffle(ks.length ? ks : ['block', 'name', 'road', 'weight', 'city', 'street'], rng);
+  // Real concrete nouns only (theme words that pass `nounable`, padded from the bank),
+  // shuffled + consumed in order so a line never repeats a filler and never slots a
+  // verb/adjective ("handed me GROWING") into a noun position.
+  const nouns = shuffle(nounPool(inputs, rng), rng);
   const verbs = shuffle(VERBS, rng);
   const adjs = shuffle(adjPool(valence), rng);   // emotion → diction: adjectives lean with the mood
   let ni = 0, vi = 0, ai = 0;
@@ -174,7 +224,9 @@ export const mockLyricsProvider: LyricsProvider = {
     const temp: RhymeTemp = inputs.rhymeTemp ?? 'balanced';
     // the thread: a few theme words carried across every section so the song develops
     // one idea; the diversity guard stops any frame template being reused song-wide.
-    const thread = keywords([inputs.theme, inputs.references].join(' ')).filter((k) => !NOUN_STOP.has(k)).slice(0, 3);
+    // anchor words carried across sections must be real, DISTINCT nouns — on-theme first,
+    // padded from the concrete bank so a thin theme (1 usable noun) doesn't repeat it every verse.
+    const thread = [...themeNouns(inputs), ...shuffle(CONCRETE_NOUNS, rng)].slice(0, 3);
     const used = new Set<string>();
     // hierarchical generation: each verse pursues its section goal (setup → turn → reflect)
     const v1 = buildRhymedVerse(inputs, rng, valence, 2, { pool: SETUP_LINES, thread, used, temp, anchorIdx: 0 });

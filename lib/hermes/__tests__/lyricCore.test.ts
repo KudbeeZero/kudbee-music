@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { mockLyricsProvider } from '../providers/mockLyricsProvider';
+import { mockLyricsProvider, nounable, themeNouns } from '../providers/mockLyricsProvider';
 import { selfSimilarity, lineSkeleton, keywords } from '../text';
 import { slantKey, rhymeKey } from '../lexicon';
 import { rhymeFamily } from '../rhyme';
@@ -20,6 +20,30 @@ async function gen(inputs: SongInputs, seed = 4): Promise<SongSection[]> {
 }
 const verses = (secs: SongSection[]) => secs.filter((s) => /verse|bridge/i.test(s.label));
 const verseLines = (secs: SongSection[]) => secs.filter((s) => !/hook|chorus|intro|outro/i.test(s.label)).flatMap((s) => s.lines);
+
+describe('grammaticality — no verb/adjective/gerund in a noun slot', () => {
+  it('nounable() rejects gerunds, participles, adverbs, auxiliaries; keeps real nouns', () => {
+    // the exact words that used to leak into the demos as "nouns"
+    for (const bad of ['growing', 'supposed', 'was', 'beautiful', 'breaking', 'handed', 'really']) {
+      expect(nounable(bad)).toBe(false);
+    }
+    for (const good of ['harbor', 'street', 'garden', 'record', 'morning', 'road']) {
+      expect(nounable(good)).toBe(true);
+    }
+  });
+
+  it('a thin theme still yields distinct anchor nouns (padded from the concrete bank)', async () => {
+    // this theme surfaces only "place" as a usable noun — the rest are verbs/adjectives
+    const inputs = brief({ theme: 'growing something beautiful out of a place that was supposed to break you', references: '' });
+    expect(themeNouns(inputs).length).toBeLessThanOrEqual(2); // thin on purpose
+    const secs = await gen(inputs, 2);
+    const words = verseLines(secs).join(' ').toLowerCase().split(/[^a-z]+/).filter(Boolean);
+    // none of the broken words appear anywhere in the verses
+    for (const bad of ['growing', 'supposed', 'beautiful']) expect(words).not.toContain(bad);
+    // a bare linking verb never sits after an article ("the was", "the supposed")
+    expect(verseLines(secs).join('\n')).not.toMatch(/\bthe (was|supposed|growing|beautiful)\b/i);
+  });
+});
 
 describe('lyric-core depth', () => {
   it('gives each verse a distinct section goal (setup ≠ turn ≠ reflect)', async () => {

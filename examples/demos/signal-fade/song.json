@@ -20,41 +20,41 @@
   "conceptSummary": "Synthwave Pop record for the ones far away: loving someone across distance while the connection keeps dropping — delivered aching, electric, bittersweet, voiced as smooth.",
   "hookOptions": [
     {
-      "text": "For ones, I hold on through the dropping",
-      "angle": "anthem declaration",
+      "text": "For ones, I fight through the keeps",
+      "angle": "confessional one-liner",
       "cadence": "floating melodic",
-      "score": 92
+      "score": 94
     },
     {
       "text": "I been heavy but I never let it show",
-      "angle": "confessional one-liner",
-      "cadence": "floating melodic",
-      "score": 82
+      "angle": "melodic question",
+      "cadence": "half-time, laid back",
+      "score": 80
     },
     {
-      "text": "Still standing where the loving used to be",
+      "text": "Still standing where the across used to be",
       "angle": "confessional one-liner",
-      "cadence": "half-time, laid back",
+      "cadence": "on-beat and punchy",
+      "score": 98
+    },
+    {
+      "text": "Distance, that's the only thing I kept",
+      "angle": "melodic question",
+      "cadence": "bouncy triplets",
       "score": 95
     },
     {
-      "text": "Keeps, that's the only thing I kept",
-      "angle": "melodic question",
-      "cadence": "half-time, laid back",
-      "score": 92
-    },
-    {
-      "text": "Tell ones I made it out the loving",
+      "text": "Tell ones I made it out the across",
       "angle": "anthem declaration",
-      "cadence": "floating melodic",
+      "cadence": "half-time, laid back",
       "score": 94
     }
   ],
   "chosenHook": {
-    "text": "Still standing where the loving used to be",
+    "text": "Still standing where the across used to be",
     "angle": "confessional one-liner",
-    "cadence": "half-time, laid back",
-    "score": 95
+    "cadence": "on-beat and punchy",
+    "score": 98
   },
   "sections": [
     {
@@ -66,57 +66,57 @@
     {
       "label": "Hook",
       "lines": [
-        "Still standing where the loving used to be",
-        "Still standing where the loving used to be",
-        "All this across, I earned it slow",
-        "Still standing where the loving used to be"
+        "Still standing where the across used to be",
+        "Still standing where the across used to be",
+        "And ones know I fight for it",
+        "Still standing where the across used to be"
       ]
     },
     {
       "label": "Verse 1",
       "lines": [
-        "All I had was loving and the wheel",
-        "Came up on dropping, dreaming of the steel",
-        "They handed me connection instead of the name",
-        "Grew up on dropping, chasing the shame"
+        "Came up on across, dreaming of the grade",
+        "Grew up on distance, chasing the shade",
+        "All I had was while and the glow",
+        "It started with the road and the flow"
       ]
     },
     {
       "label": "Hook",
       "lines": [
-        "Still standing where the loving used to be",
-        "Still standing where the loving used to be",
-        "All this across, I earned it slow",
-        "Still standing where the loving used to be"
+        "Still standing where the across used to be",
+        "Still standing where the across used to be",
+        "And ones know I fight for it",
+        "Still standing where the across used to be"
       ]
     },
     {
       "label": "Verse 2",
       "lines": [
-        "Stakes got higher, someone became the crown",
-        "Took that across and turned it to a town",
-        "Everything changed, traded distance for the road",
-        "Now I keep moving the someone into the load"
+        "Now I hustle the distance into the sound",
+        "Took that shadow and turned it to a ground",
+        "No turning back, I want the skyline and the road",
+        "Stakes got higher, keeps became the load"
       ]
     },
     {
       "label": "Bridge",
       "lines": [
-        "When it's quiet I still hear the across and the art",
-        "Somewhere in the someone I found the part"
+        "Wouldn't trade the while for an art",
+        "Every across of mine became a part"
       ]
     },
     {
       "label": "Hook",
       "lines": [
-        "Still standing where the loving used to be",
-        "Still standing where the loving used to be",
-        "All this across, I earned it slow",
-        "Still standing where the loving used to be"
+        "Still standing where the across used to be",
+        "Still standing where the across used to be",
+        "And ones know I fight for it",
+        "Still standing where the across used to be"
       ]
     }
   ],
-  "finalLyrics": "[Intro]\nOnes, this one's for you\n\n[Hook]\nStill standing where the loving used to be\nStill standing where the loving used to be\nAll this across, I earned it slow\nStill standing where the loving used to be\n\n[Verse 1]\nAll I had was loving and the wheel\nCame up on dropping, dreaming of the steel\nThey handed me connection instead of the name\nGrew up on dropping, chasing the shame\n\n[Hook]\nStill standing where the loving used to be\nStill standing where the loving used to be\nAll this across, I earned it slow\nStill standing where the loving used to be\n\n[Verse 2]\nStakes got higher, someone became the crown\nTook that across and turned it to a town\nEverything changed, traded distance for the road\nNow I keep moving the someone into the load\n\n[Bridge]\nWhen it's quiet I still hear the across and the art\nSomewhere in the someone I found the part\n\n[Hook]\nStill standing where the loving used to be\nStill standing where the loving used to be\nAll this across, I earned it slow\nStill standing where the loving used to be",
+  "finalLyrics": "[Intro]\nOnes, this one's for you\n\n[Hook]\nStill standing where the across used to be\nStill standing where the across used to be\nAnd ones know I fight for it\nStill standing where the across used to be\n\n[Verse 1]\nCame up on across, dreaming of the grade\nGrew up on distance, chasing the shade\nAll I had was while and the glow\nIt started with the road and the flow\n\n[Hook]\nStill standing where the across used to be\nStill standing where the across used to be\nAnd ones know I fight for it\nStill standing where the across used to be\n\n[Verse 2]\nNow I hustle the distance into the sound\nTook that shadow and turned it to a ground\nNo turning back, I want the skyline and the road\nStakes got higher, keeps became the load\n\n[Bridge]\nWouldn't trade the while for an art\nEvery across of mine became a part\n\n[Hook]\nStill standing where the across used to be\nStill standing where the across used to be\nAnd ones know I fight for it\nStill standing where the across used to be",
   "production": {
     "tempoBpm": 106,
     "drums": "boom-bap with dusty snares",
@@ -167,95 +167,101 @@
       "label": "Hook hit",
       "startHint": "first chorus",
       "durationSec": 15,
-      "caption": "“Still standing where the loving used to be” 🎧 #newmusic",
-      "hookLine": "Still standing where the loving used to be"
+      "caption": "“Still standing where the across used to be” 🎧 #newmusic",
+      "hookLine": "Still standing where the across used to be"
     },
     {
       "label": "Verse opener",
       "startHint": "verse 1, bar 1",
       "durationSec": 12,
       "caption": "the story starts here 👀",
-      "hookLine": "All I had was loving and the wheel"
+      "hookLine": "Came up on across, dreaming of the grade"
     },
     {
       "label": "Bridge turn",
       "startHint": "bridge",
       "durationSec": 18,
       "caption": "wait for it…",
-      "hookLine": "When it's quiet I still hear the across and the art"
+      "hookLine": "Wouldn't trade the while for an art"
     }
   ],
-  "promoCaption": "“Still standing where the loving used to be” — new one for the ones far away. #loving #someone #synthwavepop",
+  "promoCaption": "“Still standing where the across used to be” — new one for the ones far away. #loving #someone #synthwavepop",
   "uniqueness": {
-    "score": 99,
+    "score": 98,
     "flags": [
       {
         "kind": "banned-word",
-        "detail": "avoid-word \"crown\"",
-        "line": "Stakes got higher, someone became the crown",
-        "suggestion": "the title"
+        "detail": "avoid-word \"shadow\"",
+        "line": "Took that shadow and turned it to a ground",
+        "suggestion": "the dark side"
+      },
+      {
+        "kind": "banned-word",
+        "detail": "avoid-word \"every\"",
+        "line": "Every across of mine became a part"
       },
       {
         "kind": "banned-word",
         "detail": "avoid-word \"dreaming\"",
-        "line": "Came up on dropping, dreaming of the steel",
+        "line": "Came up on across, dreaming of the grade",
         "suggestion": "planning"
       },
       {
         "kind": "repeated-hook",
         "detail": "hook line repeats 9× — consider varying one word",
-        "line": "Still standing where the loving used to be"
+        "line": "Still standing where the across used to be"
       }
     ],
     "fingerprints": [
       "949c6452",
-      "74584ea5",
-      "74584ea5",
-      "f86a9297",
-      "74584ea5",
-      "a2e873d3",
-      "ffdb1f24",
-      "a646f7e8",
-      "1adf0531",
-      "74584ea5",
-      "74584ea5",
-      "f86a9297",
-      "74584ea5",
-      "7981ac32",
-      "a467c2a8",
-      "80c9f5d",
-      "d548afed",
-      "aba6a2ba",
-      "ba705571",
-      "74584ea5",
-      "74584ea5",
-      "f86a9297",
-      "74584ea5"
+      "52a580af",
+      "52a580af",
+      "4136fc31",
+      "52a580af",
+      "8d67b730",
+      "b2b9e4ce",
+      "85ffd671",
+      "18b40c5c",
+      "52a580af",
+      "52a580af",
+      "4136fc31",
+      "52a580af",
+      "3f3bb6df",
+      "bd4b635e",
+      "46a9de8f",
+      "759bff09",
+      "65028cb2",
+      "e33d290",
+      "52a580af",
+      "52a580af",
+      "4136fc31",
+      "52a580af"
     ],
     "bannedWordsHit": [
-      "crown",
+      "shadow",
+      "every",
       "dreaming"
     ],
     "rewriteSuggestions": [
       {
-        "line": "Stakes got higher, someone became the crown",
-        "suggestion": "try \"the title\" instead of \"crown\""
+        "line": "Took that shadow and turned it to a ground",
+        "suggestion": "try \"the dark side\" instead of \"shadow\""
       },
       {
-        "line": "Came up on dropping, dreaming of the steel",
+        "line": "Came up on across, dreaming of the grade",
         "suggestion": "try \"planning\" instead of \"dreaming\""
       }
     ]
   },
   "score": {
-    "hookStrength": 20,
+    "hookStrength": 15,
     "emotionalClarity": 20,
     "originality": 20,
     "replayValue": 13,
     "visualIdentity": 10,
     "shortFormPotential": 10,
-    "releaseReadiness": 5,
-    "total": 98,
+    "releaseReadiness": 4,
+    "total": 92,
     "verdict": "Certified banger — ship it."
   },
   "release": [
@@ -280,7 +286,7 @@
     {
       "label": "Avoid-words reviewed",
       "ok": false,
-      "note": "2 avoid-word(s) present (warning only)"
+      "note": "3 avoid-word(s) present (warning only)"
     },
     {
       "label": "Ownership clear",
@@ -320,48 +326,48 @@
       "id": "hooksmith",
       "name": "Hooksmith",
       "status": "done",
-      "finding": "Lead hook: \"Still standing where the loving used to be\"",
+      "finding": "Lead hook: \"Still standing where the across used to be\"",
       "confidence": 95,
       "warnings": [],
       "suggestedNextAction": "Build verses from the lead hook.",
       "data": {
         "hookOptions": [
           {
-            "text": "For ones, I hold on through the dropping",
-            "angle": "anthem declaration",
+            "text": "For ones, I fight through the keeps",
+            "angle": "confessional one-liner",
             "cadence": "floating melodic",
-            "score": 92
+            "score": 94
           },
           {
             "text": "I been heavy but I never let it show",
-            "angle": "confessional one-liner",
-            "cadence": "floating melodic",
-            "score": 82
+            "angle": "melodic question",
+            "cadence": "half-time, laid back",
+            "score": 80
           },
           {
-            "text": "Still standing where the loving used to be",
+            "text": "Still standing where the across used to be",
             "angle": "confessional one-liner",
-            "cadence": "half-time, laid back",
+            "cadence": "on-beat and punchy",
+            "score": 98
+          },
+          {
+            "text": "Distance, that's the only thing I kept",
+            "angle": "melodic question",
+            "cadence": "bouncy triplets",
             "score": 95
           },
           {
-            "text": "Keeps, that's the only thing I kept",
-            "angle": "melodic question",
-            "cadence": "half-time, laid back",
-            "score": 92
-          },
-          {
-            "text": "Tell ones I made it out the loving",
+            "text": "Tell ones I made it out the across",
             "angle": "anthem declaration",
-            "cadence": "floating melodic",
+            "cadence": "half-time, laid back",
             "score": 94
           }
         ],
         "chosenHook": {
-          "text": "Still standing where the loving used to be",
+          "text": "Still standing where the across used to be",
           "angle": "confessional one-liner",
-          "cadence": "half-time, laid back",
-          "score": 95
+          "cadence": "on-beat and punchy",
+          "score": 98
         }
       }
     },
@@ -384,53 +390,53 @@
           {
             "label": "Hook",
             "lines": [
-              "Still standing where the loving used to be",
-              "Still standing where the loving used to be",
-              "All this across, I earned it slow",
-              "Still standing where the loving used to be"
+              "Still standing where the across used to be",
+              "Still standing where the across used to be",
+              "And ones know I fight for it",
+              "Still standing where the across used to be"
             ]
           },
           {
             "label": "Verse 1",
             "lines": [
-              "All I had was loving and the wheel",
-              "Came up on dropping, dreaming of the steel",
-              "They handed me connection instead of the name",
-              "Grew up on dropping, chasing the shame"
+              "Came up on across, dreaming of the grade",
+              "Grew up on distance, chasing the shade",
+              "All I had was while and the glow",
+              "It started with the road and the flow"
             ]
           },
           {
             "label": "Hook",
             "lines": [
-              "Still standing where the loving used to be",
-              "Still standing where the loving used to be",
-              "All this across, I earned it slow",
-              "Still standing where the loving used to be"
+              "Still standing where the across used to be",
+              "Still standing where the across used to be",
+              "And ones know I fight for it",
+              "Still standing where the across used to be"
             ]
           },
           {
             "label": "Verse 2",
             "lines": [
-              "Stakes got higher, someone became the crown",
-              "Took that across and turned it to a town",
-              "Everything changed, traded distance for the road",
-              "Now I keep moving the someone into the load"
+              "Now I hustle the distance into the sound",
+              "Took that shadow and turned it to a ground",
+              "No turning back, I want the skyline and the road",
+              "Stakes got higher, keeps became the load"
             ]
           },
           {
             "label": "Bridge",
             "lines": [
-              "When it's quiet I still hear the across and the art",
-              "Somewhere in the someone I found the part"
+              "Wouldn't trade the while for an art",
+              "Every across of mine became a part"
             ]
           },
           {
             "label": "Hook",
             "lines": [
-              "Still standing where the loving used to be",
-              "Still standing where the loving used to be",
-              "All this across, I earned it slow",
-              "Still standing where the loving used to be"
+              "Still standing where the across used to be",
+              "Still standing where the across used to be",
+              "And ones know I fight for it",
+              "Still standing where the across used to be"
             ]
           }
         ]
@@ -519,72 +525,79 @@
       "id": "originality-auditor",
       "name": "Originality Auditor",
       "status": "done",
-      "finding": "Uniqueness 99/100 · 3 flag(s).",
+      "finding": "Uniqueness 98/100 · 4 flag(s).",
       "confidence": 90,
       "warnings": [
-        "avoid-word \"crown\"",
+        "avoid-word \"shadow\"",
+        "avoid-word \"every\"",
         "avoid-word \"dreaming\"",
         "hook line repeats 9× — consider varying one word"
       ],
       "suggestedNextAction": "Apply suggested rewrites before release.",
       "data": {
         "uniqueness": {
-          "score": 99,
+          "score": 98,
           "flags": [
             {
               "kind": "banned-word",
-              "detail": "avoid-word \"crown\"",
-              "line": "Stakes got higher, someone became the crown",
-              "suggestion": "the title"
+              "detail": "avoid-word \"shadow\"",
+              "line": "Took that shadow and turned it to a ground",
+              "suggestion": "the dark side"
+            },
+            {
+              "kind": "banned-word",
+              "detail": "avoid-word \"every\"",
+              "line": "Every across of mine became a part"
             },
             {
               "kind": "banned-word",
               "detail": "avoid-word \"dreaming\"",
-              "line": "Came up on dropping, dreaming of the steel",
+              "line": "Came up on across, dreaming of the grade",
               "suggestion": "planning"
             },
             {
               "kind": "repeated-hook",
               "detail": "hook line repeats 9× — consider varying one word",
-              "line": "Still standing where the loving used to be"
+              "line": "Still standing where the across used to be"
             }
           ],
           "fingerprints": [
             "949c6452",
-            "74584ea5",
-            "74584ea5",
-            "f86a9297",
-            "74584ea5",
-            "a2e873d3",
-            "ffdb1f24",
-            "a646f7e8",
-            "1adf0531",
-            "74584ea5",
-            "74584ea5",
-            "f86a9297",
-            "74584ea5",
-            "7981ac32",
-            "a467c2a8",
-            "80c9f5d",
-            "d548afed",
-            "aba6a2ba",
-            "ba705571",
-            "74584ea5",
-            "74584ea5",
-            "f86a9297",
-            "74584ea5"
+            "52a580af",
+            "52a580af",
+            "4136fc31",
+            "52a580af",
+            "8d67b730",
+            "b2b9e4ce",
+            "85ffd671",
+            "18b40c5c",
+            "52a580af",
+            "52a580af",
+            "4136fc31",
+            "52a580af",
+            "3f3bb6df",
+            "bd4b635e",
+            "46a9de8f",
+            "759bff09",
+            "65028cb2",
+            "e33d290",
+            "52a580af",
+            "52a580af",
+            "4136fc31",
+            "52a580af"
           ],
           "bannedWordsHit": [
-            "crown",
+            "shadow",
+            "every",
             "dreaming"
           ],
           "rewriteSuggestions": [
             {
-              "line": "Stakes got higher, someone became the crown",
-              "suggestion": "try \"the title\" instead of \"crown\""
+              "line": "Took that shadow and turned it to a ground",
+              "suggestion": "try \"the dark side\" instead of \"shadow\""
             },
             {
-              "line": "Came up on dropping, dreaming of the steel",
+              "line": "Came up on across, dreaming of the grade",
               "suggestion": "try \"planning\" instead of \"dreaming\""
             }
           ]
@@ -632,22 +645,22 @@
             "label": "Hook hit",
             "startHint": "first chorus",
             "durationSec": 15,
-            "caption": "“Still standing where the loving used to be” 🎧 #newmusic",
-            "hookLine": "Still standing where the loving used to be"
+            "caption": "“Still standing where the across used to be” 🎧 #newmusic",
+            "hookLine": "Still standing where the across used to be"
           },
           {
             "label": "Verse opener",
             "startHint": "verse 1, bar 1",
             "durationSec": 12,
             "caption": "the story starts here 👀",
-            "hookLine": "All I had was loving and the wheel"
+            "hookLine": "Came up on across, dreaming of the grade"
           },
           {
             "label": "Bridge turn",
             "startHint": "bridge",
             "durationSec": 18,
             "caption": "wait for it…",
-            "hookLine": "When it's quiet I still hear the across and the art"
+            "hookLine": "Wouldn't trade the while for an art"
           }
         ]
       }
@@ -656,20 +669,20 @@
       "id": "ar-judge",
       "name": "A&R Judge",
       "status": "done",
-      "finding": "Banger 98/100 · crave-ability 75/100 — Certified banger — ship it.",
+      "finding": "Banger 92/100 · crave-ability 75/100 — Certified banger — ship it.",
       "confidence": 82,
       "warnings": [],
       "suggestedNextAction": "Green-light.",
       "data": {
         "score": {
-          "hookStrength": 20,
+          "hookStrength": 15,
           "emotionalClarity": 20,
           "originality": 20,
           "replayValue": 13,
           "visualIdentity": 10,
           "shortFormPotential": 10,
-          "releaseReadiness": 5,
-          "total": 98,
+          "releaseReadiness": 4,
+          "total": 92,
           "verdict": "Certified banger — ship it."
         },
         "crave": {
@@ -717,7 +730,7 @@
           {
             "label": "Avoid-words reviewed",
             "ok": false,
-            "note": "2 avoid-word(s) present (warning only)"
+            "note": "3 avoid-word(s) present (warning only)"
           },
           {
             "label": "Ownership clear",
@@ -729,7 +742,7 @@
     }
   ],
   "cognition": {
-    "firstThought": "Still standing where the loving used to be",
+    "firstThought": "Still standing where the across used to be",
     "secondThought": [
       {
         "key": "true",
