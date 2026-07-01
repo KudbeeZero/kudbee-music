@@ -49,6 +49,14 @@ In the **video studio** the dial is `--brain right\|left\|balanced` — on the f
 
 The brain also has a **memory layer** ([`brain/memory.json`](brain/memory.json)) — it remembers your preferences and a growing exclusion list, and **learns who you are** from everything you make.
 
+> **ℹ️ On the brain language.** The hemispheres, the ~11 named "regions," and the
+> "nervous system" are an **inspired conceptual model** — a workflow architecture for
+> balancing *generation* against *critique*, borrowed from how a creative brain
+> lateralizes. It is **not a claim of biological fidelity** and does not simulate
+> neurons. Under the metaphor it's a deterministic multi-agent system plus a memory
+> layer (working memory that decays and consolidates into long-term on save). The
+> metaphor is the map; the code is the territory — and it's all readable in `lib/hermes/`.
+
 ---
 
 ## 🎤 Studio 2 — Hit Factory (the song brain)

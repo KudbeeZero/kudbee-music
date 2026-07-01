@@ -88,6 +88,9 @@ export default function BrainScan({
       {typeof workingMemory === 'number' && workingMemory > 0 && (
         <div className={styles.hint} style={{ marginTop: 2 }}>⚡ short-term memory: {workingMemory} recent signal{workingMemory === 1 ? '' : 's'} this session</div>
       )}
+      <div className={styles.hint} style={{ marginTop: 6, opacity: 0.7, fontSize: '0.7rem' }}>
+        The anatomy is an inspired workflow model, not a biological brain — each region is real code in <code>lib/hermes/</code>.
+      </div>
     </div>
   );
 }
