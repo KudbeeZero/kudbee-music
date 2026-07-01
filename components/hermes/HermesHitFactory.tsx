@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import type { SongInputs, SongPackage, AgentOutput, HookOption } from '@/lib/hermes/types';
 import { AGENT_DEFINITIONS } from '@/lib/hermes/agents';
 import { runPipeline } from '@/lib/hermes/pipeline';
@@ -25,6 +25,9 @@ import BrainScan from './BrainScan';
 import VoiceMirror from './VoiceMirror';
 import { createNervousSystem, signalForAgent } from '@/lib/hermes/nervousSystem';
 import { createWorkingMemory } from '@/lib/hermes/workingMemory';
+import { brainHeat } from '@/lib/hermes/heat';
+import { deriveEmotion } from '@/lib/hermes/emotion';
+import { voiceMirror } from '@/lib/hermes/becomingYou';
 import styles from './hermes.module.css';
 
 const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
@@ -47,6 +50,19 @@ export default function HermesHitFactory() {
   const nsRef = useRef(createNervousSystem());      // the nervous system (signal bus)
   const wmRef = useRef(createWorkingMemory(16));     // short-term (working) memory
   const [wmSize, setWmSize] = useState(0);
+
+  // the artist's thermal brain signature — drives the Brain Scan heat-map ($0, local)
+  const heat = useMemo(() => {
+    const emo = pkg ? deriveEmotion(pkg.inputs) : { intensity: 0.3, valence: 0 };
+    const becomingYou = pkg ? voiceMirror(pkg, taste, vault.filter((s) => s.id !== pkg.id)).youPercent : 0;
+    return brainHeat({
+      songCount: vault.length,
+      edits: taste?.edits ?? 0,
+      emotionIntensity: emo.intensity,
+      emotionValence: emo.valence,
+      becomingYou,
+    });
+  }, [pkg, vault, taste]);
 
   // hydrate from local storage on mount (client only — avoids SSR mismatch)
   useEffect(() => {
@@ -239,7 +255,7 @@ export default function HermesHitFactory() {
 
         {/* center column — brain scan + agent board + package */}
         <div className={styles.col}>
-          <BrainScan outputs={outputs} running={running} workingMemory={wmSize} />
+          <BrainScan outputs={outputs} running={running} workingMemory={wmSize} heat={heat} />
           <AgentBoard outputs={outputs} />
           {pkg ? (
             <SongPackageView pkg={pkg} onSaveEdit={saveLyricEdit} onChooseHook={chooseHook} />

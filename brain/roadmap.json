@@ -42,7 +42,7 @@
         { "id": "2.1", "title": "Cognitive model: first thought → second thought → decision", "status": "shipped", "pr": "#39", "home": "lib/hermes/cognition.ts", "note": "deliberate() runs 3 real critiques (true-to-brief / original / earns-it) → keep|revise; a '🧭 How the brain decided' readout on the lead hook" },
         { "id": "2.2", "title": "The Council — agents as a deliberating board", "status": "queued", "home": "components/hermes/Council.tsx" },
         { "id": "2.3", "title": "Brain-scan boot sequence + live per-agent drive", "status": "queued", "home": "components/hermes/BrainScan.tsx" },
-        { "id": "2.4", "title": "Particle Brain + artist heat-map (living Brain Scan)", "status": "queued", "home": "components/hermes/BrainScan.tsx", "note": "FOUNDER IDEA: particle field flowing along the nerves; a thermal heat-map colors regions by the type of artist you are (right/generative=hot magenta, analytical=cyan, emotion raises temp, more 'becoming-you'=hotter). $0 from taste+persona+emotion+procedural. Reduced-motion aware. Prime demo/Twitter asset. Feeds the Living-Brain dNFT." }
+        { "id": "2.4", "title": "Particle Brain + artist heat-map (living Brain Scan)", "status": "shipped", "pr": "#40", "home": "components/hermes/BrainScan.tsx + lib/hermes/heat.ts", "note": "SHIPPED (founder idea): canvas particle layer over the SVG brain + a thermal heat-map; brainHeat() (tested) colors regions by artist type (right/generative=hot magenta, analytical=cyan, emotion raises temp, more 'becoming-you'=hotter). Reduced-motion aware. Header shows the artist type + brain temp. Feeds the Living-Brain dNFT." }
       ]
     },
     {
@@ -104,6 +104,7 @@
     "token": { "status": "later", "what": "Crossroads / Solana / token / NFT governance — funds the ecosystem, powers community steering; integrates via API." },
     "perAgentCompute": { "status": "later", "what": "See lightningAI — each agent on its own minimal compute, paid tiers to advance the model." },
     "docsSite": { "status": "later", "what": "Astro Starlight docs on GitHub Pages." },
-    "videoStudio": { "status": "paused", "what": "De-emphasized in the web app (focus on lyrics + brain). Code intact for the CLI; re-enable later." }
+    "videoStudio": { "status": "paused", "what": "De-emphasized in the web app (focus on lyrics + brain). Code intact for the CLI; re-enable later." },
+    "runwayGen4": { "status": "blocked-on-founder", "what": "FOUNDER has a Runway Gen-4 API key + ~1000 credits (lots of 10s clips). Best uses (opt-in, key-gated, NEVER in the free core): (1) animate the agent avatars into living characters, (2) generate the HERMES Studio 'office/living world' scenes (agents get bodies), (3) a landing-page hero video, (4) real video-studio clips. Plan: a studio/runway.mjs adapter behind process.env.RUNWAY_API_KEY (key in .env.local, gitignored, NEVER committed; committed .env.example placeholder). I can scaffold the adapter $0 without the key; the founder runs it with their key. Actual generation = founder go-ahead + credits." }
   }
 }
