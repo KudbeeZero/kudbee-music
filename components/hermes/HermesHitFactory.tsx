@@ -53,6 +53,7 @@ export default function HermesHitFactory() {
   const nsRef = useRef(createNervousSystem());      // the nervous system (signal bus)
   const wmRef = useRef(createWorkingMemory(16));     // short-term (working) memory
   const [wmSize, setWmSize] = useState(0);
+  const stageRef = useRef<HTMLDivElement>(null);     // the brain/result column (scroll target on mobile)
 
   // how much of the current song is the artist's learned voice (feeds heat + the artist card)
   const becomingYou = useMemo(
@@ -78,6 +79,16 @@ export default function HermesHitFactory() {
     setBanned(loadBannedWords(allAvoidWords()));
     setTaste(loadTaste());
   }, []);
+
+  // On mobile/tablet the deck stacks (form/tools above the brain), so when a run
+  // starts, bring the brain-scan + result into view — the generation "moment"
+  // shouldn't happen off-screen below the form. No-op on desktop (side-by-side).
+  useEffect(() => {
+    if (!running || typeof window === 'undefined') return;
+    if (window.matchMedia('(max-width: 1180px)').matches) {
+      stageRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  }, [running]);
 
   // learn-from-edits: diff the rewrite into taste signals, update the song + vault
   function saveLyricEdit(newText: string) {
@@ -263,7 +274,7 @@ export default function HermesHitFactory() {
         </div>
 
         {/* center column — brain scan + agent board + package */}
-        <div className={styles.col}>
+        <div className={styles.col} ref={stageRef}>
           <BrainScan outputs={outputs} running={running} workingMemory={wmSize} heat={heat} />
           <AgentBoard outputs={outputs} />
           {pkg && <Council outputs={outputs} pkg={pkg} />}

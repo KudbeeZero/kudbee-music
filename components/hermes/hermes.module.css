@@ -203,3 +203,63 @@
   margin-top: 10px; padding: 9px 11px; border-radius: 9px; font-size: 12.5px;
   border: 1px solid rgba(87, 217, 138, 0.4); background: rgba(87, 217, 138, 0.08); color: var(--ink);
 }
+
+/* ============================================================================
+   Responsive system
+   Two standard breakpoints — reuse these, don't invent new ones:
+     • --bp-tablet: 1180px  (the 3-col deck collapses to a single stack)
+     • --bp-mobile:  640px  (touch sizing, glass budget, bottom sheets, reflow)
+   Anything long-form (lyrics, prompts, traces) wraps at every width so a phone
+   never gets a horizontal scrollbar.
+   ============================================================================ */
+
+/* never let long unbroken strings force a horizontal scroll (all viewports) */
+.lyricBlock, .promptBox, .kv, .committedBox { overflow-wrap: anywhere; }
+
+/* ---- tablet / stacked deck (≤1180) ---- */
+@media (max-width: 1180px) {
+  .shell { padding: 18px clamp(12px, 3vw, 24px) 72px; }
+  /* the deck already collapses to one column (rule above); tighten the gap */
+  .deck { gap: 14px; }
+}
+
+/* ---- mobile (≤640) ---- */
+@media (max-width: 640px) {
+  .shell { padding: 12px 12px 64px; }
+
+  /* Glass budget: stacked backdrop-filter blurs stutter on mid/low-end phones
+     and cut text contrast — fall back to the solid panel token. */
+  .panel { backdrop-filter: none; background: var(--panel-solid); }
+
+  /* Header: keep brand + actions legible; let the badge/subtitle yield first. */
+  .header { gap: 10px; padding: 12px 2px 16px; }
+  .subtitle { font-size: 11.5px; }
+
+  /* Touch targets — comfortable ~44px for anything tappable. */
+  .ghostBtn { min-height: 44px; display: inline-flex; align-items: center; }
+  .runBtn { padding: 15px; font-size: 16px; }
+  .copyBtn, .personaChip, .chip { min-height: 34px; display: inline-flex; align-items: center; }
+  .vaultItem, .hookCard { padding: 13px; }
+
+  /* 16px inputs stop iOS from zooming the viewport on focus. */
+  .input, .textarea, .select { font-size: 16px; }
+
+  /* Dial back the biggest type so scores/headlines don't overflow. */
+  .scoreBig { font-size: 38px; }
+  .uniqScore { font-size: 26px; }
+  .agentGrid { grid-template-columns: 1fr; }
+
+  /* Drawers become bottom sheets — native-feeling on a phone. */
+  .drawerWrap { justify-content: stretch; align-items: flex-end; }
+  .drawer, .labDrawer {
+    width: 100%; max-width: 100%; height: auto; max-height: 88vh;
+    border-left: none; border-top: 1px solid var(--line-strong);
+    border-radius: 18px 18px 0 0;
+    padding-bottom: calc(18px + env(safe-area-inset-bottom));
+  }
+}
+
+/* ---- very narrow (≤420) — unstack paired inputs ---- */
+@media (max-width: 420px) {
+  .row2 { grid-template-columns: 1fr; }
+}
