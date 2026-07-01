@@ -21,40 +21,40 @@
   "hookOptions": [
     {
       "text": "Still standing where the status used to be",
-      "angle": "call-and-response chant",
-      "cadence": "bouncy triplets",
-      "score": 94
-    },
-    {
-      "text": "Tell doubters I made it out the fake",
-      "angle": "melodic question",
-      "cadence": "on-beat and punchy",
-      "score": 94
-    },
-    {
-      "text": "I been grounded but I never let it show",
-      "angle": "call-and-response chant",
+      "angle": "anthem declaration",
       "cadence": "half-time, laid back",
-      "score": 79
+      "score": 91
     },
     {
-      "text": "This one's for the terms that raised me",
-      "angle": "anthem declaration",
-      "cadence": "floating melodic",
-      "score": 90
+      "text": "Tell doubters I made it out the status",
+      "angle": "confessional one-liner",
+      "cadence": "half-time, laid back",
+      "score": 92
     },
     {
-      "text": "For doubters, I hold on through the yourself",
+      "text": "I been guarded but I never let it show",
       "angle": "anthem declaration",
       "cadence": "on-beat and punchy",
-      "score": 94
+      "score": 86
+    },
+    {
+      "text": "This one's for the seed that raised me",
+      "angle": "confessional one-liner",
+      "cadence": "half-time, laid back",
+      "score": 93
+    },
+    {
+      "text": "For doubters, I rebuild through the status",
+      "angle": "melodic question",
+      "cadence": "floating melodic",
+      "score": 93
     }
   ],
   "chosenHook": {
-    "text": "Still standing where the status used to be",
-    "angle": "call-and-response chant",
-    "cadence": "bouncy triplets",
-    "score": 94
+    "text": "For doubters, I rebuild through the status",
+    "angle": "melodic question",
+    "cadence": "floating melodic",
+    "score": 93
   },
   "sections": [
     {
@@ -66,57 +66,57 @@
     {
       "label": "Hook",
       "lines": [
-        "Still standing where the status used to be",
-        "Still standing where the status used to be",
-        "All this status, I earned it slow",
-        "Still standing where the status used to be"
+        "For doubters, I rebuild through the status",
+        "For doubters, I rebuild through the status",
+        "And doubters know I push for it",
+        "For doubters, I rebuild through the status"
       ]
     },
     {
       "label": "Verse 1",
       "lines": [
-        "All I had was fake and the pain",
-        "It started with the your and the stain",
-        "Came up on status, dreaming of the wheel",
-        "They handed me fake instead of the steel"
+        "Came up on status, dreaming of the road",
+        "All I had was games and the load",
+        "Nothing in my hands but status and the wheel",
+        "It started with the terms and the steel"
       ]
     },
     {
       "label": "Hook",
       "lines": [
-        "Still standing where the status used to be",
-        "Still standing where the status used to be",
-        "All this status, I earned it slow",
-        "Still standing where the status used to be"
+        "For doubters, I rebuild through the status",
+        "For doubters, I rebuild through the status",
+        "And doubters know I push for it",
+        "For doubters, I rebuild through the status"
       ]
     },
     {
       "label": "Verse 2",
       "lines": [
-        "Everything changed, traded status for the frame",
-        "No turning back, I want the games and the flame",
-        "Put the games down, reaching for the night",
-        "Stakes got higher, terms became the sight"
+        "Now I keep moving the games into the flame",
+        "Everything changed, traded your for the shame",
+        "No turning back, I want the games and the frame",
+        "Put the yourself down, reaching for the shame"
       ]
     },
     {
       "label": "Bridge",
       "lines": [
-        "Looking back, the games was always the pain",
-        "When it's quiet I still hear the fake and the train"
+        "Looking back, the yourself was always the blade",
+        "Made my peace with your and the grade"
       ]
     },
     {
       "label": "Hook",
       "lines": [
-        "Still standing where the status used to be",
-        "Still standing where the status used to be",
-        "All this status, I earned it slow",
-        "Still standing where the status used to be"
+        "For doubters, I rebuild through the status",
+        "For doubters, I rebuild through the status",
+        "And doubters know I push for it",
+        "For doubters, I rebuild through the status"
       ]
     }
   ],
-  "finalLyrics": "[Intro]\nDoubters, this one's for you\n\n[Hook]\nStill standing where the status used to be\nStill standing where the status used to be\nAll this status, I earned it slow\nStill standing where the status used to be\n\n[Verse 1]\nAll I had was fake and the pain\nIt started with the your and the stain\nCame up on status, dreaming of the wheel\nThey handed me fake instead of the steel\n\n[Hook]\nStill standing where the status used to be\nStill standing where the status used to be\nAll this status, I earned it slow\nStill standing where the status used to be\n\n[Verse 2]\nEverything changed, traded status for the frame\nNo turning back, I want the games and the flame\nPut the games down, reaching for the night\nStakes got higher, terms became the sight\n\n[Bridge]\nLooking back, the games was always the pain\nWhen it's quiet I still hear the fake and the train\n\n[Hook]\nStill standing where the status used to be\nStill standing where the status used to be\nAll this status, I earned it slow\nStill standing where the status used to be",
+  "finalLyrics": "[Intro]\nDoubters, this one's for you\n\n[Hook]\nFor doubters, I rebuild through the status\nFor doubters, I rebuild through the status\nAnd doubters know I push for it\nFor doubters, I rebuild through the status\n\n[Verse 1]\nCame up on status, dreaming of the road\nAll I had was games and the load\nNothing in my hands but status and the wheel\nIt started with the terms and the steel\n\n[Hook]\nFor doubters, I rebuild through the status\nFor doubters, I rebuild through the status\nAnd doubters know I push for it\nFor doubters, I rebuild through the status\n\n[Verse 2]\nNow I keep moving the games into the flame\nEverything changed, traded your for the shame\nNo turning back, I want the games and the frame\nPut the yourself down, reaching for the shame\n\n[Bridge]\nLooking back, the yourself was always the blade\nMade my peace with your and the grade\n\n[Hook]\nFor doubters, I rebuild through the status\nFor doubters, I rebuild through the status\nAnd doubters know I push for it\nFor doubters, I rebuild through the status",
   "production": {
     "tempoBpm": 143,
     "drums": "minimal knock, heavy kick",
@@ -167,88 +167,77 @@
       "label": "Hook hit",
       "startHint": "first chorus",
       "durationSec": 15,
-      "caption": "“Still standing where the status used to be” 🎧 #newmusic",
-      "hookLine": "Still standing where the status used to be"
+      "caption": "“For doubters, I rebuild through the status” 🎧 #newmusic",
+      "hookLine": "For doubters, I rebuild through the status"
     },
     {
       "label": "Verse opener",
       "startHint": "verse 1, bar 1",
       "durationSec": 12,
       "caption": "the story starts here 👀",
-      "hookLine": "All I had was fake and the pain"
+      "hookLine": "Came up on status, dreaming of the road"
     },
     {
       "label": "Bridge turn",
       "startHint": "bridge",
       "durationSec": 18,
       "caption": "wait for it…",
-      "hookLine": "Looking back, the games was always the pain"
+      "hookLine": "Looking back, the yourself was always the blade"
     }
   ],
-  "promoCaption": "“Still standing where the status used to be” — new one for the doubters. #refusing #fake #drill-influencedtrap",
+  "promoCaption": "“For doubters, I rebuild through the status” — new one for the doubters. #refusing #fake #drill-influencedtrap",
   "uniqueness": {
-    "score": 98,
+    "score": 99,
     "flags": [
       {
         "kind": "banned-word",
         "detail": "avoid-word \"flame\"",
-        "line": "No turning back, I want the games and the flame"
-      },
-      {
-        "kind": "banned-word",
-        "detail": "avoid-word \"pain\"",
-        "line": "All I had was fake and the pain",
-        "suggestion": "the ache"
+        "line": "Now I keep moving the games into the flame"
       },
       {
         "kind": "banned-word",
         "detail": "avoid-word \"dreaming\"",
-        "line": "Came up on status, dreaming of the wheel",
+        "line": "Came up on status, dreaming of the road",
         "suggestion": "planning"
       },
       {
         "kind": "repeated-hook",
         "detail": "hook line repeats 9× — consider varying one word",
-        "line": "Still standing where the status used to be"
+        "line": "For doubters, I rebuild through the status"
       }
     ],
     "fingerprints": [
       "35cc0a4f",
-      "a8becf92",
-      "a8becf92",
-      "c7b1bdbe",
-      "a8becf92",
-      "fa998dda",
-      "fa459bcc",
-      "4ea1d70f",
-      "bf422651",
-      "a8becf92",
-      "a8becf92",
-      "c7b1bdbe",
-      "a8becf92",
-      "6ce1c5f9",
-      "d0ad969c",
-      "cb864551",
-      "43cebdb9",
-      "3c31533a",
-      "4996e191",
-      "a8becf92",
-      "a8becf92",
-      "c7b1bdbe",
-      "a8becf92"
+      "df31f5c2",
+      "df31f5c2",
+      "bc0f35f0",
+      "df31f5c2",
+      "d47cc07e",
+      "a4b6b51e",
+      "204ef56b",
+      "1324132a",
+      "df31f5c2",
+      "df31f5c2",
+      "bc0f35f0",
+      "df31f5c2",
+      "86bb5035",
+      "8cbcc5bd",
+      "e30fbefa",
+      "45a0beeb",
+      "1c7b14be",
+      "f5f22d1a",
+      "df31f5c2",
+      "df31f5c2",
+      "bc0f35f0",
+      "df31f5c2"
     ],
     "bannedWordsHit": [
       "flame",
-      "pain",
       "dreaming"
     ],
     "rewriteSuggestions": [
       {
-        "line": "All I had was fake and the pain",
-        "suggestion": "try \"the ache\" instead of \"pain\""
-      },
-      {
-        "line": "Came up on status, dreaming of the wheel",
+        "line": "Came up on status, dreaming of the road",
         "suggestion": "try \"planning\" instead of \"dreaming\""
       }
     ]
@@ -260,8 +249,8 @@
     "replayValue": 13,
     "visualIdentity": 10,
     "shortFormPotential": 10,
-    "releaseReadiness": 4,
-    "total": 92,
+    "releaseReadiness": 5,
+    "total": 93,
     "verdict": "Certified banger — ship it."
   },
   "release": [
@@ -286,7 +275,7 @@
     {
       "label": "Avoid-words reviewed",
       "ok": false,
-      "note": "3 avoid-word(s) present (warning only)"
+      "note": "2 avoid-word(s) present (warning only)"
     },
     {
       "label": "Ownership clear",
@@ -326,7 +315,7 @@
       "id": "hooksmith",
       "name": "Hooksmith",
       "status": "done",
-      "finding": "Lead hook: \"Still standing where the status used to be\"",
+      "finding": "Lead hook: \"For doubters, I rebuild through the status\"",
       "confidence": 95,
       "warnings": [],
       "suggestedNextAction": "Build verses from the lead hook.",
@@ -334,40 +323,40 @@
         "hookOptions": [
           {
             "text": "Still standing where the status used to be",
-            "angle": "call-and-response chant",
-            "cadence": "bouncy triplets",
-            "score": 94
-          },
-          {
-            "text": "Tell doubters I made it out the fake",
-            "angle": "melodic question",
-            "cadence": "on-beat and punchy",
-            "score": 94
-          },
-          {
-            "text": "I been grounded but I never let it show",
-            "angle": "call-and-response chant",
+            "angle": "anthem declaration",
             "cadence": "half-time, laid back",
-            "score": 79
+            "score": 91
           },
           {
-            "text": "This one's for the terms that raised me",
-            "angle": "anthem declaration",
-            "cadence": "floating melodic",
-            "score": 90
+            "text": "Tell doubters I made it out the status",
+            "angle": "confessional one-liner",
+            "cadence": "half-time, laid back",
+            "score": 92
           },
           {
-            "text": "For doubters, I hold on through the yourself",
+            "text": "I been guarded but I never let it show",
             "angle": "anthem declaration",
             "cadence": "on-beat and punchy",
-            "score": 94
+            "score": 86
+          },
+          {
+            "text": "This one's for the seed that raised me",
+            "angle": "confessional one-liner",
+            "cadence": "half-time, laid back",
+            "score": 93
+          },
+          {
+            "text": "For doubters, I rebuild through the status",
+            "angle": "melodic question",
+            "cadence": "floating melodic",
+            "score": 93
           }
         ],
         "chosenHook": {
-          "text": "Still standing where the status used to be",
-          "angle": "call-and-response chant",
-          "cadence": "bouncy triplets",
-          "score": 94
+          "text": "For doubters, I rebuild through the status",
+          "angle": "melodic question",
+          "cadence": "floating melodic",
+          "score": 93
         }
       }
     },
@@ -390,53 +379,53 @@
           {
             "label": "Hook",
             "lines": [
-              "Still standing where the status used to be",
-              "Still standing where the status used to be",
-              "All this status, I earned it slow",
-              "Still standing where the status used to be"
+              "For doubters, I rebuild through the status",
+              "For doubters, I rebuild through the status",
+              "And doubters know I push for it",
+              "For doubters, I rebuild through the status"
             ]
           },
           {
             "label": "Verse 1",
             "lines": [
-              "All I had was fake and the pain",
-              "It started with the your and the stain",
-              "Came up on status, dreaming of the wheel",
-              "They handed me fake instead of the steel"
+              "Came up on status, dreaming of the road",
+              "All I had was games and the load",
+              "Nothing in my hands but status and the wheel",
+              "It started with the terms and the steel"
             ]
           },
           {
             "label": "Hook",
             "lines": [
-              "Still standing where the status used to be",
-              "Still standing where the status used to be",
-              "All this status, I earned it slow",
-              "Still standing where the status used to be"
+              "For doubters, I rebuild through the status",
+              "For doubters, I rebuild through the status",
+              "And doubters know I push for it",
+              "For doubters, I rebuild through the status"
             ]
           },
           {
             "label": "Verse 2",
             "lines": [
-              "Everything changed, traded status for the frame",
-              "No turning back, I want the games and the flame",
-              "Put the games down, reaching for the night",
-              "Stakes got higher, terms became the sight"
+              "Now I keep moving the games into the flame",
+              "Everything changed, traded your for the shame",
+              "No turning back, I want the games and the frame",
+              "Put the yourself down, reaching for the shame"
             ]
           },
           {
             "label": "Bridge",
             "lines": [
-              "Looking back, the games was always the pain",
-              "When it's quiet I still hear the fake and the train"
+              "Looking back, the yourself was always the blade",
+              "Made my peace with your and the grade"
             ]
           },
           {
             "label": "Hook",
             "lines": [
-              "Still standing where the status used to be",
-              "Still standing where the status used to be",
-              "All this status, I earned it slow",
-              "Still standing where the status used to be"
+              "For doubters, I rebuild through the status",
+              "For doubters, I rebuild through the status",
+              "And doubters know I push for it",
+              "For doubters, I rebuild through the status"
             ]
           }
         ]
@@ -525,79 +514,67 @@
       "id": "originality-auditor",
       "name": "Originality Auditor",
       "status": "done",
-      "finding": "Uniqueness 98/100 · 4 flag(s).",
+      "finding": "Uniqueness 99/100 · 3 flag(s).",
       "confidence": 90,
       "warnings": [
         "avoid-word \"flame\"",
-        "avoid-word \"pain\"",
         "avoid-word \"dreaming\"",
         "hook line repeats 9× — consider varying one word"
       ],
       "suggestedNextAction": "Apply suggested rewrites before release.",
       "data": {
         "uniqueness": {
-          "score": 98,
+          "score": 99,
           "flags": [
             {
               "kind": "banned-word",
               "detail": "avoid-word \"flame\"",
-              "line": "No turning back, I want the games and the flame"
-            },
-            {
-              "kind": "banned-word",
-              "detail": "avoid-word \"pain\"",
-              "line": "All I had was fake and the pain",
-              "suggestion": "the ache"
+              "line": "Now I keep moving the games into the flame"
             },
             {
               "kind": "banned-word",
               "detail": "avoid-word \"dreaming\"",
-              "line": "Came up on status, dreaming of the wheel",
+              "line": "Came up on status, dreaming of the road",
               "suggestion": "planning"
             },
             {
               "kind": "repeated-hook",
               "detail": "hook line repeats 9× — consider varying one word",
-              "line": "Still standing where the status used to be"
+              "line": "For doubters, I rebuild through the status"
             }
           ],
           "fingerprints": [
             "35cc0a4f",
-            "a8becf92",
-            "a8becf92",
-            "c7b1bdbe",
-            "a8becf92",
-            "fa998dda",
-            "fa459bcc",
-            "4ea1d70f",
-            "bf422651",
-            "a8becf92",
-            "a8becf92",
-            "c7b1bdbe",
-            "a8becf92",
-            "6ce1c5f9",
-            "d0ad969c",
-            "cb864551",
-            "43cebdb9",
-            "3c31533a",
-            "4996e191",
-            "a8becf92",
-            "a8becf92",
-            "c7b1bdbe",
-            "a8becf92"
+            "df31f5c2",
+            "df31f5c2",
+            "bc0f35f0",
+            "df31f5c2",
+            "d47cc07e",
+            "a4b6b51e",
+            "204ef56b",
+            "1324132a",
+            "df31f5c2",
+            "df31f5c2",
+            "bc0f35f0",
+            "df31f5c2",
+            "86bb5035",
+            "8cbcc5bd",
+            "e30fbefa",
+            "45a0beeb",
+            "1c7b14be",
+            "f5f22d1a",
+            "df31f5c2",
+            "df31f5c2",
+            "bc0f35f0",
+            "df31f5c2"
           ],
           "bannedWordsHit": [
             "flame",
-            "pain",
             "dreaming"
           ],
           "rewriteSuggestions": [
             {
-              "line": "All I had was fake and the pain",
-              "suggestion": "try \"the ache\" instead of \"pain\""
-            },
-            {
-              "line": "Came up on status, dreaming of the wheel",
+              "line": "Came up on status, dreaming of the road",
               "suggestion": "try \"planning\" instead of \"dreaming\""
             }
           ]
@@ -645,22 +622,22 @@
             "label": "Hook hit",
             "startHint": "first chorus",
             "durationSec": 15,
-            "caption": "“Still standing where the status used to be” 🎧 #newmusic",
-            "hookLine": "Still standing where the status used to be"
+            "caption": "“For doubters, I rebuild through the status” 🎧 #newmusic",
+            "hookLine": "For doubters, I rebuild through the status"
           },
           {
             "label": "Verse opener",
             "startHint": "verse 1, bar 1",
             "durationSec": 12,
             "caption": "the story starts here 👀",
-            "hookLine": "All I had was fake and the pain"
+            "hookLine": "Came up on status, dreaming of the road"
           },
           {
             "label": "Bridge turn",
             "startHint": "bridge",
             "durationSec": 18,
             "caption": "wait for it…",
-            "hookLine": "Looking back, the games was always the pain"
+            "hookLine": "Looking back, the yourself was always the blade"
           }
         ]
       }
@@ -669,7 +646,7 @@
       "id": "ar-judge",
       "name": "A&R Judge",
       "status": "done",
-      "finding": "Banger 92/100 · crave-ability 75/100 — Certified banger — ship it.",
+      "finding": "Banger 93/100 · crave-ability 76/100 — Certified banger — ship it.",
       "confidence": 82,
       "warnings": [],
       "suggestedNextAction": "Green-light.",
@@ -681,17 +658,17 @@
           "replayValue": 13,
           "visualIdentity": 10,
           "shortFormPotential": 10,
-          "releaseReadiness": 4,
-          "total": 92,
+          "releaseReadiness": 5,
+          "total": 93,
           "verdict": "Certified banger — ship it."
         },
         "crave": {
-          "score": 75,
+          "score": 76,
           "factors": {
             "returns": 1,
             "mutation": 0.5,
             "brevity": 0.75,
-            "singability": 0.68
+            "singability": 0.72
           },
           "note": "Compulsive — you'll want it again."
         }
@@ -730,7 +707,7 @@
           {
             "label": "Avoid-words reviewed",
             "ok": false,
-            "note": "3 avoid-word(s) present (warning only)"
+            "note": "2 avoid-word(s) present (warning only)"
           },
           {
             "label": "Ownership clear",
@@ -742,7 +719,7 @@
     }
   ],
   "cognition": {
-    "firstThought": "Still standing where the status used to be",
+    "firstThought": "For doubters, I rebuild through the status",
     "secondThought": [
       {
         "key": "true",

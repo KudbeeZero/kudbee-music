@@ -20,41 +20,41 @@
   "conceptSummary": "Lo-Fi Soul Hip-Hop record for everyone grinding in the dark: working the graveyard shift to build a future nobody sees yet — delivered tired but relentless, quietly proud, voiced as weathered.",
   "hookOptions": [
     {
-      "text": "I been quiet but I never let it show",
-      "angle": "melodic question",
-      "cadence": "on-beat and punchy",
-      "score": 85
+      "text": "I been bright but I never let it show",
+      "angle": "confessional one-liner",
+      "cadence": "half-time, laid back",
+      "score": 86
     },
     {
-      "text": "Graveyard, that's the only thing I kept",
-      "angle": "melodic question",
-      "cadence": "bouncy triplets",
-      "score": 94
-    },
-    {
-      "text": "For everyone, I grind through the graveyard",
-      "angle": "call-and-response chant",
-      "cadence": "floating melodic",
-      "score": 94
-    },
-    {
-      "text": "Every step a promise that I push",
-      "angle": "call-and-response chant",
-      "cadence": "on-beat and punchy",
-      "score": 95
-    },
-    {
-      "text": "Still standing where the graveyard used to be",
+      "text": "Nobody, that's the only thing I kept",
       "angle": "anthem declaration",
+      "cadence": "on-beat and punchy",
+      "score": 94
+    },
+    {
+      "text": "For everyone, I crawl through the future",
+      "angle": "call-and-response chant",
+      "cadence": "half-time, laid back",
+      "score": 92
+    },
+    {
+      "text": "Every step a promise that I hustle",
+      "angle": "melodic question",
       "cadence": "floating melodic",
-      "score": 98
+      "score": 93
+    },
+    {
+      "text": "Still standing where the shift used to be",
+      "angle": "call-and-response chant",
+      "cadence": "half-time, laid back",
+      "score": 95
     }
   ],
   "chosenHook": {
-    "text": "Still standing where the graveyard used to be",
-    "angle": "anthem declaration",
-    "cadence": "floating melodic",
-    "score": 98
+    "text": "Still standing where the shift used to be",
+    "angle": "call-and-response chant",
+    "cadence": "half-time, laid back",
+    "score": 95
   },
   "sections": [
     {
@@ -66,57 +66,57 @@
     {
       "label": "Hook",
       "lines": [
-        "Still standing where the graveyard used to be",
-        "Still standing where the graveyard used to be",
-        "All this future, I earned it slow",
-        "Still standing where the graveyard used to be"
+        "Still standing where the shift used to be",
+        "Still standing where the shift used to be",
+        "All this graveyard, I earned it slow",
+        "Still standing where the shift used to be"
       ]
     },
     {
       "label": "Verse 1",
       "lines": [
-        "They handed me graveyard instead of the train",
-        "It started with the shift and the brain",
-        "Nothing in my hands but graveyard and the art",
-        "All I had was yet and the part"
+        "It started with the graveyard and the flow",
+        "Came up on kitchen, dreaming of the glow",
+        "Nothing in my hands but nobody and the light",
+        "All I had was horizon and the might"
       ]
     },
     {
       "label": "Hook",
       "lines": [
-        "Still standing where the graveyard used to be",
-        "Still standing where the graveyard used to be",
-        "All this future, I earned it slow",
-        "Still standing where the graveyard used to be"
+        "Still standing where the shift used to be",
+        "Still standing where the shift used to be",
+        "All this graveyard, I earned it slow",
+        "Still standing where the shift used to be"
       ]
     },
     {
       "label": "Verse 2",
       "lines": [
-        "No turning back, I want the shift and the dream",
-        "Stakes got higher, shift became the stream",
-        "Put the future down, reaching for the glow",
-        "Took that nobody and turned it to a flow"
+        "Stakes got higher, shift became the grade",
+        "Took that sunrise and turned it to a trade",
+        "No turning back, I want the flame and the part",
+        "Now I crawl the nobody into the art"
       ]
     },
     {
       "label": "Bridge",
       "lines": [
-        "Wouldn't trade the future for a crown",
-        "Looking back, the sees was always the town"
+        "When it's quiet I still hear the future and the mark",
+        "Made my peace with future and the spark"
       ]
     },
     {
       "label": "Hook",
       "lines": [
-        "Still standing where the graveyard used to be",
-        "Still standing where the graveyard used to be",
-        "All this future, I earned it slow",
-        "Still standing where the graveyard used to be"
+        "Still standing where the shift used to be",
+        "Still standing where the shift used to be",
+        "All this graveyard, I earned it slow",
+        "Still standing where the shift used to be"
       ]
     }
   ],
-  "finalLyrics": "[Intro]\nEveryone, this one's for you\n\n[Hook]\nStill standing where the graveyard used to be\nStill standing where the graveyard used to be\nAll this future, I earned it slow\nStill standing where the graveyard used to be\n\n[Verse 1]\nThey handed me graveyard instead of the train\nIt started with the shift and the brain\nNothing in my hands but graveyard and the art\nAll I had was yet and the part\n\n[Hook]\nStill standing where the graveyard used to be\nStill standing where the graveyard used to be\nAll this future, I earned it slow\nStill standing where the graveyard used to be\n\n[Verse 2]\nNo turning back, I want the shift and the dream\nStakes got higher, shift became the stream\nPut the future down, reaching for the glow\nTook that nobody and turned it to a flow\n\n[Bridge]\nWouldn't trade the future for a crown\nLooking back, the sees was always the town\n\n[Hook]\nStill standing where the graveyard used to be\nStill standing where the graveyard used to be\nAll this future, I earned it slow\nStill standing where the graveyard used to be",
+  "finalLyrics": "[Intro]\nEveryone, this one's for you\n\n[Hook]\nStill standing where the shift used to be\nStill standing where the shift used to be\nAll this graveyard, I earned it slow\nStill standing where the shift used to be\n\n[Verse 1]\nIt started with the graveyard and the flow\nCame up on kitchen, dreaming of the glow\nNothing in my hands but nobody and the light\nAll I had was horizon and the might\n\n[Hook]\nStill standing where the shift used to be\nStill standing where the shift used to be\nAll this graveyard, I earned it slow\nStill standing where the shift used to be\n\n[Verse 2]\nStakes got higher, shift became the grade\nTook that sunrise and turned it to a trade\nNo turning back, I want the flame and the part\nNow I crawl the nobody into the art\n\n[Bridge]\nWhen it's quiet I still hear the future and the mark\nMade my peace with future and the spark\n\n[Hook]\nStill standing where the shift used to be\nStill standing where the shift used to be\nAll this graveyard, I earned it slow\nStill standing where the shift used to be",
   "production": {
     "tempoBpm": 82,
     "drums": "boom-bap with dusty snares",
@@ -167,72 +167,78 @@
       "label": "Hook hit",
       "startHint": "first chorus",
       "durationSec": 15,
-      "caption": "“Still standing where the graveyard used to be” 🎧 #newmusic",
-      "hookLine": "Still standing where the graveyard used to be"
+      "caption": "“Still standing where the shift used to be” 🎧 #newmusic",
+      "hookLine": "Still standing where the shift used to be"
     },
     {
       "label": "Verse opener",
       "startHint": "verse 1, bar 1",
       "durationSec": 12,
       "caption": "the story starts here 👀",
-      "hookLine": "They handed me graveyard instead of the train"
+      "hookLine": "It started with the graveyard and the flow"
     },
     {
       "label": "Bridge turn",
       "startHint": "bridge",
       "durationSec": 18,
       "caption": "wait for it…",
-      "hookLine": "Wouldn't trade the future for a crown"
+      "hookLine": "When it's quiet I still hear the future and the mark"
     }
   ],
-  "promoCaption": "“Still standing where the graveyard used to be” — new one for everyone grinding in the dark. #working #graveyard #lo-fisoulhip-hop",
+  "promoCaption": "“Still standing where the shift used to be” — new one for everyone grinding in the dark. #working #graveyard #lo-fisoulhip-hop",
   "uniqueness": {
-    "score": 100,
+    "score": 99,
     "flags": [
       {
         "kind": "banned-word",
-        "detail": "avoid-word \"crown\"",
-        "line": "Wouldn't trade the future for a crown",
-        "suggestion": "the title"
+        "detail": "avoid-word \"flame\"",
+        "line": "No turning back, I want the flame and the part"
+      },
+      {
+        "kind": "banned-word",
+        "detail": "avoid-word \"dreaming\"",
+        "line": "Came up on kitchen, dreaming of the glow",
+        "suggestion": "planning"
       },
       {
         "kind": "repeated-hook",
         "detail": "hook line repeats 9× — consider varying one word",
-        "line": "Still standing where the graveyard used to be"
+        "line": "Still standing where the shift used to be"
       }
     ],
     "fingerprints": [
       "4e5eaf26",
-      "a1ed3ef1",
-      "a1ed3ef1",
-      "5918d69d",
-      "a1ed3ef1",
-      "403808b2",
-      "ae12c72e",
-      "8d269f9e",
-      "63d6d650",
-      "a1ed3ef1",
-      "a1ed3ef1",
-      "5918d69d",
-      "a1ed3ef1",
-      "b782f04b",
-      "9479583",
-      "e8772b22",
-      "e31061b2",
-      "c6e0f91e",
-      "c4ffde31",
-      "a1ed3ef1",
-      "a1ed3ef1",
-      "5918d69d",
-      "a1ed3ef1"
+      "2037d52a",
+      "2037d52a",
+      "1b6c3a1b",
+      "2037d52a",
+      "10283fbd",
+      "c5169c81",
+      "b14706c5",
+      "c77a836d",
+      "2037d52a",
+      "2037d52a",
+      "1b6c3a1b",
+      "2037d52a",
+      "da7e58e6",
+      "57ca2cf2",
+      "6d352ecc",
+      "e3289d81",
+      "8cb8e986",
+      "95dcea80",
+      "2037d52a",
+      "2037d52a",
+      "1b6c3a1b",
+      "2037d52a"
     ],
     "bannedWordsHit": [
-      "crown"
+      "flame",
+      "dreaming"
     ],
     "rewriteSuggestions": [
       {
-        "line": "Wouldn't trade the future for a crown",
-        "suggestion": "try \"the title\" instead of \"crown\""
+        "line": "Came up on kitchen, dreaming of the glow",
+        "suggestion": "try \"planning\" instead of \"dreaming\""
       }
     ]
   },
@@ -269,7 +275,7 @@
     {
       "label": "Avoid-words reviewed",
       "ok": false,
-      "note": "1 avoid-word(s) present (warning only)"
+      "note": "2 avoid-word(s) present (warning only)"
     },
     {
       "label": "Ownership clear",
@@ -309,48 +315,48 @@
       "id": "hooksmith",
       "name": "Hooksmith",
       "status": "done",
-      "finding": "Lead hook: \"Still standing where the graveyard used to be\"",
+      "finding": "Lead hook: \"Still standing where the shift used to be\"",
       "confidence": 95,
       "warnings": [],
       "suggestedNextAction": "Build verses from the lead hook.",
       "data": {
         "hookOptions": [
           {
-            "text": "I been quiet but I never let it show",
-            "angle": "melodic question",
-            "cadence": "on-beat and punchy",
-            "score": 85
+            "text": "I been bright but I never let it show",
+            "angle": "confessional one-liner",
+            "cadence": "half-time, laid back",
+            "score": 86
           },
           {
-            "text": "Graveyard, that's the only thing I kept",
-            "angle": "melodic question",
-            "cadence": "bouncy triplets",
-            "score": 94
-          },
-          {
-            "text": "For everyone, I grind through the graveyard",
-            "angle": "call-and-response chant",
-            "cadence": "floating melodic",
-            "score": 94
-          },
-          {
-            "text": "Every step a promise that I push",
-            "angle": "call-and-response chant",
-            "cadence": "on-beat and punchy",
-            "score": 95
-          },
-          {
-            "text": "Still standing where the graveyard used to be",
+            "text": "Nobody, that's the only thing I kept",
             "angle": "anthem declaration",
+            "cadence": "on-beat and punchy",
+            "score": 94
+          },
+          {
+            "text": "For everyone, I crawl through the future",
+            "angle": "call-and-response chant",
+            "cadence": "half-time, laid back",
+            "score": 92
+          },
+          {
+            "text": "Every step a promise that I hustle",
+            "angle": "melodic question",
             "cadence": "floating melodic",
-            "score": 98
+            "score": 93
+          },
+          {
+            "text": "Still standing where the shift used to be",
+            "angle": "call-and-response chant",
+            "cadence": "half-time, laid back",
+            "score": 95
           }
         ],
         "chosenHook": {
-          "text": "Still standing where the graveyard used to be",
-          "angle": "anthem declaration",
-          "cadence": "floating melodic",
-          "score": 98
+          "text": "Still standing where the shift used to be",
+          "angle": "call-and-response chant",
+          "cadence": "half-time, laid back",
+          "score": 95
         }
       }
     },
@@ -373,53 +379,53 @@
           {
             "label": "Hook",
             "lines": [
-              "Still standing where the graveyard used to be",
-              "Still standing where the graveyard used to be",
-              "All this future, I earned it slow",
-              "Still standing where the graveyard used to be"
+              "Still standing where the shift used to be",
+              "Still standing where the shift used to be",
+              "All this graveyard, I earned it slow",
+              "Still standing where the shift used to be"
             ]
           },
           {
             "label": "Verse 1",
             "lines": [
-              "They handed me graveyard instead of the train",
-              "It started with the shift and the brain",
-              "Nothing in my hands but graveyard and the art",
-              "All I had was yet and the part"
+              "It started with the graveyard and the flow",
+              "Came up on kitchen, dreaming of the glow",
+              "Nothing in my hands but nobody and the light",
+              "All I had was horizon and the might"
             ]
           },
           {
             "label": "Hook",
             "lines": [
-              "Still standing where the graveyard used to be",
-              "Still standing where the graveyard used to be",
-              "All this future, I earned it slow",
-              "Still standing where the graveyard used to be"
+              "Still standing where the shift used to be",
+              "Still standing where the shift used to be",
+              "All this graveyard, I earned it slow",
+              "Still standing where the shift used to be"
             ]
           },
           {
             "label": "Verse 2",
             "lines": [
-              "No turning back, I want the shift and the dream",
-              "Stakes got higher, shift became the stream",
-              "Put the future down, reaching for the glow",
-              "Took that nobody and turned it to a flow"
+              "Stakes got higher, shift became the grade",
+              "Took that sunrise and turned it to a trade",
+              "No turning back, I want the flame and the part",
+              "Now I crawl the nobody into the art"
             ]
           },
           {
             "label": "Bridge",
             "lines": [
-              "Wouldn't trade the future for a crown",
-              "Looking back, the sees was always the town"
+              "When it's quiet I still hear the future and the mark",
+              "Made my peace with future and the spark"
             ]
           },
           {
             "label": "Hook",
             "lines": [
-              "Still standing where the graveyard used to be",
-              "Still standing where the graveyard used to be",
-              "All this future, I earned it slow",
-              "Still standing where the graveyard used to be"
+              "Still standing where the shift used to be",
+              "Still standing where the shift used to be",
+              "All this graveyard, I earned it slow",
+              "Still standing where the shift used to be"
             ]
           }
         ]
@@ -508,61 +514,68 @@
       "id": "originality-auditor",
       "name": "Originality Auditor",
       "status": "done",
-      "finding": "Uniqueness 100/100 · 2 flag(s).",
+      "finding": "Uniqueness 99/100 · 3 flag(s).",
       "confidence": 90,
       "warnings": [
-        "avoid-word \"crown\"",
+        "avoid-word \"flame\"",
+        "avoid-word \"dreaming\"",
         "hook line repeats 9× — consider varying one word"
       ],
       "suggestedNextAction": "Apply suggested rewrites before release.",
       "data": {
         "uniqueness": {
-          "score": 100,
+          "score": 99,
           "flags": [
             {
               "kind": "banned-word",
-              "detail": "avoid-word \"crown\"",
-              "line": "Wouldn't trade the future for a crown",
-              "suggestion": "the title"
+              "detail": "avoid-word \"flame\"",
+              "line": "No turning back, I want the flame and the part"
+            },
+            {
+              "kind": "banned-word",
+              "detail": "avoid-word \"dreaming\"",
+              "line": "Came up on kitchen, dreaming of the glow",
+              "suggestion": "planning"
             },
             {
               "kind": "repeated-hook",
               "detail": "hook line repeats 9× — consider varying one word",
-              "line": "Still standing where the graveyard used to be"
+              "line": "Still standing where the shift used to be"
             }
           ],
           "fingerprints": [
             "4e5eaf26",
-            "a1ed3ef1",
-            "a1ed3ef1",
-            "5918d69d",
-            "a1ed3ef1",
-            "403808b2",
-            "ae12c72e",
-            "8d269f9e",
-            "63d6d650",
-            "a1ed3ef1",
-            "a1ed3ef1",
-            "5918d69d",
-            "a1ed3ef1",
-            "b782f04b",
-            "9479583",
-            "e8772b22",
-            "e31061b2",
-            "c6e0f91e",
-            "c4ffde31",
-            "a1ed3ef1",
-            "a1ed3ef1",
-            "5918d69d",
-            "a1ed3ef1"
+            "2037d52a",
+            "2037d52a",
+            "1b6c3a1b",
+            "2037d52a",
+            "10283fbd",
+            "c5169c81",
+            "b14706c5",
+            "c77a836d",
+            "2037d52a",
+            "2037d52a",
+            "1b6c3a1b",
+            "2037d52a",
+            "da7e58e6",
+            "57ca2cf2",
+            "6d352ecc",
+            "e3289d81",
+            "8cb8e986",
+            "95dcea80",
+            "2037d52a",
+            "2037d52a",
+            "1b6c3a1b",
+            "2037d52a"
           ],
           "bannedWordsHit": [
-            "crown"
+            "flame",
+            "dreaming"
           ],
           "rewriteSuggestions": [
             {
-              "line": "Wouldn't trade the future for a crown",
-              "suggestion": "try \"the title\" instead of \"crown\""
+              "line": "Came up on kitchen, dreaming of the glow",
+              "suggestion": "try \"planning\" instead of \"dreaming\""
             }
           ]
         }
@@ -609,22 +622,22 @@
             "label": "Hook hit",
             "startHint": "first chorus",
             "durationSec": 15,
-            "caption": "“Still standing where the graveyard used to be” 🎧 #newmusic",
-            "hookLine": "Still standing where the graveyard used to be"
+            "caption": "“Still standing where the shift used to be” 🎧 #newmusic",
+            "hookLine": "Still standing where the shift used to be"
           },
           {
             "label": "Verse opener",
             "startHint": "verse 1, bar 1",
             "durationSec": 12,
             "caption": "the story starts here 👀",
-            "hookLine": "They handed me graveyard instead of the train"
+            "hookLine": "It started with the graveyard and the flow"
           },
           {
             "label": "Bridge turn",
             "startHint": "bridge",
             "durationSec": 18,
             "caption": "wait for it…",
-            "hookLine": "Wouldn't trade the future for a crown"
+            "hookLine": "When it's quiet I still hear the future and the mark"
           }
         ]
       }
@@ -633,7 +646,7 @@
       "id": "ar-judge",
       "name": "A&R Judge",
       "status": "done",
-      "finding": "Banger 93/100 · crave-ability 75/100 — Certified banger — ship it.",
+      "finding": "Banger 93/100 · crave-ability 74/100 — Certified banger — ship it.",
       "confidence": 82,
       "warnings": [],
       "suggestedNextAction": "Green-light.",
@@ -650,14 +663,14 @@
           "verdict": "Certified banger — ship it."
         },
         "crave": {
-          "score": 75,
+          "score": 74,
           "factors": {
             "returns": 1,
             "mutation": 0.5,
             "brevity": 0.75,
-            "singability": 0.68
+            "singability": 0.66
           },
-          "note": "Compulsive — you'll want it again."
+          "note": "Catchy; a mutated return would push it higher."
         }
       }
     },
@@ -694,7 +707,7 @@
           {
             "label": "Avoid-words reviewed",
             "ok": false,
-            "note": "1 avoid-word(s) present (warning only)"
+            "note": "2 avoid-word(s) present (warning only)"
           },
           {
             "label": "Ownership clear",
@@ -706,7 +719,7 @@
     }
   ],
   "cognition": {
-    "firstThought": "Still standing where the graveyard used to be",
+    "firstThought": "Still standing where the shift used to be",
     "secondThought": [
       {
         "key": "true",
