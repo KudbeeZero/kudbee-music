@@ -82,6 +82,14 @@ vector memory, and document the architecture — lifts output quality, dev appea
    reads auto-heal from the mirror if the live key is missing/corrupt, plus `restoreFromBackup()`
    + `vaultBackupStatus()` for an explicit restore. Survives a truncated write or a cleared
    single key (full-storage export/import still covers a wiped browser). Tested. _(#56)_
+- [x] **Lyric grammaticality (the moat)** — the combinator was slotting verbs/adjectives/
+   gerunds into noun positions ("handed me GROWING", "the WAS and the light"). Added
+   `nounable()` (rejects gerunds/participles/adverbs/auxiliaries) + a concrete-noun bank that
+   backfills so `{noun}` slots are always real, distinct nouns; anchor thread padded so a thin
+   theme doesn't repeat one word. Grammaticality guard tests; demos regenerated. _(#58)_
+- [ ] **Deeper lyric craft (next $0 pass)** — the combinator is grammatical now but still
+   impressionistic; next: theme→imagery mapping so backfill nouns fit the subject, verb/noun
+   agreement in frames, and image-coherence scoring so a line's nouns relate.
 
 ## 🌐 Ecosystem (integrates via API — kept out of the free local core)
 - [~] **Crossroads Board** — the WIFI DJ governance/community steering surface (the brain's
