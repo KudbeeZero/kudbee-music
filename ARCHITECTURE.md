@@ -68,7 +68,9 @@ generated wiring diagram: [`docs/brain-wiring.md`](docs/brain-wiring.md).
 - `scoring.ts`, `rescore.ts` — the banger score (craft signals, not length+RNG).
 - `originality.ts`, `safety.ts` — uniqueness fingerprints + famous-phrase screen.
 - `reward.ts` — crave-ability (returns, mutation, brevity, singability).
-- `cognition.ts` — first-thought → second-thought critique → keep/revise decision.
+- `cognition.ts` — first-thought → second-thought critique → keep/revise decision; picks
+  the chosen hook (`selectHookByCognition`).
+- `council.ts` — the deliberating board's hook ranking (challenges · crave · confidence).
 - `eval.ts` — the golden-set eval harness (`npm run eval`), a CI regression guard.
 
 **Memory**
@@ -76,6 +78,9 @@ generated wiring diagram: [`docs/brain-wiring.md`](docs/brain-wiring.md).
 - `learn.ts`, `edits.ts`, `procedural.ts` — long-term: taste model + learn-from-edits.
 - `vectorMemory.ts` — optional local semantic recall (opt-in, lazy-loaded embeddings,
   deterministic ranking). Pure search core is unit-tested with a fake embedder.
+- `vectorRecall.ts` — learn→recall over `vectorMemory` (`rememberSong` / `recommendSimilar`).
+  **Server/CLI-only on purpose** — it imports Node built-ins, so it's kept out of the
+  modules the client bundle touches (`learn.ts` / `recommend.ts` stay browser-safe).
 - `storage.ts` — the localStorage vault (export/import).
 
 **Identity & output**
