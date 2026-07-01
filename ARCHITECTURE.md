@@ -83,7 +83,9 @@ generated wiring diagram: [`docs/brain-wiring.md`](docs/brain-wiring.md).
 - `vectorRecall.ts` — learn→recall over `vectorMemory` (`rememberSong` / `recommendSimilar`).
   **Server/CLI-only on purpose** — it imports Node built-ins, so it's kept out of the
   modules the client bundle touches (`learn.ts` / `recommend.ts` stay browser-safe).
-- `storage.ts` — the localStorage vault (export/import).
+- `storage.ts` — the localStorage vault (export/import) with a **backup mirror**: every
+  write also lands in a `.bak` key; reads auto-heal from it if the live key is corrupt,
+  and `restoreFromBackup()` offers explicit recovery.
 
 **Identity & output**
 - `artist.ts`, `story.ts`, `becomingYou.ts`, `brainSignature.ts`, `heat.ts` — who the
