@@ -3,7 +3,7 @@ import { rmSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import {
-  cosineSimilarity, rankBySimilarity, addMemory, semanticSearch,
+  cosineSimilarity, rankBySimilarity, addMemory, semanticSearch, quantize,
   type VectorEntry, type Embedder,
 } from '../vectorMemory';
 
@@ -40,6 +40,35 @@ describe('vector memory — pure search core', () => {
     expect(ranked.map((r) => r.entry.id)).toEqual(['a', 'd']); // a and d are perfect matches
     expect(rankBySimilarity([1, 0, 0], entries, { type: 'lyric' }).map((r) => r.entry.id)).toEqual(['d']);
     expect(rankBySimilarity([0, 1, 0], entries, { minScore: 0.99 }).map((r) => r.entry.id)).toEqual(['c']);
+  });
+});
+
+describe('vector memory — deterministic ranking (reproducibility)', () => {
+  it('quantize() collapses sub-1e-8 differences to the same rank key', () => {
+    expect(quantize(0.123456781)).toBe(quantize(0.1234567811)); // differ below 1e-8 → same key
+    expect(quantize(0.99999999)).not.toBe(quantize(0.99999998)); // above 1e-8 → distinct
+  });
+
+  it('produces identical ordering on repeated runs', () => {
+    const entries = [
+      entry('c', 'C', [0.8, 0.2, 0]),
+      entry('a', 'A', [1, 0, 0]),
+      entry('b', 'B', [0.6, 0.4, 0]),
+    ];
+    const once = rankBySimilarity([1, 0, 0], entries).map((r) => r.entry.id);
+    const twice = rankBySimilarity([1, 0, 0], entries).map((r) => r.entry.id);
+    expect(once).toEqual(twice);
+  });
+
+  it('breaks exact ties deterministically by id (then text), not by input order', () => {
+    // three identical vectors → identical similarity → tie-break must be id-ascending
+    const shuffled = [entry('z', 'Z', [1, 1]), entry('a', 'A', [1, 1]), entry('m', 'M', [1, 1])];
+    expect(rankBySimilarity([1, 1], shuffled).map((r) => r.entry.id)).toEqual(['a', 'm', 'z']);
+  });
+
+  it('keeps the RAW similarity in results (only the sort key is quantized)', () => {
+    const r = rankBySimilarity([1, 0], [entry('a', 'A', [1, 0])]);
+    expect(r[0].similarity).toBeCloseTo(1, 10);
   });
 });
 
