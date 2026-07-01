@@ -49,6 +49,21 @@ describe('grammaticality — no verb/adjective/gerund in a noun slot', () => {
       expect(nounable(bad)).toBe(false);
     }
   });
+
+  // regression: the end-to-end audit surfaced "the carry that raised me" + "through the daughter"
+  it("rejects the combinator's own action verbs as nouns (audit: 'the carry that raised me')", () => {
+    for (const v of ['carry', 'grind', 'hustle', 'climb', 'survive', 'reach']) expect(nounable(v)).toBe(false);
+  });
+
+  it("keeps the audience word out of noun slots (audit: 'for daughter … through the daughter')", async () => {
+    const inputs = brief({ theme: 'made it out the struggle for my daughter, still carry the block', audience: 'my daughter', references: '' });
+    expect(themeNouns(inputs)).not.toContain('daughter');
+    const hooks = await mockLyricsProvider.generateHooks(inputs, 5, 3);
+    const secs = await mockLyricsProvider.generateSections(inputs, hooks[0], 3);
+    const text = [...hooks.map((h) => h.text), ...verseLines(secs)].join(' ').toLowerCase();
+    expect(text).not.toMatch(/\bthe daughter\b/); // audience word never fills a {noun}
+    expect(text).not.toMatch(/\bthe carry\b/);     // verb never fills a {noun}
+  });
 });
 
 describe('imagery coherence — backfill nouns match the theme', () => {
