@@ -205,6 +205,17 @@ Board** governance / Solana / token / NFT layer integrates with this engine via 
 later (kept out of this repo's core so it stays free + local).
 
 ## ✅ Shipped (newest first)
+- [x] **Focal Compose / Studio layout** — `/hermes` splits into a focused "Compose"
+      hero (just the brief + Generate, plus "or see a finished example") vs. the full
+      three-column "Studio" deck once a run starts or a package exists; a "✨ New"
+      header button returns to Compose. Second of the UI-polish sequence (after
+      typography); next: the generation-as-a-moment animation, then the in-app
+      semantic-memory panel. _(#72)_
+- [x] **Premium typography** — self-hosted **Space Grotesk** (display) + **Inter**
+      (body) via `next/font/local` (`app/fonts/`, OFL-licensed, ~74KB total): no
+      Google Fonts/CDN call, deterministic $0/offline CI builds. Wired only in
+      `app/layout.tsx` so the component test suite stays free of the `next/font`
+      dependency; headings/brand mark/big numerals take the display face. _(#71)_
 - [x] **Responsive web UI (mobile + tablet)** — a scoped pass in the existing CSS-Modules +
       CSS-variable system (no Tailwind migration) around two breakpoints: **≤1180 (stack)** and
       **≤640 (touch)**. Touch targets ~44px, 16px inputs (no iOS focus-zoom), a glass budget that
