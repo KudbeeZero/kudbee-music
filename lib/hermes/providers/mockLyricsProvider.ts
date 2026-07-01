@@ -6,6 +6,7 @@
 import type { LyricsProvider } from './providerTypes';
 import type { SongInputs, HookOption, SongSection } from '../types';
 import { makeRng, hashString, pick, keywords, titleCase, shuffle, tidyLine } from '../text';
+import { rhymeFamily } from '../rhyme';
 
 function seedOf(inputs: SongInputs, salt = '', seed = 0): number {
   return hashString(
@@ -24,19 +25,6 @@ const HOOK_FRAMES = [
   'this one\'s for the {noun} that raised me',
 ];
 
-const VERSE_FRAMES = [
-  'I count the {noun} like I count the days gone by',
-  'they ask me how I {verb} and I just point to the sky',
-  '{who} on my mind every time the beat drop',
-  'turned the {adj} mornings into something I could hold',
-  'no shortcuts, just the {noun} and the long road',
-  'wrote it down so {who} would always know',
-  'the {adj} streets taught me patience and the cost',
-  'I keep the receipts of everything I lost',
-  'made a way where the map said there was none',
-  'carry the name like it weighs a ton',
-];
-
 const VERBS = ['climb', 'carry', 'build', 'fight', 'hold on', 'keep moving', 'pray', 'grind', 'crawl', 'rebuild', 'reach', 'hustle', 'survive', 'push'];
 const ADJ = ['cold', 'quiet', 'heavy', 'restless', 'patient', 'stubborn', 'grounded', 'hollow', 'guarded', 'weathered', 'relentless', 'distant'];
 
@@ -44,7 +32,39 @@ const ADJ = ['cold', 'quiet', 'heavy', 'restless', 'patient', 'stubborn', 'groun
 // out of the {noun}/{k} pool so the combinator stays grammatical.
 const NOUN_STOP = new Set(['made', 'out', 'still', 'got', 'get', 'keep', 'let', 'gone', 'been', 'came', 'through', 'about', 'song']);
 
-function fill(frame: string, inputs: SongInputs, rng: () => number): string {
+// Couplet lines end on a {rhyme} slot so two of them land a real end-rhyme.
+const COUPLET_LINES = [
+  'still {verb} my way up out the {rhyme}',
+  'they never saw me chase the {rhyme}',
+  'I keep it close, the {adj} {rhyme}',
+  'everything I lost became the {rhyme}',
+  'no map, no plan, just the {rhyme}',
+  'I carry the weight of the {rhyme}',
+  'they ask me why I need the {rhyme}',
+  'wrote my whole name across the {rhyme}',
+  'out them {adj} nights I found the {rhyme}',
+  'nobody ever handed me the {rhyme}',
+  'I bet it all on the {rhyme}',
+  'learned to love the {adj} {rhyme}',
+];
+
+// Build a rhymed verse: `couplets` pairs of lines, each pair ending on two
+// different-but-rhyming lexicon words. Deterministic per rng.
+function buildRhymedVerse(inputs: SongInputs, rng: () => number, valence: number, couplets: number): string[] {
+  const lines: string[] = [];
+  for (let c = 0; c < couplets; c++) {
+    const fam = rhymeFamily(rng, valence, 2);
+    const a = fam[0]?.w ?? 'road';
+    const b = fam[1]?.w ?? 'gold';
+    const t1 = pick(COUPLET_LINES, rng);
+    const t2 = pick(COUPLET_LINES.filter((x) => x !== t1), rng);
+    lines.push(capitalize(fill(t1, inputs, rng, a)));
+    lines.push(capitalize(fill(t2, inputs, rng, b)));
+  }
+  return dedupe(lines);
+}
+
+function fill(frame: string, inputs: SongInputs, rng: () => number, rhyme = ''): string {
   const ks = keywords([inputs.theme, inputs.mood, inputs.references].join(' ')).filter((k) => !NOUN_STOP.has(k));
   // shuffled pools, consumed in order, so a single line never repeats the same
   // filler word ("the road and the road") — distinct, grammatical output.
@@ -62,6 +82,7 @@ function fill(frame: string, inputs: SongInputs, rng: () => number): string {
     .replace(/\{verb\}/g, () => verbs[vi++ % verbs.length])
     .replace(/\{adj\}/g, () => adjs[ai++ % adjs.length])
     .replace(/\{who\}/g, () => who)
+    .replace(/\{rhyme\}/g, () => rhyme || nouns[ni++ % nouns.length])
     .replace(/\{place\}/g, () => nouns[ni++ % nouns.length]);
   return tidyLine(out);
 }
@@ -102,10 +123,14 @@ export const mockLyricsProvider: LyricsProvider = {
 
   async generateSections(inputs, hook, seed = 0) {
     const rng = makeRng(seedOf(inputs, 'verse', seed));
-    const frames = shuffle(VERSE_FRAMES, rng);
-    const v1 = dedupe(frames.slice(0, 4).map((f) => capitalize(fill(f, inputs, rng))));
-    const v2 = dedupe(frames.slice(4, 8).map((f) => capitalize(fill(f, inputs, rng))));
-    const bridge = dedupe(frames.slice(8).concat(frames.slice(0, 2)).slice(0, 2).map((f) => capitalize(fill(f, inputs, rng))));
+    // a light valence read so the rhyme words lean with the mood (dark vs bright)
+    const blob = `${inputs.mood} ${inputs.theme}`.toLowerCase();
+    const valence = /(dark|cold|hard|sad|pain|lonely|angry|aggress|grief|hurt|broke)/.test(blob) ? -0.5
+      : /(hope|joy|love|bright|triumph|proud|warm|heal|rise)/.test(blob) ? 0.5 : 0;
+    // rhymed couplets — verses now land real end-rhymes (built on the lexicon)
+    const v1 = buildRhymedVerse(inputs, rng, valence, 2);
+    const v2 = buildRhymedVerse(inputs, rng, valence, 2);
+    const bridge = buildRhymedVerse(inputs, rng, valence, 1);
     const hookLines = [hook.text, hook.text, secondHookLine(inputs, rng), hook.text];
 
     const full: SongSection[] = [

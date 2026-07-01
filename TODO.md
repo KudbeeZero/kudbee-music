@@ -15,8 +15,9 @@ _Nothing actively in flight — pick the next item from **Up next**._
 
 ## 🧠 Brain buildout queue (autonomous /loop — research-informed)
 1. [x] **Local lexicon** (vocabulary cortex) — token-free word store. _(shipped)_
-2. [ ] **Rhyme + meter engine** — use the lexicon so generated lyrics actually rhyme
-   and scan; honest hook scoring. *(biggest quality lift)*
+2. [x] **Rhyme + meter engine** — `lib/hermes/rhyme.ts`: end-rhyme/scheme/density +
+   lexicon rhyme families; the combinator now writes **rhymed couplets**, and hook
+   scoring is honest (brevity + theme reference + internal rhyme, not length+RNG). _(shipped)_
 3. [ ] **Emotion → diction** — the limbic layer colors word/imagery choice via the
    lexicon's affect tags.
 4. [ ] **Default-Mode Network** — a "creativity-at-rest" region that surfaces original
@@ -77,6 +78,11 @@ Board** governance / Solana / token / NFT layer integrates with this engine via 
 later (kept out of this repo's core so it stays free + local).
 
 ## ✅ Shipped (newest first)
+- [x] **Rhyme + meter engine** — `lib/hermes/rhyme.ts` (end-rhyme, scheme, density,
+      lexicon rhyme families). The combinator writes **rhymed couplets** now (verses
+      actually rhyme), and hook scoring is **honest** — brevity + theme reference +
+      internal rhyme, not length + RNG. Closes the "lyrics don't rhyme / gameable
+      score" weakness. _(this PR)_
 - [x] **Local lexicon (vocabulary cortex)** — `brain/lexicon/core.json` + `lib/hermes/lexicon.ts`:
       a token-free, version-controlled word store (part-of-speech, affect/valence,
       imagery tag) with heuristic **syllable counting** and **rhyme matching**
