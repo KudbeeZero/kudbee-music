@@ -77,9 +77,23 @@ describe('vector memory — hybrid (vector + lexicon) + diversity (MMR)', () => 
     expect(diverse).toEqual(['a', 'c']);
   });
 
+  it('mmrCandidates limits the MMR re-rank to the top-N by rank (deterministic)', () => {
+    const entries = [
+      entry('a', 'A', [1, 0, 0]),
+      entry('b', 'B', [0.999, 0.001, 0]), // near-dup of A (rank 2)
+      entry('c', 'C', [0, 1, 0]),          // different, but LOW rank (3)
+    ];
+    // MMR over only the top-2 candidates (a, b) never sees 'c', so diversity can't pull it in
+    const capped = rankBySimilarity([1, 0, 0], entries, { topK: 2, diversity: 0.7, mmrCandidates: 2 }).map((r) => r.entry.id);
+    expect(capped).toEqual(['a', 'b']);
+    // with the full pool, diversity pulls the distinct 'c' up (as before)
+    const full = rankBySimilarity([1, 0, 0], entries, { topK: 2, diversity: 0.7 }).map((r) => r.entry.id);
+    expect(full).toEqual(['a', 'c']);
+  });
+
   it('hybrid + diversity stay deterministic across repeated runs', () => {
     const entries = [entry('a', 'cold gold', [1, 0]), entry('b', 'cold gold twin', [1, 0]), entry('c', 'warm sea', [0, 1])];
-    const run = () => rankBySimilarity([1, 0], entries, { queryText: 'cold gold', hybrid: 0.5, diversity: 0.5, topK: 3 }).map((r) => r.entry.id);
+    const run = () => rankBySimilarity([1, 0], entries, { queryText: 'cold gold', hybrid: 0.5, diversity: 0.5, topK: 3, mmrCandidates: 10 }).map((r) => r.entry.id);
     expect(run()).toEqual(run());
   });
 });
