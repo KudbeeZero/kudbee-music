@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { mockLyricsProvider, nounable, themeNouns } from '../providers/mockLyricsProvider';
+import { mockLyricsProvider, nounable, themeNouns, themeImagery } from '../providers/mockLyricsProvider';
 import { selfSimilarity, lineSkeleton, keywords } from '../text';
 import { slantKey, rhymeKey } from '../lexicon';
 import { rhymeFamily } from '../rhyme';
@@ -42,6 +42,32 @@ describe('grammaticality — no verb/adjective/gerund in a noun slot', () => {
     for (const bad of ['growing', 'supposed', 'beautiful']) expect(words).not.toContain(bad);
     // a bare linking verb never sits after an article ("the was", "the supposed")
     expect(verseLines(secs).join('\n')).not.toMatch(/\bthe (was|supposed|growing|beautiful)\b/i);
+  });
+
+  it('rejects prepositions / conjunctions and 3rd-person verbs in the noun slot', () => {
+    for (const bad of ['across', 'while', 'because', 'toward', 'keeps', 'sees', 'goes', 'yet', 'fake']) {
+      expect(nounable(bad)).toBe(false);
+    }
+  });
+});
+
+describe('imagery coherence — backfill nouns match the theme', () => {
+  it('routes a theme/mood to the most relevant imagery clusters', () => {
+    expect(themeImagery(brief({ theme: 'loving someone across the ocean while the tide pulls us apart', mood: 'aching' }))[0]).toBe('water');
+    expect(themeImagery(brief({ theme: 'coming home to the family that raised me', mood: 'warm' }))[0]).toBe('home');
+    expect(themeImagery(brief({ theme: 'grinding on the cold block to eat', mood: 'hard, hungry' }))[0]).toBeDefined();
+  });
+
+  it('a water-themed brief pulls water/ocean imagery into the verses (not random nouns)', async () => {
+    const inputs = brief({ theme: 'loving someone across the ocean while the tide keeps pulling us apart', mood: 'aching, distant', references: '' });
+    const words = new Set(verseLines(await gen(inputs, 5)).join(' ').toLowerCase().split(/[^a-z]+/).filter(Boolean));
+    const water = ['harbor', 'current', 'river', 'tide', 'ocean', 'anchor', 'shoreline', 'raindrop', 'wave', 'flood', 'distance', 'desire', 'fire', 'spark'];
+    expect(water.some((w) => words.has(w))).toBe(true); // at least one on-imagery noun surfaced
+  });
+
+  it('is deterministic — same brief routes to the same clusters', () => {
+    const b = brief();
+    expect(themeImagery(b)).toEqual(themeImagery(b));
   });
 });
 
