@@ -75,10 +75,10 @@
     {
       "label": "Verse 1",
       "lines": [
-        "Learned to love the bright art",
-        "They ask me why I need the part",
-        "Still reach my way up out the mark",
-        "Everything I lost became the spark"
+        "They handed me working instead of the art",
+        "Came up on working, dreaming of the part",
+        "It started with the future and the mark",
+        "Grew up on shift, chasing the spark"
       ]
     },
     {
@@ -93,17 +93,17 @@
     {
       "label": "Verse 2",
       "lines": [
-        "They never saw me chase the flow",
-        "I carry the weight of the glow",
-        "Nobody ever handed me the desire",
-        "Learned to love the open fire"
+        "Now I survive the graveyard into the flow",
+        "Took that sees and turned it to a glow",
+        "Put the yet down, reaching for the desire",
+        "Stakes got higher, yet became the fire"
       ]
     },
     {
       "label": "Bridge",
       "lines": [
-        "No map, no plan, just the spark",
-        "Wrote my whole name across the mark"
+        "Wouldn't trade the shift for a spark",
+        "Made my peace with build and the mark"
       ]
     },
     {
@@ -116,7 +116,7 @@
       ]
     }
   ],
-  "finalLyrics": "[Intro]\nEveryone, this one's for you\n\n[Hook]\nEvery step a promise that I rebuild\nEvery step a promise that I rebuild\nAll this shift, I earned it slow\nEvery step a promise that I rebuild\n\n[Verse 1]\nLearned to love the bright art\nThey ask me why I need the part\nStill reach my way up out the mark\nEverything I lost became the spark\n\n[Hook]\nEvery step a promise that I rebuild\nEvery step a promise that I rebuild\nAll this shift, I earned it slow\nEvery step a promise that I rebuild\n\n[Verse 2]\nThey never saw me chase the flow\nI carry the weight of the glow\nNobody ever handed me the desire\nLearned to love the open fire\n\n[Bridge]\nNo map, no plan, just the spark\nWrote my whole name across the mark\n\n[Hook]\nEvery step a promise that I rebuild\nEvery step a promise that I rebuild\nAll this shift, I earned it slow\nEvery step a promise that I rebuild",
+  "finalLyrics": "[Intro]\nEveryone, this one's for you\n\n[Hook]\nEvery step a promise that I rebuild\nEvery step a promise that I rebuild\nAll this shift, I earned it slow\nEvery step a promise that I rebuild\n\n[Verse 1]\nThey handed me working instead of the art\nCame up on working, dreaming of the part\nIt started with the future and the mark\nGrew up on shift, chasing the spark\n\n[Hook]\nEvery step a promise that I rebuild\nEvery step a promise that I rebuild\nAll this shift, I earned it slow\nEvery step a promise that I rebuild\n\n[Verse 2]\nNow I survive the graveyard into the flow\nTook that sees and turned it to a glow\nPut the yet down, reaching for the desire\nStakes got higher, yet became the fire\n\n[Bridge]\nWouldn't trade the shift for a spark\nMade my peace with build and the mark\n\n[Hook]\nEvery step a promise that I rebuild\nEvery step a promise that I rebuild\nAll this shift, I earned it slow\nEvery step a promise that I rebuild",
   "production": {
     "tempoBpm": 82,
     "drums": "boom-bap with dusty snares",
@@ -175,30 +175,36 @@
       "startHint": "verse 1, bar 1",
       "durationSec": 12,
       "caption": "the story starts here 👀",
-      "hookLine": "Learned to love the bright art"
+      "hookLine": "They handed me working instead of the art"
     },
     {
       "label": "Bridge turn",
       "startHint": "bridge",
       "durationSec": 18,
       "caption": "wait for it…",
-      "hookLine": "No map, no plan, just the spark"
+      "hookLine": "Wouldn't trade the shift for a spark"
     }
   ],
   "promoCaption": "“Every step a promise that I rebuild” — new one for everyone grinding in the dark. #working #graveyard #lo-fisoulhip-hop",
   "uniqueness": {
-    "score": 99,
+    "score": 98,
     "flags": [
       {
         "kind": "banned-word",
         "detail": "avoid-word \"fire\"",
-        "line": "Learned to love the open fire",
+        "line": "Stakes got higher, yet became the fire",
         "suggestion": "the heat"
       },
       {
         "kind": "banned-word",
         "detail": "avoid-word \"every\"",
         "line": "Every step a promise that I rebuild"
+      },
+      {
+        "kind": "banned-word",
+        "detail": "avoid-word \"dreaming\"",
+        "line": "Came up on working, dreaming of the part",
+        "suggestion": "planning"
       },
       {
         "kind": "repeated-hook",
@@ -212,20 +218,20 @@
       "3ec650f5",
       "bbeb6ea0",
       "3ec650f5",
-      "1dac491",
-      "35f421d1",
-      "deed4a48",
-      "a454a788",
+      "f3ce2c7f",
+      "b35a5e6c",
+      "af585a42",
+      "46eea015",
       "3ec650f5",
       "3ec650f5",
       "bbeb6ea0",
       "3ec650f5",
-      "9ba34ed1",
-      "b9cf735f",
-      "4e87ea3",
-      "ba0f5044",
-      "7fc7325a",
-      "a822d585",
+      "952d5043",
+      "cc706e2c",
+      "bb519de0",
+      "889b3b65",
+      "46157cab",
+      "ef019193",
       "3ec650f5",
       "3ec650f5",
       "bbeb6ea0",
@@ -233,12 +239,17 @@
     ],
     "bannedWordsHit": [
       "fire",
-      "every"
+      "every",
+      "dreaming"
     ],
     "rewriteSuggestions": [
       {
-        "line": "Learned to love the open fire",
+        "line": "Stakes got higher, yet became the fire",
         "suggestion": "try \"the heat\" instead of \"fire\""
+      },
+      {
+        "line": "Came up on working, dreaming of the part",
+        "suggestion": "try \"planning\" instead of \"dreaming\""
       }
     ]
   },
@@ -249,8 +260,8 @@
     "replayValue": 13,
     "visualIdentity": 10,
     "shortFormPotential": 10,
-    "releaseReadiness": 5,
-    "total": 93,
+    "releaseReadiness": 4,
+    "total": 92,
     "verdict": "Certified banger — ship it."
   },
   "release": [
@@ -275,7 +286,7 @@
     {
       "label": "Avoid-words reviewed",
       "ok": false,
-      "note": "2 avoid-word(s) present (warning only)"
+      "note": "3 avoid-word(s) present (warning only)"
     },
     {
       "label": "Ownership clear",
@@ -388,10 +399,10 @@
           {
             "label": "Verse 1",
             "lines": [
-              "Learned to love the bright art",
-              "They ask me why I need the part",
-              "Still reach my way up out the mark",
-              "Everything I lost became the spark"
+              "They handed me working instead of the art",
+              "Came up on working, dreaming of the part",
+              "It started with the future and the mark",
+              "Grew up on shift, chasing the spark"
             ]
           },
           {
@@ -406,17 +417,17 @@
           {
             "label": "Verse 2",
             "lines": [
-              "They never saw me chase the flow",
-              "I carry the weight of the glow",
-              "Nobody ever handed me the desire",
-              "Learned to love the open fire"
+              "Now I survive the graveyard into the flow",
+              "Took that sees and turned it to a glow",
+              "Put the yet down, reaching for the desire",
+              "Stakes got higher, yet became the fire"
             ]
           },
           {
             "label": "Bridge",
             "lines": [
-              "No map, no plan, just the spark",
-              "Wrote my whole name across the mark"
+              "Wouldn't trade the shift for a spark",
+              "Made my peace with build and the mark"
             ]
           },
           {
@@ -514,28 +525,35 @@
       "id": "originality-auditor",
       "name": "Originality Auditor",
       "status": "done",
-      "finding": "Uniqueness 99/100 · 3 flag(s).",
+      "finding": "Uniqueness 98/100 · 4 flag(s).",
       "confidence": 90,
       "warnings": [
         "avoid-word \"fire\"",
         "avoid-word \"every\"",
+        "avoid-word \"dreaming\"",
         "hook line repeats 9× — consider varying one word"
       ],
       "suggestedNextAction": "Apply suggested rewrites before release.",
       "data": {
         "uniqueness": {
-          "score": 99,
+          "score": 98,
           "flags": [
             {
               "kind": "banned-word",
               "detail": "avoid-word \"fire\"",
-              "line": "Learned to love the open fire",
+              "line": "Stakes got higher, yet became the fire",
               "suggestion": "the heat"
             },
             {
               "kind": "banned-word",
               "detail": "avoid-word \"every\"",
               "line": "Every step a promise that I rebuild"
+            },
+            {
+              "kind": "banned-word",
+              "detail": "avoid-word \"dreaming\"",
+              "line": "Came up on working, dreaming of the part",
+              "suggestion": "planning"
             },
             {
               "kind": "repeated-hook",
@@ -549,20 +567,20 @@
             "3ec650f5",
             "bbeb6ea0",
             "3ec650f5",
-            "1dac491",
-            "35f421d1",
-            "deed4a48",
-            "a454a788",
+            "f3ce2c7f",
+            "b35a5e6c",
+            "af585a42",
+            "46eea015",
             "3ec650f5",
             "3ec650f5",
             "bbeb6ea0",
             "3ec650f5",
-            "9ba34ed1",
-            "b9cf735f",
-            "4e87ea3",
-            "ba0f5044",
-            "7fc7325a",
-            "a822d585",
+            "952d5043",
+            "cc706e2c",
+            "bb519de0",
+            "889b3b65",
+            "46157cab",
+            "ef019193",
             "3ec650f5",
             "3ec650f5",
             "bbeb6ea0",
@@ -570,12 +588,17 @@
           ],
           "bannedWordsHit": [
             "fire",
-            "every"
+            "every",
+            "dreaming"
           ],
           "rewriteSuggestions": [
             {
-              "line": "Learned to love the open fire",
+              "line": "Stakes got higher, yet became the fire",
               "suggestion": "try \"the heat\" instead of \"fire\""
+            },
+            {
+              "line": "Came up on working, dreaming of the part",
+              "suggestion": "try \"planning\" instead of \"dreaming\""
             }
           ]
         }
@@ -630,14 +653,14 @@
             "startHint": "verse 1, bar 1",
             "durationSec": 12,
             "caption": "the story starts here 👀",
-            "hookLine": "Learned to love the bright art"
+            "hookLine": "They handed me working instead of the art"
           },
           {
             "label": "Bridge turn",
             "startHint": "bridge",
             "durationSec": 18,
             "caption": "wait for it…",
-            "hookLine": "No map, no plan, just the spark"
+            "hookLine": "Wouldn't trade the shift for a spark"
           }
         ]
       }
@@ -646,7 +669,7 @@
       "id": "ar-judge",
       "name": "A&R Judge",
       "status": "done",
-      "finding": "Banger 93/100 · crave-ability 77/100 — Certified banger — ship it.",
+      "finding": "Banger 92/100 · crave-ability 77/100 — Certified banger — ship it.",
       "confidence": 82,
       "warnings": [],
       "suggestedNextAction": "Green-light.",
@@ -658,8 +681,8 @@
           "replayValue": 13,
           "visualIdentity": 10,
           "shortFormPotential": 10,
-          "releaseReadiness": 5,
-          "total": 93,
+          "releaseReadiness": 4,
+          "total": 92,
           "verdict": "Certified banger — ship it."
         },
         "crave": {
@@ -707,7 +730,7 @@
           {
             "label": "Avoid-words reviewed",
             "ok": false,
-            "note": "2 avoid-word(s) present (warning only)"
+            "note": "3 avoid-word(s) present (warning only)"
           },
           {
             "label": "Ownership clear",

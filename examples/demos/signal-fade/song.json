@@ -75,10 +75,10 @@
     {
       "label": "Verse 1",
       "lines": [
-        "I carry the weight of the wheel",
-        "They ask me why I need the steel",
-        "I bet it all on the name",
-        "No map, no plan, just the shame"
+        "All I had was loving and the wheel",
+        "Came up on dropping, dreaming of the steel",
+        "They handed me connection instead of the name",
+        "Grew up on dropping, chasing the shame"
       ]
     },
     {
@@ -93,17 +93,17 @@
     {
       "label": "Verse 2",
       "lines": [
-        "Out them grounded nights I found the crown",
-        "Nobody ever handed me the town",
-        "I carry the weight of the road",
-        "Still keep moving my way up out the load"
+        "Stakes got higher, someone became the crown",
+        "Took that across and turned it to a town",
+        "Everything changed, traded distance for the road",
+        "Now I keep moving the someone into the load"
       ]
     },
     {
       "label": "Bridge",
       "lines": [
-        "Still push my way up out the art",
-        "Learned to love the fearless part"
+        "When it's quiet I still hear the across and the art",
+        "Somewhere in the someone I found the part"
       ]
     },
     {
@@ -116,7 +116,7 @@
       ]
     }
   ],
-  "finalLyrics": "[Intro]\nOnes, this one's for you\n\n[Hook]\nStill standing where the loving used to be\nStill standing where the loving used to be\nAll this across, I earned it slow\nStill standing where the loving used to be\n\n[Verse 1]\nI carry the weight of the wheel\nThey ask me why I need the steel\nI bet it all on the name\nNo map, no plan, just the shame\n\n[Hook]\nStill standing where the loving used to be\nStill standing where the loving used to be\nAll this across, I earned it slow\nStill standing where the loving used to be\n\n[Verse 2]\nOut them grounded nights I found the crown\nNobody ever handed me the town\nI carry the weight of the road\nStill keep moving my way up out the load\n\n[Bridge]\nStill push my way up out the art\nLearned to love the fearless part\n\n[Hook]\nStill standing where the loving used to be\nStill standing where the loving used to be\nAll this across, I earned it slow\nStill standing where the loving used to be",
+  "finalLyrics": "[Intro]\nOnes, this one's for you\n\n[Hook]\nStill standing where the loving used to be\nStill standing where the loving used to be\nAll this across, I earned it slow\nStill standing where the loving used to be\n\n[Verse 1]\nAll I had was loving and the wheel\nCame up on dropping, dreaming of the steel\nThey handed me connection instead of the name\nGrew up on dropping, chasing the shame\n\n[Hook]\nStill standing where the loving used to be\nStill standing where the loving used to be\nAll this across, I earned it slow\nStill standing where the loving used to be\n\n[Verse 2]\nStakes got higher, someone became the crown\nTook that across and turned it to a town\nEverything changed, traded distance for the road\nNow I keep moving the someone into the load\n\n[Bridge]\nWhen it's quiet I still hear the across and the art\nSomewhere in the someone I found the part\n\n[Hook]\nStill standing where the loving used to be\nStill standing where the loving used to be\nAll this across, I earned it slow\nStill standing where the loving used to be",
   "production": {
     "tempoBpm": 106,
     "drums": "boom-bap with dusty snares",
@@ -175,25 +175,31 @@
       "startHint": "verse 1, bar 1",
       "durationSec": 12,
       "caption": "the story starts here 👀",
-      "hookLine": "I carry the weight of the wheel"
+      "hookLine": "All I had was loving and the wheel"
     },
     {
       "label": "Bridge turn",
       "startHint": "bridge",
       "durationSec": 18,
       "caption": "wait for it…",
-      "hookLine": "Still push my way up out the art"
+      "hookLine": "When it's quiet I still hear the across and the art"
     }
   ],
   "promoCaption": "“Still standing where the loving used to be” — new one for the ones far away. #loving #someone #synthwavepop",
   "uniqueness": {
-    "score": 100,
+    "score": 99,
     "flags": [
       {
         "kind": "banned-word",
         "detail": "avoid-word \"crown\"",
-        "line": "Out them grounded nights I found the crown",
+        "line": "Stakes got higher, someone became the crown",
         "suggestion": "the title"
+      },
+      {
+        "kind": "banned-word",
+        "detail": "avoid-word \"dreaming\"",
+        "line": "Came up on dropping, dreaming of the steel",
+        "suggestion": "planning"
       },
       {
         "kind": "repeated-hook",
@@ -207,32 +213,37 @@
       "74584ea5",
       "f86a9297",
       "74584ea5",
-      "5de361c9",
-      "bac8badb",
-      "42ceec6a",
-      "7383086f",
+      "a2e873d3",
+      "ffdb1f24",
+      "a646f7e8",
+      "1adf0531",
       "74584ea5",
       "74584ea5",
       "f86a9297",
       "74584ea5",
-      "4d37e02d",
-      "a986b875",
-      "5dfae5c0",
-      "db2294d3",
-      "94c85d5f",
-      "6b06658",
+      "7981ac32",
+      "a467c2a8",
+      "80c9f5d",
+      "d548afed",
+      "aba6a2ba",
+      "ba705571",
       "74584ea5",
       "74584ea5",
       "f86a9297",
       "74584ea5"
     ],
     "bannedWordsHit": [
-      "crown"
+      "crown",
+      "dreaming"
     ],
     "rewriteSuggestions": [
       {
-        "line": "Out them grounded nights I found the crown",
+        "line": "Stakes got higher, someone became the crown",
         "suggestion": "try \"the title\" instead of \"crown\""
+      },
+      {
+        "line": "Came up on dropping, dreaming of the steel",
+        "suggestion": "try \"planning\" instead of \"dreaming\""
       }
     ]
   },
@@ -240,11 +251,11 @@
     "hookStrength": 20,
     "emotionalClarity": 20,
     "originality": 20,
-    "replayValue": 12,
+    "replayValue": 13,
     "visualIdentity": 10,
     "shortFormPotential": 10,
     "releaseReadiness": 5,
-    "total": 97,
+    "total": 98,
     "verdict": "Certified banger — ship it."
   },
   "release": [
@@ -269,7 +280,7 @@
     {
       "label": "Avoid-words reviewed",
       "ok": false,
-      "note": "1 avoid-word(s) present (warning only)"
+      "note": "2 avoid-word(s) present (warning only)"
     },
     {
       "label": "Ownership clear",
@@ -382,10 +393,10 @@
           {
             "label": "Verse 1",
             "lines": [
-              "I carry the weight of the wheel",
-              "They ask me why I need the steel",
-              "I bet it all on the name",
-              "No map, no plan, just the shame"
+              "All I had was loving and the wheel",
+              "Came up on dropping, dreaming of the steel",
+              "They handed me connection instead of the name",
+              "Grew up on dropping, chasing the shame"
             ]
           },
           {
@@ -400,17 +411,17 @@
           {
             "label": "Verse 2",
             "lines": [
-              "Out them grounded nights I found the crown",
-              "Nobody ever handed me the town",
-              "I carry the weight of the road",
-              "Still keep moving my way up out the load"
+              "Stakes got higher, someone became the crown",
+              "Took that across and turned it to a town",
+              "Everything changed, traded distance for the road",
+              "Now I keep moving the someone into the load"
             ]
           },
           {
             "label": "Bridge",
             "lines": [
-              "Still push my way up out the art",
-              "Learned to love the fearless part"
+              "When it's quiet I still hear the across and the art",
+              "Somewhere in the someone I found the part"
             ]
           },
           {
@@ -508,22 +519,29 @@
       "id": "originality-auditor",
       "name": "Originality Auditor",
       "status": "done",
-      "finding": "Uniqueness 100/100 · 2 flag(s).",
+      "finding": "Uniqueness 99/100 · 3 flag(s).",
       "confidence": 90,
       "warnings": [
         "avoid-word \"crown\"",
+        "avoid-word \"dreaming\"",
         "hook line repeats 9× — consider varying one word"
       ],
       "suggestedNextAction": "Apply suggested rewrites before release.",
       "data": {
         "uniqueness": {
-          "score": 100,
+          "score": 99,
           "flags": [
             {
               "kind": "banned-word",
               "detail": "avoid-word \"crown\"",
-              "line": "Out them grounded nights I found the crown",
+              "line": "Stakes got higher, someone became the crown",
               "suggestion": "the title"
+            },
+            {
+              "kind": "banned-word",
+              "detail": "avoid-word \"dreaming\"",
+              "line": "Came up on dropping, dreaming of the steel",
+              "suggestion": "planning"
             },
             {
               "kind": "repeated-hook",
@@ -537,32 +555,37 @@
             "74584ea5",
             "f86a9297",
             "74584ea5",
-            "5de361c9",
-            "bac8badb",
-            "42ceec6a",
-            "7383086f",
+            "a2e873d3",
+            "ffdb1f24",
+            "a646f7e8",
+            "1adf0531",
             "74584ea5",
             "74584ea5",
             "f86a9297",
             "74584ea5",
-            "4d37e02d",
-            "a986b875",
-            "5dfae5c0",
-            "db2294d3",
-            "94c85d5f",
-            "6b06658",
+            "7981ac32",
+            "a467c2a8",
+            "80c9f5d",
+            "d548afed",
+            "aba6a2ba",
+            "ba705571",
             "74584ea5",
             "74584ea5",
             "f86a9297",
             "74584ea5"
           ],
           "bannedWordsHit": [
-            "crown"
+            "crown",
+            "dreaming"
           ],
           "rewriteSuggestions": [
             {
-              "line": "Out them grounded nights I found the crown",
+              "line": "Stakes got higher, someone became the crown",
               "suggestion": "try \"the title\" instead of \"crown\""
+            },
+            {
+              "line": "Came up on dropping, dreaming of the steel",
+              "suggestion": "try \"planning\" instead of \"dreaming\""
             }
           ]
         }
@@ -617,14 +640,14 @@
             "startHint": "verse 1, bar 1",
             "durationSec": 12,
             "caption": "the story starts here 👀",
-            "hookLine": "I carry the weight of the wheel"
+            "hookLine": "All I had was loving and the wheel"
           },
           {
             "label": "Bridge turn",
             "startHint": "bridge",
             "durationSec": 18,
             "caption": "wait for it…",
-            "hookLine": "Still push my way up out the art"
+            "hookLine": "When it's quiet I still hear the across and the art"
           }
         ]
       }
@@ -633,7 +656,7 @@
       "id": "ar-judge",
       "name": "A&R Judge",
       "status": "done",
-      "finding": "Banger 97/100 · crave-ability 75/100 — Certified banger — ship it.",
+      "finding": "Banger 98/100 · crave-ability 75/100 — Certified banger — ship it.",
       "confidence": 82,
       "warnings": [],
       "suggestedNextAction": "Green-light.",
@@ -642,11 +665,11 @@
           "hookStrength": 20,
           "emotionalClarity": 20,
           "originality": 20,
-          "replayValue": 12,
+          "replayValue": 13,
           "visualIdentity": 10,
           "shortFormPotential": 10,
           "releaseReadiness": 5,
-          "total": 97,
+          "total": 98,
           "verdict": "Certified banger — ship it."
         },
         "crave": {
@@ -694,7 +717,7 @@
           {
             "label": "Avoid-words reviewed",
             "ok": false,
-            "note": "1 avoid-word(s) present (warning only)"
+            "note": "2 avoid-word(s) present (warning only)"
           },
           {
             "label": "Ownership clear",

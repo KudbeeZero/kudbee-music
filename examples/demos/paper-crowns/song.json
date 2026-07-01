@@ -75,10 +75,10 @@
     {
       "label": "Verse 1",
       "lines": [
-        "Still hold on my way up out the wheel",
-        "Out them stubborn nights I found the steel",
-        "I bet it all on the steel",
-        "Nobody ever handed me the wheel"
+        "It started with the refusing and the wheel",
+        "Nothing in my hands but yourself and the steel",
+        "They handed me games instead of the steel",
+        "Came up on refusing, dreaming of the wheel"
       ]
     },
     {
@@ -93,17 +93,17 @@
     {
       "label": "Verse 2",
       "lines": [
-        "No map, no plan, just the stain",
-        "I carry the weight of the rain",
-        "Everything I lost became the crime",
-        "They ask me why I need the time"
+        "No turning back, I want the fake and the stain",
+        "Took that games and turned it to a rain",
+        "Everything changed, traded yourself for the crime",
+        "Stakes got higher, your became the time"
       ]
     },
     {
       "label": "Bridge",
       "lines": [
-        "They ask me why I need the stain",
-        "Still keep moving my way up out the pain"
+        "Made my peace with status and the stain",
+        "When it's quiet I still hear the games and the pain"
       ]
     },
     {
@@ -116,7 +116,7 @@
       ]
     }
   ],
-  "finalLyrics": "[Intro]\nDoubters, this one's for you\n\n[Hook]\nThis one's for the games that raised me\nThis one's for the games that raised me\nAll this fake, I earned it slow\nThis one's for the games that raised me\n\n[Verse 1]\nStill hold on my way up out the wheel\nOut them stubborn nights I found the steel\nI bet it all on the steel\nNobody ever handed me the wheel\n\n[Hook]\nThis one's for the games that raised me\nThis one's for the games that raised me\nAll this fake, I earned it slow\nThis one's for the games that raised me\n\n[Verse 2]\nNo map, no plan, just the stain\nI carry the weight of the rain\nEverything I lost became the crime\nThey ask me why I need the time\n\n[Bridge]\nThey ask me why I need the stain\nStill keep moving my way up out the pain\n\n[Hook]\nThis one's for the games that raised me\nThis one's for the games that raised me\nAll this fake, I earned it slow\nThis one's for the games that raised me",
+  "finalLyrics": "[Intro]\nDoubters, this one's for you\n\n[Hook]\nThis one's for the games that raised me\nThis one's for the games that raised me\nAll this fake, I earned it slow\nThis one's for the games that raised me\n\n[Verse 1]\nIt started with the refusing and the wheel\nNothing in my hands but yourself and the steel\nThey handed me games instead of the steel\nCame up on refusing, dreaming of the wheel\n\n[Hook]\nThis one's for the games that raised me\nThis one's for the games that raised me\nAll this fake, I earned it slow\nThis one's for the games that raised me\n\n[Verse 2]\nNo turning back, I want the fake and the stain\nTook that games and turned it to a rain\nEverything changed, traded yourself for the crime\nStakes got higher, your became the time\n\n[Bridge]\nMade my peace with status and the stain\nWhen it's quiet I still hear the games and the pain\n\n[Hook]\nThis one's for the games that raised me\nThis one's for the games that raised me\nAll this fake, I earned it slow\nThis one's for the games that raised me",
   "production": {
     "tempoBpm": 143,
     "drums": "minimal knock, heavy kick",
@@ -175,25 +175,31 @@
       "startHint": "verse 1, bar 1",
       "durationSec": 12,
       "caption": "the story starts here 👀",
-      "hookLine": "Still hold on my way up out the wheel"
+      "hookLine": "It started with the refusing and the wheel"
     },
     {
       "label": "Bridge turn",
       "startHint": "bridge",
       "durationSec": 18,
       "caption": "wait for it…",
-      "hookLine": "They ask me why I need the stain"
+      "hookLine": "Made my peace with status and the stain"
     }
   ],
   "promoCaption": "“This one's for the games that raised me” — new one for the doubters. #refusing #fake #drill-influencedtrap",
   "uniqueness": {
-    "score": 100,
+    "score": 99,
     "flags": [
       {
         "kind": "banned-word",
         "detail": "avoid-word \"pain\"",
-        "line": "Still keep moving my way up out the pain",
+        "line": "When it's quiet I still hear the games and the pain",
         "suggestion": "the ache"
+      },
+      {
+        "kind": "banned-word",
+        "detail": "avoid-word \"dreaming\"",
+        "line": "Came up on refusing, dreaming of the wheel",
+        "suggestion": "planning"
       },
       {
         "kind": "repeated-hook",
@@ -207,32 +213,37 @@
       "a7efbff",
       "ad22f8af",
       "a7efbff",
-      "59372ad1",
-      "c6dbf55a",
-      "ff4b84f8",
-      "be52a6ec",
+      "ae640a5e",
+      "2f71f618",
+      "771b1fcd",
+      "da53eee2",
       "a7efbff",
       "a7efbff",
       "ad22f8af",
       "a7efbff",
-      "cf3d0daa",
-      "937011b0",
-      "8b3d5c7f",
-      "4040a755",
-      "7fbbb09",
-      "22e7c567",
+      "2220c954",
+      "ab191372",
+      "4a522ef5",
+      "eb138b4f",
+      "73706261",
+      "5c2ed47b",
       "a7efbff",
       "a7efbff",
       "ad22f8af",
       "a7efbff"
     ],
     "bannedWordsHit": [
-      "pain"
+      "pain",
+      "dreaming"
     ],
     "rewriteSuggestions": [
       {
-        "line": "Still keep moving my way up out the pain",
+        "line": "When it's quiet I still hear the games and the pain",
         "suggestion": "try \"the ache\" instead of \"pain\""
+      },
+      {
+        "line": "Came up on refusing, dreaming of the wheel",
+        "suggestion": "try \"planning\" instead of \"dreaming\""
       }
     ]
   },
@@ -240,11 +251,11 @@
     "hookStrength": 20,
     "emotionalClarity": 20,
     "originality": 20,
-    "replayValue": 12,
+    "replayValue": 13,
     "visualIdentity": 10,
     "shortFormPotential": 10,
     "releaseReadiness": 5,
-    "total": 97,
+    "total": 98,
     "verdict": "Certified banger — ship it."
   },
   "release": [
@@ -269,7 +280,7 @@
     {
       "label": "Avoid-words reviewed",
       "ok": false,
-      "note": "1 avoid-word(s) present (warning only)"
+      "note": "2 avoid-word(s) present (warning only)"
     },
     {
       "label": "Ownership clear",
@@ -382,10 +393,10 @@
           {
             "label": "Verse 1",
             "lines": [
-              "Still hold on my way up out the wheel",
-              "Out them stubborn nights I found the steel",
-              "I bet it all on the steel",
-              "Nobody ever handed me the wheel"
+              "It started with the refusing and the wheel",
+              "Nothing in my hands but yourself and the steel",
+              "They handed me games instead of the steel",
+              "Came up on refusing, dreaming of the wheel"
             ]
           },
           {
@@ -400,17 +411,17 @@
           {
             "label": "Verse 2",
             "lines": [
-              "No map, no plan, just the stain",
-              "I carry the weight of the rain",
-              "Everything I lost became the crime",
-              "They ask me why I need the time"
+              "No turning back, I want the fake and the stain",
+              "Took that games and turned it to a rain",
+              "Everything changed, traded yourself for the crime",
+              "Stakes got higher, your became the time"
             ]
           },
           {
             "label": "Bridge",
             "lines": [
-              "They ask me why I need the stain",
-              "Still keep moving my way up out the pain"
+              "Made my peace with status and the stain",
+              "When it's quiet I still hear the games and the pain"
             ]
           },
           {
@@ -508,22 +519,29 @@
       "id": "originality-auditor",
       "name": "Originality Auditor",
       "status": "done",
-      "finding": "Uniqueness 100/100 · 2 flag(s).",
+      "finding": "Uniqueness 99/100 · 3 flag(s).",
       "confidence": 90,
       "warnings": [
         "avoid-word \"pain\"",
+        "avoid-word \"dreaming\"",
         "hook line repeats 9× — consider varying one word"
       ],
       "suggestedNextAction": "Apply suggested rewrites before release.",
       "data": {
         "uniqueness": {
-          "score": 100,
+          "score": 99,
           "flags": [
             {
               "kind": "banned-word",
               "detail": "avoid-word \"pain\"",
-              "line": "Still keep moving my way up out the pain",
+              "line": "When it's quiet I still hear the games and the pain",
               "suggestion": "the ache"
+            },
+            {
+              "kind": "banned-word",
+              "detail": "avoid-word \"dreaming\"",
+              "line": "Came up on refusing, dreaming of the wheel",
+              "suggestion": "planning"
             },
             {
               "kind": "repeated-hook",
@@ -537,32 +555,37 @@
             "a7efbff",
             "ad22f8af",
             "a7efbff",
-            "59372ad1",
-            "c6dbf55a",
-            "ff4b84f8",
-            "be52a6ec",
+            "ae640a5e",
+            "2f71f618",
+            "771b1fcd",
+            "da53eee2",
             "a7efbff",
             "a7efbff",
             "ad22f8af",
             "a7efbff",
-            "cf3d0daa",
-            "937011b0",
-            "8b3d5c7f",
-            "4040a755",
-            "7fbbb09",
-            "22e7c567",
+            "2220c954",
+            "ab191372",
+            "4a522ef5",
+            "eb138b4f",
+            "73706261",
+            "5c2ed47b",
             "a7efbff",
             "a7efbff",
             "ad22f8af",
             "a7efbff"
           ],
           "bannedWordsHit": [
-            "pain"
+            "pain",
+            "dreaming"
           ],
           "rewriteSuggestions": [
             {
-              "line": "Still keep moving my way up out the pain",
+              "line": "When it's quiet I still hear the games and the pain",
               "suggestion": "try \"the ache\" instead of \"pain\""
+            },
+            {
+              "line": "Came up on refusing, dreaming of the wheel",
+              "suggestion": "try \"planning\" instead of \"dreaming\""
             }
           ]
         }
@@ -617,14 +640,14 @@
             "startHint": "verse 1, bar 1",
             "durationSec": 12,
             "caption": "the story starts here 👀",
-            "hookLine": "Still hold on my way up out the wheel"
+            "hookLine": "It started with the refusing and the wheel"
           },
           {
             "label": "Bridge turn",
             "startHint": "bridge",
             "durationSec": 18,
             "caption": "wait for it…",
-            "hookLine": "They ask me why I need the stain"
+            "hookLine": "Made my peace with status and the stain"
           }
         ]
       }
@@ -633,7 +656,7 @@
       "id": "ar-judge",
       "name": "A&R Judge",
       "status": "done",
-      "finding": "Banger 97/100 · crave-ability 76/100 — Certified banger — ship it.",
+      "finding": "Banger 98/100 · crave-ability 76/100 — Certified banger — ship it.",
       "confidence": 82,
       "warnings": [],
       "suggestedNextAction": "Green-light.",
@@ -642,11 +665,11 @@
           "hookStrength": 20,
           "emotionalClarity": 20,
           "originality": 20,
-          "replayValue": 12,
+          "replayValue": 13,
           "visualIdentity": 10,
           "shortFormPotential": 10,
           "releaseReadiness": 5,
-          "total": 97,
+          "total": 98,
           "verdict": "Certified banger — ship it."
         },
         "crave": {
@@ -694,7 +717,7 @@
           {
             "label": "Avoid-words reviewed",
             "ok": false,
-            "note": "1 avoid-word(s) present (warning only)"
+            "note": "2 avoid-word(s) present (warning only)"
           },
           {
             "label": "Ownership clear",

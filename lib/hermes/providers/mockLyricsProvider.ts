@@ -6,7 +6,7 @@
 import type { LyricsProvider } from './providerTypes';
 import type { SongInputs, HookOption, SongSection } from '../types';
 import { makeRng, hashString, pick, keywords, titleCase, shuffle, tidyLine } from '../text';
-import { rhymeFamily } from '../rhyme';
+import { rhymeFamily, type RhymeTemp } from '../rhyme';
 import { deriveEmotion } from '../emotion';
 
 function seedOf(inputs: SongInputs, salt = '', seed = 0): number {
@@ -40,57 +40,96 @@ function adjPool(valence: number): string[] {
 const NOUN_STOP = new Set(['made', 'out', 'still', 'got', 'get', 'keep', 'let', 'gone', 'been', 'came', 'through', 'about', 'song']);
 
 // Couplet lines end on a {rhyme} slot so two of them land a real end-rhyme.
-const COUPLET_LINES = [
-  'still {verb} my way up out the {rhyme}',
-  'they never saw me chase the {rhyme}',
-  'I keep it close, the {adj} {rhyme}',
-  'everything I lost became the {rhyme}',
-  'no map, no plan, just the {rhyme}',
-  'I carry the weight of the {rhyme}',
-  'they ask me why I need the {rhyme}',
-  'wrote my whole name across the {rhyme}',
-  'out them {adj} nights I found the {rhyme}',
-  'nobody ever handed me the {rhyme}',
-  'I bet it all on the {rhyme}',
-  'learned to love the {adj} {rhyme}',
+// Hierarchical generation: each SECTION has a GOAL, and draws from a pool of frames
+// written for that goal — Verse 1 sets the scene, Verse 2 raises the stakes, the
+// Bridge reflects — so the song develops one idea instead of repeating generic lines.
+// Each goal frame carries a {noun} (a theme word — this is where thematic threading
+// lands) and ends on a {rhyme} (a lexicon rhyme word), so verses both stay on-theme
+// and land real couplets.
+// Verse 1 — establish: where it started, the ground truth.
+const SETUP_LINES = [
+  'it started with the {noun} and the {rhyme}',
+  'grew up on {noun}, chasing the {rhyme}',
+  'all I had was {noun} and the {rhyme}',
+  'came up on {noun}, dreaming of the {rhyme}',
+  'nothing in my hands but {noun} and the {rhyme}',
+  'they handed me {noun} instead of the {rhyme}',
+];
+// Verse 2 — escalate: the stakes rise, something turns.
+const TURN_LINES = [
+  'now I {verb} the {noun} into the {rhyme}',
+  'everything changed, traded {noun} for the {rhyme}',
+  'no turning back, I want the {noun} and the {rhyme}',
+  'took that {noun} and turned it to a {rhyme}',
+  'stakes got higher, {noun} became the {rhyme}',
+  'put the {noun} down, reaching for the {rhyme}',
+];
+// Bridge — reflect: the quiet payoff, what it cost and meant.
+const REFLECT_LINES = [
+  'when it\'s quiet I still hear the {noun} and the {rhyme}',
+  'looking back, the {noun} was always the {rhyme}',
+  'wouldn\'t trade the {noun} for a {rhyme}',
+  'made my peace with {noun} and the {rhyme}',
+  'every {noun} of mine became a {rhyme}',
+  'somewhere in the {noun} I found the {rhyme}',
 ];
 
-// Build a rhymed verse: `couplets` pairs of lines, each pair ending on two
-// different-but-rhyming lexicon words. Deterministic per rng.
-function buildRhymedVerse(inputs: SongInputs, rng: () => number, valence: number, couplets: number): string[] {
+interface VerseOpts { pool: string[]; thread: string[]; used: Set<string>; temp: RhymeTemp; anchorIdx: number; }
+
+// pick a frame not already used elsewhere in the song (diversity guard), falling
+// back to the whole pool once exhausted; records the choice so it isn't reused.
+function pickFresh(pool: string[], used: Set<string>, rng: () => number): string {
+  const fresh = pool.filter((x) => !used.has(x));
+  const choice = pick(fresh.length ? fresh : pool, rng);
+  used.add(choice);
+  return choice;
+}
+
+// Build a rhymed verse toward a section goal: `couplets` pairs of lines, each pair
+// ending on two different-but-rhyming lexicon words. Threads a theme word through
+// the opening line so sections stay about the same thing. Deterministic per rng.
+function buildRhymedVerse(inputs: SongInputs, rng: () => number, valence: number, couplets: number, opts: VerseOpts): string[] {
+  const { pool, thread, used, temp, anchorIdx } = opts;
   const lines: string[] = [];
   for (let c = 0; c < couplets; c++) {
-    const fam = rhymeFamily(rng, valence, 2);
+    const fam = rhymeFamily(rng, valence, 2, temp);
     const a = fam[0]?.w ?? 'road';
     const b = fam[1]?.w ?? 'gold';
-    const t1 = pick(COUPLET_LINES, rng);
-    const t2 = pick(COUPLET_LINES.filter((x) => x !== t1), rng);
-    lines.push(capitalize(fill(t1, inputs, rng, a, valence)));
-    lines.push(capitalize(fill(t2, inputs, rng, b, valence)));
+    const t1 = pickFresh(pool, used, rng);
+    const t2 = pickFresh(pool.filter((x) => x !== t1), used, rng);
+    const anchor = thread.length ? thread[(anchorIdx + c) % thread.length] : '';
+    lines.push(capitalize(fill(t1, inputs, rng, a, valence, c === 0 ? anchor : '')));
+    lines.push(capitalize(fill(t2, inputs, rng, b, valence, '')));
   }
   return dedupe(lines);
 }
 
-function fill(frame: string, inputs: SongInputs, rng: () => number, rhyme = '', valence = 0): string {
-  const ks = keywords([inputs.theme, inputs.mood, inputs.references].join(' ')).filter((k) => !NOUN_STOP.has(k));
+function fill(frame: string, inputs: SongInputs, rng: () => number, rhyme = '', valence = 0, anchor = ''): string {
+  // nouns come from the theme + references (the "what"); mood drives adjectives
+  // separately (adjPool), so keeping it out of the noun slots reads more grammatically.
+  const ks = keywords([inputs.theme, inputs.references].join(' ')).filter((k) => !NOUN_STOP.has(k));
   // shuffled pools, consumed in order, so a single line never repeats the same
   // filler word ("the road and the road") — distinct, grammatical output.
   const nouns = shuffle(ks.length ? ks : ['block', 'name', 'road', 'weight', 'city', 'street'], rng);
   const verbs = shuffle(VERBS, rng);
   const adjs = shuffle(adjPool(valence), rng);   // emotion → diction: adjectives lean with the mood
   let ni = 0, vi = 0, ai = 0;
+  // thematic threading: the first noun-type slot uses the section's anchor word (a
+  // theme keyword), so the same idea recurs across sections instead of drifting.
+  let anchorLeft = anchor ? 1 : 0;
+  const nextNoun = () => (anchorLeft-- > 0 ? anchor : nouns[ni++ % nouns.length]);
   // pick a meaningful audience word — skip leading articles ("the lonely" -> "lonely")
   const WHO_STOP = new Set(['the', 'a', 'an', 'my', 'for', 'to', 'of', 'all']);
   const whoTokens = (inputs.audience || '').split(/\s+/).filter(Boolean);
   const who = whoTokens.find((w) => !WHO_STOP.has(w.toLowerCase())) || whoTokens[whoTokens.length - 1] || 'mine';
   const out = frame
-    .replace(/\{k\}/g, () => titleCase(nouns[ni++ % nouns.length]))
-    .replace(/\{noun\}/g, () => nouns[ni++ % nouns.length])
+    .replace(/\{k\}/g, () => titleCase(nextNoun()))
+    .replace(/\{noun\}/g, () => nextNoun())
     .replace(/\{verb\}/g, () => verbs[vi++ % verbs.length])
     .replace(/\{adj\}/g, () => adjs[ai++ % adjs.length])
     .replace(/\{who\}/g, () => who)
     .replace(/\{rhyme\}/g, () => rhyme || nouns[ni++ % nouns.length])
-    .replace(/\{place\}/g, () => nouns[ni++ % nouns.length]);
+    .replace(/\{place\}/g, () => nextNoun());
   return tidyLine(out);
 }
 
@@ -132,10 +171,15 @@ export const mockLyricsProvider: LyricsProvider = {
     const rng = makeRng(seedOf(inputs, 'verse', seed));
     // the limbic layer sets the emotional valence → rhyme words + adjectives lean with it
     const valence = deriveEmotion(inputs).valence;
-    // rhymed couplets — verses now land real end-rhymes (built on the lexicon)
-    const v1 = buildRhymedVerse(inputs, rng, valence, 2);
-    const v2 = buildRhymedVerse(inputs, rng, valence, 2);
-    const bridge = buildRhymedVerse(inputs, rng, valence, 1);
+    const temp: RhymeTemp = inputs.rhymeTemp ?? 'balanced';
+    // the thread: a few theme words carried across every section so the song develops
+    // one idea; the diversity guard stops any frame template being reused song-wide.
+    const thread = keywords([inputs.theme, inputs.references].join(' ')).filter((k) => !NOUN_STOP.has(k)).slice(0, 3);
+    const used = new Set<string>();
+    // hierarchical generation: each verse pursues its section goal (setup → turn → reflect)
+    const v1 = buildRhymedVerse(inputs, rng, valence, 2, { pool: SETUP_LINES, thread, used, temp, anchorIdx: 0 });
+    const v2 = buildRhymedVerse(inputs, rng, valence, 2, { pool: TURN_LINES, thread, used, temp, anchorIdx: 1 });
+    const bridge = buildRhymedVerse(inputs, rng, valence, 1, { pool: REFLECT_LINES, thread, used, temp, anchorIdx: 2 });
     const hookLines = [hook.text, hook.text, secondHookLine(inputs, rng), hook.text];
 
     const full: SongSection[] = [
