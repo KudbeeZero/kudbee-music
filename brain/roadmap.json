@@ -1,0 +1,105 @@
+{
+  "updated": "2026-07-01",
+  "northStar": "The AI-engine pillar of WIFI DJ (wifidj.xyz). The lyrical process + the brain are the moat — not the video studio.",
+  "principles": [
+    "$0 / local / original-only by default",
+    "no living-artist mimicry — influences are felt, never copied",
+    "assistant, not autopilot — the artist decides",
+    "real-AI and Web3 are opt-in, behind adapters/APIs, never bloating the free local core"
+  ],
+  "livingState": {
+    "note": "One source of truth so nothing goes stale or gets left behind.",
+    "capture": "IDEAS.md — the capture net; nothing the artist says is lost",
+    "backlog": "TODO.md — the working list",
+    "spine": "brain/roadmap.json — this file; indexes every item + the PR that shipped it",
+    "highlights": "README.md#-roadmap — the highlight reel",
+    "rule": "Every PR updates the spine + TODO + IDEAS + README together. Shipping an item flips its status here and moves it to Shipped in TODO. A PR that skips this is not done."
+  },
+  "brainRegions": 11,
+  "phases": [
+    {
+      "id": 0, "name": "Living-state spine", "status": "in-progress",
+      "goal": "A single machine-readable roadmap the /loop reads each iteration; keep all four tracking surfaces in lockstep.",
+      "items": [
+        { "id": "0.1", "title": "brain/roadmap.json spine + sync discipline", "status": "next", "home": "brain/roadmap.json" },
+        { "id": "0.2", "title": "Refresh TODO.md to reality (mark #30–#34 shipped)", "status": "next", "home": "TODO.md" }
+      ]
+    },
+    {
+      "id": 1, "name": "Measure & make it safe", "status": "queued",
+      "goal": "Cheap, high-credibility foundation that makes everything after it measurable and responsible.",
+      "items": [
+        { "id": "1.1", "title": "Eval harness + golden songs (npm run eval)", "status": "queued", "home": "lib/hermes/eval.ts", "source": "Grok #5" },
+        { "id": "1.2", "title": "Output-safety filter + short disclaimer/ToS", "status": "queued", "home": "lib/hermes/safety.ts", "source": "Grok" },
+        { "id": "1.3", "title": "One-command demo (npm run demo) — full song end-to-end", "status": "queued", "home": "scripts/demo", "source": "Grok #4" }
+      ]
+    },
+    {
+      "id": 2, "name": "Deepen the visible brain", "status": "queued",
+      "goal": "The lyrics/brain focus, made visible — the star magnet.",
+      "items": [
+        { "id": "2.1", "title": "Cognitive model: first thought → second thought → decision", "status": "queued", "home": "lib/hermes/cognition.ts" },
+        { "id": "2.2", "title": "The Council — agents as a deliberating board", "status": "queued", "home": "components/hermes/Council.tsx" },
+        { "id": "2.3", "title": "Brain-scan boot sequence + live per-agent drive", "status": "queued", "home": "components/hermes/BrainScan.tsx" }
+      ]
+    },
+    {
+      "id": 3, "name": "Make it yours (the living world)", "status": "queued",
+      "goal": "The brain becomes the individual artist over time.",
+      "items": [
+        { "id": "3.1", "title": "Create-your-own-artist v1 — an artist-identity file that becomes you", "status": "queued", "home": "lib/hermes/artist.ts" },
+        { "id": "3.2", "title": "Community-authored personas (craft-DNA, like scene packs)", "status": "queued", "home": "brain/personas.json" }
+      ]
+    },
+    {
+      "id": 4, "name": "Durability", "status": "queued",
+      "goal": "Stop data loss; a cleared browser must never wipe a catalog.",
+      "items": [
+        { "id": "4.1", "title": "Vault durability — export-on-change + file/cloud backup", "status": "queued", "home": "lib/hermes/storage.ts" },
+        { "id": "4.2", "title": "Optional durable cloud brain (Notion/Drive backing)", "status": "queued", "home": "lib/hermes/storage.ts" }
+      ]
+    },
+    {
+      "id": 5, "name": "Real intelligence (opt-in)", "status": "queued",
+      "goal": "The smallest real-AI increment that feels transformative; mock stays default so the core stays $0.",
+      "items": [
+        { "id": "5.1", "title": "claudeLyricsProvider behind ANTHROPIC_API_KEY (mock default)", "status": "queued", "home": "lib/hermes/providers/claudeLyricsProvider.ts" },
+        { "id": "5.2", "title": "Rhyme/BPM validation loop on generated output", "status": "queued", "home": "lib/hermes/pipeline.ts" }
+      ]
+    },
+    {
+      "id": 6, "name": "Influence Studio (WIFI DJ framework Part 1)", "status": "queued",
+      "goal": "Describe an influence (felt, never copied) → craft parameters.",
+      "items": [
+        { "id": "6.1", "title": "Influence Studio — thematic cartography + lexical fingerprinting", "status": "queued", "home": "lib/hermes/influence.ts" }
+      ]
+    }
+  ],
+  "ecosystem": {
+    "note": "Bigger initiatives that integrate with the engine via API — kept OUT of the free local core so it stays $0. Tracked here so they don't get lost; built when the founder greenlights.",
+    "crossroadsBoard": {
+      "status": "designing",
+      "what": "The WIFI DJ governance + community steering surface — the brain's 'decision' region made social. The community and the agents meet at the crossroads to steer creative + ecosystem direction.",
+      "plan": [
+        "1. Board model (local-first, $0): brain/crossroads.json + lib/hermes/crossroads.ts — a data model of 'crossings' (a decision/fork: creative choice, persona/pack addition, direction). Each crossing has options, rationales, weighted votes, and an outcome. Versioned in git, same pattern as beliefs/personas.",
+        "2. The Board UI: a /crossroads route rendering active crossings — right-hemisphere proposals vs left-hemisphere challenges vs the artist's decision (shares the Council + Brain Scan aesthetic).",
+        "3. Signals → the brain: board decisions feed the taste/memory model (recordTaste) and can steer generation, exactly like Lyric Lab choices.",
+        "4. Community layer (opt-in, via API): proposals/votes sync to a backend (Supabase / Cloudflare D1); identity via email or wallet. No secrets in the core repo.",
+        "5. Web3 governance (later, via API): token-weighted voting / Solana / NFT membership steers the G-DJ. The Board is the on-ramp; the token layer plugs in through the API, never bloating the free local core."
+      ],
+      "guardrail": "Ships in stages; stages 1–3 are $0/local and live in this repo. Stages 4–5 are a separate service the core calls via API."
+    },
+    "lightningAI": {
+      "status": "spike-pending",
+      "what": "Per-agent compute for the opt-in 'advance your model' tier: a user signs up and gets their own agent; paid tiers give a bigger brain.",
+      "assessment": "Great fit for the OPTIONAL GPU / 'bigger brain' lane and for prototyping per-agent compute — NOT the backbone. The base experience stays $0/local/serverless; the real prerequisite for 'their own agent' is an auth + DB layer (accounts + persistent vault), which is compute-light. Recommend testing Lightning as one opt-in provider behind the existing LyricsProvider seam, reversible and low-risk.",
+      "spike": "When SSL is connected: stand up ONE Lightning Studio running a single HERMES agent behind an HTTPS endpoint; wire the app to call it as an opt-in provider. Compare against Anthropic API direct + Modal/Replicate for the same job before committing.",
+      "prerequisite": "Accounts + persistent vault (see Phase 4 durability) — 'their own agent' needs identity + storage first."
+    },
+    "wifiDjRadio": { "status": "later", "what": "A live radio streaming engine-made music; community submits + shapes; eventually each person runs their own agent." },
+    "token": { "status": "later", "what": "Crossroads / Solana / token / NFT governance — funds the ecosystem, powers community steering; integrates via API." },
+    "perAgentCompute": { "status": "later", "what": "See lightningAI — each agent on its own minimal compute, paid tiers to advance the model." },
+    "docsSite": { "status": "later", "what": "Astro Starlight docs on GitHub Pages." },
+    "videoStudio": { "status": "paused", "what": "De-emphasized in the web app (focus on lyrics + brain). Code intact for the CLI; re-enable later." }
+  }
+}

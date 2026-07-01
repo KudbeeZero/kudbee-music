@@ -11,7 +11,9 @@ artist says gets lost), then graduate here once designed. Check items off as the
 ---
 
 ## 🚧 In progress
-_Nothing actively in flight — pick the next item from **Up next**._
+_The autonomous `/loop` is working the phased roadmap. **Source of truth:
+[`brain/roadmap.json`](brain/roadmap.json)** — it indexes every item + the PR that
+shipped it. This file is the human-readable view; keep the two in sync._
 
 ## 🧠 Brain buildout queue (autonomous /loop — research-informed)
 1. [x] **Local lexicon** (vocabulary cortex) — token-free word store. _(shipped)_
@@ -28,25 +30,36 @@ _Nothing actively in flight — pick the next item from **Up next**._
 6. [x] **Procedural memory** — `lib/hermes/procedural.ts`: derives the artist's recurring
    craft moves (favorite structure, recurring rhyme sounds, verse length) from the vault;
    surfaced as a "signature move" recommendation. _(shipped)_
-7. [ ] **"Becoming you" self-portrait** — surface how much of a song is the learned voice.
+7. [x] **"Becoming you" self-portrait** — the 🪞 panel surfaces how much of a song is the
+   learned voice vs fresh suggestion. _(#30)_
 
-## 🎯 Up next (ordered) — the depth-pass plan (see `/root/.claude/plans/…`)
-0. [ ] **Real-audio flagship video** — render a properly **vocal-synced** Cold Hard
-   Gold video from the *actual* Suno master (needs the real lyrics, not the generated
-   demo lyrics, so sync is honest). Completes Phase 1's end-to-end proof.
-1. [ ] **Phase 2 — make the local engine real ($0):** rhyme-aware combinator +
-   escalating hooks (`text.ts`, `mockLyricsProvider.ts`); honest, non-gameable
-   scoring — semantic hook strength, hook-mutation replay value, arc via transition
-   tokens (`scoring.ts`, `pipeline.ts`); smarter recommendations (`recommend.ts`).
-2. [ ] **Phase 3 — real AI behind the adapters (opt-in, behind keys):**
-   `claudeLyricsProvider` (default stays mock → $0), optional Suno API bridge,
-   rhyme/BPM validation loop.
-3. [ ] **Phase 4 — durability + unify the studios:** stop localStorage data loss,
-   in-app video preview, video studio reachable from the web app; video-engine
-   generality (auto section detection, shotlist DSL, `--bpm`, `--auto-refine`).
+## 🎯 Up next (ordered) — the phased roadmap (see [`brain/roadmap.json`](brain/roadmap.json))
+- **Phase 1 — Measure & make it safe:** eval harness + golden songs (`npm run eval`);
+  output-safety filter + disclaimer; one-command demo (`npm run demo`).
+- **Phase 2 — Deepen the visible brain:** cognitive model (`cognition.ts`, first→second
+  thought→decision); the Council (agents as a deliberating board); brain-scan boot
+  sequence + live per-agent drive.
+- **Phase 3 — Make it yours:** create-your-own-artist v1 (artist-identity file that
+  becomes you); community-authored personas.
+- **Phase 4 — Durability:** vault durability (export-on-change + backup); optional cloud brain.
+- **Phase 5 — Real intelligence (opt-in):** `claudeLyricsProvider` behind a key (mock
+  default → $0); rhyme/BPM validation loop.
+- **Phase 6 — Influence Studio:** describe an influence (felt, never copied) → craft params.
+
+## 🌐 Ecosystem (integrates via API — kept out of the free local core)
+- [~] **Crossroads Board** — the WIFI DJ governance/community steering surface (the brain's
+   "decision" region, made social). Staged plan in [`brain/roadmap.json`](brain/roadmap.json):
+   (1) local `crossroads.json` model → (2) `/crossroads` board UI → (3) decisions feed the
+   taste model → (4) community sync via API → (5) token-weighted governance. Stages 1–3 are
+   $0/local; 4–5 are a separate service the core calls via API.
+- [ ] **Lightning AI spike** — per-agent compute for the opt-in "advance your model" tier
+   (user signs up → their own agent). Best used as the **optional GPU lane**, not the
+   backbone; base stays $0/local/serverless. Prereq: accounts + persistent vault (Phase 4).
+   **Spike when SSL is connected:** one Lightning Studio running a single HERMES agent
+   behind HTTPS, wired as an opt-in provider; compare vs Anthropic-API-direct + Modal/Replicate.
 - [ ] **Per-track Suno structure hints** — `[Intro]`/`[Bridge]` pacing, stems, BPM/key
-   tags in the Suno export (folds into Phase 2/3).
-- [ ] **Docs site on GitHub Pages** — Astro Starlight (folds into Phase 4).
+   tags in the Suno export (folds into Phase 5).
+- [ ] **Docs site on GitHub Pages** — Astro Starlight.
 
 ## 💡 Backlog (unordered ideas)
 - [ ] **Live preview = the review path** — deploy to **Vercel** (free, instant
@@ -82,6 +95,18 @@ Board** governance / Solana / token / NFT layer integrates with this engine via 
 later (kept out of this repo's core so it stays free + local).
 
 ## ✅ Shipped (newest first)
+- [x] **Deterministic lyric-core depth** — hierarchical generation (section goals:
+      setup→turn→reflect), thematic threading, diversity scoring (`selfSimilarity`), and a
+      slant-rhyme "temperature" dial (`rhymeTemp`, `slantKey`, Song Lab selector). _(#34)_
+- [x] **Functional song deck + video pullback** — hook options selectable (honest re-score
+      + feeds the voice model), clips copy-on-tap; video framing removed from the web app
+      (plain JSON export, music-video section gone). Video studio code kept for the CLI. _(#33)_
+- [x] **Demo songs + generation traces** — `examples/demos/`: 5 original songs, each minted
+      by the real pipeline with a trace of what all 11 regions contributed. _(#32)_
+- [x] **Honest framing pass** — README + `hemispheres.md` + Brain Scan state the brain is an
+      inspired workflow model, not biological fidelity. _(#31)_
+- [x] **Reward, Default-Mode, Procedural memory, Becoming-you** — the last brain-buildout
+      regions/readouts (crave score, divergent angles, signature moves, voice mirror). _(#27–#30)_
 - [x] **Rhyme + meter engine** — `lib/hermes/rhyme.ts` (end-rhyme, scheme, density,
       lexicon rhyme families). The combinator writes **rhymed couplets** now (verses
       actually rhyme), and hook scoring is **honest** — brevity + theme reference +
@@ -170,3 +195,8 @@ later (kept out of this repo's core so it stays free + local).
 - When something ships, move it from **Up next/Backlog** to **Shipped** in the same PR,
   and update the README Roadmap if it's highlight-worthy. Keep this file and the README
   in sync.
+- **Living-state rule (anti-staleness spine):** every PR updates all four surfaces
+  together — [`brain/roadmap.json`](brain/roadmap.json) (flip the item's status + record
+  the PR), this `TODO.md`, [`IDEAS.md`](IDEAS.md), and the README roadmap. A PR that ships
+  an item but leaves the spine stale is **not done**. The `/loop` reads `roadmap.json` to
+  pick the next item, so it must always reflect reality.
