@@ -30,7 +30,7 @@
       "goal": "Cheap, high-credibility foundation that makes everything after it measurable and responsible.",
       "items": [
         { "id": "1.1", "title": "Eval harness + golden songs (npm run eval)", "status": "shipped", "pr": "#36", "home": "lib/hermes/eval.ts", "source": "Grok #5", "note": "objective metrics (rhyme density, line diversity, thematic coherence, hook strength) over the demos+flagship golden set; regression guard in CI" },
-        { "id": "1.2", "title": "Output-safety filter + short disclaimer/ToS", "status": "queued", "home": "lib/hermes/safety.ts", "source": "Grok" },
+        { "id": "1.2", "title": "Output-safety filter + short disclaimer/ToS", "status": "shipped", "pr": "#37", "home": "lib/hermes/safety.ts", "source": "Grok", "note": "screens hooks/lyrics against a famous-phrase list → a 'famous-phrase' uniqueness flag; disclaimer in README + Uniqueness panel" },
         { "id": "1.3", "title": "One-command demo (npm run demo) — full song end-to-end", "status": "queued", "home": "scripts/demo", "source": "Grok #4" }
       ]
     },

@@ -95,6 +95,9 @@ Board** governance / Solana / token / NFT layer integrates with this engine via 
 later (kept out of this repo's core so it stays free + local).
 
 ## ✅ Shipped (newest first)
+- [x] **Output-safety filter + disclaimer** — `lib/hermes/safety.ts`: screens generated
+      hooks/lyrics against a famous-phrase list → a `famous-phrase` uniqueness flag; a
+      responsibility disclaimer in the README + Uniqueness panel. _(#37)_
 - [x] **Eval harness + golden songs** — `lib/hermes/eval.ts` + `npm run eval`: objective
       local metrics (rhyme density, line diversity, thematic coherence, hook strength) over
       the demos + flagship as a **golden set**; a CI regression guard so "learn/score" is
