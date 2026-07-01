@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { deliberate, selectHookByCognition } from '../cognition';
+import { deliberate, selectHookByCognition, deliberationForHook } from '../cognition';
 import type { SongInputs, HookOption } from '../types';
 
 const hook = (text: string, score: number): HookOption => ({ text, angle: '', cadence: '', score });
@@ -34,6 +34,26 @@ describe('cognition (first thought → second thought → decision)', () => {
     const d = deliberate('yeah uh ok', inputs);
     expect(d.verdict).toBe('revise');
     expect(d.confidence).toBeLessThan(0.5);
+  });
+});
+
+describe('deliberationForHook (keeps the displayed verdict in sync with the current hook)', () => {
+  it('reuses the stored deliberation when it is for this hook', () => {
+    const stored = deliberate('the cold streets made the gold in me', inputs);
+    const d = deliberationForHook('the cold streets made the gold in me', inputs, stored);
+    expect(d).toBe(stored); // same object — no recompute
+  });
+
+  it('recomputes when the stored deliberation is for a DIFFERENT hook (after a re-pick)', () => {
+    const stored = deliberate('an old auto-chosen hook', inputs);
+    const d = deliberationForHook('a different hook the artist just picked', inputs, stored);
+    expect(d).not.toBe(stored);
+    expect(d.firstThought).toBe('a different hook the artist just picked');
+  });
+
+  it('computes fresh when there is no stored deliberation', () => {
+    const d = deliberationForHook('cold streets turned to gold', inputs, null);
+    expect(d.firstThought).toBe('cold streets turned to gold');
   });
 });
 

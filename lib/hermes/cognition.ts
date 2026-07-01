@@ -44,6 +44,16 @@ export function deliberate(proposal: string, inputs: SongInputs): Deliberation {
 }
 
 /**
+ * The deliberation to DISPLAY for a hook: reuse the pipeline's stored one only when it
+ * actually belongs to this hook (its firstThought is the hook text), otherwise compute a
+ * fresh one. Prevents a stale readout after the artist picks a different hook (the stored
+ * `cognition` was minted for the auto-chosen hook and doesn't follow a re-pick).
+ */
+export function deliberationForHook(hookText: string, inputs: SongInputs, stored?: Deliberation | null): Deliberation {
+  return stored && stored.firstThought === hookText ? stored : deliberate(hookText, inputs);
+}
+
+/**
  * Choose a hook by CLOSING THE COGNITION LOOP — the second thought is load-bearing, not
  * decorative. Each candidate is deliberated; the winner is the one that (1) fixes the most
  * critiques the artist previously flagged (`feedback`), then (2) survives the most

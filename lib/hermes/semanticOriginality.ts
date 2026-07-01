@@ -33,22 +33,28 @@ export async function semanticOriginality(
   const min = opts.minScore ?? 0.85;
   const flags: UniquenessFlag[] = [];
   const seen = new Set<string>();
+  let anySucceeded = false;
   for (const line of lyricLines(lyrics)) {
     const key = line.toLowerCase();
     if (seen.has(key)) continue;
     seen.add(key);
     try {
       const hits = await semanticSearch(line, { topK: 1, minScore: min, embed: opts.embed, file: opts.file });
+      anySucceeded = true;
       if (hits.length) {
         flags.push({
           kind: 'too-similar',
-          detail: `line is ~${(hits[0].similarity * 100) | 0}% close in MEANING to a prior line — a paraphrase the word-level check misses`,
+          detail: `line is ~${Math.round(hits[0].similarity * 100)}% close in MEANING to a prior line — a paraphrase the word-level check misses`,
           line,
           suggestion: 'rephrase with your own image',
         });
       }
     } catch {
-      return flags; // optional dep missing → stop; the base report already stands on its own
+      // If the very FIRST call fails, the optional embedding dep is almost certainly
+      // absent → bail cleanly (the base report stands on its own). A transient error
+      // AFTER we've already embedded a line shouldn't drop the rest of the scan.
+      if (!anySucceeded) return [];
+      // else: skip just this line and keep checking the others.
     }
   }
   return flags;
