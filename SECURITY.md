@@ -38,6 +38,26 @@ rules when those land:
   proxy that holds the key, per-IP rate limiting, and a hard spend cap. Until that
   exists, paid providers run only locally with the user's own key in `.env.local`.
 
+## If a secret is ever committed (incident response)
+
+`.gitignore` blocks `.env` / `.env.*`, but that only protects `git add` — creating
+a file through the **GitHub web UI bypasses `.gitignore`**, and a key pasted into a
+committed file is exposed the instant it's pushed (and stays in git history even
+after you delete the file).
+
+If it happens, in this order:
+
+1. **Rotate/revoke the key first.** This is the only fix that actually matters —
+   once a secret is public (even briefly, even in a since-deleted commit, even in a
+   force-pushed-away history), assume it is compromised and burn it at the provider.
+2. **Then scrub history** (belt-and-suspenders): remove the blob from all history
+   with `git filter-repo --path <file> --invert-paths` and force-push. Note this
+   does **not** un-leak an already-public value — GitHub can still serve the old
+   commit by SHA for a while, and forks/clones retain it. Rotation is what closes it.
+3. Enable **push protection** (below) so the next one is blocked before it lands.
+
+Keys belong only in a gitignored `.env.local`, never in a tracked file or the web UI.
+
 ## Recommended repo settings (for the maintainer)
 
 Branch protection on `main` (these can't be set from a file — flip them in
