@@ -39,9 +39,10 @@
       "id": 2, "name": "Deepen the visible brain", "status": "queued",
       "goal": "The lyrics/brain focus, made visible — the star magnet.",
       "items": [
-        { "id": "2.1", "title": "Cognitive model: first thought → second thought → decision", "status": "queued", "home": "lib/hermes/cognition.ts" },
+        { "id": "2.1", "title": "Cognitive model: first thought → second thought → decision", "status": "shipped", "pr": "#39", "home": "lib/hermes/cognition.ts", "note": "deliberate() runs 3 real critiques (true-to-brief / original / earns-it) → keep|revise; a '🧭 How the brain decided' readout on the lead hook" },
         { "id": "2.2", "title": "The Council — agents as a deliberating board", "status": "queued", "home": "components/hermes/Council.tsx" },
-        { "id": "2.3", "title": "Brain-scan boot sequence + live per-agent drive", "status": "queued", "home": "components/hermes/BrainScan.tsx" }
+        { "id": "2.3", "title": "Brain-scan boot sequence + live per-agent drive", "status": "queued", "home": "components/hermes/BrainScan.tsx" },
+        { "id": "2.4", "title": "Particle Brain + artist heat-map (living Brain Scan)", "status": "queued", "home": "components/hermes/BrainScan.tsx", "note": "FOUNDER IDEA: particle field flowing along the nerves; a thermal heat-map colors regions by the type of artist you are (right/generative=hot magenta, analytical=cyan, emotion raises temp, more 'becoming-you'=hotter). $0 from taste+persona+emotion+procedural. Reduced-motion aware. Prime demo/Twitter asset. Feeds the Living-Brain dNFT." }
       ]
     },
     {
@@ -97,6 +98,7 @@
       "spike": "When SSL is connected: stand up ONE Lightning Studio running a single HERMES agent behind an HTTPS endpoint; wire the app to call it as an opt-in provider. Compare against Anthropic API direct + Modal/Replicate for the same job before committing.",
       "prerequisite": "Accounts + persistent vault (see Phase 4 durability) — 'their own agent' needs identity + storage first."
     },
+    "livingBrainNft": { "status": "blocked-on-founder", "what": "The particle brain as a DYNAMIC NFT that evolves as you create. tokenURI → metadata URL whose animation_url is the live Brain-Scan HTML + a snapshot image; traits = dominant hemisphere / temperature / top rhyme sound / songs-made / becoming-you% / primary emotion. Value = utility (unlocks compute tier + Crossroads votes + roles + radio/curation), evolving status/provenance, portable G-DJ identity, song royalties. NEAR-TERM $0 STEP (buildable, pairs with the Particle Brain): brainSignature() → deterministic traits + a stable metadata JSON + a shareable /brain/[id] render URL (no chain yet). Chain mint (Solana/Metaplex) = founder decision. Guardrail: free core stays free; utility/identity framing, not investment promises." },
     "discordServer": { "status": "blocked-on-founder", "what": "Community server (preferred over Telegram) to learn-the-process + contribute. Plan: channels (#showcase/#help/#contributing/#song-drops), roles, voice listening parties, and a GitHub→Discord webhook posting commits/PRs/releases. Draft structure + wire the webhook on the founder's go-ahead; optional Telegram announce mirror later." },
     "wifiDjRadio": { "status": "later", "what": "A live radio streaming engine-made music; community submits + shapes; eventually each person runs their own agent." },
     "token": { "status": "later", "what": "Crossroads / Solana / token / NFT governance — funds the ecosystem, powers community steering; integrates via API." },

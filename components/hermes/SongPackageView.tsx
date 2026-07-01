@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import type { HookOption, SongPackage } from '@/lib/hermes/types';
+import { deliberate } from '@/lib/hermes/cognition';
 import styles from './hermes.module.css';
 
 export default function SongPackageView({ pkg, onSaveEdit, onChooseHook }: {
@@ -69,6 +70,7 @@ export default function SongPackageView({ pkg, onSaveEdit, onChooseHook }: {
             </div>
           );
         })}
+        {pkg.chosenHook && <Deliberation hook={pkg.chosenHook.text} pkg={pkg} />}
       </Section>
 
       <div className={styles.pkgSection}>
@@ -145,6 +147,26 @@ export default function SongPackageView({ pkg, onSaveEdit, onChooseHook }: {
       <Section label="Promo caption" copy={pkg.promoCaption}>
         <div className={styles.kv}>{pkg.promoCaption}</div>
       </Section>
+    </div>
+  );
+}
+
+/** The dual-process readout: first thought → second thought → decision, on the lead hook. */
+function Deliberation({ hook, pkg }: { hook: string; pkg: SongPackage }) {
+  const d = deliberate(hook, pkg.inputs);
+  return (
+    <div style={{ marginTop: 8, borderTop: '1px solid var(--line)', paddingTop: 8 }}>
+      <div className={styles.hint}>🧭 How the brain decided <span style={{ opacity: 0.7 }}>(first thought → second thought → decision)</span></div>
+      <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap', marginTop: 6 }}>
+        {d.secondThought.map((c, i) => (
+          <span key={i} className={styles.chip}
+            style={{ borderColor: c.passes ? 'rgba(87,217,138,0.4)' : 'rgba(255,120,120,0.4)', color: c.passes ? 'var(--good)' : 'var(--bad)' }}
+            title={c.note}>
+            {c.passes ? '✓' : '✗'} {c.question.replace(/^Is it |^Does it /, '').replace('?', '')}
+          </span>
+        ))}
+      </div>
+      <div className={styles.hint} style={{ marginTop: 6 }}>{d.verdict === 'keep' ? '✅ ' : '↻ '}{d.decision}</div>
     </div>
   );
 }
