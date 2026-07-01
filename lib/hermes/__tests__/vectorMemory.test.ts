@@ -3,7 +3,7 @@ import { rmSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import {
-  cosineSimilarity, rankBySimilarity, addMemory, semanticSearch, quantize,
+  cosineSimilarity, rankBySimilarity, addMemory, semanticSearch, quantize, lexicalOverlap,
   type VectorEntry, type Embedder,
 } from '../vectorMemory';
 
@@ -40,6 +40,47 @@ describe('vector memory — pure search core', () => {
     expect(ranked.map((r) => r.entry.id)).toEqual(['a', 'd']); // a and d are perfect matches
     expect(rankBySimilarity([1, 0, 0], entries, { type: 'lyric' }).map((r) => r.entry.id)).toEqual(['d']);
     expect(rankBySimilarity([0, 1, 0], entries, { minScore: 0.99 }).map((r) => r.entry.id)).toEqual(['c']);
+  });
+});
+
+describe('vector memory — hybrid (vector + lexicon) + diversity (MMR)', () => {
+  it('lexicalOverlap is a deterministic Jaccard over content keywords', () => {
+    expect(lexicalOverlap('cold gold streets', 'cold gold streets')).toBeCloseTo(1, 5);
+    expect(lexicalOverlap('cold gold', 'warm silver')).toBe(0);
+    const v = lexicalOverlap('cold gold streets', 'cold silver streets');
+    expect(v).toBeGreaterThan(0); expect(v).toBeLessThan(1);
+  });
+
+  it('hybrid weight lets lexical overlap break a vector near-tie toward the keyword match', () => {
+    // two entries with identical embeddings (vector tie) but different words
+    const entries = [
+      entry('a', 'the warm harbor at dawn', [1, 0, 0]),
+      entry('b', 'cold gold on the block', [1, 0, 0]),
+    ];
+    // pure vector → tie broken by id ('a' first); hybrid → the lexical match ('cold gold') wins
+    const pure = rankBySimilarity([1, 0, 0], entries, { queryText: 'cold gold', topK: 1 });
+    expect(pure[0].entry.id).toBe('a');
+    const hybrid = rankBySimilarity([1, 0, 0], entries, { queryText: 'cold gold', hybrid: 0.6, topK: 1 });
+    expect(hybrid[0].entry.id).toBe('b');
+  });
+
+  it('diversity (MMR) avoids returning near-identical memories back to back', () => {
+    const entries = [
+      entry('a', 'A', [1, 0, 0]),
+      entry('b', 'B', [0.999, 0.001, 0]), // near-duplicate of A
+      entry('c', 'C', [0, 1, 0]),          // different direction
+    ];
+    // without diversity the two near-duplicates rank 1–2; with it, the different one is pulled up
+    const plain = rankBySimilarity([1, 0, 0], entries, { topK: 2 }).map((r) => r.entry.id);
+    expect(plain).toEqual(['a', 'b']);
+    const diverse = rankBySimilarity([1, 0, 0], entries, { topK: 2, diversity: 0.7 }).map((r) => r.entry.id);
+    expect(diverse).toEqual(['a', 'c']);
+  });
+
+  it('hybrid + diversity stay deterministic across repeated runs', () => {
+    const entries = [entry('a', 'cold gold', [1, 0]), entry('b', 'cold gold twin', [1, 0]), entry('c', 'warm sea', [0, 1])];
+    const run = () => rankBySimilarity([1, 0], entries, { queryText: 'cold gold', hybrid: 0.5, diversity: 0.5, topK: 3 }).map((r) => r.entry.id);
+    expect(run()).toEqual(run());
   });
 });
 

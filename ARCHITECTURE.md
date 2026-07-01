@@ -79,7 +79,9 @@ generated wiring diagram: [`docs/brain-wiring.md`](docs/brain-wiring.md).
 - `memory.ts`, `workingMemory.ts` — short-term (this session) working set.
 - `learn.ts`, `edits.ts`, `procedural.ts` — long-term: taste model + learn-from-edits.
 - `vectorMemory.ts` — optional local semantic recall (opt-in, lazy-loaded embeddings,
-  deterministic ranking). Pure search core is unit-tested with a fake embedder.
+  deterministic ranking). Pure search core supports **hybrid** search (blend cosine with
+  deterministic lexical/keyword overlap) and **diversity/MMR** re-ranking (no near-duplicate
+  results), both opt-in and off by default. Unit-tested with a fake embedder.
 - `vectorRecall.ts` — learn→recall over `vectorMemory`. `rememberSong` stores one memory
   per facet (hook / lyric / theme→procedural / mood→emotion); per-agent recalls surface
   meaning-close past work: `recallSimilarCraft` (procedural), `recallSimilarEmotion`

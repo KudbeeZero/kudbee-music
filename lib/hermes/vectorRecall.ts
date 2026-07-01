@@ -77,15 +77,26 @@ export interface Recall {
   similarity: number;
 }
 
+/** Options an agent recall accepts — includes the hybrid + diversity knobs from vectorMemory. */
+export interface RecallOptions {
+  embed?: Embedder;
+  file?: string;
+  topK?: number;
+  minScore?: number;
+  hybrid?: number;     // 0..1 — blend lexical overlap into ranking (creative-text friendly)
+  diversity?: number;  // 0..1 — MMR: don't return near-identical memories (great for procedural/originality)
+}
+
 /** Shared typed-recall core — embed the query, return the closest memories of one type. */
 async function recall(
   query: string,
   type: 'hook' | 'lyric' | 'procedural' | 'emotion',
-  opts: { embed?: Embedder; file?: string; topK?: number; minScore?: number } = {},
+  opts: RecallOptions = {},
 ): Promise<Recall[]> {
   try {
     const hits = await semanticSearch(query, {
-      type, topK: opts.topK ?? 3, minScore: opts.minScore ?? 0.75, embed: opts.embed, file: opts.file,
+      type, topK: opts.topK ?? 3, minScore: opts.minScore ?? 0.75,
+      embed: opts.embed, file: opts.file, hybrid: opts.hybrid, diversity: opts.diversity,
     });
     return hits.map((h) => ({ text: h.entry.text, source: h.entry.metadata.source, similarity: h.similarity }));
   } catch {
@@ -98,7 +109,7 @@ async function recall(
  * songs whose theme is semantically close, so the brain can lean on (or deliberately break)
  * a craft pattern it's used before. Opt-in + graceful.
  */
-export function recallSimilarCraft(theme: string, opts?: { embed?: Embedder; file?: string; topK?: number }): Promise<Recall[]> {
+export function recallSimilarCraft(theme: string, opts?: RecallOptions): Promise<Recall[]> {
   return recall(theme, 'procedural', opts);
 }
 
@@ -106,7 +117,7 @@ export function recallSimilarCraft(theme: string, opts?: { embed?: Embedder; fil
  * LIMBIC recall — "have I chased this feeling before?" Surfaces past songs with a
  * semantically close mood, so the emotion layer can recall how it handled a similar take.
  */
-export function recallSimilarEmotion(mood: string, opts?: { embed?: Embedder; file?: string; topK?: number }): Promise<Recall[]> {
+export function recallSimilarEmotion(mood: string, opts?: RecallOptions): Promise<Recall[]> {
   return recall(mood, 'emotion', opts);
 }
 
@@ -114,6 +125,6 @@ export function recallSimilarEmotion(mood: string, opts?: { embed?: Embedder; fi
  * COUNCIL / deliberation recall — "have I written a hook like this before?" Surfaces past
  * hooks close in meaning, so the board can flag self-repetition before it ships.
  */
-export function recallSimilarHook(hookText: string, opts?: { embed?: Embedder; file?: string; topK?: number }): Promise<Recall[]> {
+export function recallSimilarHook(hookText: string, opts?: RecallOptions): Promise<Recall[]> {
   return recall(hookText, 'hook', opts);
 }
