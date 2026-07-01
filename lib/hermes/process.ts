@@ -12,6 +12,7 @@ import { learnProfile } from './learn';
 import { allAvoidWords } from './memory';
 import { belief, type Belief } from './beliefs';
 import { personaOverlay, type Persona } from './personas';
+import { deriveLanguage, languageCoaching } from './language';
 
 /** One stage of the songwriting craft. */
 export interface CraftStep {
@@ -201,6 +202,11 @@ export function guideStep(
     const overlay = personaOverlay(ctx.persona, stepId, ctx.inputs);
     coaching = overlay.coaching;
     if (overlay.option) options = [overlay.option, ...options].slice(0, 3);
+  }
+
+  // the Language & Culture area shapes the actual words on the truth/draft steps
+  if (stepId === 'truth' || stepId === 'verse-draft') {
+    coaching = `${coaching} ${languageCoaching(deriveLanguage(ctx.inputs))}`;
   }
 
   return { step, belief: step.belief ? belief(step.belief) : undefined, prompt: made.prompt, coaching, options };

@@ -28,7 +28,10 @@ describe('brain map (anatomy)', () => {
       hooksmith: out('hooksmith', 'done'), 'lyric-chemist': out('lyric-chemist', 'done'),
       'visual-director': out('visual-director', 'done'), 'viral-clip-scout': out('viral-clip-scout', 'done'),
     })).toBe('done');
-    expect(regionState(REGIONS.find((r) => r.id === 'language')!, {})).toBe('soon');
+    // Language & Culture is now wired (driven by the lyric-chemist), no longer "soon"
+    const lang = REGIONS.find((r) => r.id === 'language')!;
+    expect(regionState(lang, {})).toBe('idle');
+    expect(regionState(lang, { 'lyric-chemist': out('lyric-chemist', 'running') })).toBe('running');
   });
 
   it('lights the nerves touching a running region', () => {

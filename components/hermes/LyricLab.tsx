@@ -13,7 +13,7 @@ export interface CraftLogEntry { stepId: string; title: string; choice: string; 
 const DEFAULT_INPUTS: SongInputs = {
   title: '', theme: '', mood: '', genre: 'aggressive boom-bap hip-hop',
   tempoMin: 86, tempoMax: 96, voice: 'gritty', audience: '',
-  doNotUse: [], references: '', structure: 'full-song',
+  doNotUse: [], references: '', structure: 'full-song', culture: '',
 };
 
 /**
@@ -82,7 +82,7 @@ export default function LyricLab({
     const concept = log['concept']?.choice;
     const finalInputs: SongInputs = {
       ...inputs,
-      references: [inputs.references, concept, `feel of ${persona.name}`].filter(Boolean).join(' · '),
+      references: [inputs.references, inputs.culture, concept, `feel of ${persona.name}`].filter(Boolean).join(' · '),
     };
     onGenerate({ inputs: finalInputs, persona, forcedHook, craftLog });
   }
@@ -124,6 +124,10 @@ export default function LyricLab({
             <div className={styles.field}>
               <label className={styles.label} htmlFor="lab-genre">Genre</label>
               <input id="lab-genre" className={styles.input} value={inputs.genre} onChange={(e) => set('genre', e.target.value)} />
+            </div>
+            <div className={styles.field}>
+              <label className={styles.label} htmlFor="lab-culture">Where you're from / what shaped you <span className={styles.hint}>(your own voice — never copied)</span></label>
+              <input id="lab-culture" className={styles.input} value={inputs.culture ?? ''} onChange={(e) => set('culture', e.target.value)} placeholder="the block I grew up on, my grandmother's kitchen…" />
             </div>
 
             <div className={styles.panelTitle} style={{ marginTop: 16 }}>Pick a craft persona</div>
