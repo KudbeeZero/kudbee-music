@@ -14,6 +14,7 @@ import type { Album } from '@/lib/hermes/album';
 import type { ExpansionPack } from '@/lib/hermes/expansionPacks';
 import SongLabForm from './SongLabForm';
 import AgentBoard from './AgentBoard';
+import Council from './Council';
 import SongPackageView from './SongPackageView';
 import BangerScoreCard from './BangerScoreCard';
 import UniquenessReportView from './UniquenessReport';
@@ -257,6 +258,7 @@ export default function HermesHitFactory() {
         <div className={styles.col}>
           <BrainScan outputs={outputs} running={running} workingMemory={wmSize} heat={heat} />
           <AgentBoard outputs={outputs} />
+          {pkg && <Council outputs={outputs} pkg={pkg} />}
           {pkg ? (
             <SongPackageView pkg={pkg} onSaveEdit={saveLyricEdit} onChooseHook={chooseHook} />
           ) : (

@@ -101,6 +101,10 @@ Board** governance / Solana / token / NFT layer integrates with this engine via 
 later (kept out of this repo's core so it stays free + local).
 
 ## ✅ Shipped (newest first)
+- [x] **The Council** — `components/hermes/Council.tsx`: the agents as a deliberating board
+      (right proposes · left challenges · you decide), reusing agent findings + the cognition
+      loop. The WIFI DJ "Crossroads Board" made literal. Plus a `.env*` gitignore guard +
+      `.env.example` so founder API keys can never be committed. _(#41)_
 - [x] **Particle Brain + artist heat-map** — the Brain Scan now has a canvas particle layer
       + a **thermal heat-map** (`lib/hermes/heat.ts` `brainHeat()`, tested): regions glow by
       *the type of artist you are* (right/generative → hot magenta, analytical → cyan, emotion
