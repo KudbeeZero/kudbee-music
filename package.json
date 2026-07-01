@@ -22,6 +22,7 @@
     "web:lint": "next lint",
     "test:web": "vitest run",
     "eval": "vitest run eval --reporter=basic",
+    "eval:compare": "vitest run compare --reporter=basic",
     "demo": "vitest run demo --reporter=basic"
   },
   "dependencies": {

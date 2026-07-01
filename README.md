@@ -299,7 +299,7 @@ flow, and the non-negotiables — plus the code-generated [brain-wiring diagram]
 **Next** — the phased plan is the spine [`brain/roadmap.json`](brain/roadmap.json); the human backlog is [`TODO.md`](TODO.md).
 - [ ] **Deepen the visible brain** — cognitive model (first→second thought→decision); the Council; brain-scan boot sequence
 - [ ] **Make it yours** — create-your-own-artist; community personas · **Durability** — vault backup so a cleared browser never loses your catalog
-- [ ] **Real AI (opt-in)** behind the adapters (mock stays default → $0) · **Influence Studio** (felt, never copied)
+- [ ] **Real AI (opt-in)** — the Claude engine + eval-comparison lane are wired ([docs/claude-engine.md](docs/claude-engine.md)); the live combinator-vs-AI comparison run is founder-triggered · **Influence Studio** (felt, never copied)
 - [ ] **Ecosystem (via API):** the **Crossroads Board** (community steering) · per-agent compute (Lightning AI) · WIFI DJ radio · token/governance
 
 ---
