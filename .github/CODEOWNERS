@@ -1,0 +1,3 @@
+# Default owner for everything in the repo — routes PR review requests.
+# Split by path once there's more than one maintainer.
+* @KudbeeZero
