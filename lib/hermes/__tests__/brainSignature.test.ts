@@ -41,15 +41,34 @@ describe('brainSignature (dNFT trait card)', () => {
     expect(brainSignature({ songs: s, becomingYou: 20 })).toEqual(brainSignature({ songs: s, becomingYou: 20 }));
   });
 
-  it('shapes standard ERC-721 metadata a token can point to', async () => {
+  it('shapes Metaplex Token Metadata off-chain JSON a token uri can point to', async () => {
     const sig = brainSignature({ songs: await songs(2), becomingYou: 55 });
     const md = toNftMetadata(sig, { tokenId: 7 });
     expect(md.name).toBe('HERMES Brain #7');
+    expect(md.name.length).toBeLessThanOrEqual(32); // Metaplex on-chain name limit
+    expect(md.symbol).toBe('HERMES');
+    expect(md.symbol.length).toBeLessThanOrEqual(10); // Metaplex on-chain symbol limit
     expect(md.description.length).toBeGreaterThan(20);
     expect(md.image).toMatch(/\/7\.png$/);
     expect(md.animation_url).toMatch(/\/7$/);
+    expect(md.external_url).toBe(md.animation_url);
+    expect(md.seller_fee_basis_points).toBe(0); // no royalty claim until the founder decides
     expect(md.attributes).toHaveLength(6);
-    expect(md.attributes.map((a) => a.trait_type)).toContain('Dominant Hemisphere');
+    expect(md.attributes.map((a) => a.trait_type)).toEqual([
+      'Dominant Hemisphere', 'Temperature', 'Signature Rhyme', 'Songs Made', 'Becoming You', 'Primary Emotion',
+    ]);
     expect(md.attributes.find((a) => a.trait_type === 'Songs Made')?.value).toBe(2);
+    expect(md.properties.category).toBe('html'); // live brain page is the primary asset
+    expect(md.properties.files).toEqual([
+      { uri: md.image, type: 'image/png' },
+      { uri: md.animation_url, type: 'text/html' },
+    ]);
+  });
+
+  it('keeps the metadata name within the 32-char Metaplex limit for long token ids', () => {
+    const sig = brainSignature({ songs: [], becomingYou: 0 });
+    const md = toNftMetadata(sig, { tokenId: 'x'.repeat(64) });
+    expect(md.name.length).toBeLessThanOrEqual(32);
+    expect(md.name.startsWith('HERMES Brain #')).toBe(true);
   });
 });
