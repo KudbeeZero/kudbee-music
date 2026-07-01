@@ -101,6 +101,9 @@ Board** governance / Solana / token / NFT layer integrates with this engine via 
 later (kept out of this repo's core so it stays free + local).
 
 ## ✅ Shipped (newest first)
+- [x] **Cognitive model** — `lib/hermes/cognition.ts`: `deliberate()` runs first thought →
+      second thought (3 real critiques: true-to-brief / original / earns-it) → decision
+      (keep|revise); a "🧭 How the brain decided" readout on the lead hook. _(#39)_
 - [x] **One-command demo** — `npm run demo`: generates a full original song end-to-end and
       prints it + the 11-region generation trace (lyrics-focused, no video; deterministic).
       The 30-second "see it work" moment for new visitors. _(#38)_
