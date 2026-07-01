@@ -45,26 +45,53 @@ const NON_NOUN = new Set([
   'does', 'will', 'would', 'could', 'should', 'can', 'may', 'might', 'must', 'into',
   'onto', 'from', 'over', 'under', 'want', 'need', 'know', 'feel', 'take', 'give',
   'break', 'turn', 'grow', 'build', 'run', 'hold', 'find', 'lose', 'said', 'told',
+  // common 3rd-person verbs that look like plural nouns ("grew up on KEEPS/SEES")
+  'keeps', 'sees', 'drops', 'makes', 'takes', 'gives', 'goes', 'does', 'says', 'gets',
+  'runs', 'feels', 'knows', 'wants', 'needs', 'breaks', 'turns', 'holds', 'finds', 'loses',
+  'falls', 'calls', 'tries', 'moves', 'comes', 'leaves', 'lives', 'stays', 'grinds', 'fights',
   // adjectives / adverbs / abstractions that read wrong as a concrete noun
   'supposed', 'beautiful', 'lonely', 'really', 'very', 'just', 'always', 'never',
   'every', 'some', 'more', 'most', 'much', 'many', 'own', 'same', 'another', 'something',
   'nothing', 'everything', 'anything', 'someone', 'anyone', 'everyone',
+  'yet', 'fake', 'real', 'free', 'next', 'last', 'first', 'best', 'only', 'even', 'else',
+  'enough', 'quite', 'almost', 'else', 'true', 'false', 'whole', 'half', 'sure', 'able',
+  // prepositions / conjunctions — never a concrete noun ("started with the ACROSS")
+  'across', 'while', 'upon', 'within', 'without', 'between', 'among', 'toward', 'towards',
+  'beyond', 'during', 'before', 'after', 'since', 'until', 'unless', 'though', 'although',
+  'whether', 'because', 'against', 'around', 'along', 'above', 'below', 'behind', 'beside',
 ]);
 
 // The few -ing / -ed words that ARE nouns (so the suffix heuristic doesn't reject them).
 const NOUN_ING = new Set(['morning', 'evening', 'feeling', 'ceiling', 'blessing', 'offering', 'lightning', 'building', 'crossing', 'longing']);
 const NOUN_ED = new Set(['shade', 'blade', 'grade', 'trade', 'creed', 'seed', 'weed', 'bed', 'bread', 'thread', 'road', 'load', 'code']);
 
-// A curated bank of concrete nouns — grounded, singable, genre-appropriate imagery.
-// BACKFILLS a {noun} slot when the theme doesn't yield enough real nouns, so a slot is
-// never starved into a broken word. Deterministic (shuffled by the song seed).
-const CONCRETE_NOUNS = [
-  'block', 'corner', 'concrete', 'pavement', 'city', 'street', 'road', 'alley', 'rooftop',
-  'window', 'doorway', 'hallway', 'engine', 'record', 'mirror', 'shadow', 'candle', 'ember',
-  'iron', 'chain', 'anchor', 'harbor', 'current', 'mountain', 'valley', 'garden', 'seed',
-  'root', 'thorn', 'gravel', 'dust', 'smoke', 'rain', 'thunder', 'horizon', 'skyline',
-  'ladder', 'bridge', 'river', 'hunger', 'name', 'weight', 'ghost', 'promise', 'fire',
-];
+// Concrete nouns grouped by IMAGERY CLUSTER. Backfill draws from the cluster(s) that match
+// the song's theme/mood first, so a street song pulls street images and a water song pulls
+// water images — the noun bank coheres with the subject instead of feeling random. Every
+// word is a real, singable noun, so a {noun} slot is never starved into a broken word.
+const NOUN_BANK: Record<string, string[]> = {
+  street:   ['block', 'corner', 'concrete', 'pavement', 'city', 'alley', 'rooftop', 'curb', 'fence', 'streetlight'],
+  home:     ['doorway', 'hallway', 'window', 'kitchen', 'porch', 'table', 'photograph', 'blanket', 'doorstep', 'name'],
+  nature:   ['garden', 'seed', 'root', 'thorn', 'branch', 'harvest', 'mountain', 'valley', 'meadow', 'stone'],
+  water:    ['harbor', 'current', 'river', 'tide', 'ocean', 'anchor', 'shoreline', 'raindrop', 'wave', 'flood'],
+  light:    ['candle', 'ember', 'lantern', 'sunrise', 'horizon', 'skyline', 'spark', 'glow', 'beacon', 'flame'],
+  struggle: ['iron', 'chain', 'gravel', 'dust', 'weight', 'hunger', 'bruise', 'ash', 'debt', 'scar'],
+  motion:   ['engine', 'ladder', 'bridge', 'railroad', 'highway', 'compass', 'mile', 'staircase', 'runway', 'wheel'],
+  memory:   ['record', 'mirror', 'shadow', 'ghost', 'promise', 'letter', 'echo', 'photograph', 'keepsake', 'memory'],
+};
+const ALL_NOUNS = Object.values(NOUN_BANK).flat();
+
+// Which imagery clusters a theme/mood word points at — cheap keyword→cluster routing.
+const IMAGERY_SIGNALS: Record<string, string[]> = {
+  street:   ['street', 'block', 'hood', 'city', 'concrete', 'corner', 'trap', 'gang', 'pavement', 'urban'],
+  home:     ['home', 'family', 'mother', 'father', 'raised', 'kids', 'house', 'town', 'roots', 'blood'],
+  nature:   ['grow', 'garden', 'seed', 'root', 'nature', 'mountain', 'earth', 'bloom', 'harvest', 'wild'],
+  water:    ['ocean', 'water', 'sea', 'river', 'tide', 'harbor', 'drown', 'flood', 'rain', 'distance'],
+  light:    ['light', 'gold', 'shine', 'sun', 'hope', 'bright', 'dawn', 'fire', 'burn', 'glow'],
+  struggle: ['cold', 'pain', 'broke', 'struggle', 'hunger', 'hard', 'fight', 'weight', 'dark', 'lost'],
+  motion:   ['road', 'journey', 'run', 'climb', 'drive', 'move', 'chase', 'race', 'far', 'leave'],
+  memory:   ['memory', 'past', 'ghost', 'remember', 'gone', 'miss', 'nostalgi', 'used', 'back', 'time'],
+};
 
 /** True if a word can plausibly fill a concrete-noun slot. Heuristic, deterministic, $0. */
 export function nounable(w: string): boolean {
@@ -81,11 +108,35 @@ export function themeNouns(inputs: SongInputs): string[] {
   return keywords([inputs.theme, inputs.references].join(' '), 12).filter(nounable);
 }
 
-/** A guaranteed-full noun pool: on-theme nouns first, padded from the concrete bank. */
+/**
+ * The imagery clusters this song evokes, most-relevant first — scored by how many of each
+ * cluster's signal words appear in the theme + mood. Deterministic. Falls back to a
+ * sensible default blend when nothing matches, so backfill is always coherent, never random.
+ */
+export function themeImagery(inputs: SongInputs): string[] {
+  const hay = ' ' + [inputs.theme, inputs.mood, inputs.references].join(' ').toLowerCase() + ' ';
+  const scored = Object.entries(IMAGERY_SIGNALS)
+    .map(([cluster, sigs]) => ({ cluster, score: sigs.reduce((n, s) => n + (hay.includes(s) ? 1 : 0), 0) }))
+    .filter((c) => c.score > 0)
+    .sort((a, b) => b.score - a.score || a.cluster.localeCompare(b.cluster)); // stable tie-break
+  const ranked = scored.map((c) => c.cluster);
+  // default blend keeps output grounded when a theme doesn't trip any signal
+  return ranked.length ? ranked : ['struggle', 'light', 'motion'];
+}
+
+/** Concrete nouns drawn from the song's imagery clusters (in relevance order), then the rest. */
+function imageryNouns(inputs: SongInputs): string[] {
+  const clusters = themeImagery(inputs);
+  const picked = clusters.flatMap((c) => NOUN_BANK[c] ?? []);
+  const rest = ALL_NOUNS.filter((n) => !picked.includes(n));
+  return [...picked, ...rest];
+}
+
+/** A guaranteed-full noun pool: on-theme words first, padded from the matching imagery bank. */
 function nounPool(inputs: SongInputs, rng: () => number): string[] {
   const theme = themeNouns(inputs);
   const pool = [...theme];
-  if (pool.length < 6) pool.push(...shuffle(CONCRETE_NOUNS, rng).filter((n) => !pool.includes(n)).slice(0, 6 - pool.length));
+  if (pool.length < 6) pool.push(...shuffle(imageryNouns(inputs), rng).filter((n) => !pool.includes(n)).slice(0, 6 - pool.length));
   return pool;
 }
 
@@ -226,7 +277,7 @@ export const mockLyricsProvider: LyricsProvider = {
     // one idea; the diversity guard stops any frame template being reused song-wide.
     // anchor words carried across sections must be real, DISTINCT nouns — on-theme first,
     // padded from the concrete bank so a thin theme (1 usable noun) doesn't repeat it every verse.
-    const thread = [...themeNouns(inputs), ...shuffle(CONCRETE_NOUNS, rng)].slice(0, 3);
+    const thread = [...themeNouns(inputs), ...shuffle(imageryNouns(inputs), rng)].slice(0, 3);
     const used = new Set<string>();
     // hierarchical generation: each verse pursues its section goal (setup → turn → reflect)
     const v1 = buildRhymedVerse(inputs, rng, valence, 2, { pool: SETUP_LINES, thread, used, temp, anchorIdx: 0 });

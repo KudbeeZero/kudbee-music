@@ -37,7 +37,9 @@ chat. Detail for each is in [`brain/roadmap.json`](brain/roadmap.json) + [`IDEAS
 - [ ] **Suno-Studio workspace** — section/arrangement timeline + rack + meter bridge ($0 read-only now; clip editing later).
 
 **$0/local, no key — I can just build these next:**
-- [ ] **Deeper lyric craft** — theme→imagery mapping + image-coherence scoring (the moat; lyrics are grammatical now, next is *good*).
+- [~] **Deeper lyric craft** (the moat) — grammaticality shipped _(#58)_; **imagery coherence** shipped
+   _(#60)_: theme/mood → imagery clusters (street/home/water/light/struggle/…) so backfill nouns match the
+   subject. Next: image-coherence *scoring* + verb/noun agreement so lines relate, not just cohere thematically.
 - [ ] **End-to-end app audit** — drive `/hermes` headless, confirm generate→select→edit→save→export actually works.
 - [ ] **Crossroads Stages 2–3** — `/crossroads` board UI → decisions feed the taste model.
 - [ ] **3 review cleanups** — stronger memory-id hash · independent "earns-it" critique · guaranteed vault mirror.

@@ -15,19 +15,19 @@
 | **Language & Culture** | Register: mixed. Diction lean: mix plain talk with one or two vivid images per verse. Imagery seeds: refusing, fake, status, games. |
 | **Limbic (emotion)** | Primary feeling: desolation (valence -0.80, intensity 0.50); contrast: a flicker of hope. Colored word choice; arc: setup → tension → problem → tension → tension → payoff → tension. |
 | **Default-Mode Network** | Considered 3 divergent angles, incl. “Tell "refusing" through a letter you'll never send”. |
-| **Generative (right hemisphere)** | Wrote the hook from 5 candidates → “Still standing where the status used to be”. |
+| **Generative (right hemisphere)** | Wrote the hook from 5 candidates → “For doubters, I rebuild through the status”. |
 | **Analytical (left hemisphere)** | Rhyme scheme AABB, density 100% across the verse; beat/BPM sanity checks. |
-| **Reward circuit** | Crave-ability 75/100 (returns 1, mutation 0.5, brevity 0.75, singability 0.68) — Compulsive — you'll want it again. |
-| **Decision (corpus callosum)** | A&R verdict: Certified banger — ship it. (92/100). The artist gets the final choice. |
-| **Long-term memory** | Originality checked against the vault → 98/100 (4 flags). |
+| **Reward circuit** | Crave-ability 76/100 (returns 1, mutation 0.5, brevity 0.75, singability 0.72) — Compulsive — you'll want it again. |
+| **Decision (corpus callosum)** | A&R verdict: Certified banger — ship it. (93/100). The artist gets the final choice. |
+| **Long-term memory** | Originality checked against the vault → 99/100 (3 flags). |
 | **Short-term memory** | Held the working set (hook + section drafts) live across the 10-agent run. |
 
 ## 🎯 The result
 
-- **Lead hook:** “Still standing where the status used to be” _(chosen from 5 candidates)_
+- **Lead hook:** “For doubters, I rebuild through the status” _(chosen from 5 candidates)_
 - **Rhyme:** scheme AABB, 100% density
-- **Crave-ability:** 75/100
-- **Originality:** 98/100
-- **Banger score:** **92/100** — _Certified banger — ship it._
+- **Crave-ability:** 76/100
+- **Originality:** 99/100
+- **Banger score:** **93/100** — _Certified banger — ship it._
 
 _Full package: [`song.json`](song.json). Load it in the app (`/hermes`) to see the whole deck._
