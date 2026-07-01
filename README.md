@@ -204,6 +204,9 @@ docs/                    quickstart, concepts, CLI ref, scene-pack guide, hit-fa
 .github/workflows/ci.yml  3 gates: check (lint+tests) · smoke (real render + QA) · web (engine tests + build)
 ```
 
+**New here?** Read [**`ARCHITECTURE.md`**](ARCHITECTURE.md) — the module map, the pipeline
+flow, and the non-negotiables — plus the code-generated [brain-wiring diagram](docs/brain-wiring.md).
+
 ---
 
 ## 🗓️ Roadmap
