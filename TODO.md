@@ -74,7 +74,8 @@ chat. Detail for each is in [`brain/roadmap.json`](brain/roadmap.json) + [`IDEAS
      leaks into `{noun}` slots (`themeNouns` excludes audience tokens); (b) the combinator's own action
      verbs (`carry`/`grind`/…) are rejected by `nounable` (`VERB_SET` derived from `VERBS`). Regression-tested.
 - [ ] **Crossroads Stages 2–3** — `/crossroads` board UI → decisions feed the taste model.
-- [ ] **3 review cleanups** — stronger memory-id hash · independent "earns-it" critique · guaranteed vault mirror.
+- [ ] **2 review cleanups** — stronger memory-id hash · independent "earns-it" critique. _(the third —
+   guaranteed vault mirror — is now surfaced in the Vault drawer with status + restore)_
 - [ ] **Star-launch kit** — `LAUNCH.md` with a draft Twitter/X thread + a YouTube demo-recording script (you post it).
 
 ---
@@ -214,6 +215,13 @@ Board** governance / Solana / token / NFT layer integrates with this engine via 
 later (kept out of this repo's core so it stays free + local).
 
 ## ✅ Shipped (newest first)
+- [x] **Vault backup status + guarded restore in the UI** — the shipped-but-unsurfaced
+      durability APIs (`vaultBackupStatus()` / `restoreFromBackup()`, #56) now show in the
+      Vault drawer: a `🛟 backup mirror: N songs` status line, an amber warning when the live
+      vault is behind its mirror, and a confirm-guarded "Restore from backup" that reports
+      real counts and refreshes the list (assistant-not-autopilot: cancelable, honest no-op
+      when no mirror exists). Verified with Playwright at 1280/375 incl. a live corrupt-vault
+      restore; zero console errors. _(this PR)_
 - [x] **Interactive scrolling landing page** — `/` is now a real scroll-driven landing
       (`components/landing/`): a scroll-scrubbed hero over the repo's own hero clips (honest
       loading — poster until ready, no spinners), "right proposes · left disposes" hemispheres
