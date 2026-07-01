@@ -56,7 +56,14 @@ chat. Detail for each is in [`brain/roadmap.json`](brain/roadmap.json) + [`IDEAS
    interactive brain trace (heat-map + per-region cards + copy-paste Suno prompt) in a new tab,
    built client-side from the real brain modules (same renderer the demo gallery ships). #50 made
    visible where people actually use it. _(#63)_
-- [ ] **End-to-end app audit** — drive `/hermes` headless, confirm generate→select→edit→save→export actually works.
+- [x] **End-to-end app audit** — drove the static `/hermes` build headless through the full flow:
+   generate → **choose a different hook** (swaps lead + re-scores) → **edit lyrics → save** (taste
+   feedback) → **🔍 Explain** (trace opens) → **⬇ Export JSON** → **reload** (vault persists). PASS,
+   zero console errors; the old "deck not selectable" issue is resolved. _(audit only, no code change)_
+   - Surfaced two combinator-polish issues (feed the deeper-lyric-craft item): (a) the **audience
+     word leaks into `{noun}` slots** ("for daughter … through the daughter") — exclude audience
+     tokens from the noun pool; (b) a **verb slips through** ("the *carry* that raised me") — `carry`
+     et al. pass `nounable`.
 - [ ] **Crossroads Stages 2–3** — `/crossroads` board UI → decisions feed the taste model.
 - [ ] **3 review cleanups** — stronger memory-id hash · independent "earns-it" critique · guaranteed vault mirror.
 - [ ] **Star-launch kit** — `LAUNCH.md` with a draft Twitter/X thread + a YouTube demo-recording script (you post it).
