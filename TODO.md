@@ -37,9 +37,16 @@ chat. Detail for each is in [`brain/roadmap.json`](brain/roadmap.json) + [`IDEAS
 - [ ] **Suno-Studio workspace** — section/arrangement timeline + rack + meter bridge ($0 read-only now; clip editing later).
 
 **$0/local, no key — I can just build these next:**
-- [~] **Deeper lyric craft** (the moat) — grammaticality shipped _(#58)_; **imagery coherence** shipped
+- [x] **Deeper lyric craft** (the moat) — grammaticality shipped _(#58)_; imagery coherence shipped
    _(#60)_: theme/mood → imagery clusters (street/home/water/light/struggle/…) so backfill nouns match the
-   subject. Next: image-coherence *scoring* + verb/noun agreement so lines relate, not just cohere thematically.
+   subject. **Image-coherence scoring + verb/noun agreement** shipped _(this PR)_: a new
+   `imageryCoherence()` eval metric measures whether a song's actual bank nouns share its top-ranked
+   cluster (not just whether a theme keyword is mentioned somewhere); verbs now draw from a
+   `VERB_CLUSTERS`-tagged pool biased toward those same clusters (falls back to the full list when
+   too few verbs match, so variety never starves). Also fixed the noun/thread backfill itself — it
+   was shuffling across every cluster before slicing, diluting the very bias imagery coherence
+   depends on; picked/rest now shuffle separately so padding stays biased toward the top cluster(s).
+   Demos regenerated; the golden eval is green on all 6 songs, including the new metric.
 - [x] **Vector search strategies** — hybrid (cosine + deterministic lexical/keyword overlap) +
    diversity/MMR re-ranking (no near-duplicate recalls), opt-in + off by default, threaded through
    the per-agent recalls. Determinism preserved (quantized + id tie-break). _(#62)_
@@ -146,9 +153,8 @@ vector memory, and document the architecture — lifts output quality, dev appea
    `nounable()` (rejects gerunds/participles/adverbs/auxiliaries) + a concrete-noun bank that
    backfills so `{noun}` slots are always real, distinct nouns; anchor thread padded so a thin
    theme doesn't repeat one word. Grammaticality guard tests; demos regenerated. _(#58)_
-- [ ] **Deeper lyric craft (next $0 pass)** — the combinator is grammatical now but still
-   impressionistic; next: theme→imagery mapping so backfill nouns fit the subject, verb/noun
-   agreement in frames, and image-coherence scoring so a line's nouns relate.
+- [x] **Deeper lyric craft (next $0 pass)** — theme→imagery mapping shipped _(#60)_; verb/noun
+   agreement + image-coherence scoring shipped _(this PR)_ — see the "Deeper lyric craft" entry above.
 
 ## 🌐 Ecosystem (integrates via API — kept out of the free local core)
 - [~] **Crossroads Board** — the WIFI DJ governance/community steering surface (the brain's
@@ -205,6 +211,18 @@ Board** governance / Solana / token / NFT layer integrates with this engine via 
 later (kept out of this repo's core so it stays free + local).
 
 ## ✅ Shipped (newest first)
+- [x] **Image-coherence scoring + verb/noun agreement (the moat, deeper lyric craft)** —
+      a new `imageryCoherence()` eval metric measures whether a song's actual imagery-bank
+      nouns share its top-ranked cluster, not just whether a theme keyword is mentioned
+      anywhere (a stronger signal than the existing "thematic coherence" metric). Verbs are
+      now tagged by imagery cluster (`VERB_CLUSTERS`) and drawn from a pool biased toward the
+      song's top cluster(s) — the same register the noun backfill already leans on — falling
+      back to the full verb list when too few match so variety never starves. Also fixed a
+      real bug in the existing noun/thread backfill: it shuffled candidates across *every*
+      cluster before slicing, diluting the exact cluster bias imagery coherence depends on;
+      picked/rest now shuffle separately so padding stays biased toward the top cluster(s).
+      Demos regenerated (`GEN_DEMOS=1 npx vitest run trace`); golden eval green on all 6
+      songs, including the new metric. _(this PR)_
 - [x] **Focal Compose / Studio layout** — `/hermes` splits into a focused "Compose"
       hero (just the brief + Generate, plus "or see a finished example") vs. the full
       three-column "Studio" deck once a run starts or a package exists; a "✨ New"

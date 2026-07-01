@@ -15,9 +15,9 @@ Suno prompt, all in one self-contained file.
 | Song | Genre | Banger score | Trace |
 |------|-------|--------------|-------|
 | **Midnight Shift** | lo-fi soul hip-hop | 93/100 | [explore](midnight-shift/trace.html) · [trace.md](midnight-shift/trace.md) · [song.json](midnight-shift/song.json) |
-| **Concrete Garden** | boom-bap hip-hop | 92/100 | [explore](concrete-garden/trace.html) · [trace.md](concrete-garden/trace.md) · [song.json](concrete-garden/song.json) |
+| **Concrete Garden** | boom-bap hip-hop | 91/100 | [explore](concrete-garden/trace.html) · [trace.md](concrete-garden/trace.md) · [song.json](concrete-garden/song.json) |
 | **Signal Fade** | synthwave pop | 93/100 | [explore](signal-fade/trace.html) · [trace.md](signal-fade/trace.md) · [song.json](signal-fade/song.json) |
-| **Paper Crowns** | drill-influenced trap | 93/100 | [explore](paper-crowns/trace.html) · [trace.md](paper-crowns/trace.md) · [song.json](paper-crowns/song.json) |
+| **Paper Crowns** | drill-influenced trap | 92/100 | [explore](paper-crowns/trace.html) · [trace.md](paper-crowns/trace.md) · [song.json](paper-crowns/song.json) |
 | **Hometown Ghosts** | acoustic folk-rap | 93/100 | [explore](hometown-ghosts/trace.html) · [trace.md](hometown-ghosts/trace.md) · [song.json](hometown-ghosts/song.json) |
 
 Load any `song.json` into the app at `/hermes` (Vault → Import) to see the full deck.

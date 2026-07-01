@@ -27,6 +27,25 @@ const HOOK_FRAMES = [
 ];
 
 const VERBS = ['climb', 'carry', 'build', 'fight', 'hold on', 'keep moving', 'pray', 'grind', 'crawl', 'rebuild', 'reach', 'hustle', 'survive', 'push'];
+// Which imagery cluster(s) each verb's ACTION belongs to — same cluster keys as
+// NOUN_BANK. Lets the combinator bias verb choice toward the song's own imagery
+// register (verb/noun agreement), the same way nouns already are.
+const VERB_CLUSTERS: Record<string, string[]> = {
+  climb: ['motion', 'nature'],
+  carry: ['struggle', 'motion'],
+  build: ['home', 'nature'],
+  fight: ['struggle'],
+  'hold on': ['struggle', 'memory'],
+  'keep moving': ['motion'],
+  pray: ['light', 'memory'],
+  grind: ['struggle', 'street'],
+  crawl: ['struggle', 'motion'],
+  rebuild: ['home', 'motion'],
+  reach: ['motion', 'light'],
+  hustle: ['street', 'struggle'],
+  survive: ['struggle'],
+  push: ['motion', 'struggle'],
+};
 // adjectives split by affect — the limbic layer picks the pool that matches the mood
 const ADJ_DARK = ['cold', 'quiet', 'heavy', 'restless', 'hollow', 'guarded', 'weathered', 'distant', 'stubborn', 'bitter'];
 const ADJ_BRIGHT = ['golden', 'fearless', 'patient', 'steady', 'open', 'grateful', 'relentless', 'grounded', 'bright', 'awake'];
@@ -139,20 +158,59 @@ export function themeImagery(inputs: SongInputs): string[] {
   return ranked.length ? ranked : ['struggle', 'light', 'motion'];
 }
 
-/** Concrete nouns drawn from the song's imagery clusters (in relevance order), then the rest. */
-function imageryNouns(inputs: SongInputs): string[] {
+/**
+ * Concrete nouns drawn from the song's imagery clusters (in relevance order), then the
+ * rest. `picked` and `rest` are shuffled SEPARATELY (not the combined array) so a slice
+ * off the front stays biased toward the top-ranked cluster(s) — shuffling the whole thing
+ * before slicing would dilute the bias evenly across every cluster, on- and off-image alike.
+ */
+function imageryNouns(inputs: SongInputs, rng: () => number): string[] {
   const clusters = themeImagery(inputs);
   const picked = clusters.flatMap((c) => NOUN_BANK[c] ?? []);
   const rest = ALL_NOUNS.filter((n) => !picked.includes(n));
-  return [...picked, ...rest];
+  return [...shuffle(picked, rng), ...shuffle(rest, rng)];
 }
 
 /** A guaranteed-full noun pool: on-theme words first, padded from the matching imagery bank. */
 function nounPool(inputs: SongInputs, rng: () => number): string[] {
   const theme = themeNouns(inputs);
   const pool = [...theme];
-  if (pool.length < 6) pool.push(...shuffle(imageryNouns(inputs), rng).filter((n) => !pool.includes(n)).slice(0, 6 - pool.length));
+  if (pool.length < 6) pool.push(...imageryNouns(inputs, rng).filter((n) => !pool.includes(n)).slice(0, 6 - pool.length));
   return pool;
+}
+
+/**
+ * Verb/noun agreement: verbs biased toward the song's top imagery cluster(s), the
+ * same register the noun pool already leans on — a struggle/street brief reaches
+ * for "grind"/"hustle" more than a home/nature one reaches for "build"/"climb".
+ * Restricts to the on-image subset only when it's wide enough to keep the verse
+ * from repeating itself; falls back to the full pool so variety never starves.
+ */
+export function verbPool(inputs: SongInputs): string[] {
+  const top = new Set(themeImagery(inputs).slice(0, 2));
+  const onImage = VERBS.filter((v) => VERB_CLUSTERS[v]?.some((c) => top.has(c)));
+  return onImage.length >= 4 ? onImage : VERBS;
+}
+
+/**
+ * Image-coherence score (0..1): of the imagery-bank nouns that actually surfaced in
+ * `lines`, the fraction belonging to the song's top-ranked cluster(s) — a stronger
+ * signal than a theme-keyword mention (eval.ts's "thematic coherence"), because it
+ * measures whether the words that landed share one visual register instead of
+ * scattering across unrelated ones. Vacuously 1 (nothing to fault) when fewer than
+ * 3 bank nouns appear — a thin/on-theme brief that barely touched the backfill
+ * bank isn't incoherent, and 1-2 words is too small a sample for the ratio to mean
+ * anything (a single incidental word would swing the score to 0 or 1).
+ */
+export function imageryCoherence(lines: string[], inputs: SongInputs): number {
+  const top = new Set(themeImagery(inputs).slice(0, 2));
+  const clusterOf = new Map<string, string>();
+  for (const [cluster, nouns] of Object.entries(NOUN_BANK)) for (const n of nouns) clusterOf.set(n, cluster);
+  const words = lines.join(' ').toLowerCase().split(/[^a-z]+/).filter(Boolean);
+  const tagged = words.filter((w) => clusterOf.has(w));
+  if (tagged.length < 3) return 1;
+  const onImage = tagged.filter((w) => top.has(clusterOf.get(w)!));
+  return +(onImage.length / tagged.length).toFixed(2);
 }
 
 // Couplet lines end on a {rhyme} slot so two of them land a real end-rhyme.
@@ -227,7 +285,7 @@ function fill(frame: string, inputs: SongInputs, rng: () => number, rhyme = '', 
   // shuffled + consumed in order so a line never repeats a filler and never slots a
   // verb/adjective ("handed me GROWING") into a noun position.
   const nouns = shuffle(nounPool(inputs, rng), rng);
-  const verbs = shuffle(VERBS, rng);
+  const verbs = shuffle(verbPool(inputs), rng);
   const adjs = shuffle(adjPool(valence), rng);   // emotion → diction: adjectives lean with the mood
   let ni = 0, vi = 0, ai = 0;
   // thematic threading: the first noun-type slot uses the section's anchor word (a
@@ -292,7 +350,7 @@ export const mockLyricsProvider: LyricsProvider = {
     // one idea; the diversity guard stops any frame template being reused song-wide.
     // anchor words carried across sections must be real, DISTINCT nouns — on-theme first,
     // padded from the concrete bank so a thin theme (1 usable noun) doesn't repeat it every verse.
-    const thread = [...themeNouns(inputs), ...shuffle(imageryNouns(inputs), rng)].slice(0, 3);
+    const thread = [...themeNouns(inputs), ...imageryNouns(inputs, rng)].slice(0, 3);
     const used = new Set<string>();
     // hierarchical generation: each verse pursues its section goal (setup → turn → reflect)
     const v1 = buildRhymedVerse(inputs, rng, valence, 2, { pool: SETUP_LINES, thread, used, temp, anchorIdx: 0 });
