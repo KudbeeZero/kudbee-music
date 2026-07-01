@@ -21,8 +21,8 @@ export const ENGINE_UNITS: EngineUnit[] = [
   },
   {
     id: 'claude-engine', label: 'Claude Engine', tier: 'pro', active: false, locked: true,
-    blurb: 'Real-AI lyric generation behind the same provider seam. Mock stays the default.',
-    unlockHint: 'connect an API key to unlock',
+    blurb: 'Real-AI lyric generation, wired behind the same provider seam (claudeLyricsProvider). Runs only via the CLI/eval lane — the web app never calls it; mock stays the default.',
+    unlockHint: 'set ANTHROPIC_API_KEY and run the eval lane (npm run eval:compare) to unlock',
   },
   {
     id: 'lightning-engine', label: 'Lightning Engine', tier: 'pro', active: false, locked: true,
