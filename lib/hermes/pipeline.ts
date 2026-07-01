@@ -14,6 +14,8 @@ import { keywords, titleCase } from './text';
 import { deriveEmotion, emotionalArc, emotionClarity } from './emotion';
 import { divergentAngles } from './defaultMode';
 import { craveScore } from './reward';
+import { deliberate, selectHookByCognition } from './cognition';
+import type { CritiqueKey, Deliberation } from './types';
 
 export interface RunOptions {
   providers?: ProviderBundle;
@@ -29,6 +31,9 @@ export interface RunOptions {
   /** a hook the artist committed in the Lyric Lab — when set, it becomes the
    *  chosen hook and the verses are written from it (the writers-room made real). */
   forcedHook?: string;
+  /** failing critiques from a prior take — "regenerate from these critiques." The
+   *  hook selector prefers a candidate that FIXES these (closes the cognition loop). */
+  cognitionFeedback?: CritiqueKey[];
 }
 
 const ORDER: AgentId[] = [
@@ -82,7 +87,15 @@ export async function runPipeline(inputs: SongInputs, opts: RunOptions = {}): Pr
     ? { text: opts.forcedHook.trim(), angle: 'written by the artist in the Lyric Lab', cadence: 'the artist’s own pocket', score: 96 }
     : null;
   const hookOptions: HookOption[] = labHook ? [labHook, ...generatedHooks] : generatedHooks;
-  const chosenHook = labHook ?? hookOptions.slice().sort((a, b) => b.score - a.score)[0] ?? null;
+  // Close the cognition loop: the chosen hook is the best-REASONED candidate (not just
+  // the top raw score), and any "regenerate from these critiques" feedback steers it.
+  const { chosen: cognitionHook, deliberation: cognitionSel } = selectHookByCognition(
+    generatedHooks, inputs, opts.cognitionFeedback ?? [],
+  );
+  const chosenHook = labHook ?? cognitionHook ?? null;
+  const cognition: Deliberation | null = chosenHook
+    ? (labHook ? deliberate(labHook.text, inputs) : cognitionSel)
+    : null;
   emit({
     id: 'hooksmith', name: 'Hooksmith', status: hookOptions.length ? 'done' : 'warning',
     finding: chosenHook ? `Lead hook: "${chosenHook.text}"` : 'No hook generated.',
@@ -232,6 +245,7 @@ export async function runPipeline(inputs: SongInputs, opts: RunOptions = {}): Pr
     score,
     release,
     agentOutputs: outputs,
+    cognition,
   };
 
   return { pkg, agentOutputs: outputs };

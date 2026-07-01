@@ -740,5 +740,31 @@
         ]
       }
     }
-  ]
+  ],
+  "cognition": {
+    "firstThought": "Every step a promise that I rebuild",
+    "secondThought": [
+      {
+        "key": "true",
+        "question": "Is it true to the brief?",
+        "passes": true,
+        "note": "references the theme"
+      },
+      {
+        "key": "original",
+        "question": "Is it original?",
+        "passes": true,
+        "note": "no famous-phrase echo"
+      },
+      {
+        "key": "earns-it",
+        "question": "Does it earn it?",
+        "passes": true,
+        "note": "carries craft (image/rhyme)"
+      }
+    ],
+    "verdict": "keep",
+    "decision": "Keep it — survives 3/3 challenges. Yours to accept or push further.",
+    "confidence": 1
+  }
 }

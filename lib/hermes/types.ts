@@ -166,6 +166,28 @@ export interface SongPackage {
   score: BangerScore;
   release: ReleaseChecklistItem[];
   agentOutputs: AgentOutput[];
+  /** The dual-process decision behind the chosen hook (first→second thought→verdict). */
+  cognition?: Deliberation | null;
+}
+
+/** A key naming which reflective challenge a critique represents — stable across runs. */
+export type CritiqueKey = 'true' | 'original' | 'earns-it';
+
+/** One reflective challenge (second thought) against a proposal. */
+export interface Critique {
+  key: CritiqueKey;
+  question: string;
+  passes: boolean;
+  note: string;
+}
+
+/** First thought → second thought → decision on a proposal (usually the lead hook). */
+export interface Deliberation {
+  firstThought: string;       // the fast, generative proposal (right hemisphere)
+  secondThought: Critique[];  // the reflective challenges (left hemisphere)
+  verdict: 'keep' | 'revise';
+  decision: string;           // the integrated call (the artist gets the final say)
+  confidence: number;         // 0..1 — share of challenges the proposal survives
 }
 
 /** Returned by the pipeline runner. */
