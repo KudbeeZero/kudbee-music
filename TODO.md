@@ -61,8 +61,11 @@ vector memory, and document the architecture — lifts output quality, dev appea
    + `docs/demo-gallery.html`. The top shareability/stars move. _(#50)_
 - [ ] **4. Council scoring → hook ranking** — the Council re-scores/ranks hooks; `learn.ts`
    stores winners into vector memory + `recommend.ts` semantic recall (the brain as a coach).
-- [ ] **5. ARCHITECTURE.md + brain-wiring diagram + module headers** — attract senior-eng
-   contributors; speed PRs; reframe as "a modular agent brain."
+- [x] **5. ARCHITECTURE.md + brain-wiring diagram** — `ARCHITECTURE.md` (two studios/one
+   brain, pipeline flow, full `lib/hermes/` module map, non-negotiables) + a code-generated
+   `docs/brain-wiring.md` Mermaid diagram (`wiringDoc.ts` from `brainMap.ts`, can't drift);
+   README "New here?" pointer. Attracts senior-eng contributors; reframes as "a modular
+   agent brain." _(#51)_
 
 ## 🌐 Ecosystem (integrates via API — kept out of the free local core)
 - [~] **Crossroads Board** — the WIFI DJ governance/community steering surface (the brain's
