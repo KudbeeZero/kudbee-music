@@ -4,6 +4,11 @@ on: [push, pull_request]
 # uses secrets (there are none), so nothing needs more than this.
 permissions:
   contents: read
+# One live run per ref: a force-push or rapid re-push cancels the superseded run
+# instead of queueing adversarial duplicate workloads.
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
 jobs:
   # Left-brain check: fast, deterministic, no heavy deps. The reliable gate.
   check:

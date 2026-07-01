@@ -120,24 +120,192 @@ export function deleteAlbum(id: string): void {
   writeAlbums(readAlbums().filter((a) => a.id !== id));
 }
 
+// ---- import sanitization -----------------------------------------------------
+// importVault is the one place raw, attacker-controllable JSON enters the engine
+// (a shared "vault backup" file). Every accepted item is REBUILT field-by-field
+// from an allowlist with type coercion, so a hostile or hand-mangled file can
+// never store a shape the rest of the app (components, trace, scoring) chokes on,
+// and dangerous keys (__proto__/constructor/prototype) never survive the parse.
+const DANGEROUS_KEYS = new Set(['__proto__', 'constructor', 'prototype']);
+
+/** JSON.parse reviver that drops prototype-pollution vectors anywhere in the tree. */
+function stripDangerous(key: string, value: unknown): unknown {
+  return DANGEROUS_KEYS.has(key) ? undefined : value;
+}
+
+function isObj(v: unknown): v is Record<string, unknown> {
+  return typeof v === 'object' && v !== null && !Array.isArray(v);
+}
+function str(v: unknown, fallback = ''): string {
+  return typeof v === 'string' ? v : fallback;
+}
+function num(v: unknown, fallback = 0): number {
+  return typeof v === 'number' && Number.isFinite(v) ? v : fallback;
+}
+function bool(v: unknown, fallback = false): boolean {
+  return typeof v === 'boolean' ? v : fallback;
+}
+function strArr(v: unknown): string[] {
+  return Array.isArray(v) ? v.filter((x): x is string => typeof x === 'string') : [];
+}
+
+function sanitizeInputs(raw: unknown): SongPackage['inputs'] {
+  const r = isObj(raw) ? raw : {};
+  const structures = ['hook-first', 'verse-first', 'radio-edit', 'short-form', 'full-song'];
+  const structure = structures.includes(str(r.structure)) ? str(r.structure) : 'full-song';
+  return {
+    title: str(r.title), theme: str(r.theme), mood: str(r.mood), genre: str(r.genre),
+    tempoMin: num(r.tempoMin, 120), tempoMax: num(r.tempoMax, 160),
+    voice: str(r.voice), audience: str(r.audience), doNotUse: strArr(r.doNotUse),
+    references: str(r.references),
+    structure: structure as SongPackage['inputs']['structure'],
+    ...(typeof r.culture === 'string' ? { culture: r.culture } : {}),
+    ...(r.rhymeTemp === 'tight' || r.rhymeTemp === 'balanced' || r.rhymeTemp === 'loose'
+      ? { rhymeTemp: r.rhymeTemp } : {}),
+  };
+}
+
+function sanitizeHook(raw: unknown): SongPackage['chosenHook'] {
+  if (!isObj(raw) || typeof raw.text !== 'string' || !raw.text) return null;
+  return { text: raw.text, angle: str(raw.angle), cadence: str(raw.cadence), score: num(raw.score) };
+}
+
+/** Rebuild a SongPackage from untrusted JSON. Requires id + title; everything else
+ *  is coerced to a safe, fully-shaped default. Returns null if unsalvageable. */
+export function sanitizeSong(raw: unknown): SongPackage | null {
+  if (!isObj(raw)) return null;
+  if (typeof raw.id !== 'string' || !raw.id) return null;
+  if (typeof raw.title !== 'string' || !raw.title) return null;
+
+  const sections = (Array.isArray(raw.sections) ? raw.sections : [])
+    .filter(isObj)
+    .filter((s) => typeof s.label === 'string')
+    .map((s) => ({ label: str(s.label), lines: strArr(s.lines) }));
+
+  const hookOptions = (Array.isArray(raw.hookOptions) ? raw.hookOptions : [])
+    .map(sanitizeHook)
+    .filter((h): h is NonNullable<SongPackage['chosenHook']> => h !== null);
+
+  const p = isObj(raw.production) ? raw.production : {};
+  const vo = isObj(raw.vocals) ? raw.vocals : {};
+  const vi = isObj(raw.visuals) ? raw.visuals : {};
+  const u = isObj(raw.uniqueness) ? raw.uniqueness : {};
+  const sc = isObj(raw.score) ? raw.score : {};
+
+  return {
+    id: raw.id,
+    title: raw.title,
+    createdAt: str(raw.createdAt, new Date(0).toISOString()),
+    version: num(raw.version, 1),
+    inputs: sanitizeInputs(raw.inputs),
+    brief: str(raw.brief),
+    conceptSummary: str(raw.conceptSummary),
+    hookOptions,
+    chosenHook: sanitizeHook(raw.chosenHook),
+    sections,
+    finalLyrics: str(raw.finalLyrics),
+    production: {
+      tempoBpm: num(p.tempoBpm, 140), drums: str(p.drums), bass: str(p.bass),
+      instrumentation: strArr(p.instrumentation), arrangement: strArr(p.arrangement),
+      genreBlend: str(p.genreBlend), mixVibe: str(p.mixVibe),
+    },
+    vocals: { delivery: str(vo.delivery), adlibs: strArr(vo.adlibs), doublesAndStacks: str(vo.doublesAndStacks) },
+    visuals: {
+      albumCoverPrompt: str(vi.albumCoverPrompt), musicVideoPrompt: str(vi.musicVideoPrompt),
+      sceneIdeas: strArr(vi.sceneIdeas), shortFormClipIdeas: strArr(vi.shortFormClipIdeas),
+    },
+    viralClips: (Array.isArray(raw.viralClips) ? raw.viralClips : [])
+      .filter(isObj)
+      .map((c) => ({
+        label: str(c.label), startHint: str(c.startHint), durationSec: num(c.durationSec, 15),
+        caption: str(c.caption), hookLine: str(c.hookLine),
+      })),
+    promoCaption: str(raw.promoCaption),
+    uniqueness: {
+      score: num(u.score, 100),
+      flags: (Array.isArray(u.flags) ? u.flags : [])
+        .filter(isObj)
+        .filter((f) => typeof f.kind === 'string' && typeof f.detail === 'string')
+        .map((f) => ({
+          kind: f.kind as SongPackage['uniqueness']['flags'][number]['kind'],
+          detail: str(f.detail),
+          ...(typeof f.line === 'string' ? { line: f.line } : {}),
+          ...(typeof f.suggestion === 'string' ? { suggestion: f.suggestion } : {}),
+        })),
+      fingerprints: strArr(u.fingerprints),
+      bannedWordsHit: strArr(u.bannedWordsHit),
+      rewriteSuggestions: (Array.isArray(u.rewriteSuggestions) ? u.rewriteSuggestions : [])
+        .filter(isObj)
+        .filter((r) => typeof r.line === 'string' && typeof r.suggestion === 'string')
+        .map((r) => ({ line: str(r.line), suggestion: str(r.suggestion) })),
+    },
+    score: {
+      hookStrength: num(sc.hookStrength), emotionalClarity: num(sc.emotionalClarity),
+      originality: num(sc.originality), replayValue: num(sc.replayValue),
+      visualIdentity: num(sc.visualIdentity), shortFormPotential: num(sc.shortFormPotential),
+      releaseReadiness: num(sc.releaseReadiness), total: num(sc.total), verdict: str(sc.verdict),
+    },
+    release: (Array.isArray(raw.release) ? raw.release : [])
+      .filter(isObj)
+      .filter((r) => typeof r.label === 'string')
+      .map((r) => ({ label: str(r.label), ok: bool(r.ok), ...(typeof r.note === 'string' ? { note: r.note } : {}) })),
+    agentOutputs: [], // replayable run metadata, not load-bearing — never trusted from a file
+    cognition: null,  // recomputed on demand by deliberationForHook
+    ...(typeof raw.seed === 'number' && Number.isFinite(raw.seed) ? { seed: raw.seed } : {}),
+  };
+}
+
+/** Rebuild an Album from untrusted JSON. Requires id + title. */
+export function sanitizeAlbum(raw: unknown): Album | null {
+  if (!isObj(raw)) return null;
+  if (typeof raw.id !== 'string' || !raw.id) return null;
+  if (typeof raw.title !== 'string' || !raw.title) return null;
+  return {
+    id: raw.id,
+    title: raw.title,
+    concept: str(raw.concept),
+    trackIds: strArr(raw.trackIds),
+    createdAt: str(raw.createdAt, new Date(0).toISOString()),
+  };
+}
+
 // ---- vault export / import (durability beyond a single browser) ----
 export function exportVault(): string {
   return JSON.stringify({ kind: 'hermes-vault', version: 1, songs: readAll(), albums: readAlbums() }, null, 2);
 }
 export function importVault(json: string, mode: 'merge' | 'replace' = 'merge'): { songs: number; albums: number } {
-  let data: { songs?: SongPackage[]; albums?: Album[] };
-  try { data = JSON.parse(json); } catch { return { songs: 0, albums: 0 }; }
-  const songs = Array.isArray(data.songs) ? data.songs : [];
-  const albums = Array.isArray(data.albums) ? data.albums : [];
+  let data: unknown;
+  try { data = JSON.parse(json, stripDangerous); } catch { return { songs: 0, albums: 0 }; }
+  if (!isObj(data)) return { songs: 0, albums: 0 };
+
+  // validate + rebuild every item, deduping ids WITHIN the payload
+  const songs: SongPackage[] = [];
+  const seenSongIds = new Set<string>();
+  for (const raw of Array.isArray(data.songs) ? data.songs : []) {
+    const s = sanitizeSong(raw);
+    if (s && !seenSongIds.has(s.id)) { seenSongIds.add(s.id); songs.push(s); }
+  }
+  const albums: Album[] = [];
+  const seenAlbumIds = new Set<string>();
+  for (const raw of Array.isArray(data.albums) ? data.albums : []) {
+    const a = sanitizeAlbum(raw);
+    if (a && !seenAlbumIds.has(a.id)) { seenAlbumIds.add(a.id); albums.push(a); }
+  }
+
   if (mode === 'replace') {
     writeAll(songs); writeAlbums(albums);
-  } else {
-    const sIds = new Set(readAll().map((s) => s.id));
-    writeAll([...readAll(), ...songs.filter((s) => !sIds.has(s.id))]);
-    const aIds = new Set(readAlbums().map((a) => a.id));
-    writeAlbums([...readAlbums(), ...albums.filter((a) => !aIds.has(a.id))]);
+    return { songs: songs.length, albums: albums.length };
   }
-  return { songs: songs.length, albums: albums.length };
+  const existingSongs = readAll();
+  const sIds = new Set(existingSongs.map((s) => s.id));
+  const newSongs = songs.filter((s) => !sIds.has(s.id));
+  writeAll([...existingSongs, ...newSongs]);
+  const existingAlbums = readAlbums();
+  const aIds = new Set(existingAlbums.map((a) => a.id));
+  const newAlbums = albums.filter((a) => !aIds.has(a.id));
+  writeAlbums([...existingAlbums, ...newAlbums]);
+  // honest counts: what was actually ACCEPTED and stored, not what the file claimed
+  return { songs: newSongs.length, albums: newAlbums.length };
 }
 
 // ---- durability: backup status + explicit restore --------------------------------

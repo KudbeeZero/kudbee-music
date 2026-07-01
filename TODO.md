@@ -221,6 +221,15 @@ Board** governance / Solana / token / NFT layer integrates with this engine via 
 later (kept out of this repo's core so it stays free + local).
 
 ## ✅ Shipped (newest first)
+- [x] **Adversarial-input hardening (break-proofing for public traffic)** — attacked the app the
+      way a hostile visitor would and fixed everything that broke: `importVault` now sanitizes
+      every song/album (allowlist rebuild, required id+title, `__proto__`/`constructor` keys
+      stripped, dupes dropped, honest accepted-counts — hostile files can no longer crash the
+      deck); pipeline inputs are normalized (BPM clamped to 40–260, NaN-proof, free-text soft-cap
+      2000 chars); the generation **seed is persisted on the package** so 🔍 Explain replays the
+      real run (was hardcoded 0); XSS through the trace explorer, regex metachars in avoid-words,
+      and path traversal in `from-song` were attacked, HELD, and are now pinned by tests
+      (+28 vitest, +1 node → 283 | 16). Plus: CI `concurrency` dedup and `metadataBase`. _(this PR)_
 - [x] **Claude Engine groundwork (roadmap 5.1) — opt-in real-AI provider + eval-comparison lane** —
       `lib/hermes/providers/claudeLyricsProvider.ts` implements the `LyricsProvider` seam against the
       Anthropic Messages API (structured JSON output, hard avoid-list in the prompt, typed errors,

@@ -71,3 +71,27 @@ test('build on a scaffolded project with no audio gives clear guidance, not a cr
     rmSync(dir, { recursive: true, force: true });
   }
 });
+
+test('hostile titles (unicode / RTL / zalgo / empty / traversal) slug to a safe project dir', () => {
+  const cases = [
+    { title: 'مرحبا بالعالم', expect: 'song' },          // RTL, no ascii -> fallback
+    { title: '🔥💯🎧', expect: 'song' },                  // emoji-only -> fallback
+    { title: '', expect: 'song' },                        // empty -> fallback
+    { title: '../../etc/passwd', expect: 'etc-passwd' },  // traversal chars stripped
+    { title: '  --Cold--  ', expect: 'cold' },            // leading/trailing dashes trimmed
+  ];
+  for (const { title, expect: want } of cases) {
+    const dir = mkdtempSync(resolve(tmpdir(), 'hermes-slug-'));
+    try {
+      const songFile = resolve(dir, 'song.json');
+      writeFileSync(songFile, JSON.stringify({ ...SONG, title }));
+      const r = spawnSync('node', [FROM_SONG, songFile], { encoding: 'utf8', cwd: dir });
+      assert.equal(r.status, 0, r.stderr);
+      assert.ok(existsSync(resolve(dir, want, 'hermes.json')), `"${title}" -> ${want}/`);
+      // the project must land INSIDE the cwd — no traversal out of it
+      assert.ok(!existsSync(resolve(dir, '..', 'etc-passwd')), 'no dir created outside cwd');
+    } finally {
+      rmSync(dir, { recursive: true, force: true });
+    }
+  }
+});
