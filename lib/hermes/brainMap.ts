@@ -7,7 +7,7 @@ import type { AgentId, AgentOutput, AgentStatus } from './types';
 
 export type RegionId =
   | 'intent' | 'language' | 'values' | 'generative' | 'analytical'
-  | 'decision' | 'limbic' | 'short-term' | 'long-term';
+  | 'decision' | 'limbic' | 'default-mode' | 'short-term' | 'long-term';
 
 export type RegionState = 'idle' | 'running' | 'done' | 'soon';
 
@@ -31,6 +31,7 @@ export const REGIONS: Region[] = [
   { id: 'analytical', label: 'Analytical (left)', doc: 'originality + scoring', side: 'left', agents: ['beat-oracle', 'originality-auditor'], x: 100, y: 150 },
   { id: 'decision', label: 'Decision', doc: 'the Writers-Room (process.ts)', side: 'center', agents: ['ar-judge', 'rights-release-guard'], x: 224, y: 150 },
   { id: 'limbic', label: 'Limbic (emotion)', doc: 'lib/hermes/emotion.ts', side: 'right', agents: ['emotion-scanner'], x: 316, y: 196 },
+  { id: 'default-mode', label: 'Default Mode', doc: 'lib/hermes/defaultMode.ts', side: 'center', agents: ['hooksmith'], x: 72, y: 196 },
   { id: 'short-term', label: 'Short-term', doc: 'working memory (this session)', side: 'center', agents: ['hooksmith', 'lyric-chemist'], x: 150, y: 222 },
   { id: 'long-term', label: 'Long-term', doc: 'brain/memory.json + the vault', side: 'center', agents: ['originality-auditor'], x: 272, y: 222 },
 ];
@@ -42,6 +43,7 @@ export const PATHWAYS: [RegionId, RegionId][] = [
   ['generative', 'short-term'], ['analytical', 'short-term'], ['analytical', 'long-term'],
   ['short-term', 'long-term'],
   ['decision', 'limbic'], ['limbic', 'generative'], ['limbic', 'short-term'],
+  ['default-mode', 'generative'], ['default-mode', 'decision'], ['default-mode', 'analytical'],
 ];
 
 export function region(id: RegionId): Region | undefined {
