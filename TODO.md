@@ -25,7 +25,9 @@ _Nothing actively in flight — pick the next item from **Up next**._
    generative + decision + analytical; feeds a divergent option into the concept step. _(shipped)_
 5. [x] **Reward circuit** — `lib/hermes/reward.ts`: crave-ability score (returns +
    mutation + brevity + singability); the 11th brain region, surfaced by the A&R Judge. _(shipped)_
-6. [ ] **Procedural memory** — the artist's recurring craft moves become reusable.
+6. [x] **Procedural memory** — `lib/hermes/procedural.ts`: derives the artist's recurring
+   craft moves (favorite structure, recurring rhyme sounds, verse length) from the vault;
+   surfaced as a "signature move" recommendation. _(shipped)_
 7. [ ] **"Becoming you" self-portrait** — surface how much of a song is the learned voice.
 
 ## 🎯 Up next (ordered) — the depth-pass plan (see `/root/.claude/plans/…`)
