@@ -61,6 +61,9 @@ export interface SearchOptions {
   /** DIVERSITY (MMR) in [0,1]: 0 = off (default), →1 = penalize results similar to ones already
    *  picked, so recall doesn't return three near-identical memories. Deterministic. */
   diversity?: number;
+  /** When diversity > 0, only re-rank the top-N scored candidates (default: all). A small N
+   *  keeps MMR fast + focused on strong matches; deterministic since the candidate cut is by rank. */
+  mmrCandidates?: number;
 }
 
 /** A function that turns text into a vector. The default is the local on-device model. */
@@ -121,7 +124,7 @@ const cmp = (a: string, b: string): number => (a < b ? -1 : a > b ? 1 : 0);
  * built from the same `entries` — the public API stays identical, so callers never change.
  */
 export function rankBySimilarity(queryVec: number[], entries: VectorEntry[], opts: SearchOptions = {}): SearchResult[] {
-  const { topK = 5, minScore = 0, type, queryText, hybrid = 0, diversity = 0 } = opts;
+  const { topK = 5, minScore = 0, type, queryText, hybrid = 0, diversity = 0, mmrCandidates } = opts;
   const h = Math.max(0, Math.min(1, hybrid));
 
   // Score each entry. `similarity` stays the RAW cosine (what callers see); `score` is the
@@ -137,7 +140,10 @@ export function rankBySimilarity(queryVec: number[], entries: VectorEntry[], opt
     .filter((r) => r.similarity >= minScore)
     .sort((a, b) => (b.rank - a.rank) || cmp(a.entry.id, b.entry.id) || cmp(a.entry.text, b.entry.text));
 
-  const chosen = diversity > 0 ? mmrSelect(scored, Math.max(0, Math.min(1, diversity)), topK) : scored.slice(0, topK);
+  // MMR re-ranks over the top `mmrCandidates` (by rank) so diversity is applied among strong
+  // matches, not the whole store. The slice is by the already-deterministic rank order.
+  const pool = mmrCandidates && mmrCandidates > 0 ? scored.slice(0, mmrCandidates) : scored;
+  const chosen = diversity > 0 ? mmrSelect(pool, Math.max(0, Math.min(1, diversity)), topK) : scored.slice(0, topK);
   return chosen.map(({ entry, similarity }) => ({ entry, similarity })); // public result keeps the RAW similarity
 }
 
@@ -310,4 +316,22 @@ function hash(s: string): string {
  *   await addMemory('every step a promise that I build', { type: 'hook', score: 92 });
  *   const hits = await semanticSearch('a vow to keep climbing', { type: 'hook', topK: 3 });
  *   // hits[0].entry.text ≈ the hook above, hits[0].similarity ≈ 0.8+
+ *
+ * ── Hybrid search + diversity (MMR) — both OPT-IN, default OFF ────────────────
+ *   // pure vector (unchanged default):
+ *   await searchSimilar('cold streets turned to gold', { type: 'hook', topK: 5 });
+ *
+ *   // HYBRID: blend deterministic keyword overlap with cosine (good for short creative text).
+ *   //   hybrid=0 → pure vector · hybrid=1 → pure lexical · 0.3–0.6 is a sensible mix.
+ *   await searchSimilar('cold streets turned to gold', { type: 'hook', topK: 5, hybrid: 0.4 });
+ *
+ *   // DIVERSITY (MMR): stop three near-identical memories surfacing together.
+ *   //   diversity=0 → off · →1 → more diverse. mmrCandidates caps the re-rank pool.
+ *   await searchSimilar('cold streets turned to gold', { type: 'hook', topK: 5, diversity: 0.5, mmrCandidates: 20 });
+ *
+ *   // both together — hybrid ranking, then diversified:
+ *   await searchSimilar('cold streets turned to gold', { topK: 5, hybrid: 0.4, diversity: 0.5 });
+ *
+ * All four options preserve determinism: the ranking key is quantized and every tie (including
+ * MMR's) breaks by entry.id, so the same store returns the same results on every machine.
  */
