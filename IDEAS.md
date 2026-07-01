@@ -162,9 +162,11 @@ A second-opinion review flagged real risks worth acting on (truth-first):
   `brain/hemispheres.md`, and the Brain Scan UI now state up front that the 11 regions /
   hemispheres / nervous system are an **inspired conceptual model**, not a claim of
   biological fidelity — each region is real code in `lib/hermes/`. _(this PR)_
-- 💭 **Proof on the landing/README** — public **demo songs + step-by-step generation
-  traces** ("here's what each region did"). Proof beats description for stars. *(We have
-  the in-app Cold Hard Gold demo; add committed traces + audio.)*
+- ✅ **Proof on the landing/README** — `examples/demos/` ships **five original songs**
+  (five genres) minted by the real pipeline, each with a committed **generation trace**
+  showing what all 11 regions contributed (limbic read, reward crave score, rhyme
+  scheme/density, originality, A&R verdict). Reproducible via `GEN_DEMOS=1 npx vitest run
+  trace`; linked from the README proof table. `lib/hermes/trace.ts` + tests. _(this PR)_
 - 💭 **Deepen the deterministic core** — hierarchical generation (structure → section
   goal → line constraints), **thematic threading** across sections, and **diversity
   scoring** so a song avoids repeating its own patterns; expose a **slant/near-rhyme

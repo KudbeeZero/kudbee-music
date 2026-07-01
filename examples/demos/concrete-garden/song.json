@@ -1,0 +1,708 @@
+{
+  "id": "concrete-garden",
+  "title": "Concrete Garden",
+  "createdAt": "2026-01-01T00:00:00Z",
+  "version": 1,
+  "inputs": {
+    "title": "Concrete Garden",
+    "theme": "growing something beautiful out of a place that was supposed to break you",
+    "mood": "defiant, hopeful, hard-earned",
+    "genre": "boom-bap hip-hop",
+    "tempoMin": 88,
+    "tempoMax": 96,
+    "voice": "gritty",
+    "audience": "the block",
+    "doNotUse": [],
+    "references": "",
+    "structure": "hook-first"
+  },
+  "brief": "Make a hook first boom-bap hip-hop song titled \"Concrete Garden\". Center it on: growing, something, beautiful, out, place, was, supposed, break. Keep it grounded and specific — not corny. Tempo 88-96 BPM. References (feel, never copied): none given.",
+  "conceptSummary": "Boom-Bap Hip-Hop record for the block: growing something beautiful out of a place that was supposed to break you — delivered defiant, hopeful, hard-earned, voiced as gritty.",
+  "hookOptions": [
+    {
+      "text": "Still standing where the growing used to be",
+      "angle": "call-and-response chant",
+      "cadence": "on-beat and punchy",
+      "score": 98
+    },
+    {
+      "text": "Every step a promise that I carry",
+      "angle": "call-and-response chant",
+      "cadence": "on-beat and punchy",
+      "score": 96
+    },
+    {
+      "text": "I been grateful but I never let it show",
+      "angle": "call-and-response chant",
+      "cadence": "floating melodic",
+      "score": 81
+    },
+    {
+      "text": "For block, I build through the growing",
+      "angle": "anthem declaration",
+      "cadence": "on-beat and punchy",
+      "score": 93
+    },
+    {
+      "text": "Tell block I made it out the something",
+      "angle": "confessional one-liner",
+      "cadence": "floating melodic",
+      "score": 93
+    }
+  ],
+  "chosenHook": {
+    "text": "Still standing where the growing used to be",
+    "angle": "call-and-response chant",
+    "cadence": "on-beat and punchy",
+    "score": 98
+  },
+  "sections": [
+    {
+      "label": "Intro",
+      "lines": [
+        "Block, this one's for you"
+      ]
+    },
+    {
+      "label": "Hook",
+      "lines": [
+        "Still standing where the growing used to be",
+        "Still standing where the growing used to be",
+        "And block know I survive for it",
+        "Still standing where the growing used to be"
+      ]
+    },
+    {
+      "label": "Verse 1",
+      "lines": [
+        "Learned to love the bright train",
+        "I bet it all on the brain",
+        "Still fight my way up out the light",
+        "Nobody ever handed me the sight"
+      ]
+    },
+    {
+      "label": "Hook",
+      "lines": [
+        "Still standing where the growing used to be",
+        "Still standing where the growing used to be",
+        "And block know I survive for it",
+        "Still standing where the growing used to be"
+      ]
+    },
+    {
+      "label": "Verse 2",
+      "lines": [
+        "No map, no plan, just the mark",
+        "I keep it close, the steady spark",
+        "I bet it all on the train",
+        "Everything I lost became the brain"
+      ]
+    },
+    {
+      "label": "Bridge",
+      "lines": [
+        "They ask me why I need the fire",
+        "Nobody ever handed me the desire"
+      ]
+    },
+    {
+      "label": "Hook",
+      "lines": [
+        "Still standing where the growing used to be",
+        "Still standing where the growing used to be",
+        "And block know I survive for it",
+        "Still standing where the growing used to be"
+      ]
+    }
+  ],
+  "finalLyrics": "[Intro]\nBlock, this one's for you\n\n[Hook]\nStill standing where the growing used to be\nStill standing where the growing used to be\nAnd block know I survive for it\nStill standing where the growing used to be\n\n[Verse 1]\nLearned to love the bright train\nI bet it all on the brain\nStill fight my way up out the light\nNobody ever handed me the sight\n\n[Hook]\nStill standing where the growing used to be\nStill standing where the growing used to be\nAnd block know I survive for it\nStill standing where the growing used to be\n\n[Verse 2]\nNo map, no plan, just the mark\nI keep it close, the steady spark\nI bet it all on the train\nEverything I lost became the brain\n\n[Bridge]\nThey ask me why I need the fire\nNobody ever handed me the desire\n\n[Hook]\nStill standing where the growing used to be\nStill standing where the growing used to be\nAnd block know I survive for it\nStill standing where the growing used to be",
+  "production": {
+    "tempoBpm": 92,
+    "drums": "minimal knock, heavy kick",
+    "bass": "warm analog bassline",
+    "instrumentation": [
+      "choir swell",
+      "detuned bell lead",
+      "lo-fi guitar loop"
+    ],
+    "arrangement": [
+      "Intro: sparse, just the lead motif + vinyl",
+      "Hook: full drums in, 808 glide, double the vocal",
+      "Verse: pull the pad, let the knock breathe",
+      "Bridge: drop drums, swell, then re-enter on the one",
+      "Outro: filter the beat down, leave the hook ringing"
+    ],
+    "genreBlend": "boom-bap hip-hop core with melodic/emotional top line",
+    "mixVibe": "wide, warm low end, vocal up front, slight tape saturation"
+  },
+  "vocals": {
+    "delivery": "defiant, hopeful, hard-earned delivery, conversational on verses, lifted on the hook",
+    "adlibs": [
+      "(yeah)",
+      "(uh)",
+      "(for you)",
+      "(no cap)"
+    ],
+    "doublesAndStacks": "Double the hook, stack harmonies on the last line of each chorus."
+  },
+  "visuals": {
+    "albumCoverPrompt": "Album cover, square 1:1. Cinematic, defiant, hopeful, hard-earned mood. Subject reflects: Boom-Bap Hip-Hop record for the block: growing something beautiful out of a place that was supposed to break you — delivered defiant, hopeful, hard-earned, voiced as gritty.. Visual motifs: growing, something, beautiful, out. Color: deep shadows, one warm accent light. Film grain, 35mm. No text, no logos, no real-artist likeness. Original styling.",
+    "musicVideoPrompt": "Cinematic 16:9 music video. Concept: Boom-Bap Hip-Hop record for the block: growing something beautiful out of a place that was supposed to break you — delivered defiant, hopeful, hard-earned, voiced as gritty.. defiant, hopeful, hard-earned tone, boom-bap hip-hop energy. Grounded, not corny; real locations, natural light with one stylized accent. Original — no copyrighted footage or artist mimicry.",
+    "sceneIdeas": [
+      "Opening: slow 16:9 push-in on the subject, defiant, hopeful, hard-earned light, city at dawn.",
+      "Hook: handheld, performance energy, neon reflections.",
+      "Verse: storytelling cutaways tied to \"growing\".",
+      "Bridge: single locked-off wide, subject still while the world moves.",
+      "Outro: pull back to reveal the place it all started."
+    ],
+    "shortFormClipIdeas": [
+      "Hook punch-in with on-screen lyric",
+      "Behind-the-scenes studio reaction to the drop",
+      "Single-take walk synced to the bridge"
+    ]
+  },
+  "viralClips": [
+    {
+      "label": "Hook hit",
+      "startHint": "first chorus",
+      "durationSec": 15,
+      "caption": "“Still standing where the growing used to be” 🎧 #newmusic",
+      "hookLine": "Still standing where the growing used to be"
+    },
+    {
+      "label": "Verse opener",
+      "startHint": "verse 1, bar 1",
+      "durationSec": 12,
+      "caption": "the story starts here 👀",
+      "hookLine": "Learned to love the bright train"
+    },
+    {
+      "label": "Bridge turn",
+      "startHint": "bridge",
+      "durationSec": 18,
+      "caption": "wait for it…",
+      "hookLine": "They ask me why I need the fire"
+    }
+  ],
+  "promoCaption": "“Still standing where the growing used to be” — new one for the block. #growing #something #boom-baphip-hop",
+  "uniqueness": {
+    "score": 100,
+    "flags": [
+      {
+        "kind": "banned-word",
+        "detail": "avoid-word \"fire\"",
+        "line": "They ask me why I need the fire",
+        "suggestion": "the heat"
+      },
+      {
+        "kind": "repeated-hook",
+        "detail": "hook line repeats 9× — consider varying one word",
+        "line": "Still standing where the growing used to be"
+      }
+    ],
+    "fingerprints": [
+      "93ba72e8",
+      "113f25d1",
+      "113f25d1",
+      "ada77621",
+      "113f25d1",
+      "568949b6",
+      "bece4b9f",
+      "7111ab5a",
+      "c962d4ce",
+      "113f25d1",
+      "113f25d1",
+      "ada77621",
+      "113f25d1",
+      "33accd30",
+      "ffebd580",
+      "ae77a40d",
+      "d9c2c159",
+      "b5131378",
+      "4e87ea3",
+      "113f25d1",
+      "113f25d1",
+      "ada77621",
+      "113f25d1"
+    ],
+    "bannedWordsHit": [
+      "fire"
+    ],
+    "rewriteSuggestions": [
+      {
+        "line": "They ask me why I need the fire",
+        "suggestion": "try \"the heat\" instead of \"fire\""
+      }
+    ]
+  },
+  "score": {
+    "hookStrength": 20,
+    "emotionalClarity": 20,
+    "originality": 20,
+    "replayValue": 13,
+    "visualIdentity": 10,
+    "shortFormPotential": 10,
+    "releaseReadiness": 5,
+    "total": 98,
+    "verdict": "Certified banger — ship it."
+  },
+  "release": [
+    {
+      "label": "Title set",
+      "ok": true
+    },
+    {
+      "label": "Genre + audience defined",
+      "ok": true
+    },
+    {
+      "label": "No high-similarity matches",
+      "ok": true,
+      "note": "rephrase flagged lines"
+    },
+    {
+      "label": "Original — no copyrighted references",
+      "ok": true,
+      "note": "describe inspiration, don't reuse material"
+    },
+    {
+      "label": "Avoid-words reviewed",
+      "ok": false,
+      "note": "1 avoid-word(s) present (warning only)"
+    },
+    {
+      "label": "Ownership clear",
+      "ok": true,
+      "note": "original generated content — you own this draft"
+    }
+  ],
+  "agentOutputs": [
+    {
+      "id": "conductor",
+      "name": "HERMES Conductor",
+      "status": "done",
+      "finding": "Brief locked: hook-first boom-bap hip-hop for the block.",
+      "confidence": 88,
+      "warnings": [],
+      "suggestedNextAction": "Hand the brief to Hooksmith.",
+      "data": {
+        "brief": "Make a hook first boom-bap hip-hop song titled \"Concrete Garden\". Center it on: growing, something, beautiful, out, place, was, supposed, break. Keep it grounded and specific — not corny. Tempo 88-96 BPM. References (feel, never copied): none given.",
+        "concept": "Boom-Bap Hip-Hop record for the block: growing something beautiful out of a place that was supposed to break you — delivered defiant, hopeful, hard-earned, voiced as gritty.",
+        "angles": [
+          {
+            "angle": "Tell \"growing\" through a letter you'll never send",
+            "why": "An oblique frame forces fresh, specific images instead of the obvious ones."
+          },
+          {
+            "angle": "Anchor the whole song to one image: \"night\"",
+            "why": "A single concrete anchor from an unrelated domain (time) gives the song a spine and a surprise."
+          },
+          {
+            "angle": "Flip the perspective — write it as an object that outlived the person",
+            "why": "Re-narrating from an unexpected vantage is the DMN move that lifts originality."
+          }
+        ]
+      }
+    },
+    {
+      "id": "hooksmith",
+      "name": "Hooksmith",
+      "status": "done",
+      "finding": "Lead hook: \"Still standing where the growing used to be\"",
+      "confidence": 95,
+      "warnings": [],
+      "suggestedNextAction": "Build verses from the lead hook.",
+      "data": {
+        "hookOptions": [
+          {
+            "text": "Still standing where the growing used to be",
+            "angle": "call-and-response chant",
+            "cadence": "on-beat and punchy",
+            "score": 98
+          },
+          {
+            "text": "Every step a promise that I carry",
+            "angle": "call-and-response chant",
+            "cadence": "on-beat and punchy",
+            "score": 96
+          },
+          {
+            "text": "I been grateful but I never let it show",
+            "angle": "call-and-response chant",
+            "cadence": "floating melodic",
+            "score": 81
+          },
+          {
+            "text": "For block, I build through the growing",
+            "angle": "anthem declaration",
+            "cadence": "on-beat and punchy",
+            "score": 93
+          },
+          {
+            "text": "Tell block I made it out the something",
+            "angle": "confessional one-liner",
+            "cadence": "floating melodic",
+            "score": 93
+          }
+        ],
+        "chosenHook": {
+          "text": "Still standing where the growing used to be",
+          "angle": "call-and-response chant",
+          "cadence": "on-beat and punchy",
+          "score": 98
+        }
+      }
+    },
+    {
+      "id": "lyric-chemist",
+      "name": "Lyric Chemist",
+      "status": "done",
+      "finding": "7 sections, 23 lines.",
+      "confidence": 84,
+      "warnings": [],
+      "suggestedNextAction": "Send lyrics to Emotion Scanner + Originality Auditor.",
+      "data": {
+        "sections": [
+          {
+            "label": "Intro",
+            "lines": [
+              "Block, this one's for you"
+            ]
+          },
+          {
+            "label": "Hook",
+            "lines": [
+              "Still standing where the growing used to be",
+              "Still standing where the growing used to be",
+              "And block know I survive for it",
+              "Still standing where the growing used to be"
+            ]
+          },
+          {
+            "label": "Verse 1",
+            "lines": [
+              "Learned to love the bright train",
+              "I bet it all on the brain",
+              "Still fight my way up out the light",
+              "Nobody ever handed me the sight"
+            ]
+          },
+          {
+            "label": "Hook",
+            "lines": [
+              "Still standing where the growing used to be",
+              "Still standing where the growing used to be",
+              "And block know I survive for it",
+              "Still standing where the growing used to be"
+            ]
+          },
+          {
+            "label": "Verse 2",
+            "lines": [
+              "No map, no plan, just the mark",
+              "I keep it close, the steady spark",
+              "I bet it all on the train",
+              "Everything I lost became the brain"
+            ]
+          },
+          {
+            "label": "Bridge",
+            "lines": [
+              "They ask me why I need the fire",
+              "Nobody ever handed me the desire"
+            ]
+          },
+          {
+            "label": "Hook",
+            "lines": [
+              "Still standing where the growing used to be",
+              "Still standing where the growing used to be",
+              "And block know I survive for it",
+              "Still standing where the growing used to be"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "beat-oracle",
+      "name": "Beat Oracle",
+      "status": "done",
+      "finding": "92 BPM · minimal knock, heavy kick",
+      "confidence": 80,
+      "warnings": [],
+      "suggestedNextAction": "Lock arrangement to the hook placement.",
+      "data": {
+        "production": {
+          "tempoBpm": 92,
+          "drums": "minimal knock, heavy kick",
+          "bass": "warm analog bassline",
+          "instrumentation": [
+            "choir swell",
+            "detuned bell lead",
+            "lo-fi guitar loop"
+          ],
+          "arrangement": [
+            "Intro: sparse, just the lead motif + vinyl",
+            "Hook: full drums in, 808 glide, double the vocal",
+            "Verse: pull the pad, let the knock breathe",
+            "Bridge: drop drums, swell, then re-enter on the one",
+            "Outro: filter the beat down, leave the hook ringing"
+          ],
+          "genreBlend": "boom-bap hip-hop core with melodic/emotional top line",
+          "mixVibe": "wide, warm low end, vocal up front, slight tape saturation"
+        }
+      }
+    },
+    {
+      "id": "emotion-scanner",
+      "name": "Emotion Scanner",
+      "status": "done",
+      "finding": "defiance · clarity 100/100 → turn toward the tenderness underneath it.",
+      "confidence": 76,
+      "warnings": [],
+      "suggestedNextAction": "Proceed to scoring.",
+      "data": {
+        "clarity": 1,
+        "emotion": {
+          "valence": 0.23,
+          "intensity": 0.95,
+          "primary": "defiance",
+          "contrast": "the tenderness underneath it",
+          "guidance": "Lead with defiance (bright, high-intensity), then turn toward the tenderness underneath it for depth. Render the feeling in a concrete image, don't name it."
+        },
+        "arc": [
+          {
+            "label": "Intro",
+            "beat": "setup"
+          },
+          {
+            "label": "Hook",
+            "beat": "tension"
+          },
+          {
+            "label": "Verse 1",
+            "beat": "problem"
+          },
+          {
+            "label": "Hook",
+            "beat": "tension"
+          },
+          {
+            "label": "Verse 2",
+            "beat": "tension"
+          },
+          {
+            "label": "Bridge",
+            "beat": "payoff"
+          },
+          {
+            "label": "Hook",
+            "beat": "tension"
+          }
+        ]
+      }
+    },
+    {
+      "id": "originality-auditor",
+      "name": "Originality Auditor",
+      "status": "done",
+      "finding": "Uniqueness 100/100 · 2 flag(s).",
+      "confidence": 90,
+      "warnings": [
+        "avoid-word \"fire\"",
+        "hook line repeats 9× — consider varying one word"
+      ],
+      "suggestedNextAction": "Apply suggested rewrites before release.",
+      "data": {
+        "uniqueness": {
+          "score": 100,
+          "flags": [
+            {
+              "kind": "banned-word",
+              "detail": "avoid-word \"fire\"",
+              "line": "They ask me why I need the fire",
+              "suggestion": "the heat"
+            },
+            {
+              "kind": "repeated-hook",
+              "detail": "hook line repeats 9× — consider varying one word",
+              "line": "Still standing where the growing used to be"
+            }
+          ],
+          "fingerprints": [
+            "93ba72e8",
+            "113f25d1",
+            "113f25d1",
+            "ada77621",
+            "113f25d1",
+            "568949b6",
+            "bece4b9f",
+            "7111ab5a",
+            "c962d4ce",
+            "113f25d1",
+            "113f25d1",
+            "ada77621",
+            "113f25d1",
+            "33accd30",
+            "ffebd580",
+            "ae77a40d",
+            "d9c2c159",
+            "b5131378",
+            "4e87ea3",
+            "113f25d1",
+            "113f25d1",
+            "ada77621",
+            "113f25d1"
+          ],
+          "bannedWordsHit": [
+            "fire"
+          ],
+          "rewriteSuggestions": [
+            {
+              "line": "They ask me why I need the fire",
+              "suggestion": "try \"the heat\" instead of \"fire\""
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "visual-director",
+      "name": "Visual Director",
+      "status": "done",
+      "finding": "Album cover + cinematic 16:9 video direction ready.",
+      "confidence": 78,
+      "warnings": [],
+      "suggestedNextAction": "Pass scenes to Viral Clip Scout.",
+      "data": {
+        "visuals": {
+          "albumCoverPrompt": "Album cover, square 1:1. Cinematic, defiant, hopeful, hard-earned mood. Subject reflects: Boom-Bap Hip-Hop record for the block: growing something beautiful out of a place that was supposed to break you — delivered defiant, hopeful, hard-earned, voiced as gritty.. Visual motifs: growing, something, beautiful, out. Color: deep shadows, one warm accent light. Film grain, 35mm. No text, no logos, no real-artist likeness. Original styling.",
+          "musicVideoPrompt": "Cinematic 16:9 music video. Concept: Boom-Bap Hip-Hop record for the block: growing something beautiful out of a place that was supposed to break you — delivered defiant, hopeful, hard-earned, voiced as gritty.. defiant, hopeful, hard-earned tone, boom-bap hip-hop energy. Grounded, not corny; real locations, natural light with one stylized accent. Original — no copyrighted footage or artist mimicry.",
+          "sceneIdeas": [
+            "Opening: slow 16:9 push-in on the subject, defiant, hopeful, hard-earned light, city at dawn.",
+            "Hook: handheld, performance energy, neon reflections.",
+            "Verse: storytelling cutaways tied to \"growing\".",
+            "Bridge: single locked-off wide, subject still while the world moves.",
+            "Outro: pull back to reveal the place it all started."
+          ],
+          "shortFormClipIdeas": [
+            "Hook punch-in with on-screen lyric",
+            "Behind-the-scenes studio reaction to the drop",
+            "Single-take walk synced to the bridge"
+          ]
+        }
+      }
+    },
+    {
+      "id": "viral-clip-scout",
+      "name": "Viral Clip Scout",
+      "status": "done",
+      "finding": "3 short-form moments identified.",
+      "confidence": 74,
+      "warnings": [],
+      "suggestedNextAction": "Schedule the strongest clip first.",
+      "data": {
+        "viralClips": [
+          {
+            "label": "Hook hit",
+            "startHint": "first chorus",
+            "durationSec": 15,
+            "caption": "“Still standing where the growing used to be” 🎧 #newmusic",
+            "hookLine": "Still standing where the growing used to be"
+          },
+          {
+            "label": "Verse opener",
+            "startHint": "verse 1, bar 1",
+            "durationSec": 12,
+            "caption": "the story starts here 👀",
+            "hookLine": "Learned to love the bright train"
+          },
+          {
+            "label": "Bridge turn",
+            "startHint": "bridge",
+            "durationSec": 18,
+            "caption": "wait for it…",
+            "hookLine": "They ask me why I need the fire"
+          }
+        ]
+      }
+    },
+    {
+      "id": "ar-judge",
+      "name": "A&R Judge",
+      "status": "done",
+      "finding": "Banger 98/100 · crave-ability 75/100 — Certified banger — ship it.",
+      "confidence": 82,
+      "warnings": [],
+      "suggestedNextAction": "Green-light.",
+      "data": {
+        "score": {
+          "hookStrength": 20,
+          "emotionalClarity": 20,
+          "originality": 20,
+          "replayValue": 13,
+          "visualIdentity": 10,
+          "shortFormPotential": 10,
+          "releaseReadiness": 5,
+          "total": 98,
+          "verdict": "Certified banger — ship it."
+        },
+        "crave": {
+          "score": 75,
+          "factors": {
+            "returns": 1,
+            "mutation": 0.5,
+            "brevity": 0.75,
+            "singability": 0.67
+          },
+          "note": "Compulsive — you'll want it again."
+        }
+      }
+    },
+    {
+      "id": "rights-release-guard",
+      "name": "Rights & Release Guard",
+      "status": "warning",
+      "finding": "5/6 release checks passing.",
+      "confidence": 86,
+      "warnings": [
+        "Avoid-words reviewed"
+      ],
+      "suggestedNextAction": "Resolve open items before publishing.",
+      "data": {
+        "release": [
+          {
+            "label": "Title set",
+            "ok": true
+          },
+          {
+            "label": "Genre + audience defined",
+            "ok": true
+          },
+          {
+            "label": "No high-similarity matches",
+            "ok": true,
+            "note": "rephrase flagged lines"
+          },
+          {
+            "label": "Original — no copyrighted references",
+            "ok": true,
+            "note": "describe inspiration, don't reuse material"
+          },
+          {
+            "label": "Avoid-words reviewed",
+            "ok": false,
+            "note": "1 avoid-word(s) present (warning only)"
+          },
+          {
+            "label": "Ownership clear",
+            "ok": true,
+            "note": "original generated content — you own this draft"
+          }
+        ]
+      }
+    }
+  ]
+}

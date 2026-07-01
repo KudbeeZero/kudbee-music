@@ -73,6 +73,22 @@ npm run web:dev          # http://localhost:3000/hermes  (or /hit-factory)
 > actually produced — then run it through the video studio with one command. See
 > [`examples/cold-hard-gold/`](examples/cold-hard-gold/).
 
+### 🧾 Proof: five songs, and what the brain thought
+Description is cheap; here's the receipts. **[`examples/demos/`](examples/demos/)** holds
+five original songs across five genres — each **minted by the real pipeline** (deterministic
+seed) with a **generation trace** showing *what every one of the 11 brain regions actually
+contributed*: the limbic layer's emotional read, the reward circuit's crave score, the rhyme
+scheme + density, the originality check, the A&R verdict. Reproduce them yourself with
+`GEN_DEMOS=1 npx vitest run trace`.
+
+| Song | Genre | Score | Lead hook |
+|------|-------|-------|-----------|
+| [Concrete Garden](examples/demos/concrete-garden/trace.md) | boom-bap | 98 | *"Still standing where the growing used to be"* |
+| [Paper Crowns](examples/demos/paper-crowns/trace.md) | drill trap | 97 | *"This one's for the games that raised me"* |
+| [Signal Fade](examples/demos/signal-fade/trace.md) | synthwave pop | 97 | *"Still standing where the loving used to be"* |
+| [Midnight Shift](examples/demos/midnight-shift/trace.md) | lo-fi soul | 93 | *"Every step a promise that I rebuild"* |
+| [Hometown Ghosts](examples/demos/hometown-ghosts/trace.md) | folk-rap | 91 | *"This one's for the town that raised me"* |
+
 **The 10 agents (right proposes, left disposes):**
 
 | Right | Left |
