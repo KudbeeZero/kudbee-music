@@ -101,6 +101,10 @@ Board** governance / Solana / token / NFT layer integrates with this engine via 
 later (kept out of this repo's core so it stays free + local).
 
 ## ✅ Shipped (newest first)
+- [x] **Particle Brain + artist heat-map** — the Brain Scan now has a canvas particle layer
+      + a **thermal heat-map** (`lib/hermes/heat.ts` `brainHeat()`, tested): regions glow by
+      *the type of artist you are* (right/generative → hot magenta, analytical → cyan, emotion
+      raises temp, more "becoming-you" → hotter). Reduced-motion aware. _(#40)_
 - [x] **Cognitive model** — `lib/hermes/cognition.ts`: `deliberate()` runs first thought →
       second thought (3 real critiques: true-to-brief / original / earns-it) → decision
       (keep|revise); a "🧭 How the brain decided" readout on the lead hook. _(#39)_
