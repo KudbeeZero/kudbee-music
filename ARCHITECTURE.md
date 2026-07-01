@@ -67,6 +67,8 @@ generated wiring diagram: [`docs/brain-wiring.md`](docs/brain-wiring.md).
 **Evaluation (left hemisphere — analytical)**
 - `scoring.ts`, `rescore.ts` — the banger score (craft signals, not length+RNG).
 - `originality.ts`, `safety.ts` — uniqueness fingerprints + famous-phrase screen.
+- `semanticOriginality.ts` — optional MEANING-level novelty (catches paraphrases the
+  fingerprint check misses). Server/CLI-only (imports `vectorMemory`); opt-in + graceful.
 - `reward.ts` — crave-ability (returns, mutation, brevity, singability).
 - `cognition.ts` — first-thought → second-thought critique → keep/revise decision; picks
   the chosen hook (`selectHookByCognition`).
