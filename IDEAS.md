@@ -196,8 +196,9 @@ A second-opinion review flagged real risks worth acting on (truth-first):
 - ✅ **Eval harness + golden songs** — `lib/hermes/eval.ts` + `npm run eval`: objective
   metrics (rhyme density, line diversity, thematic coherence, hook strength) over the
   demos + flagship golden set; a CI regression guard so "learn/score" is measurable. _(#36)_
-- 💭 **Output safety filter** — screen generated hooks against famous phrases; add a
-  short disclaimer/ToS putting responsibility on the user.
+- ✅ **Output safety filter** — `lib/hermes/safety.ts` screens hooks/lyrics against a
+  famous-phrase list (a `famous-phrase` uniqueness flag), plus a responsibility
+  disclaimer in the README + Uniqueness panel. _(#37)_
 
 ## ✅ Captured → shipped
 - ✅ **Nervous system + short-term/long-term memory** — `brain map` (regions + nerves,

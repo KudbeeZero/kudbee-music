@@ -73,6 +73,12 @@ npm run web:dev          # http://localhost:3000/hermes  (or /hit-factory)
 > actually produced — then run it through the video studio with one command. See
 > [`examples/cold-hard-gold/`](examples/cold-hard-gold/).
 
+> **Originality & safety.** Lyrics are generated **locally from your own inputs** as a
+> creative starting point. HERMES runs a local uniqueness check + a **famous-phrase
+> filter**, but does **not** guarantee originality — you're responsible for clearing any
+> song before you release or monetize it. Influences are *felt, never copied*; no
+> living-artist mimicry.
+
 ### 🧾 Proof: five songs, and what the brain thought
 Description is cheap; here's the receipts. **[`examples/demos/`](examples/demos/)** holds
 five original songs across five genres — each **minted by the real pipeline** (deterministic
@@ -217,9 +223,10 @@ docs/                    quickstart, concepts, CLI ref, scene-pack guide, hit-fa
 - [x] **Deterministic lyric-core depth** — hierarchical generation, thematic threading, diversity scoring, slant-rhyme "temperature" dial
 
 - [x] **Eval harness + golden songs** (`npm run eval`) — objective lyric metrics over a golden set; a CI regression guard
+- [x] **Output-safety filter + disclaimer** — screens hooks/lyrics against famous phrases; responsibility disclaimer
 
 **Next** — the phased plan is the spine [`brain/roadmap.json`](brain/roadmap.json); the human backlog is [`TODO.md`](TODO.md).
-- [ ] **Measure & safety** — output-safety filter + disclaimer; one-command demo (`npm run demo`)
+- [ ] **Measure & safety** — one-command demo (`npm run demo`)
 - [ ] **Deepen the visible brain** — cognitive model (first→second thought→decision); the Council; brain-scan boot sequence
 - [ ] **Make it yours** — create-your-own-artist; community personas · **Durability** — vault backup so a cleared browser never loses your catalog
 - [ ] **Real AI (opt-in)** behind the adapters (mock stays default → $0) · **Influence Studio** (felt, never copied)

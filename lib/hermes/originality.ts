@@ -3,6 +3,7 @@
 import type { UniquenessReport, UniquenessFlag } from './types';
 import { DEFAULT_BANNED_WORDS, suggestReplacement } from './bannedWords';
 import { normalizeLine, ngrams, lineSimilarity, tokenSetSimilarity, hashString } from './text';
+import { screenFamousPhrases } from './safety';
 
 export interface PriorSong {
   id: string;
@@ -133,6 +134,16 @@ export function checkOriginality(lyrics: string, opts: OriginalityOptions = {}):
     }
   }
 
+  // 6) output-safety: echoes of very famous phrases/titles (see lib/hermes/safety.ts)
+  for (const hit of screenFamousPhrases(lyrics)) {
+    flags.push({
+      kind: 'famous-phrase',
+      detail: `echoes a famous line ("${hit.phrase}") — change it before release`,
+      line: hit.line,
+      suggestion: 'rewrite in your own words',
+    });
+  }
+
   const score = scoreUniqueness(lines.length, flags);
   return { score, flags, fingerprints, bannedWordsHit, rewriteSuggestions };
 }
@@ -145,6 +156,7 @@ function scoreUniqueness(lineCount: number, flags: UniquenessFlag[]): number {
   for (const f of flags) {
     switch (f.kind) {
       case 'too-similar': score -= 14; break;
+      case 'famous-phrase': score -= 12; break;
       case 'cliche': score -= 6; break;
       case 'overused-phrase': score -= 4; break;
       case 'repeated-hook': score -= 2; break;
