@@ -20,10 +20,17 @@ export async function rememberSong(
   pkg: SongPackage,
   opts: { embed?: Embedder; file?: string } = {},
 ): Promise<number> {
-  const items: { text: string; type: 'hook' | 'lyric' }[] = [];
+  // Store one memory per FACET so each agent system can recall by its own lens:
+  //  hook       → Council / deliberation ("have I written a hook like this?")
+  //  lyric      → originality (semantic near-duplicate lines)
+  //  procedural → "have I crafted this THEME before?" (procedural memory)
+  //  emotion    → "have I chased this FEELING before?" (limbic layer)
+  const items: { text: string; type: 'hook' | 'lyric' | 'procedural' | 'emotion' }[] = [];
   if (pkg.chosenHook?.text) items.push({ text: pkg.chosenHook.text, type: 'hook' });
   const lead = pkg.sections.find((s) => s.lines.length > 1)?.lines[0];
   if (lead) items.push({ text: lead, type: 'lyric' });
+  if (pkg.inputs?.theme) items.push({ text: pkg.inputs.theme, type: 'procedural' });
+  if (pkg.inputs?.mood) items.push({ text: pkg.inputs.mood, type: 'emotion' });
 
   let stored = 0;
   for (const it of items) {
@@ -61,4 +68,52 @@ export async function recommendSimilar(
   } catch {
     return null; // optional dep missing → no semantic recall, everything else still works
   }
+}
+
+/** One recalled memory: the stored text, its source song, and how close it is (0..1). */
+export interface Recall {
+  text: string;
+  source?: string;
+  similarity: number;
+}
+
+/** Shared typed-recall core — embed the query, return the closest memories of one type. */
+async function recall(
+  query: string,
+  type: 'hook' | 'lyric' | 'procedural' | 'emotion',
+  opts: { embed?: Embedder; file?: string; topK?: number; minScore?: number } = {},
+): Promise<Recall[]> {
+  try {
+    const hits = await semanticSearch(query, {
+      type, topK: opts.topK ?? 3, minScore: opts.minScore ?? 0.75, embed: opts.embed, file: opts.file,
+    });
+    return hits.map((h) => ({ text: h.entry.text, source: h.entry.metadata.source, similarity: h.similarity }));
+  } catch {
+    return []; // optional dep missing → empty; each agent falls back to its rule-based path
+  }
+}
+
+/**
+ * PROCEDURAL memory recall — "have I crafted this kind of theme before?" Surfaces past
+ * songs whose theme is semantically close, so the brain can lean on (or deliberately break)
+ * a craft pattern it's used before. Opt-in + graceful.
+ */
+export function recallSimilarCraft(theme: string, opts?: { embed?: Embedder; file?: string; topK?: number }): Promise<Recall[]> {
+  return recall(theme, 'procedural', opts);
+}
+
+/**
+ * LIMBIC recall — "have I chased this feeling before?" Surfaces past songs with a
+ * semantically close mood, so the emotion layer can recall how it handled a similar take.
+ */
+export function recallSimilarEmotion(mood: string, opts?: { embed?: Embedder; file?: string; topK?: number }): Promise<Recall[]> {
+  return recall(mood, 'emotion', opts);
+}
+
+/**
+ * COUNCIL / deliberation recall — "have I written a hook like this before?" Surfaces past
+ * hooks close in meaning, so the board can flag self-repetition before it ships.
+ */
+export function recallSimilarHook(hookText: string, opts?: { embed?: Embedder; file?: string; topK?: number }): Promise<Recall[]> {
+  return recall(hookText, 'hook', opts);
 }
