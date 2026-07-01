@@ -23,9 +23,14 @@ chat. Detail for each is in [`brain/roadmap.json`](brain/roadmap.json) + [`IDEAS
 - [x] **Notion live roadmap mirror** · **Grok agent-image prompts** (10, delivered in chat)
 
 **Blocked on you (needs a key / account / decision — I can scaffold the $0 parts, you flip the switch):**
-- [ ] **Runway Gen-4 video** (you have the key + ~1000 credits) → `studio/runway.mjs` behind `RUNWAY_API_KEY`
-   (`.env.local`, gitignored, never committed). Uses: agent avatars → living characters, the **HERMES office/world**
-   scenes (agents get bodies), a **landing-page hero video**, real video clips. I can build the adapter $0; you run it.
+- [~] **Runway Gen-4 video** — **adapter shipped + live-tested** _(#83)_: `studio/runway.mjs`
+   (`hermes runway --image <path> --prompt "..." --duration 5|10 --out <path>`) drives Runway's
+   `image_to_video` (Gen-4 Turbo), polls the task, downloads the clip. Behind `RUNWAY_API_KEY`
+   (`.env.local`, gitignored, never committed) — opt-in, key-gated, never the free core. Verified
+   end-to-end with a real 10s clip animating `assets/hero-still.png` (the landing-page hero use
+   case) on the founder's test-account key/credits. Remaining, founder-paced: wire clips into the
+   actual landing page, animate the agent avatars into living characters, the **HERMES office/world**
+   scenes. See `docs/runway-plan.md` for the phased rollout.
 - [x] **Cool landing page** — interactive scroll-driven landing shipped at `/` _(#86)_, live at
    [wifi-dj-meme.pages.dev](https://wifi-dj-meme.pages.dev); the Runway hero video + Solana connect remain
    founder-gated upgrades (comment slots left in `components/landing/Landing.tsx`).

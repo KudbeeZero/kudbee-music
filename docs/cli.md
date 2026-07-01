@@ -18,6 +18,7 @@ hermes <command> [options]
 | `build` | prep → analyze → timeline → render (the flagship in this repo) |
 | `build <dir>` | Build a scaffolded **project**: reads `<dir>/hermes.json` for `pack`/`aspect`/`brain`, uses the project's own `song/` + `assets/`, writes `<dir>/out/<name>.mp4` |
 | `qa <video>` | The left-brain **eval gate** — ffprobe + frame-sample a render, score it, exit non-zero on fail (`--slice` for short renders) |
+| `runway [opts]` | **Opt-in, key-gated.** Animate a still into a short clip via Runway Gen-4 Turbo — agent avatars, HERMES world scenes, a landing-page hero. Needs `RUNWAY_API_KEY` in `.env.local` (never committed); the free core never calls this. |
 
 **Render options:** `--start <s>` `--end <s>` `--out <path>` `--preset <x>`
 `--crf <n>` `--pack <neo-noir\|retrowave\|vhs-lofi\|lyric-minimal>`
@@ -42,3 +43,16 @@ A project with no hero clips renders fully procedurally, so every scene pack
 works out of the box. Sections come from the headers in your `lyrics.md`
 (`[Verse 1]`, `[Hook]`, …) and are spread across the song by line count;
 add `whisper.json` (via `hermes transcribe`) to lock lyrics to the real vocal.
+
+## Runway Gen-4 (`hermes runway`)
+Opt-in and key-gated — the free core is $0 and never touches this. Put a real
+key in `.env.local` (gitignored; see `.env.example`), then:
+```bash
+hermes runway --image assets/hero-still.png --prompt "slow cinematic push-in" \
+  --duration 10 --ratio 1280:720 --out out/runway/hero.mp4
+```
+`--duration` is `5` or `10` seconds only (Runway Gen-4 Turbo's image-to-video
+constraint — also a built-in guardrail against burning credits on longer
+clips). `--ratio` must be one of Runway's supported values (`1280:720`,
+`720:1280`, `1104:832`, `832:1104`, `960:960`, `1584:672`). `--model` defaults
+to `gen4_turbo`.
