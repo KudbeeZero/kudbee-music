@@ -1,5 +1,9 @@
 name: ci
 on: [push, pull_request]
+# Least-privilege token: CI only reads the repo. No job writes, comments, or
+# uses secrets (there are none), so nothing needs more than this.
+permissions:
+  contents: read
 jobs:
   # Left-brain check: fast, deterministic, no heavy deps. The reliable gate.
   check:
