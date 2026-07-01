@@ -170,8 +170,13 @@
 .brainCaption code { color: var(--ink-dim); font-size: 11px; }
 @keyframes brainPulse { 0%, 100% { opacity: 0.7; } 50% { opacity: 1; } }
 @keyframes brainScanFade { 0%, 100% { opacity: 0.85; } 50% { opacity: 1; } }
+/* the boot sweep — a scan-line that runs down the brain while the agents fire */
+.scanline { position: absolute; left: 0; right: 0; top: 2%; height: 3px; pointer-events: none; z-index: 2; opacity: 0; background: linear-gradient(90deg, transparent, var(--cyan), transparent); box-shadow: 0 0 12px var(--cyan); }
+.scanline[data-run="true"] { opacity: 0.85; animation: brainBoot 1.5s ease-in-out infinite; }
+@keyframes brainBoot { 0% { top: 2%; opacity: 0.2; } 50% { opacity: 0.9; } 100% { top: 96%; opacity: 0.2; } }
 @media (prefers-reduced-motion: reduce) {
   .brainNode[data-state="running"], .brainBody[data-scan="true"], .brainNerve[data-on="true"] { animation: none; }
+  .scanline[data-run="true"] { animation: none; opacity: 0; }
 }
 
 /* ---- Lyric Lab (the Writers-Room drawer) ---- */

@@ -35,6 +35,7 @@ export default function BrainScan({
       )}
 
       <div style={{ position: 'relative' }}>
+      <div className={styles.scanline} data-run={running} aria-hidden="true" />
       <HeatField heat={heat} running={running} />
       <svg viewBox="0 0 440 300" className={styles.brainSvg} role="img" aria-label="Brain activity scan" style={{ position: 'relative', zIndex: 1, display: 'block' }}>
         <defs>
