@@ -200,6 +200,17 @@ A second-opinion review flagged real risks worth acting on (truth-first):
   famous-phrase list (a `famous-phrase` uniqueness flag), plus a responsibility
   disclaimer in the README + Uniqueness panel. _(#37)_
 
+## 🌱 Fresh captures
+- 💭 **Discord community server** (founder prefers it over Telegram) — a hub to learn the
+  process + contribute; channels, roles, voice listening parties, and a GitHub→Discord
+  webhook so repo activity streams in. I can draft the structure + wire the webhook on the
+  go-ahead. Optional Telegram announce mirror later.
+- 💭 **Diction polish (small)** — the deterministic combinator still lets a few function
+  words ("from", "into", "turning") land in noun slots. Add them to the noun-slot stoplist
+  (`NOUN_STOP` / `text.ts` STOP) so verses read cleaner. Tiny, helps all generation.
+- ✅ **One-command demo** — `npm run demo` generates a full song end-to-end + prints the
+  11-region trace (lyrics-focused). The 30-second "see it work" moment. _(#38)_
+
 ## ✅ Captured → shipped
 - ✅ **Nervous system + short-term/long-term memory** — `brain map` (regions + nerves,
   `lib/hermes/brainMap.ts`), a signal bus (`lib/hermes/nervousSystem.ts`), and decaying

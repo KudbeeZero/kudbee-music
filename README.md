@@ -168,6 +168,9 @@ A **scene pack** is a visual style. Switch with `--pack` — the *same song*, a 
 git clone https://github.com/KudbeeZero/kudbee-music && cd kudbee-music
 npm install
 
+# ⚡ See it work in 10 seconds — generate a full song + the brain trace, in your terminal
+npm run demo
+
 # 🎤 Song brain (web app — no API key)
 npm run web:dev                         # open http://localhost:3000/hermes
 
@@ -224,9 +227,9 @@ docs/                    quickstart, concepts, CLI ref, scene-pack guide, hit-fa
 
 - [x] **Eval harness + golden songs** (`npm run eval`) — objective lyric metrics over a golden set; a CI regression guard
 - [x] **Output-safety filter + disclaimer** — screens hooks/lyrics against famous phrases; responsibility disclaimer
+- [x] **One-command demo** (`npm run demo`) — generates a full song end-to-end + prints the 11-region brain trace
 
 **Next** — the phased plan is the spine [`brain/roadmap.json`](brain/roadmap.json); the human backlog is [`TODO.md`](TODO.md).
-- [ ] **Measure & safety** — one-command demo (`npm run demo`)
 - [ ] **Deepen the visible brain** — cognitive model (first→second thought→decision); the Council; brain-scan boot sequence
 - [ ] **Make it yours** — create-your-own-artist; community personas · **Durability** — vault backup so a cleared browser never loses your catalog
 - [ ] **Real AI (opt-in)** behind the adapters (mock stays default → $0) · **Influence Studio** (felt, never copied)

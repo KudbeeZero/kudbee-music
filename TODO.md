@@ -52,6 +52,12 @@ shipped it. This file is the human-readable view; keep the two in sync._
    (1) local `crossroads.json` model → (2) `/crossroads` board UI → (3) decisions feed the
    taste model → (4) community sync via API → (5) token-weighted governance. Stages 1–3 are
    $0/local; 4–5 are a separate service the core calls via API.
+- [ ] **Discord community server** (preferred over Telegram) — learn-the-process + contribute:
+   channels (`#showcase`/`#help`/`#contributing`/`#song-drops`), roles, voice listening
+   parties, and a **GitHub→Discord webhook** posting commits/PRs/releases. Draft structure +
+   wire the webhook on founder's go-ahead; optional Telegram announce mirror later.
+- [ ] **`LAUNCH.md` kit** — star-launch checklist + draft Twitter/X thread + demo-recording
+   script (supports the Twitter/YouTube launch). $0 doc-only.
 - [ ] **Lightning AI spike** — per-agent compute for the opt-in "advance your model" tier
    (user signs up → their own agent). Best used as the **optional GPU lane**, not the
    backbone; base stays $0/local/serverless. Prereq: accounts + persistent vault (Phase 4).
@@ -95,6 +101,9 @@ Board** governance / Solana / token / NFT layer integrates with this engine via 
 later (kept out of this repo's core so it stays free + local).
 
 ## ✅ Shipped (newest first)
+- [x] **One-command demo** — `npm run demo`: generates a full original song end-to-end and
+      prints it + the 11-region generation trace (lyrics-focused, no video; deterministic).
+      The 30-second "see it work" moment for new visitors. _(#38)_
 - [x] **Output-safety filter + disclaimer** — `lib/hermes/safety.ts`: screens generated
       hooks/lyrics against a famous-phrase list → a `famous-phrase` uniqueness flag; a
       responsibility disclaimer in the README + Uniqueness panel. _(#37)_

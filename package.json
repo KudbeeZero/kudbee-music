@@ -21,7 +21,8 @@
     "web:start": "next start",
     "web:lint": "next lint",
     "test:web": "vitest run",
-    "eval": "vitest run eval --reporter=basic"
+    "eval": "vitest run eval --reporter=basic",
+    "demo": "vitest run demo --reporter=basic"
   },
   "dependencies": {
     "next": "^14.2.35",
