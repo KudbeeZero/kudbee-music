@@ -19,7 +19,25 @@ const RHYME_TEMPS: { value: RhymeTempOpt; label: string }[] = [
   { value: 'loose', label: 'Loose — slant / near-rhyme' },
 ];
 
+// A new visitor starts with a blank page — no preloaded words. Only neutral
+// craft settings (tempo/structure/rhyme) carry a default.
 const DEFAULTS: SongInputs = {
+  title: '',
+  theme: '',
+  mood: '',
+  genre: '',
+  tempoMin: 130,
+  tempoMax: 145,
+  voice: '',
+  audience: '',
+  doNotUse: [],
+  references: '',
+  structure: 'hook-first',
+  rhymeTemp: 'balanced',
+};
+
+/** The rich example brief — loaded only on an explicit click, never preloaded. */
+export const EXAMPLE_BRIEF: SongInputs = {
   title: 'Out the Mud',
   theme: 'Chicago pain song for my daughter — made it out the struggle, still carry the block',
   mood: 'street but emotional, melodic',
@@ -58,9 +76,22 @@ export default function SongLabForm({
     onRun({ ...v, doNotUse });
   }
 
+  function loadExample() {
+    setV(EXAMPLE_BRIEF);
+    setDoNotUseRaw('');
+  }
+
+  // same readiness rule as the Lyric Lab: a brief needs a title, theme, and genre
+  const briefReady = Boolean(v.title.trim() && v.theme.trim() && v.genre.trim());
+
   return (
     <div className={styles.panel}>
-      <div className={styles.panelTitle}>Song Lab</div>
+      <div className={styles.panelTitle} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 8 }}>
+        <span>Song Lab</span>
+        <button type="button" className={styles.copyBtn} style={{ marginLeft: 0, textTransform: 'none', letterSpacing: 'normal' }} onClick={loadExample}>
+          ✨ Load an example brief
+        </button>
+      </div>
 
       <Field label="Song title" htmlFor="hf-title">
         <input id="hf-title" className={styles.input} value={v.title} onChange={(e) => set('title', e.target.value)} placeholder="Working title" />
@@ -118,9 +149,10 @@ export default function SongLabForm({
         </Field>
       </div>
 
-      <button className={styles.runBtn} disabled={running} onClick={submit}>
+      <button className={styles.runBtn} disabled={running || !briefReady} onClick={submit}>
         {running ? 'HERMES is working…' : 'Generate Song Package ▸'}
       </button>
+      {!briefReady && <p className={styles.hint} style={{ marginTop: 6 }}>Add a title, theme, and genre to start.</p>}
       <p className={styles.hint} style={{ marginTop: 8 }}>
         V1 uses local mock generation — original combinator output, no API key, no copyrighted material.
       </p>

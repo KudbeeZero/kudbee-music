@@ -294,6 +294,7 @@ flow, and the non-negotiables — plus the code-generated [brain-wiring diagram]
 - [x] **Create-your-own-artist + Story Mode** — name your artist; its identity grows from what you make, unlocking chapters
 - [x] **Interactive scrolling landing page** — scroll-scrubbed hero, hemispheres, demo-proof table; **[live](https://wifi-dj-meme.pages.dev)**
 - [x] **Public-readiness hardening** — [`SECURITY.md`](SECURITY.md) + least-privilege CI token
+- [x] **Onboarding + local-first accounts** — welcome gate, guest + developer entry, honest Google/GitHub slots, blank-first Song Lab ([docs/accounts.md](docs/accounts.md))
 - [x] **Metaplex-aligned dNFT metadata** — the signature JSON now targets the stated Solana chain ([`docs/nft-standard.md`](docs/nft-standard.md))
 
 **Next** — the phased plan is the spine [`brain/roadmap.json`](brain/roadmap.json); the human backlog is [`TODO.md`](TODO.md).

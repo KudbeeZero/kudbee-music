@@ -1,0 +1,214 @@
+/* Welcome gate — brand tokens from app/globals.css, mobile-first, reduced-motion safe. */
+
+.gate {
+  display: flex;
+  justify-content: center;
+  padding: clamp(16px, 8vh, 88px) 0 48px;
+}
+
+.card {
+  width: 100%;
+  max-width: 440px;
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: clamp(20px, 5vw, 32px);
+  backdrop-filter: blur(8px);
+  text-align: center;
+  animation: gateIn 0.4s ease-out;
+}
+
+@keyframes gateIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: none; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .card { animation: none; }
+}
+
+.mark {
+  width: 52px;
+  height: 52px;
+  margin: 0 auto 14px;
+  border-radius: 14px;
+  background: radial-gradient(circle at 30% 25%, var(--amber), var(--amber-2) 55%, #6a2bd6);
+  box-shadow: var(--glow-amber);
+  display: grid;
+  place-items: center;
+  font-family: var(--ff-display);
+  font-weight: 700;
+  color: #170d04;
+  font-size: 25px;
+}
+
+.kicker {
+  font-family: var(--ff-display);
+  letter-spacing: 0.42em;
+  font-size: 10.5px;
+  color: var(--amber);
+  margin-bottom: 8px;
+}
+
+.heading {
+  font-family: var(--ff-display);
+  font-weight: 700;
+  font-size: clamp(21px, 4vw, 26px);
+  letter-spacing: -0.02em;
+  line-height: 1.1;
+  margin-bottom: 10px;
+}
+
+.pitch {
+  color: var(--ink-dim);
+  font-size: 13.5px;
+  line-height: 1.55;
+  margin: 0 0 20px;
+}
+
+.nameLabel {
+  display: block;
+  text-align: left;
+  font-size: 11.5px;
+  color: var(--ink-dim);
+  font-weight: 600;
+  margin-bottom: 5px;
+}
+
+.optional { color: var(--ink-faint); font-weight: 400; }
+
+.nameInput {
+  width: 100%;
+  background: var(--bg-1);
+  border: 1px solid var(--line-strong);
+  color: var(--ink);
+  border-radius: 9px;
+  padding: 10px 12px;
+  font-size: 13.5px;
+  outline: none;
+  margin-bottom: 12px;
+}
+
+.nameInput:focus {
+  border-color: var(--amber);
+  box-shadow: 0 0 0 3px rgba(255, 177, 78, 0.12);
+}
+
+.primaryBtn {
+  width: 100%;
+  border: none;
+  cursor: pointer;
+  border-radius: 11px;
+  padding: 13px;
+  font-weight: 800;
+  font-size: 15px;
+  color: #170d04;
+  background: linear-gradient(180deg, var(--amber), var(--amber-2));
+  box-shadow: var(--glow-amber);
+}
+
+.primaryBtn:focus-visible,
+.providerBtn:focus-visible,
+.devLink:focus-visible {
+  outline: 2px solid var(--cyan);
+  outline-offset: 2px;
+}
+
+.honest {
+  color: var(--ink-faint);
+  font-size: 11.5px;
+  line-height: 1.5;
+  margin: 10px 0 0;
+}
+
+.providers {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 18px;
+}
+
+.providerBtn {
+  border: 1px solid var(--line-strong);
+  background: var(--panel);
+  color: var(--ink);
+  padding: 11px 14px;
+  border-radius: 10px;
+  font-weight: 600;
+  font-size: 13px;
+  cursor: pointer;
+}
+
+.providerBtn:hover { border-color: var(--amber); }
+
+.comingSoon {
+  color: var(--ink-faint);
+  font-size: 11.5px;
+  margin: 16px 0 0;
+}
+
+.oauthError {
+  border: 1px solid rgba(255, 93, 108, 0.5);
+  background: rgba(255, 93, 108, 0.1);
+  color: var(--bad);
+  border-radius: 10px;
+  padding: 9px 12px;
+  font-size: 12px;
+  line-height: 1.45;
+  margin: 12px 0 0;
+  text-align: left;
+}
+
+.foot {
+  margin-top: 20px;
+  padding-top: 14px;
+  border-top: 1px solid var(--line);
+}
+
+.devLink {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--ink-faint);
+  font-size: 11.5px;
+  padding: 6px 8px;
+}
+
+.devLink:hover { color: var(--cyan); }
+
+/* ---- header profile chip (rendered by the shell after entry) ---- */
+.profileChip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--ink-dim);
+  border: 1px solid var(--line-strong);
+  background: var(--bg-1);
+  padding: 6px 11px;
+  border-radius: 999px;
+  max-width: 180px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.devBadge {
+  font-size: 9px;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--cyan);
+  border: 1px solid rgba(54, 224, 212, 0.4);
+  padding: 1px 6px;
+  border-radius: 999px;
+}
+
+/* ---- mobile (≤640) — same breakpoint system as hermes.module.css ---- */
+@media (max-width: 640px) {
+  .gate { padding: 12px 0 32px; }
+  .card { backdrop-filter: none; background: var(--panel-solid); }
+  .primaryBtn { padding: 15px; font-size: 16px; }
+  .providerBtn, .devLink { min-height: 44px; }
+  .nameInput { font-size: 16px; } /* stops iOS focus zoom */
+}

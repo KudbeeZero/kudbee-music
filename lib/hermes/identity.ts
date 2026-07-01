@@ -1,0 +1,182 @@
+// Identity — the onboarding layer for the Hit Factory. Local-first accounts:
+// a profile lives in this browser's localStorage (in-memory fallback on the
+// server / in tests, same idiom as storage.ts) so the app stays fully static —
+// no server, no API routes, $0. OAuth (Google/GitHub) is an honest seam: the
+// buttons only appear once a provider is actually configured at build time;
+// until then `authProviders()` returns [] and `beginOAuth()` throws.
+
+export type AuthProvider = 'google' | 'github';
+
+export interface Profile {
+  id: string;
+  name: string;
+  kind: 'guest' | 'dev' | 'oauth';
+  provider?: AuthProvider;
+  createdAt: string;
+}
+
+const PROFILE_KEY = 'hermes.profile.v1';
+const DEV_DOOR_KEY = 'hermes.devDoor.v1';
+
+interface KV {
+  getItem(k: string): string | null;
+  setItem(k: string, v: string): void;
+  removeItem(k: string): void;
+}
+
+const memory = new Map<string, string>();
+const memoryKV: KV = {
+  getItem: (k) => (memory.has(k) ? memory.get(k)! : null),
+  setItem: (k, v) => void memory.set(k, v),
+  removeItem: (k) => void memory.delete(k),
+};
+
+function kv(): KV {
+  if (typeof window !== 'undefined' && window.localStorage) return window.localStorage;
+  return memoryKV;
+}
+
+function newId(): string {
+  return `p-${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 8)}`;
+}
+
+function isProfile(p: unknown): p is Profile {
+  if (!p || typeof p !== 'object') return false;
+  const o = p as Record<string, unknown>;
+  return (
+    typeof o.id === 'string' &&
+    typeof o.name === 'string' &&
+    (o.kind === 'guest' || o.kind === 'dev' || o.kind === 'oauth') &&
+    typeof o.createdAt === 'string'
+  );
+}
+
+/** The signed-in profile, or null when the visitor hasn't entered yet. */
+export function currentProfile(): Profile | null {
+  try {
+    const raw = kv().getItem(PROFILE_KEY);
+    if (!raw) return null;
+    const parsed: unknown = JSON.parse(raw);
+    return isProfile(parsed) ? parsed : null;
+  } catch {
+    return null;
+  }
+}
+
+function persist(profile: Profile): Profile {
+  try {
+    kv().setItem(PROFILE_KEY, JSON.stringify(profile));
+  } catch {
+    /* quota / unavailable — the profile still works for this session */
+  }
+  return profile;
+}
+
+/** Local-first account: a profile that lives in this browser. Name optional. */
+export function signInGuest(name?: string): Profile {
+  return persist({
+    id: newId(),
+    name: name?.trim() || 'Guest',
+    kind: 'guest',
+    createdAt: new Date().toISOString(),
+  });
+}
+
+/** The founder's no-login testing door (see isDevEntryAllowed). */
+export function signInDev(): Profile {
+  return persist({ id: newId(), name: 'Developer', kind: 'dev', createdAt: new Date().toISOString() });
+}
+
+/** Forget the profile. Deliberately does NOT touch the vault — songs, albums,
+ *  taste, and avoid-words stay in this browser. */
+export function signOut(): void {
+  try {
+    kv().removeItem(PROFILE_KEY);
+  } catch {
+    /* ignore */
+  }
+}
+
+/** truthy build-time flag: set to any non-empty value except "0"/"false" */
+function flagOn(v: string | undefined): boolean {
+  if (!v) return false;
+  const s = v.trim().toLowerCase();
+  return s !== '' && s !== '0' && s !== 'false';
+}
+
+/**
+ * Which OAuth providers are actually configured at build time. Today none are —
+ * this returns [] and the UI says so honestly instead of showing dead buttons.
+ * To light one up, set NEXT_PUBLIC_AUTH_GOOGLE=1 / NEXT_PUBLIC_AUTH_GITHUB=1
+ * (client-safe NEXT_PUBLIC_ vars, inlined by Next at build) once a real flow
+ * exists behind beginOAuth().
+ */
+export function authProviders(): AuthProvider[] {
+  const list: AuthProvider[] = [];
+  if (flagOn(process.env.NEXT_PUBLIC_AUTH_GOOGLE)) list.push('google');
+  if (flagOn(process.env.NEXT_PUBLIC_AUTH_GITHUB)) list.push('github');
+  return list;
+}
+
+/**
+ * The seam where a real OAuth flow will start.
+ *
+ * TODO(founder decision — see docs/accounts.md): a static export can't do the
+ * OAuth token exchange itself (that needs a client secret on a server). Pick one:
+ *   a) a hosted auth service (e.g. Supabase Auth / Auth0 / Clerk free tier) — this
+ *      function then redirects to the provider's authorize URL and the service
+ *      handles the callback; or
+ *   b) Cloudflare Pages Functions next to the static site — a tiny /auth/callback
+ *      function holds the secret and finishes the exchange.
+ * Either way the founder must also create the Google/GitHub OAuth apps and supply
+ * their client IDs + redirect URL via NEXT_PUBLIC_ config. Until then this throws —
+ * we never fake a sign-in.
+ */
+export function beginOAuth(provider: AuthProvider): never {
+  if (!authProviders().includes(provider)) {
+    throw new Error(
+      `${provider === 'google' ? 'Google' : 'GitHub'} sign-in isn't configured yet — accounts are local-first today. See docs/accounts.md.`,
+    );
+  }
+  // Configured flag without an implementation is still not a real flow — refuse
+  // loudly rather than pretend. Replaced when the founder picks (a) or (b) above.
+  throw new Error(`${provider} sign-in is flagged on but the OAuth flow isn't implemented yet. See docs/accounts.md.`);
+}
+
+/**
+ * The founder's testing door: visiting with `?dev=1` unlocks a quiet
+ * "Developer entry" link on the welcome gate, and persists a flag so the door
+ * stays open in this browser on later visits (no query string needed).
+ * `search` is injectable for tests; it defaults to the real URL in the browser.
+ */
+export function isDevEntryAllowed(search?: string): boolean {
+  const q = search ?? (typeof window !== 'undefined' ? window.location.search : '');
+  try {
+    if (new URLSearchParams(q).get('dev') === '1') {
+      try {
+        kv().setItem(DEV_DOOR_KEY, '1');
+      } catch {
+        /* ignore */
+      }
+      return true;
+    }
+  } catch {
+    /* malformed search — fall through to the persisted flag */
+  }
+  try {
+    return kv().getItem(DEV_DOOR_KEY) === '1';
+  } catch {
+    return false;
+  }
+}
+
+/** test-only reset */
+export function __clearIdentity(): void {
+  memory.clear();
+  try {
+    kv().removeItem(PROFILE_KEY);
+    kv().removeItem(DEV_DOOR_KEY);
+  } catch {
+    /* ignore */
+  }
+}
