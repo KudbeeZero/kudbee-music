@@ -74,6 +74,13 @@ vector memory, and document the architecture — lifts output quality, dev appea
    README "New here?" pointer. Attracts senior-eng contributors; reframes as "a modular
    agent brain." _(#51)_
 
+### 📎 $0 backlog (post-sprint polish)
+- [x] **Persona-map reference** — `docs/personas.md` documenting the 6 craft archetypes,
+   generated from `personas.ts` (`personasDoc.ts`, `GEN_DOCS`-gated) so it can't drift;
+   states the original-only / never-name-an-artist stance. _(#55)_
+- [ ] **Vault durability** — `storage.ts` writes a secondary backup key on save + restores
+   from it if the primary vault is cleared/corrupt, so a cleared browser never wipes a catalog.
+
 ## 🌐 Ecosystem (integrates via API — kept out of the free local core)
 - [~] **Crossroads Board** — the WIFI DJ governance/community steering surface (the brain's
    "decision" region, made social). Staged plan in [`brain/roadmap.json`](brain/roadmap.json):
