@@ -48,6 +48,10 @@ chat. Detail for each is in [`brain/roadmap.json`](brain/roadmap.json) + [`IDEAS
    (hook/lyric/theme→procedural/mood→emotion) and exposes per-agent recalls: `recallSimilarCraft`
    (procedural), `recallSimilarEmotion` (limbic), `recallSimilarHook` (Council self-repetition).
    Opt-in + graceful (empty without the dep); server/CLI-only so the client bundle stays Node-free. _(#61)_
+- [x] **README hero / onboarding** — reframed the top around the deterministic songwriting brain
+   (video studio now secondary), added a "⚡ Try it in 10 seconds" (`npm run demo`) path, a
+   "🧠 Semantic memory (opt-in)" section (4 recall lenses + hybrid/MMR/determinism), and prominent
+   demo-gallery + "Explain this song" links. The stars/adoption front door. _(#65)_
 - [x] **In-app trace explorer** — a "🔍 Explain this song" button on the song package opens the
    interactive brain trace (heat-map + per-region cards + copy-paste Suno prompt) in a new tab,
    built client-side from the real brain modules (same renderer the demo gallery ships). #50 made
