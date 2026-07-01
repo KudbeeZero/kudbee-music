@@ -108,3 +108,33 @@ export function keywords(text: string, max = 8): string[] {
   }
   return out;
 }
+
+/**
+ * A line's structural "skeleton" — its first two words + last word, lowercased.
+ * Two lines built from the same frame template share a skeleton even when the
+ * filler words differ ("still climb my way up out the road" ≈ "still grind my way
+ * up out the gold"). Used to detect a song leaning on one template.
+ */
+export function lineSkeleton(line: string): string {
+  const w = tokenize(line);
+  if (!w.length) return '';
+  return [w[0], w[1] ?? '', w[w.length - 1]].join(' ');
+}
+
+/**
+ * Self-similarity of a set of lines, 0..1 — the fraction of lines that repeat a
+ * skeleton already seen. 0 = every line is structurally distinct; higher = the
+ * writing keeps reusing the same shape. The inverse is a diversity signal.
+ */
+export function selfSimilarity(lines: string[]): number {
+  const real = lines.filter((l) => l.trim());
+  if (real.length < 2) return 0;
+  const seen = new Set<string>();
+  let repeats = 0;
+  for (const l of real) {
+    const s = lineSkeleton(l);
+    if (seen.has(s)) repeats++;
+    else seen.add(s);
+  }
+  return +(repeats / real.length).toFixed(2);
+}

@@ -41,6 +41,18 @@ export function rhymeKey(word: string): string {
   return key;
 }
 
+/**
+ * A looser key than `rhymeKey` — just the final vowel nucleus, so near/slant rhymes
+ * group together (road/home, fight/mind). Used when the artist turns the rhyme
+ * "temperature" up (perfect → slant).
+ */
+export function slantKey(word: string): string {
+  const k = rhymeKey(word);
+  if (!k) return '';
+  const m = k.match(/[aeiouy]+/);   // the vowel sound, dropping trailing consonants
+  return m ? m[0] : k;
+}
+
 /** True if two words rhyme (share a rhyme key), and aren't the same word. */
 export function doesRhyme(a: string, b: string): boolean {
   const x = a.toLowerCase(), y = b.toLowerCase();

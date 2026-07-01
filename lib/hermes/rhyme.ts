@@ -1,8 +1,11 @@
 // The rhyme + meter engine — turns the mental lexicon into actual craft: it detects
 // rhyme, scores a set of lines, and hands the combinator rhyme "families" so verses
 // land in real couplets. All local, zero tokens (built on lib/hermes/lexicon.ts).
-import { LEXICON, doesRhyme, rhymeKey, type LexEntry } from './lexicon';
+import { LEXICON, doesRhyme, rhymeKey, slantKey, type LexEntry } from './lexicon';
 import { shuffle } from './text';
+
+/** Rhyme strictness the artist can dial: perfect only ↔ loose slant/near-rhyme. */
+export type RhymeTemp = 'tight' | 'balanced' | 'loose';
 
 const wordsOf = (line: string): string[] => line.toLowerCase().match(/[a-z']+/g) ?? [];
 
@@ -51,29 +54,36 @@ export function rhymeDensity(lines: string[]): number {
 
 // Rhyme families: groups of lexicon NOUNS that share a rhyme key (>= 2 members),
 // so the combinator can end two lines on different-but-rhyming words.
-const NOUN_FAMILIES: LexEntry[][] = (() => {
+function familiesBy(key: (w: string) => string): LexEntry[][] {
   const groups = new Map<string, LexEntry[]>();
   for (const e of LEXICON) {
     if (e.p !== 'n') continue;
-    const k = rhymeKey(e.w);
+    const k = key(e.w);
     if (!groups.has(k)) groups.set(k, []);
     groups.get(k)!.push(e);
   }
   return [...groups.values()].filter((g) => g.length >= 2);
-})();
+}
+
+// Perfect-rhyme families (tight/balanced) and looser slant families (loose temp).
+const NOUN_FAMILIES: LexEntry[][] = familiesBy(rhymeKey);
+const SLANT_FAMILIES: LexEntry[][] = familiesBy(slantKey);
 
 export function familyCount(): number {
   return NOUN_FAMILIES.length;
 }
 
 /**
- * Pick `n` rhyming nouns from the lexicon, optionally biased toward a valence
- * (dark < 0, bright > 0). Deterministic given the rng.
+ * Pick `n` rhyming nouns from the lexicon, biased toward a valence (dark < 0,
+ * bright > 0) and a rhyme `temp` — 'tight'/'balanced' use perfect-rhyme families,
+ * 'loose' opens up to slant/near-rhyme families (bigger, more varied groups, so a
+ * song is less likely to reach for the same two end-words). Deterministic per rng.
  */
-export function rhymeFamily(rng: () => number, valence = 0, n = 2): LexEntry[] {
+export function rhymeFamily(rng: () => number, valence = 0, n = 2, temp: RhymeTemp = 'balanced'): LexEntry[] {
   const leans = (e: LexEntry) => (valence < -0.2 ? e.a <= 0.1 : valence > 0.2 ? e.a >= -0.1 : true);
-  const eligible = NOUN_FAMILIES.filter((g) => g.filter(leans).length >= n);
-  const fams = eligible.length ? eligible : NOUN_FAMILIES;
+  const source = temp === 'loose' ? SLANT_FAMILIES : NOUN_FAMILIES;
+  const eligible = source.filter((g) => g.filter(leans).length >= n);
+  const fams = eligible.length ? eligible : source;
   if (!fams.length) return [];
   const fam = fams[Math.floor(rng() * fams.length)];
   const words = fam.filter(leans).length >= n ? fam.filter(leans) : fam;

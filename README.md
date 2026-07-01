@@ -83,11 +83,11 @@ scheme + density, the originality check, the A&R verdict. Reproduce them yoursel
 
 | Song | Genre | Score | Lead hook |
 |------|-------|-------|-----------|
-| [Concrete Garden](examples/demos/concrete-garden/trace.md) | boom-bap | 98 | *"Still standing where the growing used to be"* |
-| [Paper Crowns](examples/demos/paper-crowns/trace.md) | drill trap | 97 | *"This one's for the games that raised me"* |
-| [Signal Fade](examples/demos/signal-fade/trace.md) | synthwave pop | 97 | *"Still standing where the loving used to be"* |
-| [Midnight Shift](examples/demos/midnight-shift/trace.md) | lo-fi soul | 93 | *"Every step a promise that I rebuild"* |
-| [Hometown Ghosts](examples/demos/hometown-ghosts/trace.md) | folk-rap | 91 | *"This one's for the town that raised me"* |
+| [Paper Crowns](examples/demos/paper-crowns/trace.md) | drill trap | 98 | *"This one's for the games that raised me"* |
+| [Signal Fade](examples/demos/signal-fade/trace.md) | synthwave pop | 98 | *"Still standing where the loving used to be"* |
+| [Concrete Garden](examples/demos/concrete-garden/trace.md) | boom-bap | 97 | *"Still standing where the growing used to be"* |
+| [Hometown Ghosts](examples/demos/hometown-ghosts/trace.md) | folk-rap | 93 | *"Tell people I made it out the back"* |
+| [Midnight Shift](examples/demos/midnight-shift/trace.md) | lo-fi soul | 92 | *"Every step a promise that I rebuild"* |
 
 **The 10 agents (right proposes, left disposes):**
 
