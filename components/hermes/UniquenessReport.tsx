@@ -1,6 +1,7 @@
 'use client';
 
 import type { UniquenessReport } from '@/lib/hermes/types';
+import { SAFETY_DISCLAIMER } from '@/lib/hermes/safety';
 import styles from './hermes.module.css';
 
 export default function UniquenessReportView({ report }: { report: UniquenessReport }) {
@@ -46,6 +47,10 @@ export default function UniquenessReportView({ report }: { report: UniquenessRep
           </ul>
         </div>
       )}
+
+      <div className={styles.hint} style={{ marginTop: 12, opacity: 0.7, fontSize: '0.7rem', borderTop: '1px solid var(--line)', paddingTop: 8 }}>
+        {SAFETY_DISCLAIMER}
+      </div>
     </div>
   );
 }

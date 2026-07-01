@@ -123,7 +123,7 @@ export interface BangerScore {
 }
 
 export interface UniquenessFlag {
-  kind: 'repeated-hook' | 'overused-phrase' | 'banned-word' | 'too-similar' | 'cliche';
+  kind: 'repeated-hook' | 'overused-phrase' | 'banned-word' | 'too-similar' | 'cliche' | 'famous-phrase';
   detail: string;
   line?: string;
   suggestion?: string;
