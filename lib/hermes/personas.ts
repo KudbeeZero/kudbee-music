@@ -33,7 +33,7 @@ export function persona(id: string): Persona | undefined {
 
 // Trait words that point at each archetype — matched against what the artist
 // DESCRIBES (never a name). Keeps the mapping about craft, not identity.
-const SIGNALS: Record<string, string[]> = {
+export const SIGNALS: Record<string, string[]> = {
   'confessional-storyteller': ['story', 'storytelling', 'personal', 'vulnerable', 'emotional', 'narrative', 'honest', 'family', 'confessional', 'intimate'],
   'battle-technician': ['battle', 'bars', 'technical', 'lyrical', 'wordplay', 'punchline', 'complex', 'multisyllabic', 'rhyme', 'aggressive', 'hard', 'sharp', 'boom-bap'],
   'soul-poet': ['soul', 'sample', 'warm', 'spiritual', 'poetic', 'literary', 'uplift', 'melodic', 'jazzy', 'grace', 'hope'],
