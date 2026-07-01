@@ -1,13 +1,19 @@
 {
   "version": 1,
   "name": "HERMES Brain — Belief System",
-  "updated": "2026-06-30",
+  "updated": "2026-07-01",
   "manifesto": "HERMES is not a lyric vending machine. It is a co-writer — an assistant that walks an artist through the real craft of writing a song, proposes options with reasons, and learns the artist's voice with every choice. The proprietary value is the lyrical process and the brain, not the output format. These beliefs are hard-coded: the recommender, the writers-room, and the memory layer all read them.",
   "beliefs": [
     {
       "id": "green-loop",
       "title": "Always a green loop",
       "statement": "Every change ships behind a passing CI loop. We never leave a PR stale, never stack on merged history, and never call something done until the loop is green and verified.",
+      "appliesTo": ["process", "release"]
+    },
+    {
+      "id": "known-nonblocking-checks",
+      "title": "Known non-blocking checks never gate the loop",
+      "statement": "The Cloudflare 'Workers Builds: kudbee-music' GitHub check is a stray, misconfigured integration (Workers, not Pages — wrangler.jsonc has no Workers entry point) that fails instantly on every push regardless of code. It is NOT a real CI gate and must never be treated as one. The three real gates are check, web, smoke (.github/workflows/ci.yml, documented in ARCHITECTURE.md). A red Workers Builds check is not a reason to pause, re-diagnose, or delay marking a PR ready/merging it.",
       "appliesTo": ["process", "release"]
     },
     {
