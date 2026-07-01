@@ -26,9 +26,12 @@ chat. Detail for each is in [`brain/roadmap.json`](brain/roadmap.json) + [`IDEAS
 - [ ] **Runway Gen-4 video** (you have the key + ~1000 credits) → `studio/runway.mjs` behind `RUNWAY_API_KEY`
    (`.env.local`, gitignored, never committed). Uses: agent avatars → living characters, the **HERMES office/world**
    scenes (agents get bodies), a **landing-page hero video**, real video clips. I can build the adapter $0; you run it.
-- [ ] **Cool landing page** — hero (Runway video optional), Solana connect, live Brain-Scan. $0 static shell buildable now.
+- [x] **Cool landing page** — interactive scroll-driven landing shipped at `/` _(#86)_, live at
+   [wifi-dj-meme.pages.dev](https://wifi-dj-meme.pages.dev); the Runway hero video + Solana connect remain
+   founder-gated upgrades (comment slots left in `components/landing/Landing.tsx`).
 - [ ] **Solana wallet connect + accounts** — identity for the Board + dNFT; needs the auth/DB decision.
-- [ ] **dNFT mint on-chain** (Solana/Metaplex) — the signature is $0-ready; minting is your call.
+- [ ] **dNFT mint on-chain** (Solana/Metaplex) — the signature is $0-ready and the metadata now targets the
+   real **Metaplex Token Metadata** standard _(#85, `docs/nft-standard.md`)_; minting is your call (devnet-first, never mainnet without your explicit approval).
 - [ ] **Agent images → avatars** — wire the Grok-generated images onto each agent (once you generate them).
 - [ ] **Lightning AI spike** — one Studio running a HERMES agent behind **HTTPS/SSL** as an opt-in provider (you connect SSL).
 - [ ] **Discord server** (+ GitHub→Discord webhook) — channels/roles/listening parties; wire on your go-ahead.
@@ -211,6 +214,23 @@ Board** governance / Solana / token / NFT layer integrates with this engine via 
 later (kept out of this repo's core so it stays free + local).
 
 ## ✅ Shipped (newest first)
+- [x] **Interactive scrolling landing page** — `/` is now a real scroll-driven landing
+      (`components/landing/`): a scroll-scrubbed hero over the repo's own hero clips (honest
+      loading — poster until ready, no spinners), "right proposes · left disposes" hemispheres
+      driven by the real `AGENT_DEFINITIONS`, the real demo-song proof table, lazy video-studio
+      GIF strip, CTA into `/hermes`. Mobile-first on the two standard breakpoints, full
+      reduced-motion fallback, zero new deps; verified at 375/768/1280 + reduced-motion with
+      zero console errors. Live on Cloudflare Pages. _(#86)_
+- [x] **dNFT metadata → Metaplex Token Metadata** — the audit found `toNftMetadata()` emitted
+      an ERC-721 shape while every living-state source targets Solana/Metaplex. Now emits the
+      Metaplex off-chain JSON standard (32-char name clamp, symbol, `properties.files`,
+      `seller_fee_basis_points: 0`), same six traits, still pure/deterministic/no-chain.
+      Decision record + mint blocker note in `docs/nft-standard.md`. _(#85)_
+- [x] **Security/public-readiness hardening** — four-point adversarial audit before going
+      public (paid-API abuse surface: clean; fork-PR CI secrets isolation: clean; full-history
+      secret scan: clean; brain/*.json write-protection: needs branch protection — founder
+      toggle). Shipped `SECURITY.md` (threat model, reporting, paid-provider deployment rules)
+      + a least-privilege `permissions: contents: read` CI token. _(#84)_
 - [x] **Auto-exclude on the 2nd cut + proactive cliché seeding (the moat)** — closes the
       remaining "learn from edits" gaps a repeated round of artist feedback surfaced.
       (1) A word cut twice in the lyric editor is now auto-added to the avoid list

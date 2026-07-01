@@ -11,13 +11,15 @@ A roster of specialized agents that cross-check each other. **$0. No paid servic
 [![Node 22](https://img.shields.io/badge/node-22-339933.svg?logo=node.js&logoColor=white)](https://nodejs.org)
 [![PRs welcome](https://img.shields.io/badge/PRs-welcome-7a3cff.svg)](CONTRIBUTING.md)
 
-[**⚡ Try it in 10 seconds**](#-try-it-in-10-seconds) · [**🧠 See the brain think**](examples/demos/) · [Semantic memory](#-semantic-memory-opt-in) · [The brain](#-the-brain-two-hemispheres-one-dial) · [Docs](docs/) · [Roadmap](#-roadmap)
+[**🌐 Try it live — no install**](https://wifi-dj-meme.pages.dev) · [**⚡ Try it in 10 seconds**](#-try-it-in-10-seconds) · [**🧠 See the brain think**](examples/demos/) · [Semantic memory](#-semantic-memory-opt-in) · [The brain](#-the-brain-two-hemispheres-one-dial) · [Docs](docs/) · [Roadmap](#-roadmap)
 
 </div>
 
 ---
 
 ## ⚡ Try it in 10 seconds
+
+**Zero install:** the app is live at **[wifi-dj-meme.pages.dev](https://wifi-dj-meme.pages.dev)** — the landing walks you into the Hit Factory, entirely in your browser, no key. Or run it locally:
 
 ```bash
 git clone https://github.com/KudbeeZero/kudbee-music && cd kudbee-music
@@ -290,6 +292,9 @@ flow, and the non-negotiables — plus the code-generated [brain-wiring diagram]
 - [x] **The Council** — the agents as a deliberating board: right proposes · left challenges · you decide
 - [x] **Brain-scan boot sequence** — a scan-line sweep + regions igniting live as each agent fires
 - [x] **Create-your-own-artist + Story Mode** — name your artist; its identity grows from what you make, unlocking chapters
+- [x] **Interactive scrolling landing page** — scroll-scrubbed hero, hemispheres, demo-proof table; **[live](https://wifi-dj-meme.pages.dev)**
+- [x] **Public-readiness hardening** — [`SECURITY.md`](SECURITY.md) + least-privilege CI token
+- [x] **Metaplex-aligned dNFT metadata** — the signature JSON now targets the stated Solana chain ([`docs/nft-standard.md`](docs/nft-standard.md))
 
 **Next** — the phased plan is the spine [`brain/roadmap.json`](brain/roadmap.json); the human backlog is [`TODO.md`](TODO.md).
 - [ ] **Deepen the visible brain** — cognitive model (first→second thought→decision); the Council; brain-scan boot sequence
