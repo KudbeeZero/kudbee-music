@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import type { HookOption, SongPackage, CritiqueKey } from '@/lib/hermes/types';
-import { deliberate } from '@/lib/hermes/cognition';
+import { deliberationForHook } from '@/lib/hermes/cognition';
 import styles from './hermes.module.css';
 
 export default function SongPackageView({ pkg, onSaveEdit, onChooseHook, onRegenerateFromCritiques }: {
@@ -156,8 +156,9 @@ export default function SongPackageView({ pkg, onSaveEdit, onChooseHook, onRegen
 function Deliberation({ hook, pkg, onRegenerateFromCritiques }: {
   hook: string; pkg: SongPackage; onRegenerateFromCritiques?: (keys: CritiqueKey[]) => void;
 }) {
-  // Prefer the loop-closing verdict the pipeline actually used; fall back for older songs.
-  const d = pkg.cognition ?? deliberate(hook, pkg.inputs);
+  // Prefer the pipeline's stored verdict, but ONLY if it's for this hook — after the artist
+  // re-picks a hook, pkg.cognition still holds the auto-chosen hook's deliberation.
+  const d = deliberationForHook(hook, pkg.inputs, pkg.cognition);
   const failing = d.secondThought.filter((c) => !c.passes);
   return (
     <div style={{ marginTop: 8, borderTop: '1px solid var(--line)', paddingTop: 8 }}>
