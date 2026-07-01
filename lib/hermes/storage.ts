@@ -8,6 +8,7 @@ const KEY = 'hermes.vault.v1';
 const ALBUM_KEY = 'hermes.albums.v1';
 const BANNED_KEY = 'hermes.bannedWords.v1';
 const TASTE_KEY = 'hermes.taste.v1';
+const ALIAS_KEY = 'hermes.artistAlias.v1';
 
 interface KV {
   getItem(k: string): string | null;
@@ -135,6 +136,14 @@ export function loadTaste(): Taste {
   } catch { /* ignore */ }
   return { liked: {}, disliked: {}, edits: 0 };
 }
+// ---- artist alias (create-your-own-artist): the name the artist chooses ----
+export function loadArtistAlias(): string {
+  try { return kv().getItem(ALIAS_KEY) ?? ''; } catch { return ''; }
+}
+export function saveArtistAlias(alias: string): void {
+  try { kv().setItem(ALIAS_KEY, alias); } catch { /* ignore */ }
+}
+
 export function recordTaste(added: string[], removed: string[]): Taste {
   const t = loadTaste();
   for (const w of added) t.liked[w] = (t.liked[w] ?? 0) + 1;

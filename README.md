@@ -232,6 +232,7 @@ docs/                    quickstart, concepts, CLI ref, scene-pack guide, hit-fa
 - [x] **Particle Brain heat-map** — the Brain Scan runs hot where *you* are as an artist (particles + thermal glow by region)
 - [x] **The Council** — the agents as a deliberating board: right proposes · left challenges · you decide
 - [x] **Brain-scan boot sequence** — a scan-line sweep + regions igniting live as each agent fires
+- [x] **Create-your-own-artist + Story Mode** — name your artist; its identity grows from what you make, unlocking chapters
 
 **Next** — the phased plan is the spine [`brain/roadmap.json`](brain/roadmap.json); the human backlog is [`TODO.md`](TODO.md).
 - [ ] **Deepen the visible brain** — cognitive model (first→second thought→decision); the Council; brain-scan boot sequence
