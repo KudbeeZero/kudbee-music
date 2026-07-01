@@ -55,8 +55,10 @@ vector memory, and document the architecture — lifts output quality, dev appea
    (optional flag) to flag *meaning*-similar prior lines the fingerprint check misses.
 - [ ] **2. Close the cognition loop** — `keep|revise` verdict + failing critiques feed the
    next generation (`pipeline.ts` `cognitionFeedback`); "Regenerate from these critiques" button.
-- [ ] **3. Interactive trace explorer + demo gallery** — `traceHtml.ts` → clickable region
-   heat-map traces + `docs/demo-gallery.html`. The top shareability/stars move.
+- [x] **3. Interactive trace explorer + demo gallery** — `traceHtml.ts` renders a `SongTrace`
+   to self-contained HTML: brain heat-map (Brain-Scan hues, clickable nodes), collapsible
+   per-region cards, copy-to-clipboard Suno prompt. `GEN_DEMOS=1` mints `trace.html` per demo
+   + `docs/demo-gallery.html`. The top shareability/stars move. _(#50)_
 - [ ] **4. Council scoring → hook ranking** — the Council re-scores/ranks hooks; `learn.ts`
    stores winners into vector memory + `recommend.ts` semantic recall (the brain as a coach).
 - [ ] **5. ARCHITECTURE.md + brain-wiring diagram + module headers** — attract senior-eng
