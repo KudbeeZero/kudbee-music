@@ -156,6 +156,24 @@ contribution loop are the seeds of this.
 
 ---
 
+## 🔎 External review (Grok) — adopt these
+A second-opinion review flagged real risks worth acting on (truth-first):
+- 💭 **Honest framing of the brain metaphor** *(high value, low effort)* — present the
+  11 regions / hemispheres / nervous system as an **inspired conceptual model**, not a
+  claim of biological fidelity. Add a one-line disclaimer in README + docs. Protects
+  credibility once people read the code.
+- 💭 **Proof on the landing/README** — public **demo songs + step-by-step generation
+  traces** ("here's what each region did"). Proof beats description for stars. *(We have
+  the in-app Cold Hard Gold demo; add committed traces + audio.)*
+- 💭 **Deepen the deterministic core** — hierarchical generation (structure → section
+  goal → line constraints), **thematic threading** across sections, and **diversity
+  scoring** so a song avoids repeating its own patterns; expose a **slant/near-rhyme
+  "temperature"** knob. Biggest lyric-quality lever without an LLM.
+- 💭 **Eval harness + golden songs** — automated scoring (rhyme density, repetition,
+  section coherence) over a fixed set, so "learn"/"scoring" claims are measurable.
+- 💭 **Output safety filter** — screen generated hooks against famous phrases; add a
+  short disclaimer/ToS putting responsibility on the user.
+
 ## ✅ Captured → shipped
 - ✅ **Nervous system + short-term/long-term memory** — `brain map` (regions + nerves,
   `lib/hermes/brainMap.ts`), a signal bus (`lib/hermes/nervousSystem.ts`), and decaying
