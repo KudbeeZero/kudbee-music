@@ -51,8 +51,10 @@ The audit converged: turn **display-only** brain systems into **load-bearing** o
 vector memory, and document the architecture — lifts output quality, dev appeal, and stars.
 - [x] **0. Vector-memory determinism hardening** — quantized rank + deterministic tie-break
    (id, then text) so search is reproducible across Intel/Apple-Silicon/AMD (FP/BLAS-safe). _(#49)_
-- [ ] **1. Semantic originality** — wire `vectorMemory.searchSimilar` into `originality.ts`
-   (optional flag) to flag *meaning*-similar prior lines the fingerprint check misses.
+- [x] **1. Semantic originality** — `semanticOriginality.ts` flags *meaning*-similar prior
+   lines (paraphrases the fingerprint/bigram check misses) via `vectorMemory`; `mergeSemanticFlags`
+   folds them into the base report + re-scores. Server/CLI-only (keeps the client bundle
+   Node-free), opt-in + graceful. _(#54)_
 - [x] **2. Close the cognition loop** — cognition is now load-bearing: `selectHookByCognition`
    picks the best-*reasoned* hook (not just top score), the pipeline stores the `Deliberation`
    on the package, `opts.cognitionFeedback` steers regeneration toward a hook that fixes the

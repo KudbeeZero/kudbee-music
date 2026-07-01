@@ -20,7 +20,7 @@
     "note": "Ranked $0 items from the 3-agent GitHub-traction audit. Theme: make display-only brain systems load-bearing, wire in vector memory, document the architecture.",
     "items": [
       { "id": "T0", "title": "Vector-memory determinism hardening", "status": "shipped", "pr": "#49", "home": "lib/hermes/vectorMemory.ts" },
-      { "id": "T1", "title": "Semantic originality — wire vectorMemory into originality.ts (optional)", "status": "queued", "home": "lib/hermes/originality.ts" },
+      { "id": "T1", "title": "Semantic originality — meaning-level novelty (optional, server-side)", "status": "shipped", "pr": "#54", "home": "lib/hermes/semanticOriginality.ts" },
       { "id": "T2", "title": "Close the cognition loop — cognition picks the hook + regenerate-from-critiques", "status": "shipped", "pr": "#52", "home": "cognition.ts (selectHookByCognition) + pipeline.ts (cognitionFeedback) + SongPackageView.tsx + HermesHitFactory.tsx" },
       { "id": "T3", "title": "Interactive trace explorer + demo gallery", "status": "shipped", "pr": "#50", "home": "lib/hermes/traceHtml.ts + docs/demo-gallery.html + examples/demos/*/trace.html" },
       { "id": "T4", "title": "Council scoring → hook ranking + learn→vector recall", "status": "shipped", "pr": "#53", "home": "council.ts (rankHooksByCouncil) + Council.tsx + vectorRecall.ts (rememberSong/recommendSimilar)" },
