@@ -65,6 +65,10 @@ Board** governance / Solana / token / NFT layer integrates with this engine via 
 later (kept out of this repo's core so it stays free + local).
 
 ## ✅ Shipped (newest first)
+- [x] **Deploy path + `wifidj.xyz` wiring** — `docs/deploy.md`: the app is fully static
+      (all routes prerendered), so `STATIC_EXPORT=1 next build` → `out/` hosts on
+      **Cloudflare Pages** with one env var (or Vercel, already configured). Env-gated
+      static export in `next.config.mjs`; `out/` fully gitignored. _(this PR)_
 - [x] **`/resume` continuity skill** — `.claude/skills/resume/SKILL.md`: a new chat runs
       `/resume` to pick up exactly where the last left off — reads TODO/IDEAS/docs, checks
       git + open PRs (nothing stale/crossed), states the workflow rules, proposes the next
