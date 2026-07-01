@@ -20,6 +20,7 @@ import RecommendationsPanel from './RecommendationsPanel';
 import AlbumView from './AlbumView';
 import LyricLab from './LyricLab';
 import BrainScan from './BrainScan';
+import VoiceMirror from './VoiceMirror';
 import { createNervousSystem, signalForAgent } from '@/lib/hermes/nervousSystem';
 import { createWorkingMemory } from '@/lib/hermes/workingMemory';
 import styles from './hermes.module.css';
@@ -257,6 +258,7 @@ export default function HermesHitFactory() {
           {pkg ? (
             <>
               <BangerScoreCard score={pkg.score} />
+              <VoiceMirror pkg={pkg} taste={taste} priorSongs={vault.filter((s) => s.id !== pkg.id)} />
               <UniquenessReportView report={pkg.uniqueness} />
               <div className={styles.panel}>
                 <div className={styles.panelTitle}>Release Readiness</div>
