@@ -105,7 +105,7 @@ mapping** (mood → word-color + imagery). Pairs with Language & Culture: *how i
 *how you say it*. Candidate home: `lib/hermes/emotion.ts` + a `limbic` region in
 `brainMap.ts`.
 
-### 6. Create-your-own-artist — a living world  💭
+### 6. Create-your-own-artist — a living world  🔨 (v1 shipped — `lib/hermes/artist.ts` + Story Mode)
 The big game: anyone can **build their own artist**, choose its path and identity,
 visually show it, and **capture events like a living world** that evolves. Each user's
 artist is theirs; the brain becomes *them* over time. Personas + memory + the persona

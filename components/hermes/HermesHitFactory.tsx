@@ -20,6 +20,7 @@ import BangerScoreCard from './BangerScoreCard';
 import UniquenessReportView from './UniquenessReport';
 import VaultDrawer from './VaultDrawer';
 import RecommendationsPanel from './RecommendationsPanel';
+import ArtistCard from './ArtistCard';
 import AlbumView from './AlbumView';
 import LyricLab from './LyricLab';
 import BrainScan from './BrainScan';
@@ -52,10 +53,14 @@ export default function HermesHitFactory() {
   const wmRef = useRef(createWorkingMemory(16));     // short-term (working) memory
   const [wmSize, setWmSize] = useState(0);
 
+  // how much of the current song is the artist's learned voice (feeds heat + the artist card)
+  const becomingYou = useMemo(
+    () => (pkg ? voiceMirror(pkg, taste, vault.filter((s) => s.id !== pkg.id)).youPercent : 0),
+    [pkg, vault, taste],
+  );
   // the artist's thermal brain signature — drives the Brain Scan heat-map ($0, local)
   const heat = useMemo(() => {
     const emo = pkg ? deriveEmotion(pkg.inputs) : { intensity: 0.3, valence: 0 };
-    const becomingYou = pkg ? voiceMirror(pkg, taste, vault.filter((s) => s.id !== pkg.id)).youPercent : 0;
     return brainHeat({
       songCount: vault.length,
       edits: taste?.edits ?? 0,
@@ -63,7 +68,7 @@ export default function HermesHitFactory() {
       emotionValence: emo.valence,
       becomingYou,
     });
-  }, [pkg, vault, taste]);
+  }, [pkg, vault, taste, becomingYou]);
 
   // hydrate from local storage on mount (client only — avoids SSR mismatch)
   useEffect(() => {
@@ -251,6 +256,7 @@ export default function HermesHitFactory() {
             )}
           </div>
 
+          <ArtistCard songs={vault} taste={taste} becomingYou={becomingYou} />
           <RecommendationsPanel songs={vault} taste={taste} onAddExclusion={addExclusion} onApplyPack={applyPack} />
         </div>
 
