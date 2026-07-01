@@ -36,6 +36,7 @@ export interface SongInputs {
   doNotUse: string[];  // extra avoid-words for this song (merged with the global list)
   references: string;  // inspirations, described — never copied
   structure: SongStructure;
+  culture?: string;    // where you're from / what shaped you — your OWN background, as craft
 }
 
 /** Static metadata describing an agent (its job), independent of any run. */

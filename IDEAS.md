@@ -66,7 +66,7 @@ Model real dual-process cognition explicitly (it already maps onto our two hemis
 Let the community add craft-DNA personas the same way they add scene packs — which
 feeds the WIFI DJ token/governance "steer the G-DJ" loop.
 
-### 5. The Language & Culture cortex (next engine layer)  ✏️
+### 5. The Language & Culture cortex  ✅ (shipped — `lib/hermes/language.ts`)
 The brain's **language area** — the part that actually shapes word choice. The best
 lyrics come from lived experience, and a huge part of that is **culture and how you
 were brought up**. Add a layer that maps:

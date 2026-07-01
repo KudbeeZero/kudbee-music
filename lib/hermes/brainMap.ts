@@ -25,7 +25,7 @@ export interface Region {
 // long-term (the persisted vault/profile) — the two memory systems.
 export const REGIONS: Region[] = [
   { id: 'intent', label: 'Intent', doc: 'the brief', side: 'center', agents: ['conductor'], x: 220, y: 54 },
-  { id: 'language', label: 'Language & Culture', doc: 'lib/hermes/language.ts (coming)', side: 'left', agents: [], x: 146, y: 96, soon: true },
+  { id: 'language', label: 'Language & Culture', doc: 'lib/hermes/language.ts', side: 'left', agents: ['lyric-chemist'], x: 146, y: 96 },
   { id: 'values', label: 'Values', doc: 'brain/beliefs.json', side: 'center', agents: ['conductor'], x: 256, y: 104 },
   { id: 'generative', label: 'Generative (right)', doc: 'brain/personas.json', side: 'right', agents: ['hooksmith', 'lyric-chemist', 'visual-director', 'viral-clip-scout'], x: 338, y: 150 },
   { id: 'analytical', label: 'Analytical (left)', doc: 'originality + scoring', side: 'left', agents: ['beat-oracle', 'emotion-scanner', 'originality-auditor'], x: 102, y: 156 },

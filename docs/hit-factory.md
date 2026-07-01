@@ -79,6 +79,17 @@ who the writer is from their vault (reusing `learn.ts`), so the room is informed
 everything they've made. **Assistant, not autopilot** — the artist makes every real
 choice; the brain sharpens the voice instead of replacing it.
 
+## Language & Culture
+`lib/hermes/language.ts` is the brain's language area — where lived experience becomes
+word choice. It maps the artist's **own described background** (an optional "where
+you're from / what shaped you" field) plus their voice into neutral craft levers:
+**register** (plainspoken / literary / slang-forward / mixed), **diction**, an
+**imagery palette seeded from their own words**, and **vernacular** guidance to write
+the way they actually talk. Struggle is treated as **depth**, not a limit (truth-first).
+It feeds the Writers-Room's truth/draft coaching and lights the Language & Culture
+brain region. **Original-only — it maps the artist describing themselves, never a
+profile of a group and never an impersonation.**
+
 ## Nervous system & memory tiers
 The brain has a **signalling layer** and two **memory systems**.
 `lib/hermes/brainMap.ts` is the anatomy — the **regions** (functional areas, each a
