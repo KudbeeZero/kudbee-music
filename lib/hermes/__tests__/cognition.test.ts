@@ -1,6 +1,8 @@
 import { describe, it, expect } from 'vitest';
-import { deliberate } from '../cognition';
-import type { SongInputs } from '../types';
+import { deliberate, selectHookByCognition } from '../cognition';
+import type { SongInputs, HookOption } from '../types';
+
+const hook = (text: string, score: number): HookOption => ({ text, angle: '', cadence: '', score });
 
 const inputs: SongInputs = {
   title: 'T', theme: 'building gold out of the cold streets', mood: 'hard, hopeful',
@@ -32,5 +34,39 @@ describe('cognition (first thought → second thought → decision)', () => {
     const d = deliberate('yeah uh ok', inputs);
     expect(d.verdict).toBe('revise');
     expect(d.confidence).toBeLessThan(0.5);
+  });
+});
+
+describe('selectHookByCognition (closing the loop — cognition picks the hook)', () => {
+  it('prefers the best-REASONED hook over a higher raw score', () => {
+    const candidates = [
+      hook('yeah uh ok whatever', 99),                 // top score, but thin + off-theme
+      hook('the cold streets made the gold in me', 70), // lower score, survives cognition
+    ];
+    const { chosen, deliberation } = selectHookByCognition(candidates, inputs);
+    expect(chosen?.text).toBe('the cold streets made the gold in me');
+    expect(deliberation?.verdict).toBe('keep');
+  });
+
+  it('steers toward a hook that FIXES the flagged critiques (feedback)', () => {
+    // prior take failed "true to the brief"; the on-theme candidate should now win even
+    // though an off-theme one scores higher.
+    const candidates = [
+      hook('shiny things and pretty lights tonight', 95), // off-theme
+      hook('cold streets turned to gold in the grind', 60), // on-theme (fixes 'true')
+    ];
+    const { chosen } = selectHookByCognition(candidates, inputs, ['true']);
+    expect(chosen?.text).toBe('cold streets turned to gold in the grind');
+  });
+
+  it('is deterministic and stable for identical inputs', () => {
+    const candidates = [hook('a', 50), hook('b', 50), hook('c', 50)];
+    const a = selectHookByCognition(candidates, inputs).chosen?.text;
+    const b = selectHookByCognition(candidates, inputs).chosen?.text;
+    expect(a).toBe(b);
+  });
+
+  it('returns nulls for an empty candidate list', () => {
+    expect(selectHookByCognition([], inputs)).toEqual({ chosen: null, deliberation: null });
   });
 });

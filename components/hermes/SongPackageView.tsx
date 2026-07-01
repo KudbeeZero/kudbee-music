@@ -1,12 +1,13 @@
 'use client';
 
 import { useState } from 'react';
-import type { HookOption, SongPackage } from '@/lib/hermes/types';
+import type { HookOption, SongPackage, CritiqueKey } from '@/lib/hermes/types';
 import { deliberate } from '@/lib/hermes/cognition';
 import styles from './hermes.module.css';
 
-export default function SongPackageView({ pkg, onSaveEdit, onChooseHook }: {
+export default function SongPackageView({ pkg, onSaveEdit, onChooseHook, onRegenerateFromCritiques }: {
   pkg: SongPackage; onSaveEdit?: (newText: string) => void; onChooseHook?: (h: HookOption) => void;
+  onRegenerateFromCritiques?: (keys: CritiqueKey[]) => void;
 }) {
   const rawLyrics = pkg.sections.map((s) => `[${s.label}]\n${s.lines.join('\n')}`).join('\n\n');
   const [editing, setEditing] = useState(false);
@@ -70,7 +71,7 @@ export default function SongPackageView({ pkg, onSaveEdit, onChooseHook }: {
             </div>
           );
         })}
-        {pkg.chosenHook && <Deliberation hook={pkg.chosenHook.text} pkg={pkg} />}
+        {pkg.chosenHook && <Deliberation hook={pkg.chosenHook.text} pkg={pkg} onRegenerateFromCritiques={onRegenerateFromCritiques} />}
       </Section>
 
       <div className={styles.pkgSection}>
@@ -152,8 +153,12 @@ export default function SongPackageView({ pkg, onSaveEdit, onChooseHook }: {
 }
 
 /** The dual-process readout: first thought → second thought → decision, on the lead hook. */
-function Deliberation({ hook, pkg }: { hook: string; pkg: SongPackage }) {
-  const d = deliberate(hook, pkg.inputs);
+function Deliberation({ hook, pkg, onRegenerateFromCritiques }: {
+  hook: string; pkg: SongPackage; onRegenerateFromCritiques?: (keys: CritiqueKey[]) => void;
+}) {
+  // Prefer the loop-closing verdict the pipeline actually used; fall back for older songs.
+  const d = pkg.cognition ?? deliberate(hook, pkg.inputs);
+  const failing = d.secondThought.filter((c) => !c.passes);
   return (
     <div style={{ marginTop: 8, borderTop: '1px solid var(--line)', paddingTop: 8 }}>
       <div className={styles.hint}>🧭 How the brain decided <span style={{ opacity: 0.7 }}>(first thought → second thought → decision)</span></div>
@@ -167,6 +172,16 @@ function Deliberation({ hook, pkg }: { hook: string; pkg: SongPackage }) {
         ))}
       </div>
       <div className={styles.hint} style={{ marginTop: 6 }}>{d.verdict === 'keep' ? '✅ ' : '↻ '}{d.decision}</div>
+      {failing.length > 0 && onRegenerateFromCritiques && (
+        <button
+          className={styles.copyBtn}
+          style={{ marginTop: 8 }}
+          onClick={() => onRegenerateFromCritiques(failing.map((c) => c.key))}
+          title={`Regenerate, steering toward a hook that fixes: ${failing.map((c) => c.note).join('; ')}`}
+        >
+          ↻ Regenerate from these critiques
+        </button>
+      )}
     </div>
   );
 }

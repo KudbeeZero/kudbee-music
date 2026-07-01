@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useMemo, useRef, useState } from 'react';
-import type { SongInputs, SongPackage, AgentOutput, HookOption } from '@/lib/hermes/types';
+import type { SongInputs, SongPackage, AgentOutput, HookOption, CritiqueKey } from '@/lib/hermes/types';
 import { AGENT_DEFINITIONS } from '@/lib/hermes/agents';
 import { runPipeline } from '@/lib/hermes/pipeline';
 import { withChosenHook } from '@/lib/hermes/rescore';
@@ -104,7 +104,7 @@ export default function HermesHitFactory() {
     setPreset({ genre: pack.style.split(',')[0].trim(), mood: pack.description, references: `${pack.title} expansion — ${pack.hookGuidance}` });
   }
 
-  async function run(inputs: SongInputs, runOpts?: { forcedHook?: string }) {
+  async function run(inputs: SongInputs, runOpts?: { forcedHook?: string; cognitionFeedback?: CritiqueKey[] }) {
     setRunning(true);
     setPkg(null);
     setOutputs({});
@@ -116,7 +116,7 @@ export default function HermesHitFactory() {
         (s) => s.title.trim().toLowerCase() !== inputs.title.trim().toLowerCase(),
       );
       const seed = (Date.now() ^ (regenRef.current++ * 0x9e3779b1)) >>> 0;
-      const { pkg: result } = await runPipeline(inputs, { priorSongs, bannedWords: banned, seed, forcedHook: runOpts?.forcedHook });
+      const { pkg: result } = await runPipeline(inputs, { priorSongs, bannedWords: banned, seed, forcedHook: runOpts?.forcedHook, cognitionFeedback: runOpts?.cognitionFeedback });
 
       // new session: clear working memory, seed it with the committed hook
       const wm = wmRef.current; const ns = nsRef.current;
@@ -268,7 +268,8 @@ export default function HermesHitFactory() {
           <AgentBoard outputs={outputs} />
           {pkg && <Council outputs={outputs} pkg={pkg} />}
           {pkg ? (
-            <SongPackageView pkg={pkg} onSaveEdit={saveLyricEdit} onChooseHook={chooseHook} />
+            <SongPackageView pkg={pkg} onSaveEdit={saveLyricEdit} onChooseHook={chooseHook}
+              onRegenerateFromCritiques={(keys) => run(pkg.inputs, { cognitionFeedback: keys })} />
           ) : (
             <div className={styles.panel}>
               <div className={styles.emptyState}>
