@@ -15,7 +15,7 @@
     "qa": "node studio/qa.mjs",
     "smoke": "node studio/render.mjs --pack retrowave --start 46 --end 48 --out out/smoke.mp4 --preset ultrafast --crf 30 && node studio/qa.mjs out/smoke.mp4 --slice",
     "test": "node --test test/*.test.mjs",
-    "lint:check": "node --check studio/render.mjs && node --check studio/build-timeline.mjs && node --check studio/analyze.mjs && node --check studio/align.mjs && node --check studio/prep-frames.mjs && node --check studio/brain.mjs && node --check studio/qa.mjs && node --check studio/from-song.mjs && node --check bin/hermes",
+    "lint:check": "node --check studio/render.mjs && node --check studio/build-timeline.mjs && node --check studio/analyze.mjs && node --check studio/align.mjs && node --check studio/prep-frames.mjs && node --check studio/brain.mjs && node --check studio/qa.mjs && node --check studio/from-song.mjs && node --check studio/runway.mjs && node --check bin/hermes",
     "web:dev": "next dev",
     "web:build": "next build",
     "web:start": "next start",

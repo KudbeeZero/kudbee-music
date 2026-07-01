@@ -37,6 +37,13 @@ Commands:
   qa <video>           Eval gate: ffprobe + frame-sample a render, score it,
                        exit non-zero on fail (the "left brain" check). (studio/qa.mjs)
 
+  runway [opts]        Animate a still into a short clip via Runway Gen-4
+                       (opt-in, needs RUNWAY_API_KEY in .env.local — never
+                       the free core). (studio/runway.mjs)
+                       --image <path> --prompt "..." --duration 5|10
+                       --ratio 1280:720 --out out/runway/clip.mp4
+                       --balance            check remaining Runway credits (no spend)
+
 Render options:  --start <s> --end <s> --out <path> --preset <x> --crf <n>
                  --pack <neo-noir|retrowave|vhs-lofi|lyric-minimal>
                  --brain <balanced|right|left>   (dominance dial: bias the cut +
@@ -64,6 +71,7 @@ switch (cmd) {
   case 'render':     run('render.mjs', rest); break;
   case 'preview':    run('render.mjs', ['--start','40','--end','56','--out','out/preview.mp4','--preset','fast','--crf','20', ...rest]); break;
   case 'qa':         run('qa.mjs', rest); break;
+  case 'runway':     run('runway.mjs', rest); break;
   case 'build': {
     const dirArg = rest[0] && !rest[0].startsWith('--') ? rest.shift() : null;
     const flagBrain = (() => { const i = rest.indexOf('--brain'); return i >= 0 ? rest[i + 1] : null; })();

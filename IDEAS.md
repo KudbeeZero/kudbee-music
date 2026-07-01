@@ -236,10 +236,12 @@ A second-opinion review flagged real risks worth acting on (truth-first):
   pro workspace: a section/arrangement **timeline** (the song's [Intro]/[Verse]/[Hook] as clips we
   already parse) + the engine **rack** + the **Brain Scan as the meter bridge**. $0 read-only
   timeline now; clip editing later. (roadmap 3.4)
-- 💭 **Runway Gen-4 world/video** *(founder has key + ~1000 credits)* — animate agent avatars,
+- 🔨 **Runway Gen-4 world/video** *(founder has key + ~1000 credits)* — **adapter shipped +
+  live-tested**: `studio/runway.mjs` / `hermes runway` drives Gen-4 Turbo image-to-video, opt-in
+  and key-gated (`.env.local`, never committed, never in the free core); confirmed working with a
+  real 10s clip. Remaining (founder-paced, see `docs/runway-plan.md`): animate agent avatars,
   generate the HERMES Studio "office/living world" scenes, a landing hero video, real clips.
-  Opt-in, key-gated (`.env.local`, never committed), never in the free core. Scaffold a
-  `studio/runway.mjs` adapter $0; founder runs it with their key. (ecosystem)
+  (ecosystem)
 - 🔨 **Living Brain dNFT + token utility** *(founder idea)* — **near-term step shipped**
   (`lib/hermes/brainSignature.ts`: `brainSignature()` traits + `toNftMetadata()` ERC-721
   shape, $0/no-chain). Remaining: a `/brain/[id]` static render + the actual Solana/Metaplex
