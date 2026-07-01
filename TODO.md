@@ -48,6 +48,10 @@ chat. Detail for each is in [`brain/roadmap.json`](brain/roadmap.json) + [`IDEAS
    (hook/lyric/theme→procedural/mood→emotion) and exposes per-agent recalls: `recallSimilarCraft`
    (procedural), `recallSimilarEmotion` (limbic), `recallSimilarHook` (Council self-repetition).
    Opt-in + graceful (empty without the dep); server/CLI-only so the client bundle stays Node-free. _(#61)_
+- [x] **In-app trace explorer** — a "🔍 Explain this song" button on the song package opens the
+   interactive brain trace (heat-map + per-region cards + copy-paste Suno prompt) in a new tab,
+   built client-side from the real brain modules (same renderer the demo gallery ships). #50 made
+   visible where people actually use it. _(#63)_
 - [ ] **End-to-end app audit** — drive `/hermes` headless, confirm generate→select→edit→save→export actually works.
 - [ ] **Crossroads Stages 2–3** — `/crossroads` board UI → decisions feed the taste model.
 - [ ] **3 review cleanups** — stronger memory-id hash · independent "earns-it" critique · guaranteed vault mirror.
