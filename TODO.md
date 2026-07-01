@@ -101,6 +101,10 @@ Board** governance / Solana / token / NFT layer integrates with this engine via 
 later (kept out of this repo's core so it stays free + local).
 
 ## ✅ Shipped (newest first)
+- [x] **Create-your-own-artist v1 + Story Mode** — `lib/hermes/artist.ts` grows an identity
+      (alias, signature words, hemisphere, chapter, bio) from your vault+taste; `lib/hermes/story.ts`
+      unlocks chapters (First Spark → Finding Your Voice → First Banger → The Album) as the brain
+      becomes you. A "🎭 Your Artist" card (editable, persisted alias) surfaces it. _(#46)_
 - [x] **Living-Brain dNFT signature (near-term, $0)** — `lib/hermes/brainSignature.ts`:
       `brainSignature()` → deterministic traits (dominant hemisphere, temperature, signature
       rhyme, songs made, becoming-you, primary emotion) + `toNftMetadata()` → standard
