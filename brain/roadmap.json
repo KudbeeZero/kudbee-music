@@ -32,7 +32,7 @@
         { "id": "1.1", "title": "Eval harness + golden songs (npm run eval)", "status": "shipped", "pr": "#36", "home": "lib/hermes/eval.ts", "source": "Grok #5", "note": "objective metrics (rhyme density, line diversity, thematic coherence, hook strength) over the demos+flagship golden set; regression guard in CI" },
         { "id": "1.2", "title": "Output-safety filter + short disclaimer/ToS", "status": "shipped", "pr": "#37", "home": "lib/hermes/safety.ts", "source": "Grok", "note": "screens hooks/lyrics against a famous-phrase list → a 'famous-phrase' uniqueness flag; disclaimer in README + Uniqueness panel" },
         { "id": "1.3", "title": "One-command demo (npm run demo) — full song end-to-end", "status": "shipped", "pr": "#38", "home": "lib/hermes/__tests__/demo.test.ts", "source": "Grok #4", "note": "generates a full original song + prints the 11-region generation trace; lyrics-focused, no video; deterministic" },
-        { "id": "1.4", "title": "LAUNCH.md kit (star checklist + Twitter thread + demo-recording script)", "status": "queued", "home": "LAUNCH.md", "note": "$0 doc-only; supports the Twitter/YouTube launch" }
+        { "id": "1.4", "title": "LAUNCH.md kit (star checklist + Twitter thread + demo-recording script)", "status": "shipped", "pr": "#43", "home": "LAUNCH.md", "note": "rewrote the stale video-first kit into a brain-first launch playbook: pre-flight checklist, demo-recording script, draft X thread, channel sequence (X → Show HN → Reddit → PH → YouTube), guardrails" }
       ]
     },
     {
@@ -50,7 +50,9 @@
       "goal": "The brain becomes the individual artist over time.",
       "items": [
         { "id": "3.1", "title": "Create-your-own-artist v1 — an artist-identity file that becomes you", "status": "queued", "home": "lib/hermes/artist.ts" },
-        { "id": "3.2", "title": "Community-authored personas (craft-DNA, like scene packs)", "status": "queued", "home": "brain/personas.json" }
+        { "id": "3.2", "title": "Community-authored personas (craft-DNA, like scene packs)", "status": "queued", "home": "brain/personas.json" },
+        { "id": "3.3", "title": "Pro Studio Rack — modular upgradeable engine 'boxes' (Pro Tools aesthetic)", "status": "queued", "home": "components/hermes/Rack.tsx", "note": "FOUNDER: a DAW-style rack where each lyrical engine/agent is a swappable, upgradeable unit (free Local Combinator + locked Claude/Lightning 'upgrade' slots) on the existing LyricsProvider seam. $0 rack UI + free unit now; premium units founder-gated." },
+        { "id": "3.4", "title": "HERMES Studio workspace (Suno-Studio-style: section timeline + rack + meter bridge)", "status": "queued", "home": "components/hermes/Studio.tsx", "note": "FOUNDER: implement a Suno-Studio-like pro workspace — a section/arrangement timeline (the song's [Intro]/[Verse]/[Hook] as clips) + the engine rack + the Brain Scan as the meter bridge. $0 read-only timeline now; clip editing later. Pairs with 3.3." }
       ]
     },
     {

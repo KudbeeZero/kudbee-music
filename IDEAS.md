@@ -205,6 +205,15 @@ A second-opinion review flagged real risks worth acting on (truth-first):
   over the SVG brain + a thermal heat-map (`lib/hermes/heat.ts`) coloring regions by the type
   of artist you are; header shows artist type + brain temp. Reduced-motion aware. Feeds the
   Living-Brain dNFT. _(#40)_
+- 💭 **Pro Studio Rack** *(founder idea — "make it look like a professional stack / Pro Tools")* —
+  a DAW-style **rack** where each lyrical engine/agent is a swappable, **upgradeable** "digital box"
+  (free Local Combinator + locked Claude / Lightning "upgrade" slots), built on the existing
+  `LyricsProvider` adapter seam + the "advance your model" tier. $0 rack UI + free unit now;
+  premium units founder-gated (keys/servers). (roadmap 3.3)
+- 💭 **HERMES Studio workspace** *(founder idea — "look at Suno's Studio")* — a Suno-Studio-style
+  pro workspace: a section/arrangement **timeline** (the song's [Intro]/[Verse]/[Hook] as clips we
+  already parse) + the engine **rack** + the **Brain Scan as the meter bridge**. $0 read-only
+  timeline now; clip editing later. (roadmap 3.4)
 - 💭 **Runway Gen-4 world/video** *(founder has key + ~1000 credits)* — animate agent avatars,
   generate the HERMES Studio "office/living world" scenes, a landing hero video, real clips.
   Opt-in, key-gated (`.env.local`, never committed), never in the free core. Scaffold a
