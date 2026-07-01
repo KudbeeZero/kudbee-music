@@ -38,7 +38,7 @@ describe('brain map (anatomy)', () => {
     // hooksmith running lights the generative region AND short-term memory (it holds
     // the draft), so active nerves touch one of those running regions.
     const paths = activePathways({ hooksmith: out('hooksmith', 'running') });
-    const running = new Set(['generative', 'short-term']);
+    const running = new Set(['generative', 'short-term', 'default-mode']);
     expect(paths.length).toBeGreaterThan(0);
     expect(paths.every(([a, b]) => running.has(a) || running.has(b))).toBe(true);
     expect(paths.some(([a, b]) => a === 'generative' || b === 'generative')).toBe(true);

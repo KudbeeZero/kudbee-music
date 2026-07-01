@@ -20,8 +20,9 @@ _Nothing actively in flight — pick the next item from **Up next**._
    scoring is honest (brevity + theme reference + internal rhyme, not length+RNG). _(shipped)_
 3. [x] **Emotion → diction** — the limbic valence now picks the rhyme words + adjective
    pool (dark vs bright), so word choice leans with the mood. _(shipped)_
-4. [ ] **Default-Mode Network** — a "creativity-at-rest" region that surfaces original
-   angles, coupled to the analytical layer (research: causal role in originality).
+4. [x] **Default-Mode Network** — `lib/hermes/defaultMode.ts`: surfaces divergent
+   angles on the brief (creativity-at-rest); the 10th brain region, coupled by nerves to
+   generative + decision + analytical; feeds a divergent option into the concept step. _(shipped)_
 5. [ ] **Reward circuit** — model hook "crave-ability" / drive.
 6. [ ] **Procedural memory** — the artist's recurring craft moves become reusable.
 7. [ ] **"Becoming you" self-portrait** — surface how much of a song is the learned voice.

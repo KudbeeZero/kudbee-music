@@ -12,6 +12,7 @@ import { scoreSong } from './scoring';
 import { allAvoidWords } from './memory';
 import { keywords, titleCase } from './text';
 import { deriveEmotion, emotionalArc } from './emotion';
+import { divergentAngles } from './defaultMode';
 
 export interface RunOptions {
   providers?: ProviderBundle;
@@ -80,7 +81,7 @@ export async function runPipeline(inputs: SongInputs, opts: RunOptions = {}): Pr
     finding: `Brief locked: ${inputs.structure} ${inputs.genre} for ${inputs.audience || 'you'}.`,
     confidence: 88, warnings: inputs.title ? [] : ['No title yet — using "Untitled".'],
     suggestedNextAction: 'Hand the brief to Hooksmith.',
-    data: { brief, concept },
+    data: { brief, concept, angles: divergentAngles(inputs, 3, seed) },
   });
 
   // 2) Hooksmith — hooks. A hook written in the Lyric Lab wins outright; the
