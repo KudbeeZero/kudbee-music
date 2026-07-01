@@ -90,6 +90,16 @@ vault). Lean into it: add an explicit **artist-identity file**, **cross-link** t
 docs into a navigable web, and adopt an **ingest → research → save** loop. Crucially,
 **each knowledge file = one region of the Brain Scan** — click a region, open its file.
 
+### 8. The Emotional (limbic) layer  ✏️
+Emotion is *analyzed* today (Emotion Scanner arc score, emotional-clarity banger
+category, mood input, dark-lean, emotional-contrast recs, struggle-as-depth). The next
+level is a true **limbic layer** that *shapes* feeling, not just scores it: its **own
+Brain Scan region** (the limbic/amygdala area), an explicit **emotional-arc model**
+(which section carries which feeling; the tension curve across the song), and **affect
+mapping** (mood → word-color + imagery). Pairs with Language & Culture: *how it feels* +
+*how you say it*. Candidate home: `lib/hermes/emotion.ts` + a `limbic` region in
+`brainMap.ts`.
+
 ### 6. Create-your-own-artist — a living world  💭
 The big game: anyone can **build their own artist**, choose its path and identity,
 visually show it, and **capture events like a living world** that evolves. Each user's

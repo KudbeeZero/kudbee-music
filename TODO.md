@@ -65,6 +65,10 @@ Board** governance / Solana / token / NFT layer integrates with this engine via 
 later (kept out of this repo's core so it stays free + local).
 
 ## ✅ Shipped (newest first)
+- [x] **`/resume` continuity skill** — `.claude/skills/resume/SKILL.md`: a new chat runs
+      `/resume` to pick up exactly where the last left off — reads TODO/IDEAS/docs, checks
+      git + open PRs (nothing stale/crossed), states the workflow rules, proposes the next
+      step. _(this PR)_
 - [x] **Language & Culture area** — `lib/hermes/language.ts`: maps the artist's OWN
       described background (where you're from / what shaped you) + voice into craft
       levers (register, diction, imagery from their own words, vernacular), with
