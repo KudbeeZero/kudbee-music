@@ -40,6 +40,10 @@ chat. Detail for each is in [`brain/roadmap.json`](brain/roadmap.json) + [`IDEAS
 - [~] **Deeper lyric craft** (the moat) — grammaticality shipped _(#58)_; **imagery coherence** shipped
    _(#60)_: theme/mood → imagery clusters (street/home/water/light/struggle/…) so backfill nouns match the
    subject. Next: image-coherence *scoring* + verb/noun agreement so lines relate, not just cohere thematically.
+- [x] **Vector search strategies** — hybrid (cosine + deterministic lexical/keyword overlap) +
+   diversity/MMR re-ranking (no near-duplicate recalls), opt-in + off by default, threaded through
+   the per-agent recalls. Determinism preserved (quantized + id tie-break). _(#62)_
+   Next vector ideas (deferred): embedding cache, hierarchical/section chunking.
 - [x] **Vector memory → the agent systems** — `vectorRecall.ts` now stores a memory per facet
    (hook/lyric/theme→procedural/mood→emotion) and exposes per-agent recalls: `recallSimilarCraft`
    (procedural), `recallSimilarEmotion` (limbic), `recallSimilarHook` (Council self-repetition).
