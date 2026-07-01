@@ -38,7 +38,7 @@ export default function SongPackageView({ pkg, onSaveEdit, onChooseHook, onRegen
   // in a new tab. All client-side + deterministic: renders the same self-contained HTML the
   // demo gallery ships, from the real brain modules — no server, no key.
   function explainSong() {
-    const trace = buildTrace(pkg, pkg.inputs, 0);
+    const trace = buildTrace(pkg, pkg.inputs, pkg.seed ?? 0);
     const html = renderTraceHtml(trace, { sunoStyle: sunoStyle(pkg), sunoLyrics: sunoLyrics(pkg) });
     const url = URL.createObjectURL(new Blob([html], { type: 'text/html' }));
     window.open(url, '_blank', 'noopener');

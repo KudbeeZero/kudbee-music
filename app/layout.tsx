@@ -24,6 +24,7 @@ const body = localFont({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL('https://wifi-dj-meme.pages.dev'),
   title: 'HERMES Hit Factory — Lyrical Combinator Brain',
   description: 'A multi-agent song-creation studio. Turn a rough idea into a full song package — concept, hooks, lyrics, production, visuals, uniqueness, and a banger score.',
 };

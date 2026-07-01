@@ -46,7 +46,48 @@ function lyricsText(sections: SongSection[]): string {
   return sections.map((s) => `[${s.label}]\n${s.lines.join('\n')}`).join('\n\n');
 }
 
-export async function runPipeline(inputs: SongInputs, opts: RunOptions = {}): Promise<PipelineResult> {
+// ---- input hardening --------------------------------------------------------
+// The Song Lab is a public form: Number(e.target.value) can hand us NaN, a paste
+// can hand us a 100k-char theme, and nothing stops a negative or 1e9 tempo. The
+// engine normalizes ONCE here (the UI never silently truncates) so every agent
+// downstream can trust the brief.
+const TEMPO_FLOOR = 40;
+const TEMPO_CEIL = 260;
+const DEFAULT_TEMPO_MIN = 120;
+const DEFAULT_TEMPO_MAX = 160;
+/** Soft cap on free-text brief fields — long enough for any real brief. */
+const TEXT_CAP = 2000;
+
+function clampTempo(v: number, fallback: number): number {
+  if (typeof v !== 'number' || !Number.isFinite(v)) return fallback;
+  return Math.min(TEMPO_CEIL, Math.max(TEMPO_FLOOR, Math.round(v)));
+}
+
+function normalizeInputs(raw: SongInputs): SongInputs {
+  const cap = (s: string) => (typeof s === 'string' ? s.slice(0, TEXT_CAP) : '');
+  let tempoMin = clampTempo(raw.tempoMin, DEFAULT_TEMPO_MIN);
+  let tempoMax = clampTempo(raw.tempoMax, DEFAULT_TEMPO_MAX);
+  if (tempoMin > tempoMax) [tempoMin, tempoMax] = [tempoMax, tempoMin];
+  return {
+    ...raw,
+    title: cap(raw.title),
+    theme: cap(raw.theme),
+    mood: cap(raw.mood),
+    genre: cap(raw.genre),
+    voice: cap(raw.voice),
+    audience: cap(raw.audience),
+    references: cap(raw.references),
+    ...(raw.culture !== undefined ? { culture: cap(raw.culture) } : {}),
+    tempoMin,
+    tempoMax,
+    doNotUse: Array.isArray(raw.doNotUse)
+      ? raw.doNotUse.filter((w): w is string => typeof w === 'string').map((w) => w.slice(0, 100))
+      : [],
+  };
+}
+
+export async function runPipeline(rawInputs: SongInputs, opts: RunOptions = {}): Promise<PipelineResult> {
+  const inputs = normalizeInputs(rawInputs);
   const providers = opts.providers ?? mockProviders;
   const seed = opts.seed ?? 0;
   // memory layer: generic clichés + remembered exclusions + this song's words
@@ -246,6 +287,7 @@ export async function runPipeline(inputs: SongInputs, opts: RunOptions = {}): Pr
     release,
     agentOutputs: outputs,
     cognition,
+    seed,
   };
 
   return { pkg, agentOutputs: outputs };

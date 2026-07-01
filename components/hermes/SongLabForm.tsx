@@ -81,10 +81,10 @@ export default function SongLabForm({
 
       <div className={styles.row2}>
         <Field label="Tempo min (BPM)" htmlFor="hf-tmin">
-          <input id="hf-tmin" className={styles.input} type="number" value={v.tempoMin} onChange={(e) => set('tempoMin', Number(e.target.value))} />
+          <input id="hf-tmin" className={styles.input} type="number" min={40} max={260} value={v.tempoMin} onChange={(e) => set('tempoMin', Number(e.target.value))} />
         </Field>
         <Field label="Tempo max (BPM)" htmlFor="hf-tmax">
-          <input id="hf-tmax" className={styles.input} type="number" value={v.tempoMax} onChange={(e) => set('tempoMax', Number(e.target.value))} />
+          <input id="hf-tmax" className={styles.input} type="number" min={40} max={260} value={v.tempoMax} onChange={(e) => set('tempoMax', Number(e.target.value))} />
         </Field>
       </div>
 
