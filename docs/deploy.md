@@ -58,17 +58,15 @@ fail on a web host. The web build command is **`npm run web:build`** (with
 `STATIC_EXPORT=1` for a static export). Set that explicitly in the project settings —
 don't let it auto-run `npm run build`.
 
-### If you're using Cloudflare **Workers** (Git integration)
-The repo ships a `wrangler.jsonc` (assets-only Worker serving `./out`). In the Workers
-project **Settings → Build**:
+### Cloudflare **Pages** (recommended — this is what's deployed to wifidj.xyz)
+Create a **Pages** project, connect the repo, and set:
+- **Framework preset:** React Static (or None)
 - **Build command:** `STATIC_EXPORT=1 npm run web:build`
-- **Deploy command:** `npx wrangler deploy`
+- **Build output directory:** `out`   ← not `dist`
 - **Environment variable:** `NODE_VERSION` = `22`
 
-### Simpler: Cloudflare **Pages** (recommended for a static site)
-Create a **Pages** project instead of Workers (Pages is purpose-built for static
-output): build command `npm run web:build`, output dir `out`, env `STATIC_EXPORT=1` +
-`NODE_VERSION=22`. No `wrangler.jsonc` needed.
+The repo's `wrangler.jsonc` declares `pages_build_output_dir: ./out` to match. Then
+**Custom domains → add wifidj.xyz** (or `app.wifidj.xyz`).
 
 ## Notes
 - The Node/ffmpeg **video studio** (`bin/hermes`, `studio/*`) is not part of the web
