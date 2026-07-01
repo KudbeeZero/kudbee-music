@@ -21,19 +21,19 @@
   "conceptSummary": "Acoustic Folk-Rap record for the people back home: coming back to the town that raised you and made you leave — delivered nostalgic, heavy, warm, voiced as plain, honest.",
   "hookOptions": [
     {
-      "text": "Still standing where the record used to be",
+      "text": "Still standing where the curb used to be",
       "angle": "confessional one-liner",
       "cadence": "on-beat and punchy",
       "score": 98
     },
     {
-      "text": "Tell people I made it out the block",
+      "text": "Tell people I made it out the hallway",
       "angle": "confessional one-liner",
       "cadence": "half-time, laid back",
       "score": 91
     },
     {
-      "text": "For people, I keep moving through the flame",
+      "text": "For people, I keep moving through the engine",
       "angle": "call-and-response chant",
       "cadence": "half-time, laid back",
       "score": 95
@@ -45,14 +45,14 @@
       "score": 83
     },
     {
-      "text": "This one's for the town that raised me",
+      "text": "This one's for the leave that raised me",
       "angle": "confessional one-liner",
       "cadence": "floating melodic",
       "score": 97
     }
   ],
   "chosenHook": {
-    "text": "This one's for the town that raised me",
+    "text": "This one's for the leave that raised me",
     "angle": "confessional one-liner",
     "cadence": "floating melodic",
     "score": 97
@@ -67,57 +67,57 @@
     {
       "label": "Hook",
       "lines": [
-        "This one's for the town that raised me",
-        "This one's for the town that raised me",
+        "This one's for the leave that raised me",
+        "This one's for the leave that raised me",
         "And people know I climb for it",
-        "This one's for the town that raised me"
+        "This one's for the leave that raised me"
       ]
     },
     {
       "label": "Verse 1",
       "lines": [
-        "Nothing in my hands but back and the part",
-        "Grew up on ghost, chasing the art",
-        "All I had was town and the spark",
-        "Came up on town, dreaming of the mark"
+        "Nothing in my hands but town and the part",
+        "Grew up on river, chasing the art",
+        "All I had was leave and the spark",
+        "Came up on leave, dreaming of the mark"
       ]
     },
     {
       "label": "Hook",
       "lines": [
-        "This one's for the town that raised me",
-        "This one's for the town that raised me",
+        "This one's for the leave that raised me",
+        "This one's for the leave that raised me",
         "And people know I climb for it",
-        "This one's for the town that raised me"
+        "This one's for the leave that raised me"
       ]
     },
     {
       "label": "Verse 2",
       "lines": [
-        "Everything changed, traded town for the day",
-        "Put the back down, reaching for the way",
-        "Now I reach the lantern into the stream",
-        "Took that back and turned it to a team"
+        "Everything changed, traded leave for the day",
+        "Put the town down, reaching for the way",
+        "Now I reach the bruise into the stream",
+        "Took that town and turned it to a team"
       ]
     },
     {
       "label": "Bridge",
       "lines": [
-        "Wouldn't trade the leave for a light",
-        "Made my peace with beacon and the sight"
+        "Wouldn't trade the sunrise for a light",
+        "Made my peace with bruise and the sight"
       ]
     },
     {
       "label": "Hook",
       "lines": [
-        "This one's for the town that raised me",
-        "This one's for the town that raised me",
+        "This one's for the leave that raised me",
+        "This one's for the leave that raised me",
         "And people know I climb for it",
-        "This one's for the town that raised me"
+        "This one's for the leave that raised me"
       ]
     }
   ],
-  "finalLyrics": "[Intro]\nPeople, this one's for you\n\n[Hook]\nThis one's for the town that raised me\nThis one's for the town that raised me\nAnd people know I climb for it\nThis one's for the town that raised me\n\n[Verse 1]\nNothing in my hands but back and the part\nGrew up on ghost, chasing the art\nAll I had was town and the spark\nCame up on town, dreaming of the mark\n\n[Hook]\nThis one's for the town that raised me\nThis one's for the town that raised me\nAnd people know I climb for it\nThis one's for the town that raised me\n\n[Verse 2]\nEverything changed, traded town for the day\nPut the back down, reaching for the way\nNow I reach the lantern into the stream\nTook that back and turned it to a team\n\n[Bridge]\nWouldn't trade the leave for a light\nMade my peace with beacon and the sight\n\n[Hook]\nThis one's for the town that raised me\nThis one's for the town that raised me\nAnd people know I climb for it\nThis one's for the town that raised me",
+  "finalLyrics": "[Intro]\nPeople, this one's for you\n\n[Hook]\nThis one's for the leave that raised me\nThis one's for the leave that raised me\nAnd people know I climb for it\nThis one's for the leave that raised me\n\n[Verse 1]\nNothing in my hands but town and the part\nGrew up on river, chasing the art\nAll I had was leave and the spark\nCame up on leave, dreaming of the mark\n\n[Hook]\nThis one's for the leave that raised me\nThis one's for the leave that raised me\nAnd people know I climb for it\nThis one's for the leave that raised me\n\n[Verse 2]\nEverything changed, traded leave for the day\nPut the town down, reaching for the way\nNow I reach the bruise into the stream\nTook that town and turned it to a team\n\n[Bridge]\nWouldn't trade the sunrise for a light\nMade my peace with bruise and the sight\n\n[Hook]\nThis one's for the leave that raised me\nThis one's for the leave that raised me\nAnd people know I climb for it\nThis one's for the leave that raised me",
   "production": {
     "tempoBpm": 86,
     "drums": "minimal knock, heavy kick",
@@ -168,71 +168,71 @@
       "label": "Hook hit",
       "startHint": "first chorus",
       "durationSec": 15,
-      "caption": "“This one's for the town that raised me” 🎧 #newmusic",
-      "hookLine": "This one's for the town that raised me"
+      "caption": "“This one's for the leave that raised me” 🎧 #newmusic",
+      "hookLine": "This one's for the leave that raised me"
     },
     {
       "label": "Verse opener",
       "startHint": "verse 1, bar 1",
       "durationSec": 12,
       "caption": "the story starts here 👀",
-      "hookLine": "Nothing in my hands but back and the part"
+      "hookLine": "Nothing in my hands but town and the part"
     },
     {
       "label": "Bridge turn",
       "startHint": "bridge",
       "durationSec": 18,
       "caption": "wait for it…",
-      "hookLine": "Wouldn't trade the leave for a light"
+      "hookLine": "Wouldn't trade the sunrise for a light"
     }
   ],
-  "promoCaption": "“This one's for the town that raised me” — new one for the people back home. #coming #back #acousticfolk-rap",
+  "promoCaption": "“This one's for the leave that raised me” — new one for the people back home. #coming #back #acousticfolk-rap",
   "uniqueness": {
     "score": 100,
     "flags": [
       {
         "kind": "banned-word",
         "detail": "avoid-word \"dreaming\"",
-        "line": "Came up on town, dreaming of the mark",
+        "line": "Came up on leave, dreaming of the mark",
         "suggestion": "planning"
       },
       {
         "kind": "repeated-hook",
         "detail": "hook line repeats 9× — consider varying one word",
-        "line": "This one's for the town that raised me"
+        "line": "This one's for the leave that raised me"
       }
     ],
     "fingerprints": [
       "34a8eba4",
-      "900ea440",
-      "900ea440",
+      "93474bab",
+      "93474bab",
       "c9a252a6",
-      "900ea440",
-      "a01e8eaa",
-      "2f3c5136",
-      "923497a6",
-      "8bc700fb",
-      "900ea440",
-      "900ea440",
+      "93474bab",
+      "24dfd3f",
+      "5174f3b3",
+      "2dbf8047",
+      "d3355984",
+      "93474bab",
+      "93474bab",
       "c9a252a6",
-      "900ea440",
-      "cc154e0",
-      "72aa3d46",
-      "87104c9b",
-      "be42a72b",
-      "8eb82aa5",
-      "5287228b",
-      "900ea440",
-      "900ea440",
+      "93474bab",
+      "762a18c3",
+      "c00e3d5d",
+      "9aa88a31",
+      "d5f0c7d0",
+      "3c49b655",
+      "17b037d9",
+      "93474bab",
+      "93474bab",
       "c9a252a6",
-      "900ea440"
+      "93474bab"
     ],
     "bannedWordsHit": [
       "dreaming"
     ],
     "rewriteSuggestions": [
       {
-        "line": "Came up on town, dreaming of the mark",
+        "line": "Came up on leave, dreaming of the mark",
         "suggestion": "try \"planning\" instead of \"dreaming\""
       }
     ]
@@ -310,26 +310,26 @@
       "id": "hooksmith",
       "name": "Hooksmith",
       "status": "done",
-      "finding": "Lead hook: \"This one's for the town that raised me\"",
+      "finding": "Lead hook: \"This one's for the leave that raised me\"",
       "confidence": 95,
       "warnings": [],
       "suggestedNextAction": "Build verses from the lead hook.",
       "data": {
         "hookOptions": [
           {
-            "text": "Still standing where the record used to be",
+            "text": "Still standing where the curb used to be",
             "angle": "confessional one-liner",
             "cadence": "on-beat and punchy",
             "score": 98
           },
           {
-            "text": "Tell people I made it out the block",
+            "text": "Tell people I made it out the hallway",
             "angle": "confessional one-liner",
             "cadence": "half-time, laid back",
             "score": 91
           },
           {
-            "text": "For people, I keep moving through the flame",
+            "text": "For people, I keep moving through the engine",
             "angle": "call-and-response chant",
             "cadence": "half-time, laid back",
             "score": 95
@@ -341,14 +341,14 @@
             "score": 83
           },
           {
-            "text": "This one's for the town that raised me",
+            "text": "This one's for the leave that raised me",
             "angle": "confessional one-liner",
             "cadence": "floating melodic",
             "score": 97
           }
         ],
         "chosenHook": {
-          "text": "This one's for the town that raised me",
+          "text": "This one's for the leave that raised me",
           "angle": "confessional one-liner",
           "cadence": "floating melodic",
           "score": 97
@@ -374,53 +374,53 @@
           {
             "label": "Hook",
             "lines": [
-              "This one's for the town that raised me",
-              "This one's for the town that raised me",
+              "This one's for the leave that raised me",
+              "This one's for the leave that raised me",
               "And people know I climb for it",
-              "This one's for the town that raised me"
+              "This one's for the leave that raised me"
             ]
           },
           {
             "label": "Verse 1",
             "lines": [
-              "Nothing in my hands but back and the part",
-              "Grew up on ghost, chasing the art",
-              "All I had was town and the spark",
-              "Came up on town, dreaming of the mark"
+              "Nothing in my hands but town and the part",
+              "Grew up on river, chasing the art",
+              "All I had was leave and the spark",
+              "Came up on leave, dreaming of the mark"
             ]
           },
           {
             "label": "Hook",
             "lines": [
-              "This one's for the town that raised me",
-              "This one's for the town that raised me",
+              "This one's for the leave that raised me",
+              "This one's for the leave that raised me",
               "And people know I climb for it",
-              "This one's for the town that raised me"
+              "This one's for the leave that raised me"
             ]
           },
           {
             "label": "Verse 2",
             "lines": [
-              "Everything changed, traded town for the day",
-              "Put the back down, reaching for the way",
-              "Now I reach the lantern into the stream",
-              "Took that back and turned it to a team"
+              "Everything changed, traded leave for the day",
+              "Put the town down, reaching for the way",
+              "Now I reach the bruise into the stream",
+              "Took that town and turned it to a team"
             ]
           },
           {
             "label": "Bridge",
             "lines": [
-              "Wouldn't trade the leave for a light",
-              "Made my peace with beacon and the sight"
+              "Wouldn't trade the sunrise for a light",
+              "Made my peace with bruise and the sight"
             ]
           },
           {
             "label": "Hook",
             "lines": [
-              "This one's for the town that raised me",
-              "This one's for the town that raised me",
+              "This one's for the leave that raised me",
+              "This one's for the leave that raised me",
               "And people know I climb for it",
-              "This one's for the town that raised me"
+              "This one's for the leave that raised me"
             ]
           }
         ]
@@ -523,46 +523,46 @@
             {
               "kind": "banned-word",
               "detail": "avoid-word \"dreaming\"",
-              "line": "Came up on town, dreaming of the mark",
+              "line": "Came up on leave, dreaming of the mark",
               "suggestion": "planning"
             },
             {
               "kind": "repeated-hook",
               "detail": "hook line repeats 9× — consider varying one word",
-              "line": "This one's for the town that raised me"
+              "line": "This one's for the leave that raised me"
             }
           ],
           "fingerprints": [
             "34a8eba4",
-            "900ea440",
-            "900ea440",
+            "93474bab",
+            "93474bab",
             "c9a252a6",
-            "900ea440",
-            "a01e8eaa",
-            "2f3c5136",
-            "923497a6",
-            "8bc700fb",
-            "900ea440",
-            "900ea440",
+            "93474bab",
+            "24dfd3f",
+            "5174f3b3",
+            "2dbf8047",
+            "d3355984",
+            "93474bab",
+            "93474bab",
             "c9a252a6",
-            "900ea440",
-            "cc154e0",
-            "72aa3d46",
-            "87104c9b",
-            "be42a72b",
-            "8eb82aa5",
-            "5287228b",
-            "900ea440",
-            "900ea440",
+            "93474bab",
+            "762a18c3",
+            "c00e3d5d",
+            "9aa88a31",
+            "d5f0c7d0",
+            "3c49b655",
+            "17b037d9",
+            "93474bab",
+            "93474bab",
             "c9a252a6",
-            "900ea440"
+            "93474bab"
           ],
           "bannedWordsHit": [
             "dreaming"
           ],
           "rewriteSuggestions": [
             {
-              "line": "Came up on town, dreaming of the mark",
+              "line": "Came up on leave, dreaming of the mark",
               "suggestion": "try \"planning\" instead of \"dreaming\""
             }
           ]
@@ -610,22 +610,22 @@
             "label": "Hook hit",
             "startHint": "first chorus",
             "durationSec": 15,
-            "caption": "“This one's for the town that raised me” 🎧 #newmusic",
-            "hookLine": "This one's for the town that raised me"
+            "caption": "“This one's for the leave that raised me” 🎧 #newmusic",
+            "hookLine": "This one's for the leave that raised me"
           },
           {
             "label": "Verse opener",
             "startHint": "verse 1, bar 1",
             "durationSec": 12,
             "caption": "the story starts here 👀",
-            "hookLine": "Nothing in my hands but back and the part"
+            "hookLine": "Nothing in my hands but town and the part"
           },
           {
             "label": "Bridge turn",
             "startHint": "bridge",
             "durationSec": 18,
             "caption": "wait for it…",
-            "hookLine": "Wouldn't trade the leave for a light"
+            "hookLine": "Wouldn't trade the sunrise for a light"
           }
         ]
       }
@@ -634,7 +634,7 @@
       "id": "ar-judge",
       "name": "A&R Judge",
       "status": "done",
-      "finding": "Banger 93/100 · crave-ability 75/100 — Certified banger — ship it.",
+      "finding": "Banger 93/100 · crave-ability 77/100 — Certified banger — ship it.",
       "confidence": 82,
       "warnings": [],
       "suggestedNextAction": "Green-light.",
@@ -651,12 +651,12 @@
           "verdict": "Certified banger — ship it."
         },
         "crave": {
-          "score": 75,
+          "score": 77,
           "factors": {
             "returns": 1,
             "mutation": 0.5,
             "brevity": 0.75,
-            "singability": 0.71
+            "singability": 0.77
           },
           "note": "Compulsive — you'll want it again."
         }
@@ -707,7 +707,7 @@
     }
   ],
   "cognition": {
-    "firstThought": "This one's for the town that raised me",
+    "firstThought": "This one's for the leave that raised me",
     "secondThought": [
       {
         "key": "true",

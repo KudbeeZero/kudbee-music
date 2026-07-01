@@ -93,19 +93,30 @@ const IMAGERY_SIGNALS: Record<string, string[]> = {
   memory:   ['memory', 'past', 'ghost', 'remember', 'gone', 'miss', 'nostalgi', 'used', 'back', 'time'],
 };
 
+// The combinator's own action verbs are verbs by definition — never nouns ("the CARRY
+// that raised me"). Derived from VERBS so the two lists can't drift.
+const VERB_SET = new Set(VERBS.map((v) => v.split(' ')[0]));
+
 /** True if a word can plausibly fill a concrete-noun slot. Heuristic, deterministic, $0. */
 export function nounable(w: string): boolean {
   const s = w.toLowerCase();
-  if (s.length < 3 || NON_NOUN.has(s)) return false;
+  if (s.length < 3 || NON_NOUN.has(s) || VERB_SET.has(s)) return false;
   if (/ing$/.test(s) && !NOUN_ING.has(s)) return false;   // gerunds: growing, breaking
   if (/ed$/.test(s) && !NOUN_ED.has(s)) return false;      // participles/adjectives: supposed, handed
   if (/ly$/.test(s)) return false;                          // adverbs: quickly, really
   return true;
 }
 
+/** Audience tokens ("my daughter" → {daughter}) — kept OUT of noun slots so a line never
+ *  reads "for daughter … through the daughter" (the {who} word doubling as a {noun}). */
+function audienceWords(inputs: SongInputs): Set<string> {
+  return new Set((inputs.audience || '').toLowerCase().split(/[^a-z0-9]+/).filter((w) => w.length > 2));
+}
+
 /** Theme/reference words that pass as concrete nouns, in stable order (on-theme first). */
 export function themeNouns(inputs: SongInputs): string[] {
-  return keywords([inputs.theme, inputs.references].join(' '), 12).filter(nounable);
+  const audience = audienceWords(inputs);
+  return keywords([inputs.theme, inputs.references].join(' '), 12).filter((w) => nounable(w) && !audience.has(w.toLowerCase()));
 }
 
 /**
