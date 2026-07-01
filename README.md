@@ -228,6 +228,7 @@ docs/                    quickstart, concepts, CLI ref, scene-pack guide, hit-fa
 - [x] **Eval harness + golden songs** (`npm run eval`) — objective lyric metrics over a golden set; a CI regression guard
 - [x] **Output-safety filter + disclaimer** — screens hooks/lyrics against famous phrases; responsibility disclaimer
 - [x] **One-command demo** (`npm run demo`) — generates a full song end-to-end + prints the 11-region brain trace
+- [x] **Cognitive model** — first thought → second thought → decision on the lead hook (assistant, not autopilot)
 
 **Next** — the phased plan is the spine [`brain/roadmap.json`](brain/roadmap.json); the human backlog is [`TODO.md`](TODO.md).
 - [ ] **Deepen the visible brain** — cognitive model (first→second thought→decision); the Council; brain-scan boot sequence

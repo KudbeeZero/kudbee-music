@@ -53,7 +53,7 @@ Render the 10 agents as a **council** around the brain (the "Crossroads Board"):
 hemisphere proposes, left hemisphere challenges, the artist decides. Show the
 back-and-forth, not just final outputs.
 
-### 3. Cognitive model — first thought → second thought → decision  ✏️
+### 3. Cognitive model — first thought → second thought → decision  ✅ (shipped — `lib/hermes/cognition.ts`)
 Model real dual-process cognition explicitly (it already maps onto our two hemispheres):
 - **First thought (System 1, right):** fast, generative — the persona-driven proposal.
 - **Second thought (System 2, left):** reflective critique — "is this true? original?
@@ -201,6 +201,19 @@ A second-opinion review flagged real risks worth acting on (truth-first):
   disclaimer in the README + Uniqueness panel. _(#37)_
 
 ## 🌱 Fresh captures
+- ✏️ **Particle Brain + artist heat-map** *(founder idea)* — render the Brain Scan as a
+  particle field flowing along the nerves, with a **thermal heat-map** that colors regions
+  by *the type of artist you are* (right/generative → hot magenta, analytical → cyan,
+  emotional intensity raises overall temp, more "becoming-you" → hotter/denser). Driven $0
+  from taste + persona + emotion + procedural. Reduced-motion aware. The prime demo/Twitter
+  visual. (roadmap 2.4)
+- 💭 **Living Brain dNFT + token utility** *(founder idea)* — the particle brain as a
+  **dynamic NFT** that evolves as you create: `tokenURI` → metadata whose `animation_url`
+  is the live brain page + a snapshot; traits from the brain signature. **Value = utility**
+  (compute tier, Crossroads votes, roles, radio/curation) + evolving status/provenance +
+  portable G-DJ identity + song royalties. **Near-term $0:** `brainSignature()` + metadata
+  JSON + a `/brain/[id]` render URL (no chain yet) → a later Solana/Metaplex mint is trivial.
+  Free core stays free; utility/identity framing, not investment promises. (ecosystem)
 - 💭 **Discord community server** (founder prefers it over Telegram) — a hub to learn the
   process + contribute; channels, roles, voice listening parties, and a GitHub→Discord
   webhook so repo activity streams in. I can draft the structure + wire the webhook on the
