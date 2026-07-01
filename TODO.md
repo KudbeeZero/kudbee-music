@@ -53,8 +53,10 @@ vector memory, and document the architecture — lifts output quality, dev appea
    (id, then text) so search is reproducible across Intel/Apple-Silicon/AMD (FP/BLAS-safe). _(#49)_
 - [ ] **1. Semantic originality** — wire `vectorMemory.searchSimilar` into `originality.ts`
    (optional flag) to flag *meaning*-similar prior lines the fingerprint check misses.
-- [ ] **2. Close the cognition loop** — `keep|revise` verdict + failing critiques feed the
-   next generation (`pipeline.ts` `cognitionFeedback`); "Regenerate from these critiques" button.
+- [x] **2. Close the cognition loop** — cognition is now load-bearing: `selectHookByCognition`
+   picks the best-*reasoned* hook (not just top score), the pipeline stores the `Deliberation`
+   on the package, `opts.cognitionFeedback` steers regeneration toward a hook that fixes the
+   flagged critiques, and a "↻ Regenerate from these critiques" button wires it in the UI. _(#52)_
 - [x] **3. Interactive trace explorer + demo gallery** — `traceHtml.ts` renders a `SongTrace`
    to self-contained HTML: brain heat-map (Brain-Scan hues, clickable nodes), collapsible
    per-region cards, copy-to-clipboard Suno prompt. `GEN_DEMOS=1` mints `trace.html` per demo

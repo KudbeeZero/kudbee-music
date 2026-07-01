@@ -3,24 +3,14 @@
 // Second thought (System 2, left hemisphere): reflective critique — is it true?
 // original? does it earn it? — using the SAME real checks the brain already runs.
 // Decision (integration, corpus callosum): keep or revise. Deterministic, local, $0.
-import type { SongInputs } from './types';
+import type { SongInputs, HookOption, Critique, Deliberation, CritiqueKey } from './types';
 import { keywords } from './text';
 import { isClear } from './safety';
 import { hasInternalRhyme } from './rhyme';
 
-export interface Critique {
-  question: string;
-  passes: boolean;
-  note: string;
-}
-
-export interface Deliberation {
-  firstThought: string;    // the fast, generative proposal (right hemisphere)
-  secondThought: Critique[]; // the reflective challenges (left hemisphere)
-  verdict: 'keep' | 'revise';
-  decision: string;        // the integrated call (the artist gets the final say)
-  confidence: number;      // 0..1 — share of challenges the proposal survives
-}
+// Types live in types.ts so the SongPackage can carry a Deliberation without an import
+// cycle. Re-exported here for existing call sites.
+export type { Critique, Deliberation, CritiqueKey } from './types';
 
 /**
  * Run a proposal through first-thought → second-thought → decision. The critiques
@@ -38,9 +28,9 @@ export function deliberate(proposal: string, inputs: SongInputs): Deliberation {
   const earnsIt = words.length >= 4 && (hasInternalRhyme(text) || themeKw.some((k) => text.toLowerCase().includes(k)));
 
   const secondThought: Critique[] = [
-    { question: 'Is it true to the brief?', passes: isTrue, note: isTrue ? 'references the theme' : 'feels generic — tie it to the story' },
-    { question: 'Is it original?', passes: isOriginal, note: isOriginal ? 'no famous-phrase echo' : 'echoes a known line — change it' },
-    { question: 'Does it earn it?', passes: earnsIt, note: earnsIt ? 'carries craft (image/rhyme)' : 'thin — add an image or a rhyme' },
+    { key: 'true', question: 'Is it true to the brief?', passes: isTrue, note: isTrue ? 'references the theme' : 'feels generic — tie it to the story' },
+    { key: 'original', question: 'Is it original?', passes: isOriginal, note: isOriginal ? 'no famous-phrase echo' : 'echoes a known line — change it' },
+    { key: 'earns-it', question: 'Does it earn it?', passes: earnsIt, note: earnsIt ? 'carries craft (image/rhyme)' : 'thin — add an image or a rhyme' },
   ];
 
   const passed = secondThought.filter((c) => c.passes).length;
@@ -51,4 +41,34 @@ export function deliberate(proposal: string, inputs: SongInputs): Deliberation {
     : `Revise — only ${passed}/3 hold up. ${secondThought.find((c) => !c.passes)?.note ?? ''}`.trim();
 
   return { firstThought: text, secondThought, verdict, decision, confidence };
+}
+
+/**
+ * Choose a hook by CLOSING THE COGNITION LOOP — the second thought is load-bearing, not
+ * decorative. Each candidate is deliberated; the winner is the one that (1) fixes the most
+ * critiques the artist previously flagged (`feedback`), then (2) survives the most
+ * challenges, then (3) has the highest raw hook score, with input order as a stable
+ * final tiebreak. Deterministic. When `feedback` is empty this simply prefers the
+ * best-reasoned hook among the top options — so cognition actually changes what ships.
+ */
+export function selectHookByCognition(
+  candidates: HookOption[],
+  inputs: SongInputs,
+  feedback: CritiqueKey[] = [],
+): { chosen: HookOption | null; deliberation: Deliberation | null } {
+  if (!candidates.length) return { chosen: null, deliberation: null };
+  const fb = new Set(feedback);
+  const scored = candidates.map((h, i) => {
+    const d = deliberate(h.text, inputs);
+    const passed = d.secondThought.filter((c) => c.passes).length;
+    const fixes = fb.size ? d.secondThought.filter((c) => fb.has(c.key) && c.passes).length : 0;
+    return { h, d, passed, fixes, i };
+  });
+  scored.sort((a, b) =>
+    (b.fixes - a.fixes) ||       // first: address the critiques the artist flagged
+    (b.passed - a.passed) ||     // then: survive the most challenges
+    (b.h.score - a.h.score) ||   // then: raw hook score
+    (a.i - b.i),                 // stable: original order
+  );
+  return { chosen: scored[0].h, deliberation: scored[0].d };
 }
