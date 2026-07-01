@@ -65,6 +65,12 @@ Board** governance / Solana / token / NFT layer integrates with this engine via 
 later (kept out of this repo's core so it stays free + local).
 
 ## ✅ Shipped (newest first)
+- [x] **Language & Culture area** — `lib/hermes/language.ts`: maps the artist's OWN
+      described background (where you're from / what shaped you) + voice into craft
+      levers (register, diction, imagery from their own words, vernacular), with
+      struggle-as-depth (truth-first). Feeds the Writers-Room truth/draft steps and a
+      new Lyric Lab brief field. The dim brain region now **lights up** (wired to the
+      lyric-chemist) — the whole brain is active. Original-only, never a group profile. _(this PR)_
 - [x] **Nervous system + memory tiers** — the brain's signalling + memory layer:
       `lib/hermes/brainMap.ts` (regions + nerves, single source of truth),
       `lib/hermes/nervousSystem.ts` (a signal bus), `lib/hermes/workingMemory.ts`
