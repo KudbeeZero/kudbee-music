@@ -5,6 +5,22 @@
 // an emotional arc (problem → tension → payoff). Feeds the Writers-Room and lights
 // the limbic brain region. Truth-first: the honest feeling, specifically rendered.
 import type { SongInputs, SongSection } from './types';
+import { keywords } from './text';
+
+/**
+ * Emotional clarity (0..1) — how legibly the song lands its feeling: a clear theme,
+ * a named audience, a turn (bridge), and enough length to breathe. Deterministic (no
+ * RNG), so it can be recomputed faithfully anywhere the pipeline's score is rebuilt.
+ */
+export function emotionClarity(inputs: SongInputs, sections: SongSection[]): number {
+  let c = 0.4;
+  if (keywords(inputs.theme).length >= 2) c += 0.2;
+  if (inputs.audience.trim()) c += 0.15;
+  if (sections.some((s) => /bridge/i.test(s.label))) c += 0.15;
+  const lines = sections.reduce((a, b) => a + b.lines.length, 0);
+  if (lines >= 10) c += 0.1;
+  return Math.min(1, c);
+}
 
 export interface EmotionProfile {
   valence: number;        // -1 (dark) .. +1 (bright)

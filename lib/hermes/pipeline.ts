@@ -11,7 +11,7 @@ import { checkOriginality, fingerprintLyrics, type PriorSong } from './originali
 import { scoreSong } from './scoring';
 import { allAvoidWords } from './memory';
 import { keywords, titleCase } from './text';
-import { deriveEmotion, emotionalArc } from './emotion';
+import { deriveEmotion, emotionalArc, emotionClarity } from './emotion';
 import { divergentAngles } from './defaultMode';
 import { craveScore } from './reward';
 
@@ -39,17 +39,6 @@ const ORDER: AgentId[] = [
 
 function lyricsText(sections: SongSection[]): string {
   return sections.map((s) => `[${s.label}]\n${s.lines.join('\n')}`).join('\n\n');
-}
-
-function emotionClarity(inputs: SongInputs, sections: SongSection[]): number {
-  // heuristic: clear theme + audience + a bridge (turn) + reasonable length
-  let c = 0.4;
-  if (keywords(inputs.theme).length >= 2) c += 0.2;
-  if (inputs.audience.trim()) c += 0.15;
-  if (sections.some((s) => /bridge/i.test(s.label))) c += 0.15;
-  const lines = sections.reduce((a, b) => a + b.lines.length, 0);
-  if (lines >= 10) c += 0.1;
-  return Math.min(1, c);
 }
 
 export async function runPipeline(inputs: SongInputs, opts: RunOptions = {}): Promise<PipelineResult> {
