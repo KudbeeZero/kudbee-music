@@ -11,6 +11,7 @@ import { checkOriginality, fingerprintLyrics, type PriorSong } from './originali
 import { scoreSong } from './scoring';
 import { allAvoidWords } from './memory';
 import { keywords, titleCase } from './text';
+import { deriveEmotion, emotionalArc } from './emotion';
 
 export interface RunOptions {
   providers?: ProviderBundle;
@@ -125,16 +126,18 @@ export async function runPipeline(inputs: SongInputs, opts: RunOptions = {}): Pr
     data: { production },
   });
 
-  // 5) Emotion Scanner
+  // 5) Emotion Scanner — the limbic layer: scores clarity AND reads the affect
   announce('emotion-scanner');
   const clarity = emotionClarity(inputs, sections);
+  const emotion = deriveEmotion(inputs);
+  const arc = emotionalArc(sections);
   const emoWarn = clarity < 0.6 ? ['Emotional arc is thin — add a clear turn/payoff.'] : [];
   emit({
     id: 'emotion-scanner', name: 'Emotion Scanner', status: clarity < 0.5 ? 'warning' : 'done',
-    finding: `Emotional clarity ${(clarity * 100) | 0}/100 (problem → tension → payoff).`,
+    finding: `${emotion.primary} · clarity ${(clarity * 100) | 0}/100 → turn toward ${emotion.contrast}.`,
     confidence: 76, warnings: emoWarn,
     suggestedNextAction: clarity < 0.6 ? 'Strengthen the bridge turn.' : 'Proceed to scoring.',
-    data: { clarity, arc: ['problem', 'tension', 'payoff'] },
+    data: { clarity, emotion, arc },
   });
 
   // 6) Originality Auditor

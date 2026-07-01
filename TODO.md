@@ -65,6 +65,11 @@ Board** governance / Solana / token / NFT layer integrates with this engine via 
 later (kept out of this repo's core so it stays free + local).
 
 ## ✅ Shipped (newest first)
+- [x] **Limbic (emotion) layer** — `lib/hermes/emotion.ts`: reads mood into an affect
+      model (valence/intensity/primary feeling), proposes the emotional **contrast** for
+      depth, and maps sections onto an emotional **arc**. Feeds the Writers-Room
+      (concept + arc) and enriches the Emotion Scanner. Its own **Limbic brain region**
+      (9/9) now lights up. Emotion is now *shaped*, not just scored. _(this PR)_
 - [x] **Deploy path + `wifidj.xyz` wiring** — `docs/deploy.md`: the app is fully static
       (all routes prerendered), so `STATIC_EXPORT=1 next build` → `out/` hosts on
       **Cloudflare Pages** with one env var (or Vercel, already configured). Env-gated
