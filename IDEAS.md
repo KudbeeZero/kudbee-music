@@ -204,6 +204,11 @@ A second-opinion review flagged real risks worth acting on (truth-first):
   disclaimer in the README + Uniqueness panel. _(#37)_
 
 ## 🌱 Fresh captures
+- 🔨 **Traction Sprint** *(3-agent audit)* — ranked $0 plan to lift quality + stars: (T0 ✅)
+  vector-memory determinism hardening; (T1) semantic originality wiring; (T2) close the
+  cognition loop (keep|revise→regenerate); (T3) interactive trace explorer + gallery;
+  (T4) Council scoring→hook ranking + learn→vector recall; (T5) ARCHITECTURE.md + wiring
+  diagram. Full detail in `TODO.md` + `brain/roadmap.json` (tractionSprint) + Notion.
 - ✅ **Particle Brain + artist heat-map** *(founder idea)* — shipped: canvas particle layer
   over the SVG brain + a thermal heat-map (`lib/hermes/heat.ts`) coloring regions by the type
   of artist you are; header shows artist type + brain temp. Reduced-motion aware. Feeds the
