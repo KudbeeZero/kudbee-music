@@ -2,34 +2,65 @@
 
 # 🧠 HERMES
 
-### An agent-driven music-creation **brain** — write the song *and* render the video, entirely from code.
+### A local, deterministic **songwriting brain** — write original songs *and see exactly how it thought*. No API key. Runs in your browser.
 
-Two studios, one brain. **No paid software. No GPU required. $0.**
+A roster of specialized agents that cross-check each other. **$0. No paid services. No GPU. Same input → same song, on every machine.**
 
 [![CI](https://github.com/KudbeeZero/kudbee-music/actions/workflows/ci.yml/badge.svg)](https://github.com/KudbeeZero/kudbee-music/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-amber.svg)](LICENSE)
 [![Node 22](https://img.shields.io/badge/node-22-339933.svg?logo=node.js&logoColor=white)](https://nodejs.org)
 [![PRs welcome](https://img.shields.io/badge/PRs-welcome-7a3cff.svg)](CONTRIBUTING.md)
 
-<img src="media/demo-intro.gif" width="49%" alt="cinematic studio intro"/> <img src="media/demo-hook.gif" width="49%" alt="kinetic-typography hook"/>
-
-[**▶ Watch the demo video**](media/kudbee-music-video-1080p.mp4) · [The brain](#-the-brain-two-hemispheres-one-dial) · [Hit Factory](#-studio-2--hit-factory-the-song-brain) · [Video studio](#-studio-1--the-video-studio) · [Quickstart](#-quickstart) · [Docs](docs/) · [Roadmap](#-roadmap)
+[**⚡ Try it in 10 seconds**](#-try-it-in-10-seconds) · [**🧠 See the brain think**](examples/demos/) · [Semantic memory](#-semantic-memory-opt-in) · [The brain](#-the-brain-two-hemispheres-one-dial) · [Docs](docs/) · [Roadmap](#-roadmap)
 
 </div>
 
 ---
 
-**HERMES is a roster of specialized agents that cross-check each other to make music — end to end, from code, for free.** It's two studios sharing one brain:
+## ⚡ Try it in 10 seconds
 
-| | 🎬 **Video Studio** | 🎤 **Hit Factory** *(song brain)* |
+```bash
+git clone https://github.com/KudbeeZero/kudbee-music && cd kudbee-music
+npm install
+npm run demo        # generates a full original song + prints what each brain region did
+```
+
+No key, no signup, no network — it runs the real pipeline locally and prints the lyrics,
+the scores, and a **per-region trace of how the brain made its choices**. Then open the web
+app for the full deck:
+
+```bash
+npm run web:dev     # → http://localhost:3000/hermes
+```
+
+**Prefer to just look?** Every demo song ships with its generation trace:
+**[▶ browse the demo gallery](examples/demos/)** — each one has a brain heat-map, a card for
+what every region contributed, and a copy-paste Suno prompt. Inside the app, the **"🔍 Explain
+this song"** button opens that same interactive trace for anything you make.
+
+---
+
+**HERMES is a roster of specialized agents that cross-check each other to write original songs — from a rough idea to a complete package (concept · hooks · lyrics · production · Suno prompts · scores), entirely from code, for free.** The lyrical process *and the brain that runs it* are the point; it also **renders music videos** from the same brain (see [Video Studio](#-studio-1--the-video-studio)). Two studios, one brain:
+
+| | 🎤 **Hit Factory** *(the song brain — start here)* | 🎬 **Video Studio** |
 |---|---|---|
-| **Does** | song + clips → a vocal-synced **1080p music video** | a rough idea → a complete, original **song package** |
-| **How** | headless Chromium frames → ffmpeg, forced-aligned lyrics | 10 cross-checking agents, local "Lyrical Combinator" |
-| **Run** | `hermes build` (CLI) | `npm run web:dev` → `/hermes` (web app) |
-| **Out** | `out/*.mp4` | concept, hooks, lyrics, production, visuals, **Suno prompts**, scores |
-| **Cost** | $0 — ffmpeg + Chromium | $0 — fully local/mock, **no API key** |
+| **Does** | a rough idea → a complete, original **song package** | song + clips → a vocal-synced **1080p music video** |
+| **How** | 10 cross-checking agents, local "Lyrical Combinator" | headless Chromium frames → ffmpeg, forced-aligned lyrics |
+| **Run** | `npm run web:dev` → `/hermes` (web app) | `hermes build` (CLI) |
+| **Out** | concept, hooks, lyrics, production, visuals, **Suno prompts**, scores | `out/*.mp4` |
+| **Cost** | $0 — fully local/mock, **no API key** | $0 — ffmpeg + Chromium |
 
-The flagship demo is a finished 2:38 video for *"Stay There × Fuck Em × Poverty Porn"* by **Dom Shady / kudbee** — cinematic neo-noir, forced-aligned lyrics, 25 hero shots cut to the beat.
+The song brain writes deterministic, original-only lyrics, scores them, checks them for
+originality, and **shows its reasoning** — then hands you Suno-ready prompts. The video
+studio is the downstream half: the flagship demo is a finished 2:38 video for *"Stay There ×
+Fuck Em × Poverty Porn"* by **Dom Shady / kudbee** — cinematic neo-noir, forced-aligned
+lyrics, 25 hero shots cut to the beat.
+
+<div align="center">
+<img src="media/demo-intro.gif" width="49%" alt="cinematic studio intro"/> <img src="media/demo-hook.gif" width="49%" alt="kinetic-typography hook"/>
+
+[**▶ Watch the full demo video**](media/kudbee-music-video-1080p.mp4)
+</div>
 
 > **🔗 The full loop.** Write a song in the **Hit Factory** → it hands you Suno-ready prompts → render the audio in Suno → `hermes from-song song.json` scaffolds a **video project** with your lyrics already in place → drop the audio → `hermes build` → a finished **music video**. Both halves of HERMES, one pipeline.
 
@@ -56,6 +87,29 @@ The brain also has a **memory layer** ([`brain/memory.json`](brain/memory.json))
 > neurons. Under the metaphor it's a deterministic multi-agent system plus a memory
 > layer (working memory that decays and consolidates into long-term on save). The
 > metaphor is the map; the code is the territory — and it's all readable in `lib/hermes/`.
+
+---
+
+## 🧠 Semantic memory (opt-in)
+
+The brain can **recall past work by *meaning*, not just keywords** — an optional local layer
+that never touches the network or a paid API. When you install the on-device embedding model
+(`npm i @xenova/transformers`), every finished song is stored across four lenses and each
+agent can recall by its own:
+
+| Lens | Question it answers | Feeds |
+|------|--------------------|-------|
+| **procedural** | "have I crafted *this theme* before?" | procedural memory |
+| **emotion** | "have I chased *this feeling* before?" | the limbic layer |
+| **hook** | "have I written *a hook like this* before?" | the Council (self-repetition) |
+| **lyric** | "is this line *too close in meaning* to a past one?" | originality scoring |
+
+Retrieval is **deterministic** (a quantized similarity key + stable tie-breaks, so results
+can't reorder across Intel / Apple Silicon / AMD) and supports **hybrid search** (blend
+semantic similarity with keyword overlap) and **MMR diversity** (don't surface three
+near-identical memories) — all opt-in and off by default. Zero embeddings? The whole thing
+is a graceful no-op and the rule-based brain runs exactly as before. See
+[`lib/hermes/vectorMemory.ts`](lib/hermes/vectorMemory.ts) + [`ARCHITECTURE.md`](ARCHITECTURE.md).
 
 ---
 
