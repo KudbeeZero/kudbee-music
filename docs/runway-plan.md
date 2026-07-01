@@ -64,3 +64,9 @@ out the workflow and credits allow.
 - Every clip attempt should get a real prompt review pass first (reuse a still,
   vary the prompt, not the credits) — Gen-4 Turbo doesn't retry failed/bad
   results for free.
+
+## Spend log
+- **2026-07-01 · Phase-1 (landing/brand asset) · 10s Gen-4 Turbo · 50 credits (950 → 900):**
+  the **Crossroads Board launch teaser** (`media/crossroads-teaser.mp4`, 1280×720, 24fps),
+  animating `media/crossroads-still.png` (a $0 in-repo title card in the locked palette).
+  One generation, `--seed 7`. Committed for a public link.
