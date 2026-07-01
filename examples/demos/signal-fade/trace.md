@@ -15,19 +15,19 @@
 | **Language & Culture** | Register: mixed. Diction lean: mix plain talk with one or two vivid images per verse. Imagery seeds: loving, someone, across, distance. |
 | **Limbic (emotion)** | Primary feeling: ambivalence (valence 0.00, intensity 0.50); contrast: a clear stance. Colored word choice; arc: setup → tension → problem → tension → tension → payoff → tension. |
 | **Default-Mode Network** | Considered 3 divergent angles, incl. “Tell "loving" through a letter you'll never send”. |
-| **Generative (right hemisphere)** | Wrote the hook from 5 candidates → “For ones, I rebuild through the distance”. |
+| **Generative (right hemisphere)** | Wrote the hook from 5 candidates → “Tell ones I made it out the distance”. |
 | **Analytical (left hemisphere)** | Rhyme scheme AABB, density 100% across the verse; beat/BPM sanity checks. |
-| **Reward circuit** | Crave-ability 76/100 (returns 1, mutation 0.5, brevity 0.75, singability 0.74) — Compulsive — you'll want it again. |
+| **Reward circuit** | Crave-ability 77/100 (returns 1, mutation 0.5, brevity 0.75, singability 0.8) — Compulsive — you'll want it again. |
 | **Decision (corpus callosum)** | A&R verdict: Certified banger — ship it. (93/100). The artist gets the final choice. |
-| **Long-term memory** | Originality checked against the vault → 99/100 (3 flags). |
+| **Long-term memory** | Originality checked against the vault → 100/100 (1 flag). |
 | **Short-term memory** | Held the working set (hook + section drafts) live across the 10-agent run. |
 
 ## 🎯 The result
 
-- **Lead hook:** “For ones, I rebuild through the distance” _(chosen from 5 candidates)_
+- **Lead hook:** “Tell ones I made it out the distance” _(chosen from 5 candidates)_
 - **Rhyme:** scheme AABB, 100% density
-- **Crave-ability:** 76/100
-- **Originality:** 99/100
+- **Crave-ability:** 77/100
+- **Originality:** 100/100
 - **Banger score:** **93/100** — _Certified banger — ship it._
 
 _Full package: [`song.json`](song.json). Load it in the app (`/hermes`) to see the whole deck._

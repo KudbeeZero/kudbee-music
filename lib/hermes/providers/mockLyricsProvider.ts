@@ -50,8 +50,10 @@ const VERB_CLUSTERS: Record<string, string[]> = {
 const ADJ_DARK = ['cold', 'quiet', 'heavy', 'restless', 'hollow', 'guarded', 'weathered', 'distant', 'stubborn', 'bitter'];
 const ADJ_BRIGHT = ['golden', 'fearless', 'patient', 'steady', 'open', 'grateful', 'relentless', 'grounded', 'bright', 'awake'];
 const ADJ_ALL = [...ADJ_DARK, ...ADJ_BRIGHT];
-function adjPool(valence: number): string[] {
-  return valence < -0.2 ? ADJ_DARK : valence > 0.2 ? ADJ_BRIGHT : ADJ_ALL;
+function adjPool(valence: number, banned: Set<string> = new Set()): string[] {
+  const base = valence < -0.2 ? ADJ_DARK : valence > 0.2 ? ADJ_BRIGHT : ADJ_ALL;
+  const allowed = base.filter((a) => !banned.has(a));
+  return allowed.length ? allowed : base; // never starve the pool over an exclusion
 }
 
 // Words that read badly in a NOUN slot ("where the OUT used to be", "handed me
@@ -163,19 +165,21 @@ export function themeImagery(inputs: SongInputs): string[] {
  * rest. `picked` and `rest` are shuffled SEPARATELY (not the combined array) so a slice
  * off the front stays biased toward the top-ranked cluster(s) — shuffling the whole thing
  * before slicing would dilute the bias evenly across every cluster, on- and off-image alike.
+ * `banned` (avoid-words — generic clichés + the artist's remembered exclusions) is
+ * filtered out here, at the source, instead of only being flagged after the fact.
  */
-function imageryNouns(inputs: SongInputs, rng: () => number): string[] {
+function imageryNouns(inputs: SongInputs, rng: () => number, banned: Set<string> = new Set()): string[] {
   const clusters = themeImagery(inputs);
-  const picked = clusters.flatMap((c) => NOUN_BANK[c] ?? []);
-  const rest = ALL_NOUNS.filter((n) => !picked.includes(n));
+  const picked = clusters.flatMap((c) => NOUN_BANK[c] ?? []).filter((n) => !banned.has(n));
+  const rest = ALL_NOUNS.filter((n) => !picked.includes(n) && !banned.has(n));
   return [...shuffle(picked, rng), ...shuffle(rest, rng)];
 }
 
 /** A guaranteed-full noun pool: on-theme words first, padded from the matching imagery bank. */
-function nounPool(inputs: SongInputs, rng: () => number): string[] {
-  const theme = themeNouns(inputs);
+function nounPool(inputs: SongInputs, rng: () => number, banned: Set<string> = new Set()): string[] {
+  const theme = themeNouns(inputs).filter((n) => !banned.has(n.toLowerCase()));
   const pool = [...theme];
-  if (pool.length < 6) pool.push(...imageryNouns(inputs, rng).filter((n) => !pool.includes(n)).slice(0, 6 - pool.length));
+  if (pool.length < 6) pool.push(...imageryNouns(inputs, rng, banned).filter((n) => !pool.includes(n)).slice(0, 6 - pool.length));
   return pool;
 }
 
@@ -186,24 +190,28 @@ function nounPool(inputs: SongInputs, rng: () => number): string[] {
  * Restricts to the on-image subset only when it's wide enough to keep the verse
  * from repeating itself; falls back to the full pool so variety never starves.
  */
-export function verbPool(inputs: SongInputs): string[] {
+export function verbPool(inputs: SongInputs, banned: Set<string> = new Set()): string[] {
   const top = new Set(themeImagery(inputs).slice(0, 2));
-  const onImage = VERBS.filter((v) => VERB_CLUSTERS[v]?.some((c) => top.has(c)));
-  return onImage.length >= 4 ? onImage : VERBS;
+  const allowed = VERBS.filter((v) => !banned.has(v));
+  const onImage = allowed.filter((v) => VERB_CLUSTERS[v]?.some((c) => top.has(c)));
+  return onImage.length >= 4 ? onImage : allowed.length ? allowed : VERBS;
 }
 
 /**
  * Image-coherence score (0..1): of the imagery-bank nouns that actually surfaced in
- * `lines`, the fraction belonging to the song's top-ranked cluster(s) — a stronger
- * signal than a theme-keyword mention (eval.ts's "thematic coherence"), because it
- * measures whether the words that landed share one visual register instead of
- * scattering across unrelated ones. Vacuously 1 (nothing to fault) when fewer than
- * 3 bank nouns appear — a thin/on-theme brief that barely touched the backfill
- * bank isn't incoherent, and 1-2 words is too small a sample for the ratio to mean
- * anything (a single incidental word would swing the score to 0 or 1).
+ * `lines`, the fraction belonging to one of the song's scoring cluster(s) — a
+ * stronger signal than a theme-keyword mention (eval.ts's "thematic coherence"),
+ * because it measures whether the words that landed share the song's visual
+ * register instead of scattering into clusters the theme never touched. Uses
+ * the SAME cluster set `imageryNouns()` actually draws from (every cluster with
+ * a nonzero signal score, not an arbitrary top-N) — scoring against a narrower
+ * window than the generator itself uses would flag words the generator considers
+ * perfectly on-theme. Vacuously 1 (nothing to fault) when fewer than 3 bank nouns
+ * appear — a thin/on-theme brief that barely touched the backfill bank isn't
+ * incoherent, and 1-2 words is too small a sample for the ratio to mean anything.
  */
 export function imageryCoherence(lines: string[], inputs: SongInputs): number {
-  const top = new Set(themeImagery(inputs).slice(0, 2));
+  const top = new Set(themeImagery(inputs));
   const clusterOf = new Map<string, string>();
   for (const [cluster, nouns] of Object.entries(NOUN_BANK)) for (const n of nouns) clusterOf.set(n, cluster);
   const words = lines.join(' ').toLowerCase().split(/[^a-z]+/).filter(Boolean);
@@ -248,7 +256,25 @@ const REFLECT_LINES = [
   'somewhere in the {noun} I found the {rhyme}',
 ];
 
-interface VerseOpts { pool: string[]; thread: string[]; used: Set<string>; temp: RhymeTemp; anchorIdx: number; }
+/** True if a frame's own fixed wording contains an avoid-word/phrase (e.g. "no turning
+ *  back" is baked into a TURN_LINES template, not a fillable slot — the only way to
+ *  keep a banned phrase out of a line is to drop the frame itself from the pool). */
+function hasBanned(text: string, banned: Set<string>): boolean {
+  if (!banned.size) return false;
+  // strip punctuation first — "no turning back, I want..." must still match "no
+  // turning back" even though a comma (not a space) follows the phrase.
+  const t = ' ' + text.toLowerCase().replace(/[.,!?;:'"()]/g, ' ') + ' ';
+  for (const b of banned) if (t.includes(' ' + b + ' ')) return true;
+  return false;
+}
+
+/** Drops frames whose fixed wording hits an avoid-word/phrase; never starves the pool. */
+function filterFrames(pool: string[], banned: Set<string>): string[] {
+  const kept = pool.filter((f) => !hasBanned(f, banned));
+  return kept.length ? kept : pool;
+}
+
+interface VerseOpts { pool: string[]; thread: string[]; used: Set<string>; temp: RhymeTemp; anchorIdx: number; banned: Set<string>; }
 
 // pick a frame not already used elsewhere in the song (diversity guard), falling
 // back to the whole pool once exhausted; records the choice so it isn't reused.
@@ -263,30 +289,30 @@ function pickFresh(pool: string[], used: Set<string>, rng: () => number): string
 // ending on two different-but-rhyming lexicon words. Threads a theme word through
 // the opening line so sections stay about the same thing. Deterministic per rng.
 function buildRhymedVerse(inputs: SongInputs, rng: () => number, valence: number, couplets: number, opts: VerseOpts): string[] {
-  const { pool, thread, used, temp, anchorIdx } = opts;
+  const { pool, thread, used, temp, anchorIdx, banned } = opts;
   const lines: string[] = [];
   for (let c = 0; c < couplets; c++) {
-    const fam = rhymeFamily(rng, valence, 2, temp);
+    const fam = rhymeFamily(rng, valence, 2, temp, banned);
     const a = fam[0]?.w ?? 'road';
     const b = fam[1]?.w ?? 'gold';
     const t1 = pickFresh(pool, used, rng);
     const t2 = pickFresh(pool.filter((x) => x !== t1), used, rng);
     const anchor = thread.length ? thread[(anchorIdx + c) % thread.length] : '';
-    lines.push(capitalize(fill(t1, inputs, rng, a, valence, c === 0 ? anchor : '')));
-    lines.push(capitalize(fill(t2, inputs, rng, b, valence, '')));
+    lines.push(capitalize(fill(t1, inputs, rng, a, valence, c === 0 ? anchor : '', banned)));
+    lines.push(capitalize(fill(t2, inputs, rng, b, valence, '', banned)));
   }
   return dedupe(lines);
 }
 
-function fill(frame: string, inputs: SongInputs, rng: () => number, rhyme = '', valence = 0, anchor = ''): string {
+function fill(frame: string, inputs: SongInputs, rng: () => number, rhyme = '', valence = 0, anchor = '', banned: Set<string> = new Set()): string {
   // nouns come from the theme + references (the "what"); mood drives adjectives
   // separately (adjPool), so keeping it out of the noun slots reads more grammatically.
   // Real concrete nouns only (theme words that pass `nounable`, padded from the bank),
   // shuffled + consumed in order so a line never repeats a filler and never slots a
   // verb/adjective ("handed me GROWING") into a noun position.
-  const nouns = shuffle(nounPool(inputs, rng), rng);
-  const verbs = shuffle(verbPool(inputs), rng);
-  const adjs = shuffle(adjPool(valence), rng);   // emotion → diction: adjectives lean with the mood
+  const nouns = shuffle(nounPool(inputs, rng, banned), rng);
+  const verbs = shuffle(verbPool(inputs, banned), rng);
+  const adjs = shuffle(adjPool(valence, banned), rng);   // emotion → diction: adjectives lean with the mood
   let ni = 0, vi = 0, ai = 0;
   // thematic threading: the first noun-type slot uses the section's anchor word (a
   // theme keyword), so the same idea recurs across sections instead of drifting.
@@ -321,12 +347,13 @@ export const mockLyricsProvider: LyricsProvider = {
   id: 'mock-lyrics',
   live: false,
 
-  async generateHooks(inputs, count, seed = 0) {
+  async generateHooks(inputs, count, seed = 0, bannedWords = []) {
+    const banned = new Set(bannedWords.map((w) => w.toLowerCase()));
     const rng = makeRng(seedOf(inputs, 'hooks', seed));
-    const frames = shuffle(HOOK_FRAMES, rng);
+    const frames = shuffle(filterFrames(HOOK_FRAMES, banned), rng);
     const out: HookOption[] = [];
     for (let i = 0; i < count && i < frames.length; i++) {
-      const text = capitalize(fill(frames[i], inputs, rng));
+      const text = capitalize(fill(frames[i], inputs, rng, '', 0, '', banned));
       const len = text.split(/\s+/).length;
       out.push({
         text,
@@ -341,7 +368,8 @@ export const mockLyricsProvider: LyricsProvider = {
     return out;
   },
 
-  async generateSections(inputs, hook, seed = 0) {
+  async generateSections(inputs, hook, seed = 0, bannedWords = []) {
+    const banned = new Set(bannedWords.map((w) => w.toLowerCase()));
     const rng = makeRng(seedOf(inputs, 'verse', seed));
     // the limbic layer sets the emotional valence → rhyme words + adjectives lean with it
     const valence = deriveEmotion(inputs).valence;
@@ -350,16 +378,16 @@ export const mockLyricsProvider: LyricsProvider = {
     // one idea; the diversity guard stops any frame template being reused song-wide.
     // anchor words carried across sections must be real, DISTINCT nouns — on-theme first,
     // padded from the concrete bank so a thin theme (1 usable noun) doesn't repeat it every verse.
-    const thread = [...themeNouns(inputs), ...imageryNouns(inputs, rng)].slice(0, 3);
+    const thread = [...themeNouns(inputs).filter((n) => !banned.has(n.toLowerCase())), ...imageryNouns(inputs, rng, banned)].slice(0, 3);
     const used = new Set<string>();
     // hierarchical generation: each verse pursues its section goal (setup → turn → reflect)
-    const v1 = buildRhymedVerse(inputs, rng, valence, 2, { pool: SETUP_LINES, thread, used, temp, anchorIdx: 0 });
-    const v2 = buildRhymedVerse(inputs, rng, valence, 2, { pool: TURN_LINES, thread, used, temp, anchorIdx: 1 });
-    const bridge = buildRhymedVerse(inputs, rng, valence, 1, { pool: REFLECT_LINES, thread, used, temp, anchorIdx: 2 });
-    const hookLines = [hook.text, hook.text, secondHookLine(inputs, rng), hook.text];
+    const v1 = buildRhymedVerse(inputs, rng, valence, 2, { pool: filterFrames(SETUP_LINES, banned), thread, used, temp, anchorIdx: 0, banned });
+    const v2 = buildRhymedVerse(inputs, rng, valence, 2, { pool: filterFrames(TURN_LINES, banned), thread, used, temp, anchorIdx: 1, banned });
+    const bridge = buildRhymedVerse(inputs, rng, valence, 1, { pool: filterFrames(REFLECT_LINES, banned), thread, used, temp, anchorIdx: 2, banned });
+    const hookLines = [hook.text, hook.text, secondHookLine(inputs, rng, banned), hook.text];
 
     const full: SongSection[] = [
-      { label: 'Intro', lines: [capitalize(fill('{who}, this one\'s for you', inputs, rng))] },
+      { label: 'Intro', lines: [capitalize(fill('{who}, this one\'s for you', inputs, rng, '', 0, '', banned))] },
       { label: 'Hook', lines: hookLines },
       { label: 'Verse 1', lines: v1 },
       { label: 'Hook', lines: hookLines },
@@ -383,8 +411,9 @@ export const mockLyricsProvider: LyricsProvider = {
   },
 };
 
-function secondHookLine(inputs: SongInputs, rng: () => number): string {
-  return capitalize(fill(pick(['and {who} know I {verb} for it', 'all this {noun}, I earned it slow'], rng), inputs, rng));
+function secondHookLine(inputs: SongInputs, rng: () => number, banned: Set<string> = new Set()): string {
+  const frames = filterFrames(['and {who} know I {verb} for it', 'all this {noun}, I earned it slow'], banned);
+  return capitalize(fill(pick(frames, rng), inputs, rng, '', 0, '', banned));
 }
 
 function capitalize(s: string): string {
