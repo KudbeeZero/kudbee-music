@@ -241,7 +241,7 @@ To use your own track in the video studio: drop `song/track.mp3`, your lyrics in
 **Test everything:**
 ```bash
 npm test        # video studio — brain dial + scene-pack contract
-npm run test:web   # Hit Factory engine — 36 tests
+npm run test:web   # Hit Factory engine (vitest — 280+ tests)
 ```
 
 ---

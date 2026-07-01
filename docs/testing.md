@@ -44,3 +44,12 @@ npx localtunnel --port 3000                            # -> https://<random>.loc
 ---
 **Recommended:** Vercel (#1) for a stable link you can revisit and share; Codespaces
 (#2) if you don't want to install anything.
+
+---
+## Notes from a sandboxed/proxied environment
+- **Serving the static export:** the landing hero videos need HTTP **Range** support to
+  scrub — use `npx serve out` (or any Range-capable server). `python -m http.server`
+  sends no `Accept-Ranges` and the scrub silently no-ops (the page still works).
+- **ffmpeg for the video studio:** if `ffmpeg-static`'s postinstall download is blocked
+  by a proxy, `npm i --no-save @ffmpeg-installer/ffmpeg @ffprobe-installer/ffprobe`
+  works (binaries ship inside the npm packages) — symlink them into `.bin/`.

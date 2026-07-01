@@ -168,6 +168,8 @@ export interface SongPackage {
   agentOutputs: AgentOutput[];
   /** The dual-process decision behind the chosen hook (first→second thought→verdict). */
   cognition?: Deliberation | null;
+  /** The regeneration nonce this package was minted with — lets the trace replay honestly. */
+  seed?: number;
 }
 
 /** A key naming which reflective challenge a critique represents — stable across runs. */
