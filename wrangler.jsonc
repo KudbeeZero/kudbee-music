@@ -1,15 +1,14 @@
 {
-  // Cloudflare Workers (Static Assets) config for the Hit Factory web app.
-  // The app is a fully static Next.js export (STATIC_EXPORT=1 npm run web:build → ./out),
-  // so this is an assets-only Worker — no server script needed.
+  // Cloudflare Pages config for the Hit Factory web app. The app is a fully static
+  // Next.js export (STATIC_EXPORT=1 npm run web:build → ./out).
   //
-  // In the Cloudflare Workers/Pages project settings, set:
-  //   Build command:   STATIC_EXPORT=1 npm run web:build
-  //   Deploy command:  npx wrangler deploy
-  //   NODE_VERSION:    22
+  // In the Cloudflare Pages project settings, set:
+  //   Framework preset:        React Static (or None)
+  //   Build command:           STATIC_EXPORT=1 npm run web:build
+  //   Build output directory:  out
+  //   Environment variable:    NODE_VERSION = 22
   // Do NOT let it run the repo's default `npm run build` — that's the ffmpeg VIDEO
   // pipeline and will fail on a web host.
   "name": "kudbee-music",
-  "compatibility_date": "2024-11-01",
-  "assets": { "directory": "./out" }
+  "pages_build_output_dir": "./out"
 }
