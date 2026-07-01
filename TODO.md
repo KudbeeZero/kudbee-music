@@ -101,6 +101,12 @@ Board** governance / Solana / token / NFT layer integrates with this engine via 
 later (kept out of this repo's core so it stays free + local).
 
 ## ✅ Shipped (newest first)
+- [x] **Vector memory + semantic search (opt-in, $0/local)** — `lib/hermes/vectorMemory.ts`:
+      a local semantic-recall layer on top of the rule/lexicon systems. `@xenova/transformers`
+      is an **optional lazy dep** (core install + CI stay light; enable with `npm i
+      @xenova/transformers`); the pure cosine-search core is unit-tested without the model.
+      `addMemory`/`semanticSearch` + type filtering + a gitignored store. Wiring into
+      learn/originality/procedural is the next step. _(#47)_
 - [x] **Create-your-own-artist v1 + Story Mode** — `lib/hermes/artist.ts` grows an identity
       (alias, signature words, hemisphere, chapter, bio) from your vault+taste; `lib/hermes/story.ts`
       unlocks chapters (First Spark → Finding Your Voice → First Banger → The Album) as the brain
