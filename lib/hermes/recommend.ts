@@ -7,9 +7,10 @@ import type { ArtistProfile } from './learn';
 import type { Taste } from './storage';
 import { MEMORY } from './memory';
 import { EXPANSION_PACKS } from './expansionPacks';
+import { proceduralMemory } from './procedural';
 
 export type RecommendationKind =
-  | 'emotional-direction' | 'style' | 'exclusion' | 'album' | 'craft' | 'expansion';
+  | 'emotional-direction' | 'style' | 'exclusion' | 'album' | 'craft' | 'expansion' | 'procedural';
 
 export interface Recommendation {
   kind: RecommendationKind;
@@ -21,6 +22,16 @@ export interface Recommendation {
 
 export function recommend(profile: ArtistProfile, songs: SongPackage[], taste?: Taste): Recommendation[] {
   const recs: Recommendation[] = [];
+
+  // procedural memory: the artist's recurring craft moves (lean in, or break it)
+  if (songs.length >= 2) {
+    const proc = proceduralMemory(songs);
+    recs.push({
+      kind: 'procedural',
+      title: 'Your signature move',
+      detail: `${proc.signatureMove} Lean into it for cohesion — or break the pattern on the next one for a standout.`,
+    });
+  }
 
   // learned-from-edits: a word the writer keeps CUTTING is a real exclusion signal
   if (taste && taste.edits > 0) {
