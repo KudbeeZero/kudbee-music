@@ -157,7 +157,19 @@ contribution loop are the seeds of this.
 
 ## 🧬 Brain / engine
 - ✏️ **Rhyme architect + syllabic constraint layer** (framework Part 2) — real rhyme
-  scheme + meter in the generation engine.
+  scheme + meter in the generation engine. **Founder addition (2026-07-01, after
+  generating "Second Wind"):** study how real songs are actually built (rhyme
+  schemes beyond AABB, internal/multisyllabic rhyme, genre-typical flow patterns),
+  then feed that into three concrete upgrades — (1) a **thesaurus/synonym-expansion**
+  layer so word choice isn't limited to the fixed lexicon/noun-bank (broader,
+  less-repetitive vocabulary per line); (2) **syllable + rhythmic-pattern awareness**
+  in generation, not just at the end-rhyme (`lexicon.ts` already has `syllableCount` —
+  extend it to fit whole lines to a target cadence); (3) let the **artist pick a
+  lyric-generation style/rhythm** in the Song Lab UI (e.g. tight/loose flow, dense vs.
+  sparse rhyme, different genre-typical patterns) rather than one fixed combinator
+  voice. Candidate home: `lib/hermes/rhyme.ts` + `lexicon.ts` for the engine work,
+  `SongLabForm`/`LyricLab` for the style picker. Natural next step after the
+  image-coherence + verb/noun agreement pass (#74).
 - ✏️ **Real LLM provider** behind the adapter (opt-in, behind a key; mock stays default).
 - 💭 **Influence Studio** — describe a feel → thematic cartography + architectural
   blueprint → craft parameters (original-only).
