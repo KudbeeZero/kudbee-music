@@ -208,11 +208,10 @@ A second-opinion review flagged real risks worth acting on (truth-first):
   over the SVG brain + a thermal heat-map (`lib/hermes/heat.ts`) coloring regions by the type
   of artist you are; header shows artist type + brain temp. Reduced-motion aware. Feeds the
   Living-Brain dNFT. _(#40)_
-- 💭 **Pro Studio Rack** *(founder idea — "make it look like a professional stack / Pro Tools")* —
-  a DAW-style **rack** where each lyrical engine/agent is a swappable, **upgradeable** "digital box"
-  (free Local Combinator + locked Claude / Lightning "upgrade" slots), built on the existing
-  `LyricsProvider` adapter seam + the "advance your model" tier. $0 rack UI + free unit now;
-  premium units founder-gated (keys/servers). (roadmap 3.3)
+- ✅ **Pro Studio Rack** *(founder idea)* — shipped: a DAW-style "🎛️ Engine Rack"
+  (`components/hermes/Rack.tsx` + `lib/hermes/engines.ts`) — free Local Combinator active +
+  locked Claude/Lightning upgrade slots on the `LyricsProvider` seam. Premium units unlock
+  when the founder connects keys/servers. _(#48)_
 - 💭 **HERMES Studio workspace** *(founder idea — "look at Suno's Studio")* — a Suno-Studio-style
   pro workspace: a section/arrangement **timeline** (the song's [Intro]/[Verse]/[Hook] as clips we
   already parse) + the engine **rack** + the **Brain Scan as the meter bridge**. $0 read-only

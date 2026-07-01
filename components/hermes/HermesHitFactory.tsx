@@ -21,6 +21,7 @@ import UniquenessReportView from './UniquenessReport';
 import VaultDrawer from './VaultDrawer';
 import RecommendationsPanel from './RecommendationsPanel';
 import ArtistCard from './ArtistCard';
+import Rack from './Rack';
 import AlbumView from './AlbumView';
 import LyricLab from './LyricLab';
 import BrainScan from './BrainScan';
@@ -257,6 +258,7 @@ export default function HermesHitFactory() {
           </div>
 
           <ArtistCard songs={vault} taste={taste} becomingYou={becomingYou} />
+          <Rack />
           <RecommendationsPanel songs={vault} taste={taste} onAddExclusion={addExclusion} onApplyPack={applyPack} />
         </div>
 

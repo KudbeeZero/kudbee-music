@@ -101,6 +101,10 @@ Board** governance / Solana / token / NFT layer integrates with this engine via 
 later (kept out of this repo's core so it stays free + local).
 
 ## ✅ Shipped (newest first)
+- [x] **Pro Studio Rack** — `components/hermes/Rack.tsx` + `lib/hermes/engines.ts`: a DAW-style
+      "🎛️ Engine Rack" — the free Local Combinator active, locked Claude/Lightning upgrade
+      slots on the LyricsProvider seam (the professional-stack vision; premium units unlock
+      with a key/server). _(#48)_
 - [x] **Vector memory + semantic search (opt-in, $0/local)** — `lib/hermes/vectorMemory.ts`:
       a local semantic-recall layer on top of the rule/lexicon systems. `@xenova/transformers`
       is an **optional lazy dep** (core install + CI stay light; enable with `npm i
