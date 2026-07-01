@@ -18,8 +18,8 @@ _Nothing actively in flight — pick the next item from **Up next**._
 2. [x] **Rhyme + meter engine** — `lib/hermes/rhyme.ts`: end-rhyme/scheme/density +
    lexicon rhyme families; the combinator now writes **rhymed couplets**, and hook
    scoring is honest (brevity + theme reference + internal rhyme, not length+RNG). _(shipped)_
-3. [ ] **Emotion → diction** — the limbic layer colors word/imagery choice via the
-   lexicon's affect tags.
+3. [x] **Emotion → diction** — the limbic valence now picks the rhyme words + adjective
+   pool (dark vs bright), so word choice leans with the mood. _(shipped)_
 4. [ ] **Default-Mode Network** — a "creativity-at-rest" region that surfaces original
    angles, coupled to the analytical layer (research: causal role in originality).
 5. [ ] **Reward circuit** — model hook "crave-ability" / drive.

@@ -7,6 +7,7 @@ import type { LyricsProvider } from './providerTypes';
 import type { SongInputs, HookOption, SongSection } from '../types';
 import { makeRng, hashString, pick, keywords, titleCase, shuffle, tidyLine } from '../text';
 import { rhymeFamily } from '../rhyme';
+import { deriveEmotion } from '../emotion';
 
 function seedOf(inputs: SongInputs, salt = '', seed = 0): number {
   return hashString(
@@ -26,7 +27,13 @@ const HOOK_FRAMES = [
 ];
 
 const VERBS = ['climb', 'carry', 'build', 'fight', 'hold on', 'keep moving', 'pray', 'grind', 'crawl', 'rebuild', 'reach', 'hustle', 'survive', 'push'];
-const ADJ = ['cold', 'quiet', 'heavy', 'restless', 'patient', 'stubborn', 'grounded', 'hollow', 'guarded', 'weathered', 'relentless', 'distant'];
+// adjectives split by affect — the limbic layer picks the pool that matches the mood
+const ADJ_DARK = ['cold', 'quiet', 'heavy', 'restless', 'hollow', 'guarded', 'weathered', 'distant', 'stubborn', 'bitter'];
+const ADJ_BRIGHT = ['golden', 'fearless', 'patient', 'steady', 'open', 'grateful', 'relentless', 'grounded', 'bright', 'awake'];
+const ADJ_ALL = [...ADJ_DARK, ...ADJ_BRIGHT];
+function adjPool(valence: number): string[] {
+  return valence < -0.2 ? ADJ_DARK : valence > 0.2 ? ADJ_BRIGHT : ADJ_ALL;
+}
 
 // words that read badly in a noun slot ("where the OUT used to be") — keep them
 // out of the {noun}/{k} pool so the combinator stays grammatical.
@@ -58,19 +65,19 @@ function buildRhymedVerse(inputs: SongInputs, rng: () => number, valence: number
     const b = fam[1]?.w ?? 'gold';
     const t1 = pick(COUPLET_LINES, rng);
     const t2 = pick(COUPLET_LINES.filter((x) => x !== t1), rng);
-    lines.push(capitalize(fill(t1, inputs, rng, a)));
-    lines.push(capitalize(fill(t2, inputs, rng, b)));
+    lines.push(capitalize(fill(t1, inputs, rng, a, valence)));
+    lines.push(capitalize(fill(t2, inputs, rng, b, valence)));
   }
   return dedupe(lines);
 }
 
-function fill(frame: string, inputs: SongInputs, rng: () => number, rhyme = ''): string {
+function fill(frame: string, inputs: SongInputs, rng: () => number, rhyme = '', valence = 0): string {
   const ks = keywords([inputs.theme, inputs.mood, inputs.references].join(' ')).filter((k) => !NOUN_STOP.has(k));
   // shuffled pools, consumed in order, so a single line never repeats the same
   // filler word ("the road and the road") — distinct, grammatical output.
   const nouns = shuffle(ks.length ? ks : ['block', 'name', 'road', 'weight', 'city', 'street'], rng);
   const verbs = shuffle(VERBS, rng);
-  const adjs = shuffle(ADJ, rng);
+  const adjs = shuffle(adjPool(valence), rng);   // emotion → diction: adjectives lean with the mood
   let ni = 0, vi = 0, ai = 0;
   // pick a meaningful audience word — skip leading articles ("the lonely" -> "lonely")
   const WHO_STOP = new Set(['the', 'a', 'an', 'my', 'for', 'to', 'of', 'all']);
@@ -123,10 +130,8 @@ export const mockLyricsProvider: LyricsProvider = {
 
   async generateSections(inputs, hook, seed = 0) {
     const rng = makeRng(seedOf(inputs, 'verse', seed));
-    // a light valence read so the rhyme words lean with the mood (dark vs bright)
-    const blob = `${inputs.mood} ${inputs.theme}`.toLowerCase();
-    const valence = /(dark|cold|hard|sad|pain|lonely|angry|aggress|grief|hurt|broke)/.test(blob) ? -0.5
-      : /(hope|joy|love|bright|triumph|proud|warm|heal|rise)/.test(blob) ? 0.5 : 0;
+    // the limbic layer sets the emotional valence → rhyme words + adjectives lean with it
+    const valence = deriveEmotion(inputs).valence;
     // rhymed couplets — verses now land real end-rhymes (built on the lexicon)
     const v1 = buildRhymedVerse(inputs, rng, valence, 2);
     const v2 = buildRhymedVerse(inputs, rng, valence, 2);
