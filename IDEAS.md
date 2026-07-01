@@ -173,10 +173,13 @@ A second-opinion review flagged real risks worth acting on (truth-first):
   showing what all 11 regions contributed (limbic read, reward crave score, rhyme
   scheme/density, originality, A&R verdict). Reproducible via `GEN_DEMOS=1 npx vitest run
   trace`; linked from the README proof table. `lib/hermes/trace.ts` + tests. _(this PR)_
-- 💭 **Deepen the deterministic core** — hierarchical generation (structure → section
-  goal → line constraints), **thematic threading** across sections, and **diversity
-  scoring** so a song avoids repeating its own patterns; expose a **slant/near-rhyme
-  "temperature"** knob. Biggest lyric-quality lever without an LLM.
+- ✅ **Deepen the deterministic core** — shipped: **hierarchical generation** (each verse
+  pursues a section goal — setup → turn → reflect — from its own frame pool), **thematic
+  threading** (theme words anchored across sections so the song develops one idea),
+  **diversity guard + scoring** (`selfSimilarity` in `text.ts`, wired into replay value;
+  a song-wide guard stops any frame being reused), and a **slant/near-rhyme "temperature"**
+  knob (`rhymeTemp` tight↔loose, `slantKey` families, a Rhyme selector in the Song Lab).
+  Still $0/local/deterministic. _(this PR)_
 - 💭 **Eval harness + golden songs** — automated scoring (rhyme density, repetition,
   section coherence) over a fixed set, so "learn"/"scoring" claims are measurable.
 - 💭 **Output safety filter** — screen generated hooks against famous phrases; add a

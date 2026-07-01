@@ -37,6 +37,7 @@ export interface SongInputs {
   references: string;  // inspirations, described — never copied
   structure: SongStructure;
   culture?: string;    // where you're from / what shaped you — your OWN background, as craft
+  rhymeTemp?: 'tight' | 'balanced' | 'loose';  // rhyme strictness dial (perfect ↔ slant); default balanced
 }
 
 /** Static metadata describing an agent (its job), independent of any run. */

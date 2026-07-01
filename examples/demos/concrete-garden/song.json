@@ -75,10 +75,10 @@
     {
       "label": "Verse 1",
       "lines": [
-        "Learned to love the bright train",
-        "I bet it all on the brain",
-        "Still fight my way up out the light",
-        "Nobody ever handed me the sight"
+        "They handed me growing instead of the train",
+        "Nothing in my hands but supposed and the brain",
+        "It started with the was and the light",
+        "Came up on was, dreaming of the sight"
       ]
     },
     {
@@ -93,17 +93,17 @@
     {
       "label": "Verse 2",
       "lines": [
-        "No map, no plan, just the mark",
-        "I keep it close, the steady spark",
-        "I bet it all on the train",
-        "Everything I lost became the brain"
+        "No turning back, I want the something and the mark",
+        "Now I hustle the beautiful into the spark",
+        "Put the supposed down, reaching for the train",
+        "Took that growing and turned it to a brain"
       ]
     },
     {
       "label": "Bridge",
       "lines": [
-        "They ask me why I need the fire",
-        "Nobody ever handed me the desire"
+        "Made my peace with beautiful and the fire",
+        "Every growing of mine became a desire"
       ]
     },
     {
@@ -116,7 +116,7 @@
       ]
     }
   ],
-  "finalLyrics": "[Intro]\nBlock, this one's for you\n\n[Hook]\nStill standing where the growing used to be\nStill standing where the growing used to be\nAnd block know I survive for it\nStill standing where the growing used to be\n\n[Verse 1]\nLearned to love the bright train\nI bet it all on the brain\nStill fight my way up out the light\nNobody ever handed me the sight\n\n[Hook]\nStill standing where the growing used to be\nStill standing where the growing used to be\nAnd block know I survive for it\nStill standing where the growing used to be\n\n[Verse 2]\nNo map, no plan, just the mark\nI keep it close, the steady spark\nI bet it all on the train\nEverything I lost became the brain\n\n[Bridge]\nThey ask me why I need the fire\nNobody ever handed me the desire\n\n[Hook]\nStill standing where the growing used to be\nStill standing where the growing used to be\nAnd block know I survive for it\nStill standing where the growing used to be",
+  "finalLyrics": "[Intro]\nBlock, this one's for you\n\n[Hook]\nStill standing where the growing used to be\nStill standing where the growing used to be\nAnd block know I survive for it\nStill standing where the growing used to be\n\n[Verse 1]\nThey handed me growing instead of the train\nNothing in my hands but supposed and the brain\nIt started with the was and the light\nCame up on was, dreaming of the sight\n\n[Hook]\nStill standing where the growing used to be\nStill standing where the growing used to be\nAnd block know I survive for it\nStill standing where the growing used to be\n\n[Verse 2]\nNo turning back, I want the something and the mark\nNow I hustle the beautiful into the spark\nPut the supposed down, reaching for the train\nTook that growing and turned it to a brain\n\n[Bridge]\nMade my peace with beautiful and the fire\nEvery growing of mine became a desire\n\n[Hook]\nStill standing where the growing used to be\nStill standing where the growing used to be\nAnd block know I survive for it\nStill standing where the growing used to be",
   "production": {
     "tempoBpm": 92,
     "drums": "minimal knock, heavy kick",
@@ -175,25 +175,36 @@
       "startHint": "verse 1, bar 1",
       "durationSec": 12,
       "caption": "the story starts here 👀",
-      "hookLine": "Learned to love the bright train"
+      "hookLine": "They handed me growing instead of the train"
     },
     {
       "label": "Bridge turn",
       "startHint": "bridge",
       "durationSec": 18,
       "caption": "wait for it…",
-      "hookLine": "They ask me why I need the fire"
+      "hookLine": "Made my peace with beautiful and the fire"
     }
   ],
   "promoCaption": "“Still standing where the growing used to be” — new one for the block. #growing #something #boom-baphip-hop",
   "uniqueness": {
-    "score": 100,
+    "score": 98,
     "flags": [
       {
         "kind": "banned-word",
         "detail": "avoid-word \"fire\"",
-        "line": "They ask me why I need the fire",
+        "line": "Made my peace with beautiful and the fire",
         "suggestion": "the heat"
+      },
+      {
+        "kind": "banned-word",
+        "detail": "avoid-word \"every\"",
+        "line": "Every growing of mine became a desire"
+      },
+      {
+        "kind": "banned-word",
+        "detail": "avoid-word \"dreaming\"",
+        "line": "Came up on was, dreaming of the sight",
+        "suggestion": "planning"
       },
       {
         "kind": "repeated-hook",
@@ -207,32 +218,38 @@
       "113f25d1",
       "ada77621",
       "113f25d1",
-      "568949b6",
-      "bece4b9f",
-      "7111ab5a",
-      "c962d4ce",
+      "f2fc64fa",
+      "8f487671",
+      "f219837f",
+      "78245a1c",
       "113f25d1",
       "113f25d1",
       "ada77621",
       "113f25d1",
-      "33accd30",
-      "ffebd580",
-      "ae77a40d",
-      "d9c2c159",
-      "b5131378",
-      "4e87ea3",
+      "d54520b1",
+      "6cb873d5",
+      "2642b58b",
+      "9006bc1a",
+      "21c10f3b",
+      "54a065ab",
       "113f25d1",
       "113f25d1",
       "ada77621",
       "113f25d1"
     ],
     "bannedWordsHit": [
-      "fire"
+      "fire",
+      "every",
+      "dreaming"
     ],
     "rewriteSuggestions": [
       {
-        "line": "They ask me why I need the fire",
+        "line": "Made my peace with beautiful and the fire",
         "suggestion": "try \"the heat\" instead of \"fire\""
+      },
+      {
+        "line": "Came up on was, dreaming of the sight",
+        "suggestion": "try \"planning\" instead of \"dreaming\""
       }
     ]
   },
@@ -243,8 +260,8 @@
     "replayValue": 13,
     "visualIdentity": 10,
     "shortFormPotential": 10,
-    "releaseReadiness": 5,
-    "total": 98,
+    "releaseReadiness": 4,
+    "total": 97,
     "verdict": "Certified banger — ship it."
   },
   "release": [
@@ -269,7 +286,7 @@
     {
       "label": "Avoid-words reviewed",
       "ok": false,
-      "note": "1 avoid-word(s) present (warning only)"
+      "note": "3 avoid-word(s) present (warning only)"
     },
     {
       "label": "Ownership clear",
@@ -382,10 +399,10 @@
           {
             "label": "Verse 1",
             "lines": [
-              "Learned to love the bright train",
-              "I bet it all on the brain",
-              "Still fight my way up out the light",
-              "Nobody ever handed me the sight"
+              "They handed me growing instead of the train",
+              "Nothing in my hands but supposed and the brain",
+              "It started with the was and the light",
+              "Came up on was, dreaming of the sight"
             ]
           },
           {
@@ -400,17 +417,17 @@
           {
             "label": "Verse 2",
             "lines": [
-              "No map, no plan, just the mark",
-              "I keep it close, the steady spark",
-              "I bet it all on the train",
-              "Everything I lost became the brain"
+              "No turning back, I want the something and the mark",
+              "Now I hustle the beautiful into the spark",
+              "Put the supposed down, reaching for the train",
+              "Took that growing and turned it to a brain"
             ]
           },
           {
             "label": "Bridge",
             "lines": [
-              "They ask me why I need the fire",
-              "Nobody ever handed me the desire"
+              "Made my peace with beautiful and the fire",
+              "Every growing of mine became a desire"
             ]
           },
           {
@@ -508,22 +525,35 @@
       "id": "originality-auditor",
       "name": "Originality Auditor",
       "status": "done",
-      "finding": "Uniqueness 100/100 · 2 flag(s).",
+      "finding": "Uniqueness 98/100 · 4 flag(s).",
       "confidence": 90,
       "warnings": [
         "avoid-word \"fire\"",
+        "avoid-word \"every\"",
+        "avoid-word \"dreaming\"",
         "hook line repeats 9× — consider varying one word"
       ],
       "suggestedNextAction": "Apply suggested rewrites before release.",
       "data": {
         "uniqueness": {
-          "score": 100,
+          "score": 98,
           "flags": [
             {
               "kind": "banned-word",
               "detail": "avoid-word \"fire\"",
-              "line": "They ask me why I need the fire",
+              "line": "Made my peace with beautiful and the fire",
               "suggestion": "the heat"
+            },
+            {
+              "kind": "banned-word",
+              "detail": "avoid-word \"every\"",
+              "line": "Every growing of mine became a desire"
+            },
+            {
+              "kind": "banned-word",
+              "detail": "avoid-word \"dreaming\"",
+              "line": "Came up on was, dreaming of the sight",
+              "suggestion": "planning"
             },
             {
               "kind": "repeated-hook",
@@ -537,32 +567,38 @@
             "113f25d1",
             "ada77621",
             "113f25d1",
-            "568949b6",
-            "bece4b9f",
-            "7111ab5a",
-            "c962d4ce",
+            "f2fc64fa",
+            "8f487671",
+            "f219837f",
+            "78245a1c",
             "113f25d1",
             "113f25d1",
             "ada77621",
             "113f25d1",
-            "33accd30",
-            "ffebd580",
-            "ae77a40d",
-            "d9c2c159",
-            "b5131378",
-            "4e87ea3",
+            "d54520b1",
+            "6cb873d5",
+            "2642b58b",
+            "9006bc1a",
+            "21c10f3b",
+            "54a065ab",
             "113f25d1",
             "113f25d1",
             "ada77621",
             "113f25d1"
           ],
           "bannedWordsHit": [
-            "fire"
+            "fire",
+            "every",
+            "dreaming"
           ],
           "rewriteSuggestions": [
             {
-              "line": "They ask me why I need the fire",
+              "line": "Made my peace with beautiful and the fire",
               "suggestion": "try \"the heat\" instead of \"fire\""
+            },
+            {
+              "line": "Came up on was, dreaming of the sight",
+              "suggestion": "try \"planning\" instead of \"dreaming\""
             }
           ]
         }
@@ -617,14 +653,14 @@
             "startHint": "verse 1, bar 1",
             "durationSec": 12,
             "caption": "the story starts here 👀",
-            "hookLine": "Learned to love the bright train"
+            "hookLine": "They handed me growing instead of the train"
           },
           {
             "label": "Bridge turn",
             "startHint": "bridge",
             "durationSec": 18,
             "caption": "wait for it…",
-            "hookLine": "They ask me why I need the fire"
+            "hookLine": "Made my peace with beautiful and the fire"
           }
         ]
       }
@@ -633,7 +669,7 @@
       "id": "ar-judge",
       "name": "A&R Judge",
       "status": "done",
-      "finding": "Banger 98/100 · crave-ability 75/100 — Certified banger — ship it.",
+      "finding": "Banger 97/100 · crave-ability 75/100 — Certified banger — ship it.",
       "confidence": 82,
       "warnings": [],
       "suggestedNextAction": "Green-light.",
@@ -645,8 +681,8 @@
           "replayValue": 13,
           "visualIdentity": 10,
           "shortFormPotential": 10,
-          "releaseReadiness": 5,
-          "total": 98,
+          "releaseReadiness": 4,
+          "total": 97,
           "verdict": "Certified banger — ship it."
         },
         "crave": {
@@ -694,7 +730,7 @@
           {
             "label": "Avoid-words reviewed",
             "ok": false,
-            "note": "1 avoid-word(s) present (warning only)"
+            "note": "3 avoid-word(s) present (warning only)"
           },
           {
             "label": "Ownership clear",

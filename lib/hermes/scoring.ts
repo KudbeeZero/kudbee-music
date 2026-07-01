@@ -5,7 +5,7 @@ import type {
   SongInputs, SongSection,
 } from './types';
 import { hasInternalRhyme, rhymeDensity } from './rhyme';
-import { keywords } from './text';
+import { keywords, selfSimilarity } from './text';
 
 export interface ScoreInputs {
   inputs: SongInputs;
@@ -39,12 +39,16 @@ export function scoreSong(s: ScoreInputs): BangerScore {
   // originality 0–20 from the uniqueness score
   const originality = clampTo((s.uniqueness.score / 100) * 20, 20);
 
-  // replay value 0–15: structural variety + tightness + how much the lyrics rhyme
+  // replay value 0–15: structural variety + tightness + rhyme + line diversity.
+  // diversity = how much the WRITING avoids repeating its own line shapes (measured
+  // on verse/bridge lines, so a chorus repeating on purpose isn't penalized).
   const distinctSections = new Set(s.sections.map((x) => x.label.replace(/\s*\d+$/, ''))).size;
   const variety = Math.min(1, distinctSections / 5);
   const tightness = lineCount >= 8 && lineCount <= 40 ? 1 : 0.6;
   const rhyme = rhymeDensity(s.sections.flatMap((x) => x.lines));
-  const replayValue = clampTo((brevity * 0.35 + variety * 0.25 + tightness * 0.15 + rhyme * 0.25) * 15, 15);
+  const verseLines = s.sections.filter((x) => !/hook|chorus|intro|outro/i.test(x.label)).flatMap((x) => x.lines);
+  const diversity = 1 - selfSimilarity(verseLines);
+  const replayValue = clampTo((brevity * 0.3 + variety * 0.2 + tightness * 0.1 + rhyme * 0.2 + diversity * 0.2) * 15, 15);
 
   // visual identity 0–10
   const hasVisuals = s.visuals.albumCoverPrompt && s.visuals.musicVideoPrompt ? 1 : 0.4;

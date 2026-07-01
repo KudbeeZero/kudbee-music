@@ -18,8 +18,8 @@
 | **Generative (right hemisphere)** | Wrote the hook from 5 candidates → “This one's for the games that raised me”. |
 | **Analytical (left hemisphere)** | Rhyme scheme AAAA, density 100% across the verse; beat/BPM sanity checks. |
 | **Reward circuit** | Crave-ability 76/100 (returns 1, mutation 0.5, brevity 0.75, singability 0.73) — Compulsive — you'll want it again. |
-| **Decision (corpus callosum)** | A&R verdict: Certified banger — ship it. (97/100). The artist gets the final choice. |
-| **Long-term memory** | Originality checked against the vault → 100/100 (2 flags). |
+| **Decision (corpus callosum)** | A&R verdict: Certified banger — ship it. (98/100). The artist gets the final choice. |
+| **Long-term memory** | Originality checked against the vault → 99/100 (3 flags). |
 | **Short-term memory** | Held the working set (hook + section drafts) live across the 10-agent run. |
 
 ## 🎯 The result
@@ -27,7 +27,7 @@
 - **Lead hook:** “This one's for the games that raised me” _(chosen from 5 candidates)_
 - **Rhyme:** scheme AAAA, 100% density
 - **Crave-ability:** 76/100
-- **Originality:** 100/100
-- **Banger score:** **97/100** — _Certified banger — ship it._
+- **Originality:** 99/100
+- **Banger score:** **98/100** — _Certified banger — ship it._
 
 _Full package: [`song.json`](song.json). Load it in the app (`/hermes`) to see the whole deck._
