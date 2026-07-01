@@ -119,13 +119,26 @@ contribution loop are the seeds of this.
 - 💭 **WIFI DJ radio** — a **live radio** that streams the music this engine makes;
   people **submit** tracks, the community **shapes** the project, and eventually each
   person runs **their own agent**. The closed loop becomes a public, living station.
-- 💭 **Crossroads Board / Solana / token / NFT** — the Web3 governance layer integrates
-  with this engine **via API**; kept out of the core so the brain stays free + local.
-  A token funds the ecosystem and powers community steering (the founding intent).
-- 💭 **Per-agent compute (Lightning AI, down the road)** — each agent could run on its
-  own minimal compute; default = minimal processing (cheap/free), with **paid tiers to
-  "advance your model"** (a bigger plan = more capable agents). A monetization + scaling
-  path, opt-in, never required for the free local core.
+- ✏️ **Crossroads Board (extensive)** — the WIFI DJ governance/community steering surface:
+  the brain's **"decision" region made social**, where the community and the agents meet at
+  the crossroads to steer creative + ecosystem direction. **Staged plan in
+  [`brain/roadmap.json`](brain/roadmap.json)** → (1) local `crossroads.json` model of
+  "crossings" (a decision/fork with options + rationales + weighted votes + outcome,
+  versioned in git like beliefs/personas) → (2) a `/crossroads` board UI (right proposes,
+  left challenges, artist decides — shares the Council/Brain-Scan look) → (3) decisions feed
+  the taste/memory model and steer generation → (4) community sync via API (Supabase /
+  Cloudflare D1; email or wallet identity) → (5) token-weighted governance (Solana / NFT).
+  Stages 1–3 are $0/local in this repo; 4–5 are a separate service the core calls **via API**,
+  so the free brain stays free + local. A token funds the ecosystem (the founding intent).
+- ✏️ **Per-agent compute — Lightning AI spike** — the opt-in "advance your model" tier:
+  a user **signs up → gets their own agent**, paid tiers give a bigger brain. **My read:**
+  great fit for the *optional GPU / bigger-brain lane* and for prototyping per-agent compute,
+  **not the backbone** — the base stays $0/local/serverless, and "their own agent" really
+  needs an **accounts + persistent-vault** layer first (Phase 4 durability), which is
+  compute-light. **Spike (when SSL is connected):** stand up one Lightning Studio running a
+  single HERMES agent behind HTTPS, wire it as an opt-in provider behind the existing
+  `LyricsProvider` seam (reversible), and compare vs Anthropic-API-direct + Modal/Replicate
+  before committing.
 - 💭 **Durable cloud brain** — optional Notion / Google Drive backing so a cleared
   browser never loses the vault (fixes the localStorage weakness).
 - 💭 **Reference study (opt-in)** — Spotify to study a *described* sound (never names),

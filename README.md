@@ -211,11 +211,17 @@ docs/                    quickstart, concepts, CLI ref, scene-pack guide, hit-fa
 - [x] **Song → video** — `hermes from-song` turns a Hit Factory song into a renderable video project (both studios fused)
 - [x] **Public testing URL** — Vercel-ready (`vercel.json`) + deploy guide ([`docs/testing.md`](docs/testing.md))
 - [x] **Flagship example + one-click Suno handoff** — load *Cold Hard Gold* in-app; `from-song` emits a ready-to-paste Suno link, and `build` guides you if the audio isn't placed yet
+- [x] **11-region brain** — hemispheres + intent/values/language/limbic/default-mode/reward/decision + short & long-term memory + nervous system (an [inspired workflow model](brain/hemispheres.md), not biological)
+- [x] **Honest framing + demo proof** — [5 demo songs with generation traces](examples/demos/) showing what each region contributed
+- [x] **Interactive song deck** — selectable hooks (honest re-score + feeds your voice model), copy-on-tap clips; app focused on lyrics + the brain
+- [x] **Deterministic lyric-core depth** — hierarchical generation, thematic threading, diversity scoring, slant-rhyme "temperature" dial
 
-**Next** — the full, living backlog lives in [`TODO.md`](TODO.md).
-- [ ] Per-track **Suno structure hints** (stems, `[Intro]`/`[Bridge]` pacing, BPM/key tags)
-- [ ] A real **AI/music provider** behind the adapters (lyrics + audio)
-- [ ] Auto song-structure detection · docs site on GitHub Pages
+**Next** — the phased plan is the spine [`brain/roadmap.json`](brain/roadmap.json); the human backlog is [`TODO.md`](TODO.md).
+- [ ] **Measure & safety** — eval harness + golden songs (`npm run eval`); output-safety filter; one-command demo (`npm run demo`)
+- [ ] **Deepen the visible brain** — cognitive model (first→second thought→decision); the Council; brain-scan boot sequence
+- [ ] **Make it yours** — create-your-own-artist; community personas · **Durability** — vault backup so a cleared browser never loses your catalog
+- [ ] **Real AI (opt-in)** behind the adapters (mock stays default → $0) · **Influence Studio** (felt, never copied)
+- [ ] **Ecosystem (via API):** the **Crossroads Board** (community steering) · per-agent compute (Lightning AI) · WIFI DJ radio · token/governance
 
 ---
 
