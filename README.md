@@ -252,7 +252,7 @@ PRs welcome — the easiest wins are a new **scene pack** (`scene-packs/<name>/`
 Node 22 · headless Chromium (Playwright) · ffmpeg (libx264/AAC) · faster-whisper *(optional)* · Next.js + React · Vitest. **No paid services.**
 
 ## 📚 Documentation
-[Quickstart](docs/quickstart.md) · [Concepts](docs/concepts.md) · [CLI reference](docs/cli.md) · [Build a scene pack](docs/scene-packs.md) · [Hit Factory guide](docs/hit-factory.md) · [Examples](examples/)
+[Quickstart](docs/quickstart.md) · [Concepts](docs/concepts.md) · [Architecture](ARCHITECTURE.md) · [Brain wiring](docs/brain-wiring.md) · [Persona map](docs/personas.md) · [CLI reference](docs/cli.md) · [Build a scene pack](docs/scene-packs.md) · [Hit Factory guide](docs/hit-factory.md) · [Examples](examples/)
 
 ## 📄 License
 [MIT](LICENSE). Demo song © kudbee.
