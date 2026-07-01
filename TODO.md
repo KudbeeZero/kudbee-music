@@ -13,6 +13,18 @@ artist says gets lost), then graduate here once designed. Check items off as the
 ## 🚧 In progress
 _Nothing actively in flight — pick the next item from **Up next**._
 
+## 🧠 Brain buildout queue (autonomous /loop — research-informed)
+1. [x] **Local lexicon** (vocabulary cortex) — token-free word store. _(shipped)_
+2. [ ] **Rhyme + meter engine** — use the lexicon so generated lyrics actually rhyme
+   and scan; honest hook scoring. *(biggest quality lift)*
+3. [ ] **Emotion → diction** — the limbic layer colors word/imagery choice via the
+   lexicon's affect tags.
+4. [ ] **Default-Mode Network** — a "creativity-at-rest" region that surfaces original
+   angles, coupled to the analytical layer (research: causal role in originality).
+5. [ ] **Reward circuit** — model hook "crave-ability" / drive.
+6. [ ] **Procedural memory** — the artist's recurring craft moves become reusable.
+7. [ ] **"Becoming you" self-portrait** — surface how much of a song is the learned voice.
+
 ## 🎯 Up next (ordered) — the depth-pass plan (see `/root/.claude/plans/…`)
 0. [ ] **Real-audio flagship video** — render a properly **vocal-synced** Cold Hard
    Gold video from the *actual* Suno master (needs the real lyrics, not the generated
@@ -65,6 +77,11 @@ Board** governance / Solana / token / NFT layer integrates with this engine via 
 later (kept out of this repo's core so it stays free + local).
 
 ## ✅ Shipped (newest first)
+- [x] **Local lexicon (vocabulary cortex)** — `brain/lexicon/core.json` + `lib/hermes/lexicon.ts`:
+      a token-free, version-controlled word store (part-of-speech, affect/valence,
+      imagery tag) with heuristic **syllable counting** and **rhyme matching**
+      (`rhymesWith`, `doesRhyme`), plus affect/imagery queries. The offline backbone for
+      the rhyme engine + emotion-colored diction. Grow it by adding words to the JSON. _(this PR)_
 - [x] **Limbic (emotion) layer** — `lib/hermes/emotion.ts`: reads mood into an affect
       model (valence/intensity/primary feeling), proposes the emotional **contrast** for
       depth, and maps sections onto an emotional **arc**. Feeds the Writers-Room
