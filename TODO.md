@@ -399,3 +399,7 @@ later (kept out of this repo's core so it stays free + local).
   the PR), this `TODO.md`, [`IDEAS.md`](IDEAS.md), and the README roadmap. A PR that ships
   an item but leaves the spine stale is **not done**. The `/loop` reads `roadmap.json` to
   pick the next item, so it must always reflect reality.
+- **Known non-blocking check:** the Cloudflare "Workers Builds: kudbee-music" GitHub
+  check always fails (stray Workers integration, unrelated to Pages) and is not a
+  merge gate — see `brain/beliefs.json` (`known-nonblocking-checks`) and
+  `ARCHITECTURE.md`. Never treat it as a CI failure.
