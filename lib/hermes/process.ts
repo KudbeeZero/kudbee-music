@@ -14,6 +14,7 @@ import { belief, type Belief } from './beliefs';
 import { personaOverlay, type Persona } from './personas';
 import { deriveLanguage, languageCoaching } from './language';
 import { deriveEmotion, emotionCoaching } from './emotion';
+import { divergentAngles } from './defaultMode';
 
 /** One stage of the songwriting craft. */
 export interface CraftStep {
@@ -212,6 +213,11 @@ export function guideStep(
   // the Limbic layer shapes the feeling on the concept + arc steps
   if (stepId === 'concept' || stepId === 'arc') {
     coaching = `${coaching} ${emotionCoaching(deriveEmotion(ctx.inputs))}`;
+  }
+  // the Default-Mode Network offers a divergent angle on the concept step
+  if (stepId === 'concept') {
+    const a = divergentAngles(ctx.inputs, 1, ctx.seed ?? 0)[0];
+    if (a) options = [{ text: a.angle, why: `Default-Mode: ${a.why}` }, ...options].slice(0, 3);
   }
 
   return { step, belief: step.belief ? belief(step.belief) : undefined, prompt: made.prompt, coaching, options };
