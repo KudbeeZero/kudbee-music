@@ -14,6 +14,7 @@
 //    system" pattern as the rest of the vault.
 import { readFileSync, writeFileSync, existsSync, mkdirSync } from 'node:fs';
 import { dirname, join } from 'node:path';
+import { keywords } from './text';
 
 /** Swap the model here (or via addMemory/semanticSearch opts). Kept configurable on purpose. */
 export const EMBED_CONFIG = {
@@ -52,6 +53,14 @@ export interface SearchOptions {
   type?: MemoryType;    // restrict to one memory type
   embed?: Embedder;     // inject an embedder (tests/alt models); defaults to the local model
   file?: string;        // override the store path
+  /** raw query text — enables the LEXICAL half of hybrid search (set automatically by semanticSearch). */
+  queryText?: string;
+  /** HYBRID weight in [0,1]: 0 = pure vector (default, unchanged), 1 = pure lexical overlap.
+   *  Blends deterministic keyword overlap with cosine — often better for short creative text. */
+  hybrid?: number;
+  /** DIVERSITY (MMR) in [0,1]: 0 = off (default), →1 = penalize results similar to ones already
+   *  picked, so recall doesn't return three near-identical memories. Deterministic. */
+  diversity?: number;
 }
 
 /** A function that turns text into a vector. The default is the local on-device model. */
@@ -112,17 +121,68 @@ const cmp = (a: string, b: string): number => (a < b ? -1 : a > b ? 1 : 0);
  * built from the same `entries` — the public API stays identical, so callers never change.
  */
 export function rankBySimilarity(queryVec: number[], entries: VectorEntry[], opts: SearchOptions = {}): SearchResult[] {
-  const { topK = 5, minScore = 0, type } = opts;
-  return entries
+  const { topK = 5, minScore = 0, type, queryText, hybrid = 0, diversity = 0 } = opts;
+  const h = Math.max(0, Math.min(1, hybrid));
+
+  // Score each entry. `similarity` stays the RAW cosine (what callers see); `score` is the
+  // ranking key — optionally blended with deterministic lexical overlap for hybrid search.
+  const scored = entries
     .filter((e) => (type ? e.metadata.type === type : true))
     .map((entry) => {
       const similarity = cosineSimilarity(queryVec, entry.embedding);
-      return { entry, similarity, rank: quantize(similarity) };
+      const lexical = h > 0 && queryText ? lexicalOverlap(queryText, entry.text) : 0;
+      const score = h > 0 && queryText ? (1 - h) * Math.max(0, similarity) + h * lexical : similarity;
+      return { entry, similarity, score, rank: quantize(score) };
     })
     .filter((r) => r.similarity >= minScore)
-    .sort((a, b) => (b.rank - a.rank) || cmp(a.entry.id, b.entry.id) || cmp(a.entry.text, b.entry.text))
-    .slice(0, topK)
-    .map(({ entry, similarity }) => ({ entry, similarity })); // public result keeps the RAW similarity
+    .sort((a, b) => (b.rank - a.rank) || cmp(a.entry.id, b.entry.id) || cmp(a.entry.text, b.entry.text));
+
+  const chosen = diversity > 0 ? mmrSelect(scored, Math.max(0, Math.min(1, diversity)), topK) : scored.slice(0, topK);
+  return chosen.map(({ entry, similarity }) => ({ entry, similarity })); // public result keeps the RAW similarity
+}
+
+/**
+ * Deterministic lexical overlap (Jaccard over content keywords) in [0,1]. Reuses the same
+ * `keywords()` the rest of the brain uses, so hybrid search agrees with the lexicon systems.
+ */
+export function lexicalOverlap(a: string, b: string): number {
+  const ka = new Set(keywords(a, 32));
+  const kb = new Set(keywords(b, 32));
+  if (!ka.size || !kb.size) return 0;
+  let inter = 0;
+  for (const w of ka) if (kb.has(w)) inter++;
+  return inter / (ka.size + kb.size - inter); // Jaccard
+}
+
+interface Scored { entry: VectorEntry; similarity: number; score: number; rank: number; }
+
+/**
+ * Maximal Marginal Relevance selection. `diversity` d in [0,1] sets how hard to push apart:
+ * each next pick maximizes `(1−d)·score − d·maxSimilarityToAlreadyPicked`, so near-duplicate
+ * memories don't all surface together (higher d = more diverse). Deterministic — every
+ * comparison is quantized and ties break by entry.id, so the same store returns the same
+ * diversified set on every machine.
+ */
+function mmrSelect(scored: Scored[], diversity: number, topK: number): Scored[] {
+  const rel = 1 - diversity; // relevance weight
+  const pool = [...scored];
+  const picked: Scored[] = [];
+  while (picked.length < topK && pool.length) {
+    let bestIdx = 0;
+    let bestKey = -Infinity;
+    let bestId = '';
+    for (let i = 0; i < pool.length; i++) {
+      const cand = pool[i];
+      let maxSim = 0;
+      for (const p of picked) maxSim = Math.max(maxSim, cosineSimilarity(cand.entry.embedding, p.entry.embedding));
+      const mmr = quantize(rel * cand.score - diversity * maxSim);
+      if (mmr > bestKey || (mmr === bestKey && (bestId === '' || cand.entry.id < bestId))) {
+        bestKey = mmr; bestIdx = i; bestId = cand.entry.id;
+      }
+    }
+    picked.push(pool.splice(bestIdx, 1)[0]);
+  }
+  return picked;
 }
 
 // ----------------------------------------------------------------------------
@@ -217,7 +277,8 @@ export async function semanticSearch(query: string, opts: SearchOptions = {}): P
   const embed = opts.embed ?? localEmbedder;
   const file = opts.file ?? DEFAULT_FILE;
   const queryVec = await embed(query, 'query');
-  return rankBySimilarity(queryVec, loadMemories(file), opts);
+  // thread the raw query text through so hybrid (lexical) search can run when opts.hybrid > 0
+  return rankBySimilarity(queryVec, loadMemories(file), { queryText: query, ...opts });
 }
 
 /** Alias matching the requested API name — same behavior as semanticSearch. */
