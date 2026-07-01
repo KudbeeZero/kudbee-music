@@ -1,0 +1,708 @@
+{
+  "id": "paper-crowns",
+  "title": "Paper Crowns",
+  "createdAt": "2026-01-01T00:00:00Z",
+  "version": 1,
+  "inputs": {
+    "title": "Paper Crowns",
+    "theme": "refusing the fake status games and crowning yourself on your own terms",
+    "mood": "cold, confident, sharp",
+    "genre": "drill-influenced trap",
+    "tempoMin": 140,
+    "tempoMax": 146,
+    "voice": "hard",
+    "audience": "the doubters",
+    "doNotUse": [],
+    "references": "",
+    "structure": "hook-first"
+  },
+  "brief": "Make a hook first drill-influenced trap song titled \"Paper Crowns\". Center it on: refusing, fake, status, games, crowning, yourself, your, own. Keep it grounded and specific — not corny. Tempo 140-146 BPM. References (feel, never copied): none given.",
+  "conceptSummary": "Drill-Influenced Trap record for the doubters: refusing the fake status games and crowning yourself on your own terms — delivered cold, confident, sharp, voiced as hard.",
+  "hookOptions": [
+    {
+      "text": "Still standing where the games used to be",
+      "angle": "anthem declaration",
+      "cadence": "bouncy triplets",
+      "score": 96
+    },
+    {
+      "text": "Tell doubters I made it out the own",
+      "angle": "melodic question",
+      "cadence": "floating melodic",
+      "score": 96
+    },
+    {
+      "text": "I been heavy but I never let it show",
+      "angle": "melodic question",
+      "cadence": "on-beat and punchy",
+      "score": 81
+    },
+    {
+      "text": "This one's for the games that raised me",
+      "angle": "anthem declaration",
+      "cadence": "half-time, laid back",
+      "score": 97
+    },
+    {
+      "text": "For doubters, I climb through the own",
+      "angle": "melodic question",
+      "cadence": "on-beat and punchy",
+      "score": 95
+    }
+  ],
+  "chosenHook": {
+    "text": "This one's for the games that raised me",
+    "angle": "anthem declaration",
+    "cadence": "half-time, laid back",
+    "score": 97
+  },
+  "sections": [
+    {
+      "label": "Intro",
+      "lines": [
+        "Doubters, this one's for you"
+      ]
+    },
+    {
+      "label": "Hook",
+      "lines": [
+        "This one's for the games that raised me",
+        "This one's for the games that raised me",
+        "All this fake, I earned it slow",
+        "This one's for the games that raised me"
+      ]
+    },
+    {
+      "label": "Verse 1",
+      "lines": [
+        "Still hold on my way up out the wheel",
+        "Out them stubborn nights I found the steel",
+        "I bet it all on the steel",
+        "Nobody ever handed me the wheel"
+      ]
+    },
+    {
+      "label": "Hook",
+      "lines": [
+        "This one's for the games that raised me",
+        "This one's for the games that raised me",
+        "All this fake, I earned it slow",
+        "This one's for the games that raised me"
+      ]
+    },
+    {
+      "label": "Verse 2",
+      "lines": [
+        "No map, no plan, just the stain",
+        "I carry the weight of the rain",
+        "Everything I lost became the crime",
+        "They ask me why I need the time"
+      ]
+    },
+    {
+      "label": "Bridge",
+      "lines": [
+        "They ask me why I need the stain",
+        "Still keep moving my way up out the pain"
+      ]
+    },
+    {
+      "label": "Hook",
+      "lines": [
+        "This one's for the games that raised me",
+        "This one's for the games that raised me",
+        "All this fake, I earned it slow",
+        "This one's for the games that raised me"
+      ]
+    }
+  ],
+  "finalLyrics": "[Intro]\nDoubters, this one's for you\n\n[Hook]\nThis one's for the games that raised me\nThis one's for the games that raised me\nAll this fake, I earned it slow\nThis one's for the games that raised me\n\n[Verse 1]\nStill hold on my way up out the wheel\nOut them stubborn nights I found the steel\nI bet it all on the steel\nNobody ever handed me the wheel\n\n[Hook]\nThis one's for the games that raised me\nThis one's for the games that raised me\nAll this fake, I earned it slow\nThis one's for the games that raised me\n\n[Verse 2]\nNo map, no plan, just the stain\nI carry the weight of the rain\nEverything I lost became the crime\nThey ask me why I need the time\n\n[Bridge]\nThey ask me why I need the stain\nStill keep moving my way up out the pain\n\n[Hook]\nThis one's for the games that raised me\nThis one's for the games that raised me\nAll this fake, I earned it slow\nThis one's for the games that raised me",
+  "production": {
+    "tempoBpm": 143,
+    "drums": "minimal knock, heavy kick",
+    "bass": "sub bass locked to the kick",
+    "instrumentation": [
+      "choir swell",
+      "lo-fi guitar loop",
+      "vinyl texture"
+    ],
+    "arrangement": [
+      "Intro: sparse, just the lead motif + vinyl",
+      "Hook: full drums in, 808 glide, double the vocal",
+      "Verse: pull the pad, let the knock breathe",
+      "Bridge: drop drums, swell, then re-enter on the one",
+      "Outro: filter the beat down, leave the hook ringing"
+    ],
+    "genreBlend": "drill-influenced trap core with melodic/emotional top line",
+    "mixVibe": "wide, warm low end, vocal up front, slight tape saturation"
+  },
+  "vocals": {
+    "delivery": "cold, confident, sharp delivery, conversational on verses, lifted on the hook",
+    "adlibs": [
+      "(yeah)",
+      "(uh)",
+      "(for you)",
+      "(no cap)"
+    ],
+    "doublesAndStacks": "Double the hook, stack harmonies on the last line of each chorus."
+  },
+  "visuals": {
+    "albumCoverPrompt": "Album cover, square 1:1. Cinematic, cold, confident, sharp mood. Subject reflects: Drill-Influenced Trap record for the doubters: refusing the fake status games and crowning yourself on your own terms — delivered cold, confident, sharp, voiced as hard.. Visual motifs: refusing, fake, status, games. Color: deep shadows, one warm accent light. Film grain, 35mm. No text, no logos, no real-artist likeness. Original styling.",
+    "musicVideoPrompt": "Cinematic 16:9 music video. Concept: Drill-Influenced Trap record for the doubters: refusing the fake status games and crowning yourself on your own terms — delivered cold, confident, sharp, voiced as hard.. cold, confident, sharp tone, drill-influenced trap energy. Grounded, not corny; real locations, natural light with one stylized accent. Original — no copyrighted footage or artist mimicry.",
+    "sceneIdeas": [
+      "Opening: slow 16:9 push-in on the subject, cold, confident, sharp light, city at dawn.",
+      "Hook: handheld, performance energy, golden hour.",
+      "Verse: storytelling cutaways tied to \"refusing\".",
+      "Bridge: single locked-off wide, subject still while the world moves.",
+      "Outro: pull back to reveal the place it all started."
+    ],
+    "shortFormClipIdeas": [
+      "Hook punch-in with on-screen lyric",
+      "Behind-the-scenes studio reaction to the drop",
+      "Single-take walk synced to the bridge"
+    ]
+  },
+  "viralClips": [
+    {
+      "label": "Hook hit",
+      "startHint": "first chorus",
+      "durationSec": 15,
+      "caption": "“This one's for the games that raised me” 🎧 #newmusic",
+      "hookLine": "This one's for the games that raised me"
+    },
+    {
+      "label": "Verse opener",
+      "startHint": "verse 1, bar 1",
+      "durationSec": 12,
+      "caption": "the story starts here 👀",
+      "hookLine": "Still hold on my way up out the wheel"
+    },
+    {
+      "label": "Bridge turn",
+      "startHint": "bridge",
+      "durationSec": 18,
+      "caption": "wait for it…",
+      "hookLine": "They ask me why I need the stain"
+    }
+  ],
+  "promoCaption": "“This one's for the games that raised me” — new one for the doubters. #refusing #fake #drill-influencedtrap",
+  "uniqueness": {
+    "score": 100,
+    "flags": [
+      {
+        "kind": "banned-word",
+        "detail": "avoid-word \"pain\"",
+        "line": "Still keep moving my way up out the pain",
+        "suggestion": "the ache"
+      },
+      {
+        "kind": "repeated-hook",
+        "detail": "hook line repeats 9× — consider varying one word",
+        "line": "This one's for the games that raised me"
+      }
+    ],
+    "fingerprints": [
+      "35cc0a4f",
+      "a7efbff",
+      "a7efbff",
+      "ad22f8af",
+      "a7efbff",
+      "59372ad1",
+      "c6dbf55a",
+      "ff4b84f8",
+      "be52a6ec",
+      "a7efbff",
+      "a7efbff",
+      "ad22f8af",
+      "a7efbff",
+      "cf3d0daa",
+      "937011b0",
+      "8b3d5c7f",
+      "4040a755",
+      "7fbbb09",
+      "22e7c567",
+      "a7efbff",
+      "a7efbff",
+      "ad22f8af",
+      "a7efbff"
+    ],
+    "bannedWordsHit": [
+      "pain"
+    ],
+    "rewriteSuggestions": [
+      {
+        "line": "Still keep moving my way up out the pain",
+        "suggestion": "try \"the ache\" instead of \"pain\""
+      }
+    ]
+  },
+  "score": {
+    "hookStrength": 20,
+    "emotionalClarity": 20,
+    "originality": 20,
+    "replayValue": 12,
+    "visualIdentity": 10,
+    "shortFormPotential": 10,
+    "releaseReadiness": 5,
+    "total": 97,
+    "verdict": "Certified banger — ship it."
+  },
+  "release": [
+    {
+      "label": "Title set",
+      "ok": true
+    },
+    {
+      "label": "Genre + audience defined",
+      "ok": true
+    },
+    {
+      "label": "No high-similarity matches",
+      "ok": true,
+      "note": "rephrase flagged lines"
+    },
+    {
+      "label": "Original — no copyrighted references",
+      "ok": true,
+      "note": "describe inspiration, don't reuse material"
+    },
+    {
+      "label": "Avoid-words reviewed",
+      "ok": false,
+      "note": "1 avoid-word(s) present (warning only)"
+    },
+    {
+      "label": "Ownership clear",
+      "ok": true,
+      "note": "original generated content — you own this draft"
+    }
+  ],
+  "agentOutputs": [
+    {
+      "id": "conductor",
+      "name": "HERMES Conductor",
+      "status": "done",
+      "finding": "Brief locked: hook-first drill-influenced trap for the doubters.",
+      "confidence": 88,
+      "warnings": [],
+      "suggestedNextAction": "Hand the brief to Hooksmith.",
+      "data": {
+        "brief": "Make a hook first drill-influenced trap song titled \"Paper Crowns\". Center it on: refusing, fake, status, games, crowning, yourself, your, own. Keep it grounded and specific — not corny. Tempo 140-146 BPM. References (feel, never copied): none given.",
+        "concept": "Drill-Influenced Trap record for the doubters: refusing the fake status games and crowning yourself on your own terms — delivered cold, confident, sharp, voiced as hard.",
+        "angles": [
+          {
+            "angle": "Tell \"refusing\" through a letter you'll never send",
+            "why": "An oblique frame forces fresh, specific images instead of the obvious ones."
+          },
+          {
+            "angle": "Anchor the whole song to one image: \"road\"",
+            "why": "A single concrete anchor from an unrelated domain (street) gives the song a spine and a surprise."
+          },
+          {
+            "angle": "Flip the perspective — write it as a conversation that never happened",
+            "why": "Re-narrating from an unexpected vantage is the DMN move that lifts originality."
+          }
+        ]
+      }
+    },
+    {
+      "id": "hooksmith",
+      "name": "Hooksmith",
+      "status": "done",
+      "finding": "Lead hook: \"This one's for the games that raised me\"",
+      "confidence": 95,
+      "warnings": [],
+      "suggestedNextAction": "Build verses from the lead hook.",
+      "data": {
+        "hookOptions": [
+          {
+            "text": "Still standing where the games used to be",
+            "angle": "anthem declaration",
+            "cadence": "bouncy triplets",
+            "score": 96
+          },
+          {
+            "text": "Tell doubters I made it out the own",
+            "angle": "melodic question",
+            "cadence": "floating melodic",
+            "score": 96
+          },
+          {
+            "text": "I been heavy but I never let it show",
+            "angle": "melodic question",
+            "cadence": "on-beat and punchy",
+            "score": 81
+          },
+          {
+            "text": "This one's for the games that raised me",
+            "angle": "anthem declaration",
+            "cadence": "half-time, laid back",
+            "score": 97
+          },
+          {
+            "text": "For doubters, I climb through the own",
+            "angle": "melodic question",
+            "cadence": "on-beat and punchy",
+            "score": 95
+          }
+        ],
+        "chosenHook": {
+          "text": "This one's for the games that raised me",
+          "angle": "anthem declaration",
+          "cadence": "half-time, laid back",
+          "score": 97
+        }
+      }
+    },
+    {
+      "id": "lyric-chemist",
+      "name": "Lyric Chemist",
+      "status": "done",
+      "finding": "7 sections, 23 lines.",
+      "confidence": 84,
+      "warnings": [],
+      "suggestedNextAction": "Send lyrics to Emotion Scanner + Originality Auditor.",
+      "data": {
+        "sections": [
+          {
+            "label": "Intro",
+            "lines": [
+              "Doubters, this one's for you"
+            ]
+          },
+          {
+            "label": "Hook",
+            "lines": [
+              "This one's for the games that raised me",
+              "This one's for the games that raised me",
+              "All this fake, I earned it slow",
+              "This one's for the games that raised me"
+            ]
+          },
+          {
+            "label": "Verse 1",
+            "lines": [
+              "Still hold on my way up out the wheel",
+              "Out them stubborn nights I found the steel",
+              "I bet it all on the steel",
+              "Nobody ever handed me the wheel"
+            ]
+          },
+          {
+            "label": "Hook",
+            "lines": [
+              "This one's for the games that raised me",
+              "This one's for the games that raised me",
+              "All this fake, I earned it slow",
+              "This one's for the games that raised me"
+            ]
+          },
+          {
+            "label": "Verse 2",
+            "lines": [
+              "No map, no plan, just the stain",
+              "I carry the weight of the rain",
+              "Everything I lost became the crime",
+              "They ask me why I need the time"
+            ]
+          },
+          {
+            "label": "Bridge",
+            "lines": [
+              "They ask me why I need the stain",
+              "Still keep moving my way up out the pain"
+            ]
+          },
+          {
+            "label": "Hook",
+            "lines": [
+              "This one's for the games that raised me",
+              "This one's for the games that raised me",
+              "All this fake, I earned it slow",
+              "This one's for the games that raised me"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "beat-oracle",
+      "name": "Beat Oracle",
+      "status": "done",
+      "finding": "143 BPM · minimal knock, heavy kick",
+      "confidence": 80,
+      "warnings": [],
+      "suggestedNextAction": "Lock arrangement to the hook placement.",
+      "data": {
+        "production": {
+          "tempoBpm": 143,
+          "drums": "minimal knock, heavy kick",
+          "bass": "sub bass locked to the kick",
+          "instrumentation": [
+            "choir swell",
+            "lo-fi guitar loop",
+            "vinyl texture"
+          ],
+          "arrangement": [
+            "Intro: sparse, just the lead motif + vinyl",
+            "Hook: full drums in, 808 glide, double the vocal",
+            "Verse: pull the pad, let the knock breathe",
+            "Bridge: drop drums, swell, then re-enter on the one",
+            "Outro: filter the beat down, leave the hook ringing"
+          ],
+          "genreBlend": "drill-influenced trap core with melodic/emotional top line",
+          "mixVibe": "wide, warm low end, vocal up front, slight tape saturation"
+        }
+      }
+    },
+    {
+      "id": "emotion-scanner",
+      "name": "Emotion Scanner",
+      "status": "done",
+      "finding": "desolation · clarity 100/100 → turn toward a flicker of hope.",
+      "confidence": 76,
+      "warnings": [],
+      "suggestedNextAction": "Proceed to scoring.",
+      "data": {
+        "clarity": 1,
+        "emotion": {
+          "valence": -0.8,
+          "intensity": 0.5,
+          "primary": "desolation",
+          "contrast": "a flicker of hope",
+          "guidance": "Lead with desolation (dark, restrained), then turn toward a flicker of hope for depth. Render the feeling in a concrete image, don't name it."
+        },
+        "arc": [
+          {
+            "label": "Intro",
+            "beat": "setup"
+          },
+          {
+            "label": "Hook",
+            "beat": "tension"
+          },
+          {
+            "label": "Verse 1",
+            "beat": "problem"
+          },
+          {
+            "label": "Hook",
+            "beat": "tension"
+          },
+          {
+            "label": "Verse 2",
+            "beat": "tension"
+          },
+          {
+            "label": "Bridge",
+            "beat": "payoff"
+          },
+          {
+            "label": "Hook",
+            "beat": "tension"
+          }
+        ]
+      }
+    },
+    {
+      "id": "originality-auditor",
+      "name": "Originality Auditor",
+      "status": "done",
+      "finding": "Uniqueness 100/100 · 2 flag(s).",
+      "confidence": 90,
+      "warnings": [
+        "avoid-word \"pain\"",
+        "hook line repeats 9× — consider varying one word"
+      ],
+      "suggestedNextAction": "Apply suggested rewrites before release.",
+      "data": {
+        "uniqueness": {
+          "score": 100,
+          "flags": [
+            {
+              "kind": "banned-word",
+              "detail": "avoid-word \"pain\"",
+              "line": "Still keep moving my way up out the pain",
+              "suggestion": "the ache"
+            },
+            {
+              "kind": "repeated-hook",
+              "detail": "hook line repeats 9× — consider varying one word",
+              "line": "This one's for the games that raised me"
+            }
+          ],
+          "fingerprints": [
+            "35cc0a4f",
+            "a7efbff",
+            "a7efbff",
+            "ad22f8af",
+            "a7efbff",
+            "59372ad1",
+            "c6dbf55a",
+            "ff4b84f8",
+            "be52a6ec",
+            "a7efbff",
+            "a7efbff",
+            "ad22f8af",
+            "a7efbff",
+            "cf3d0daa",
+            "937011b0",
+            "8b3d5c7f",
+            "4040a755",
+            "7fbbb09",
+            "22e7c567",
+            "a7efbff",
+            "a7efbff",
+            "ad22f8af",
+            "a7efbff"
+          ],
+          "bannedWordsHit": [
+            "pain"
+          ],
+          "rewriteSuggestions": [
+            {
+              "line": "Still keep moving my way up out the pain",
+              "suggestion": "try \"the ache\" instead of \"pain\""
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "visual-director",
+      "name": "Visual Director",
+      "status": "done",
+      "finding": "Album cover + cinematic 16:9 video direction ready.",
+      "confidence": 78,
+      "warnings": [],
+      "suggestedNextAction": "Pass scenes to Viral Clip Scout.",
+      "data": {
+        "visuals": {
+          "albumCoverPrompt": "Album cover, square 1:1. Cinematic, cold, confident, sharp mood. Subject reflects: Drill-Influenced Trap record for the doubters: refusing the fake status games and crowning yourself on your own terms — delivered cold, confident, sharp, voiced as hard.. Visual motifs: refusing, fake, status, games. Color: deep shadows, one warm accent light. Film grain, 35mm. No text, no logos, no real-artist likeness. Original styling.",
+          "musicVideoPrompt": "Cinematic 16:9 music video. Concept: Drill-Influenced Trap record for the doubters: refusing the fake status games and crowning yourself on your own terms — delivered cold, confident, sharp, voiced as hard.. cold, confident, sharp tone, drill-influenced trap energy. Grounded, not corny; real locations, natural light with one stylized accent. Original — no copyrighted footage or artist mimicry.",
+          "sceneIdeas": [
+            "Opening: slow 16:9 push-in on the subject, cold, confident, sharp light, city at dawn.",
+            "Hook: handheld, performance energy, golden hour.",
+            "Verse: storytelling cutaways tied to \"refusing\".",
+            "Bridge: single locked-off wide, subject still while the world moves.",
+            "Outro: pull back to reveal the place it all started."
+          ],
+          "shortFormClipIdeas": [
+            "Hook punch-in with on-screen lyric",
+            "Behind-the-scenes studio reaction to the drop",
+            "Single-take walk synced to the bridge"
+          ]
+        }
+      }
+    },
+    {
+      "id": "viral-clip-scout",
+      "name": "Viral Clip Scout",
+      "status": "done",
+      "finding": "3 short-form moments identified.",
+      "confidence": 74,
+      "warnings": [],
+      "suggestedNextAction": "Schedule the strongest clip first.",
+      "data": {
+        "viralClips": [
+          {
+            "label": "Hook hit",
+            "startHint": "first chorus",
+            "durationSec": 15,
+            "caption": "“This one's for the games that raised me” 🎧 #newmusic",
+            "hookLine": "This one's for the games that raised me"
+          },
+          {
+            "label": "Verse opener",
+            "startHint": "verse 1, bar 1",
+            "durationSec": 12,
+            "caption": "the story starts here 👀",
+            "hookLine": "Still hold on my way up out the wheel"
+          },
+          {
+            "label": "Bridge turn",
+            "startHint": "bridge",
+            "durationSec": 18,
+            "caption": "wait for it…",
+            "hookLine": "They ask me why I need the stain"
+          }
+        ]
+      }
+    },
+    {
+      "id": "ar-judge",
+      "name": "A&R Judge",
+      "status": "done",
+      "finding": "Banger 97/100 · crave-ability 76/100 — Certified banger — ship it.",
+      "confidence": 82,
+      "warnings": [],
+      "suggestedNextAction": "Green-light.",
+      "data": {
+        "score": {
+          "hookStrength": 20,
+          "emotionalClarity": 20,
+          "originality": 20,
+          "replayValue": 12,
+          "visualIdentity": 10,
+          "shortFormPotential": 10,
+          "releaseReadiness": 5,
+          "total": 97,
+          "verdict": "Certified banger — ship it."
+        },
+        "crave": {
+          "score": 76,
+          "factors": {
+            "returns": 1,
+            "mutation": 0.5,
+            "brevity": 0.75,
+            "singability": 0.73
+          },
+          "note": "Compulsive — you'll want it again."
+        }
+      }
+    },
+    {
+      "id": "rights-release-guard",
+      "name": "Rights & Release Guard",
+      "status": "warning",
+      "finding": "5/6 release checks passing.",
+      "confidence": 86,
+      "warnings": [
+        "Avoid-words reviewed"
+      ],
+      "suggestedNextAction": "Resolve open items before publishing.",
+      "data": {
+        "release": [
+          {
+            "label": "Title set",
+            "ok": true
+          },
+          {
+            "label": "Genre + audience defined",
+            "ok": true
+          },
+          {
+            "label": "No high-similarity matches",
+            "ok": true,
+            "note": "rephrase flagged lines"
+          },
+          {
+            "label": "Original — no copyrighted references",
+            "ok": true,
+            "note": "describe inspiration, don't reuse material"
+          },
+          {
+            "label": "Avoid-words reviewed",
+            "ok": false,
+            "note": "1 avoid-word(s) present (warning only)"
+          },
+          {
+            "label": "Ownership clear",
+            "ok": true,
+            "note": "original generated content — you own this draft"
+          }
+        ]
+      }
+    }
+  ]
+}
