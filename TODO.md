@@ -60,10 +60,9 @@ chat. Detail for each is in [`brain/roadmap.json`](brain/roadmap.json) + [`IDEAS
    generate → **choose a different hook** (swaps lead + re-scores) → **edit lyrics → save** (taste
    feedback) → **🔍 Explain** (trace opens) → **⬇ Export JSON** → **reload** (vault persists). PASS,
    zero console errors; the old "deck not selectable" issue is resolved. _(audit only, no code change)_
-   - Surfaced two combinator-polish issues (feed the deeper-lyric-craft item): (a) the **audience
-     word leaks into `{noun}` slots** ("for daughter … through the daughter") — exclude audience
-     tokens from the noun pool; (b) a **verb slips through** ("the *carry* that raised me") — `carry`
-     et al. pass `nounable`.
+   - ~~Surfaced two combinator-polish issues~~ **both fixed _(#67)_**: (a) the audience word no longer
+     leaks into `{noun}` slots (`themeNouns` excludes audience tokens); (b) the combinator's own action
+     verbs (`carry`/`grind`/…) are rejected by `nounable` (`VERB_SET` derived from `VERBS`). Regression-tested.
 - [ ] **Crossroads Stages 2–3** — `/crossroads` board UI → decisions feed the taste model.
 - [ ] **3 review cleanups** — stronger memory-id hash · independent "earns-it" critique · guaranteed vault mirror.
 - [ ] **Star-launch kit** — `LAUNCH.md` with a draft Twitter/X thread + a YouTube demo-recording script (you post it).
