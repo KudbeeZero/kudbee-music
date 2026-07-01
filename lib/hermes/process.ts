@@ -13,6 +13,7 @@ import { allAvoidWords } from './memory';
 import { belief, type Belief } from './beliefs';
 import { personaOverlay, type Persona } from './personas';
 import { deriveLanguage, languageCoaching } from './language';
+import { deriveEmotion, emotionCoaching } from './emotion';
 
 /** One stage of the songwriting craft. */
 export interface CraftStep {
@@ -207,6 +208,10 @@ export function guideStep(
   // the Language & Culture area shapes the actual words on the truth/draft steps
   if (stepId === 'truth' || stepId === 'verse-draft') {
     coaching = `${coaching} ${languageCoaching(deriveLanguage(ctx.inputs))}`;
+  }
+  // the Limbic layer shapes the feeling on the concept + arc steps
+  if (stepId === 'concept' || stepId === 'arc') {
+    coaching = `${coaching} ${emotionCoaching(deriveEmotion(ctx.inputs))}`;
   }
 
   return { step, belief: step.belief ? belief(step.belief) : undefined, prompt: made.prompt, coaching, options };
