@@ -35,7 +35,8 @@ chat. Detail for each is in [`brain/roadmap.json`](brain/roadmap.json) + [`IDEAS
 - [ ] **Agent images → avatars** — wire the Grok-generated images onto each agent (once you generate them).
 - [ ] **Lightning AI spike** — one Studio running a HERMES agent behind **HTTPS/SSL** as an opt-in provider (you connect SSL).
 - [ ] **Discord server** (+ GitHub→Discord webhook) — channels/roles/listening parties; wire on your go-ahead.
-- [ ] **Real-AI Claude engine** — `claudeLyricsProvider` behind `ANTHROPIC_API_KEY` unlocks the locked rack slot (mock stays default).
+- [~] **Real-AI Claude engine** — provider + eval-comparison lane **shipped** (see Shipped, `docs/claude-engine.md`);
+   what remains yours: run `RUN_LIVE_EVAL=1 ANTHROPIC_API_KEY=... npm run eval:compare` when budget is confirmed (mock stays default).
 - [ ] **Cloud brain** — server-side vault/memory (Notion/Drive/Supabase creds) so it's not localStorage-only.
 - [ ] **Suno-Studio workspace** — section/arrangement timeline + rack + meter bridge ($0 read-only now; clip editing later).
 
@@ -215,6 +216,15 @@ Board** governance / Solana / token / NFT layer integrates with this engine via 
 later (kept out of this repo's core so it stays free + local).
 
 ## ✅ Shipped (newest first)
+- [x] **Claude Engine groundwork (roadmap 5.1) — opt-in real-AI provider + eval-comparison lane** —
+      `lib/hermes/providers/claudeLyricsProvider.ts` implements the `LyricsProvider` seam against the
+      Anthropic Messages API (structured JSON output, hard avoid-list in the prompt, typed errors,
+      key resolved only at call time from `ANTHROPIC_API_KEY`); `lib/hermes/evalCompare.ts` + a
+      gated vitest lane (`npm run eval:compare`) score combinator vs. real-AI on the golden briefs
+      with the existing metrics. **Mock stays the default everywhere**; nothing client-side imports
+      the provider; the runner hard-skips unless `RUN_LIVE_EVAL=1` AND a key are set — zero live
+      calls were made and the live comparison run is the founder's trigger
+      (`RUN_LIVE_EVAL=1 ANTHROPIC_API_KEY=... npm run eval:compare`). See `docs/claude-engine.md`. _(this PR)_
 - [x] **Vault backup status + guarded restore in the UI** — the shipped-but-unsurfaced
       durability APIs (`vaultBackupStatus()` / `restoreFromBackup()`, #56) now show in the
       Vault drawer: a `🛟 backup mirror: N songs` status line, an amber warning when the live
