@@ -158,10 +158,10 @@ contribution loop are the seeds of this.
 
 ## 🔎 External review (Grok) — adopt these
 A second-opinion review flagged real risks worth acting on (truth-first):
-- 💭 **Honest framing of the brain metaphor** *(high value, low effort)* — present the
-  11 regions / hemispheres / nervous system as an **inspired conceptual model**, not a
-  claim of biological fidelity. Add a one-line disclaimer in README + docs. Protects
-  credibility once people read the code.
+- ✅ **Honest framing of the brain metaphor** *(high value, low effort)* — README,
+  `brain/hemispheres.md`, and the Brain Scan UI now state up front that the 11 regions /
+  hemispheres / nervous system are an **inspired conceptual model**, not a claim of
+  biological fidelity — each region is real code in `lib/hermes/`. _(this PR)_
 - 💭 **Proof on the landing/README** — public **demo songs + step-by-step generation
   traces** ("here's what each region did"). Proof beats description for stars. *(We have
   the in-app Cold Hard Gold demo; add committed traces + audio.)*

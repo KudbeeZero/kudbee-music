@@ -5,6 +5,16 @@ roster splits cleanly into two hemispheres, and a single dial biases which one
 leads — exactly the way a creative person's brain leans one way without ever
 shutting the other half off.
 
+> **Read this first — what "brain" means here.** The hemispheres, the named
+> **regions** (intent, values, language & culture, generative/analytical, decision,
+> limbic, default-mode, reward, short-term & long-term memory), and the **nervous
+> system** are an **engineering metaphor inspired by brain lateralization**, not a
+> claim of biological accuracy. Nothing here simulates neurons or real neuroscience.
+> What the metaphor buys us is a concrete architecture: a divergent path that
+> *proposes*, a convergent path that *disposes*, structured artifacts passed between
+> them, and a memory layer that decays and consolidates. Treat the anatomy as a map
+> of the workflow — the actual behavior is whatever `lib/hermes/` does.
+
 > Lateralization is a **bias, not a switch.** Both hemispheres always fire. The
 > right one *dreams up* the video; the left one *makes sure it's actually correct.*
 > A **corpus callosum** of shared files carries structured thoughts between them.
