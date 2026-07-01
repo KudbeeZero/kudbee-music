@@ -34,7 +34,10 @@ chat. Detail for each is in [`brain/roadmap.json`](brain/roadmap.json) + [`IDEAS
 - [x] **Cool landing page** — interactive scroll-driven landing shipped at `/` _(#86)_, live at
    [wifi-dj-meme.pages.dev](https://wifi-dj-meme.pages.dev); the Runway hero video + Solana connect remain
    founder-gated upgrades (comment slots left in `components/landing/Landing.tsx`).
-- [ ] **Solana wallet connect + accounts** — identity for the Board + dNFT; needs the auth/DB decision.
+- [~] **Accounts / sign-in** — local-first identity layer shipped (guest + dev door + honest
+   Google/GitHub slots, `docs/accounts.md`); what remains yours: pick a hosted-auth provider (or add
+   Cloudflare Pages Functions) + register the OAuth apps so real Google/GitHub sign-in activates.
+   Solana wallet connect (for the Board + dNFT) still needs the same auth/DB decision.
 - [ ] **dNFT mint on-chain** (Solana/Metaplex) — the signature is $0-ready and the metadata now targets the
    real **Metaplex Token Metadata** standard _(#85, `docs/nft-standard.md`)_; minting is your call (devnet-first, never mainnet without your explicit approval).
 - [ ] **Agent images → avatars** — wire the Grok-generated images onto each agent (once you generate them).
@@ -221,6 +224,16 @@ Board** governance / Solana / token / NFT layer integrates with this engine via 
 later (kept out of this repo's core so it stays free + local).
 
 ## ✅ Shipped (newest first)
+- [x] **Onboarding / identity layer + blank-first Song Lab** — new visitors now land on a
+      **Welcome gate** (`components/auth/WelcomeGate.tsx`), not a pre-filled form: the Song Lab
+      opens **empty** (no more "Out the Mud"/Chicago preloaded words) with a one-click
+      "✨ Load an example brief" and Generate gated until title+theme+genre are set. Accounts are
+      **local-first** (`lib/hermes/identity.ts`, `hermes.profile.v1`): "Continue as guest" now,
+      **Google / GitHub sign-in slots** that light up honestly the moment OAuth creds are provided
+      (no fake buttons — real token exchange needs the founder's provider decision, see
+      `docs/accounts.md`), and a **developer entry** (`/hermes?dev=1` → a quiet "Developer entry →"
+      that signs in instantly and sticks, so testing never needs a login). Sign-out keeps the vault.
+      _(this PR)_
 - [x] **Adversarial-input hardening (break-proofing for public traffic)** — attacked the app the
       way a hostile visitor would and fixed everything that broke: `importVault` now sanitizes
       every song/album (allowlist rebuild, required id+title, `__proto__`/`constructor` keys

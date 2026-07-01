@@ -31,11 +31,17 @@ import { createWorkingMemory } from '@/lib/hermes/workingMemory';
 import { brainHeat } from '@/lib/hermes/heat';
 import { deriveEmotion } from '@/lib/hermes/emotion';
 import { voiceMirror } from '@/lib/hermes/becomingYou';
+import { currentProfile, signOut, type Profile } from '@/lib/hermes/identity';
+import WelcomeGate from '../auth/WelcomeGate';
+import authStyles from '../auth/auth.module.css';
 import styles from './hermes.module.css';
 
 const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
 
 export default function HermesHitFactory() {
+  // identity gate — null until hydrated (client-only, avoids SSR mismatch)
+  const [profile, setProfile] = useState<Profile | null>(null);
+  const [identityReady, setIdentityReady] = useState(false);
   const [running, setRunning] = useState(false);
   const [outputs, setOutputs] = useState<Record<string, AgentOutput>>({});
   const [pkg, setPkg] = useState<SongPackage | null>(null);
@@ -77,6 +83,8 @@ export default function HermesHitFactory() {
 
   // hydrate from local storage on mount (client only — avoids SSR mismatch)
   useEffect(() => {
+    setProfile(currentProfile());
+    setIdentityReady(true);
     setVault(listSongs());
     setAlbums(listAlbums());
     setBanned(loadBannedWords(allAvoidWords()));
@@ -249,6 +257,14 @@ export default function HermesHitFactory() {
 
   function newSong() { setPkg(null); setOutputs({}); setError(null); }
 
+  // sign-out returns to the gate; the vault deliberately stays on this device
+  function handleSignOut() {
+    signOut();
+    setProfile(null);
+    setVaultOpen(false); setAlbumOpen(false); setLabOpen(false);
+    newSong();
+  }
+
   return (
     <div className={styles.shell}>
       <header className={styles.header}>
@@ -259,13 +275,33 @@ export default function HermesHitFactory() {
           <span className={styles.subtitle}>Lyrical Combinator Brain · {AGENT_DEFINITIONS.length} agents</span>
         </div>
         <div className={styles.headerSpacer} />
-        <span className={styles.modeBadge}>● V1 · local mock — no API key</span>
-        {mode === 'studio' && <button className={styles.ghostBtn} onClick={newSong}>✨ New</button>}
-        <button className={styles.ghostBtn} onClick={() => setLabOpen(true)}>✍️ Lyric Lab</button>
-        <button className={styles.ghostBtn} onClick={() => setAlbumOpen(true)}>Albums ({albums.length})</button>
-        <button className={styles.ghostBtn} onClick={() => setVaultOpen(true)}>Vault ({vault.length})</button>
+        {/* header stays minimal on the welcome gate — actions appear after entry */}
+        {profile && (
+          <>
+            <span className={styles.modeBadge}>● V1 · local mock — no API key</span>
+            {mode === 'studio' && <button className={styles.ghostBtn} onClick={newSong}>✨ New</button>}
+            <button className={styles.ghostBtn} onClick={() => setLabOpen(true)}>✍️ Lyric Lab</button>
+            <button className={styles.ghostBtn} onClick={() => setAlbumOpen(true)}>Albums ({albums.length})</button>
+            <button className={styles.ghostBtn} onClick={() => setVaultOpen(true)}>Vault ({vault.length})</button>
+            <span className={authStyles.profileChip} title={`Signed in as ${profile.name} (${profile.kind}) — local to this browser`}>
+              {profile.name}
+              {profile.kind === 'dev' && <span className={authStyles.devBadge}>dev</span>}
+            </span>
+            <button
+              className={styles.ghostBtn}
+              onClick={handleSignOut}
+              title="Sign out — your vault stays on this device"
+            >
+              Sign out
+            </button>
+          </>
+        )}
       </header>
 
+      {!identityReady ? null : !profile ? (
+        <WelcomeGate onEnter={setProfile} />
+      ) : (
+      <>
       {error && mode === 'compose' && (
         <div role="alert" style={{ border: '1px solid rgba(255,93,108,0.5)', background: 'rgba(255,93,108,0.10)', color: 'var(--bad)', borderRadius: 12, padding: '10px 14px', margin: '4px auto 0', maxWidth: 620, fontSize: 13 }}>⚠ {error}</div>
       )}
@@ -437,6 +473,8 @@ export default function HermesHitFactory() {
           onRecordTaste={(kept, dropped) => setTaste(recordTaste(kept, dropped))}
           onGenerate={({ inputs, forcedHook }) => { setLabOpen(false); run(inputs, { forcedHook }); }}
         />
+      )}
+      </>
       )}
     </div>
   );
