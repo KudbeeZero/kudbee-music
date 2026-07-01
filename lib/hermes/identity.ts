@@ -144,12 +144,32 @@ export function beginOAuth(provider: AuthProvider): never {
 }
 
 /**
- * The founder's testing door: visiting with `?dev=1` unlocks a quiet
- * "Developer entry" link on the welcome gate, and persists a flag so the door
- * stays open in this browser on later visits (no query string needed).
+ * Is this a build where the developer door is even allowed to exist? The door is
+ * a LOCAL/DEV convenience only — it must NEVER be reachable on the production
+ * static deploy, or `…/hermes?dev=1` would be a public backdoor. Two ways it's on:
+ *   • a non-production build (`npm run web:dev` → NODE_ENV=development), or
+ *   • an explicit opt-in flag baked at build time (`NEXT_PUBLIC_DEV_DOOR=1`) for a
+ *     hosted preview you deliberately want the door on.
+ * The Cloudflare production export runs `next build` (NODE_ENV=production) with the
+ * flag unset, so the door does not exist there — `?dev=1` is inert. Both env reads
+ * are inlined by Next at build time, so this can't be flipped from the client.
+ */
+export function isDevBuild(): boolean {
+  return process.env.NODE_ENV !== 'production' || flagOn(process.env.NEXT_PUBLIC_DEV_DOOR);
+}
+
+/**
+ * The founder's testing door: on a DEV/opt-in build (see `isDevBuild`), visiting
+ * with `?dev=1` unlocks a quiet "Developer entry" link on the welcome gate and
+ * persists a flag so the door stays open in this browser on later visits. On a
+ * production build it always returns false — no query string or stale persisted
+ * flag can open it — so it is never a public backdoor on the live deploy.
  * `search` is injectable for tests; it defaults to the real URL in the browser.
  */
 export function isDevEntryAllowed(search?: string): boolean {
+  // Production hard stop: the door cannot exist on the live static deploy, even if
+  // a browser carries a stale hermes.devDoor.v1 flag from a prior dev build.
+  if (!isDevBuild()) return false;
   const q = search ?? (typeof window !== 'undefined' ? window.location.search : '');
   try {
     if (new URLSearchParams(q).get('dev') === '1') {

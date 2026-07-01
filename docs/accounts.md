@@ -20,10 +20,20 @@ moment you tap **Continue as guest** on the welcome gate. Nothing is sent anywhe
 
 ## The developer door
 
-Visit `/hermes?dev=1` once and a quiet **Developer entry →** link appears at the
-foot of the welcome gate (the visit persists `hermes.devDoor.v1` so the door
-stays open in that browser). One click signs in a `dev` profile — no typing, for
-testing. The dev profile shows a small `dev` badge in the header.
+**Dev/local builds only — it does not exist on the production deploy.** On a
+non-production build (`npm run web:dev`, `NODE_ENV=development`), visit
+`/hermes?dev=1` once and a quiet **Developer entry →** link appears at the foot of
+the welcome gate (the visit persists `hermes.devDoor.v1` so the door stays open in
+that browser). One click signs in a `dev` profile — no typing, for testing; it
+shows a small `dev` badge in the header.
+
+On the **production static export** (Cloudflare Pages runs `next build`,
+`NODE_ENV=production`) the door is compiled out: `isDevBuild()` is false, so
+`isDevEntryAllowed()` returns false and `?dev=1` is inert — even a browser carrying
+a stale `hermes.devDoor.v1` flag from a prior dev build cannot reopen it. This
+keeps `…pages.dev/hermes?dev=1` from ever being a public backdoor. If you *want*
+the door on a specific hosted preview, build that deploy with
+`NEXT_PUBLIC_DEV_DOOR=1` (an explicit, per-build opt-in).
 
 ## What the founder must provide to light up Google/GitHub
 

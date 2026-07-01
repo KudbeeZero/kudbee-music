@@ -224,6 +224,12 @@ Board** governance / Solana / token / NFT layer integrates with this engine via 
 later (kept out of this repo's core so it stays free + local).
 
 ## ✅ Shipped (newest first)
+- [x] **Dev-door is no longer a production backdoor** — `?dev=1` "Developer entry" now exists
+      only on dev/local builds (`isDevBuild()`: `NODE_ENV!=='production'`, or an explicit
+      `NEXT_PUBLIC_DEV_DOOR=1` opt-in for a chosen hosted preview). On the live Cloudflare
+      export the door is compiled out — `?dev=1` is inert, and a stale `hermes.devDoor.v1`
+      flag can't reopen it. Runtime-verified against the production build (welcome gate shows,
+      no Developer entry); 3 new tests pin prod-off/dev-on/flag-opt-in. _(this PR)_
 - [x] **Onboarding / identity layer + blank-first Song Lab** — new visitors now land on a
       **Welcome gate** (`components/auth/WelcomeGate.tsx`), not a pre-filled form: the Song Lab
       opens **empty** (no more "Out the Mud"/Chicago preloaded words) with a one-click

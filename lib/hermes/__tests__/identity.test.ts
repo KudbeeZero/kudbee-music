@@ -7,6 +7,7 @@ import {
   authProviders,
   beginOAuth,
   isDevEntryAllowed,
+  isDevBuild,
   __clearIdentity,
 } from '../identity';
 
@@ -71,6 +72,47 @@ describe('identity — the developer door (?dev=1)', () => {
     isDevEntryAllowed('?dev=1');
     __clearIdentity();
     expect(isDevEntryAllowed('')).toBe(false);
+  });
+});
+
+describe('identity — the dev door is NEVER a production backdoor', () => {
+  const prevNodeEnv = process.env.NODE_ENV;
+  const prevFlag = process.env.NEXT_PUBLIC_DEV_DOOR;
+  beforeEach(() => __clearIdentity());
+  afterEach(() => {
+    // vitest runs with NODE_ENV=test; restore whatever it was so other suites see it
+    (process.env as Record<string, string | undefined>).NODE_ENV = prevNodeEnv;
+    if (prevFlag === undefined) delete process.env.NEXT_PUBLIC_DEV_DOOR;
+    else process.env.NEXT_PUBLIC_DEV_DOOR = prevFlag;
+    __clearIdentity();
+  });
+
+  it('is inert on a production build even with ?dev=1 (the live-deploy backdoor is closed)', () => {
+    (process.env as Record<string, string | undefined>).NODE_ENV = 'production';
+    delete process.env.NEXT_PUBLIC_DEV_DOOR;
+    expect(isDevBuild()).toBe(false);
+    expect(isDevEntryAllowed('?dev=1')).toBe(false);
+    // a stale flag carried over from a prior dev build must NOT reopen it in prod
+    expect(isDevEntryAllowed('')).toBe(false);
+  });
+
+  it('is available in a non-production (dev) build', () => {
+    (process.env as Record<string, string | undefined>).NODE_ENV = 'development';
+    delete process.env.NEXT_PUBLIC_DEV_DOOR;
+    expect(isDevBuild()).toBe(true);
+    expect(isDevEntryAllowed('?dev=1')).toBe(true);
+  });
+
+  it('can be deliberately opted into a production build via NEXT_PUBLIC_DEV_DOOR', () => {
+    (process.env as Record<string, string | undefined>).NODE_ENV = 'production';
+    process.env.NEXT_PUBLIC_DEV_DOOR = '1';
+    expect(isDevBuild()).toBe(true);
+    expect(isDevEntryAllowed('?dev=1')).toBe(true);
+    // and NOT opened by a falsy flag value
+    process.env.NEXT_PUBLIC_DEV_DOOR = '0';
+    __clearIdentity();
+    expect(isDevBuild()).toBe(false);
+    expect(isDevEntryAllowed('?dev=1')).toBe(false);
   });
 });
 
