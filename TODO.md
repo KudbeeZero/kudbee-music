@@ -61,8 +61,11 @@ vector memory, and document the architecture — lifts output quality, dev appea
    to self-contained HTML: brain heat-map (Brain-Scan hues, clickable nodes), collapsible
    per-region cards, copy-to-clipboard Suno prompt. `GEN_DEMOS=1` mints `trace.html` per demo
    + `docs/demo-gallery.html`. The top shareability/stars move. _(#50)_
-- [ ] **4. Council scoring → hook ranking** — the Council re-scores/ranks hooks; `learn.ts`
-   stores winners into vector memory + `recommend.ts` semantic recall (the brain as a coach).
+- [x] **4. Council scoring → hook ranking + learn→vector recall** — `council.ts`
+   `rankHooksByCouncil` ranks every hook across the three voices (challenges 45 · crave 35 ·
+   confidence 20), shown as a live board in the Council. `vectorRecall.ts` (`rememberSong` /
+   `recommendSimilar`) stores winners into semantic memory + recalls meaning-close past hooks —
+   kept in its own server/CLI module so the client bundle stays Node-free. Both opt-in/$0. _(#53)_
 - [x] **5. ARCHITECTURE.md + brain-wiring diagram** — `ARCHITECTURE.md` (two studios/one
    brain, pipeline flow, full `lib/hermes/` module map, non-negotiables) + a code-generated
    `docs/brain-wiring.md` Mermaid diagram (`wiringDoc.ts` from `brainMap.ts`, can't drift);

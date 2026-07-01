@@ -3,6 +3,7 @@
 import type { AgentOutput, SongPackage } from '@/lib/hermes/types';
 import { AGENT_DEFINITIONS } from '@/lib/hermes/agents';
 import { deliberate } from '@/lib/hermes/cognition';
+import { rankHooksByCouncil } from '@/lib/hermes/council';
 import styles from './hermes.module.css';
 
 // The Council — the agents as a deliberating board (the WIFI DJ "Crossroads Board"
@@ -12,6 +13,9 @@ export default function Council({ outputs, pkg }: { outputs: Record<string, Agen
   const right = AGENT_DEFINITIONS.filter((d) => d.hemisphere === 'right');
   const left = AGENT_DEFINITIONS.filter((d) => d.hemisphere === 'left');
   const d = pkg.chosenHook ? deliberate(pkg.chosenHook.text, pkg.inputs) : null;
+  // The Council's actual work: rank the hook candidates across the three voices.
+  const ranking = rankHooksByCouncil(pkg.hookOptions, pkg.inputs, pkg.sections).slice(0, 4);
+  const chosenText = pkg.chosenHook?.text;
 
   const Bench = ({ title, defs, tint }: { title: string; defs: typeof AGENT_DEFINITIONS; tint: string }) => (
     <div style={{ flex: 1, minWidth: 0 }}>
@@ -35,6 +39,25 @@ export default function Council({ outputs, pkg }: { outputs: Record<string, Agen
         <Bench title="✦ Proposes (right)" defs={right} tint="var(--magenta)" />
         <Bench title="⚖ Challenges (left)" defs={left} tint="var(--cyan)" />
       </div>
+      {ranking.length > 1 && (
+        <div style={{ marginTop: 10, borderTop: '1px solid var(--line)', paddingTop: 8 }}>
+          <div className={styles.hint}>🏆 The Council's ranking <span style={{ opacity: 0.7 }}>(challenges 45 · crave 35 · confidence 20)</span></div>
+          <div style={{ marginTop: 6, display: 'flex', flexDirection: 'column', gap: 4 }}>
+            {ranking.map((r) => {
+              const isPick = r.hook.text === chosenText;
+              return (
+                <div key={r.hook.text} style={{ display: 'flex', alignItems: 'center', gap: 8, opacity: isPick ? 1 : 0.72 }}>
+                  <span style={{ width: 34, fontWeight: 700, color: isPick ? 'var(--magenta)' : 'var(--ink-faint)' }}>{r.councilScore}</span>
+                  <span className={styles.hint} style={{ flex: 1, minWidth: 0, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', color: isPick ? 'var(--ink)' : undefined }}>
+                    {isPick ? '★ ' : `${r.rank}. `}{r.hook.text}
+                  </span>
+                  <span className={styles.hint} style={{ opacity: 0.7 }}>{r.passed}/3</span>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      )}
       {d && (
         <div style={{ marginTop: 10, borderTop: '1px solid var(--line)', paddingTop: 8 }}>
           <div className={styles.hint}>The decision on the lead hook — “{pkg.chosenHook!.text}”</div>

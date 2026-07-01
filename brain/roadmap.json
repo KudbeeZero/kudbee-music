@@ -23,7 +23,7 @@
       { "id": "T1", "title": "Semantic originality — wire vectorMemory into originality.ts (optional)", "status": "queued", "home": "lib/hermes/originality.ts" },
       { "id": "T2", "title": "Close the cognition loop — cognition picks the hook + regenerate-from-critiques", "status": "shipped", "pr": "#52", "home": "cognition.ts (selectHookByCognition) + pipeline.ts (cognitionFeedback) + SongPackageView.tsx + HermesHitFactory.tsx" },
       { "id": "T3", "title": "Interactive trace explorer + demo gallery", "status": "shipped", "pr": "#50", "home": "lib/hermes/traceHtml.ts + docs/demo-gallery.html + examples/demos/*/trace.html" },
-      { "id": "T4", "title": "Council scoring → hook ranking + learn→vector recall", "status": "queued", "home": "cognition.ts + Council.tsx + learn.ts + recommend.ts" },
+      { "id": "T4", "title": "Council scoring → hook ranking + learn→vector recall", "status": "shipped", "pr": "#53", "home": "council.ts (rankHooksByCouncil) + Council.tsx + vectorRecall.ts (rememberSong/recommendSimilar)" },
       { "id": "T5", "title": "ARCHITECTURE.md + brain-wiring diagram (generated from brainMap)", "status": "shipped", "pr": "#51", "home": "ARCHITECTURE.md + docs/brain-wiring.md + lib/hermes/wiringDoc.ts" }
     ]
   },
