@@ -78,8 +78,10 @@ vector memory, and document the architecture — lifts output quality, dev appea
 - [x] **Persona-map reference** — `docs/personas.md` documenting the 6 craft archetypes,
    generated from `personas.ts` (`personasDoc.ts`, `GEN_DOCS`-gated) so it can't drift;
    states the original-only / never-name-an-artist stance. _(#55)_
-- [ ] **Vault durability** — `storage.ts` writes a secondary backup key on save + restores
-   from it if the primary vault is cleared/corrupt, so a cleared browser never wipes a catalog.
+- [x] **Vault durability** — `storage.ts` mirrors every vault/album write to a `.bak` key;
+   reads auto-heal from the mirror if the live key is missing/corrupt, plus `restoreFromBackup()`
+   + `vaultBackupStatus()` for an explicit restore. Survives a truncated write or a cleared
+   single key (full-storage export/import still covers a wiped browser). Tested. _(#56)_
 
 ## 🌐 Ecosystem (integrates via API — kept out of the free local core)
 - [~] **Crossroads Board** — the WIFI DJ governance/community steering surface (the brain's
