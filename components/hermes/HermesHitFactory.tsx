@@ -7,7 +7,7 @@ import { runPipeline } from '@/lib/hermes/pipeline';
 import { withChosenHook } from '@/lib/hermes/rescore';
 import { keywords } from '@/lib/hermes/text';
 import { listSongs, saveSong, getSong, deleteSong, priorSongsForOriginality, loadBannedWords, saveBannedWords, listAlbums, saveAlbum, deleteAlbum, loadTaste, recordTaste, type Taste } from '@/lib/hermes/storage';
-import { allAvoidWords } from '@/lib/hermes/memory';
+import { allAvoidWords, newLearnedExclusions } from '@/lib/hermes/memory';
 import { diffEdit, parseSections } from '@/lib/hermes/edits';
 import { demoSong } from '@/lib/hermes/exampleSong';
 import type { Album } from '@/lib/hermes/album';
@@ -49,6 +49,9 @@ export default function HermesHitFactory() {
   const [labOpen, setLabOpen] = useState(false);
   const [preset, setPreset] = useState<Partial<{ genre: string; mood: string; references: string }> | null>(null);
   const [taste, setTaste] = useState<Taste | undefined>(undefined);
+  // words just auto-excluded this session (cut twice in an edit) — surfaced as a
+  // visible, undo-able notice so learning never silently overrides the artist.
+  const [autoExcluded, setAutoExcluded] = useState<string[]>([]);
   const regenRef = useRef(0); // bumps each run so the same idea yields a fresh take
   const nsRef = useRef(createNervousSystem());      // the nervous system (signal bus)
   const wmRef = useRef(createWorkingMemory(16));     // short-term (working) memory
@@ -94,7 +97,19 @@ export default function HermesHitFactory() {
   function saveLyricEdit(newText: string) {
     if (!pkg) return;
     const edit = diffEdit(pkg.finalLyrics, newText);
-    if (edit.changed) setTaste(recordTaste(edit.added, edit.removed));
+    if (edit.changed) {
+      const t = recordTaste(edit.added, edit.removed);
+      setTaste(t);
+      // a word cut twice is a real signal, not a fluke — exclude it automatically
+      // instead of waiting on a manual "+ exclude" tap, but never silently: it's
+      // announced below with an undo, so the artist still has the final say.
+      for (const w of edit.removed) {
+        if ((t.disliked[w] ?? 0) >= 2 && !banned.includes(w)) {
+          addExclusion(w);
+          setAutoExcluded((prev) => (prev.includes(w) ? prev : [...prev, w]));
+        }
+      }
+    }
     const updated = { ...pkg, finalLyrics: newText, sections: parseSections(newText) };
     saveSong(updated);
     setVault(listSongs());
@@ -202,6 +217,31 @@ export default function HermesHitFactory() {
     saveBannedWords(next);
   }
 
+  // undo for an auto-excluded word (from the notice banner) — the artist always
+  // gets the final say, even on a word the brain excluded on its own.
+  function removeExclusion(word: string) {
+    const next = banned.filter((w) => w !== word.toLowerCase());
+    setBanned(next);
+    saveBannedWords(next);
+    setAutoExcluded((prev) => prev.filter((w) => w !== word));
+  }
+
+  function dismissAutoExcludedNotice(word: string) {
+    setAutoExcluded((prev) => prev.filter((w) => w !== word));
+  }
+
+  // one-tap bridge from session-local learning to the durable, version-controlled
+  // record — copies the words this browser has learned that aren't in the
+  // committed brain/memory.json yet, so they survive a cleared browser or a
+  // different device instead of staying stuck in this one's localStorage.
+  const learnedToRemember = newLearnedExclusions(banned);
+  function copyLearnedExclusions() {
+    const payload = JSON.stringify(learnedToRemember, null, 2);
+    navigator.clipboard?.writeText(
+      `Add these to brain/memory.json's exclusions.words to remember them everywhere:\n${payload}`,
+    ).catch(() => {});
+  }
+
   const doneCount = Object.values(outputs).filter((o) => o.status === 'done' || o.status === 'warning').length;
   // Compose (calm, focal input) until there's something to study; Studio (the full
   // analytical deck) once a run is under way or a package exists.
@@ -271,6 +311,21 @@ export default function HermesHitFactory() {
         </div>
       )}
 
+      {autoExcluded.map((w) => (
+        <div
+          key={w}
+          role="status"
+          style={{
+            display: 'flex', alignItems: 'center', gap: 10, border: '1px solid var(--line-strong)',
+            background: 'rgba(210,75,255,0.08)', borderRadius: 12, padding: '10px 14px', margin: '4px 0 14px', fontSize: 13,
+          }}
+        >
+          <span style={{ flex: 1 }}>🧠 Added &ldquo;{w}&rdquo; to your avoid list — you&rsquo;ve cut it twice.</span>
+          <button className={styles.ghostBtn} onClick={() => removeExclusion(w)}>Undo</button>
+          <button className={styles.ghostBtn} onClick={() => dismissAutoExcludedNotice(w)}>×</button>
+        </div>
+      ))}
+
       <div className={styles.deck}>
         {/* left column — input + avoid words */}
         <div className={styles.col}>
@@ -292,13 +347,18 @@ export default function HermesHitFactory() {
                   onBlur={(e) => saveAvoid(e.target.value)}
                   aria-label="Avoid-words, comma separated"
                 />
+                {learnedToRemember.length > 0 && (
+                  <button className={styles.copyBtn} style={{ marginLeft: 0, marginTop: 7 }} onClick={copyLearnedExclusions}>
+                    📋 copy {learnedToRemember.length} new word{learnedToRemember.length > 1 ? 's' : ''} to remember permanently
+                  </button>
+                )}
               </>
             )}
           </div>
 
           <ArtistCard songs={vault} taste={taste} becomingYou={becomingYou} />
           <Rack />
-          <RecommendationsPanel songs={vault} taste={taste} onAddExclusion={addExclusion} onApplyPack={applyPack} />
+          <RecommendationsPanel songs={vault} taste={taste} banned={banned} onAddExclusion={addExclusion} onApplyPack={applyPack} />
         </div>
 
         {/* center column — brain scan + agent board + package */}

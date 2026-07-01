@@ -36,3 +36,21 @@ export function allAvoidWords(extra: string[] = []): string[] {
 export function memoryPreferences() {
   return MEMORY.preferences ?? {};
 }
+
+/**
+ * Words the app has learned (via the in-app avoid-words list — one-tap exclusions
+ * or auto-excluded repeated cuts) that AREN'T yet in the durable, version-controlled
+ * record (`DEFAULT_BANNED_WORDS` + `brain/memory.json`). Those learned words only
+ * live in that browser's localStorage — this is the diff a "copy to remember
+ * permanently" UI action offers, so a real exclusion survives a cleared browser or
+ * a different device instead of staying session-local.
+ */
+export function newLearnedExclusions(currentBanned: string[]): string[] {
+  const known = new Set(
+    [...DEFAULT_BANNED_WORDS, ...(MEMORY.exclusions?.words ?? [])].map((w) => w.toLowerCase().trim()),
+  );
+  const seen = new Set<string>();
+  return currentBanned
+    .map((w) => w.toLowerCase().trim())
+    .filter((w) => w && !known.has(w) && !seen.has(w) && (seen.add(w), true));
+}
