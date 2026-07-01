@@ -78,14 +78,22 @@ export function familyCount(): number {
  * bright > 0) and a rhyme `temp` — 'tight'/'balanced' use perfect-rhyme families,
  * 'loose' opens up to slant/near-rhyme families (bigger, more varied groups, so a
  * song is less likely to reach for the same two end-words). Deterministic per rng.
+ * `banned` is enforced here (not just flagged post-generation afterward) — an
+ * excluded word like "crown" never lands in a rhyme slot in the first place.
+ * Falls back tier by tier (never fully starves a couplet over an exclusion).
  */
-export function rhymeFamily(rng: () => number, valence = 0, n = 2, temp: RhymeTemp = 'balanced'): LexEntry[] {
+export function rhymeFamily(
+  rng: () => number, valence = 0, n = 2, temp: RhymeTemp = 'balanced', banned: Set<string> = new Set(),
+): LexEntry[] {
   const leans = (e: LexEntry) => (valence < -0.2 ? e.a <= 0.1 : valence > 0.2 ? e.a >= -0.1 : true);
+  const allowed = (e: LexEntry) => !banned.has(e.w.toLowerCase());
   const source = temp === 'loose' ? SLANT_FAMILIES : NOUN_FAMILIES;
-  const eligible = source.filter((g) => g.filter(leans).length >= n);
-  const fams = eligible.length ? eligible : source;
-  if (!fams.length) return [];
-  const fam = fams[Math.floor(rng() * fams.length)];
-  const words = fam.filter(leans).length >= n ? fam.filter(leans) : fam;
+  const eligible = source.filter((g) => g.filter((e) => leans(e) && allowed(e)).length >= n);
+  const fams = eligible.length ? eligible : source.filter((g) => g.filter(allowed).length >= n);
+  const finalSource = fams.length ? fams : source;
+  if (!finalSource.length) return [];
+  const fam = finalSource[Math.floor(rng() * finalSource.length)];
+  const leanAllowed = fam.filter((e) => leans(e) && allowed(e));
+  const words = leanAllowed.length >= n ? leanAllowed : fam.filter(allowed).length >= n ? fam.filter(allowed) : fam;
   return shuffle(words, rng).slice(0, n);
 }

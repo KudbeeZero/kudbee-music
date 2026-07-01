@@ -9,8 +9,8 @@ import type { SongInputs, HookOption, SongSection, ProductionNotes } from '../ty
 export interface LyricsProvider {
   readonly id: string;
   readonly live: boolean; // false = mock/local
-  generateHooks(inputs: SongInputs, count: number, seed?: number): Promise<HookOption[]>;
-  generateSections(inputs: SongInputs, hook: HookOption, seed?: number): Promise<SongSection[]>;
+  generateHooks(inputs: SongInputs, count: number, seed?: number, bannedWords?: string[]): Promise<HookOption[]>;
+  generateSections(inputs: SongInputs, hook: HookOption, seed?: number, bannedWords?: string[]): Promise<SongSection[]>;
 }
 
 export interface AudioProvider {

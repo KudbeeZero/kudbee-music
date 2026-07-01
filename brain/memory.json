@@ -1,18 +1,23 @@
 {
   "owner": "kudbee",
-  "updated": "2026-06-30",
+  "updated": "2026-07-01",
   "note": "Persistent creative memory for the HERMES Hit Factory — the semantic-memory tier of the brain. The algorithm always reads this so preferences and exclusions stick without re-specifying. Edit freely; it's version-controlled.",
   "exclusions": {
     "words": [
       "concrete", "sharpen", "sharpened",
       "chain", "chains", "chained",
       "bed", "bedroom",
-      "mirror", "mirrors"
+      "mirror", "mirrors",
+      "skyline", "throne",
+      "no turning back"
     ],
     "notes": [
       "no chain / chains imagery",
       "no bedroom scenes or mirrors-on-the-wall clichés",
-      "avoid 'concrete' and 'sharpen'"
+      "avoid 'concrete' and 'sharpen'",
+      "avoid 'skyline' and 'throne' — overused AI-lyric clichés (2026-07-01, from generating \"Second Wind\")",
+      "avoid the fixed phrase 'no turning back' — generic AI-lyric opener",
+      "fire/flame/crown were already in the generic avoid-list (bannedWords.ts) but weren't being enforced during generation until this same pass — see lib/hermes/providers/mockLyricsProvider.ts"
     ]
   },
   "preferences": {

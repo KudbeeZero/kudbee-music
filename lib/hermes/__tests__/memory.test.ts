@@ -40,4 +40,16 @@ describe('memory layer', () => {
     const { pkg } = await runPipeline(inputs, { id: 'm', now: '2026-01-01T00:00:00Z' });
     expect(pkg.uniqueness).toBeTruthy();
   });
+
+  it('a remembered exclusion actually keeps the word out of the generated lyrics, not just flags it', async () => {
+    const inputs: SongInputs = {
+      title: 'T', theme: 'looking in the mirror on the skyline', mood: 'hard', genre: 'trap',
+      tempoMin: 130, tempoMax: 150, voice: 'me', audience: 'crew', doNotUse: [], references: '', structure: 'hook-first',
+    };
+    const { pkg } = await runPipeline(inputs, { id: 'm2', now: '2026-01-01T00:00:00Z', seed: 3 });
+    expect(pkg.finalLyrics.toLowerCase()).not.toMatch(/\bmirror\b/);
+    expect(pkg.finalLyrics.toLowerCase()).not.toMatch(/\bskyline\b/);
+    expect(pkg.uniqueness.bannedWordsHit).not.toContain('mirror');
+    expect(pkg.uniqueness.bannedWordsHit).not.toContain('skyline');
+  });
 });
