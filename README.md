@@ -216,8 +216,10 @@ docs/                    quickstart, concepts, CLI ref, scene-pack guide, hit-fa
 - [x] **Interactive song deck** — selectable hooks (honest re-score + feeds your voice model), copy-on-tap clips; app focused on lyrics + the brain
 - [x] **Deterministic lyric-core depth** — hierarchical generation, thematic threading, diversity scoring, slant-rhyme "temperature" dial
 
+- [x] **Eval harness + golden songs** (`npm run eval`) — objective lyric metrics over a golden set; a CI regression guard
+
 **Next** — the phased plan is the spine [`brain/roadmap.json`](brain/roadmap.json); the human backlog is [`TODO.md`](TODO.md).
-- [ ] **Measure & safety** — eval harness + golden songs (`npm run eval`); output-safety filter; one-command demo (`npm run demo`)
+- [ ] **Measure & safety** — output-safety filter + disclaimer; one-command demo (`npm run demo`)
 - [ ] **Deepen the visible brain** — cognitive model (first→second thought→decision); the Council; brain-scan boot sequence
 - [ ] **Make it yours** — create-your-own-artist; community personas · **Durability** — vault backup so a cleared browser never loses your catalog
 - [ ] **Real AI (opt-in)** behind the adapters (mock stays default → $0) · **Influence Studio** (felt, never copied)

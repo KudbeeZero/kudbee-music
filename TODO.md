@@ -95,6 +95,10 @@ Board** governance / Solana / token / NFT layer integrates with this engine via 
 later (kept out of this repo's core so it stays free + local).
 
 ## ✅ Shipped (newest first)
+- [x] **Eval harness + golden songs** — `lib/hermes/eval.ts` + `npm run eval`: objective
+      local metrics (rhyme density, line diversity, thematic coherence, hook strength) over
+      the demos + flagship as a **golden set**; a CI regression guard so "learn/score" is
+      measurable. _(#36)_
 - [x] **Deterministic lyric-core depth** — hierarchical generation (section goals:
       setup→turn→reflect), thematic threading, diversity scoring (`selfSimilarity`), and a
       slant-rhyme "temperature" dial (`rhymeTemp`, `slantKey`, Song Lab selector). _(#34)_

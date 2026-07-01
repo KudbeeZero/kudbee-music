@@ -193,8 +193,9 @@ A second-opinion review flagged real risks worth acting on (truth-first):
   a song-wide guard stops any frame being reused), and a **slant/near-rhyme "temperature"**
   knob (`rhymeTemp` tight↔loose, `slantKey` families, a Rhyme selector in the Song Lab).
   Still $0/local/deterministic. _(this PR)_
-- 💭 **Eval harness + golden songs** — automated scoring (rhyme density, repetition,
-  section coherence) over a fixed set, so "learn"/"scoring" claims are measurable.
+- ✅ **Eval harness + golden songs** — `lib/hermes/eval.ts` + `npm run eval`: objective
+  metrics (rhyme density, line diversity, thematic coherence, hook strength) over the
+  demos + flagship golden set; a CI regression guard so "learn/score" is measurable. _(#36)_
 - 💭 **Output safety filter** — screen generated hooks against famous phrases; add a
   short disclaimer/ToS putting responsibility on the user.
 
