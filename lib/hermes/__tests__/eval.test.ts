@@ -38,7 +38,7 @@ describe('eval harness (golden regression guard)', () => {
 
   it('reports all four metrics per song', () => {
     const r = evaluateSong(golden[0]);
-    expect(r.metrics.map((m) => m.name)).toEqual(['rhyme density', 'line diversity', 'thematic coherence', 'hook strength']);
+    expect(r.metrics.map((m) => m.name)).toEqual(['rhyme density', 'line diversity', 'thematic coherence', 'imagery coherence', 'hook strength']);
     expect(r.bangerTotal).toBeGreaterThan(0);
   });
 
