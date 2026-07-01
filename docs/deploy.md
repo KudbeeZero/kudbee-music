@@ -38,6 +38,38 @@ natively — nothing to configure.
 That keeps the marketing front door and the studio cleanly separated, both under your
 one domain.
 
+## Which host for what (you have Cloudflare, Vercel, and Fly.io)
+- **The Hit Factory front end** (this app) is **static** → cheapest + simplest on
+  **Cloudflare Pages** or **Vercel**. Don't put it on Fly.io — a container is overkill
+  for static files.
+- **Fly.io is for the *server* workloads** that come later, where it genuinely shines
+  (Docker containers, always-on, real CPU): the **video studio** render pipeline
+  (ffmpeg + headless Chromium), a future **real-AI / audio** backend, the **WIFI DJ
+  radio** stream, and per-agent compute. Keep those off the static host and on Fly.io.
+- **Cloudflare** stays the front door: the domain, DNS, the WIFI-DJ landing, the CDN,
+  and (later) a Worker/API in front of the Fly.io services.
+
+Rule of thumb: **static + edge → Cloudflare/Vercel; anything with a server, ffmpeg, or
+a model → Fly.io.**
+
+## Cloudflare build gotcha (important — this is why the first build failed)
+The repo's default `npm run build` is the **video pipeline** (ffmpeg/Chromium) and will
+fail on a web host. The web build command is **`npm run web:build`** (with
+`STATIC_EXPORT=1` for a static export). Set that explicitly in the project settings —
+don't let it auto-run `npm run build`.
+
+### If you're using Cloudflare **Workers** (Git integration)
+The repo ships a `wrangler.jsonc` (assets-only Worker serving `./out`). In the Workers
+project **Settings → Build**:
+- **Build command:** `STATIC_EXPORT=1 npm run web:build`
+- **Deploy command:** `npx wrangler deploy`
+- **Environment variable:** `NODE_VERSION` = `22`
+
+### Simpler: Cloudflare **Pages** (recommended for a static site)
+Create a **Pages** project instead of Workers (Pages is purpose-built for static
+output): build command `npm run web:build`, output dir `out`, env `STATIC_EXPORT=1` +
+`NODE_VERSION=22`. No `wrangler.jsonc` needed.
+
 ## Notes
 - The Node/ffmpeg **video studio** (`bin/hermes`, `studio/*`) is not part of the web
   build — it never runs on the host; only `next build` does.
