@@ -4,6 +4,8 @@ import type {
   BangerScore, HookOption, UniquenessReport, VisualPackage, ViralClip,
   SongInputs, SongSection,
 } from './types';
+import { hasInternalRhyme, rhymeDensity } from './rhyme';
+import { keywords } from './text';
 
 export interface ScoreInputs {
   inputs: SongInputs;
@@ -21,10 +23,15 @@ export function scoreSong(s: ScoreInputs): BangerScore {
   const hook = s.chosenHook;
   const lineCount = s.sections.reduce((a, b) => a + b.lines.length, 0);
 
-  // hook strength 0–20: the hook's own stickiness + brevity bonus
-  const hookLen = hook ? hook.text.split(/\s+/).length : 0;
+  // hook strength 0–20: HONEST signals, not length + RNG — brevity, whether the
+  // hook actually references the theme, and whether it carries internal rhyme.
+  const hookText = hook?.text ?? '';
+  const hookLen = hook ? hookText.split(/\s+/).length : 0;
   const brevity = hook ? (hookLen <= 8 ? 1 : hookLen <= 12 ? 0.7 : 0.4) : 0;
-  const hookStrength = clampTo(((hook?.score ?? 40) / 100) * 14 + brevity * 6, 20);
+  const themeKw = keywords(s.inputs.theme, 8);
+  const refsTheme = hook && themeKw.some((k) => hookText.toLowerCase().includes(k)) ? 1 : 0;
+  const internalRhyme = hook && hasInternalRhyme(hookText) ? 1 : 0;
+  const hookStrength = clampTo(brevity * 6 + refsTheme * 5 + internalRhyme * 5 + (hook ? 4 : 0), 20);
 
   // emotional clarity 0–20
   const emotionalClarity = clampTo(s.emotionClarity * 20, 20);
@@ -32,11 +39,12 @@ export function scoreSong(s: ScoreInputs): BangerScore {
   // originality 0–20 from the uniqueness score
   const originality = clampTo((s.uniqueness.score / 100) * 20, 20);
 
-  // replay value 0–15: hook repetition + structural variety + tightness
+  // replay value 0–15: structural variety + tightness + how much the lyrics rhyme
   const distinctSections = new Set(s.sections.map((x) => x.label.replace(/\s*\d+$/, ''))).size;
   const variety = Math.min(1, distinctSections / 5);
   const tightness = lineCount >= 8 && lineCount <= 40 ? 1 : 0.6;
-  const replayValue = clampTo((brevity * 0.5 + variety * 0.3 + tightness * 0.2) * 15, 15);
+  const rhyme = rhymeDensity(s.sections.flatMap((x) => x.lines));
+  const replayValue = clampTo((brevity * 0.35 + variety * 0.25 + tightness * 0.15 + rhyme * 0.25) * 15, 15);
 
   // visual identity 0–10
   const hasVisuals = s.visuals.albumCoverPrompt && s.visuals.musicVideoPrompt ? 1 : 0.4;
