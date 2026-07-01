@@ -46,6 +46,26 @@ describe('learn-from-edits', () => {
     const rec = recs.find((r) => r.action?.type === 'add-exclusion' && r.action.value === 'concrete');
     expect(rec).toBeTruthy();
   });
+
+  it('does not re-recommend a word that is already excluded (e.g. auto-excluded)', () => {
+    recordTaste([], ['concrete']);
+    recordTaste([], ['concrete']);
+    const recs = recommend(learnProfile([]), [], loadTaste(), ['concrete']);
+    const rec = recs.find((r) => r.action?.type === 'add-exclusion' && r.action.value === 'concrete');
+    expect(rec).toBeUndefined();
+  });
+
+  it('does not re-recommend an already-banned overused word, but still surfaces the next one', () => {
+    const profile = {
+      songCount: 3, topGenres: [], topMoods: [], themeKeywords: [], avgBanger: 80,
+      avgUniqueness: 90, emotionRange: 0.5, leansDark: false,
+      overusedWords: [{ word: 'skyline', count: 3 }, { word: 'railroad', count: 2 }],
+      structuresUsed: [], weakHookCount: 0,
+    };
+    const recs = recommend(profile, [], undefined, ['skyline']);
+    expect(recs.find((r) => r.action?.type === 'add-exclusion' && r.action.value === 'skyline')).toBeUndefined();
+    expect(recs.find((r) => r.action?.type === 'add-exclusion' && r.action.value === 'railroad')).toBeTruthy();
+  });
 });
 
 describe('vault export / import (durability)', () => {

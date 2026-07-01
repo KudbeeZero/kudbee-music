@@ -211,6 +211,24 @@ Board** governance / Solana / token / NFT layer integrates with this engine via 
 later (kept out of this repo's core so it stays free + local).
 
 ## ✅ Shipped (newest first)
+- [x] **Auto-exclude on the 2nd cut + proactive cliché seeding (the moat)** — closes the
+      remaining "learn from edits" gaps a repeated round of artist feedback surfaced.
+      (1) A word cut twice in the lyric editor is now auto-added to the avoid list
+      instead of only being *recommended* with a manual tap — surfaced as a visible,
+      undo-able notice (`components/hermes/HermesHitFactory.tsx`) so learning never
+      silently overrides the artist, per the "assistant, not autopilot" belief.
+      `recommend.ts` now takes the current `banned` list so it never re-suggests a word
+      that's already excluded. (2) A "📋 copy N new words to remember permanently"
+      button in the Avoid-words panel bridges the session-local, localStorage-only
+      learned exclusions into the durable, git-committed `brain/memory.json`
+      (`lib/hermes/memory.ts`'s new `newLearnedExclusions()`) — no fake auto-sync, just
+      a one-tap export the same way the Suno-style copy button already works. (3)
+      Proactively expanded `bannedWords.ts` with 18 commonly-recognized AI-lyric-cliché
+      terms (tapestry, unwavering, phoenix, haunting, etc.) ahead of a specific
+      complaint — confirmed zero overlap with current generation vocabulary, so no
+      demo regeneration needed. Verified live: generate → cut a repeated word → notice
+      + auto-exclusion appear; avoid-words panel surfaces the copy button; zero console
+      errors. _(this PR)_
 - [x] **Avoid-words actually enforced during generation (the moat)** — the exclusion
       system (`brain/memory.json` + `bannedWords.ts` generic clichés) was **warn-only**:
       `checkOriginality()` flagged a banned word after the fact, but nothing in the

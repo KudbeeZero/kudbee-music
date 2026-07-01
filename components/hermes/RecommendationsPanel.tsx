@@ -10,16 +10,20 @@ import styles from './hermes.module.css';
 export default function RecommendationsPanel({
   songs,
   taste,
+  banned,
   onAddExclusion,
   onApplyPack,
 }: {
   songs: SongPackage[];
   taste?: import('@/lib/hermes/storage').Taste;
+  /** already-excluded words — so a recommendation never re-suggests one that's
+   *  already banned (e.g. auto-excluded from a repeated cut). */
+  banned?: string[];
   onAddExclusion: (word: string) => void;
   onApplyPack?: (pack: ExpansionPack) => void;
 }) {
   const profile = useMemo(() => learnProfile(songs), [songs]);
-  const recs = useMemo(() => recommend(profile, songs, taste), [profile, songs, taste]);
+  const recs = useMemo(() => recommend(profile, songs, taste, banned), [profile, songs, taste, banned]);
   const [copied, setCopied] = useState<string | null>(null);
 
   return (

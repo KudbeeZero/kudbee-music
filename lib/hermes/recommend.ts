@@ -20,8 +20,9 @@ export interface Recommendation {
   action?: { type: 'add-exclusion' | 'apply-pack' | 'start-album'; value: string };
 }
 
-export function recommend(profile: ArtistProfile, songs: SongPackage[], taste?: Taste): Recommendation[] {
+export function recommend(profile: ArtistProfile, songs: SongPackage[], taste?: Taste, banned: string[] = []): Recommendation[] {
   const recs: Recommendation[] = [];
+  const isBanned = (w: string) => banned.includes(w.toLowerCase());
 
   // procedural memory: the artist's recurring craft moves (lean in, or break it)
   if (songs.length >= 2) {
@@ -35,7 +36,7 @@ export function recommend(profile: ArtistProfile, songs: SongPackage[], taste?: 
 
   // learned-from-edits: a word the writer keeps CUTTING is a real exclusion signal
   if (taste && taste.edits > 0) {
-    const cut = Object.entries(taste.disliked).filter(([, c]) => c >= 2).sort((a, b) => b[1] - a[1])[0];
+    const cut = Object.entries(taste.disliked).filter(([w, c]) => c >= 2 && !isBanned(w)).sort((a, b) => b[1] - a[1])[0];
     if (cut) {
       recs.push({
         kind: 'exclusion', title: `You keep cutting "${cut[0]}"`,
@@ -66,12 +67,12 @@ export function recommend(profile: ArtistProfile, songs: SongPackage[], taste?: 
   }
 
   // retire crutch words → memory exclusion candidates
-  if (profile.overusedWords.length) {
-    const w = profile.overusedWords[0];
+  const overused = profile.overusedWords.find((o) => !isBanned(o.word));
+  if (overused) {
     recs.push({
-      kind: 'exclusion', title: `You lean on "${w.word}" a lot`,
-      detail: `"${w.word}" shows up across ${w.count} of your songs. Excluding it forces a fresh image. One tap adds it to your memory's exclusion list.`,
-      action: { type: 'add-exclusion', value: w.word },
+      kind: 'exclusion', title: `You lean on "${overused.word}" a lot`,
+      detail: `"${overused.word}" shows up across ${overused.count} of your songs. Excluding it forces a fresh image. One tap adds it to your memory's exclusion list.`,
+      action: { type: 'add-exclusion', value: overused.word },
     });
   }
 

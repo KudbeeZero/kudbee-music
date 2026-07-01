@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { allAvoidWords, MEMORY } from '../memory';
+import { allAvoidWords, newLearnedExclusions, MEMORY } from '../memory';
 import { DEFAULT_BANNED_WORDS } from '../bannedWords';
 import { runPipeline } from '../pipeline';
 import { checkOriginality } from '../originality';
@@ -14,6 +14,10 @@ describe('memory layer', () => {
     }
     // generic clichés still present
     expect(all).toContain('pain');
+    // proactive "sounds like AI wrote it" clichés (added ahead of a complaint)
+    for (const w of ['tapestry', 'unwavering', 'phoenix', 'haunting']) {
+      expect(all).toContain(w);
+    }
     // de-duplicated
     expect(new Set(all).size).toBe(all.length);
   });
@@ -51,5 +55,12 @@ describe('memory layer', () => {
     expect(pkg.finalLyrics.toLowerCase()).not.toMatch(/\bskyline\b/);
     expect(pkg.uniqueness.bannedWordsHit).not.toContain('mirror');
     expect(pkg.uniqueness.bannedWordsHit).not.toContain('skyline');
+  });
+
+  it('newLearnedExclusions() finds only words not already durably remembered', () => {
+    expect(newLearnedExclusions(allAvoidWords())).toEqual([]); // nothing new yet
+    expect(newLearnedExclusions([...allAvoidWords(), 'moonlit', 'lantern-glow'])).toEqual(['moonlit', 'lantern-glow']);
+    // case-insensitive + de-duplicated against the durable record
+    expect(newLearnedExclusions(['CONCRETE', 'moonlit', 'moonlit'])).toEqual(['moonlit']);
   });
 });
