@@ -68,7 +68,8 @@
       "goal": "The smallest real-AI increment that feels transformative; mock stays default so the core stays $0.",
       "items": [
         { "id": "5.1", "title": "claudeLyricsProvider behind ANTHROPIC_API_KEY (mock default)", "status": "queued", "home": "lib/hermes/providers/claudeLyricsProvider.ts" },
-        { "id": "5.2", "title": "Rhyme/BPM validation loop on generated output", "status": "queued", "home": "lib/hermes/pipeline.ts" }
+        { "id": "5.2", "title": "Rhyme/BPM validation loop on generated output", "status": "queued", "home": "lib/hermes/pipeline.ts" },
+        { "id": "5.3", "title": "Vector memory + semantic search (local embeddings, opt-in)", "status": "shipped", "pr": "#47", "home": "lib/hermes/vectorMemory.ts", "note": "FOUNDER prompt. A local semantic-search layer on top of the rule/lexicon systems (never replaces them). @xenova/transformers is an OPTIONAL lazy dep (indirect import → core install + CI stay light; model only downloads when a user runs `npm i @xenova/transformers`). Pure cosine-search core unit-tested WITHOUT the model. addMemory/semanticSearch + type filtering + brain/vector-memory.json store (gitignored). Integration guidance for learn/originality/procedural/limbic in comments; wiring is the next (aggressive) step." }
       ]
     },
     {
