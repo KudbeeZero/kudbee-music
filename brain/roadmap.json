@@ -40,7 +40,7 @@
       "goal": "The lyrics/brain focus, made visible — the star magnet.",
       "items": [
         { "id": "2.1", "title": "Cognitive model: first thought → second thought → decision", "status": "shipped", "pr": "#39", "home": "lib/hermes/cognition.ts", "note": "deliberate() runs 3 real critiques (true-to-brief / original / earns-it) → keep|revise; a '🧭 How the brain decided' readout on the lead hook" },
-        { "id": "2.2", "title": "The Council — agents as a deliberating board", "status": "queued", "home": "components/hermes/Council.tsx" },
+        { "id": "2.2", "title": "The Council — agents as a deliberating board", "status": "shipped", "pr": "#41", "home": "components/hermes/Council.tsx", "note": "right hemisphere proposes / left challenges / artist decides; reuses agent findings + cognition deliberate(). The Crossroads Board made literal. Also added a .env* gitignore guard + .env.example (RUNWAY/ANTHROPIC placeholders) so a founder key can never be committed." },
         { "id": "2.3", "title": "Brain-scan boot sequence + live per-agent drive", "status": "queued", "home": "components/hermes/BrainScan.tsx" },
         { "id": "2.4", "title": "Particle Brain + artist heat-map (living Brain Scan)", "status": "shipped", "pr": "#40", "home": "components/hermes/BrainScan.tsx + lib/hermes/heat.ts", "note": "SHIPPED (founder idea): canvas particle layer over the SVG brain + a thermal heat-map; brainHeat() (tested) colors regions by artist type (right/generative=hot magenta, analytical=cyan, emotion raises temp, more 'becoming-you'=hotter). Reduced-motion aware. Header shows the artist type + brain temp. Feeds the Living-Brain dNFT." }
       ]

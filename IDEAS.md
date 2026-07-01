@@ -48,7 +48,7 @@ brain becoming them.
 - **Why it matters:** visual proof the artist is part of the process; the WIFI DJ
   "Crossroads Board / nervous system" made literal.
 
-### 2. The Council — the agents as a deliberating board  💭
+### 2. The Council — the agents as a deliberating board  ✅ (shipped — `components/hermes/Council.tsx`)
 Render the 10 agents as a **council** around the brain (the "Crossroads Board"): right
 hemisphere proposes, left hemisphere challenges, the artist decides. Show the
 back-and-forth, not just final outputs.
