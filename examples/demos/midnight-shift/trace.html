@@ -1,0 +1,289 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>HERMES trace — Midnight Shift</title>
+<style>
+  :root{--bg0:#07070b;--bg1:#0d0d14;--ink:#f3f1fb;--dim:#a8a6bd;--faint:#6f6d86}
+  *{box-sizing:border-box}
+  body{margin:0;background:radial-gradient(1200px 600px at 50% -10%, #0d0d14, #07070b) fixed;color:var(--ink);
+    font:15px/1.55 ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial}
+  .wrap{max-width:860px;margin:0 auto;padding:34px 20px 60px}
+  .eyebrow{color:var(--faint);font-size:12px;letter-spacing:.06em;text-transform:uppercase;margin-bottom:8px}
+  h1{margin:0 0 14px;font-size:32px;letter-spacing:-.01em}
+  h2{font-size:16px;margin:0 0 12px}
+  h2 small{color:var(--faint);font-weight:400}
+  .chips{display:flex;flex-wrap:wrap;gap:8px}
+  .chip{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.08);border-radius:999px;padding:4px 11px;font-size:12.5px;color:var(--dim)}
+  .chip b{color:var(--ink);font-weight:600;text-transform:uppercase;font-size:10.5px;letter-spacing:.04em;margin-right:4px}
+  section{margin-top:30px}
+  .scan{background:rgba(255,255,255,.02);border:1px solid rgba(255,255,255,.06);border-radius:16px;padding:14px}
+  .brain{width:100%;height:auto;display:block}
+  .brain .node{cursor:pointer}
+  .brain .node:focus{outline:none}
+  .brain .node:focus circle:first-child,.brain .node:hover circle:first-child{opacity:.55}
+  .node-label{fill:var(--dim);font-size:8.5px;font-family:inherit}
+  .legend{display:flex;gap:16px;justify-content:center;flex-wrap:wrap;margin-top:6px;color:var(--dim);font-size:12px}
+  .legend i{display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:5px;vertical-align:-1px}
+  .metrics{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px}
+  .metric{background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.07);border-radius:12px;padding:12px 14px;display:flex;flex-direction:column;gap:2px}
+  .m-k{color:var(--faint);font-size:11px;text-transform:uppercase;letter-spacing:.05em}
+  .m-v{font-size:18px;font-weight:600}
+  .m-s{color:var(--dim);font-size:12px}
+  .card{border:1px solid rgba(255,255,255,.08);border-left:3px solid var(--hue);border-radius:10px;margin:8px 0;background:rgba(255,255,255,.02);transition:background .3s}
+  .card.flash{background:rgba(255,255,255,.08)}
+  .card summary{cursor:pointer;list-style:none;padding:11px 14px;display:flex;align-items:center;gap:10px}
+  .card summary::-webkit-details-marker{display:none}
+  .card .dot{width:9px;height:9px;border-radius:50%;background:var(--hue);flex:0 0 auto;box-shadow:0 0 10px var(--hue)}
+  .card-title{font-weight:600}
+  .card-side{margin-left:auto;color:var(--faint);font-size:11px;text-transform:uppercase;letter-spacing:.05em}
+  .card p{margin:0;padding:0 14px 14px 33px;color:var(--dim)}
+  .suno-head{display:flex;align-items:center;justify-content:space-between;gap:12px}
+  .suno pre{white-space:pre-wrap;word-break:break-word;background:#07070b;border:1px solid rgba(255,255,255,.08);border-radius:12px;padding:14px;color:var(--dim);font:12.5px/1.5 ui-monospace,SFMono-Regular,Menlo,monospace;margin:10px 0 0}
+  #copySuno{background:#d24bff;color:#12001a;border:0;border-radius:8px;padding:8px 14px;font-weight:600;cursor:pointer;font-size:13px}
+  #copySuno:hover{filter:brightness(1.1)}
+  footer{margin-top:36px;color:var(--faint);font-size:12.5px;line-height:1.6}
+  footer code{color:var(--dim)}
+  @media (prefers-reduced-motion: reduce){*{scroll-behavior:auto!important;transition:none!important}}
+</style>
+</head>
+<body>
+
+  <main class="wrap">
+    <header>
+      <div class="eyebrow">HERMES · generation trace · deterministic (seed 36) · $0 local</div>
+      <h1>Midnight Shift</h1>
+      <div class="chips"><span class="chip"><b>theme</b> working the graveyard shift to build a future nobody sees yet</span><span class="chip"><b>mood</b> tired but relentless, quietly proud</span><span class="chip"><b>genre</b> lo-fi soul hip-hop</span><span class="chip"><b>structure</b> full-song</span></div>
+    </header>
+
+    <section class="scan">
+      <svg viewBox="0 0 440 300" class="brain" role="img" aria-label="Brain region heat-map">
+      <g class="node" data-region="intent" tabindex="0" role="button" aria-label="Intent">
+        <circle cx="220" cy="54" r="12.2" fill="#ffb14e" opacity="0.604"/>
+        <circle cx="220" cy="54" r="3.2" fill="#ffb14e" opacity="0.95"/>
+        <text x="220" y="72" text-anchor="middle" class="node-label">Intent</text>
+      </g>
+      <g class="node" data-region="language" tabindex="0" role="button" aria-label="Language &amp; Culture">
+        <circle cx="146" cy="96" r="12.2" fill="#36e0d4" opacity="0.604"/>
+        <circle cx="146" cy="96" r="3.2" fill="#36e0d4" opacity="0.95"/>
+        <text x="146" y="114" text-anchor="middle" class="node-label">Language &amp; Culture</text>
+      </g>
+      <g class="node" data-region="values" tabindex="0" role="button" aria-label="Values">
+        <circle cx="256" cy="104" r="12.2" fill="#ffb14e" opacity="0.604"/>
+        <circle cx="256" cy="104" r="3.2" fill="#ffb14e" opacity="0.95"/>
+        <text x="256" y="122" text-anchor="middle" class="node-label">Values</text>
+      </g>
+      <g class="node" data-region="generative" tabindex="0" role="button" aria-label="Generative (right)">
+        <circle cx="338" cy="150" r="13.7" fill="#d24bff" opacity="0.736"/>
+        <circle cx="338" cy="150" r="3.2" fill="#d24bff" opacity="0.95"/>
+        <text x="338" y="168" text-anchor="middle" class="node-label">Generative (right)</text>
+      </g>
+      <g class="node" data-region="analytical" tabindex="0" role="button" aria-label="Analytical (left)">
+        <circle cx="100" cy="150" r="13.0" fill="#36e0d4" opacity="0.676"/>
+        <circle cx="100" cy="150" r="3.2" fill="#36e0d4" opacity="0.95"/>
+        <text x="100" y="168" text-anchor="middle" class="node-label">Analytical (left)</text>
+      </g>
+      <g class="node" data-region="decision" tabindex="0" role="button" aria-label="Decision">
+        <circle cx="224" cy="150" r="13.4" fill="#ffb14e" opacity="0.712"/>
+        <circle cx="224" cy="150" r="3.2" fill="#ffb14e" opacity="0.95"/>
+        <text x="224" y="168" text-anchor="middle" class="node-label">Decision</text>
+      </g>
+      <g class="node" data-region="limbic" tabindex="0" role="button" aria-label="Limbic (emotion)">
+        <circle cx="316" cy="196" r="13.2" fill="#d24bff" opacity="0.688"/>
+        <circle cx="316" cy="196" r="3.2" fill="#d24bff" opacity="0.95"/>
+        <text x="316" y="214" text-anchor="middle" class="node-label">Limbic (emotion)</text>
+      </g>
+      <g class="node" data-region="default-mode" tabindex="0" role="button" aria-label="Default Mode">
+        <circle cx="72" cy="196" r="12.2" fill="#ffb14e" opacity="0.604"/>
+        <circle cx="72" cy="196" r="3.2" fill="#ffb14e" opacity="0.95"/>
+        <text x="72" y="214" text-anchor="middle" class="node-label">Default Mode</text>
+      </g>
+      <g class="node" data-region="reward" tabindex="0" role="button" aria-label="Reward">
+        <circle cx="372" cy="108" r="13.3" fill="#d24bff" opacity="0.700"/>
+        <circle cx="372" cy="108" r="3.2" fill="#d24bff" opacity="0.95"/>
+        <text x="372" y="126" text-anchor="middle" class="node-label">Reward</text>
+      </g>
+      <g class="node" data-region="short-term" tabindex="0" role="button" aria-label="Short-term">
+        <circle cx="150" cy="222" r="12.2" fill="#ffb14e" opacity="0.604"/>
+        <circle cx="150" cy="222" r="3.2" fill="#ffb14e" opacity="0.95"/>
+        <text x="150" y="240" text-anchor="middle" class="node-label">Short-term</text>
+      </g>
+      <g class="node" data-region="long-term" tabindex="0" role="button" aria-label="Long-term">
+        <circle cx="272" cy="222" r="12.2" fill="#ffb14e" opacity="0.604"/>
+        <circle cx="272" cy="222" r="3.2" fill="#ffb14e" opacity="0.95"/>
+        <text x="272" y="240" text-anchor="middle" class="node-label">Long-term</text>
+      </g></svg>
+      <div class="legend">
+        <span><i style="background:#d24bff"></i> generative (right)</span>
+        <span><i style="background:#36e0d4"></i> analytical (left)</span>
+        <span><i style="background:#ffb14e"></i> core (center)</span>
+      </div>
+    </section>
+
+    <section class="metrics"><div class="metric"><span class="m-k">Banger score</span><span class="m-v">92/100</span><span class="m-s">Certified banger — ship it.</span></div><div class="metric"><span class="m-k">Lead hook</span><span class="m-v">“Every step a promise that I rebuild”</span><span class="m-s">chosen from 5</span></div><div class="metric"><span class="m-k">Rhyme</span><span class="m-v">AABB</span><span class="m-s">100% density</span></div><div class="metric"><span class="m-k">Crave-ability</span><span class="m-v">77/100</span></div><div class="metric"><span class="m-k">Originality</span><span class="m-v">98/100</span></div></section>
+
+    <section class="regions">
+      <h2>🧠 What each region contributed <small>(click to expand)</small></h2>
+      
+    <details class="card" data-region="intent" style="--hue:#ffb14e">
+      <summary>
+        <span class="dot"></span>
+        <span class="card-title">Intent (prefrontal)</span>
+        <span class="card-side">core</span>
+      </summary>
+      <p>Framed the brief → “Lo-Fi Soul Hip-Hop record for everyone grinding in the dark: working the graveyard shift to build a future nobody sees yet — delivered tired but relentless, quietly proud, voiced as weathered.”</p>
+    </details>
+    <details class="card" data-region="values" style="--hue:#ffb14e">
+      <summary>
+        <span class="dot"></span>
+        <span class="card-title">Values cortex</span>
+        <span class="card-side">core</span>
+      </summary>
+      <p>Held the belief system (truth-first, original-only) over the whole run.</p>
+    </details>
+    <details class="card" data-region="language" style="--hue:#36e0d4">
+      <summary>
+        <span class="dot"></span>
+        <span class="card-title">Language &amp; Culture</span>
+        <span class="card-side">analytical</span>
+      </summary>
+      <p>Register: mixed. Diction lean: mix plain talk with one or two vivid images per verse. Imagery seeds: working, graveyard, shift, build.</p>
+    </details>
+    <details class="card" data-region="limbic" style="--hue:#d24bff">
+      <summary>
+        <span class="dot"></span>
+        <span class="card-title">Limbic (emotion)</span>
+        <span class="card-side">generative</span>
+      </summary>
+      <p>Primary feeling: triumph (valence 0.40, intensity 0.85); contrast: the cost it took to get here. Colored word choice; arc: setup → tension → problem → tension → tension → payoff → tension.</p>
+    </details>
+    <details class="card" data-region="default-mode" style="--hue:#ffb14e">
+      <summary>
+        <span class="dot"></span>
+        <span class="card-title">Default-Mode Network</span>
+        <span class="card-side">core</span>
+      </summary>
+      <p>Considered 3 divergent angles, incl. “Tell &quot;working&quot; through a conversation that never happened”.</p>
+    </details>
+    <details class="card" data-region="generative" style="--hue:#d24bff">
+      <summary>
+        <span class="dot"></span>
+        <span class="card-title">Generative (right hemisphere)</span>
+        <span class="card-side">generative</span>
+      </summary>
+      <p>Wrote the hook from 5 candidates → “Every step a promise that I rebuild”.</p>
+    </details>
+    <details class="card" data-region="analytical" style="--hue:#36e0d4">
+      <summary>
+        <span class="dot"></span>
+        <span class="card-title">Analytical (left hemisphere)</span>
+        <span class="card-side">analytical</span>
+      </summary>
+      <p>Rhyme scheme AABB, density 100% across the verse; beat/BPM sanity checks.</p>
+    </details>
+    <details class="card" data-region="reward" style="--hue:#d24bff">
+      <summary>
+        <span class="dot"></span>
+        <span class="card-title">Reward circuit</span>
+        <span class="card-side">generative</span>
+      </summary>
+      <p>Crave-ability 77/100 (returns 1, mutation 0.5, brevity 0.75, singability 0.76) — Compulsive — you&#39;ll want it again.</p>
+    </details>
+    <details class="card" data-region="decision" style="--hue:#ffb14e">
+      <summary>
+        <span class="dot"></span>
+        <span class="card-title">Decision (corpus callosum)</span>
+        <span class="card-side">core</span>
+      </summary>
+      <p>A&amp;R verdict: Certified banger — ship it. (92/100). The artist gets the final choice.</p>
+    </details>
+    <details class="card" data-region="long-term" style="--hue:#ffb14e">
+      <summary>
+        <span class="dot"></span>
+        <span class="card-title">Long-term memory</span>
+        <span class="card-side">core</span>
+      </summary>
+      <p>Originality checked against the vault → 98/100 (4 flags).</p>
+    </details>
+    <details class="card" data-region="short-term" style="--hue:#ffb14e">
+      <summary>
+        <span class="dot"></span>
+        <span class="card-title">Short-term memory</span>
+        <span class="card-side">core</span>
+      </summary>
+      <p>Held the working set (hook + section drafts) live across the 10-agent run.</p>
+    </details>
+    </section>
+
+    <div class="suno">
+        <div class="suno-head">
+          <h2>🎧 Suno prompt</h2>
+          <button id="copySuno" type="button">Copy to clipboard</button>
+        </div>
+        <pre id="sunoText">Style of Music:
+lo-fi soul hip-hop, tired but relentless, quietly proud, ~82 bpm, boom-bap with dusty snares, sliding 808 with glide, muted piano, detuned bell lead, string pad, weathered male vocal, no autotune, cinematic
+
+Lyrics:
+[Intro]
+Everyone, this one&#39;s for you
+
+[Hook]
+Every step a promise that I rebuild
+Every step a promise that I rebuild
+All this shift, I earned it slow
+Every step a promise that I rebuild
+
+[Verse 1]
+They handed me working instead of the art
+Came up on working, dreaming of the part
+It started with the future and the mark
+Grew up on shift, chasing the spark
+
+[Hook]
+Every step a promise that I rebuild
+Every step a promise that I rebuild
+All this shift, I earned it slow
+Every step a promise that I rebuild
+
+[Verse 2]
+Now I survive the graveyard into the flow
+Took that sees and turned it to a glow
+Put the yet down, reaching for the desire
+Stakes got higher, yet became the fire
+
+[Bridge]
+Wouldn&#39;t trade the shift for a spark
+Made my peace with build and the mark
+
+[Hook]
+Every step a promise that I rebuild
+Every step a promise that I rebuild
+All this shift, I earned it slow
+Every step a promise that I rebuild</pre>
+      </div>
+
+    <footer>The brain metaphor is an inspired workflow model, not biological — but every line above is the output of real code in <code>lib/hermes/</code>. Load the full deck at <code>/hermes</code>.</footer>
+  </main>
+<script>
+  (function(){
+    var b=document.getElementById('copySuno');
+    if(b){b.addEventListener('click',function(){
+      var t=document.getElementById('sunoText').innerText;
+      var done=function(){b.textContent='Copied ✓';setTimeout(function(){b.textContent='Copy to clipboard';},1600);};
+      if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(t).then(done,done);}
+      else{try{var ta=document.createElement('textarea');ta.value=t;document.body.appendChild(ta);ta.select();document.execCommand('copy');document.body.removeChild(ta);done();}catch(e){}}
+    });}
+    // clicking a brain node opens+scrolls to its region card
+    document.querySelectorAll('.node').forEach(function(n){
+      var open=function(){
+        var id=n.getAttribute('data-region');
+        var c=document.querySelector('.card[data-region="'+id+'"]');
+        if(c){c.open=true;c.scrollIntoView({behavior:'smooth',block:'center'});c.classList.add('flash');setTimeout(function(){c.classList.remove('flash');},900);}
+      };
+      n.addEventListener('click',open);
+      n.addEventListener('keydown',function(e){if(e.key==='Enter'||e.key===' '){e.preventDefault();open();}});
+    });
+  })();</script>
+</body>
+</html>

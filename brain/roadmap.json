@@ -22,7 +22,7 @@
       { "id": "T0", "title": "Vector-memory determinism hardening", "status": "shipped", "pr": "#49", "home": "lib/hermes/vectorMemory.ts" },
       { "id": "T1", "title": "Semantic originality — wire vectorMemory into originality.ts (optional)", "status": "queued", "home": "lib/hermes/originality.ts" },
       { "id": "T2", "title": "Close the cognition loop — keep|revise → regeneration", "status": "queued", "home": "cognition.ts + pipeline.ts + mockLyricsProvider.ts + SongPackageView.tsx" },
-      { "id": "T3", "title": "Interactive trace explorer + demo gallery", "status": "queued", "home": "lib/hermes/traceHtml.ts + docs/demo-gallery.html" },
+      { "id": "T3", "title": "Interactive trace explorer + demo gallery", "status": "shipped", "pr": "#50", "home": "lib/hermes/traceHtml.ts + docs/demo-gallery.html + examples/demos/*/trace.html" },
       { "id": "T4", "title": "Council scoring → hook ranking + learn→vector recall", "status": "queued", "home": "cognition.ts + Council.tsx + learn.ts + recommend.ts" },
       { "id": "T5", "title": "ARCHITECTURE.md + brain-wiring diagram + module headers", "status": "queued", "home": "ARCHITECTURE.md + docs/brain-wiring.md" }
     ]
