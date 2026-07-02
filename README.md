@@ -302,6 +302,7 @@ flow, and the non-negotiables — plus the code-generated [brain-wiring diagram]
 - [x] **Scribe line editor + Test key** — edit lyrics line by line with an AI-rewrite suggestion per line (Claude Engine), plus a one-tap "Test key" to confirm your Anthropic key actually works ([docs/claude-engine.md](docs/claude-engine.md))
 - [x] **Pattern packs — rhyme-scheme + form variety** — a `rhymeScheme` dial (AABB/ABAB/ABBA/AAAA/XAXA, not just couplets anymore) and named form+scheme presets, grounded in songwriting-craft research ([docs/pattern-packs.md](docs/pattern-packs.md))
 - [x] **Watchdog** — a weekly (+ on-demand) Claude review of the repo's security posture + quality, filed as a GitHub issue with concrete findings and research ideas — findings-only, structurally unable to write code ([docs/watchdog.md](docs/watchdog.md))
+- [x] **Crossroads Board (Stage 2)** — a `/crossroads` route where you can vote on open creative/ecosystem decisions — ranked options, rationale, a live vote bar, your own vote recorded to this browser only
 
 **Next** — generated from the spine [`brain/roadmap.json`](brain/roadmap.json); the human backlog is [`TODO.md`](TODO.md), the full board is [`STATUS.md`](STATUS.md).
 

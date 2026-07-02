@@ -4,7 +4,7 @@
 //
 // Serves the static export (out/) with a Range-capable server, then walks a matrix of
 // real device profiles (Playwright's registry: viewport + DPR + touch + UA) across the
-// landing page and the studio, and fails loudly on:
+// landing page, the studio, and the Crossroads Board, and fails loudly on:
 //   · any console error
 //   · horizontal overflow (scrollWidth > viewport — the classic mobile bug)
 //   · tap targets smaller than 40px on touch devices (Apple HIG floor is 44px;
@@ -38,7 +38,7 @@ const MATRIX = [
   { name: 'iPad Mini', profile: devices['iPad Mini'] },
   { name: 'Desktop 1280', profile: { viewport: { width: 1280, height: 800 } } },
 ];
-const PAGES = ['/', '/hermes'];
+const PAGES = ['/', '/hermes', '/crossroads'];
 
 const argv = process.argv.slice(2);
 const argOf = (flag) => {

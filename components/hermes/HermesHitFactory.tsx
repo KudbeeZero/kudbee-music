@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useMemo, useRef, useState } from 'react';
+import Link from 'next/link';
 import type { SongInputs, SongPackage, AgentOutput, HookOption, CritiqueKey } from '@/lib/hermes/types';
 import { AGENT_DEFINITIONS } from '@/lib/hermes/agents';
 import { runPipeline } from '@/lib/hermes/pipeline';
@@ -346,6 +347,7 @@ export default function HermesHitFactory() {
             <span className={styles.modeBadge}>● V1 · local mock — no API key</span>
             {mode === 'studio' && <button className={styles.ghostBtn} onClick={newSong}>✨ New</button>}
             <button className={styles.ghostBtn} onClick={() => setLabOpen(true)}>✍️ Lyric Lab</button>
+            <Link href="/crossroads" className={styles.ghostBtn}>🧭 Crossroads</Link>
             <button className={styles.ghostBtn} onClick={() => setAlbumOpen(true)}>Albums ({albums.length})</button>
             <button className={styles.ghostBtn} onClick={() => setVaultOpen(true)}>Vault ({vault.length})</button>
             <span className={authStyles.profileChip} title={`Signed in as ${profile.name} (${profile.kind}) — local to this browser`}>
