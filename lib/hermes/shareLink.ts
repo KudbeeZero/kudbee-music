@@ -5,7 +5,8 @@
 // $0, no server, no dependency. The decoded token is UNTRUSTED input from a URL, so
 // decodeShare sanitizes every field (the same discipline as the vault-import
 // hardening) and can never throw or pollute the prototype.
-import type { SongInputs, SongStructure } from './types';
+import type { SongInputs, SongStructure, RhymeSchemeId } from './types';
+import { RHYME_SCHEME_IDS } from './types';
 
 /** Bumped if the token layout changes; decodeShare rejects unknown versions. */
 const SHARE_VERSION = 1;
@@ -55,6 +56,11 @@ function sanitizeInputs(raw: unknown): SongInputs {
     ...(typeof r.culture === 'string' ? { culture: str(r.culture) } : {}),
     ...(r.rhymeTemp === 'tight' || r.rhymeTemp === 'balanced' || r.rhymeTemp === 'loose'
       ? { rhymeTemp: r.rhymeTemp } : {}),
+    // Dropping this field silently broke reproduction for any pattern-pack song
+    // (an ABAB share reproduced as AABB for the recipient). Whitelist-validated,
+    // same as structure/rhymeTemp — a hostile value is dropped, never passed on.
+    ...(RHYME_SCHEME_IDS.includes(r.rhymeScheme as RhymeSchemeId)
+      ? { rhymeScheme: r.rhymeScheme as RhymeSchemeId } : {}),
   };
 }
 

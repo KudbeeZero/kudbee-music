@@ -3,8 +3,9 @@
 // different ProviderBundle later to go live.
 import type {
   SongInputs, SongPackage, AgentOutput, AgentId, PipelineResult, PipelineProgress,
-  HookOption, SongSection, ViralClip, ReleaseChecklistItem,
+  HookOption, SongSection, ViralClip, ReleaseChecklistItem, RhymeSchemeId,
 } from './types';
+import { RHYME_SCHEME_IDS } from './types';
 import type { ProviderBundle } from './providers/providerTypes';
 import { mockProviders } from './providers/mockProviders';
 import { checkOriginality, fingerprintLyrics, type PriorSong } from './originality';
@@ -83,6 +84,13 @@ function normalizeInputs(raw: SongInputs): SongInputs {
     doNotUse: Array.isArray(raw.doNotUse)
       ? raw.doNotUse.filter((w): w is string => typeof w === 'string').map((w) => w.slice(0, 100))
       : [],
+    // The `...raw` spread above passes rhymeScheme through untouched, and an
+    // out-of-enum string crashes the combinator's scheme-layout lookup — so this
+    // seam validates it like tempo/text: invalid → dropped (generation defaults
+    // to AABB), never trusted.
+    rhymeScheme: RHYME_SCHEME_IDS.includes(raw.rhymeScheme as RhymeSchemeId)
+      ? raw.rhymeScheme
+      : undefined,
   };
 }
 

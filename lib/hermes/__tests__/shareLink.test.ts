@@ -64,6 +64,22 @@ describe('shareLink — hostile / malformed tokens are neutralized (never throw)
     const token = encodeShare({ ...INPUTS, structure: 'evil' as SongInputs['structure'] }, 1);
     expect(decodeShare(token)!.inputs.structure).toBe('full-song');
   });
+
+  it('preserves a valid rhymeScheme and drops a hostile one', () => {
+    const kept = decodeShare(encodeShare({ ...INPUTS, rhymeScheme: 'ABAB' }, 1))!;
+    expect(kept.inputs.rhymeScheme).toBe('ABAB');
+    const dropped = decodeShare(encodeShare({ ...INPUTS, rhymeScheme: 'ZZZZ' as SongInputs['rhymeScheme'] }, 1))!;
+    expect(dropped.inputs.rhymeScheme).toBeUndefined();
+  });
+
+  it('a hostile rhymeScheme smuggled to runPipeline cannot crash generation', async () => {
+    const hostile = { ...INPUTS, rhymeScheme: 'ZZZZ' as SongInputs['rhymeScheme'] };
+    const opts = { id: 'fixed', now: '2026-01-01T00:00:00Z', seed: 3, priorSongs: [], bannedWords: [] as string[] };
+    const res = await runPipeline(hostile, opts);
+    // invalid scheme is dropped at the normalize seam → identical to the AABB default
+    const baseline = await runPipeline(INPUTS, opts);
+    expect(res.pkg.finalLyrics).toBe(baseline.pkg.finalLyrics);
+  });
 });
 
 describe('shareLink — the determinism promise (a link reproduces the EXACT song)', () => {
@@ -84,5 +100,18 @@ describe('shareLink — the determinism promise (a link reproduces the EXACT son
     expect(reproduced.finalLyrics).toBe(original.finalLyrics);
     expect(reproduced.chosenHook?.text).toBe(original.chosenHook?.text);
     expect(reproduced.score.total).toBe(original.score.total);
+  });
+
+  it('a pattern-pack song (non-default rhymeScheme) reproduces identically through a share link', async () => {
+    // Regression: sanitizeInputs used to drop rhymeScheme, so an ABAB share
+    // silently reproduced as AABB — different lyrics for the recipient.
+    const abab: SongInputs = { ...INPUTS, rhymeScheme: 'ABAB' };
+    const original = (await runPipeline(abab, { ...opts, seed: 11 })).pkg;
+    const decoded = decodeShare(encodeShare(abab, 11))!;
+    const reproduced = (await runPipeline(decoded.inputs, { ...opts, seed: decoded.seed })).pkg;
+    expect(reproduced.finalLyrics).toBe(original.finalLyrics);
+    // and the scheme genuinely changes output vs the default (the dial is live)
+    const aabbDefault = (await runPipeline(INPUTS, { ...opts, seed: 11 })).pkg;
+    expect(original.finalLyrics).not.toBe(aabbDefault.finalLyrics);
   });
 });

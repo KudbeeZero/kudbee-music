@@ -37,6 +37,11 @@ export type SongStructure =
  */
 export type RhymeSchemeId = 'AABB' | 'ABAB' | 'ABBA' | 'AAAA' | 'XAXA';
 
+/** Canonical runtime list of valid rhyme schemes — the single source of truth every
+ *  untrusted-input boundary (pipeline normalize, share decode, vault import) validates
+ *  against, so an out-of-enum string can never reach the generation path. */
+export const RHYME_SCHEME_IDS: readonly RhymeSchemeId[] = ['AABB', 'ABAB', 'ABBA', 'AAAA', 'XAXA'];
+
 /** What the user types into the Song Lab. */
 export interface SongInputs {
   title: string;

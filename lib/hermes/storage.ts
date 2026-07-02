@@ -1,7 +1,8 @@
 // Vault — local persistence for generated song packages. Uses localStorage in
 // the browser; falls back to an in-memory store on the server / in tests so it
 // never throws. Keeps a small version history per title.
-import type { SongPackage } from './types';
+import type { SongPackage, RhymeSchemeId } from './types';
+import { RHYME_SCHEME_IDS } from './types';
 import type { Album } from './album';
 
 const KEY = 'hermes.vault.v1';
@@ -162,6 +163,10 @@ function sanitizeInputs(raw: unknown): SongPackage['inputs'] {
     ...(typeof r.culture === 'string' ? { culture: r.culture } : {}),
     ...(r.rhymeTemp === 'tight' || r.rhymeTemp === 'balanced' || r.rhymeTemp === 'loose'
       ? { rhymeTemp: r.rhymeTemp } : {}),
+    // Preserved (whitelist-validated) so an imported pattern-pack song replays with
+    // its real scheme — dropping it made 🔍 Explain regenerate as AABB after import.
+    ...(RHYME_SCHEME_IDS.includes(r.rhymeScheme as RhymeSchemeId)
+      ? { rhymeScheme: r.rhymeScheme as RhymeSchemeId } : {}),
   };
 }
 
