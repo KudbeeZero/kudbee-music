@@ -112,10 +112,11 @@ chat. Detail for each is in [`brain/roadmap.json`](brain/roadmap.json) + [`IDEAS
      `setItem` failures, so on a full localStorage a "saved" song silently vanishes on reload.
      Fix: surface write failure to the UI (honest banner + export nudge) and cap same-title
      version history (~5) so quota pressure stops growing unbounded.
-   - [ ] **Weakness #3 — short-form breaks non-AABB schemes**: `mockLyricsProvider.ts` builds a
-     4-line scheme-arranged verse then `slice(0, 2)` — under ABAB/ABBA/XAXA the two kept lines
-     don't rhyme. Fix: build the 2-line unit directly (`layoutFor(scheme, 2)` already returns a
-     couplet); test the pair rhymes under all 5 schemes.
+   - [x] **Weakness #3 — short-form breaks non-AABB schemes** — fixed _(this PR)_: short-form
+     now builds its 2-line unit directly (always a rhymed couplet via `layoutFor`'s 2-line
+     rule) instead of slicing the 4-line scheme-arranged verse, built lazily inside the case
+     so every other structure's RNG draw order stays byte-identical (demos unchanged).
+     5 new tests prove the couplet rhymes under every scheme.
    - [ ] **Improvement — determiner–noun number agreement (the moat)**: frames like
      `all this {noun}` accept plural theme nouns ("All this winters" ships in the flagship
      demo). Fix: deterministic plural heuristic + flex the determiner (this→these, that→those);
@@ -278,6 +279,13 @@ Board** governance / Solana / token / NFT layer integrates with this engine via 
 later (kept out of this repo's core so it stays free + local).
 
 ## ✅ Shipped (newest first)
+- [x] **Short-form × rhyme-scheme fix (review weakness #3)** — `short-form` used to return
+      `v1.slice(0, 2)` off the 4-line scheme-arranged verse; under ABAB/ABBA/XAXA those two
+      lines belong to different rhyme families, so the shipped "couplet" didn't rhyme (both
+      dials freely selectable in the Song Lab). Now builds a dedicated 2-line unit — always a
+      rhymed couplet per `layoutFor`'s 2-line rule — lazily inside the short-form case so
+      every other structure's RNG draw order (and all demos) stays byte-identical. 6 new
+      tests: the couplet rhymes under all 5 schemes + determinism pin. _(this PR)_
 - [x] **Share-reproduction integrity (review weakness #1)** — a two-agent + focused-verification
       code review (Fable 5 pass → Sonnet adversarial verification, 12 candidate findings, 2
       refuted) confirmed the viral-loop promise was silently broken two ways: (1)

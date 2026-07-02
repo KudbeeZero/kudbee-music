@@ -62,6 +62,29 @@ describe('pattern packs — structure grammar', () => {
     expect(fullSong.sections.length).toBe(hookFirst.sections.length + 1);
     expect(fullSong.sections[fullSong.sections.length - 1].label).toBe('Hook');
   });
+
+  // Regression (review weakness #3): short-form used to slice the first 2 lines off
+  // the 4-line scheme-arranged verse — under ABAB/ABBA/XAXA those belong to different
+  // rhyme families, shipping a non-rhyming "couplet". A 2-line unit is now built
+  // directly, and layoutFor's 2-line rule makes it a rhymed couplet for EVERY scheme.
+  it.each<RhymeSchemeId>(['AABB', 'ABAB', 'ABBA', 'AAAA', 'XAXA'])(
+    'short-form ships a rhymed couplet under %s',
+    async (scheme) => {
+      const { pkg } = await runPipeline(
+        { ...base, structure: 'short-form', rhymeScheme: scheme },
+        { id: `sf-${scheme}`, now: '2026-01-01T00:00:00Z', seed: 4 },
+      );
+      const verse = pkg.sections.find((s) => s.label === 'Verse 1')!.lines;
+      expect(verse).toHaveLength(2);
+      expect(rhymeScheme(verse)).toBe('AA');
+    },
+  );
+
+  it('short-form stays deterministic and does not disturb other structures', async () => {
+    const a = await runPipeline({ ...base, structure: 'short-form', rhymeScheme: 'ABAB' }, { id: 's', now: '2026-01-01T00:00:00Z', seed: 6 });
+    const b = await runPipeline({ ...base, structure: 'short-form', rhymeScheme: 'ABAB' }, { id: 's', now: '2026-01-01T00:00:00Z', seed: 6 });
+    expect(a.pkg.finalLyrics).toBe(b.pkg.finalLyrics);
+  });
 });
 
 describe('pattern packs — data integrity', () => {
