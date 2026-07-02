@@ -279,7 +279,7 @@ flow, and the non-negotiables — plus the code-generated [brain-wiring diagram]
 - [x] **Song → video** — `hermes from-song` turns a Hit Factory song into a renderable video project (both studios fused)
 - [x] **Public testing URL** — Vercel-ready (`vercel.json`) + deploy guide ([`docs/testing.md`](docs/testing.md))
 - [x] **Flagship example + one-click Suno handoff** — load *Cold Hard Gold* in-app; `from-song` emits a ready-to-paste Suno link, and `build` guides you if the audio isn't placed yet
-- [x] **11-region brain** — hemispheres + intent/values/language/limbic/default-mode/reward/decision + short & long-term memory + nervous system (an [inspired workflow model](brain/hemispheres.md), not biological)
+- [x] **11-region brain · 37-subregion Deep Atlas** — hemispheres + intent/values/language/limbic/default-mode/reward/decision + short & long-term memory + nervous system, each region fanning out into anatomy-named subsections (Broca’s & Wernicke’s areas, amygdala, ACC, basal ganglia, VTA…) that each map to a real module (an [inspired workflow model](brain/hemispheres.md), not biological)
 - [x] **Honest framing + demo proof** — [5 demo songs with generation traces](examples/demos/) showing what each region contributed
 - [x] **Interactive song deck** — selectable hooks (honest re-score + feeds your voice model), copy-on-tap clips; app focused on lyrics + the brain
 - [x] **Deterministic lyric-core depth** — hierarchical generation, thematic threading, diversity scoring, slant-rhyme "temperature" dial

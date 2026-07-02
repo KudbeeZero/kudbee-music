@@ -69,8 +69,17 @@ function regionCard(r: RegionTrace): string {
         <span class="card-title">${esc(r.label)}</span>
         <span class="card-side">${esc(sideLabel)}</span>
       </summary>
-      <p>${esc(r.contribution)}</p>
+      <p>${esc(r.contribution)}</p>${subList(r)}
     </details>`;
+}
+
+/** The atlas depth — one line per subsection, each backed by a real module. */
+function subList(r: RegionTrace): string {
+  if (!r.sub?.length) return '';
+  const items = r.sub
+    .map((s) => `<li${s.dim ? ' class="dim"' : ''}><b>${esc(s.label)}</b> — ${esc(s.note)}</li>`)
+    .join('');
+  return `\n      <ul class="subs">${items}</ul>`;
 }
 
 export interface TraceHtmlOptions {
@@ -203,6 +212,11 @@ export function renderTraceHtml(t: SongTrace, opts: TraceHtmlOptions = {}): stri
   .card-title{font-weight:600}
   .card-side{margin-left:auto;color:var(--faint);font-size:11px;text-transform:uppercase;letter-spacing:.05em}
   .card p{margin:0;padding:0 14px 14px 33px;color:var(--dim)}
+  .subs{margin:0;padding:0 14px 14px 33px;list-style:none;display:grid;gap:5px;border-top:1px dashed rgba(255,255,255,0.07);padding-top:10px}
+  .subs li{color:var(--dim);font-size:12.5px;line-height:1.45}
+  .subs li b{color:var(--ink);font-weight:600}
+  .subs li.dim{opacity:.55}
+  .subs li.dim b::after{content:" · CLI lane";color:var(--faint);font-weight:400;font-size:10.5px}
   .suno-head{display:flex;align-items:center;justify-content:space-between;gap:12px}
   .suno pre{white-space:pre-wrap;word-break:break-word;background:${BG_0};border:1px solid rgba(255,255,255,.08);border-radius:12px;padding:14px;color:var(--dim);font:12.5px/1.5 ui-monospace,SFMono-Regular,Menlo,monospace;margin:10px 0 0}
   #copySuno{background:${HUE.right};color:#12001a;border:0;border-radius:8px;padding:8px 14px;font-weight:600;cursor:pointer;font-size:13px}

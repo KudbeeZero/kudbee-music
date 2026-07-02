@@ -67,3 +67,8 @@ checking the right's work. `hermes qa` (`studio/qa.mjs`) scores a finished rende
 and exits non-zero on failure; the CI `smoke` job runs it as the release gate.
 The right hemisphere generates; the left hemisphere refuses to ship something
 broken. `brain/brain.json` is the machine-readable version of this document.
+
+The map now goes a level deeper: each region fans out into anatomy-named
+subsections — the **Deep Brain Atlas** in `lib/hermes/brainMap.ts` (`SUBREGIONS`) —
+and the honesty rule holds at every depth: a subsection exists only if a real
+module and function backs it. The tables live in `docs/brain-wiring.md`.
