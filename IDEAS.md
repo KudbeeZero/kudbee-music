@@ -219,6 +219,22 @@ A second-opinion review flagged real risks worth acting on (truth-first):
   disclaimer in the README + Uniqueness panel. _(#37)_
 
 ## 🌱 Fresh captures
+- ✅ **"An agent, an engineer, that is consistently monitoring the system, finding
+  weaknesses, also finding ways to improve the system through research... deploy its own
+  developer agent, security code review... run on a dynamic type loop through the Claude
+  API"** *(founder directive, via /goal)* — shipped the part unambiguously in scope under the
+  repo's existing `workflow_dispatch`-only security law: `claude-watchdog`, a manually
+  triggered GitHub Action that runs one bounded Claude review (recent commits, npm audit,
+  the repo's own written laws, security-sensitive files) and files findings + research
+  ideas as a GitHub issue. Findings-only, never writes code. See "Watchdog" in `TODO.md`
+  Shipped + `docs/watchdog.md` for the full reasoning. Two pieces of the ask are genuinely
+  the founder's call, not mine, and are captured as explicit "Blocked on you" items rather
+  than either silently building them or silently dropping them: (1) **"consistently
+  monitoring"** would need a `schedule:` trigger, which means the founder's Anthropic key
+  spends money with no human click in the loop — a real change to the existing
+  workflow_dispatch-only law, not a routine feature; (2) **"deploy its own developer
+  agent"** would mean the workflow writing code and opening PRs unattended — a materially
+  bigger trust step than a findings report. Both are scaffolded-for but not turned on.
 - ✅ **"Make sure Claude API is working, people should be able to edit their lyrics almost
   like the application Scribe"** *(founder directive)* — shipped: a per-line lyric editor
   (`components/hermes/ScribeEditor.tsx`) with an AI-rewrite control per line (Claude Engine,

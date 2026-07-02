@@ -52,12 +52,21 @@ rules:
   touches our infrastructure.
 - **GitHub Actions repository secrets are the one approved *remote* home for a
   founder-controlled key** (e.g. `ANTHROPIC_API_KEY` for the manual `claude-compare`
-  workflow). They're encrypted, log-masked, and never available to fork PRs. Any
-  workflow that reads a secret must be `workflow_dispatch`-only (never push/PR) with
-  `contents: read` — CI proper uses zero secrets and can never spend money. Honest
-  caveat: write-access
-  collaborators can author workflows that read secrets — keep write access tight and
-  secret-scanning/push-protection enabled.
+  and `claude-watchdog` workflows). They're encrypted, log-masked, and never
+  available to fork PRs. Any workflow that reads a secret must be
+  `workflow_dispatch`-only (**never push/PR, and never a `schedule:` trigger** — a
+  timer means the key spends money with no human click in the loop, which is the
+  same trust boundary as push/PR, not a lesser one) and hold the minimum
+  permissions the job actually needs — `claude-compare` is `contents: read` only;
+  `claude-watchdog` additionally needs `issues: write` to file its report, and
+  that's the full extent of it (no `pull-requests` scope, no `contents: write` —
+  see `docs/watchdog.md`). CI proper uses zero secrets and can never spend money.
+  Honest caveat: write-access collaborators can author workflows that read
+  secrets — keep write access tight and secret-scanning/push-protection enabled.
+  **Turning any `workflow_dispatch` lane into a scheduled one is a deliberate
+  policy change, not a routine code change** — it should read as a conscious
+  "yes, spend money unattended" decision, not slip in as a side effect of an
+  unrelated PR.
 
 ## If a secret is ever committed (incident response)
 
