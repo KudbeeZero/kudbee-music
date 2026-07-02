@@ -75,10 +75,10 @@
     {
       "label": "Verse 1",
       "lines": [
-        "All I had was distance and the steel",
-        "They handed me raindrop instead of the wheel",
-        "It started with the tide and the blood",
-        "Grew up on connection, chasing the hood"
+        "Nothing in my hands but distance and the steel",
+        "It started with the river and the wheel",
+        "Grew up on connection, chasing the flow",
+        "They handed me connection instead of the glow"
       ]
     },
     {
@@ -93,17 +93,26 @@
     {
       "label": "Verse 2",
       "lines": [
-        "Took that connection and turned it to a game",
-        "Put the raindrop down, reaching for the frame",
-        "Stakes got higher, wave became the flow",
-        "Now I fight the raindrop into the glow"
+        "Put the connection down, reaching for the game",
+        "Now I carry the anchor into the frame",
+        "Stakes got higher, river became the flow",
+        "Took that raindrop and turned it to a glow"
       ]
     },
     {
       "label": "Bridge",
       "lines": [
         "Somewhere in the river I found the glow",
-        "When it's quiet I still hear the shoreline and the flow"
+        "Wouldn't trade the shoreline for a flow"
+      ]
+    },
+    {
+      "label": "Hook",
+      "lines": [
+        "Tell ones I made it out the distance",
+        "Tell ones I made it out the distance",
+        "All this harbor, I earned it slow",
+        "Tell ones I made it out the distance"
       ]
     },
     {
@@ -116,7 +125,7 @@
       ]
     }
   ],
-  "finalLyrics": "[Intro]\nOnes, this one's for you\n\n[Hook]\nTell ones I made it out the distance\nTell ones I made it out the distance\nAll this harbor, I earned it slow\nTell ones I made it out the distance\n\n[Verse 1]\nAll I had was distance and the steel\nThey handed me raindrop instead of the wheel\nIt started with the tide and the blood\nGrew up on connection, chasing the hood\n\n[Hook]\nTell ones I made it out the distance\nTell ones I made it out the distance\nAll this harbor, I earned it slow\nTell ones I made it out the distance\n\n[Verse 2]\nTook that connection and turned it to a game\nPut the raindrop down, reaching for the frame\nStakes got higher, wave became the flow\nNow I fight the raindrop into the glow\n\n[Bridge]\nSomewhere in the river I found the glow\nWhen it's quiet I still hear the shoreline and the flow\n\n[Hook]\nTell ones I made it out the distance\nTell ones I made it out the distance\nAll this harbor, I earned it slow\nTell ones I made it out the distance",
+  "finalLyrics": "[Intro]\nOnes, this one's for you\n\n[Hook]\nTell ones I made it out the distance\nTell ones I made it out the distance\nAll this harbor, I earned it slow\nTell ones I made it out the distance\n\n[Verse 1]\nNothing in my hands but distance and the steel\nIt started with the river and the wheel\nGrew up on connection, chasing the flow\nThey handed me connection instead of the glow\n\n[Hook]\nTell ones I made it out the distance\nTell ones I made it out the distance\nAll this harbor, I earned it slow\nTell ones I made it out the distance\n\n[Verse 2]\nPut the connection down, reaching for the game\nNow I carry the anchor into the frame\nStakes got higher, river became the flow\nTook that raindrop and turned it to a glow\n\n[Bridge]\nSomewhere in the river I found the glow\nWouldn't trade the shoreline for a flow\n\n[Hook]\nTell ones I made it out the distance\nTell ones I made it out the distance\nAll this harbor, I earned it slow\nTell ones I made it out the distance\n\n[Hook]\nTell ones I made it out the distance\nTell ones I made it out the distance\nAll this harbor, I earned it slow\nTell ones I made it out the distance",
   "production": {
     "tempoBpm": 106,
     "drums": "boom-bap with dusty snares",
@@ -175,7 +184,7 @@
       "startHint": "verse 1, bar 1",
       "durationSec": 12,
       "caption": "the story starts here 👀",
-      "hookLine": "All I had was distance and the steel"
+      "hookLine": "Nothing in my hands but distance and the steel"
     },
     {
       "label": "Bridge turn",
@@ -191,7 +200,7 @@
     "flags": [
       {
         "kind": "repeated-hook",
-        "detail": "hook line repeats 9× — consider varying one word",
+        "detail": "hook line repeats 12× — consider varying one word",
         "line": "Tell ones I made it out the distance"
       }
     ],
@@ -201,20 +210,24 @@
       "4a507c6c",
       "867a25d6",
       "4a507c6c",
-      "f1645703",
-      "c19d8a5f",
-      "d4918cd2",
-      "7d6559e2",
+      "3310e67e",
+      "4d58ecdf",
+      "918c78d4",
+      "99bd289e",
       "4a507c6c",
       "4a507c6c",
       "867a25d6",
       "4a507c6c",
-      "4a4d4cf",
-      "2eeb1768",
-      "cdcc2df0",
-      "e5ac59b6",
+      "5c774f68",
+      "2e0996fb",
+      "d2abd325",
+      "dddc6327",
       "24f3a107",
-      "7b7112a7",
+      "82c72e2b",
+      "4a507c6c",
+      "4a507c6c",
+      "867a25d6",
+      "4a507c6c",
       "4a507c6c",
       "4a507c6c",
       "867a25d6",
@@ -344,7 +357,7 @@
       "id": "lyric-chemist",
       "name": "Lyric Chemist",
       "status": "done",
-      "finding": "7 sections, 23 lines.",
+      "finding": "8 sections, 27 lines.",
       "confidence": 84,
       "warnings": [],
       "suggestedNextAction": "Send lyrics to Emotion Scanner + Originality Auditor.",
@@ -368,10 +381,10 @@
           {
             "label": "Verse 1",
             "lines": [
-              "All I had was distance and the steel",
-              "They handed me raindrop instead of the wheel",
-              "It started with the tide and the blood",
-              "Grew up on connection, chasing the hood"
+              "Nothing in my hands but distance and the steel",
+              "It started with the river and the wheel",
+              "Grew up on connection, chasing the flow",
+              "They handed me connection instead of the glow"
             ]
           },
           {
@@ -386,17 +399,26 @@
           {
             "label": "Verse 2",
             "lines": [
-              "Took that connection and turned it to a game",
-              "Put the raindrop down, reaching for the frame",
-              "Stakes got higher, wave became the flow",
-              "Now I fight the raindrop into the glow"
+              "Put the connection down, reaching for the game",
+              "Now I carry the anchor into the frame",
+              "Stakes got higher, river became the flow",
+              "Took that raindrop and turned it to a glow"
             ]
           },
           {
             "label": "Bridge",
             "lines": [
               "Somewhere in the river I found the glow",
-              "When it's quiet I still hear the shoreline and the flow"
+              "Wouldn't trade the shoreline for a flow"
+            ]
+          },
+          {
+            "label": "Hook",
+            "lines": [
+              "Tell ones I made it out the distance",
+              "Tell ones I made it out the distance",
+              "All this harbor, I earned it slow",
+              "Tell ones I made it out the distance"
             ]
           },
           {
@@ -486,6 +508,10 @@
           {
             "label": "Hook",
             "beat": "tension"
+          },
+          {
+            "label": "Hook",
+            "beat": "tension"
           }
         ]
       }
@@ -497,7 +523,7 @@
       "finding": "Uniqueness 100/100 · 1 flag(s).",
       "confidence": 90,
       "warnings": [
-        "hook line repeats 9× — consider varying one word"
+        "hook line repeats 12× — consider varying one word"
       ],
       "suggestedNextAction": "Clean — proceed.",
       "data": {
@@ -506,7 +532,7 @@
           "flags": [
             {
               "kind": "repeated-hook",
-              "detail": "hook line repeats 9× — consider varying one word",
+              "detail": "hook line repeats 12× — consider varying one word",
               "line": "Tell ones I made it out the distance"
             }
           ],
@@ -516,20 +542,24 @@
             "4a507c6c",
             "867a25d6",
             "4a507c6c",
-            "f1645703",
-            "c19d8a5f",
-            "d4918cd2",
-            "7d6559e2",
+            "3310e67e",
+            "4d58ecdf",
+            "918c78d4",
+            "99bd289e",
             "4a507c6c",
             "4a507c6c",
             "867a25d6",
             "4a507c6c",
-            "4a4d4cf",
-            "2eeb1768",
-            "cdcc2df0",
-            "e5ac59b6",
+            "5c774f68",
+            "2e0996fb",
+            "d2abd325",
+            "dddc6327",
             "24f3a107",
-            "7b7112a7",
+            "82c72e2b",
+            "4a507c6c",
+            "4a507c6c",
+            "867a25d6",
+            "4a507c6c",
             "4a507c6c",
             "4a507c6c",
             "867a25d6",
@@ -589,7 +619,7 @@
             "startHint": "verse 1, bar 1",
             "durationSec": 12,
             "caption": "the story starts here 👀",
-            "hookLine": "All I had was distance and the steel"
+            "hookLine": "Nothing in my hands but distance and the steel"
           },
           {
             "label": "Bridge turn",
@@ -699,5 +729,6 @@
     "verdict": "keep",
     "decision": "Keep it — survives 3/3 challenges. Yours to accept or push further.",
     "confidence": 1
-  }
+  },
+  "seed": 22
 }

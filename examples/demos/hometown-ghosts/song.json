@@ -69,7 +69,7 @@
       "lines": [
         "For people, I hold on through the leave",
         "For people, I hold on through the leave",
-        "And people know I pray for it",
+        "And people know I rebuild for it",
         "For people, I hold on through the leave"
       ]
     },
@@ -77,9 +77,9 @@
       "label": "Verse 1",
       "lines": [
         "Nothing in my hands but town and the trade",
-        "All I had was town and the grade",
-        "It started with the runway and the team",
-        "Grew up on railroad, chasing the dream"
+        "It started with the town and the grade",
+        "Grew up on leave, chasing the spark",
+        "All I had was town and the mark"
       ]
     },
     {
@@ -87,24 +87,24 @@
       "lines": [
         "For people, I hold on through the leave",
         "For people, I hold on through the leave",
-        "And people know I pray for it",
+        "And people know I rebuild for it",
         "For people, I hold on through the leave"
       ]
     },
     {
       "label": "Verse 2",
       "lines": [
-        "Put the leave down, reaching for the glow",
-        "Now I pray the memory into the flow",
-        "Everything changed, traded town for the dream",
-        "Stakes got higher, town became the stream"
+        "Now I pray the leave into the art",
+        "Put the keepsake down, reaching for the part",
+        "Stakes got higher, wheel became the brain",
+        "Took that promise and turned it to a train"
       ]
     },
     {
       "label": "Bridge",
       "lines": [
-        "Looking back, the wheel was always the way",
-        "Made my peace with runway and the day"
+        "Made my peace with wheel and the day",
+        "When it's quiet I still hear the leave and the way"
       ]
     },
     {
@@ -112,12 +112,21 @@
       "lines": [
         "For people, I hold on through the leave",
         "For people, I hold on through the leave",
-        "And people know I pray for it",
+        "And people know I rebuild for it",
+        "For people, I hold on through the leave"
+      ]
+    },
+    {
+      "label": "Hook",
+      "lines": [
+        "For people, I hold on through the leave",
+        "For people, I hold on through the leave",
+        "And people know I rebuild for it",
         "For people, I hold on through the leave"
       ]
     }
   ],
-  "finalLyrics": "[Intro]\nPeople, this one's for you\n\n[Hook]\nFor people, I hold on through the leave\nFor people, I hold on through the leave\nAnd people know I pray for it\nFor people, I hold on through the leave\n\n[Verse 1]\nNothing in my hands but town and the trade\nAll I had was town and the grade\nIt started with the runway and the team\nGrew up on railroad, chasing the dream\n\n[Hook]\nFor people, I hold on through the leave\nFor people, I hold on through the leave\nAnd people know I pray for it\nFor people, I hold on through the leave\n\n[Verse 2]\nPut the leave down, reaching for the glow\nNow I pray the memory into the flow\nEverything changed, traded town for the dream\nStakes got higher, town became the stream\n\n[Bridge]\nLooking back, the wheel was always the way\nMade my peace with runway and the day\n\n[Hook]\nFor people, I hold on through the leave\nFor people, I hold on through the leave\nAnd people know I pray for it\nFor people, I hold on through the leave",
+  "finalLyrics": "[Intro]\nPeople, this one's for you\n\n[Hook]\nFor people, I hold on through the leave\nFor people, I hold on through the leave\nAnd people know I rebuild for it\nFor people, I hold on through the leave\n\n[Verse 1]\nNothing in my hands but town and the trade\nIt started with the town and the grade\nGrew up on leave, chasing the spark\nAll I had was town and the mark\n\n[Hook]\nFor people, I hold on through the leave\nFor people, I hold on through the leave\nAnd people know I rebuild for it\nFor people, I hold on through the leave\n\n[Verse 2]\nNow I pray the leave into the art\nPut the keepsake down, reaching for the part\nStakes got higher, wheel became the brain\nTook that promise and turned it to a train\n\n[Bridge]\nMade my peace with wheel and the day\nWhen it's quiet I still hear the leave and the way\n\n[Hook]\nFor people, I hold on through the leave\nFor people, I hold on through the leave\nAnd people know I rebuild for it\nFor people, I hold on through the leave\n\n[Hook]\nFor people, I hold on through the leave\nFor people, I hold on through the leave\nAnd people know I rebuild for it\nFor people, I hold on through the leave",
   "production": {
     "tempoBpm": 86,
     "drums": "minimal knock, heavy kick",
@@ -183,7 +192,7 @@
       "startHint": "bridge",
       "durationSec": 18,
       "caption": "wait for it…",
-      "hookLine": "Looking back, the wheel was always the way"
+      "hookLine": "Made my peace with wheel and the day"
     }
   ],
   "promoCaption": "“For people, I hold on through the leave” — new one for the people back home. #coming #back #acousticfolk-rap",
@@ -192,7 +201,7 @@
     "flags": [
       {
         "kind": "repeated-hook",
-        "detail": "hook line repeats 9× — consider varying one word",
+        "detail": "hook line repeats 12× — consider varying one word",
         "line": "For people, I hold on through the leave"
       }
     ],
@@ -200,25 +209,29 @@
       "34a8eba4",
       "ee222db",
       "ee222db",
-      "bbae393b",
+      "8599786c",
       "ee222db",
       "bd60e424",
-      "78ca8948",
-      "be4a5133",
-      "1d75f291",
+      "7b167e15",
+      "fbec988e",
+      "55220bdc",
       "ee222db",
       "ee222db",
-      "bbae393b",
+      "8599786c",
       "ee222db",
-      "aed990cc",
-      "a323de11",
-      "aed6f725",
-      "a526e829",
-      "42a8eba5",
-      "da197514",
+      "5d5da760",
+      "8eb36294",
+      "28c9665c",
+      "25f97b88",
+      "332d5127",
+      "8ec3a31a",
       "ee222db",
       "ee222db",
-      "bbae393b",
+      "8599786c",
+      "ee222db",
+      "ee222db",
+      "ee222db",
+      "8599786c",
       "ee222db"
     ],
     "bannedWordsHit": [],
@@ -345,7 +358,7 @@
       "id": "lyric-chemist",
       "name": "Lyric Chemist",
       "status": "done",
-      "finding": "7 sections, 23 lines.",
+      "finding": "8 sections, 27 lines.",
       "confidence": 84,
       "warnings": [],
       "suggestedNextAction": "Send lyrics to Emotion Scanner + Originality Auditor.",
@@ -362,7 +375,7 @@
             "lines": [
               "For people, I hold on through the leave",
               "For people, I hold on through the leave",
-              "And people know I pray for it",
+              "And people know I rebuild for it",
               "For people, I hold on through the leave"
             ]
           },
@@ -370,9 +383,9 @@
             "label": "Verse 1",
             "lines": [
               "Nothing in my hands but town and the trade",
-              "All I had was town and the grade",
-              "It started with the runway and the team",
-              "Grew up on railroad, chasing the dream"
+              "It started with the town and the grade",
+              "Grew up on leave, chasing the spark",
+              "All I had was town and the mark"
             ]
           },
           {
@@ -380,24 +393,24 @@
             "lines": [
               "For people, I hold on through the leave",
               "For people, I hold on through the leave",
-              "And people know I pray for it",
+              "And people know I rebuild for it",
               "For people, I hold on through the leave"
             ]
           },
           {
             "label": "Verse 2",
             "lines": [
-              "Put the leave down, reaching for the glow",
-              "Now I pray the memory into the flow",
-              "Everything changed, traded town for the dream",
-              "Stakes got higher, town became the stream"
+              "Now I pray the leave into the art",
+              "Put the keepsake down, reaching for the part",
+              "Stakes got higher, wheel became the brain",
+              "Took that promise and turned it to a train"
             ]
           },
           {
             "label": "Bridge",
             "lines": [
-              "Looking back, the wheel was always the way",
-              "Made my peace with runway and the day"
+              "Made my peace with wheel and the day",
+              "When it's quiet I still hear the leave and the way"
             ]
           },
           {
@@ -405,7 +418,16 @@
             "lines": [
               "For people, I hold on through the leave",
               "For people, I hold on through the leave",
-              "And people know I pray for it",
+              "And people know I rebuild for it",
+              "For people, I hold on through the leave"
+            ]
+          },
+          {
+            "label": "Hook",
+            "lines": [
+              "For people, I hold on through the leave",
+              "For people, I hold on through the leave",
+              "And people know I rebuild for it",
               "For people, I hold on through the leave"
             ]
           }
@@ -487,6 +509,10 @@
           {
             "label": "Hook",
             "beat": "tension"
+          },
+          {
+            "label": "Hook",
+            "beat": "tension"
           }
         ]
       }
@@ -498,7 +524,7 @@
       "finding": "Uniqueness 100/100 · 1 flag(s).",
       "confidence": 90,
       "warnings": [
-        "hook line repeats 9× — consider varying one word"
+        "hook line repeats 12× — consider varying one word"
       ],
       "suggestedNextAction": "Clean — proceed.",
       "data": {
@@ -507,7 +533,7 @@
           "flags": [
             {
               "kind": "repeated-hook",
-              "detail": "hook line repeats 9× — consider varying one word",
+              "detail": "hook line repeats 12× — consider varying one word",
               "line": "For people, I hold on through the leave"
             }
           ],
@@ -515,25 +541,29 @@
             "34a8eba4",
             "ee222db",
             "ee222db",
-            "bbae393b",
+            "8599786c",
             "ee222db",
             "bd60e424",
-            "78ca8948",
-            "be4a5133",
-            "1d75f291",
+            "7b167e15",
+            "fbec988e",
+            "55220bdc",
             "ee222db",
             "ee222db",
-            "bbae393b",
+            "8599786c",
             "ee222db",
-            "aed990cc",
-            "a323de11",
-            "aed6f725",
-            "a526e829",
-            "42a8eba5",
-            "da197514",
+            "5d5da760",
+            "8eb36294",
+            "28c9665c",
+            "25f97b88",
+            "332d5127",
+            "8ec3a31a",
             "ee222db",
             "ee222db",
-            "bbae393b",
+            "8599786c",
+            "ee222db",
+            "ee222db",
+            "ee222db",
+            "8599786c",
             "ee222db"
           ],
           "bannedWordsHit": [],
@@ -597,7 +627,7 @@
             "startHint": "bridge",
             "durationSec": 18,
             "caption": "wait for it…",
-            "hookLine": "Looking back, the wheel was always the way"
+            "hookLine": "Made my peace with wheel and the day"
           }
         ]
       }
@@ -700,5 +730,6 @@
     "verdict": "keep",
     "decision": "Keep it — survives 3/3 challenges. Yours to accept or push further.",
     "confidence": 1
-  }
+  },
+  "seed": 14
 }
