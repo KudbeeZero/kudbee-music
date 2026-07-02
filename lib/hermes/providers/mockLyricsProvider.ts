@@ -436,8 +436,15 @@ export const mockLyricsProvider: LyricsProvider = {
     ];
 
     switch (inputs.structure) {
-      case 'short-form':
-        return [{ label: 'Hook', lines: hookLines }, { label: 'Verse 1', lines: v1.slice(0, 2) }];
+      case 'short-form': {
+        // A dedicated 2-line unit — always a rhymed couplet, per layoutFor's 2-line
+        // rule — instead of slicing the 4-line scheme-arranged verse: under
+        // ABAB/ABBA/XAXA the first two lines of v1 belong to DIFFERENT rhyme
+        // families, so the sliced "couplet" didn't rhyme. Built lazily inside this
+        // case so every other structure's RNG draw order stays byte-identical.
+        const shortV1 = buildRhymedVerse(inputs, rng, valence, 2, { pool: filterFrames(SETUP_LINES, banned), thread, used, temp, anchorIdx: 0, banned }, scheme);
+        return [{ label: 'Hook', lines: hookLines }, { label: 'Verse 1', lines: shortV1 }];
+      }
       case 'radio-edit':
         return full.filter((s) => s.label !== 'Bridge');
       case 'hook-first':
