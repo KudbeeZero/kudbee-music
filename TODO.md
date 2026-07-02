@@ -224,6 +224,13 @@ Board** governance / Solana / token / NFT layer integrates with this engine via 
 later (kept out of this repo's core so it stays free + local).
 
 ## ✅ Shipped (newest first)
+- [x] **CLAUDE.md memory spine** — the repo's saved conventions in one root file: iron laws
+      (determinism contract, $0-core, original-only), the full gate list, the green-loop
+      working agreement, the security rules learned the hard way (key hygiene, dev-door gate,
+      hostile-input sanitizing, OG activation gate), deploy/phone-testing facts, and a routing
+      table to every memory layer (brain/*.json, living-state files, localStorage keys, docs).
+      Guarded by `lib/hermes/__tests__/claudeMd.test.ts` — the spine fails the suite if a
+      route rots. Maintenance rule embedded: repeat an instruction twice → save it here
 - [x] **Mobile foundation — device intelligence + PWA + phone-testing workflow** — the app
       recognizes what phone/browser it's on and adjusts: `lib/hermes/device.ts` (pure, 22-test
       classifier: UA + capabilities → phone/tablet/desktop, perf class → animation level, single

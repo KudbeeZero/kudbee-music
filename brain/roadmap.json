@@ -1,5 +1,5 @@
 {
-  "updated": "2026-07-01",
+  "updated": "2026-07-02",
   "northStar": "The AI-engine pillar of WIFI DJ (wifidj.xyz). The lyrical process + the brain are the moat — not the video studio.",
   "principles": [
     "$0 / local / original-only by default",
@@ -33,7 +33,8 @@
       "goal": "A single machine-readable roadmap the /loop reads each iteration; keep all four tracking surfaces in lockstep.",
       "items": [
         { "id": "0.1", "title": "brain/roadmap.json spine + sync discipline", "status": "next", "home": "brain/roadmap.json" },
-        { "id": "0.2", "title": "Refresh TODO.md to reality (mark #30–#34 shipped)", "status": "next", "home": "TODO.md" }
+        { "id": "0.2", "title": "Refresh TODO.md to reality (mark #30–#34 shipped)", "status": "next", "home": "TODO.md" },
+        { "id": "0.3", "title": "CLAUDE.md memory spine — saved conventions + routing table, guard-tested", "status": "shipped", "home": "CLAUDE.md", "note": "lib/hermes/__tests__/claudeMd.test.ts keeps the routes honest; maintenance rule: repeat an instruction twice → save it" }
       ]
     },
     {
