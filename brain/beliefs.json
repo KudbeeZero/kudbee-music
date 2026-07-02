@@ -13,7 +13,7 @@
     {
       "id": "known-nonblocking-checks",
       "title": "Known non-blocking checks never gate the loop",
-      "statement": "The Cloudflare 'Workers Builds: kudbee-music' GitHub check is a stray, misconfigured integration (Workers, not Pages — wrangler.jsonc has no Workers entry point) that fails instantly on every push regardless of code. It is NOT a real CI gate and must never be treated as one. The three real gates are check, web, smoke (.github/workflows/ci.yml, documented in ARCHITECTURE.md). A red Workers Builds check is not a reason to pause, re-diagnose, or delay marking a PR ready/merging it. It IS tracked for deletion: roadmap ecosystem.workersBuildsCheck holds the founder's 30-second dashboard fix (disconnect/delete the stray kudbee-music Worker; never uninstall the GitHub app — Pages needs it).",
+      "statement": "The three real CI gates are check, web, smoke (.github/workflows/ci.yml, documented in ARCHITECTURE.md) — nothing else gates a merge. History: a stray 'Workers Builds: kudbee-music' check (a misconfigured Workers git integration; the repo is a Pages app) failed on every push until the founder deleted the Worker on 2026-07-02 (roadmap ecosystem.workersBuildsCheck). If any stray third-party check ever reappears, it must be tracked with a root cause + fix path immediately — never dismissed as 'known, ignorable' without a deletion item (CLAUDE.md never-skip-silently rule).",
       "appliesTo": ["process", "release"]
     },
     {
