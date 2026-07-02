@@ -21,8 +21,8 @@ export const ENGINE_UNITS: EngineUnit[] = [
   },
   {
     id: 'claude-engine', label: 'Claude Engine', tier: 'pro', active: false, locked: true,
-    blurb: 'Real-AI lyric generation, wired behind the same provider seam (claudeLyricsProvider). Runs only via the CLI/eval lane — the web app never calls it; mock stays the default.',
-    unlockHint: 'set ANTHROPIC_API_KEY and run the eval lane (npm run eval:compare) to unlock',
+    blurb: 'Real-AI lyric generation, wired behind the same provider seam (claudeLyricsProvider). Bring your own Anthropic key — it lives only in your browser and calls go straight from your browser to Anthropic, never through our server (we don’t have one).',
+    unlockHint: 'paste your own Anthropic API key in the rack below to unlock (get one at console.anthropic.com)',
   },
   {
     id: 'lightning-engine', label: 'Lightning Engine', tier: 'pro', active: false, locked: true,

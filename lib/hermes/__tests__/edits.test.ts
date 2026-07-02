@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeEach } from 'vitest';
-import { diffEdit, parseSections } from '../edits';
+import { diffEdit, parseSections, renderSections } from '../edits';
 import { recordTaste, loadTaste, exportVault, importVault, saveSong, listSongs, __clearVault } from '../storage';
 import { recommend } from '../recommend';
 import { learnProfile } from '../learn';
@@ -28,6 +28,16 @@ describe('learn-from-edits', () => {
     expect(secs.length).toBe(2);
     expect(secs[0].label).toBe('Hook');
     expect(secs[0].lines).toEqual(['line one', 'line two']);
+  });
+
+  it('renderSections is the inverse of parseSections (round-trips)', () => {
+    const text = '[Hook]\nline one\nline two\n\n[Verse 1]\nline three';
+    expect(renderSections(parseSections(text))).toBe(text);
+  });
+
+  it('renderSections drops sections left with no lines (e.g. the Scribe editor deleted every line)', () => {
+    const rendered = renderSections([{ label: 'Hook', lines: ['keep me'] }, { label: 'Verse 1', lines: [] }]);
+    expect(rendered).toBe('[Hook]\nkeep me');
   });
 
   it('accumulates a taste model from edits', () => {

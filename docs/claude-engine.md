@@ -1,29 +1,94 @@
 # The Claude Engine — opt-in real-AI lyrics behind the same seam
 
-**Status:** wired, locked by default. Roadmap item 5.1.
+**Status:** wired, opt-in via three separate lanes. Roadmap items 5.1 (CLI/eval), 5.4 (rack BYOK),
+5.5 (Scribe line editor + key test).
 
 The Claude Engine is a real-AI `LyricsProvider` (`lib/hermes/providers/claudeLyricsProvider.ts`,
 id `claude-lyrics`) that slots into the exact same provider seam as the free Local
 Combinator (`mockLyricsProvider`). Same interface, same pipeline, zero pipeline changes —
 `runPipeline(inputs, { providers })` just receives a bundle with the lyrics slot swapped.
 
+There are now three distinct, non-overlapping places a key can come from — each documented
+in its own section below:
+
+1. **Local `.env.local`** — the founder's own laptop key, for the CLI eval lane.
+2. **GitHub Actions repository secret** — the same eval lane, triggerable from a phone.
+3. **The visitor's own key, pasted into the Engine Rack** — bring-your-own-key, browser-only,
+   live in the deployed app (this is new — see "Run it from the panel" below).
+
 ## The $0-default guarantee
 
-- **The mock stays the default everywhere.** Nothing in the web app (`app/`, `components/`)
-  imports the Claude provider or can trigger an API call. The generation path in the UI is
-  the Local Combinator, period.
-- **The key only ever comes from the environment** — an explicit `{ apiKey }` option or
-  `ANTHROPIC_API_KEY` (e.g. from `.env.local`, which is gitignored). No key is ever
-  committed, stored, or read by client code.
+- **The mock stays the default everywhere.** Nothing in the web app calls the Claude
+  provider unless a visitor has explicitly pasted their own key into the Engine Rack and
+  flipped it on (`lib/hermes/claudeKey.ts`, localStorage-only). Every other path — landing
+  page, share links, reproduced songs — always uses the Local Combinator.
+- **No founder-controlled key is ever in the client bundle.** The env-var key
+  (`ANTHROPIC_API_KEY`, `.env.local` / Actions secret) is read only by Node — the eval lane
+  and CI. The browser bundle never references `process.env.ANTHROPIC_API_KEY`.
 - **No key → no call.** The provider checks for a key at *call* time and throws a typed
   `[claude-lyrics:missing-key]` error before any request is attempted. Creating the
   provider object is always safe.
-- **No live call without BOTH env vars.** The only thing in the repo that ever invokes the
-  live provider is the comparison runner, and it is double-gated: it skips (cleanly, with a
-  printed note) unless `RUN_LIVE_EVAL=1` **and** `ANTHROPIC_API_KEY` are both set. CI sets
-  neither, so CI can never spend money.
+- **No live call without BOTH env vars (CLI/eval lane).** The comparison runner is
+  double-gated: it skips (cleanly, with a printed note) unless `RUN_LIVE_EVAL=1` **and**
+  `ANTHROPIC_API_KEY` are both set. CI sets neither, so CI can never spend money.
 - All unit tests run against an injected fake `fetchImpl` with a tripwire on global fetch —
   the test suite is physically incapable of making a real network call.
+
+## Run it from the panel — bring your own key (BYOK)
+
+The Engine Rack (`components/hermes/Rack.tsx`) has a **Claude Engine** slot. Click "Enter
+your Anthropic key," paste a key from console.anthropic.com, and it unlocks:
+
+- The key is written to **this browser's `localStorage` only**
+  (`hermes.claudeKey.v1` / `hermes.claudeEngineActive.v1`) — never sent to any server we
+  control, because we don't have one. It never leaves the browser except in requests you
+  make yourself, straight to `api.anthropic.com`.
+- Once unlocked, the "Turn on" toggle makes the Claude Engine the active lyrics provider
+  for *your* generations. Calls go directly from your browser to Anthropic's Messages API,
+  billed to your own key. "Forget key" wipes it from this browser.
+- The browser call carries the `anthropic-dangerous-direct-browser-access: true` header —
+  Anthropic's own sanctioned opt-in for client-only, bring-your-own-key apps (the "dangerous"
+  naming is a deliberate friction/warning, not a prohibition); without it the browser's CORS
+  preflight to `api.anthropic.com` is rejected.
+- **Reproduced/shared songs never use your key.** A permalink must render byte-identically
+  for every viewer, so `runPipeline` always uses the Local Combinator when reproducing a
+  seed — regardless of whether the viewer has Claude Engine turned on.
+- If a call fails for any reason (bad key, rate limit, refusal, network), the app catches it,
+  falls back to the free Local Combinator for that take, and shows an honest banner
+  explaining the fallback — generation never gets stuck.
+
+This design is why it satisfies SECURITY.md's "no hosted deployment may proxy to a paid API
+without a server-side proxy + rate limiting + a spend cap" rule *without* needing any of
+that infrastructure: there is no proxy, because there is no server in the request path at
+all — the visitor's own browser talks straight to Anthropic with the visitor's own key and
+the visitor's own money.
+
+## "Is my key actually working?" — the Test key button
+
+Once unlocked, the Rack shows a **🔌 Test key** button next to "Turn on/off." It's an
+explicit, opt-in action — never automatic — that makes one small, real request straight to
+`api.anthropic.com` (`testClaudeKey()`, capped at 16 output tokens, so it's cheap) and reports
+`✓ Claude API is working — connection confirmed.` or the exact typed error (`missing-key` /
+`http-error` incl. status code / `refusal` / `malformed-response`) if it doesn't. This is the
+honest way to answer "is Claude actually working" without needing a founder-side dashboard or
+log — the visitor gets a direct, real answer from their own browser.
+
+## Scribe — edit lyrics line by line, with AI rewrites
+
+The "Final lyrics" edit mode (`components/hermes/ScribeEditor.tsx`) is a per-line editor
+instead of one big text block — inspired by dedicated lyric-writing tools like Scribe:
+
+- Every line is its own field. Edit it directly, **+** adds a new line below it, **×** deletes it.
+- **✨** asks the Claude Engine for 3 alternate phrasings of *that one line* — same meaning,
+  syllable count, and rhyme role, with the line before/after as context so the rewrite fits
+  the surrounding lines (`suggestLineRewrites()`, `lib/hermes/providers/claudeLyricsProvider.ts`).
+  Click a suggestion to drop it into the line. Requires the Claude Engine unlocked + active
+  (BYOK, above); if it isn't, the button still works but shows an honest unlock hint instead
+  of quietly doing nothing.
+- **"edit as raw text"** switches to the original single-textarea editor for power users who
+  want to paste in a whole rewritten song at once — no regression, both save through the same
+  `renderSections()` → learn-from-edits path (`lib/hermes/edits.ts`), so taste-learning and
+  auto-exclusion behave identically no matter which editor was used.
 
 ## How the founder triggers the live comparison
 
@@ -97,5 +162,7 @@ baseline; the deterministic golden-set guard (`npm run eval`) stays on the mock.
   defensive parsing of the returned text — markdown fences stripped, shapes validated,
   with typed `ClaudeProviderError`s (`missing-key` / `http-error` / `refusal` /
   `malformed-response`) on anything that doesn't conform.
-- **Rack:** the `claude-engine` unit in `lib/hermes/engines.ts` stays `locked: true`,
-  `active: false`. Unlock = env key + the CLI/eval lane; the UI never flips it on.
+- **Rack:** the `claude-engine` unit in `lib/hermes/engines.ts` still defaults to
+  `locked: true`, `active: false` — that's the static base data. `Rack.tsx` overrides both
+  fields live from `lib/hermes/claudeKey.ts` (does this browser have a key? is it toggled on?),
+  so the UI reflects the *visitor's* unlock state, not a global one.

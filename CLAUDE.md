@@ -72,10 +72,18 @@ node scripts/mobile-matrix.mjs   # anything touching layout (build the export fi
 - Secrets go **only** in gitignored `.env.local` — never a tracked file, commit, PR body,
   or log. **Grep every staged diff for `key_` before committing.** (A leaked Runway key
   once had to be rotated + scrubbed from history. Once is enough.)
-- The one approved **remote** home for a key: **GitHub Actions repository secrets** (e.g.
-  `ANTHROPIC_API_KEY` → the manual `claude-compare` workflow). Any workflow reading a
-  secret must be `workflow_dispatch`-only + `contents: read`; CI proper uses zero secrets.
-  Never put a key in Cloudflare Pages env — the static client must never need one.
+- The one approved **remote** home for a *founder-controlled* key: **GitHub Actions
+  repository secrets** (e.g. `ANTHROPIC_API_KEY` → the manual `claude-compare` workflow).
+  Any workflow reading a secret must be `workflow_dispatch`-only + `contents: read`; CI
+  proper uses zero secrets. Never put a founder key in Cloudflare Pages env — the static
+  client must never need one.
+- A third, distinct location: **the Engine Rack's bring-your-own-key slot**
+  (`lib/hermes/claudeKey.ts`) — a *visitor's own* Anthropic key, pasted client-side, stored
+  only in that visitor's `localStorage`, calling `api.anthropic.com` directly from their
+  browser with their own money. This is not a Cloudflare-env exception — it's a visitor
+  key that never touches our infra at all, which is why it's allowed. See SECURITY.md
+  → "Rules for paid providers" for the exact boundary (the moment a visitor's key would
+  route through server-side code, the exemption ends).
 - The `?dev=1` developer door is build-gated (`NEXT_PUBLIC_DEV_DOOR`, dev builds only).
   Never ship a public backdoor, even a convenience one.
 - **Every URL/import payload is hostile.** Sanitize at the boundary like
@@ -96,7 +104,7 @@ node scripts/mobile-matrix.mjs   # anything touching layout (build the export fi
 ## Status board
 
 <!-- STATUS:BEGIN generated: edit brain/roadmap.json, then GEN_DOCS=1 npx vitest run status -->
-**📊 Status board:** ✅ 27 shipped · 🔨 1 in build · 💤 9 queued (37 tracked) — full tables in [`STATUS.md`](STATUS.md), source of truth [`brain/roadmap.json`](brain/roadmap.json).
+**📊 Status board:** ✅ 29 shipped · 🔨 1 in build · 💤 9 queued (39 tracked) — full tables in [`STATUS.md`](STATUS.md), source of truth [`brain/roadmap.json`](brain/roadmap.json).
 <!-- STATUS:END -->
 
 ## Memory layers — where the brain keeps things
@@ -116,6 +124,7 @@ node scripts/mobile-matrix.mjs   # anything touching layout (build the export fi
 | Working list / idea inbox / build log | `TODO.md` · `IDEAS.md` · `BUILD_LOG.md` |
 | Per-user vault (browser) | localStorage `hermes.vault.v1`, `hermes.albums.v1`, `hermes.taste.v1`, `hermes.bannedWords.v1`, `hermes.artistAlias.v1` (each mirrored to a `.bak` key) via `lib/hermes/storage.ts` |
 | Identity / dev door (browser) | localStorage `hermes.profile.v1`, `hermes.devDoor.v1` via `lib/hermes/identity.ts` |
+| Claude Engine BYOK key (browser, visitor's own) | localStorage `hermes.claudeKey.v1`, `hermes.claudeEngineActive.v1` via `lib/hermes/claudeKey.ts` — never sent to any server we control |
 | Session RAM | `lib/hermes/workingMemory.ts` (decays + consolidates, in-memory) |
 | Docs index | `docs/` — hit-factory, brain-wiring (generated from brainMap — regen `GEN_DOCS=1 npx vitest run wiring`), mobile, share, og-unfurl, accounts, nft-standard, claude-engine, runway-plan |
 

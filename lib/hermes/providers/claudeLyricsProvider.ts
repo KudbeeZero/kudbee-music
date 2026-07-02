@@ -1,8 +1,8 @@
 // The Claude Engine — a real-AI LyricsProvider behind the exact same seam as the
-// mock (roadmap 5.1). OPT-IN ONLY: nothing in the web app imports this file; it is
-// consumed exclusively by the CLI/eval lane (`npm run eval:compare`). The mock stays
-// the default everywhere, so the $0 guarantee holds unless a founder explicitly
-// exports ANTHROPIC_API_KEY and runs the live comparison.
+// mock (roadmap 5.1). OPT-IN ONLY: the mock stays the default everywhere. Two opt-in
+// lanes use this module: the CLI/eval lane (`npm run eval:compare`, founder's own
+// ANTHROPIC_API_KEY) and the web app's Engine Rack BYOK path (roadmap 5.4, a
+// visitor's own key, never a founder-controlled one — see the bundle-rule note below).
 //
 // HONESTY NOTE (this matters to the repo's ethos): the live engine does NOT promise
 // determinism. The mock reproduces a draft exactly for a given seed; an LLM does not.
@@ -16,9 +16,14 @@
 // (`output_config.format` with a json_schema) — belt — plus defensive parsing of
 // the returned text (fence stripping, shape validation) — suspenders.
 //
-// Bundle rule: this module must never be imported by app/ or components/. It uses
-// only global fetch (Node 22 native) and guards `process` access, but the real
-// protection is that only tests and the eval lane import it.
+// Bundle rule (updated for BYOK, roadmap 5.4): this module MAY be imported by
+// components/ now — Rack.tsx and HermesHitFactory.tsx opt into it only when a
+// visitor has pasted their OWN key into the rack (lib/hermes/claudeKey.ts,
+// localStorage-only, never our server). The mock stays the default everywhere
+// else; nothing here ever reads a founder-controlled key or env var from the
+// browser bundle. The eval lane still uses this same module server-side with
+// ANTHROPIC_API_KEY. It uses only global fetch (Node 22 / browser native) and
+// guards `process` access, so it is safe to bundle client-side.
 import type { SongInputs, HookOption, SongSection } from '../types';
 import type { LyricsProvider } from './providerTypes';
 
@@ -251,6 +256,89 @@ export function parseSections(raw: string): SongSection[] {
 }
 
 // ---------------------------------------------------------------------------
+// The shared call — every Claude feature in this module (generation, line
+// rewrites, the Rack's "Test key" check) funnels through this one function,
+// so key resolution / CORS header / error typing stay in exactly one place.
+// ---------------------------------------------------------------------------
+
+function resolveKey(opts: ClaudeLyricsProviderOptions): string {
+  const key = opts.apiKey
+    ?? (typeof process !== 'undefined' ? process.env?.ANTHROPIC_API_KEY : undefined);
+  if (!key) {
+    throw new ClaudeProviderError(
+      'missing-key',
+      'no API key available — pass { apiKey } or set ANTHROPIC_API_KEY. ' +
+      'The mock engine remains the default; this provider is only used by the opt-in eval lane.',
+    );
+  }
+  return key;
+}
+
+function resolveFetch(opts: ClaudeLyricsProviderOptions): typeof fetch {
+  const f = opts.fetchImpl ?? (typeof fetch !== 'undefined' ? fetch : undefined);
+  if (!f) throw new ClaudeProviderError('http-error', 'no fetch implementation available in this runtime');
+  return f;
+}
+
+/**
+ * Call the Messages API once and return the raw text content. Call-time key
+ * check (never at import/construct time) — creating a provider or calling this
+ * with no key throws `missing-key` before any request is attempted.
+ */
+async function callClaudeMessages(
+  opts: ClaudeLyricsProviderOptions,
+  system: string,
+  prompt: string,
+  schema: object,
+): Promise<string> {
+  const model = opts.model ?? CLAUDE_DEFAULT_MODEL;
+  const maxTokens = opts.maxTokens ?? DEFAULT_MAX_TOKENS;
+  const key = resolveKey(opts);
+  const doFetch = resolveFetch(opts);
+  const res = await doFetch(CLAUDE_API_URL, {
+    method: 'POST',
+    headers: {
+      'content-type': 'application/json',
+      'x-api-key': key,
+      'anthropic-version': CLAUDE_API_VERSION,
+      // Anthropic's sanctioned BYOK escape hatch: without this header, a browser's
+      // CORS preflight to api.anthropic.com is rejected. Only send it when we're
+      // actually running in a browser (the Rack's own-key path) — the CLI/eval
+      // lane runs in Node and never needs it.
+      ...(typeof window !== 'undefined' ? { 'anthropic-dangerous-direct-browser-access': 'true' } : {}),
+    },
+    // NOTE: no temperature/top_p/top_k — removed on current models (400 if sent).
+    // Variation is requested via the "take" hint in the prompt instead.
+    body: JSON.stringify({
+      model,
+      max_tokens: maxTokens,
+      system,
+      messages: [{ role: 'user', content: prompt }],
+      output_config: { format: { type: 'json_schema', schema } },
+    }),
+  });
+  if (!res.ok) {
+    const body = await res.text().catch(() => '');
+    throw new ClaudeProviderError('http-error', `Messages API returned ${res.status}: ${body.slice(0, 300)}`, res.status);
+  }
+  const msg = (await res.json()) as {
+    stop_reason?: string;
+    content?: { type: string; text?: string }[];
+  };
+  if (msg.stop_reason === 'refusal') {
+    throw new ClaudeProviderError('refusal', 'the model declined this request (stop_reason: refusal)');
+  }
+  const text = (msg.content ?? [])
+    .filter((b) => b.type === 'text' && typeof b.text === 'string')
+    .map((b) => b.text)
+    .join('');
+  if (!text.trim()) {
+    throw new ClaudeProviderError('malformed-response', 'response contained no text content');
+  }
+  return text;
+}
+
+// ---------------------------------------------------------------------------
 // The provider
 // ---------------------------------------------------------------------------
 
@@ -260,79 +348,121 @@ export function parseSections(raw: string): SongSection[] {
  * time, when a generate method actually needs to hit the API.
  */
 export function createClaudeLyricsProvider(opts: ClaudeLyricsProviderOptions = {}): LyricsProvider {
-  const model = opts.model ?? CLAUDE_DEFAULT_MODEL;
-  const maxTokens = opts.maxTokens ?? DEFAULT_MAX_TOKENS;
-
-  const resolveKey = (): string => {
-    const key = opts.apiKey
-      ?? (typeof process !== 'undefined' ? process.env?.ANTHROPIC_API_KEY : undefined);
-    if (!key) {
-      throw new ClaudeProviderError(
-        'missing-key',
-        'no API key available — pass { apiKey } or set ANTHROPIC_API_KEY. ' +
-        'The mock engine remains the default; this provider is only used by the opt-in eval lane.',
-      );
-    }
-    return key;
-  };
-
-  const resolveFetch = (): typeof fetch => {
-    const f = opts.fetchImpl ?? (typeof fetch !== 'undefined' ? fetch : undefined);
-    if (!f) throw new ClaudeProviderError('http-error', 'no fetch implementation available in this runtime');
-    return f;
-  };
-
-  const complete = async (prompt: string, schema: object): Promise<string> => {
-    const key = resolveKey();       // call-time key check (never at import)
-    const doFetch = resolveFetch();
-    const res = await doFetch(CLAUDE_API_URL, {
-      method: 'POST',
-      headers: {
-        'content-type': 'application/json',
-        'x-api-key': key,
-        'anthropic-version': CLAUDE_API_VERSION,
-      },
-      // NOTE: no temperature/top_p/top_k — removed on current models (400 if sent).
-      // Variation is requested via the "take" hint in the prompt instead.
-      body: JSON.stringify({
-        model,
-        max_tokens: maxTokens,
-        system: systemPrompt(),
-        messages: [{ role: 'user', content: prompt }],
-        output_config: { format: { type: 'json_schema', schema } },
-      }),
-    });
-    if (!res.ok) {
-      const body = await res.text().catch(() => '');
-      throw new ClaudeProviderError('http-error', `Messages API returned ${res.status}: ${body.slice(0, 300)}`, res.status);
-    }
-    const msg = (await res.json()) as {
-      stop_reason?: string;
-      content?: { type: string; text?: string }[];
-    };
-    if (msg.stop_reason === 'refusal') {
-      throw new ClaudeProviderError('refusal', 'the model declined this request (stop_reason: refusal)');
-    }
-    const text = (msg.content ?? [])
-      .filter((b) => b.type === 'text' && typeof b.text === 'string')
-      .map((b) => b.text)
-      .join('');
-    if (!text.trim()) {
-      throw new ClaudeProviderError('malformed-response', 'response contained no text content');
-    }
-    return text;
-  };
-
   return {
     id: 'claude-lyrics',
     live: true,
     async generateHooks(inputs, count, seed, bannedWords) {
-      const text = await complete(buildHooksPrompt(inputs, count, seed, bannedWords), HOOKS_SCHEMA);
+      const text = await callClaudeMessages(
+        opts, systemPrompt(), buildHooksPrompt(inputs, count, seed, bannedWords), HOOKS_SCHEMA,
+      );
       return parseHooks(text).slice(0, count);
     },
     async generateSections(inputs, hook, seed, bannedWords) {
-      const text = await complete(buildSectionsPrompt(inputs, hook, seed, bannedWords), SECTIONS_SCHEMA);
+      const text = await callClaudeMessages(
+        opts, systemPrompt(), buildSectionsPrompt(inputs, hook, seed, bannedWords), SECTIONS_SCHEMA,
+      );
       return parseSections(text);
     },
   };
+}
+
+// ---------------------------------------------------------------------------
+// Scribe — AI line rewrites (roadmap 5.5). A per-line "give me alternatives"
+// tool, not part of the LyricsProvider seam (the mock has no equivalent — this
+// is a Claude Engine–only value-add, gated the same BYOK way as generation).
+// ---------------------------------------------------------------------------
+
+export interface LineRewriteContext {
+  sectionLabel: string;
+  line: string;
+  precedingLine?: string;
+  followingLine?: string;
+  inputs: SongInputs;
+}
+
+const LINE_REWRITE_SCHEMA = {
+  type: 'object',
+  properties: {
+    alternatives: { type: 'array', items: { type: 'string' } },
+  },
+  required: ['alternatives'],
+  additionalProperties: false,
+} as const;
+
+export function buildLineRewritePrompt(ctx: LineRewriteContext, count: number): string {
+  return [
+    `Rewrite ONE line from a song, offering ${count} alternative phrasings.`,
+    '',
+    briefBlock(ctx.inputs),
+    '',
+    `Section: [${ctx.sectionLabel}]`,
+    ctx.precedingLine ? `Line before (context, do not rewrite): "${ctx.precedingLine}"` : '',
+    `LINE TO REWRITE: "${ctx.line}"`,
+    ctx.followingLine ? `Line after (context, do not rewrite): "${ctx.followingLine}"` : '',
+    '',
+    'Keep roughly the same meaning, syllable count, and rhyme role as the original line —',
+    'these are alternate deliveries of the same moment, not a new idea. Each alternative must',
+    'be a single, complete, singable line (no bar numbers, no explanation).',
+    '',
+    'Respond with STRICT JSON matching exactly:',
+    `{"alternatives":["line one","line two", ...]}`,
+    `- exactly ${count} entries, each a different phrasing.`,
+  ].filter(Boolean).join('\n');
+}
+
+export function parseLineRewrites(raw: string): string[] {
+  const data = parseJson(raw);
+  if (!isRecord(data) || !Array.isArray(data.alternatives) || data.alternatives.length === 0) {
+    throw new ClaudeProviderError('malformed-response', 'expected {"alternatives":[...]} with at least one entry');
+  }
+  const lines = data.alternatives
+    .filter((l): l is string => typeof l === 'string')
+    .map((l) => l.trim())
+    .filter(Boolean);
+  if (!lines.length) {
+    throw new ClaudeProviderError('malformed-response', 'alternatives contained no usable lines');
+  }
+  return lines;
+}
+
+/** Ask Claude for `count` alternate phrasings of a single lyric line, in context. */
+export async function suggestLineRewrites(
+  opts: ClaudeLyricsProviderOptions,
+  ctx: LineRewriteContext,
+  count = 3,
+): Promise<string[]> {
+  const text = await callClaudeMessages(opts, systemPrompt(), buildLineRewritePrompt(ctx, count), LINE_REWRITE_SCHEMA);
+  return parseLineRewrites(text).slice(0, count);
+}
+
+// ---------------------------------------------------------------------------
+// Connection test — the Rack's "Test key" button. A minimal, cheap round-trip
+// so a visitor can confirm their own key actually works before generating a
+// full song with it. Never called automatically — always an explicit tap.
+// ---------------------------------------------------------------------------
+
+const TEST_SCHEMA = {
+  type: 'object',
+  properties: { ok: { type: 'string' } },
+  required: ['ok'],
+  additionalProperties: false,
+} as const;
+
+export type ClaudeKeyTestResult = { ok: true } | { ok: false; message: string };
+
+/** A tiny, capped-token round-trip against the real Messages API to confirm
+ *  this key works. Surfaces the same typed ClaudeProviderError codes as
+ *  everything else, as a plain ok/message result the UI can render directly. */
+export async function testClaudeKey(opts: ClaudeLyricsProviderOptions): Promise<ClaudeKeyTestResult> {
+  try {
+    await callClaudeMessages(
+      { ...opts, maxTokens: 16 },
+      'Respond with STRICT JSON only, no commentary.',
+      'Reply with {"ok":"ok"} to confirm the connection.',
+      TEST_SCHEMA,
+    );
+    return { ok: true };
+  } catch (e) {
+    return { ok: false, message: e instanceof ClaudeProviderError ? e.message : 'connection test failed' };
+  }
 }

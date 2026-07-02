@@ -4,6 +4,9 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 import type { SongInputs, SongPackage, AgentOutput, HookOption, CritiqueKey } from '@/lib/hermes/types';
 import { AGENT_DEFINITIONS } from '@/lib/hermes/agents';
 import { runPipeline } from '@/lib/hermes/pipeline';
+import { mockProviders } from '@/lib/hermes/providers/mockProviders';
+import { createClaudeLyricsProvider, ClaudeProviderError } from '@/lib/hermes/providers/claudeLyricsProvider';
+import { getClaudeKey, claudeEngineReady } from '@/lib/hermes/claudeKey';
 import { withChosenHook } from '@/lib/hermes/rescore';
 import { keywords } from '@/lib/hermes/text';
 import { listSongs, saveSong, getSong, deleteSong, priorSongsForOriginality, loadBannedWords, saveBannedWords, listAlbums, saveAlbum, deleteAlbum, loadTaste, recordTaste, type Taste } from '@/lib/hermes/storage';
@@ -57,6 +60,7 @@ export default function HermesHitFactory() {
   const [banned, setBanned] = useState<string[]>(() => allAvoidWords());
   const [showAvoid, setShowAvoid] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [engineNotice, setEngineNotice] = useState<string | null>(null);
   const [albums, setAlbums] = useState<Album[]>([]);
   const [albumOpen, setAlbumOpen] = useState(false);
   const [labOpen, setLabOpen] = useState(false);
@@ -172,11 +176,13 @@ export default function HermesHitFactory() {
     setPkg(null);
     setOutputs({});
     setError(null);
+    setEngineNotice(null);
     try {
       // Reproducing a shared song (an explicit seed): make it PORTABLE + byte-identical
       // for every viewer — use the deterministic default avoid-list (not this browser's
       // custom one) and an empty prior-vault (not the viewer's), so the reproduced song
-      // depends only on the encoded inputs + seed, never on local state.
+      // depends only on the encoded inputs + seed, never on local state. That also means
+      // it must never depend on THIS visitor's own Claude Engine toggle — always mock.
       const reproduce = runOpts?.seed !== undefined;
       // Compare against the vault, but never against earlier versions of THIS
       // song — regenerating the same title shouldn't read as copying itself.
@@ -185,7 +191,26 @@ export default function HermesHitFactory() {
       );
       const seed = runOpts?.seed ?? ((Date.now() ^ (regenRef.current++ * 0x9e3779b1)) >>> 0);
       const bannedForRun = reproduce ? allAvoidWords(inputs.doNotUse ?? []) : banned;
-      const { pkg: result } = await runPipeline(inputs, { priorSongs, bannedWords: bannedForRun, seed, forcedHook: runOpts?.forcedHook, cognitionFeedback: runOpts?.cognitionFeedback });
+      const runOptions = { priorSongs, bannedWords: bannedForRun, seed, forcedHook: runOpts?.forcedHook, cognitionFeedback: runOpts?.cognitionFeedback };
+
+      // Claude Engine (bring-your-own-key): opt-in per visitor, per browser. Never
+      // used to reproduce a shared song — a permalink must render identically for
+      // everyone regardless of whether the viewer has a key plugged in.
+      let result: SongPackage;
+      if (!reproduce && claudeEngineReady()) {
+        try {
+          const claudeProviders = { ...mockProviders, lyrics: createClaudeLyricsProvider({ apiKey: getClaudeKey() ?? undefined }) };
+          ({ pkg: result } = await runPipeline(inputs, { ...runOptions, providers: claudeProviders }));
+        } catch (claudeErr) {
+          // Never leave the artist stuck because their own key/quota failed —
+          // fall back to the free engine for this take and say so honestly.
+          const reason = claudeErr instanceof ClaudeProviderError ? claudeErr.message : 'the Claude Engine request failed';
+          setEngineNotice(`Claude Engine unavailable (${reason}) — used the free Local Combinator for this take.`);
+          ({ pkg: result } = await runPipeline(inputs, runOptions));
+        }
+      } else {
+        ({ pkg: result } = await runPipeline(inputs, runOptions));
+      }
 
       // new session: clear working memory, seed it with the committed hook
       const wm = wmRef.current; const ns = nsRef.current;
@@ -290,7 +315,7 @@ export default function HermesHitFactory() {
   // analytical deck) once a run is under way or a package exists.
   const mode: 'compose' | 'studio' = running || pkg ? 'studio' : 'compose';
 
-  function newSong() { setPkg(null); setOutputs({}); setError(null); }
+  function newSong() { setPkg(null); setOutputs({}); setError(null); setEngineNotice(null); }
 
   // sign-out returns to the gate; the vault deliberately stays on this device
   function handleSignOut() {
@@ -345,6 +370,9 @@ export default function HermesHitFactory() {
       {error && mode === 'compose' && (
         <div role="alert" style={{ border: '1px solid rgba(255,93,108,0.5)', background: 'rgba(255,93,108,0.10)', color: 'var(--bad)', borderRadius: 12, padding: '10px 14px', margin: '4px auto 0', maxWidth: 620, fontSize: 13 }}>⚠ {error}</div>
       )}
+      {engineNotice && mode === 'compose' && (
+        <div role="status" style={{ border: '1px solid rgba(255,177,78,0.5)', background: 'rgba(255,177,78,0.10)', color: 'var(--amber)', borderRadius: 12, padding: '10px 14px', margin: '4px auto 0', maxWidth: 620, fontSize: 13 }}>ℹ {engineNotice}</div>
+      )}
 
       {mode === 'compose' ? (
         <div className={styles.composeStage}>
@@ -384,6 +412,18 @@ export default function HermesHitFactory() {
           }}
         >
           ⚠ {error}
+        </div>
+      )}
+
+      {engineNotice && (
+        <div
+          role="status"
+          style={{
+            border: '1px solid rgba(255,177,78,0.5)', background: 'rgba(255,177,78,0.10)',
+            color: 'var(--amber)', borderRadius: 12, padding: '10px 14px', margin: '4px 0 14px', fontSize: 13,
+          }}
+        >
+          ℹ {engineNotice}
         </div>
       )}
 
