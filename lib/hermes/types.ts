@@ -23,6 +23,20 @@ export type SongStructure =
   | 'short-form'
   | 'full-song';
 
+/**
+ * Rhyme-scheme dial for verse generation (roadmap 5.6 — pattern packs). Standard
+ * poetic rhyme-scheme patterns, applied per 4-line verse (a 2-line unit like the
+ * Bridge always resolves as a single rhymed couplet — a scheme needs at least two
+ * pairs to read as distinct from AABB):
+ *   AABB — sequential couplets (the original/default combinator behavior)
+ *   ABAB — alternating (lines 1&3 rhyme, 2&4 rhyme)
+ *   ABBA — enclosed/mirrored (lines 1&4 rhyme, 2&3 rhyme)
+ *   AAAA — monorhyme (all four lines share one rhyme family)
+ *   XAXA — ballad/common-meter convention (only lines 2&4 rhyme; 1&3 are free)
+ * See docs/pattern-packs.md for the research this is grounded in.
+ */
+export type RhymeSchemeId = 'AABB' | 'ABAB' | 'ABBA' | 'AAAA' | 'XAXA';
+
 /** What the user types into the Song Lab. */
 export interface SongInputs {
   title: string;
@@ -38,6 +52,7 @@ export interface SongInputs {
   structure: SongStructure;
   culture?: string;    // where you're from / what shaped you — your OWN background, as craft
   rhymeTemp?: 'tight' | 'balanced' | 'loose';  // rhyme strictness dial (perfect ↔ slant); default balanced
+  rhymeScheme?: RhymeSchemeId;  // verse rhyme-pattern dial (AABB/ABAB/ABBA/AAAA/XAXA); default AABB
 }
 
 /** Static metadata describing an agent (its job), independent of any run. */

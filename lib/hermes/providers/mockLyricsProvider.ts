@@ -4,7 +4,7 @@
 // per input so the same brief reproduces the same draft (good for tests + the
 // uniqueness vault).
 import type { LyricsProvider } from './providerTypes';
-import type { SongInputs, HookOption, SongSection } from '../types';
+import type { SongInputs, HookOption, SongSection, RhymeSchemeId } from '../types';
 import { makeRng, hashString, pick, keywords, titleCase, shuffle, tidyLine } from '../text';
 import { rhymeFamily, type RhymeTemp } from '../rhyme';
 import { deriveEmotion } from '../emotion';
@@ -285,21 +285,59 @@ function pickFresh(pool: string[], used: Set<string>, rng: () => number): string
   return choice;
 }
 
-// Build a rhymed verse toward a section goal: `couplets` pairs of lines, each pair
-// ending on two different-but-rhyming lexicon words. Threads a theme word through
-// the opening line so sections stay about the same thing. Deterministic per rng.
-function buildRhymedVerse(inputs: SongInputs, rng: () => number, valence: number, couplets: number, opts: VerseOpts): string[] {
+// Rhyme-scheme layouts (roadmap 5.6, pattern packs): a family id per line position.
+// Lines sharing a family id land on rhyming end-words; distinct ids don't rhyme with
+// each other. A 4-line verse is the smallest unit where these read as genuinely
+// different from sequential couplets — see the RhymeSchemeId doc comment in types.ts.
+const SCHEME_LAYOUTS: Record<RhymeSchemeId, number[]> = {
+  AABB: [0, 0, 1, 1],
+  ABAB: [0, 1, 0, 1],
+  ABBA: [0, 1, 1, 0],
+  AAAA: [0, 0, 0, 0],
+  XAXA: [0, 1, 2, 1], // lines 2 & 4 rhyme (family 1); lines 1 & 3 are free (distinct singleton families)
+};
+const FALLBACK_RHYME_WORDS = ['road', 'gold', 'light', 'time'];
+
+/** Family id per line for a given scheme + line count. A 2-line unit (e.g. the
+ *  Bridge) is always a single rhymed couplet — a scheme needs ≥4 lines to differ
+ *  from AABB. Any other length falls back to sequential couplet pairing. */
+function layoutFor(scheme: RhymeSchemeId, lineCount: number): number[] {
+  if (lineCount === 2) return [0, 0];
+  if (lineCount === 4) return SCHEME_LAYOUTS[scheme];
+  return Array.from({ length: lineCount }, (_, i) => Math.floor(i / 2));
+}
+
+// Build a rhymed verse toward a section goal: `lineCount` lines arranged per the
+// chosen rhyme scheme (default AABB — sequential couplets, the original combinator
+// behavior). Threads a theme word through the first line of every pair so sections
+// stay about the same thing. Deterministic per rng.
+function buildRhymedVerse(
+  inputs: SongInputs, rng: () => number, valence: number, lineCount: number, opts: VerseOpts,
+  scheme: RhymeSchemeId = 'AABB',
+): string[] {
   const { pool, thread, used, temp, anchorIdx, banned } = opts;
+  const layout = layoutFor(scheme, lineCount);
+
+  // One rhyme-family draw per distinct family id, sized to how many lines share it —
+  // so AAAA draws one 4-word family, XAXA draws a 2-word family plus two singletons.
+  const wordQueues = new Map<number, string[]>();
+  for (const fid of [...new Set(layout)]) {
+    const count = layout.filter((x) => x === fid).length;
+    const words = rhymeFamily(rng, valence, count, temp, banned).map((e) => e.w);
+    while (words.length < count) words.push(FALLBACK_RHYME_WORDS[words.length % FALLBACK_RHYME_WORDS.length]);
+    wordQueues.set(fid, words);
+  }
+
   const lines: string[] = [];
-  for (let c = 0; c < couplets; c++) {
-    const fam = rhymeFamily(rng, valence, 2, temp, banned);
-    const a = fam[0]?.w ?? 'road';
-    const b = fam[1]?.w ?? 'gold';
-    const t1 = pickFresh(pool, used, rng);
-    const t2 = pickFresh(pool.filter((x) => x !== t1), used, rng);
-    const anchor = thread.length ? thread[(anchorIdx + c) % thread.length] : '';
-    lines.push(capitalize(fill(t1, inputs, rng, a, valence, c === 0 ? anchor : '', banned)));
-    lines.push(capitalize(fill(t2, inputs, rng, b, valence, '', banned)));
+  let prevFrame = '';
+  for (let i = 0; i < lineCount; i++) {
+    const word = wordQueues.get(layout[i])!.shift() ?? FALLBACK_RHYME_WORDS[i % FALLBACK_RHYME_WORDS.length];
+    const framePool = prevFrame ? pool.filter((x) => x !== prevFrame) : pool;
+    const t = pickFresh(framePool, used, rng);
+    prevFrame = t;
+    // anchor threading: only the first line of every 2-line unit carries the theme anchor
+    const anchor = thread.length && i % 2 === 0 ? thread[(anchorIdx + Math.floor(i / 2)) % thread.length] : '';
+    lines.push(capitalize(fill(t, inputs, rng, word, valence, anchor, banned)));
   }
   return dedupe(lines);
 }
@@ -374,6 +412,7 @@ export const mockLyricsProvider: LyricsProvider = {
     // the limbic layer sets the emotional valence → rhyme words + adjectives lean with it
     const valence = deriveEmotion(inputs).valence;
     const temp: RhymeTemp = inputs.rhymeTemp ?? 'balanced';
+    const scheme: RhymeSchemeId = inputs.rhymeScheme ?? 'AABB';
     // the thread: a few theme words carried across every section so the song develops
     // one idea; the diversity guard stops any frame template being reused song-wide.
     // anchor words carried across sections must be real, DISTINCT nouns — on-theme first,
@@ -381,9 +420,9 @@ export const mockLyricsProvider: LyricsProvider = {
     const thread = [...themeNouns(inputs).filter((n) => !banned.has(n.toLowerCase())), ...imageryNouns(inputs, rng, banned)].slice(0, 3);
     const used = new Set<string>();
     // hierarchical generation: each verse pursues its section goal (setup → turn → reflect)
-    const v1 = buildRhymedVerse(inputs, rng, valence, 2, { pool: filterFrames(SETUP_LINES, banned), thread, used, temp, anchorIdx: 0, banned });
-    const v2 = buildRhymedVerse(inputs, rng, valence, 2, { pool: filterFrames(TURN_LINES, banned), thread, used, temp, anchorIdx: 1, banned });
-    const bridge = buildRhymedVerse(inputs, rng, valence, 1, { pool: filterFrames(REFLECT_LINES, banned), thread, used, temp, anchorIdx: 2, banned });
+    const v1 = buildRhymedVerse(inputs, rng, valence, 4, { pool: filterFrames(SETUP_LINES, banned), thread, used, temp, anchorIdx: 0, banned }, scheme);
+    const v2 = buildRhymedVerse(inputs, rng, valence, 4, { pool: filterFrames(TURN_LINES, banned), thread, used, temp, anchorIdx: 1, banned }, scheme);
+    const bridge = buildRhymedVerse(inputs, rng, valence, 2, { pool: filterFrames(REFLECT_LINES, banned), thread, used, temp, anchorIdx: 2, banned }, scheme);
     const hookLines = [hook.text, hook.text, secondHookLine(inputs, rng, banned), hook.text];
 
     const full: SongSection[] = [
@@ -405,6 +444,12 @@ export const mockLyricsProvider: LyricsProvider = {
         return full;
       case 'verse-first':
         return [{ label: 'Verse 1', lines: v1 }, { label: 'Hook', lines: hookLines }, { label: 'Verse 2', lines: v2 }, { label: 'Hook', lines: hookLines }];
+      case 'full-song':
+        // A genuinely longer arrangement, not a hook-first duplicate: rides out on a
+        // repeated final hook rather than a single closing one — closer to the AABA
+        // craft convention of returning to the A material without new lyrics after the
+        // first cycle (see docs/pattern-packs.md). hook-first stays the shorter, single-outro shape.
+        return [...full, { label: 'Hook', lines: hookLines }];
       default:
         return full;
     }

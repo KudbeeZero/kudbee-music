@@ -104,7 +104,7 @@ node scripts/mobile-matrix.mjs   # anything touching layout (build the export fi
 ## Status board
 
 <!-- STATUS:BEGIN generated: edit brain/roadmap.json, then GEN_DOCS=1 npx vitest run status -->
-**📊 Status board:** ✅ 29 shipped · 🔨 1 in build · 💤 9 queued (39 tracked) — full tables in [`STATUS.md`](STATUS.md), source of truth [`brain/roadmap.json`](brain/roadmap.json).
+**📊 Status board:** ✅ 30 shipped · 🔨 1 in build · 💤 9 queued (40 tracked) — full tables in [`STATUS.md`](STATUS.md), source of truth [`brain/roadmap.json`](brain/roadmap.json).
 <!-- STATUS:END -->
 
 ## Memory layers — where the brain keeps things
@@ -119,6 +119,7 @@ node scripts/mobile-matrix.mjs   # anything touching layout (build the export fi
 | Craft-DNA archetypes | `brain/personas.json` → `lib/hermes/personas.ts` |
 | Community steering | `brain/crossroads.json` → `lib/hermes/crossroads.ts` |
 | Vocabulary cortex | `brain/lexicon/core.json` → `lib/hermes/lexicon.ts` |
+| Pattern packs (form + rhyme-scheme presets) | `brain/patternPacks.json` → `lib/hermes/patternPacks.ts` — see `docs/pattern-packs.md` |
 | Living-state spine (machine-readable) | `brain/roadmap.json` |
 | Vector memory (generated, gitignored) | `brain/vector-memory.json` → `lib/hermes/vectorMemory.ts` / `vectorRecall.ts` (node-only) |
 | Working list / idea inbox / build log | `TODO.md` · `IDEAS.md` · `BUILD_LOG.md` |
@@ -126,7 +127,7 @@ node scripts/mobile-matrix.mjs   # anything touching layout (build the export fi
 | Identity / dev door (browser) | localStorage `hermes.profile.v1`, `hermes.devDoor.v1` via `lib/hermes/identity.ts` |
 | Claude Engine BYOK key (browser, visitor's own) | localStorage `hermes.claudeKey.v1`, `hermes.claudeEngineActive.v1` via `lib/hermes/claudeKey.ts` — never sent to any server we control |
 | Session RAM | `lib/hermes/workingMemory.ts` (decays + consolidates, in-memory) |
-| Docs index | `docs/` — hit-factory, brain-wiring (generated from brainMap — regen `GEN_DOCS=1 npx vitest run wiring`), mobile, share, og-unfurl, accounts, nft-standard, claude-engine, runway-plan |
+| Docs index | `docs/` — hit-factory, brain-wiring (generated from brainMap — regen `GEN_DOCS=1 npx vitest run wiring`), mobile, share, og-unfurl, accounts, nft-standard, claude-engine, runway-plan, pattern-packs |
 
 ## Maintenance
 
