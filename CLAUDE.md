@@ -37,10 +37,10 @@ node scripts/mobile-matrix.mjs   # anything touching layout (build the export fi
 
 - Playwright chromium is preinstalled at `/opt/pw-browsers` — **never** `playwright install`.
 - Serve `out/` with a Range-capable static server for browser walkthroughs (video seeks).
-- CI gates = **check / web / smoke**. The Cloudflare **"Workers Builds" check always fails
-  and is NOT a merge gate** (`brain/beliefs.json` → known-nonblocking-checks). It is tracked
-  for deletion — the founder's 30-second dashboard fix lives in TODO.md ("Blocked on you") +
-  roadmap `ecosystem.workersBuildsCheck`. Until deleted, ignore it for merging, never for tracking.
+- CI gates = **check / web / smoke** — nothing else gates a merge. (History: a stray
+  Cloudflare "Workers Builds" check failed every push for ~30 PRs until it was tracked (#111)
+  and the founder deleted the stray Worker, 2026-07-02. If a stray check reappears, track it
+  immediately — `brain/beliefs.json` → known-nonblocking-checks.)
 
 ## Workflow (the repeated instructions, saved)
 
