@@ -52,18 +52,32 @@ function readDurable<T>(key: string): T[] {
   return [];
 }
 
-function writeDurable<T>(key: string, list: T[]): void {
+/** Test-only: makes every durable write throw, simulating a full localStorage. */
+let simulateQuota = false;
+
+/** Returns whether the LIVE write landed (the mirror stays best-effort). A swallowed
+ *  quota error used to be fully silent — the UI showed a "saved" song that vanished
+ *  on reload — so persistence failure is now a reportable result, not a secret. */
+function writeDurable<T>(key: string, list: T[]): boolean {
   const json = JSON.stringify(list);
-  try { kv().setItem(key, json); } catch { /* quota / unavailable */ }
-  try { kv().setItem(key + BAK, json); } catch { /* backup best-effort */ }
+  let ok = false;
+  try {
+    if (simulateQuota) throw new Error('QuotaExceededError (simulated)');
+    kv().setItem(key, json);
+    ok = true;
+  } catch { /* quota / unavailable — reported via the return value */ }
+  try {
+    if (!simulateQuota) kv().setItem(key + BAK, json);
+  } catch { /* backup best-effort */ }
+  return ok;
 }
 
 function readAll(): SongPackage[] {
   return readDurable<SongPackage>(KEY);
 }
 
-function writeAll(list: SongPackage[]): void {
-  writeDurable(KEY, list);
+function writeAll(list: SongPackage[]): boolean {
+  return writeDurable(KEY, list);
 }
 
 /** List newest-first. */
@@ -75,16 +89,40 @@ export function getSong(id: string): SongPackage | undefined {
   return readAll().find((s) => s.id === id);
 }
 
-/** Save a package. If a prior song shares the title, bump its version. */
-export function saveSong(pkg: SongPackage): SongPackage {
+/** Same-title version history kept per song — regenerating one title forever used to
+ *  grow the vault unbounded (each list is also mirrored, doubling quota pressure). */
+const KEEP_VERSIONS = 5;
+
+/** Keep only the newest KEEP_VERSIONS entries per title (highest version numbers). */
+function pruneVersionHistory(list: SongPackage[]): SongPackage[] {
+  const byTitle = new Map<string, SongPackage[]>();
+  for (const s of list) {
+    const k = s.title.toLowerCase();
+    const group = byTitle.get(k) ?? [];
+    group.push(s);
+    byTitle.set(k, group);
+  }
+  const keep = new Set<string>();
+  for (const group of byTitle.values()) {
+    group.sort((a, b) => b.version - a.version || (a.createdAt < b.createdAt ? 1 : -1));
+    for (const s of group.slice(0, KEEP_VERSIONS)) keep.add(s.id);
+  }
+  return list.filter((s) => keep.has(s.id));
+}
+
+/** Save a package. If a prior song shares the title, bump its version. Returns the
+ *  stored package AND whether the write actually landed — on a full localStorage the
+ *  song still renders this session, but `persisted: false` means it will NOT survive
+ *  a reload and the caller must tell the user instead of pretending it saved. */
+export function saveSong(pkg: SongPackage): { song: SongPackage; persisted: boolean } {
   const all = readAll();
   const priorSameTitle = all.filter((s) => s.title.toLowerCase() === pkg.title.toLowerCase());
   const version = priorSameTitle.length ? Math.max(...priorSameTitle.map((s) => s.version)) + 1 : 1;
   const stored: SongPackage = { ...pkg, version };
   const next = all.filter((s) => s.id !== pkg.id);
   next.push(stored);
-  writeAll(next);
-  return stored;
+  const persisted = writeAll(pruneVersionHistory(next));
+  return { song: stored, persisted };
 }
 
 export function deleteSong(id: string): void {
@@ -389,9 +427,15 @@ export function __corruptLiveVault(): void {
 /** test-only reset */
 export function __clearVault(): void {
   memory.clear();
+  simulateQuota = false;
   try {
     kv().setItem(KEY, '[]'); kv().setItem(KEY + BAK, '[]');
     kv().setItem(ALBUM_KEY, '[]'); kv().setItem(ALBUM_KEY + BAK, '[]');
     kv().setItem(TASTE_KEY, JSON.stringify({ liked: {}, disliked: {}, edits: 0 }));
   } catch { /* ignore */ }
+}
+
+/** Test-only: toggle simulated localStorage quota exhaustion (every write fails). */
+export function __simulateVaultQuota(on: boolean): void {
+  simulateQuota = on;
 }

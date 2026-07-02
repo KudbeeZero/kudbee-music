@@ -1,6 +1,6 @@
 import { describe, it, expect, beforeEach } from 'vitest';
 import {
-  saveSong, listSongs, __clearVault, __corruptLiveVault,
+  saveSong, listSongs, __clearVault, __corruptLiveVault, __simulateVaultQuota,
   vaultBackupStatus, restoreFromBackup,
 } from '../storage';
 import { runPipeline } from '../pipeline';
@@ -49,5 +49,41 @@ describe('vault durability — backup mirror + restore', () => {
     const s = vaultBackupStatus();
     expect(s.liveSongs).toBe(0);
     expect(s.backupSongs).toBe(0);
+  });
+});
+
+describe('vault durability — quota honesty + version-history cap (review weakness #2)', () => {
+  beforeEach(() => __clearVault());
+
+  it('saveSong reports persisted: false when storage is full (was silently swallowed)', async () => {
+    const pkg = await make('q1', '2026-01-01T00:00:00Z');
+    __simulateVaultQuota(true);
+    const res = saveSong(pkg);
+    expect(res.persisted).toBe(false);
+    expect(res.song.version).toBe(1); // the in-memory package is still usable this session
+    __simulateVaultQuota(false);
+    expect(listSongs()).toHaveLength(0); // and honesty was warranted: nothing landed
+  });
+
+  it('a healthy save reports persisted: true', async () => {
+    expect(saveSong(await make('q2', '2026-01-01T00:00:00Z')).persisted).toBe(true);
+  });
+
+  it('caps same-title version history at 5 (drops the oldest, keeps the newest)', async () => {
+    for (let i = 1; i <= 7; i++) {
+      saveSong(await make(`v${i}`, `2026-01-0${Math.min(i, 9)}T00:00:00Z`));
+    }
+    const all = listSongs();
+    expect(all).toHaveLength(5);
+    const versions = all.map((s) => s.version).sort((a, b) => a - b);
+    expect(versions).toEqual([3, 4, 5, 6, 7]); // v1/v2 pruned, newest five kept
+  });
+
+  it('different titles are never pruned against each other', async () => {
+    for (let i = 1; i <= 7; i++) {
+      const pkg = await make(`t${i}`, '2026-01-01T00:00:00Z');
+      saveSong({ ...pkg, title: `Song ${i}` });
+    }
+    expect(listSongs()).toHaveLength(7);
   });
 });
