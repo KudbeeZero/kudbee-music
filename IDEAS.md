@@ -239,6 +239,17 @@ A second-opinion review flagged real risks worth acting on (truth-first):
   permanently findings-only, `issues: write` is its permission ceiling, structurally unable
   to change any file. See `docs/watchdog.md` for the full reasoning, including why the
   reverted design isn't coming back without a human-approval checkpoint built in.
+- ✅ **"Lyrics are all coming out very similar in regards to pattern... people should be able
+  to choose more instead of being so limited"** *(founder observation)* — shipped: a
+  `/deep-research` pass (104 agents, 22 sources) found two real gaps and grounded the fix —
+  rhyme generation was hard-coded to AABB couplets (now a 5-value `rhymeScheme` dial:
+  AABB/ABAB/ABBA/AAAA/XAXA) and "Full song" silently duplicated "hook-first" (now genuinely
+  longer, per the verified AABA convention). Named presets in `brain/patternPacks.json`. See
+  "Pattern packs" in `TODO.md` Shipped + `docs/pattern-packs.md` (which is explicit about
+  what's research-verified vs. offered as general craft variety — the research's rhyme-*scheme*-
+  to-genre mapping did NOT survive verification, so no pack claims a scheme is "the X genre
+  scheme"). Deferred: meter/stress and rap-flow parameters need new syllable-aware generation
+  infra, not just a dial — captured in `TODO.md` backlog.
 - ✅ **"Make sure Claude API is working, people should be able to edit their lyrics almost
   like the application Scribe"** *(founder directive)* — shipped: a per-line lyric editor
   (`components/hermes/ScribeEditor.tsx`) with an AI-rewrite control per line (Claude Engine,

@@ -1,7 +1,8 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import type { SongInputs, SongStructure } from '@/lib/hermes/types';
+import type { SongInputs, SongStructure, RhymeSchemeId } from '@/lib/hermes/types';
+import { PATTERN_PACKS, findPatternPack } from '@/lib/hermes/patternPacks';
 import styles from './hermes.module.css';
 
 const STRUCTURES: { value: SongStructure; label: string }[] = [
@@ -19,6 +20,14 @@ const RHYME_TEMPS: { value: RhymeTempOpt; label: string }[] = [
   { value: 'loose', label: 'Loose — slant / near-rhyme' },
 ];
 
+const RHYME_SCHEMES: { value: RhymeSchemeId; label: string }[] = [
+  { value: 'AABB', label: 'AABB — couplets' },
+  { value: 'ABAB', label: 'ABAB — alternating' },
+  { value: 'ABBA', label: 'ABBA — enclosed' },
+  { value: 'AAAA', label: 'AAAA — monorhyme' },
+  { value: 'XAXA', label: 'XAXA — ballad meter' },
+];
+
 // A new visitor starts with a blank page — no preloaded words. Only neutral
 // craft settings (tempo/structure/rhyme) carry a default.
 const DEFAULTS: SongInputs = {
@@ -34,6 +43,7 @@ const DEFAULTS: SongInputs = {
   references: '',
   structure: 'hook-first',
   rhymeTemp: 'balanced',
+  rhymeScheme: 'AABB',
 };
 
 /** The rich example brief — loaded only on an explicit click, never preloaded. */
@@ -50,6 +60,7 @@ export const EXAMPLE_BRIEF: SongInputs = {
   references: 'melodic hook energy, emotional storytelling — feel only, never copy',
   structure: 'hook-first',
   rhymeTemp: 'balanced',
+  rhymeScheme: 'AABB',
 };
 
 export default function SongLabForm({
@@ -79,6 +90,14 @@ export default function SongLabForm({
   function loadExample() {
     setV(EXAMPLE_BRIEF);
     setDoNotUseRaw('');
+  }
+
+  // A Pattern Pack sets structure + rhyme scheme together as one choice — a
+  // quick way to try "a different pattern" instead of tuning two dropdowns.
+  // Not its own field on SongInputs; it just writes the two underlying dials.
+  function applyPatternPack(id: string) {
+    const pack = findPatternPack(id);
+    if (pack) setV((p) => ({ ...p, structure: pack.structure, rhymeScheme: pack.rhymeScheme }));
   }
 
   // same readiness rule as the Lyric Lab: a brief needs a title, theme, and genre
@@ -136,6 +155,18 @@ export default function SongLabForm({
         <input id="hf-dnu" className={styles.input} value={doNotUseRaw} onChange={(e) => setDoNotUseRaw(e.target.value)} placeholder="corny, generic, ..." />
       </Field>
 
+      <Field label="Pattern pack — apply a form + rhyme-scheme preset at once" htmlFor="hf-pack">
+        <select
+          id="hf-pack"
+          className={styles.select}
+          value=""
+          onChange={(e) => { if (e.target.value) applyPatternPack(e.target.value); e.target.value = ''; }}
+        >
+          <option value="">Choose a pattern pack…</option>
+          {PATTERN_PACKS.map((p) => <option key={p.id} value={p.id}>{p.label}</option>)}
+        </select>
+      </Field>
+
       <div className={styles.row2}>
         <Field label="Structure" htmlFor="hf-structure">
           <select id="hf-structure" className={styles.select} value={v.structure} onChange={(e) => set('structure', e.target.value as SongStructure)}>
@@ -148,6 +179,12 @@ export default function SongLabForm({
           </select>
         </Field>
       </div>
+
+      <Field label="Rhyme scheme" htmlFor="hf-scheme">
+        <select id="hf-scheme" className={styles.select} value={v.rhymeScheme ?? 'AABB'} onChange={(e) => set('rhymeScheme', e.target.value as RhymeSchemeId)}>
+          {RHYME_SCHEMES.map((s) => <option key={s.value} value={s.value}>{s.label}</option>)}
+        </select>
+      </Field>
 
       <button className={styles.runBtn} disabled={running || !briefReady} onClick={submit}>
         {running ? 'HERMES is working…' : 'Generate Song Package ▸'}

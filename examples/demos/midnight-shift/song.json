@@ -68,17 +68,17 @@
       "lines": [
         "For everyone, I grind through the nobody",
         "For everyone, I grind through the nobody",
-        "And everyone know I reach for it",
+        "All this ember, I earned it slow",
         "For everyone, I grind through the nobody"
       ]
     },
     {
       "label": "Verse 1",
       "lines": [
-        "Grew up on graveyard, chasing the day",
-        "Nothing in my hands but nobody and the way",
-        "All I had was ember and the part",
-        "They handed me hunger instead of the art"
+        "All I had was graveyard and the day",
+        "They handed me iron instead of the way",
+        "Grew up on shift, chasing the name",
+        "Nothing in my hands but future and the frame"
       ]
     },
     {
@@ -86,24 +86,24 @@
       "lines": [
         "For everyone, I grind through the nobody",
         "For everyone, I grind through the nobody",
-        "And everyone know I reach for it",
+        "All this ember, I earned it slow",
         "For everyone, I grind through the nobody"
       ]
     },
     {
       "label": "Verse 2",
       "lines": [
-        "Stakes got higher, shift became the way",
-        "Now I crawl the shift into the day",
-        "Took that nobody and turned it to a dream",
-        "Put the graveyard down, reaching for the stream"
+        "Took that shift and turned it to a frame",
+        "Everything changed, traded nobody for the name",
+        "Put the future down, reaching for the glow",
+        "Now I survive the graveyard into the flow"
       ]
     },
     {
       "label": "Bridge",
       "lines": [
-        "Wouldn't trade the future for a grade",
-        "Made my peace with future and the trade"
+        "Made my peace with future and the day",
+        "Looking back, the future was always the way"
       ]
     },
     {
@@ -111,12 +111,21 @@
       "lines": [
         "For everyone, I grind through the nobody",
         "For everyone, I grind through the nobody",
-        "And everyone know I reach for it",
+        "All this ember, I earned it slow",
+        "For everyone, I grind through the nobody"
+      ]
+    },
+    {
+      "label": "Hook",
+      "lines": [
+        "For everyone, I grind through the nobody",
+        "For everyone, I grind through the nobody",
+        "All this ember, I earned it slow",
         "For everyone, I grind through the nobody"
       ]
     }
   ],
-  "finalLyrics": "[Intro]\nEveryone, this one's for you\n\n[Hook]\nFor everyone, I grind through the nobody\nFor everyone, I grind through the nobody\nAnd everyone know I reach for it\nFor everyone, I grind through the nobody\n\n[Verse 1]\nGrew up on graveyard, chasing the day\nNothing in my hands but nobody and the way\nAll I had was ember and the part\nThey handed me hunger instead of the art\n\n[Hook]\nFor everyone, I grind through the nobody\nFor everyone, I grind through the nobody\nAnd everyone know I reach for it\nFor everyone, I grind through the nobody\n\n[Verse 2]\nStakes got higher, shift became the way\nNow I crawl the shift into the day\nTook that nobody and turned it to a dream\nPut the graveyard down, reaching for the stream\n\n[Bridge]\nWouldn't trade the future for a grade\nMade my peace with future and the trade\n\n[Hook]\nFor everyone, I grind through the nobody\nFor everyone, I grind through the nobody\nAnd everyone know I reach for it\nFor everyone, I grind through the nobody",
+  "finalLyrics": "[Intro]\nEveryone, this one's for you\n\n[Hook]\nFor everyone, I grind through the nobody\nFor everyone, I grind through the nobody\nAll this ember, I earned it slow\nFor everyone, I grind through the nobody\n\n[Verse 1]\nAll I had was graveyard and the day\nThey handed me iron instead of the way\nGrew up on shift, chasing the name\nNothing in my hands but future and the frame\n\n[Hook]\nFor everyone, I grind through the nobody\nFor everyone, I grind through the nobody\nAll this ember, I earned it slow\nFor everyone, I grind through the nobody\n\n[Verse 2]\nTook that shift and turned it to a frame\nEverything changed, traded nobody for the name\nPut the future down, reaching for the glow\nNow I survive the graveyard into the flow\n\n[Bridge]\nMade my peace with future and the day\nLooking back, the future was always the way\n\n[Hook]\nFor everyone, I grind through the nobody\nFor everyone, I grind through the nobody\nAll this ember, I earned it slow\nFor everyone, I grind through the nobody\n\n[Hook]\nFor everyone, I grind through the nobody\nFor everyone, I grind through the nobody\nAll this ember, I earned it slow\nFor everyone, I grind through the nobody",
   "production": {
     "tempoBpm": 82,
     "drums": "boom-bap with dusty snares",
@@ -175,14 +184,14 @@
       "startHint": "verse 1, bar 1",
       "durationSec": 12,
       "caption": "the story starts here 👀",
-      "hookLine": "Grew up on graveyard, chasing the day"
+      "hookLine": "All I had was graveyard and the day"
     },
     {
       "label": "Bridge turn",
       "startHint": "bridge",
       "durationSec": 18,
       "caption": "wait for it…",
-      "hookLine": "Wouldn't trade the future for a grade"
+      "hookLine": "Made my peace with future and the day"
     }
   ],
   "promoCaption": "“For everyone, I grind through the nobody” — new one for everyone grinding in the dark. #working #graveyard #lo-fisoulhip-hop",
@@ -191,7 +200,7 @@
     "flags": [
       {
         "kind": "repeated-hook",
-        "detail": "hook line repeats 9× — consider varying one word",
+        "detail": "hook line repeats 12× — consider varying one word",
         "line": "For everyone, I grind through the nobody"
       }
     ],
@@ -199,25 +208,29 @@
       "4e5eaf26",
       "d3f64919",
       "d3f64919",
-      "9865c842",
+      "b38e4ab1",
       "d3f64919",
-      "ae7ea1db",
-      "a3ff2592",
-      "2795fe2f",
-      "b80c218d",
-      "d3f64919",
-      "d3f64919",
-      "9865c842",
-      "d3f64919",
-      "1311a8e2",
-      "6f7d3813",
-      "e92b2b19",
-      "a3bd887b",
-      "4266098e",
-      "49e1584f",
+      "3d87fe62",
+      "71e0902c",
+      "c8493cab",
+      "ba995488",
       "d3f64919",
       "d3f64919",
-      "9865c842",
+      "b38e4ab1",
+      "d3f64919",
+      "40555138",
+      "c2146e24",
+      "e8772b22",
+      "952d5043",
+      "a301c7a7",
+      "740ab79d",
+      "d3f64919",
+      "d3f64919",
+      "b38e4ab1",
+      "d3f64919",
+      "d3f64919",
+      "d3f64919",
+      "b38e4ab1",
       "d3f64919"
     ],
     "bannedWordsHit": [],
@@ -344,7 +357,7 @@
       "id": "lyric-chemist",
       "name": "Lyric Chemist",
       "status": "done",
-      "finding": "7 sections, 23 lines.",
+      "finding": "8 sections, 27 lines.",
       "confidence": 84,
       "warnings": [],
       "suggestedNextAction": "Send lyrics to Emotion Scanner + Originality Auditor.",
@@ -361,17 +374,17 @@
             "lines": [
               "For everyone, I grind through the nobody",
               "For everyone, I grind through the nobody",
-              "And everyone know I reach for it",
+              "All this ember, I earned it slow",
               "For everyone, I grind through the nobody"
             ]
           },
           {
             "label": "Verse 1",
             "lines": [
-              "Grew up on graveyard, chasing the day",
-              "Nothing in my hands but nobody and the way",
-              "All I had was ember and the part",
-              "They handed me hunger instead of the art"
+              "All I had was graveyard and the day",
+              "They handed me iron instead of the way",
+              "Grew up on shift, chasing the name",
+              "Nothing in my hands but future and the frame"
             ]
           },
           {
@@ -379,24 +392,24 @@
             "lines": [
               "For everyone, I grind through the nobody",
               "For everyone, I grind through the nobody",
-              "And everyone know I reach for it",
+              "All this ember, I earned it slow",
               "For everyone, I grind through the nobody"
             ]
           },
           {
             "label": "Verse 2",
             "lines": [
-              "Stakes got higher, shift became the way",
-              "Now I crawl the shift into the day",
-              "Took that nobody and turned it to a dream",
-              "Put the graveyard down, reaching for the stream"
+              "Took that shift and turned it to a frame",
+              "Everything changed, traded nobody for the name",
+              "Put the future down, reaching for the glow",
+              "Now I survive the graveyard into the flow"
             ]
           },
           {
             "label": "Bridge",
             "lines": [
-              "Wouldn't trade the future for a grade",
-              "Made my peace with future and the trade"
+              "Made my peace with future and the day",
+              "Looking back, the future was always the way"
             ]
           },
           {
@@ -404,7 +417,16 @@
             "lines": [
               "For everyone, I grind through the nobody",
               "For everyone, I grind through the nobody",
-              "And everyone know I reach for it",
+              "All this ember, I earned it slow",
+              "For everyone, I grind through the nobody"
+            ]
+          },
+          {
+            "label": "Hook",
+            "lines": [
+              "For everyone, I grind through the nobody",
+              "For everyone, I grind through the nobody",
+              "All this ember, I earned it slow",
               "For everyone, I grind through the nobody"
             ]
           }
@@ -486,6 +508,10 @@
           {
             "label": "Hook",
             "beat": "tension"
+          },
+          {
+            "label": "Hook",
+            "beat": "tension"
           }
         ]
       }
@@ -497,7 +523,7 @@
       "finding": "Uniqueness 100/100 · 1 flag(s).",
       "confidence": 90,
       "warnings": [
-        "hook line repeats 9× — consider varying one word"
+        "hook line repeats 12× — consider varying one word"
       ],
       "suggestedNextAction": "Clean — proceed.",
       "data": {
@@ -506,7 +532,7 @@
           "flags": [
             {
               "kind": "repeated-hook",
-              "detail": "hook line repeats 9× — consider varying one word",
+              "detail": "hook line repeats 12× — consider varying one word",
               "line": "For everyone, I grind through the nobody"
             }
           ],
@@ -514,25 +540,29 @@
             "4e5eaf26",
             "d3f64919",
             "d3f64919",
-            "9865c842",
+            "b38e4ab1",
             "d3f64919",
-            "ae7ea1db",
-            "a3ff2592",
-            "2795fe2f",
-            "b80c218d",
-            "d3f64919",
-            "d3f64919",
-            "9865c842",
-            "d3f64919",
-            "1311a8e2",
-            "6f7d3813",
-            "e92b2b19",
-            "a3bd887b",
-            "4266098e",
-            "49e1584f",
+            "3d87fe62",
+            "71e0902c",
+            "c8493cab",
+            "ba995488",
             "d3f64919",
             "d3f64919",
-            "9865c842",
+            "b38e4ab1",
+            "d3f64919",
+            "40555138",
+            "c2146e24",
+            "e8772b22",
+            "952d5043",
+            "a301c7a7",
+            "740ab79d",
+            "d3f64919",
+            "d3f64919",
+            "b38e4ab1",
+            "d3f64919",
+            "d3f64919",
+            "d3f64919",
+            "b38e4ab1",
             "d3f64919"
           ],
           "bannedWordsHit": [],
@@ -589,14 +619,14 @@
             "startHint": "verse 1, bar 1",
             "durationSec": 12,
             "caption": "the story starts here 👀",
-            "hookLine": "Grew up on graveyard, chasing the day"
+            "hookLine": "All I had was graveyard and the day"
           },
           {
             "label": "Bridge turn",
             "startHint": "bridge",
             "durationSec": 18,
             "caption": "wait for it…",
-            "hookLine": "Wouldn't trade the future for a grade"
+            "hookLine": "Made my peace with future and the day"
           }
         ]
       }
@@ -699,5 +729,6 @@
     "verdict": "keep",
     "decision": "Keep it — survives 3/3 challenges. Yours to accept or push further.",
     "confidence": 1
-  }
+  },
+  "seed": 36
 }

@@ -71,6 +71,7 @@
 | ✅ | **Vector memory + semantic search (local embeddings, opt-in)** | `lib/hermes/vectorMemory.ts` | #47, #49 |
 | ✅ | **Claude Engine BYOK panel — visitor's own key, browser-only** | `components/hermes/Rack.tsx` | — |
 | ✅ | **Scribe line editor + Rack 'Test key' verification** | `components/hermes/ScribeEditor.tsx` | — |
+| ✅ | **Pattern packs — rhyme-scheme + form variety ($0/local)** | `lib/hermes/patternPacks.ts` | — |
 | ✅ | **Watchdog — Claude-powered security/quality review, scheduled + findings-only** | `scripts/watchdog.mjs` | — |
 
 ### Phase 6 — Influence Studio (WIFI DJ framework Part 1) — `▱▱▱▱▱▱▱▱▱▱` 0/1

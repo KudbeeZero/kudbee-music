@@ -300,6 +300,7 @@ flow, and the non-negotiables — plus the code-generated [brain-wiring diagram]
 - [x] **Mobile intelligence + PWA** — detects phone/browser and adjusts; install to your home screen; device-matrix test harness ([docs/mobile.md](docs/mobile.md))
 - [x] **Claude Engine — bring your own key** — unlock the Engine Rack's Claude Engine slot with your own Anthropic key; it lives only in your browser and calls Anthropic directly, no server or account of ours involved ([docs/claude-engine.md](docs/claude-engine.md))
 - [x] **Scribe line editor + Test key** — edit lyrics line by line with an AI-rewrite suggestion per line (Claude Engine), plus a one-tap "Test key" to confirm your Anthropic key actually works ([docs/claude-engine.md](docs/claude-engine.md))
+- [x] **Pattern packs — rhyme-scheme + form variety** — a `rhymeScheme` dial (AABB/ABAB/ABBA/AAAA/XAXA, not just couplets anymore) and named form+scheme presets, grounded in songwriting-craft research ([docs/pattern-packs.md](docs/pattern-packs.md))
 - [x] **Watchdog** — a weekly (+ on-demand) Claude review of the repo's security posture + quality, filed as a GitHub issue with concrete findings and research ideas — findings-only, structurally unable to write code ([docs/watchdog.md](docs/watchdog.md))
 
 **Next** — generated from the spine [`brain/roadmap.json`](brain/roadmap.json); the human backlog is [`TODO.md`](TODO.md), the full board is [`STATUS.md`](STATUS.md).
@@ -330,7 +331,7 @@ PRs welcome — the easiest wins are a new **scene pack** (`scene-packs/<name>/`
 Node 22 · headless Chromium (Playwright) · ffmpeg (libx264/AAC) · faster-whisper *(optional)* · Next.js + React · Vitest. **No paid services.**
 
 ## 📚 Documentation
-[Quickstart](docs/quickstart.md) · [Concepts](docs/concepts.md) · [Architecture](ARCHITECTURE.md) · [Brain wiring](docs/brain-wiring.md) · [Persona map](docs/personas.md) · [CLI reference](docs/cli.md) · [Build a scene pack](docs/scene-packs.md) · [Hit Factory guide](docs/hit-factory.md) · [Watchdog (security review)](docs/watchdog.md) · [Examples](examples/)
+[Quickstart](docs/quickstart.md) · [Concepts](docs/concepts.md) · [Architecture](ARCHITECTURE.md) · [Brain wiring](docs/brain-wiring.md) · [Persona map](docs/personas.md) · [Pattern packs](docs/pattern-packs.md) · [CLI reference](docs/cli.md) · [Build a scene pack](docs/scene-packs.md) · [Hit Factory guide](docs/hit-factory.md) · [Watchdog (security review)](docs/watchdog.md) · [Examples](examples/)
 
 ## 📄 License
 [MIT](LICENSE). Demo song © kudbee.

@@ -1,0 +1,58 @@
+[
+  {
+    "id": "hook-first-aabb",
+    "label": "Pop Hook-First — AABB Couplets",
+    "structure": "hook-first",
+    "rhymeScheme": "AABB",
+    "blurb": "The HERMES default: hook-forward pop structure, classic end-rhymed couplets (lines 1&2 rhyme, 3&4 rhyme).",
+    "sourceNote": "Baseline combinator behavior — the original engine shape, kept as the default pack."
+  },
+  {
+    "id": "aaba-classic",
+    "label": "AABA / 32-Bar Classic",
+    "structure": "full-song",
+    "rhymeScheme": "AABB",
+    "blurb": "A longer arrangement that rides out on a repeated final hook instead of a single closing one — in the spirit of the AABA convention: cycle through once, then return without new lyrical material.",
+    "sourceNote": "AABA production rule (A-A-B-A, ‘once the first cycle is complete there tend not to be any new lyrics’) — Open Music Theory / Summach, MTO 17.3."
+  },
+  {
+    "id": "verse-chorus-alternating",
+    "label": "Verse-Chorus — Alternating (ABAB)",
+    "structure": "verse-first",
+    "rhymeScheme": "ABAB",
+    "blurb": "Verse-led arrangement with an alternating rhyme scheme (lines 1&3 rhyme, 2&4 rhyme) instead of sequential couplets — a different craft feel over the same verse-chorus shape.",
+    "sourceNote": "ABAB is a standard poetic rhyme-scheme pattern, offered here as a craft-variety dial (genre-to-scheme frequency claims did not survive this repo's research verification — see docs/pattern-packs.md)."
+  },
+  {
+    "id": "ballad-common-meter",
+    "label": "Ballad — Common Meter (XAXA)",
+    "structure": "verse-first",
+    "rhymeScheme": "XAXA",
+    "blurb": "Only the even-numbered lines rhyme (2nd and 4th) — the classic ballad/hymn rhyme convention, leaving lines 1 and 3 free.",
+    "sourceNote": "XAXA is the standard ballad/common-meter rhyme convention (see Wikipedia: Common meter; LitCharts: Common Meter)."
+  },
+  {
+    "id": "monorhyme-chant",
+    "label": "Monorhyme Chant (AAAA)",
+    "structure": "short-form",
+    "rhymeScheme": "AAAA",
+    "blurb": "Every line lands on the same rhyme family — a chant-like, hypnotic feel, paired with a short, punchy length.",
+    "sourceNote": "Monorhyme is a standard poetic device (Wikipedia: Rhyme scheme); short-form keeps it tight rather than repetitive."
+  },
+  {
+    "id": "enclosed-radio",
+    "label": "Enclosed Rhyme (ABBA)",
+    "structure": "radio-edit",
+    "rhymeScheme": "ABBA",
+    "blurb": "Enclosed/mirrored rhyme (1st & 4th lines rhyme, 2nd & 3rd rhyme) inside a radio-length arrangement — a more intricate, folded rhyme feel.",
+    "sourceNote": "ABBA (enclosed rhyme) is a standard poetic rhyme-scheme pattern (Wikipedia: Rhyme scheme)."
+  },
+  {
+    "id": "strophic-lean",
+    "label": "Strophic, Verse-Led (AABB)",
+    "structure": "verse-first",
+    "rhymeScheme": "AABB",
+    "blurb": "No intro, no bridge — a leaner, self-contained verse-forward shape closer to a strophic feel than a padded modern-pop arrangement.",
+    "sourceNote": "Strophic form and its genre priors (blues, early hip-hop, 1950s–60s rock) — Open Music Theory / Summach. The engine's verse-first grammar approximates this shape; it is not a literal 12-bar harmonic transcription."
+  }
+]

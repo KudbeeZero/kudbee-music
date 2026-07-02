@@ -21,6 +21,13 @@ chat. Detail for each is in [`brain/roadmap.json`](brain/roadmap.json) + [`IDEAS
 - [x] **Pro Studio Rack** — DAW-style upgradeable engine "boxes"; free unit active, key/server slots locked _(#48)_
 - [x] **Crossroads Board — Stage 1** — local `crossroads.json` decision model _(#44)_
 - [x] **Notion live roadmap mirror** · **Grok agent-image prompts** (10, delivered in chat)
+- [x] **Pattern packs — lyric structure + rhyme-scheme variety** — "lyrics are all coming out
+   very similar in regards to pattern... people should be able to choose more." Fixed two real
+   gaps a `/deep-research` pass confirmed: rhyme generation was hard-coded to sequential AABB
+   couplets (now a `rhymeScheme` dial — AABB/ABAB/ABBA/AAAA/XAXA, verified against the
+   existing `rhymeScheme()` detector), and the "Full song" structure silently duplicated
+   hook-first (now rides out on a repeated final hook, per the AABA convention). Named
+   presets in `brain/patternPacks.json`. See "Pattern packs" in Shipped + `docs/pattern-packs.md`.
 - [x] **Real-AI Claude engine — live in the panel (bring-your-own-key)** — the Engine Rack's
    Claude Engine slot is now interactive: any visitor can paste their own Anthropic key
    (`console.anthropic.com`), it's stored only in their browser (`lib/hermes/claudeKey.ts`),
@@ -206,6 +213,15 @@ vector memory, and document the architecture — lifts output quality, dev appea
 - [ ] **Docs site on GitHub Pages** — Astro Starlight.
 
 ## 💡 Backlog (unordered ideas)
+- [ ] **Meter/stress + rap-flow parameters (pattern packs, part 2)** — the deep-research pass
+      confirmed the pedagogy (iambic default, mutate the template not the word's natural
+      stress) and the MCFlow rap-flow dials (speed, rhyme density, metric position of
+      stresses/rhymes/phrases, phrase length), but HERMES's line templates aren't
+      syllable-aware yet — needs new generation infra, not just a dial. See
+      `docs/pattern-packs.md` → "Deliberately out of scope for this pass."
+- [ ] **Repetition devices beyond anaphora** (epistrophe, call-and-response, list songs, POV
+      shifts) — only anaphora survived the research's verification; the rest need their own
+      sourcing before becoming a dial.
 - [ ] **Scribe editor: drag-to-reorder lines + a per-section "rewrite this verse" AI action**
       (today: add/delete a line + per-line ✨ rewrite only — see `IDEAS.md`).
 - [ ] **Live preview = the review path** — deploy to **Vercel** (free, instant
@@ -269,6 +285,33 @@ later (kept out of this repo's core so it stays free + local).
       is now stated as a **permanent design floor**, not a v1 gap. `renderReport()` stays pure
       and unit-tested (`test/watchdog.test.mjs`, 3 tests, zero network). See `docs/watchdog.md`
       for the full before/after reasoning.
+- [x] **Pattern packs — lyric structure + rhyme-scheme variety (roadmap 5.6)** — "the lyrics
+      are all coming out very similar in regards to pattern... people should be able to
+      choose more instead of being so limited." Grounded in a `/deep-research` pass (104
+      agents, 22 sources, 9 verified findings). Two real gaps in `mockLyricsProvider.ts`
+      fixed: (1) rhyme generation was hard-coded to sequential AABB couplets —
+      `buildRhymedVerse()` now takes a `rhymeScheme` dial (`SongInputs.rhymeScheme`:
+      AABB/ABAB/ABBA/AAAA/XAXA) via a family-per-line layout, reusing `rhyme.ts`'s already
+      generic `rhymeFamily(n)` hook; `lib/hermes/__tests__/patternPacks.test.ts` proves it
+      two ways — same seed reproduces byte-identical lyrics, and the **existing** scoring-side
+      `rhymeScheme()` detector independently confirms each generated verse reads back as the
+      exact scheme requested. (2) the "Full song" structure option was a silent duplicate of
+      "hook-first" (same `default` switch case) — now rides out on a repeated final Hook
+      instead, in the spirit of the verified AABA convention ("no new lyrics after the first
+      cycle" — Open Music Theory / Summach, MTO 17.3). `brain/patternPacks.json` →
+      `lib/hermes/patternPacks.ts` bundles structure + rhymeScheme into named presets (AABA
+      Classic, Ballad/XAXA, Verse-Chorus Alternating/ABAB, Monorhyme Chant, Enclosed/ABBA,
+      Strophic-lean), each with an honest `sourceNote` distinguishing verified findings from
+      the rhyme-scheme dial itself (offered as a general, well-established poetic device —
+      genre-to-scheme mapping did NOT survive the research's verification, so no pack
+      overclaims a genre affinity for its scheme). New Song Lab "Pattern pack" quick-apply
+      dropdown plus a standalone "Rhyme scheme" dial — pattern packs aren't their own
+      `SongInputs` field, they just set `structure` + `rhymeScheme` together, so the brief
+      stays the single source of truth for generation. Default behavior (rhymeScheme unset)
+      is byte-identical-scheme to before (still AABB); demos regenerated
+      (`GEN_DEMOS=1 npx vitest run trace`) since the RNG draw order changed under the hood.
+      Deferred for a follow-up: meter/stress and rap-flow parameters (no syllable-aware
+      generation infra yet) — see `docs/pattern-packs.md` → "Deliberately out of scope." _(this PR)_
 - [x] **Scribe line editor + Rack "Test key" verification (roadmap 5.5)** — "make sure Claude
       API is working, people should be able to edit their lyrics almost like the application
       Scribe." `components/hermes/ScribeEditor.tsx` replaces the single-textarea lyric edit
