@@ -27,25 +27,16 @@ chat. Detail for each is in [`brain/roadmap.json`](brain/roadmap.json) + [`IDEAS
    and their browser calls `api.anthropic.com` directly — no server, no founder key, no
    proxy involved. The Actions-secret + CLI eval lane (`docs/claude-engine.md`) remains
    separately available for founder-triggered comparison runs whenever you want them.
-- [x] **Watchdog — Claude-powered security/quality review (founder-triggered)** — a
-   `claude-watchdog` GitHub Action reviews recent commits + `npm audit` + the repo's own
-   written laws + every security-sensitive file, and files structured findings + research
-   ideas as a GitHub issue. Findings-only (never writes code / opens a PR). See "Blocked on
-   you" below for the two extensions that are your call, not mine: a recurring schedule, and
-   auto-generated fix PRs.
+- [x] **Watchdog — Claude-powered security/quality review, scheduled + findings-only** — a
+   `claude-watchdog` GitHub Action runs weekly (Mondays) plus on demand, reviews recent
+   commits + `npm audit` + the repo's own written laws + every security-sensitive file, and
+   files structured findings + research ideas as a GitHub issue. Findings-only — a permanent
+   design floor, not a stepping stone: an auto-fix-PR follow-on was built and then
+   deliberately reverted after the platform's own safety tooling flagged unattended
+   code-write-and-push (no human click between generation and a pushed branch) as a real
+   risk boundary. See `docs/watchdog.md`.
 
 **Blocked on you (needs a key / account / decision — I can scaffold the $0 parts, you flip the switch):**
-- [ ] **Watchdog — recurring schedule** — today `claude-watchdog` is manual-trigger only,
-   matching the existing "workflow_dispatch-only" security law. Turning it into a `schedule:`
-   cron means your Anthropic key starts spending money unattended — I scaffolded the review
-   loop but deliberately didn't flip this on myself; add a `schedule:` trigger to
-   `.github/workflows/claude-watchdog.yml` (and update the SECURITY.md clause) when you want
-   truly "always on" monitoring instead of a button you press.
-- [ ] **Watchdog — auto-generated fix PRs ("its own developer agent")** — today the workflow
-   only files a findings report; it doesn't write code or open PRs. Extending it so a
-   confidence-gated subset of findings drafts an actual patch and opens a **draft** PR (never
-   auto-merged, still through full CI) is the natural next step once a few real runs show the
-   findings are worth trusting — see `docs/watchdog.md` → "What's deliberately NOT built yet."
 - [x] **Delete the stray 'Workers Builds' check** — ✅ founder deleted the stray `kudbee-music`
    Worker (2026-07-02); the red check + ❌ bot comment are gone from all future pushes
    (verified live on the very next PR). The `wifi-dj-meme` Pages deploys are unaffected.
@@ -250,32 +241,34 @@ Board** governance / Solana / token / NFT layer integrates with this engine via 
 later (kept out of this repo's core so it stays free + local).
 
 ## ✅ Shipped (newest first)
-- [x] **Watchdog — Claude-powered security/quality review, findings-only (roadmap 5.7)** —
-      "an agent... consistently monitoring the system, finding weaknesses, also finding ways
-      to improve the system through research... deploy its own developer agent, security code
-      review... run on a dynamic type loop through the Claude API." Shipped the part
-      unambiguously in scope under the **existing** `workflow_dispatch`-only security law
-      (`SECURITY.md`): a one-shot Claude review over a bounded, curated context — the last 20
-      commits, `npm audit`, `CLAUDE.md`/`SECURITY.md` in full, and a fixed list of
-      security-sensitive files (`claudeKey.ts`, `claudeLyricsProvider.ts`, `shareLink.ts`,
-      `storage.ts`, `identity.ts`, every `.github/workflows/*.yml`) — producing structured
-      findings (severity, file, summary, suggested fix, the model's own confidence) plus
-      research ideas, filed as a GitHub issue labeled `watchdog-report`.
-      **Findings-only**: it never writes code, never opens a PR, human always triages, same
-      "assistant, not autopilot" principle as everything else AI-touched in this repo. New
-      `.github/workflows/claude-watchdog.yml` (manual `Run workflow` button, same shape as
-      `claude-compare.yml`) needs `contents: read` + `issues: write` — one scope wider than
-      `claude-compare`'s `contents: read`-only, justified and documented (`docs/watchdog.md`).
-      `scripts/watchdog.mjs`'s `renderReport()` is pure and unit-tested
-      (`test/watchdog.test.mjs`, 3 tests, zero network). Two extensions the founder's prompt
-      named are **deliberately deferred, flagged explicitly rather than silently scoped out**:
-      a recurring `schedule:` trigger (would mean the key spends money unattended — a real
-      policy change to the existing law, left as an explicit founder decision, not decided
-      for them) and auto-generated fix PRs ("its own developer agent" — a bigger trust step
-      than a findings report, the natural next extension once the reporting loop has proven
-      itself). `SECURITY.md`/`CLAUDE.md`'s Actions-secret rules updated to name both
-      workflows' exact scopes and explicitly call out that schedule-izing a
-      `workflow_dispatch` lane is a conscious decision, not a routine code change. _(this PR)_
+- [x] **Watchdog — Claude-powered security/quality review, scheduled + findings-only
+      (roadmap 5.7)** — "an agent... consistently monitoring the system, finding weaknesses,
+      also finding ways to improve the system through research... deploy its own developer
+      agent, security code review... run on a dynamic type loop through the Claude API."
+      Shipped in two passes, both in this PR. **Pass 1**: a Claude review over a bounded,
+      curated context — the last 20 commits, `npm audit`, `CLAUDE.md`/`SECURITY.md` in full,
+      and every security-sensitive file (`claudeKey.ts`, `claudeLyricsProvider.ts`,
+      `shareLink.ts`, `storage.ts`, `identity.ts`, every `.github/workflows/*.yml`) — producing
+      structured findings (severity, file, summary, suggested fix, confidence) + research
+      ideas, filed as a GitHub issue labeled `watchdog-report`. New
+      `.github/workflows/claude-watchdog.yml`, `contents: read` + `issues: write`.
+      **Pass 2** (a `/goal` follow-up after the founder flagged Pass 1 as incomplete against
+      the original ask): built `scripts/watchdog-fix.mjs`, an auto-fix-PR follow-on — pick a
+      low-severity/high-confidence finding, draft a one-file Claude patch, validate it against
+      the full local gate suite, auto-commit + push + open a **draft** PR. The platform's own
+      auto-mode safety classifier **blocked wiring this live**: an unattended agent writing and
+      pushing code with no human-approval step between generation and a pushed branch, gated
+      only by automated tests, is a real risk boundary. Given the choice (asked via
+      `AskUserQuestion`), the founder chose to **drop the auto-fix-PR piece entirely** (deleted
+      `watchdog-fix.mjs`) and instead add a `schedule:` trigger (weekly, Mondays) for genuine
+      unattended monitoring — safe specifically because the workflow's permission ceiling stays
+      `issues: write`, never `contents: write`, so an unattended run can spend money but is
+      structurally incapable of altering the repo. `SECURITY.md`/`CLAUDE.md` rewritten:
+      `workflow_dispatch`-only is the default; `schedule:` is a named, one-at-a-time exception
+      gated on the workflow being unable to write code — not a general permission. Findings-only
+      is now stated as a **permanent design floor**, not a v1 gap. `renderReport()` stays pure
+      and unit-tested (`test/watchdog.test.mjs`, 3 tests, zero network). See `docs/watchdog.md`
+      for the full before/after reasoning.
 - [x] **Scribe line editor + Rack "Test key" verification (roadmap 5.5)** — "make sure Claude
       API is working, people should be able to edit their lyrics almost like the application
       Scribe." `components/hermes/ScribeEditor.tsx` replaces the single-textarea lyric edit

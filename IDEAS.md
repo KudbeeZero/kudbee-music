@@ -222,19 +222,23 @@ A second-opinion review flagged real risks worth acting on (truth-first):
 - ✅ **"An agent, an engineer, that is consistently monitoring the system, finding
   weaknesses, also finding ways to improve the system through research... deploy its own
   developer agent, security code review... run on a dynamic type loop through the Claude
-  API"** *(founder directive, via /goal)* — shipped the part unambiguously in scope under the
-  repo's existing `workflow_dispatch`-only security law: `claude-watchdog`, a manually
-  triggered GitHub Action that runs one bounded Claude review (recent commits, npm audit,
-  the repo's own written laws, security-sensitive files) and files findings + research
-  ideas as a GitHub issue. Findings-only, never writes code. See "Watchdog" in `TODO.md`
-  Shipped + `docs/watchdog.md` for the full reasoning. Two pieces of the ask are genuinely
-  the founder's call, not mine, and are captured as explicit "Blocked on you" items rather
-  than either silently building them or silently dropping them: (1) **"consistently
-  monitoring"** would need a `schedule:` trigger, which means the founder's Anthropic key
-  spends money with no human click in the loop — a real change to the existing
-  workflow_dispatch-only law, not a routine feature; (2) **"deploy its own developer
-  agent"** would mean the workflow writing code and opening PRs unattended — a materially
-  bigger trust step than a findings report. Both are scaffolded-for but not turned on.
+  API"** *(founder directive, via /goal)* — shipped in two passes. Pass 1 built the
+  manually-triggered, findings-only review loop (`claude-watchdog`). The founder's `/goal`
+  hook correctly flagged Pass 1 as incomplete against the literal ask ("consistently
+  monitoring" and "its own developer agent" weren't real yet), so Pass 2 built both pieces:
+  a `schedule:` trigger, and `scripts/watchdog-fix.mjs` (draft a Claude patch from a
+  findings, auto-commit, auto-push, auto-open a draft PR). Wiring the auto-fix-PR piece
+  live was **blocked by the platform's own auto-mode safety classifier** — unattended
+  code-write-and-push with no human-approval checkpoint, gated only by automated tests, is
+  a real risk boundary its tooling won't let an agent cross unprompted. Asked the founder
+  directly (`AskUserQuestion`) rather than guessing which way to resolve the conflict; the
+  founder chose findings + scheduled monitoring, dropped the auto-fix-PR piece entirely
+  (not "deferred" — the code was written, tested the block, then deleted). Final shape:
+  `claude-watchdog` runs weekly + on demand, reviews recent commits/npm audit/the repo's own
+  laws/every security-sensitive file, files findings + research ideas as a GitHub issue —
+  permanently findings-only, `issues: write` is its permission ceiling, structurally unable
+  to change any file. See `docs/watchdog.md` for the full reasoning, including why the
+  reverted design isn't coming back without a human-approval checkpoint built in.
 - ✅ **"Make sure Claude API is working, people should be able to edit their lyrics almost
   like the application Scribe"** *(founder directive)* — shipped: a per-line lyric editor
   (`components/hermes/ScribeEditor.tsx`) with an AI-rewrite control per line (Claude Engine,

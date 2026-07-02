@@ -1,22 +1,29 @@
-# Founder-triggered ONLY: a periodic Claude-powered security + quality review that
-# files its findings as a GitHub issue. FINDINGS ONLY — this workflow never opens a
-# PR, never merges, never writes code; a human always triages the report.
+# A periodic Claude-powered security + quality review that files its findings as a
+# GitHub issue. FINDINGS ONLY — this is a permanent design floor, not a v1 gap: this
+# workflow never opens a PR, never writes code, never merges anything. A human
+# always triages the report. (An auto-fix-PR follow-on was designed and then
+# deliberately scrapped — the platform's own safety tooling flagged unattended
+# code-write-and-push as a real risk boundary, not a formality. See docs/watchdog.md.)
 #
-# ⚠️ This workflow SPENDS MONEY (one Messages API request per run). It therefore:
-#   - runs ONLY on workflow_dispatch (the Run button; write access required) — never
-#     on push/PR/schedule, so CI can never trigger a paid call and nothing spends the
-#     founder's key unattended (see docs/watchdog.md for why a recurring schedule is
-#     a deliberate, separate decision, not bundled into v1);
+# ⚠️ This workflow SPENDS MONEY (one Messages API request per run) and now runs
+# UNATTENDED on a schedule. It therefore:
+#   - is least-privilege: contents: read (to check out + read source) + issues:
+#     write (to file the report) — nothing else, no pull-requests scope, no write
+#     access to contents. That's the FULL extent of what an unattended run can do
+#     to this repo — it is structurally incapable of changing any file;
 #   - reads the key ONLY from the ANTHROPIC_API_KEY repository Actions secret
-#     (Settings → Secrets and variables → Actions). Fork PRs never receive secrets.
-#   - is least-privilege beyond the claude-compare baseline by exactly one scope:
-#     contents: read (to check out + read source) + issues: write (to file the
-#     report as an issue) — nothing else, no pull-requests scope, no write access
-#     to contents.
+#     (Settings → Secrets and variables → Actions). Fork PRs never receive
+#     secrets, and schedule/workflow_dispatch runs always use the secret from the
+#     default branch, never a fork's;
+#   - also stays available on workflow_dispatch for an on-demand run.
 # Without the secret configured, the run skips cleanly (scripts/watchdog.mjs's own
-# gate) — no failure, no spend.
+# gate) — no failure, no spend. Cadence is weekly by design — frequent enough to
+# read as "consistently monitoring," bounded enough that spend stays predictable;
+# tune the cron below if you want it tighter or looser.
 name: claude-watchdog
 on:
+  schedule:
+    - cron: '17 14 * * 1' # Mondays ~14:17 UTC — an off-the-hour minute avoids piling onto :00/:30
   workflow_dispatch:
     inputs:
       model:
@@ -47,7 +54,7 @@ jobs:
         id: watchdog
         env:
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
-          CLAUDE_MODEL: ${{ inputs.model }}
+          CLAUDE_MODEL: ${{ inputs.model || 'claude-opus-4-8' }}
           WATCHDOG_OUT_FILE: watchdog-report.md
         run: node scripts/watchdog.mjs
       - name: Render the report on the run page

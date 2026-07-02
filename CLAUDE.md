@@ -73,14 +73,21 @@ node scripts/mobile-matrix.mjs   # anything touching layout (build the export fi
   or log. **Grep every staged diff for `key_` before committing.** (A leaked Runway key
   once had to be rotated + scrubbed from history. Once is enough.)
 - The one approved **remote** home for a *founder-controlled* key: **GitHub Actions
-  repository secrets** (e.g. `ANTHROPIC_API_KEY` → the manual `claude-compare` and
-  `claude-watchdog` workflows). Any workflow reading a secret must be
-  `workflow_dispatch`-only — **never push/PR, never a `schedule:` trigger** — with the
-  minimum permissions the job needs (`contents: read`, plus `issues: write` only for
-  `claude-watchdog`, which needs it to file its report); CI proper uses zero secrets.
-  Never put a founder key in Cloudflare Pages env — the static client must never need
-  one. Turning a `workflow_dispatch` lane into a scheduled one is a deliberate policy
-  decision (unattended spend), never a routine code change — see SECURITY.md.
+  repository secrets** (e.g. `ANTHROPIC_API_KEY` → the `claude-compare` and
+  `claude-watchdog` workflows). Every workflow reading a secret holds the minimum
+  permissions the job needs (`contents: read`, plus `issues: write` only for
+  `claude-watchdog`, which needs it to file its report — no write access to
+  contents, ever); CI proper uses zero secrets. Never put a founder key in
+  Cloudflare Pages env — the static client must never need one.
+  **`workflow_dispatch`-only is the default; a `schedule:` trigger is a named,
+  one-at-a-time exception** (unattended spend is a deliberate policy decision, not
+  a routine code change) **and only safe when the workflow is structurally unable
+  to write to the repo** — `claude-watchdog` earns its weekly schedule specifically
+  because `issues: write` is its ceiling, not because it's trusted more generally.
+  A findings-only Claude review that also drafts+pushes fix PRs was built and then
+  deliberately reverted — the platform's safety tooling flagged unattended
+  code-write-and-push (no human click between generation and a pushed branch) as
+  a real boundary, not a formality. See SECURITY.md + docs/watchdog.md.
 - A third, distinct location: **the Engine Rack's bring-your-own-key slot**
   (`lib/hermes/claudeKey.ts`) — a *visitor's own* Anthropic key, pasted client-side, stored
   only in that visitor's `localStorage`, calling `api.anthropic.com` directly from their

@@ -1,49 +1,59 @@
 # The Watchdog — Claude-powered security + quality review
 
-**Status:** shipped, founder-triggered. Roadmap item 5.7.
+**Status:** shipped, runs on a schedule + on demand. Roadmap item 5.7.
 
 **Founder prompt:** "an agent, an engineer, that is consistently monitoring the system,
 finding weaknesses, also finding ways to improve the system through research... deploy its
 own developer agent, security code review, and basically run on a dynamic type loop through
 the Claude API."
 
-## What this actually is (v1 — read this before expecting more)
+## What this actually is
 
-A GitHub Actions workflow (`claude-watchdog`) that, when triggered, runs one bounded Claude
-Messages API call over a curated slice of the repo (recent commits, `npm audit`, the repo's
-own written laws in `CLAUDE.md`/`SECURITY.md`, and a fixed list of security-sensitive source
-files), and files the result as a GitHub issue: concrete findings (severity + file + summary +
-suggested fix + the model's own confidence) plus research ideas worth building next.
+A GitHub Actions workflow (`claude-watchdog`) that runs weekly on a schedule (plus on demand
+via the Actions tab), does one bounded Claude Messages API call over a curated slice of the
+repo (recent commits, `npm audit`, the repo's own written laws in `CLAUDE.md`/`SECURITY.md`,
+and a fixed list of security-sensitive source files), and files the result as a GitHub issue:
+concrete findings (severity + file + summary + suggested fix + the model's own confidence)
+plus research ideas worth building next.
 
-**It is findings-only.** It does not write code, does not open a pull request, does not touch
-`main`. A human reads the filed issue and decides what to act on — same "assistant, not
-autopilot" principle that governs every other AI-assisted feature in this repo (the Writers-
-Room, the Council, the Claude Engine's line rewrites). This is a deliberate v1 scope cut, not
-a technical limitation — see "What's deliberately NOT built yet" below for why.
+**It is findings-only, permanently.** It does not write code, does not open a pull request,
+does not touch `main`. A human reads the filed issue and decides what to act on — same
+"assistant, not autopilot" principle that governs every other AI-assisted feature in this repo
+(the Writers-Room, the Council, the Claude Engine's line rewrites).
 
-## Why manually-triggered, not "consistently monitoring" on a timer
+## Why findings-only is a permanent floor, not a v1 gap
 
-The founder's phrasing asked for something *continuously* running. `SECURITY.md` already has a
-standing law, written before this feature existed, for exactly this situation: **"any workflow
-that reads [the Anthropic key] secret must be `workflow_dispatch`-only (never push/PR)."** A
-`schedule:` trigger would mean the founder's own API key starts spending money on a timer with
-no human click in the loop — a real, meaningful change to that law, not just a new feature.
+This repo's build process (an AI agent, working from a founder's plain-language directive)
+actually attempted the fuller version first: a follow-on step where a low-severity,
+high-confidence finding would get a Claude-drafted one-file patch, validated against the full
+local gate suite, then auto-committed and pushed to a new branch with a draft PR opened —
+still never auto-merged, but with **no human click anywhere in the chain from finding to
+pushed branch**.
 
-Rather than quietly deciding that policy question myself, this PR ships the part that's
-unambiguously in scope under the existing law — the review loop itself, working end-to-end,
-triggered by a button — and leaves "should this run on a schedule with no human in the loop"
-as an explicit, separate decision for the founder to make deliberately. Flip it on by adding a
-`schedule:` trigger to `.github/workflows/claude-watchdog.yml` once that's a decision you want
-to make (and update the `SECURITY.md` clause below when you do — it's written to be
-findable/greppable specifically so it doesn't get missed).
+The platform's own safety tooling blocked that attempt before it was wired live, with this
+reasoning: an unattended agent writing and pushing code, gated only by automated tests with no
+human approval step in the loop, is a real risk boundary — not a formality to route around.
+Given the choice to either add a human-approval checkpoint back into that flow or drop it, the
+founder chose to drop the auto-fix-PR piece entirely and keep the schedule + findings-report
+half. That's not a temporary v1 cut waiting on more trust being built up — it's the intended
+final shape: **an agent that finds and reports, never one that pushes code on its own.** If
+this is ever revisited, the honest way to do it is with an explicit human click *inside* the
+loop (e.g. a separate, human-triggered "attempt this specific fix" action per finding) — never
+a fully unattended write-and-push path.
 
-## How to run it
+## How it runs
 
-Actions tab → **claude-watchdog** → **Run workflow** → pick a model (Opus 4.8 default, Haiku
-4.5 is the cheap lane) → Run. Needs `ANTHROPIC_API_KEY` set as a repository Actions secret
-(same one `claude-compare` already uses — see `docs/claude-engine.md`). Without it, the run
-skips cleanly (no failure, no spend) — same double-gate shape as every other Claude lane in
-this repo.
+- **Scheduled:** every Monday (`cron: '17 14 * * 1'`, UTC) via `.github/workflows/
+  claude-watchdog.yml`. This is the "consistently monitoring" half of the founder's ask —
+  genuinely unattended, no click required.
+- **On demand:** Actions tab → **claude-watchdog** → **Run workflow** → pick a model (Opus 4.8
+  default, Haiku 4.5 is the cheap lane) → Run.
+
+Both paths need `ANTHROPIC_API_KEY` set as a repository Actions secret (same one
+`claude-compare` already uses — see `docs/claude-engine.md`). Without it, the run skips
+cleanly (no failure, no spend) — same double-gate shape as every other Claude lane in this
+repo, and the reason a scheduled run with no key configured is still perfectly safe (it just
+does nothing).
 
 The report lands in three places on a successful run: the workflow's Summary page, a 30-day
 artifact, and a new GitHub issue labeled `watchdog-report`.
@@ -66,29 +76,31 @@ other Claude integration in this repo (`claudeLyricsProvider.ts`). `renderReport
 `scripts/watchdog.mjs` is pure and unit-tested (`test/watchdog.test.mjs`) — the Markdown shape
 is proven independent of any real API call.
 
-## What's deliberately NOT built yet
+## Cost shape
 
-- **A recurring schedule.** See above — a founder decision, not a technical gap.
-- **Auto-generated fix PRs ("deploy its own developer agent").** The founder's prompt named
-  this explicitly. It's a bigger trust step than a findings report: it means an unattended
-  process writing code and opening PRs against the repo, even in draft form. The natural next
-  step once this reporting loop has run a few times and proven its findings are worth
-  trusting: extend `scripts/watchdog.mjs` so a **subset** of findings (e.g. `severity: low`,
-  `confidence: high`, mechanical fixes only) can trigger a second Claude call that drafts an
-  actual patch and opens a **draft** PR — never auto-merged, always through the same green-loop
-  CI gates as any other change. Not built here; flagged as the explicit next step rather than
-  silently scoped out.
+One Messages API request per run, weekly by schedule plus whatever manual runs get triggered —
+roughly 52 scheduled runs/year at whatever `claude-opus-4-8` (or a cheaper model, via the
+`model` input on a manual run) costs per request with the context described above. Tune the
+cron in `.github/workflows/claude-watchdog.yml` if weekly is too frequent or not frequent
+enough; check current per-token pricing before relying on a specific number.
+
+## What's deliberately NOT built (and won't be, without a redesign)
+
+- **Auto-generated fix PRs ("deploy its own developer agent").** See "Why findings-only is a
+  permanent floor" above — this was built, then deliberately removed after the platform's
+  safety tooling flagged the missing human-approval step.
 - **A broader review surface.** The fixed file list above is intentionally narrow. Widening it
   (e.g. reviewing the whole `lib/hermes/` tree, or diffing against the last watchdog run
-  instead of a fixed commit count) is a straightforward follow-up once the cost/value shape of
-  v1 is understood from real runs.
+  instead of a fixed commit count) is a straightforward follow-up once the cost/value shape is
+  understood from real runs — doesn't touch the findings-only floor either way.
 
-## Safety properties (mirrors `claude-compare.yml`)
+## Safety properties
 
-- `workflow_dispatch` only — never triggered by push, PR, or a schedule.
 - Least-privilege: `contents: read` + `issues: write` — one scope wider than
   `claude-compare.yml`'s `contents: read`-only, and that one extra scope (needed to file the
   report) is the full extent of what this workflow can do to the repo. No `pull-requests`
-  scope, no `contents: write`.
-- Fork PRs never receive the secret; CI proper (push/PR-triggered) uses zero secrets and can
-  never spend money via this workflow.
+  scope, no `contents: write` — it is structurally incapable of changing any file, on a
+  schedule or otherwise.
+- Fork PRs never receive the secret; scheduled runs always use the secret from the default
+  branch. CI proper (push/PR-triggered) uses zero secrets and can never spend money via this
+  workflow.

@@ -1,17 +1,18 @@
 #!/usr/bin/env node
-// The Watchdog — a periodic, founder-triggered Claude-powered security + quality
-// review of the repo. Reads a curated, bounded set of context (recent commits,
-// npm audit, the repo's own stated laws, and a fixed list of security-sensitive
-// files), asks Claude for concrete findings + research ideas as structured JSON,
-// and files the result as a GitHub issue. FINDINGS ONLY — it never writes code,
-// opens a PR, or merges anything; a human always triages the report. See
-// docs/watchdog.md for the full design + why auto-fix-PRs are deliberately out
-// of scope for v1.
+// The Watchdog — a periodic Claude-powered security + quality review of the repo,
+// runnable both on a schedule and on demand. Reads a curated, bounded set of
+// context (recent commits, npm audit, the repo's own stated laws, and a fixed
+// list of security-sensitive files), asks Claude for concrete findings +
+// research ideas as structured JSON, and files the result as a GitHub issue.
+// FINDINGS ONLY — it never writes code, opens a PR, or merges anything; a human
+// always triages the report. This is a permanent design floor, not a v1 gap —
+// see docs/watchdog.md for the full reasoning (including why an earlier attempt
+// at an auto-fix-PR follow-on was scrapped, not just deferred).
 //
-// Founder-triggered ONLY (workflow_dispatch), same safety shape as
-// claude-compare.yml: reads ANTHROPIC_API_KEY only from Actions secrets, skips
-// cleanly (exit 0) when unconfigured so CI can never fail or spend money by
-// accident. Zero new npm deps — Node 22's global fetch only.
+// Runs on a schedule AND workflow_dispatch (never push/PR), same key-hygiene
+// shape as claude-compare.yml: reads ANTHROPIC_API_KEY only from Actions
+// secrets, skips cleanly (exit 0) when unconfigured so CI can never fail or
+// spend money by accident. Zero new npm deps — Node 22's global fetch only.
 import { execSync } from 'node:child_process';
 import { readFileSync, existsSync } from 'node:fs';
 import { join, dirname } from 'node:path';
