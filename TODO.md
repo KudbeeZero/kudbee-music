@@ -104,8 +104,28 @@ chat. Detail for each is in [`brain/roadmap.json`](brain/roadmap.json) + [`IDEAS
    - ~~Surfaced two combinator-polish issues~~ **both fixed _(#67)_**: (a) the audience word no longer
      leaks into `{noun}` slots (`themeNouns` excludes audience tokens); (b) the combinator's own action
      verbs (`carry`/`grind`/…) are rejected by `nounable` (`VERB_SET` derived from `VERBS`). Regression-tested.
-- [~] **Crossroads Stages 2–3** — Stage 2 shipped _(this PR)_: a `/crossroads` board UI. Stage 3
+- [~] **Crossroads Stages 2–3** — Stage 2 shipped _(#116)_: a `/crossroads` board UI. Stage 3
    (decisions feed the taste model) is still queued.
+- [~] **2026-07-02 code-review findings (Fable 5 review → Sonnet verification)** — weakness #1
+   (share-reproduction integrity) fixed _(this PR)_. Still open, in fix order:
+   - [ ] **Weakness #2 — quota-honest vault writes**: `storage.ts` `writeDurable` swallows
+     `setItem` failures, so on a full localStorage a "saved" song silently vanishes on reload.
+     Fix: surface write failure to the UI (honest banner + export nudge) and cap same-title
+     version history (~5) so quota pressure stops growing unbounded.
+   - [ ] **Weakness #3 — short-form breaks non-AABB schemes**: `mockLyricsProvider.ts` builds a
+     4-line scheme-arranged verse then `slice(0, 2)` — under ABAB/ABBA/XAXA the two kept lines
+     don't rhyme. Fix: build the 2-line unit directly (`layoutFor(scheme, 2)` already returns a
+     couplet); test the pair rhymes under all 5 schemes.
+   - [ ] **Improvement — determiner–noun number agreement (the moat)**: frames like
+     `all this {noun}` accept plural theme nouns ("All this winters" ships in the flagship
+     demo). Fix: deterministic plural heuristic + flex the determiner (this→these, that→those);
+     regenerate demos; add a grammar-agreement metric to `eval.ts` so the golden set can see it.
+   - [ ] **Improvement — chorus variation + repetition budget**: the hook line appears 9–12×
+     per song; every Hook section shares the same array reference (latent aliasing). Fix:
+     evolve one line on the final hook (the seeded Crossroads question, made real), copy
+     arrays per section, add a word-frequency metric to eval.
+   - [ ] **Improvement — cross-section diversity guard is dead code**: the `used` set threaded
+     across verses can never cross-filter (disjoint pools). Unite the pools or fix the comment.
 - [ ] **2 review cleanups** — stronger memory-id hash · independent "earns-it" critique. _(the third —
    guaranteed vault mirror — is now surfaced in the Vault drawer with status + restore)_
 - [x] **Star-launch kit** — `LAUNCH.md` shipped _(#43)_: pre-flight checklist + draft X thread + demo-recording script. Posting it stays yours (the pre-flight boxes in `LAUNCH.md` are your launch-day gate).
@@ -258,6 +278,23 @@ Board** governance / Solana / token / NFT layer integrates with this engine via 
 later (kept out of this repo's core so it stays free + local).
 
 ## ✅ Shipped (newest first)
+- [x] **Share-reproduction integrity (review weakness #1)** — a two-agent + focused-verification
+      code review (Fable 5 pass → Sonnet adversarial verification, 12 candidate findings, 2
+      refuted) confirmed the viral-loop promise was silently broken two ways: (1)
+      `shareLink.ts`'s sanitizer whitelist-rebuilt inputs and **dropped `rhymeScheme`**, so any
+      pattern-pack song (ABAB/ABBA/AAAA/XAXA) reproduced as AABB — different lyrics for the
+      recipient; (2) the hand-authored example song has no `seed`, so its "🔗 Share" encoded
+      `seed ?? 0` and reproduced a completely different song than the one on screen (verified
+      empirically). Fixed: `RHYME_SCHEME_IDS` in `types.ts` is now the canonical runtime enum,
+      validated at **all three** untrusted-input boundaries — `pipeline.ts` `normalizeInputs`
+      (an out-of-enum string used to crash the combinator's scheme-layout lookup with a
+      TypeError; now dropped → AABB default), `shareLink.ts` decode (preserved when valid),
+      and `storage.ts` vault import (preserved when valid, so 🔍 Explain replays imported
+      pattern-pack songs with their real scheme). The Share button now renders only when the
+      package carries its real generation seed — the seedless demo song shows Explain/Export
+      but no false reproduction promise. +5 tests: ABAB share round-trip byte-identical,
+      hostile-scheme crash regression, import preservation. Playwright-verified live: demo
+      hides Share, a generated song shows it, zero page errors. _(this PR)_
 - [x] **Crossroads Board — Stage 2 (the board UI)** — Stage 1 (`brain/crossroads.json` +
       `lib/hermes/crossroads.ts`, #44) shipped the pure decision model with nowhere to see or
       vote on it. This PR adds the board itself: a `/crossroads` route (`components/hermes/

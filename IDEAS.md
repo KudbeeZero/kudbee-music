@@ -219,6 +219,18 @@ A second-opinion review flagged real risks worth acting on (truth-first):
   disclaimer in the README + Uniqueness panel. _(#37)_
 
 ## 🌱 Fresh captures
+- ✏️ **"Check the code... three things to improve on and three weaknesses... come up with a way
+  to fix those"** *(founder directive, first Fable 5 session)* — ran a layered review: Fable 5
+  first pass (two broad review agents + hands-on inspection), then wrote verification
+  instructions and had a **Sonnet** agent adversarially verify all 12 candidate findings with
+  empirical reproduction (2 refuted — the rhymeScheme crash wasn't reachable from public paths,
+  and the crossroads prototype-pollution concern was inert). Confirmed weaknesses: share links
+  reproduce the wrong song (fixed same-day), silent vault loss on storage quota, short-form ×
+  non-AABB schemes ship non-rhyming couplets. Improvements: determiner–noun agreement ("All
+  this winters" ships in the flagship demo), chorus variation + repetition budget, dead
+  cross-section diversity guard. All tracked with fix designs in `TODO.md` → "code-review
+  findings"; the review-then-verify pattern (broad pass → written instructions → independent
+  verifier model) is worth reusing — it caught two overclaimed severities before any code moved.
 - ✏️ **Crossroads Board — Stage 2 shipped, Stage 3 next** — Stage 1's data model (#44) had
   nowhere for anyone to actually see or cast a vote. Shipped the `/crossroads` route: every
   seeded crossing renders with ranked options + rationale + a vote bar, and a click casts

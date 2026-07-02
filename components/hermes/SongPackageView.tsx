@@ -51,8 +51,14 @@ export default function SongPackageView({ pkg, onSaveEdit, onChooseHook, onRegen
 
   // "HERMES Live" — copy a link that reproduces this EXACT song (inputs + seed).
   // Anyone who opens it watches the brain generate the identical package. $0, static.
+  // Only offered when the package carries its real generation seed: a seedless
+  // package (the hand-authored example song, or an older import without one) would
+  // share seed 0 and reproduce a DIFFERENT song than the one on screen — a silent
+  // break of the "reproduces it exactly" promise, so the button hides instead.
+  const shareable = typeof pkg.seed === 'number';
   function shareSong() {
-    const link = shareUrl(encodeShare(pkg.inputs, pkg.seed ?? 0));
+    if (!shareable) return;
+    const link = shareUrl(encodeShare(pkg.inputs, pkg.seed as number));
     navigator.clipboard?.writeText(link).then(() => { setShared(true); setTimeout(() => setShared(false), 1600); }).catch(() => {});
   }
 
@@ -65,7 +71,9 @@ export default function SongPackageView({ pkg, onSaveEdit, onChooseHook, onRegen
       <div className={styles.panelTitle} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
         <span>Song Package · “{pkg.title}” · v{pkg.version}</span>
         <span style={{ display: 'flex', gap: 6 }}>
-          <button className={styles.copyBtn} style={{ marginLeft: 0 }} onClick={shareSong} title="Copy a link that reproduces this exact song — anyone who opens it watches the brain generate the identical package ($0, no key)">{shared ? 'link copied ✓' : '🔗 Share'}</button>
+          {shareable && (
+            <button className={styles.copyBtn} style={{ marginLeft: 0 }} onClick={shareSong} title="Copy a link that reproduces this exact song — anyone who opens it watches the brain generate the identical package ($0, no key)">{shared ? 'link copied ✓' : '🔗 Share'}</button>
+          )}
           <button className={styles.copyBtn} style={{ marginLeft: 0 }} onClick={explainSong} title="Open the interactive brain trace for this song — heat-map, what each region did, and a copy-paste Suno prompt">🔍 Explain this song</button>
           <button className={styles.copyBtn} style={{ marginLeft: 0 }} onClick={exportSong} title="Download this song package as JSON (backup / re-import into your vault)">⬇ Export JSON</button>
         </span>

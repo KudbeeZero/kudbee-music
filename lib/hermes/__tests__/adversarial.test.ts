@@ -57,6 +57,17 @@ describe('importVault under hostile payloads', () => {
     expect(listSongs()).toEqual([]);
   });
 
+  it('preserves a valid rhymeScheme on import and drops a hostile one', async () => {
+    const pkg = await validPkg('scheme-1');
+    const withScheme = { ...pkg, inputs: { ...pkg.inputs, rhymeScheme: 'ABAB' } };
+    importVault(JSON.stringify({ songs: [withScheme] }));
+    expect(getSong('scheme-1')?.inputs.rhymeScheme).toBe('ABAB');
+    __clearVault();
+    const hostile = { ...pkg, id: 'scheme-2', inputs: { ...pkg.inputs, rhymeScheme: 'ZZZZ' } };
+    importVault(JSON.stringify({ songs: [hostile] }));
+    expect(getSong('scheme-2')?.inputs.rhymeScheme).toBeUndefined();
+  });
+
   it('drops song objects missing required fields (no id / no title)', () => {
     const res = importVault(JSON.stringify({
       songs: [
