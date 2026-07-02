@@ -1,0 +1,45 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512" role="img" aria-label="HERMES">
+  <!-- HERMES app icon — the brain mark in the locked palette (near-black field,
+       amber core, cyan/magenta hemispheres). Hand-authored SVG so it stays $0,
+       deterministic, and re-renderable; scripts/make-icons.mjs rasterizes the PNG
+       sizes (192/512/apple-touch-180) from this exact file. -->
+  <defs>
+    <radialGradient id="field" cx="0.32" cy="0.22" r="1.1">
+      <stop offset="0" stop-color="#12121c"/>
+      <stop offset="1" stop-color="#07070b"/>
+    </radialGradient>
+    <radialGradient id="coreGlow" cx="0.5" cy="0.5" r="0.5">
+      <stop offset="0" stop-color="#ffb14e" stop-opacity="0.85"/>
+      <stop offset="1" stop-color="#ffb14e" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+
+  <!-- maskable-safe: all art inside the central 80% -->
+  <rect width="512" height="512" rx="104" fill="url(#field)"/>
+
+  <!-- pathways -->
+  <g stroke="#ffffff" stroke-opacity="0.10" stroke-width="6" fill="none">
+    <path d="M156 200 L256 256 L356 200"/>
+    <path d="M156 312 L256 256 L356 312"/>
+    <path d="M156 200 L156 312"/>
+    <path d="M356 200 L356 312"/>
+  </g>
+
+  <!-- amber core -->
+  <circle cx="256" cy="256" r="120" fill="url(#coreGlow)"/>
+  <circle cx="256" cy="256" r="34" fill="#ffb14e"/>
+
+  <!-- analytical (cyan) hemisphere nodes -->
+  <g fill="#36e0d4">
+    <circle cx="156" cy="200" r="22" fill-opacity="0.95"/>
+    <circle cx="156" cy="312" r="16" fill-opacity="0.7"/>
+    <circle cx="118" cy="256" r="11" fill-opacity="0.5"/>
+  </g>
+
+  <!-- generative (magenta) hemisphere nodes -->
+  <g fill="#d24bff">
+    <circle cx="356" cy="200" r="22" fill-opacity="0.95"/>
+    <circle cx="356" cy="312" r="16" fill-opacity="0.7"/>
+    <circle cx="394" cy="256" r="11" fill-opacity="0.5"/>
+  </g>
+</svg>
