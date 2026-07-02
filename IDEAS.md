@@ -219,6 +219,13 @@ A second-opinion review flagged real risks worth acting on (truth-first):
   disclaimer in the README + Uniqueness panel. _(#37)_
 
 ## 🌱 Fresh captures
+- ✏️ **Crossroads Board — Stage 2 shipped, Stage 3 next** — Stage 1's data model (#44) had
+  nowhere for anyone to actually see or cast a vote. Shipped the `/crossroads` route: every
+  seeded crossing renders with ranked options + rationale + a vote bar, and a click casts
+  this browser's own vote (localStorage-only, honest that it's not a real community tally
+  yet — that's the stage-4 API layer). Next up per the original staged plan: Stage 3, wiring
+  a cast vote into `recordTaste`/the memory model so board decisions actually steer future
+  generation, the same way Lyric Lab choices already do.
 - ✅ **"An agent, an engineer, that is consistently monitoring the system, finding
   weaknesses, also finding ways to improve the system through research... deploy its own
   developer agent, security code review... run on a dynamic type loop through the Claude

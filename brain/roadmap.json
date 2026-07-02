@@ -119,8 +119,9 @@
       "what": "History: a stray Workers service named kudbee-music was git-connected to this repo and failed a 'Workers Builds' check + posted a ❌ bot comment on every push for ~30 PRs before being tracked (#111) and deleted by the founder the same day. If a stray check ever reappears, track it immediately (CLAUDE.md never-skip-silently rule)."
     },
     "crossroadsBoard": {
-      "status": "stage-1-shipped (#44)",
+      "status": "stage-2-shipped",
       "stage1": "SHIPPED (#44): lib/hermes/crossroads.ts (openCrossing/vote/tally/leader/decide, pure+immutable) + brain/crossroads.json (3 seeded crossings) + tests. The $0/local decision model.",
+      "stage2": "SHIPPED: a /crossroads route (components/hermes/CrossroadsBoard.tsx) renders every seeded crossing (question, ranked options + rationale + a vote bar, front-runner readout); clicking an option casts/changes THIS browser's own vote via lib/hermes/crossroadsStorage.ts (localStorage-only, same BYOK-key idiom as claudeKey.ts) — no account, no server. lib/hermes/crossroadsBoard.ts keeps the seed+vote combine logic pure/tested. Honest about scope: the tally is the seeded base plus this browser's one vote, not a real community headcount (that's stage 4). Linked from the Hit Factory header; /crossroads added to the mobile device-matrix.",
       "what": "The WIFI DJ governance + community steering surface — the brain's 'decision' region made social. The community and the agents meet at the crossroads to steer creative + ecosystem direction.",
       "plan": [
         "1. Board model (local-first, $0): brain/crossroads.json + lib/hermes/crossroads.ts — a data model of 'crossings' (a decision/fork: creative choice, persona/pack addition, direction). Each crossing has options, rationales, weighted votes, and an outcome. Versioned in git, same pattern as beliefs/personas.",

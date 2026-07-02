@@ -104,7 +104,8 @@ chat. Detail for each is in [`brain/roadmap.json`](brain/roadmap.json) + [`IDEAS
    - ~~Surfaced two combinator-polish issues~~ **both fixed _(#67)_**: (a) the audience word no longer
      leaks into `{noun}` slots (`themeNouns` excludes audience tokens); (b) the combinator's own action
      verbs (`carry`/`grind`/…) are rejected by `nounable` (`VERB_SET` derived from `VERBS`). Regression-tested.
-- [ ] **Crossroads Stages 2–3** — `/crossroads` board UI → decisions feed the taste model.
+- [~] **Crossroads Stages 2–3** — Stage 2 shipped _(this PR)_: a `/crossroads` board UI. Stage 3
+   (decisions feed the taste model) is still queued.
 - [ ] **2 review cleanups** — stronger memory-id hash · independent "earns-it" critique. _(the third —
    guaranteed vault mirror — is now surfaced in the Vault drawer with status + restore)_
 - [x] **Star-launch kit** — `LAUNCH.md` shipped _(#43)_: pre-flight checklist + draft X thread + demo-recording script. Posting it stays yours (the pre-flight boxes in `LAUNCH.md` are your launch-day gate).
@@ -257,6 +258,22 @@ Board** governance / Solana / token / NFT layer integrates with this engine via 
 later (kept out of this repo's core so it stays free + local).
 
 ## ✅ Shipped (newest first)
+- [x] **Crossroads Board — Stage 2 (the board UI)** — Stage 1 (`brain/crossroads.json` +
+      `lib/hermes/crossroads.ts`, #44) shipped the pure decision model with nowhere to see or
+      vote on it. This PR adds the board itself: a `/crossroads` route (`components/hermes/
+      CrossroadsBoard.tsx`) rendering every seeded crossing — question, ranked options with
+      rationale + a vote bar, and a front-runner readout. Clicking an option casts (or
+      changes) this browser's own vote, persisted to `localStorage` only
+      (`lib/hermes/crossroadsStorage.ts`, same BYOK-key idiom as `claudeKey.ts`) — no
+      account, no server. Deliberately honest about scope: the tally shown is the seeded
+      base plus THIS browser's one vote, not a real community headcount — that's stage 4
+      (community sync via API), still out of the free local core. A new
+      `lib/hermes/crossroadsBoard.ts` keeps the seed-plus-vote combine logic pure and
+      testable (10 new tests total across the two new modules). Linked from the Hit
+      Factory header ("🧭 Crossroads"). `/crossroads` added to the mobile device-matrix
+      (18/18 clean) and screenshot-verified: vote/re-vote, highlight + front-runner update,
+      and persistence across reload, at desktop and iPhone SE widths. Stage 3 (board
+      decisions feeding the taste/memory model) stays queued. _(this PR)_
 - [x] **Watchdog — Claude-powered security/quality review, scheduled + findings-only
       (roadmap 5.7)** — "an agent... consistently monitoring the system, finding weaknesses,
       also finding ways to improve the system through research... deploy its own developer
