@@ -65,6 +65,10 @@ node scripts/mobile-matrix.mjs   # anything touching layout (build the export fi
 - Secrets go **only** in gitignored `.env.local` — never a tracked file, commit, PR body,
   or log. **Grep every staged diff for `key_` before committing.** (A leaked Runway key
   once had to be rotated + scrubbed from history. Once is enough.)
+- The one approved **remote** home for a key: **GitHub Actions repository secrets** (e.g.
+  `ANTHROPIC_API_KEY` → the manual `claude-compare` workflow). Any workflow reading a
+  secret must be `workflow_dispatch`-only + `contents: read`; CI proper uses zero secrets.
+  Never put a key in Cloudflare Pages env — the static client must never need one.
 - The `?dev=1` developer door is build-gated (`NEXT_PUBLIC_DEV_DOOR`, dev builds only).
   Never ship a public backdoor, even a convenience one.
 - **Every URL/import payload is hostile.** Sanitize at the boundary like

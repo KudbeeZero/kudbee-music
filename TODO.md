@@ -44,7 +44,9 @@ chat. Detail for each is in [`brain/roadmap.json`](brain/roadmap.json) + [`IDEAS
 - [ ] **Lightning AI spike** — one Studio running a HERMES agent behind **HTTPS/SSL** as an opt-in provider (you connect SSL).
 - [ ] **Discord server** (+ GitHub→Discord webhook) — channels/roles/listening parties; wire on your go-ahead.
 - [~] **Real-AI Claude engine** — provider + eval-comparison lane **shipped** (see Shipped, `docs/claude-engine.md`);
-   what remains yours: run `RUN_LIVE_EVAL=1 ANTHROPIC_API_KEY=... npm run eval:compare` when budget is confirmed (mock stays default).
+   what remains yours: add `ANTHROPIC_API_KEY` as a GitHub **Actions secret** (Settings → Secrets
+   and variables → Actions), then press **Run** on the `claude-compare` workflow — or run
+   `RUN_LIVE_EVAL=1 ANTHROPIC_API_KEY=... npm run eval:compare` locally (mock stays default).
 - [ ] **Cloud brain** — server-side vault/memory (Notion/Drive/Supabase creds) so it's not localStorage-only.
 - [ ] **Suno-Studio workspace** — section/arrangement timeline + rack + meter bridge ($0 read-only now; clip editing later).
 

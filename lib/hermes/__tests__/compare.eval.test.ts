@@ -134,7 +134,11 @@ describe('live provider comparison (RUN_LIVE_EVAL=1 + ANTHROPIC_API_KEY)', () =>
 
   liveIt('mock vs claude on the golden briefs', async () => {
     const briefs = loadGoldenBriefs();
-    const claudeBundle: ProviderBundle = { ...mockProviders, lyrics: createClaudeLyricsProvider() };
+    // CLAUDE_MODEL lets the Actions lane (and local runs) pick a cheaper model without a code change.
+    const claudeBundle: ProviderBundle = {
+      ...mockProviders,
+      lyrics: createClaudeLyricsProvider(process.env.CLAUDE_MODEL ? { model: process.env.CLAUDE_MODEL } : {}),
+    };
     const { rendered, runs } = await compareProviders(briefs, [
       { name: 'mock', bundle: mockProviders },
       { name: 'claude', bundle: claudeBundle },
