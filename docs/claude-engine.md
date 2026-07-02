@@ -31,6 +31,28 @@ Combinator (`mockLyricsProvider`). Same interface, same pipeline, zero pipeline 
 RUN_LIVE_EVAL=1 ANTHROPIC_API_KEY=sk-ant-... npm run eval:compare
 ```
 
+Optionally pick the model (cost/quality dial) with `CLAUDE_MODEL=claude-haiku-4-5-20251001`.
+
+## Run it from GitHub Actions (no laptop needed)
+
+The same lane is exposed as a **manual workflow** — `.github/workflows/claude-compare.yml` —
+so it can be triggered from the GitHub app/website on a phone:
+
+1. **Add the key once** (founder-only, never in the repo or chat): repo **Settings →
+   Secrets and variables → Actions → New repository secret**, name `ANTHROPIC_API_KEY`,
+   value = your key from console.anthropic.com. Actions secrets are encrypted, masked in
+   logs, and **never available to fork PRs**.
+2. **Trigger**: Actions tab → *claude-compare* → **Run workflow** → pick a model
+   (Opus 4.8 default; Haiku 4.5 is the cheap lane) → Run.
+3. **Read the result** on the run's Summary page (the side-by-side eval table renders
+   there) — also saved as a 30-day artifact.
+
+Safety properties: the workflow runs **only** on the manual button (never push/PR, so CI can
+never spend money), holds `contents: read` and nothing else, and without the secret it skips
+cleanly via the same double-gate as the CLI. The one honest caveat of Actions secrets: anyone
+with **write access** to the repo could author a workflow that reads them — keep collaborators
+tight and secret-scanning/push-protection on.
+
 This runs `lib/hermes/__tests__/compare.eval.test.ts`, which:
 
 1. loads the golden briefs (the `inputs` of every committed demo song in `examples/demos/*/song.json`),

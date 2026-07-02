@@ -1,0 +1,61 @@
+# Founder-triggered ONLY: mock combinator vs live Claude, side-by-side eval table.
+#
+# ⚠️ This workflow SPENDS MONEY (≈10 Messages API requests per run — see
+# docs/claude-engine.md "Cost ballpark"). It therefore:
+#   - runs ONLY on workflow_dispatch (the Run button; write access required) — never
+#     on push/PR, so CI can never trigger a paid call;
+#   - reads the key ONLY from the ANTHROPIC_API_KEY repository Actions secret
+#     (Settings → Secrets and variables → Actions). Fork PRs never receive secrets.
+#   - is least-privilege: contents: read, nothing else.
+# Without the secret configured, the run skips cleanly (the eval:compare double-gate).
+name: claude-compare
+on:
+  workflow_dispatch:
+    inputs:
+      model:
+        description: 'Claude model id (cost/quality dial)'
+        required: false
+        default: 'claude-opus-4-8'
+        type: choice
+        options:
+          - 'claude-opus-4-8'
+          - 'claude-sonnet-5'
+          - 'claude-haiku-4-5-20251001'
+permissions:
+  contents: read
+concurrency:
+  group: claude-compare
+  cancel-in-progress: false
+jobs:
+  compare:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: '22' }
+      - run: npm ci || npm install
+      - name: Mock vs Claude on the golden briefs
+        env:
+          RUN_LIVE_EVAL: '1'
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          CLAUDE_MODEL: ${{ inputs.model }}
+        run: |
+          set -o pipefail
+          npm run eval:compare 2>&1 | tee compare-output.txt
+      - name: Render the table on the run page
+        if: always()
+        run: |
+          {
+            echo "## 🧠 Mock combinator vs Claude (\`${{ inputs.model }}\`)"
+            echo ""
+            echo '```'
+            cat compare-output.txt
+            echo '```'
+          } >> "$GITHUB_STEP_SUMMARY"
+      - name: Upload comparison artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: claude-compare-output
+          path: compare-output.txt
+          retention-days: 30

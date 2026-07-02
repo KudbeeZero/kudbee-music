@@ -37,6 +37,13 @@ rules when those land:
 - **No hosted deployment may proxy to a paid API** without all of: a server-side
   proxy that holds the key, per-IP rate limiting, and a hard spend cap. Until that
   exists, paid providers run only locally with the user's own key in `.env.local`.
+- **GitHub Actions repository secrets are the one approved *remote* home for a key**
+  (e.g. `ANTHROPIC_API_KEY` for the manual `claude-compare` workflow). They're
+  encrypted, log-masked, and never available to fork PRs. Any workflow that reads a
+  secret must be `workflow_dispatch`-only (never push/PR) with `contents: read` —
+  CI proper uses zero secrets and can never spend money. Honest caveat: write-access
+  collaborators can author workflows that read secrets — keep write access tight and
+  secret-scanning/push-protection enabled.
 
 ## If a secret is ever committed (incident response)
 

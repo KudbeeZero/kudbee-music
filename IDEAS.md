@@ -219,6 +219,10 @@ A second-opinion review flagged real risks worth acting on (truth-first):
   disclaimer in the README + Uniqueness panel. _(#37)_
 
 ## 🌱 Fresh captures
+- ✅ **Claude key in GitHub Actions secrets** *(founder question)* — shipped: the manual
+  `claude-compare` workflow reads `ANTHROPIC_API_KEY` from Actions secrets (manual-only,
+  least-privilege, fork-safe) and renders the mock-vs-Claude eval table on the run page —
+  triggerable from a phone. Rule saved to CLAUDE.md + SECURITY.md.
 - ✅ **Status Board — "don't let this happen again"** *(founder, rotted-checklist screenshot)* —
   shipped: every status table generated from `brain/roadmap.json`, drift-tested in CI, hand
   checklists banned outside the allowlist. `STATUS.md` is the board.
