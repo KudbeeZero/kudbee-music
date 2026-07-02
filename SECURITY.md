@@ -25,23 +25,37 @@ HERMES is deliberately boring from a security standpoint:
   vector-memory store, which writes the gitignored `brain/vector-memory.json`.
   Changing the tracked brain means landing a commit — i.e. passing PR review.
 
-## Rules for future paid providers (Claude lyrics, Runway video)
+## Rules for paid providers (Claude lyrics, Runway video)
 
 The roadmap includes opt-in real-AI providers (`claudeLyricsProvider` behind
 `ANTHROPIC_API_KEY`, `studio/runway.mjs` behind `RUNWAY_API_KEY`). Non-negotiable
-rules when those land:
+rules:
 
-- **Keys stay server-side / local-side only.** Never shipped to the client bundle,
-  never in the static deployment. The mock provider stays the default and must be
-  un-bypassable in the hosted static app.
-- **No hosted deployment may proxy to a paid API** without all of: a server-side
-  proxy that holds the key, per-IP rate limiting, and a hard spend cap. Until that
-  exists, paid providers run only locally with the user's own key in `.env.local`.
-- **GitHub Actions repository secrets are the one approved *remote* home for a key**
-  (e.g. `ANTHROPIC_API_KEY` for the manual `claude-compare` workflow). They're
-  encrypted, log-masked, and never available to fork PRs. Any workflow that reads a
-  secret must be `workflow_dispatch`-only (never push/PR) with `contents: read` —
-  CI proper uses zero secrets and can never spend money. Honest caveat: write-access
+- **Founder-controlled keys stay server-side / local-side only.** Never shipped to
+  the client bundle, never in the static deployment. The mock provider stays the
+  default and must be un-bypassable in the hosted static app.
+- **No hosted deployment may proxy to a paid API using a founder-controlled key**
+  without all of: a server-side proxy that holds the key, per-IP rate limiting, and
+  a hard spend cap. Until that exists, paid providers run with a founder-controlled
+  key only locally (`.env.local`) or via the Actions-secret lane below.
+- **The one exception: bring-your-own-key (BYOK), entirely client-side.** The
+  Engine Rack's Claude Engine slot (`lib/hermes/claudeKey.ts`, `components/hermes/Rack.tsx`)
+  lets a *visitor* paste their *own* Anthropic key. It is stored only in that
+  visitor's own browser `localStorage`, never transmitted to any server we control
+  (there isn't one), and every request goes straight from that visitor's browser to
+  `api.anthropic.com`, billed to their own account. This satisfies the proxy rule
+  above by having no proxy at all — the founder never holds, sees, or pays for a
+  visitor's key. If a future feature ever routes a *visitor's* key through any
+  server-side code (even to log or validate it), that immediately falls back under
+  the full proxy rule (holds-the-key + rate-limit + spend-cap) — BYOK's exemption
+  applies only to the direct-browser-to-Anthropic design, never to a variant that
+  touches our infrastructure.
+- **GitHub Actions repository secrets are the one approved *remote* home for a
+  founder-controlled key** (e.g. `ANTHROPIC_API_KEY` for the manual `claude-compare`
+  workflow). They're encrypted, log-masked, and never available to fork PRs. Any
+  workflow that reads a secret must be `workflow_dispatch`-only (never push/PR) with
+  `contents: read` — CI proper uses zero secrets and can never spend money. Honest
+  caveat: write-access
   collaborators can author workflows that read secrets — keep write access tight and
   secret-scanning/push-protection enabled.
 

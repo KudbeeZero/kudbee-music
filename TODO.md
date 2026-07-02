@@ -21,6 +21,12 @@ chat. Detail for each is in [`brain/roadmap.json`](brain/roadmap.json) + [`IDEAS
 - [x] **Pro Studio Rack** — DAW-style upgradeable engine "boxes"; free unit active, key/server slots locked _(#48)_
 - [x] **Crossroads Board — Stage 1** — local `crossroads.json` decision model _(#44)_
 - [x] **Notion live roadmap mirror** · **Grok agent-image prompts** (10, delivered in chat)
+- [x] **Real-AI Claude engine — live in the panel (bring-your-own-key)** — the Engine Rack's
+   Claude Engine slot is now interactive: any visitor can paste their own Anthropic key
+   (`console.anthropic.com`), it's stored only in their browser (`lib/hermes/claudeKey.ts`),
+   and their browser calls `api.anthropic.com` directly — no server, no founder key, no
+   proxy involved. The Actions-secret + CLI eval lane (`docs/claude-engine.md`) remains
+   separately available for founder-triggered comparison runs whenever you want them.
 
 **Blocked on you (needs a key / account / decision — I can scaffold the $0 parts, you flip the switch):**
 - [x] **Delete the stray 'Workers Builds' check** — ✅ founder deleted the stray `kudbee-music`
@@ -46,10 +52,6 @@ chat. Detail for each is in [`brain/roadmap.json`](brain/roadmap.json) + [`IDEAS
 - [ ] **Agent images → avatars** — wire the Grok-generated images onto each agent (once you generate them).
 - [ ] **Lightning AI spike** — one Studio running a HERMES agent behind **HTTPS/SSL** as an opt-in provider (you connect SSL).
 - [ ] **Discord server** (+ GitHub→Discord webhook) — channels/roles/listening parties; wire on your go-ahead.
-- [~] **Real-AI Claude engine** — provider + eval-comparison lane **shipped** (see Shipped, `docs/claude-engine.md`);
-   what remains yours: add `ANTHROPIC_API_KEY` as a GitHub **Actions secret** (Settings → Secrets
-   and variables → Actions), then press **Run** on the `claude-compare` workflow — or run
-   `RUN_LIVE_EVAL=1 ANTHROPIC_API_KEY=... npm run eval:compare` locally (mock stays default).
 - [ ] **Cloud brain** — server-side vault/memory (Notion/Drive/Supabase creds) so it's not localStorage-only.
 - [ ] **Suno-Studio workspace** — section/arrangement timeline + rack + meter bridge ($0 read-only now; clip editing later).
 
@@ -229,6 +231,22 @@ Board** governance / Solana / token / NFT layer integrates with this engine via 
 later (kept out of this repo's core so it stays free + local).
 
 ## ✅ Shipped (newest first)
+- [x] **Claude Engine BYOK panel (roadmap 5.4)** — the Engine Rack's Claude Engine slot is
+      now interactive, not just a locked display box: click "Enter your Anthropic key," it's
+      stored in this browser's `localStorage` only (`lib/hermes/claudeKey.ts`,
+      `hermes.claudeKey.v1` / `hermes.claudeEngineActive.v1`), then "Turn on/off" flips it as
+      the active lyrics provider for this visitor's own generations — calls go straight from
+      their browser to `api.anthropic.com` (the `anthropic-dangerous-direct-browser-access`
+      header, Anthropic's sanctioned BYOK opt-in) with no server or founder key involved
+      anywhere. `HermesHitFactory.tsx` swaps the lyrics provider only when
+      `claudeEngineReady()`; a reproduced/shared song always ignores it (byte-identical for
+      every viewer); any Claude failure falls back to the free Local Combinator with an
+      honest on-screen notice, never leaving generation stuck. `claudeLyricsProvider.ts`'s
+      old "never imported by app/components" bundle rule is intentionally relaxed for this
+      opt-in path (still zero founder-key access from the browser bundle). Verified live with
+      Playwright: unlock → active → persists across reload → forget key relocks. Docs +
+      security laws updated (`docs/claude-engine.md`, `SECURITY.md`, `CLAUDE.md`) to name the
+      BYOK-browser key location as a third, distinct approved key location. _(this PR)_
 - [x] **Status Board — never-stale checklists** — status now lives ONLY in `brain/roadmap.json`
       (video-studio backlog folded in as `videoStudioTrack`; phase-0/4 lags fixed); `STATUS.md`
       + STATUS-marker blocks in CLAUDE.md/README/BUILD_LOG are GENERATED from the spine

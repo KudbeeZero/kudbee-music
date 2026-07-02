@@ -1,8 +1,8 @@
 // The Claude Engine — a real-AI LyricsProvider behind the exact same seam as the
-// mock (roadmap 5.1). OPT-IN ONLY: nothing in the web app imports this file; it is
-// consumed exclusively by the CLI/eval lane (`npm run eval:compare`). The mock stays
-// the default everywhere, so the $0 guarantee holds unless a founder explicitly
-// exports ANTHROPIC_API_KEY and runs the live comparison.
+// mock (roadmap 5.1). OPT-IN ONLY: the mock stays the default everywhere. Two opt-in
+// lanes use this module: the CLI/eval lane (`npm run eval:compare`, founder's own
+// ANTHROPIC_API_KEY) and the web app's Engine Rack BYOK path (roadmap 5.4, a
+// visitor's own key, never a founder-controlled one — see the bundle-rule note below).
 //
 // HONESTY NOTE (this matters to the repo's ethos): the live engine does NOT promise
 // determinism. The mock reproduces a draft exactly for a given seed; an LLM does not.
@@ -16,9 +16,14 @@
 // (`output_config.format` with a json_schema) — belt — plus defensive parsing of
 // the returned text (fence stripping, shape validation) — suspenders.
 //
-// Bundle rule: this module must never be imported by app/ or components/. It uses
-// only global fetch (Node 22 native) and guards `process` access, but the real
-// protection is that only tests and the eval lane import it.
+// Bundle rule (updated for BYOK, roadmap 5.4): this module MAY be imported by
+// components/ now — Rack.tsx and HermesHitFactory.tsx opt into it only when a
+// visitor has pasted their OWN key into the rack (lib/hermes/claudeKey.ts,
+// localStorage-only, never our server). The mock stays the default everywhere
+// else; nothing here ever reads a founder-controlled key or env var from the
+// browser bundle. The eval lane still uses this same module server-side with
+// ANTHROPIC_API_KEY. It uses only global fetch (Node 22 / browser native) and
+// guards `process` access, so it is safe to bundle client-side.
 import type { SongInputs, HookOption, SongSection } from '../types';
 import type { LyricsProvider } from './providerTypes';
 
@@ -291,6 +296,11 @@ export function createClaudeLyricsProvider(opts: ClaudeLyricsProviderOptions = {
         'content-type': 'application/json',
         'x-api-key': key,
         'anthropic-version': CLAUDE_API_VERSION,
+        // Anthropic's sanctioned BYOK escape hatch: without this header, a browser's
+        // CORS preflight to api.anthropic.com is rejected. Only send it when we're
+        // actually running in a browser (the Rack's own-key path) — the CLI/eval
+        // lane runs in Node and never needs it.
+        ...(typeof window !== 'undefined' ? { 'anthropic-dangerous-direct-browser-access': 'true' } : {}),
       },
       // NOTE: no temperature/top_p/top_k — removed on current models (400 if sent).
       // Variation is requested via the "take" hint in the prompt instead.

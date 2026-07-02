@@ -2,7 +2,7 @@
 
 > **Generated from [`brain/roadmap.json`](brain/roadmap.json) — do not hand-edit.** Status lives ONLY in the spine; edit it there, then regenerate with `GEN_DOCS=1 npx vitest run status`. `statusBoard.test.ts` fails CI if this file drifts.
 
-**Scoreboard:** ✅ 27 shipped · 🔨 1 in build · 💤 9 queued — 37 tracked items
+**Scoreboard:** ✅ 28 shipped · 🔨 1 in build · 💤 9 queued — 38 tracked items
 (legend: ✅ shipped · 🔌 scaffold shipped, founder-gated · 🔨 in build · ⏭️ next · 💤 queued · 💭 idea · 🚧 blocked on founder)
 
 ## Tracks
@@ -62,13 +62,14 @@
 | ✅ | **Vault durability — export-on-change + file/cloud backup** | `lib/hermes/storage.ts` | #56 |
 | 💤 | **Optional durable cloud brain (Notion/Drive backing)** | `lib/hermes/storage.ts` | — |
 
-### Phase 5 — Real intelligence (opt-in) — `▰▰▰▱▱▱▱▱▱▱` 1/3
+### Phase 5 — Real intelligence (opt-in) — `▰▰▰▰▰▱▱▱▱▱` 2/4
 
 | | Item | Where it lives | PR |
 |---|------|----------------|----|
 | 🔌 | **claudeLyricsProvider behind ANTHROPIC_API_KEY (mock default)** | `lib/hermes/providers/claudeLyricsProvider.ts` | — |
 | 💤 | **Rhyme/BPM validation loop on generated output** | `lib/hermes/pipeline.ts` | — |
 | ✅ | **Vector memory + semantic search (local embeddings, opt-in)** | `lib/hermes/vectorMemory.ts` | #47, #49 |
+| ✅ | **Claude Engine BYOK panel — visitor's own key, browser-only** | `components/hermes/Rack.tsx` | — |
 
 ### Phase 6 — Influence Studio (WIFI DJ framework Part 1) — `▱▱▱▱▱▱▱▱▱▱` 0/1
 

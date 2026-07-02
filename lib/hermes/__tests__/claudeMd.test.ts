@@ -27,10 +27,11 @@ describe('CLAUDE.md — the memory spine exists and routes everywhere', () => {
     expect(spine).toContain('brain/lexicon/core.json');
   });
 
-  it('routes to every localStorage key the storage + identity layers actually use', () => {
+  it('routes to every localStorage key the storage + identity + claudeKey layers actually use', () => {
     const src =
       readFileSync(join(root, 'lib/hermes/storage.ts'), 'utf8') +
-      readFileSync(join(root, 'lib/hermes/identity.ts'), 'utf8');
+      readFileSync(join(root, 'lib/hermes/identity.ts'), 'utf8') +
+      readFileSync(join(root, 'lib/hermes/claudeKey.ts'), 'utf8');
     const keys = [...new Set(src.match(/hermes\.[A-Za-z]+\.v\d+/g) ?? [])];
     expect(keys.length).toBeGreaterThanOrEqual(6);
     for (const k of keys) {

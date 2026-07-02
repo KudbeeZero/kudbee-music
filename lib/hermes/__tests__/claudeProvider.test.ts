@@ -161,6 +161,35 @@ describe('claudeLyricsProvider — request shape (per the claude-api skill)', ()
   });
 });
 
+describe('claudeLyricsProvider — BYOK browser CORS header', () => {
+  // vitest runs this suite in a `node` environment (see vitest.config.ts), so
+  // `window` is undefined by default — the CLI/eval lane's real runtime. These
+  // tests stub `window` in/out to cover both the Rack's browser path and the
+  // Node eval-lane path from the same provider code.
+  afterEach(() => {
+    // @ts-expect-error — test-only global cleanup
+    delete globalThis.window;
+  });
+
+  it('does NOT send the browser-access header when there is no window (CLI/eval lane)', async () => {
+    const { impl, calls } = fakeFetch(HOOKS_BODY);
+    const p = createClaudeLyricsProvider({ apiKey: 'k', fetchImpl: impl });
+    await p.generateHooks(inputs, 2);
+    const headers = calls[0].init.headers as Record<string, string>;
+    expect(headers['anthropic-dangerous-direct-browser-access']).toBeUndefined();
+  });
+
+  it('sends the browser-access header when a window exists (the Rack BYOK path)', async () => {
+    // @ts-expect-error — test-only global stub, doesn't need a full DOM
+    globalThis.window = {};
+    const { impl, calls } = fakeFetch(HOOKS_BODY);
+    const p = createClaudeLyricsProvider({ apiKey: 'k', fetchImpl: impl });
+    await p.generateHooks(inputs, 2);
+    const headers = calls[0].init.headers as Record<string, string>;
+    expect(headers['anthropic-dangerous-direct-browser-access']).toBe('true');
+  });
+});
+
 describe('claudeLyricsProvider — parsing', () => {
   it('parses a happy-path hooks response into HookOption[]', async () => {
     const p = createClaudeLyricsProvider({ apiKey: 'k', fetchImpl: fakeFetch(HOOKS_BODY).impl });
