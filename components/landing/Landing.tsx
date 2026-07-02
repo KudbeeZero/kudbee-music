@@ -8,6 +8,7 @@
 import Link from 'next/link';
 import { useEffect, useRef, useState } from 'react';
 import { AGENT_DEFINITIONS } from '@/lib/hermes/agents';
+import { useDevice } from '@/components/hermes/useDevice';
 import LivePlayground from './LivePlayground';
 import styles from './landing.module.css';
 
@@ -62,6 +63,11 @@ function usePrefersReducedMotion(): boolean {
 
 export default function Landing() {
   const reduced = usePrefersReducedMotion();
+  // Device intelligence (device.ts): on Data Saver / low-end devices, treat the
+  // page like reduced-motion for MEDIA — posters instead of autoplaying video, no
+  // scrub runway — while the copy and layout stay identical.
+  const { ui } = useDevice();
+  const lite = reduced || ui.lightMedia;
   const rootRef = useRef<HTMLDivElement>(null);
   const heroTrackRef = useRef<HTMLDivElement>(null);
   const heroVideoRef = useRef<HTMLVideoElement>(null);
@@ -76,7 +82,7 @@ export default function Landing() {
   // state — no spinners, no fake progress). Seeks are rAF-throttled and rounded
   // to 1/30s frame steps so we never thrash the decoder with sub-frame seeks.
   useEffect(() => {
-    if (reduced || heroVideoFailed) return;
+    if (lite || heroVideoFailed) return;
     const track = heroTrackRef.current;
     const video = heroVideoRef.current;
     if (!track || !video) return;
@@ -114,7 +120,7 @@ export default function Landing() {
       window.removeEventListener('resize', request);
       cancelAnimationFrame(raf);
     };
-  }, [reduced, heroVideoFailed]);
+  }, [lite, heroVideoFailed]);
 
   // --- Reveal-on-scroll: one IntersectionObserver flips data-on="true". ---
   // Under prefers-reduced-motion the CSS makes every [data-reveal] visible
@@ -140,7 +146,7 @@ export default function Landing() {
 
   // --- Subtle parallax on the how-it-works clip: translateY only, rAF-driven. ---
   useEffect(() => {
-    if (reduced) return;
+    if (lite) return;
     const video = parallaxRef.current;
     const frame = video?.parentElement;
     if (!video || !frame) return;
@@ -168,15 +174,16 @@ export default function Landing() {
       window.removeEventListener('resize', request);
       cancelAnimationFrame(raf);
     };
-  }, [reduced]);
+  }, [lite]);
 
   // --- Ambient loop clips only play while on screen (and never under
-  // prefers-reduced-motion — the poster frame carries the design). ---
+  // prefers-reduced-motion or on Data-Saver/low-end devices — the poster frame
+  // carries the design). ---
   useEffect(() => {
     const root = rootRef.current;
     if (!root) return;
     const vids = Array.from(root.querySelectorAll<HTMLVideoElement>('video[data-loop]'));
-    if (reduced) {
+    if (lite) {
       vids.forEach((v) => v.pause());
       return;
     }
@@ -192,13 +199,13 @@ export default function Landing() {
     );
     vids.forEach((v) => io.observe(v));
     return () => io.disconnect();
-  }, [reduced]);
+  }, [lite]);
 
   const rightAgents = AGENT_DEFINITIONS.filter((a) => a.hemisphere === 'right');
   const leftAgents = AGENT_DEFINITIONS.filter((a) => a.hemisphere === 'left');
 
   return (
-    <div ref={rootRef} className={styles.page} data-mounted={mounted || undefined}>
+    <div ref={rootRef} className={styles.page} data-mounted={mounted || undefined} data-lite={lite || undefined}>
       {/* ================= HERO — sticky viewport, scroll-scrubbed clip ================= */}
       <div ref={heroTrackRef} className={styles.heroTrack}>
         <section className={styles.hero} aria-label="HERMES — songwriting brain">
@@ -208,7 +215,7 @@ export default function Landing() {
               replace hero-25.mp4 with the Runway cut, same scrub wiring. Comment
               only by design: no dead UI until the asset exists.
             */}
-            {heroVideoFailed || reduced ? (
+            {heroVideoFailed || lite ? (
               // Video failed or motion is reduced: the poster is the hero. Still a
               // complete page — nothing depends on the scrub.
               // eslint-disable-next-line @next/next/no-img-element
@@ -256,11 +263,11 @@ export default function Landing() {
             </div>
             <p className={styles.heroFootnote}>
               Footage: the flagship music video, rendered by this repo&apos;s own studio
-              {reduced || heroVideoFailed ? '.' : ' — keep scrolling to scrub it.'}
+              {lite || heroVideoFailed ? '.' : ' — keep scrolling to scrub it.'}
             </p>
           </div>
 
-          {!reduced && !heroVideoFailed && (
+          {!lite && !heroVideoFailed && (
             <div className={styles.scrollHint} aria-hidden="true">
               <span>scroll</span>
               <i />

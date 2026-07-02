@@ -46,6 +46,10 @@
   .heroTrack { height: auto; }
   .hero { position: relative; }
 }
+/* Same collapse when device intelligence flags light media (Data Saver / low-end
+   device — device.ts): the poster is the hero, so the runway would be dead scroll. */
+.page[data-lite] .heroTrack { height: auto; }
+.page[data-lite] .hero { position: relative; }
 .heroMedia {
   position: absolute;
   inset: 0;

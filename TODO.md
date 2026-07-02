@@ -233,8 +233,14 @@ later (kept out of this repo's core so it stays free + local).
       Galaxy S9+, Pixel 7, iPad Mini across `/` and `/hermes` and fails on console errors,
       overflow, or sub-40px tap targets (12/12 clean). Phone workflow: every branch previews at
       `<branch>.wifi-dj-meme.pages.dev` — thumb-test on a real phone before merging
-      (`docs/mobile.md`). Remaining (next PR): wire `useDevice()` adaptations into the studio
-      deck + landing. _(this PR)_
+      (`docs/mobile.md`). _(#104)_
+- [x] **Adaptive UI wiring — "it adjusts"** — `useDevice()` now drives the app: the studio shell
+      carries `data-touch` / `data-form` / `data-anim` so CSS keys CAPABILITY-driven rules (44px
+      touch targets + 16px inputs on any touch device at any width — a landscape phone at 852px
+      no longer misses them; low-end/Data-Saver devices lose the stacked backdrop blurs), and the
+      landing treats Data Saver / low-end (`ui.lightMedia`) like reduced motion for MEDIA: poster
+      hero, no scrub runway, ambient loops paused — copy and layout identical. DOM-verified under
+      iPhone vs desktop emulation; 12/12 device-matrix clean. _(this PR)_
 - [x] **HERMES Live #3 — downloadable PNG share card** — `⬇ Share card` renders the song's brain
       trace to a deterministic 1200×630 canvas PNG (heat-map, lead hook, banger score + verdict,
       the "$0 · no API key · deterministic" receipt) fully client-side; the screenshot you post
