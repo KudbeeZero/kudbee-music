@@ -224,6 +224,30 @@ Board** governance / Solana / token / NFT layer integrates with this engine via 
 later (kept out of this repo's core so it stays free + local).
 
 ## ✅ Shipped (newest first)
+- [x] **Mobile foundation — device intelligence + PWA + phone-testing workflow** — the app
+      recognizes what phone/browser it's on and adjusts: `lib/hermes/device.ts` (pure, 22-test
+      classifier: UA + capabilities → phone/tablet/desktop, perf class → animation level, single
+      column, compact brain, ≥44px touch targets, bottom sheets, light media) + an SSR-safe
+      `useDevice()` hook that re-adjusts on rotation. PWA manifest + brand icons → "Add to Home
+      Screen" opens the studio standalone. `scripts/mobile-matrix.mjs` walks iPhone SE/14 Pro,
+      Galaxy S9+, Pixel 7, iPad Mini across `/` and `/hermes` and fails on console errors,
+      overflow, or sub-40px tap targets (12/12 clean). Phone workflow: every branch previews at
+      `<branch>.wifi-dj-meme.pages.dev` — thumb-test on a real phone before merging
+      (`docs/mobile.md`). Remaining (next PR): wire `useDevice()` adaptations into the studio
+      deck + landing. _(this PR)_
+- [x] **HERMES Live #3 — downloadable PNG share card** — `⬇ Share card` renders the song's brain
+      trace to a deterministic 1200×630 canvas PNG (heat-map, lead hook, banger score + verdict,
+      the "$0 · no API key · deterministic" receipt) fully client-side; the screenshot you post
+      next to the share link. Playwright-verified real download, zero console errors. _(#103)_
+- [x] **HERMES Live #2 — inline landing playground** — the landing IS the product: type one line,
+      pick a genre chip, and the REAL brain (all 10 agents, client-side) generates above the fold —
+      live BrainScan replay → lead hook + banger score → "🔗 Share this" + "Open in the full
+      studio →". Byte-identical reproduce proof in tests; Playwright fresh-context verification.
+      `/` First-Load 102→134 kB (ships the engine — intended for the flagship interaction). _(#102)_
+- [x] **HERMES Live #1 — deterministic share permalinks (the viral loop)** — every song gets a
+      `/hermes?s=<token>` link that REPRODUCES the byte-identical song for anyone who opens it
+      (inputs + seed in a sanitized base64url token; hostile tokens neutralized, never throw).
+      "Here's the song my brain wrote — click to watch it think." $0, static, no server. _(#101)_
 - [x] **Dev-door is no longer a production backdoor** — `?dev=1` "Developer entry" now exists
       only on dev/local builds (`isDevBuild()`: `NODE_ENV!=='production'`, or an explicit
       `NEXT_PUBLIC_DEV_DOOR=1` opt-in for a chosen hosted preview). On the live Cloudflare

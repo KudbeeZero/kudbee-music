@@ -27,6 +27,15 @@ export const metadata: Metadata = {
   metadataBase: new URL('https://wifi-dj-meme.pages.dev'),
   title: 'HERMES Hit Factory — Lyrical Combinator Brain',
   description: 'A multi-agent song-creation studio. Turn a rough idea into a full song package — concept, hooks, lyrics, production, visuals, uniqueness, and a banger score.',
+  // Installable PWA: manifest + icons let phones "Add to Home Screen" and open the
+  // studio standalone (see docs/mobile.md). Icons rasterize from public/icon.svg
+  // via scripts/make-icons.mjs.
+  manifest: '/manifest.webmanifest',
+  icons: {
+    icon: [{ url: '/icon.svg', type: 'image/svg+xml' }, { url: '/icon-192.png', sizes: '192x192' }],
+    apple: '/apple-touch-icon.png',
+  },
+  appleWebApp: { capable: true, statusBarStyle: 'black-translucent', title: 'HERMES' },
 };
 
 // Explicit viewport so the studio scales correctly on phones/tablets and can
@@ -35,6 +44,7 @@ export const viewport: Viewport = {
   width: 'device-width',
   initialScale: 1,
   viewportFit: 'cover',
+  themeColor: '#07070b',
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

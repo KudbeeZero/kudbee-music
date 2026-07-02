@@ -296,6 +296,8 @@ flow, and the non-negotiables — plus the code-generated [brain-wiring diagram]
 - [x] **Public-readiness hardening** — [`SECURITY.md`](SECURITY.md) + least-privilege CI token
 - [x] **Onboarding + local-first accounts** — welcome gate, guest + developer entry, honest Google/GitHub slots, blank-first Song Lab ([docs/accounts.md](docs/accounts.md))
 - [x] **Metaplex-aligned dNFT metadata** — the signature JSON now targets the stated Solana chain ([`docs/nft-standard.md`](docs/nft-standard.md))
+- [x] **HERMES Live** — type a line on the landing and watch the brain think; every song gets a share link that **reproduces it byte-for-byte** + a downloadable PNG share card ([docs/share.md](docs/share.md))
+- [x] **Mobile intelligence + PWA** — detects phone/browser and adjusts; install to your home screen; device-matrix test harness ([docs/mobile.md](docs/mobile.md))
 
 **Next** — the phased plan is the spine [`brain/roadmap.json`](brain/roadmap.json); the human backlog is [`TODO.md`](TODO.md).
 - [ ] **Deepen the visible brain** — cognitive model (first→second thought→decision); the Council; brain-scan boot sequence
