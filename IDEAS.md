@@ -219,12 +219,12 @@ A second-opinion review flagged real risks worth acting on (truth-first):
   disclaimer in the README + Uniqueness panel. _(#37)_
 
 ## 🌱 Fresh captures
-- 🔨 **Deep Brain Atlas — the subsections** *(founder idea, constellation-brain screenshot)* —
+- ✅ **Deep Brain Atlas — the subsections** *(founder idea, constellation-brain screenshot)* —
   take the 11-region brain down to its real subsections like human neuroanatomy: each hub fans
   out into named subregions (Broca's/Wernicke's areas, amygdala, ACC, basal ganglia, VTA,
   hippocampal consolidation…), every one honestly mapped to a real module/export that runs
   (`rhyme.ts#rhymeScheme`, `cognition.ts#deliberate`, `edits.ts#diffEdit`…). Constellation
-  expansion in the Brain Scan + subsection contributions in the trace explorer. In build now.
+  expansion in the Brain Scan + subsection contributions in the trace explorer. Shipped.
 - ✅ **CLAUDE.md memory spine** *(founder idea — "every time you repeat an instruction, save
   it")* — shipped: root CLAUDE.md consolidating the house rules + routing to every memory
   layer, with a guard test so it can't rot.

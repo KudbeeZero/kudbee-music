@@ -46,8 +46,9 @@ Determinism is a hard contract: same `inputs` + same `seed` ⇒ byte-identical
 timestamps are injected via `opts.id`/`opts.now`; the regenerate button threads a fresh
 `opts.seed`). This is what makes the demo traces reproducible and CI-safe.
 
-The agents pull from **11 brain regions**, each a real module or vault file. See the
-generated wiring diagram: [`docs/brain-wiring.md`](docs/brain-wiring.md).
+The agents pull from **11 brain regions · 37 subregions** (the Deep Brain Atlas), each
+a real module or vault file. See the generated wiring diagram + atlas tables:
+[`docs/brain-wiring.md`](docs/brain-wiring.md).
 
 ## Module map (`lib/hermes/`)
 

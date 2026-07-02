@@ -16,6 +16,7 @@
     "rule": "Every PR updates the spine + TODO + IDEAS + README together. Shipping an item flips its status here and moves it to Shipped in TODO. A PR that skips this is not done."
   },
   "brainRegions": 11,
+  "brainSubregions": 37,
   "tractionSprint": {
     "note": "Ranked $0 items from the 3-agent GitHub-traction audit. Theme: make display-only brain systems load-bearing, wire in vector memory, document the architecture.",
     "items": [
@@ -54,7 +55,8 @@
         { "id": "2.1", "title": "Cognitive model: first thought → second thought → decision", "status": "shipped", "pr": "#39", "home": "lib/hermes/cognition.ts", "note": "deliberate() runs 3 real critiques (true-to-brief / original / earns-it) → keep|revise; a '🧭 How the brain decided' readout on the lead hook" },
         { "id": "2.2", "title": "The Council — agents as a deliberating board", "status": "shipped", "pr": "#41", "home": "components/hermes/Council.tsx", "note": "right hemisphere proposes / left challenges / artist decides; reuses agent findings + cognition deliberate(). The Crossroads Board made literal. Also added a .env* gitignore guard + .env.example (RUNWAY/ANTHROPIC placeholders) so a founder key can never be committed." },
         { "id": "2.3", "title": "Brain-scan boot sequence + live per-agent drive", "status": "shipped", "pr": "#42", "home": "components/hermes/BrainScan.tsx", "note": "a scan-line boot sweep while running (reduced-motion aware) + regions/agents ignite in sequence live off the per-agent onProgress stream. COMPLETES PHASE 2." },
-        { "id": "2.4", "title": "Particle Brain + artist heat-map (living Brain Scan)", "status": "shipped", "pr": "#40", "home": "components/hermes/BrainScan.tsx + lib/hermes/heat.ts", "note": "SHIPPED (founder idea): canvas particle layer over the SVG brain + a thermal heat-map; brainHeat() (tested) colors regions by artist type (right/generative=hot magenta, analytical=cyan, emotion raises temp, more 'becoming-you'=hotter). Reduced-motion aware. Header shows the artist type + brain temp. Feeds the Living-Brain dNFT." }
+        { "id": "2.4", "title": "Particle Brain + artist heat-map (living Brain Scan)", "status": "shipped", "pr": "#40", "home": "components/hermes/BrainScan.tsx + lib/hermes/heat.ts", "note": "SHIPPED (founder idea): canvas particle layer over the SVG brain + a thermal heat-map; brainHeat() (tested) colors regions by artist type (right/generative=hot magenta, analytical=cyan, emotion raises temp, more 'becoming-you'=hotter). Reduced-motion aware. Header shows the artist type + brain temp. Feeds the Living-Brain dNFT." },
+        { "id": "2.5", "title": "Deep Brain Atlas — 37 anatomy-named subregions, each mapped to a real module", "status": "shipped", "home": "lib/hermes/brainMap.ts", "note": "constellation expansion in BrainScan + per-subsection trace notes + atlas tables in docs/brain-wiring.md; honesty rule enforced by brainAtlas.test.ts" }
       ]
     },
     {

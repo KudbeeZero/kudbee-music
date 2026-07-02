@@ -2,7 +2,7 @@
 
 import { useEffect, useMemo, useRef, useState } from 'react';
 import type { AgentOutput } from '@/lib/hermes/types';
-import { REGIONS, PATHWAYS, region as regionById, regionState, activePathways, type RegionId } from '@/lib/hermes/brainMap';
+import { REGIONS, PATHWAYS, SUBREGIONS, subregionsOf, subregionPos, region as regionById, regionState, activePathways, type RegionId, type Subregion } from '@/lib/hermes/brainMap';
 import type { BrainHeat } from '@/lib/hermes/heat';
 import styles from './hermes.module.css';
 
@@ -17,16 +17,22 @@ export default function BrainScan({
   outputs, running, workingMemory, heat,
 }: { outputs: Record<string, AgentOutput>; running: boolean; workingMemory?: number; heat?: BrainHeat }) {
   const [selected, setSelected] = useState<RegionId | null>(null);
+  const [selectedSub, setSelectedSub] = useState<Subregion | null>(null);
   const state = useMemo(() => Object.fromEntries(REGIONS.map((r) => [r.id, regionState(r, outputs)])), [outputs]);
   const activeSet = useMemo(() => new Set(activePathways(outputs).map(([a, b]) => `${a}-${b}`)), [outputs]);
   const sel = REGIONS.find((r) => r.id === selected);
+  const satellites = selected ? subregionsOf(selected) : [];
   const lit = REGIONS.filter((r) => state[r.id] === 'done' || state[r.id] === 'running').length;
+  const pickRegion = (id: RegionId) => {
+    setSelectedSub(null);
+    setSelected((cur) => (cur === id ? null : id)); // tap again to fold the constellation
+  };
 
   return (
     <div className={styles.panel}>
       <div className={styles.panelTitle} style={{ display: 'flex', justifyContent: 'space-between' }}>
         <span>🧠 Brain Scan</span>
-        <span className={styles.hint}>{running ? 'scanning…' : `${lit}/${REGIONS.length} regions`}</span>
+        <span className={styles.hint}>{running ? 'scanning…' : `${lit}/${REGIONS.length} regions · ${SUBREGIONS.length} subregions`}</span>
       </div>
       {heat && (
         <div className={styles.hint} style={{ marginTop: 2 }}>
@@ -71,13 +77,38 @@ export default function BrainScan({
           })}
         </g>
 
+        {/* the expanded constellation — the selected hub's subregions fan out */}
+        {sel && satellites.length > 0 && (
+          <g key={`atlas-${sel.id}`}>
+            {satellites.map((s) => {
+              const p = subregionPos(s);
+              const c = COLOR[sel.side];
+              const active = selectedSub?.id === s.id;
+              return (
+                <g key={s.id} style={{ cursor: 'pointer' }}
+                  onClick={(e) => { e.stopPropagation(); setSelectedSub(active ? null : s); }}
+                  role="button" tabIndex={0} aria-label={`${s.label} — ${s.role}`}
+                  onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); setSelectedSub(active ? null : s); } }}>
+                  <line x1={sel.x} y1={sel.y} x2={p.x} y2={p.y} stroke={c} strokeOpacity={s.wired ? 0.3 : 0.14} strokeWidth="1" />
+                  <circle cx={p.x} cy={p.y} r={active ? 6 : 4.5} fill={c} opacity={s.wired ? 0.92 : 0.38} />
+                  <text x={p.x} y={p.y + (s.dy >= 0 ? 12 : -8)} textAnchor="middle"
+                    className={styles.brainLabel} data-on={true}
+                    style={{ fontSize: 7, opacity: s.wired ? 0.85 : 0.5 }}>
+                    {s.label}
+                  </text>
+                </g>
+              );
+            })}
+          </g>
+        )}
+
         {/* region nodes */}
         {REGIONS.map((r) => {
           const st = state[r.id];
           const c = COLOR[r.side];
           const on = st === 'running' || st === 'done';
           return (
-            <g key={r.id} transform={`translate(${r.x} ${r.y})`} style={{ cursor: 'pointer' }} onClick={() => setSelected(r.id)}>
+            <g key={r.id} transform={`translate(${r.x} ${r.y})`} style={{ cursor: 'pointer' }} onClick={() => pickRegion(r.id)}>
               <circle r={selected === r.id ? 15 : 12} className={styles.brainNode} data-state={st}
                 style={{ fill: r.soon ? 'var(--bg-2)' : c, ['--rc' as string]: c }} />
               <circle r="3.5" fill={on ? '#0a0a12' : 'transparent'} opacity={on ? 0.5 : 0} />
@@ -89,11 +120,15 @@ export default function BrainScan({
       </div>
 
       <div className={styles.brainCaption}>
-        {sel ? (
+        {selectedSub && sel ? (
+          <><strong style={{ color: COLOR[sel.side] }}>{selectedSub.label}</strong>
+            <span className={styles.hint}> — {selectedSub.role} · <code>{selectedSub.doc}</code>{selectedSub.wired ? '' : ' · CLI lane'}</span></>
+        ) : sel ? (
           <><strong style={{ color: COLOR[sel.side] }}>{sel.label}</strong>
-            <span className={styles.hint}> — region = <code>{sel.doc}</code>{sel.soon ? ' · not wired yet' : ''}</span></>
+            <span className={styles.hint}> — region = <code>{sel.doc}</code>{sel.soon ? ' · not wired yet' : ''}
+              {satellites.length > 0 ? ` · ${satellites.length} subsection${satellites.length === 1 ? '' : 's'} — tap a satellite` : ''}</span></>
         ) : (
-          <span className={styles.hint}>Each region is a knowledge file; each line is a nerve. Generate a song and watch the signal travel.</span>
+          <span className={styles.hint}>Each region is a knowledge file; each line is a nerve. Tap a region to fan out its subsections — every one is real code.</span>
         )}
       </div>
       {typeof workingMemory === 'number' && workingMemory > 0 && (

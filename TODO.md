@@ -224,6 +224,15 @@ Board** governance / Solana / token / NFT layer integrates with this engine via 
 later (kept out of this repo's core so it stays free + local).
 
 ## ✅ Shipped (newest first)
+- [x] **Deep Brain Atlas — 37 subregions, the real bread and butter** — every hub region now
+      fans out into anatomy-named subsections (Broca’s & Wernicke’s areas, temporal lexicon,
+      amygdala + insula, ACC + corpus callosum, VTA + OFC, hippocampus + basal ganglia +
+      procedural memory…), each honestly mapped to a real module + function
+      (`SUBREGIONS` in `brainMap.ts`). Tap a region in the Brain Scan → its constellation
+      fans out (screenshot-style); the trace explorer shows per-subsection notes computed
+      from the song itself; `docs/brain-wiring.md` gains the full atlas tables; the two
+      node-only lanes render dim + honest ("CLI lane"). 8 new integrity tests incl. a
+      byte-identical determinism proof for the sub-notes
 - [x] **CLAUDE.md memory spine** — the repo's saved conventions in one root file: iron laws
       (determinism contract, $0-core, original-only), the full gate list, the green-loop
       working agreement, the security rules learned the hard way (key hygiene, dev-door gate,
