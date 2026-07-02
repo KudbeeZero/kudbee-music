@@ -9,6 +9,10 @@ import {
   CLAUDE_DEFAULT_MODEL,
   CLAUDE_API_URL,
   CLAUDE_API_VERSION,
+  suggestLineRewrites,
+  parseLineRewrites,
+  buildLineRewritePrompt,
+  testClaudeKey,
 } from '../providers/claudeLyricsProvider';
 import type { SongInputs, HookOption } from '../types';
 
@@ -187,6 +191,92 @@ describe('claudeLyricsProvider — BYOK browser CORS header', () => {
     await p.generateHooks(inputs, 2);
     const headers = calls[0].init.headers as Record<string, string>;
     expect(headers['anthropic-dangerous-direct-browser-access']).toBe('true');
+  });
+});
+
+const LINE_REWRITE_BODY = {
+  stop_reason: 'end_turn',
+  content: [{ type: 'text', text: JSON.stringify({
+    alternatives: [
+      'static where your voice used to live',
+      'nothing but static where you were',
+      'the line goes quiet where you stood',
+    ],
+  }) }],
+};
+
+const lineCtx = {
+  sectionLabel: 'Hook',
+  line: 'static where your voice should be',
+  precedingLine: 'dial tone in a dark room',
+  followingLine: 'I keep the receiver warm',
+  inputs,
+};
+
+describe('suggestLineRewrites — Scribe line editor (roadmap 5.5)', () => {
+  it('sends the line, its neighbors, and the brief in the prompt', async () => {
+    const { impl, calls } = fakeFetch(LINE_REWRITE_BODY);
+    await suggestLineRewrites({ apiKey: 'k', fetchImpl: impl }, lineCtx, 3);
+    const body = JSON.parse(String(calls[0].init.body));
+    const prompt: string = body.messages[0].content;
+    expect(prompt).toContain('static where your voice should be');
+    expect(prompt).toContain('dial tone in a dark room');
+    expect(prompt).toContain('I keep the receiver warm');
+    expect(prompt).toContain('[Hook]');
+    expect(prompt).toContain(inputs.theme);
+    expect(body.output_config.format.type).toBe('json_schema');
+  });
+
+  it('omits neighbor lines cleanly when there is no preceding/following line', async () => {
+    const { impl, calls } = fakeFetch(LINE_REWRITE_BODY);
+    await suggestLineRewrites({ apiKey: 'k', fetchImpl: impl }, { ...lineCtx, precedingLine: undefined, followingLine: undefined }, 3);
+    const body = JSON.parse(String(calls[0].init.body));
+    expect(body.messages[0].content).not.toContain('undefined');
+  });
+
+  it('parses alternatives into a plain string array, capped to count', async () => {
+    const p = fakeFetch(LINE_REWRITE_BODY);
+    const alts = await suggestLineRewrites({ apiKey: 'k', fetchImpl: p.impl }, lineCtx, 2);
+    expect(alts).toHaveLength(2);
+    expect(alts[0]).toBe('static where your voice used to live');
+  });
+
+  it('parseLineRewrites throws malformed-response on an empty/wrong-shape payload', () => {
+    expect(() => parseLineRewrites(JSON.stringify({ alternatives: [] }))).toThrow(ClaudeProviderError);
+    expect(() => parseLineRewrites(JSON.stringify({ nope: true }))).toThrow(ClaudeProviderError);
+  });
+
+  it('buildLineRewritePrompt asks for exactly N alternatives', () => {
+    const prompt = buildLineRewritePrompt(lineCtx, 5);
+    expect(prompt).toContain('5 alternative phrasings');
+    expect(prompt).toContain('exactly 5 entries');
+  });
+
+  it('propagates missing-key the same way generation does', async () => {
+    await expect(suggestLineRewrites({ fetchImpl: fakeFetch(LINE_REWRITE_BODY).impl }, lineCtx))
+      .rejects.toMatchObject({ code: 'missing-key' });
+  });
+});
+
+describe('testClaudeKey — the Rack "Test key" button', () => {
+  it('reports ok on a successful minimal round-trip, with a small capped max_tokens', async () => {
+    const ok = { stop_reason: 'end_turn', content: [{ type: 'text', text: '{"ok":"ok"}' }] };
+    const { impl, calls } = fakeFetch(ok);
+    const result = await testClaudeKey({ apiKey: 'k', fetchImpl: impl });
+    expect(result).toEqual({ ok: true });
+    expect(JSON.parse(String(calls[0].init.body)).max_tokens).toBe(16);
+  });
+
+  it('reports a typed failure message on an HTTP error (e.g. an invalid key)', async () => {
+    const { impl } = fakeFetch({ type: 'error', error: { type: 'authentication_error', message: 'invalid x-api-key' } }, 401);
+    const result = await testClaudeKey({ apiKey: 'bad-key', fetchImpl: impl });
+    expect(result.ok).toBe(false);
+    if (!result.ok) expect(result.message).toContain('[claude-lyrics:http-error]');
+  });
+
+  it('reports a failure (never throws) when no key is available at all', async () => {
+    const result = await testClaudeKey({ fetchImpl: fakeFetch({}).impl });
+    expect(result).toMatchObject({ ok: false });
   });
 });
 

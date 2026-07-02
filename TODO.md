@@ -198,6 +198,8 @@ vector memory, and document the architecture — lifts output quality, dev appea
 - [ ] **Docs site on GitHub Pages** — Astro Starlight.
 
 ## 💡 Backlog (unordered ideas)
+- [ ] **Scribe editor: drag-to-reorder lines + a per-section "rewrite this verse" AI action**
+      (today: add/delete a line + per-line ✨ rewrite only — see `IDEAS.md`).
 - [ ] **Live preview = the review path** — deploy to **Vercel** (free, instant
       `*.vercel.app` URL) so the founder can review each change in a browser; point
       **wifidj.xyz** at it later as the branded home. No domain needed to start.
@@ -231,6 +233,26 @@ Board** governance / Solana / token / NFT layer integrates with this engine via 
 later (kept out of this repo's core so it stays free + local).
 
 ## ✅ Shipped (newest first)
+- [x] **Scribe line editor + Rack "Test key" verification (roadmap 5.5)** — "make sure Claude
+      API is working, people should be able to edit their lyrics almost like the application
+      Scribe." `components/hermes/ScribeEditor.tsx` replaces the single-textarea lyric edit
+      with a per-line editor: each line is its own field with **+** (add line below), **×**
+      (delete line), and **✨** (ask the Claude Engine for 3 in-context alternate phrasings of
+      just that line, via the new `suggestLineRewrites()`) — click a suggestion to apply it.
+      Without the Claude Engine unlocked the ✨ button shows an honest unlock hint instead of
+      silently doing nothing. The old single-textarea editor stays one tap away ("edit as raw
+      text") for power-user paste workflows; both save through the same new
+      `renderSections()` (`lib/hermes/edits.ts`, the exact inverse of `parseSections`, tested
+      round-trip) → learn-from-edits path, so taste-learning behaves identically either way.
+      Separately, the Rack gained a **🔌 Test key** button: an explicit, opt-in, real minimal
+      round-trip against `api.anthropic.com` (`testClaudeKey()`, 16 max_tokens) so a visitor
+      can directly confirm their pasted key works before generating a full song with it —
+      reports `✓ Claude API is working` or the exact typed failure. `claudeLyricsProvider.ts`
+      refactored to a shared `callClaudeMessages()` helper so generation, line rewrites, and
+      the key test all resolve the key/CORS header/error typing one way. Verified live with
+      Playwright: locked-hint popover on ✨ before unlock, line edit/add, raw-text round trip,
+      "brain learned from your edit" banner, and Test key failing gracefully (bad key) without
+      crashing the panel. See `docs/claude-engine.md`. _(this PR)_
 - [x] **Claude Engine BYOK panel (roadmap 5.4)** — the Engine Rack's Claude Engine slot is
       now interactive, not just a locked display box: click "Enter your Anthropic key," it's
       stored in this browser's `localStorage` only (`lib/hermes/claudeKey.ts`,

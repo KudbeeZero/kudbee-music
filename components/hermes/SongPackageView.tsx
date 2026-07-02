@@ -7,6 +7,7 @@ import { buildTrace } from '@/lib/hermes/trace';
 import { renderTraceHtml } from '@/lib/hermes/traceHtml';
 import { sunoStyle, sunoLyrics } from '@/lib/hermes/suno';
 import { encodeShare, shareUrl } from '@/lib/hermes/shareLink';
+import ScribeEditor from './ScribeEditor';
 import styles from './hermes.module.css';
 
 export default function SongPackageView({ pkg, onSaveEdit, onChooseHook, onRegenerateFromCritiques }: {
@@ -15,13 +16,14 @@ export default function SongPackageView({ pkg, onSaveEdit, onChooseHook, onRegen
 }) {
   const rawLyrics = pkg.sections.map((s) => `[${s.label}]\n${s.lines.join('\n')}`).join('\n\n');
   const [editing, setEditing] = useState(false);
+  const [rawMode, setRawMode] = useState(false);
   const [draft, setDraft] = useState(rawLyrics);
   const [learned, setLearned] = useState(false);
   const [copiedClip, setCopiedClip] = useState(-1);
   const [shared, setShared] = useState(false);
 
-  function save() {
-    onSaveEdit?.(draft);
+  function saveText(text: string) {
+    onSaveEdit?.(text);
     setEditing(false);
     setLearned(true);
     setTimeout(() => setLearned(false), 2600);
@@ -106,19 +108,28 @@ export default function SongPackageView({ pkg, onSaveEdit, onChooseHook, onRegen
         <div className={styles.pkgLabel}>
           Final lyrics
           {onSaveEdit && !editing && (
-            <button className={styles.copyBtn} onClick={() => { setDraft(rawLyrics); setEditing(true); }}>edit</button>
+            <button className={styles.copyBtn} onClick={() => { setDraft(rawLyrics); setRawMode(false); setEditing(true); }}>edit</button>
+          )}
+          {onSaveEdit && editing && (
+            <button className={styles.copyBtn} onClick={() => setRawMode((r) => !r)}>
+              {rawMode ? 'switch to line editor' : 'edit as raw text'}
+            </button>
           )}
           {learned && <span className={styles.copyBtn} style={{ color: 'var(--cyan)', borderColor: 'var(--cyan)' }}>🧠 brain learned from your edit</span>}
         </div>
         {editing ? (
-          <>
-            <textarea className={styles.lyricBlock} style={{ width: '100%', minHeight: 280, color: 'var(--ink)' }}
-              value={draft} onChange={(e) => setDraft(e.target.value)} aria-label="Edit lyrics" />
-            <div style={{ display: 'flex', gap: 8, marginTop: 8 }}>
-              <button className={styles.runBtn} style={{ width: 'auto', flex: 1, padding: 10 }} onClick={save}>Save — teach the brain</button>
-              <button className={styles.ghostBtn} onClick={() => setEditing(false)}>Cancel</button>
-            </div>
-          </>
+          rawMode ? (
+            <>
+              <textarea className={styles.lyricBlock} style={{ width: '100%', minHeight: 280, color: 'var(--ink)' }}
+                value={draft} onChange={(e) => setDraft(e.target.value)} aria-label="Edit lyrics as raw text" />
+              <div style={{ display: 'flex', gap: 8, marginTop: 8 }}>
+                <button className={styles.runBtn} style={{ width: 'auto', flex: 1, padding: 10 }} onClick={() => saveText(draft)}>Save — teach the brain</button>
+                <button className={styles.ghostBtn} onClick={() => setEditing(false)}>Cancel</button>
+              </div>
+            </>
+          ) : (
+            <ScribeEditor sections={pkg.sections} inputs={pkg.inputs} onSave={saveText} onCancel={() => setEditing(false)} />
+          )
         ) : (
           <div className={styles.lyricBlock}>
             {pkg.sections.map((s, i) => (

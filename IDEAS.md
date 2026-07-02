@@ -219,6 +219,14 @@ A second-opinion review flagged real risks worth acting on (truth-first):
   disclaimer in the README + Uniqueness panel. _(#37)_
 
 ## 🌱 Fresh captures
+- ✅ **"Make sure Claude API is working, people should be able to edit their lyrics almost
+  like the application Scribe"** *(founder directive)* — shipped: a per-line lyric editor
+  (`components/hermes/ScribeEditor.tsx`) with an AI-rewrite control per line (Claude Engine,
+  in-context alternates) and an explicit Rack "Test key" button that makes a real minimal
+  call to confirm a pasted key actually works. See "Scribe line editor" in `TODO.md` Shipped
+  + `docs/claude-engine.md`. Deferred for later: drag-to-reorder lines (kept to +/× for scope;
+  reordering would need a real drag lib or manual up/down controls — small follow-up, not
+  blocking) and a per-section "rewrite the whole verse" AI action (line-level only for now).
 - ✅ **"Wire in Claude model now that you have API — upgrade the panel"** *(founder directive)* —
   shipped: the Engine Rack's Claude Engine slot is now a real, interactive bring-your-own-key
   unlock, not just a locked display box. Considered and rejected a founder-funded proxy (would

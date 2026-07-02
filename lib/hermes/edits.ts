@@ -35,3 +35,13 @@ export function parseSections(text: string): SongSection[] {
   }
   return sections.length ? sections : [{ label: 'Lyrics', lines: text.split(/\r?\n/).map((l) => l.trim()).filter(Boolean) }];
 }
+
+/** The inverse of parseSections — serialize sections back to the raw [Label]-block
+ *  text format. Empty sections (no lines left) are dropped. Used by the Scribe line
+ *  editor so line-level edits still funnel through the same save/diff/parse path. */
+export function renderSections(sections: SongSection[]): string {
+  return sections
+    .filter((s) => s.lines.length > 0)
+    .map((s) => `[${s.label}]\n${s.lines.join('\n')}`)
+    .join('\n\n');
+}

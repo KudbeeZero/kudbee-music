@@ -1,6 +1,7 @@
 # The Claude Engine — opt-in real-AI lyrics behind the same seam
 
-**Status:** wired, opt-in via three separate lanes. Roadmap items 5.1 (CLI/eval), 5.4 (rack BYOK).
+**Status:** wired, opt-in via three separate lanes. Roadmap items 5.1 (CLI/eval), 5.4 (rack BYOK),
+5.5 (Scribe line editor + key test).
 
 The Claude Engine is a real-AI `LyricsProvider` (`lib/hermes/providers/claudeLyricsProvider.ts`,
 id `claude-lyrics`) that slots into the exact same provider seam as the free Local
@@ -61,6 +62,33 @@ without a server-side proxy + rate limiting + a spend cap" rule *without* needin
 that infrastructure: there is no proxy, because there is no server in the request path at
 all — the visitor's own browser talks straight to Anthropic with the visitor's own key and
 the visitor's own money.
+
+## "Is my key actually working?" — the Test key button
+
+Once unlocked, the Rack shows a **🔌 Test key** button next to "Turn on/off." It's an
+explicit, opt-in action — never automatic — that makes one small, real request straight to
+`api.anthropic.com` (`testClaudeKey()`, capped at 16 output tokens, so it's cheap) and reports
+`✓ Claude API is working — connection confirmed.` or the exact typed error (`missing-key` /
+`http-error` incl. status code / `refusal` / `malformed-response`) if it doesn't. This is the
+honest way to answer "is Claude actually working" without needing a founder-side dashboard or
+log — the visitor gets a direct, real answer from their own browser.
+
+## Scribe — edit lyrics line by line, with AI rewrites
+
+The "Final lyrics" edit mode (`components/hermes/ScribeEditor.tsx`) is a per-line editor
+instead of one big text block — inspired by dedicated lyric-writing tools like Scribe:
+
+- Every line is its own field. Edit it directly, **+** adds a new line below it, **×** deletes it.
+- **✨** asks the Claude Engine for 3 alternate phrasings of *that one line* — same meaning,
+  syllable count, and rhyme role, with the line before/after as context so the rewrite fits
+  the surrounding lines (`suggestLineRewrites()`, `lib/hermes/providers/claudeLyricsProvider.ts`).
+  Click a suggestion to drop it into the line. Requires the Claude Engine unlocked + active
+  (BYOK, above); if it isn't, the button still works but shows an honest unlock hint instead
+  of quietly doing nothing.
+- **"edit as raw text"** switches to the original single-textarea editor for power users who
+  want to paste in a whole rewritten song at once — no regression, both save through the same
+  `renderSections()` → learn-from-edits path (`lib/hermes/edits.ts`), so taste-learning and
+  auto-exclusion behave identically no matter which editor was used.
 
 ## How the founder triggers the live comparison
 

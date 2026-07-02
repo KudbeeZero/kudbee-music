@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react';
 import { ENGINE_UNITS } from '@/lib/hermes/engines';
 import { getClaudeKey, setClaudeKey, clearClaudeKey, isClaudeEngineActive, setClaudeEngineActive } from '@/lib/hermes/claudeKey';
+import { testClaudeKey, type ClaudeKeyTestResult } from '@/lib/hermes/providers/claudeLyricsProvider';
 import styles from './hermes.module.css';
 
 // The Pro Studio Rack — the lyrical engines as a DAW-style rack of modular units.
@@ -16,6 +17,8 @@ export default function Rack() {
   const [active, setActive] = useState(false);
   const [keyInput, setKeyInput] = useState('');
   const [editing, setEditing] = useState(false);
+  const [testing, setTesting] = useState(false);
+  const [testResult, setTestResult] = useState<ClaudeKeyTestResult | null>(null);
 
   useEffect(() => {
     setHasKey(!!getClaudeKey());
@@ -44,6 +47,21 @@ export default function Rack() {
     setHasKey(false);
     setActive(false);
     setEditing(false);
+    setTestResult(null);
+  }
+
+  // Explicit, opt-in only — never runs automatically. A real network call from
+  // this browser to Anthropic using the visitor's own key, so they can confirm
+  // "does my key actually work" before generating a full song with it.
+  async function testKey() {
+    setTesting(true);
+    setTestResult(null);
+    try {
+      const result = await testClaudeKey({ apiKey: getClaudeKey() ?? undefined });
+      setTestResult(result);
+    } finally {
+      setTesting(false);
+    }
   }
 
   return (
@@ -97,10 +115,20 @@ export default function Rack() {
                 </div>
               )}
               {isClaude && hasKey && (
-                <div style={{ marginTop: 6, display: 'flex', gap: 6 }}>
-                  <button className={styles.ghostBtn} onClick={toggleActive}>{active ? 'Turn off' : 'Turn on'}</button>
-                  <button className={styles.ghostBtn} onClick={forget}>Forget key</button>
-                </div>
+                <>
+                  <div style={{ marginTop: 6, display: 'flex', gap: 6, flexWrap: 'wrap' }}>
+                    <button className={styles.ghostBtn} onClick={toggleActive}>{active ? 'Turn off' : 'Turn on'}</button>
+                    <button className={styles.ghostBtn} onClick={testKey} disabled={testing} title="Makes one small, real request to api.anthropic.com with your key to confirm it works">
+                      {testing ? 'Testing…' : '🔌 Test key'}
+                    </button>
+                    <button className={styles.ghostBtn} onClick={forget}>Forget key</button>
+                  </div>
+                  {testResult && (
+                    <div className={styles.hint} style={{ marginTop: 4, color: testResult.ok ? 'var(--good)' : 'var(--bad)' }}>
+                      {testResult.ok ? '✓ Claude API is working — connection confirmed.' : `✗ ${testResult.message}`}
+                    </div>
+                  )}
+                </>
               )}
             </div>
           );

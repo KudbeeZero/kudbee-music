@@ -299,11 +299,12 @@ flow, and the non-negotiables — plus the code-generated [brain-wiring diagram]
 - [x] **HERMES Live** — type a line on the landing and watch the brain think; every song gets a share link that **reproduces it byte-for-byte** + a downloadable PNG share card ([docs/share.md](docs/share.md))
 - [x] **Mobile intelligence + PWA** — detects phone/browser and adjusts; install to your home screen; device-matrix test harness ([docs/mobile.md](docs/mobile.md))
 - [x] **Claude Engine — bring your own key** — unlock the Engine Rack's Claude Engine slot with your own Anthropic key; it lives only in your browser and calls Anthropic directly, no server or account of ours involved ([docs/claude-engine.md](docs/claude-engine.md))
+- [x] **Scribe line editor + Test key** — edit lyrics line by line with an AI-rewrite suggestion per line (Claude Engine), plus a one-tap "Test key" to confirm your Anthropic key actually works ([docs/claude-engine.md](docs/claude-engine.md))
 
 **Next** — generated from the spine [`brain/roadmap.json`](brain/roadmap.json); the human backlog is [`TODO.md`](TODO.md), the full board is [`STATUS.md`](STATUS.md).
 
 <!-- STATUS:BEGIN generated: edit brain/roadmap.json, then GEN_DOCS=1 npx vitest run status -->
-**📊 Status board:** ✅ 28 shipped · 🔨 1 in build · 💤 9 queued (38 tracked) — full tables in [`STATUS.md`](STATUS.md), source of truth [`brain/roadmap.json`](brain/roadmap.json).
+**📊 Status board:** ✅ 29 shipped · 🔨 1 in build · 💤 9 queued (39 tracked) — full tables in [`STATUS.md`](STATUS.md), source of truth [`brain/roadmap.json`](brain/roadmap.json).
 
 | | Up next | id |
 |---|---------|----|
