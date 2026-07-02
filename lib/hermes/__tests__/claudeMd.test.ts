@@ -65,4 +65,11 @@ describe('CLAUDE.md — the memory spine exists and routes everywhere', () => {
       expect(spine, `CLAUDE.md must route to ${route}`).toContain(route);
     }
   });
+
+  it('carries the status-board system: the rule, the route, and the generated block', () => {
+    expect(spine).toContain('STATUS.md');
+    expect(spine).toContain('statusBoard');
+    expect(spine).toContain('STATUS:BEGIN'); // the generated block lives here too
+    expect(spine).toContain('GEN_DOCS=1 npx vitest run status');
+  });
 });

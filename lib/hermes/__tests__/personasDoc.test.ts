@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { writeFileSync, mkdirSync } from 'node:fs';
+import { writeFileSync, mkdirSync, readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { renderPersonasDoc } from '../personasDoc';
 import { PERSONAS, SIGNALS } from '../personas';
@@ -25,6 +25,12 @@ describe('persona-map doc (generated from personas.ts)', () => {
 
   it('is deterministic', () => {
     expect(renderPersonasDoc()).toBe(renderPersonasDoc());
+  });
+
+  // The drift lock (un-gated): the COMMITTED doc must match the generator, every run.
+  it('docs/personas.md on disk matches the generator (no drift)', () => {
+    const committed = readFileSync(join(process.cwd(), 'docs', 'personas.md'), 'utf8');
+    expect(committed).toBe(renderPersonasDoc());
   });
 
   // `GEN_DOCS=1 npx vitest run personasDoc` (re)mints the committed doc.

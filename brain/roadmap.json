@@ -30,12 +30,13 @@
   },
   "phases": [
     {
-      "id": 0, "name": "Living-state spine", "status": "in-progress",
+      "id": 0, "name": "Living-state spine", "status": "shipped",
       "goal": "A single machine-readable roadmap the /loop reads each iteration; keep all four tracking surfaces in lockstep.",
       "items": [
-        { "id": "0.1", "title": "brain/roadmap.json spine + sync discipline", "status": "next", "home": "brain/roadmap.json" },
-        { "id": "0.2", "title": "Refresh TODO.md to reality (mark #30–#34 shipped)", "status": "next", "home": "TODO.md" },
-        { "id": "0.3", "title": "CLAUDE.md memory spine — saved conventions + routing table, guard-tested", "status": "shipped", "home": "CLAUDE.md", "note": "lib/hermes/__tests__/claudeMd.test.ts keeps the routes honest; maintenance rule: repeat an instruction twice → save it" }
+        { "id": "0.1", "title": "brain/roadmap.json spine + sync discipline", "status": "shipped", "note": "the spine is live and every PR syncs it (living-state rule); drift now CI-enforced by 0.4", "home": "brain/roadmap.json" },
+        { "id": "0.2", "title": "Refresh TODO.md to reality (mark #30–#34 shipped)", "status": "shipped", "note": "TODO refreshed and kept newest-first since; staleness audit 2026-07-02 re-verified", "home": "TODO.md" },
+        { "id": "0.3", "title": "CLAUDE.md memory spine — saved conventions + routing table, guard-tested", "status": "shipped", "pr": "#107", "home": "CLAUDE.md", "note": "lib/hermes/__tests__/claudeMd.test.ts keeps the routes honest; maintenance rule: repeat an instruction twice → save it" },
+        { "id": "0.4", "title": "Status Board — spine-generated status tables + drift tests (never-stale checklists)", "status": "shipped", "home": "lib/hermes/statusBoard.ts", "note": "STATUS.md + STATUS marker blocks in CLAUDE.md/README/BUILD_LOG are GENERATED from this file; statusBoard.test.ts fails CI on drift, bans hand checkboxes outside the allowlist, and closes the wiring/personas generated-doc drift hole. Regenerate: GEN_DOCS=1 npx vitest run status" }
       ]
     },
     {
@@ -73,7 +74,7 @@
       "id": 4, "name": "Durability", "status": "queued",
       "goal": "Stop data loss; a cleared browser must never wipe a catalog.",
       "items": [
-        { "id": "4.1", "title": "Vault durability — export-on-change + file/cloud backup", "status": "queued", "home": "lib/hermes/storage.ts" },
+        { "id": "4.1", "title": "Vault durability — export-on-change + file/cloud backup", "status": "shipped", "pr": "#56", "home": "lib/hermes/storage.ts", "note": "every write mirrors to a .bak key; Vault drawer shows backup status + one-tap restore (#298 surfaced it). The optional file/cloud lane stays 4.2." },
         { "id": "4.2", "title": "Optional durable cloud brain (Notion/Drive backing)", "status": "queued", "home": "lib/hermes/storage.ts" }
       ]
     },
@@ -94,6 +95,19 @@
       ]
     }
   ],
+  "videoStudioTrack": {
+    "note": "The music-video studio's engineering backlog (studio/*.mjs) — formerly a hand checklist in BUILD_LOG.md, now governed by the spine like everything else. The Runway adapter lives under ecosystem.runwayGen4.",
+    "items": [
+      { "id": "V1", "title": "hermes new — project scaffold (song/, assets/, hermes.json, lyrics.md)", "status": "shipped", "home": "studio/scaffold.mjs + bin/hermes", "note": "BUILD_LOG iteration 1" },
+      { "id": "V2", "title": "Scene packs vhs-lofi + lyric-minimal (4 packs total)", "status": "shipped", "home": "studio/player.html", "note": "BUILD_LOG iteration 2; verified rendered slices" },
+      { "id": "V3", "title": "Project-targeted build — hermes build <dir> via HERMES_DATA", "status": "shipped", "home": "studio/build-timeline.mjs + bin/hermes", "note": "BUILD_LOG iteration 3; flagship build stays byte-identical" },
+      { "id": "V4", "title": "Two-hemisphere brain model + --brain dial + left-brain eval gate (hermes qa)", "status": "shipped", "home": "studio/brain.mjs + studio/qa.mjs", "note": "BUILD_LOG iteration 4; CI smoke job renders + gates a real slice" },
+      { "id": "V5", "title": "Audio-novelty song-structure detection (segment from beats + energy when lyrics.md has no headers)", "status": "queued", "home": "studio/analyze.mjs", "note": "today sections come from lyrics.md headers only (verified 2026-07-02)" },
+      { "id": "V6", "title": "hermes-composer — optional MusicGen wiring (opt-in, documented heavy deps)", "status": "queued", "home": ".claude/agents/hermes-composer.md", "note": "no studio file references MusicGen yet (verified 2026-07-02)" },
+      { "id": "V7", "title": "Per-pack scene variety for generic projects (more than the shared scene cycle)", "status": "queued", "home": "studio/build-timeline.mjs", "note": "generic projects currently share one scenePool cycle regardless of --pack" },
+      { "id": "V8", "title": "Right-brain variance — a --seed so the right hemisphere generates scene variants and qa picks the best", "status": "queued", "home": "studio/brain.mjs + studio/qa.mjs", "note": "--seed exists only in studio/runway.mjs today (unrelated Runway param)" }
+    ]
+  },
   "ecosystem": {
     "note": "Bigger initiatives that integrate with the engine via API — kept OUT of the free local core so it stays $0. Tracked here so they don't get lost; built when the founder greenlights.",
     "crossroadsBoard": {

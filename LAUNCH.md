@@ -11,11 +11,11 @@ brain.)*
 ## ✅ Pre-flight checklist (before posting)
 
 - [ ] **README hooks in the first screen** — one sharp sentence + a GIF above the fold.
-- [ ] **`npm run demo` works from a clean clone** — the 10-second "see it work" moment.
+- [x] **`npm run demo` works from a clean clone** — the 10-second "see it work" moment (golden-set gated in CI).
 - [ ] **Live demo link prominent** — [wifidj.xyz](https://wifidj.xyz) (the biggest edge — most repos can't show a live product).
 - [ ] **Social preview image** set — Settings → *Social preview* (a 1280×640 of the Brain Scan lit up).
 - [ ] **Good-first-issues open** and well-scoped (the scene-pack issues qualify) — lowers the barrier to the first external PR.
-- [ ] **`LICENSE`, `CONTRIBUTING.md`, quickstart** current. ✔
+- [x] **`LICENSE`, `CONTRIBUTING.md`, quickstart** current.
 - [ ] **Honest framing intact** — the brain is an *inspired workflow model, not biology*. Protects credibility with HN/engineers.
 - [ ] **45–60s demo video** recorded (script below).
 - [ ] **Repo topics:** `music` `ai` `generative` `typescript` `nextjs` `local-first` `agents` `creative-coding`.

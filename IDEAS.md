@@ -105,7 +105,7 @@ mapping** (mood → word-color + imagery). Pairs with Language & Culture: *how i
 *how you say it*. Candidate home: `lib/hermes/emotion.ts` + a `limbic` region in
 `brainMap.ts`.
 
-### 6. Create-your-own-artist — a living world  🔨 (v1 shipped — `lib/hermes/artist.ts` + Story Mode)
+### 6. Create-your-own-artist — a living world  ✅ (v1 shipped — `lib/hermes/artist.ts` + Story Mode; the bigger living-world game stays 💭)
 The big game: anyone can **build their own artist**, choose its path and identity,
 visually show it, and **capture events like a living world** that evolves. Each user's
 artist is theirs; the brain becomes *them* over time. Personas + memory + the persona
@@ -119,7 +119,7 @@ contribution loop are the seeds of this.
 - 💭 **WIFI DJ radio** — a **live radio** that streams the music this engine makes;
   people **submit** tracks, the community **shapes** the project, and eventually each
   person runs **their own agent**. The closed loop becomes a public, living station.
-- 🔨 **Crossroads Board (extensive)** — **Stage 1 shipped** (`lib/hermes/crossroads.ts` +
+- 🔨 **Crossroads Board (extensive)** — **Stage 1 ✅ shipped (#44), Stages 2–3 💭** (`lib/hermes/crossroads.ts` +
   `brain/crossroads.json`: the $0/local decision model — crossings, weighted votes, tally,
   decide). Stages 2-5 (board UI → taste wiring → community API → token voting) ahead. —
   the WIFI DJ governance/community steering surface:
@@ -219,6 +219,9 @@ A second-opinion review flagged real risks worth acting on (truth-first):
   disclaimer in the README + Uniqueness panel. _(#37)_
 
 ## 🌱 Fresh captures
+- ✅ **Status Board — "don't let this happen again"** *(founder, rotted-checklist screenshot)* —
+  shipped: every status table generated from `brain/roadmap.json`, drift-tested in CI, hand
+  checklists banned outside the allowlist. `STATUS.md` is the board.
 - ✅ **Deep Brain Atlas — the subsections** *(founder idea, constellation-brain screenshot)* —
   take the 11-region brain down to its real subsections like human neuroanatomy: each hub fans
   out into named subregions (Broca's/Wernicke's areas, amygdala, ACC, basal ganglia, VTA,
@@ -228,7 +231,7 @@ A second-opinion review flagged real risks worth acting on (truth-first):
 - ✅ **CLAUDE.md memory spine** *(founder idea — "every time you repeat an instruction, save
   it")* — shipped: root CLAUDE.md consolidating the house rules + routing to every memory
   layer, with a guard test so it can't rot.
-- 🔨 **Traction Sprint** *(3-agent audit)* — ranked $0 plan to lift quality + stars: (T0 ✅)
+- ✅ **Traction Sprint** *(3-agent audit)* — all six shipped (#49–#54): (T0 ✅)
   vector-memory determinism hardening; (T1) semantic originality wiring; (T2) close the
   cognition loop (keep|revise→regenerate); (T3) interactive trace explorer + gallery;
   (T4) Council scoring→hook ranking + learn→vector recall; (T5) ARCHITECTURE.md + wiring

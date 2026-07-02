@@ -85,7 +85,7 @@ chat. Detail for each is in [`brain/roadmap.json`](brain/roadmap.json) + [`IDEAS
 - [ ] **Crossroads Stages 2–3** — `/crossroads` board UI → decisions feed the taste model.
 - [ ] **2 review cleanups** — stronger memory-id hash · independent "earns-it" critique. _(the third —
    guaranteed vault mirror — is now surfaced in the Vault drawer with status + restore)_
-- [ ] **Star-launch kit** — `LAUNCH.md` with a draft Twitter/X thread + a YouTube demo-recording script (you post it).
+- [x] **Star-launch kit** — `LAUNCH.md` shipped _(#43)_: pre-flight checklist + draft X thread + demo-recording script. Posting it stays yours (the pre-flight boxes in `LAUNCH.md` are your launch-day gate).
 
 ---
 
@@ -179,8 +179,8 @@ vector memory, and document the architecture — lifts output quality, dev appea
    channels (`#showcase`/`#help`/`#contributing`/`#song-drops`), roles, voice listening
    parties, and a **GitHub→Discord webhook** posting commits/PRs/releases. Draft structure +
    wire the webhook on founder's go-ahead; optional Telegram announce mirror later.
-- [ ] **`LAUNCH.md` kit** — star-launch checklist + draft Twitter/X thread + demo-recording
-   script (supports the Twitter/YouTube launch). $0 doc-only.
+- [x] **`LAUNCH.md` kit** — star-launch checklist + draft Twitter/X thread + demo-recording
+   script shipped _(#43)_; the pre-flight boxes inside it are the founder's launch-day gate.
 - [ ] **Lightning AI spike** — per-agent compute for the opt-in "advance your model" tier
    (user signs up → their own agent). Best used as the **optional GPU lane**, not the
    backbone; base stays $0/local/serverless. Prereq: accounts + persistent vault (Phase 4).
@@ -224,6 +224,13 @@ Board** governance / Solana / token / NFT layer integrates with this engine via 
 later (kept out of this repo's core so it stays free + local).
 
 ## ✅ Shipped (newest first)
+- [x] **Status Board — never-stale checklists** — status now lives ONLY in `brain/roadmap.json`
+      (video-studio backlog folded in as `videoStudioTrack`; phase-0/4 lags fixed); `STATUS.md`
+      + STATUS-marker blocks in CLAUDE.md/README/BUILD_LOG are GENERATED from the spine
+      (`lib/hermes/statusBoard.ts`, regen `GEN_DOCS=1 npx vitest run status`);
+      `statusBoard.test.ts` fails CI on any drift, bans unchecked `- [ ]` boxes outside the
+      allowlist, and the wiring/personas generated docs got the drift assertion they were
+      missing. Founder's rotted-checklist screenshot can never happen again
 - [x] **Deep Brain Atlas — 37 subregions, the real bread and butter** — every hub region now
       fans out into anatomy-named subsections (Broca’s & Wernicke’s areas, temporal lexicon,
       amygdala + insula, ACC + corpus callosum, VTA + OFC, hippocampus + basal ganglia +
