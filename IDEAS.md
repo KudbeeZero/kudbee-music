@@ -219,6 +219,26 @@ A second-opinion review flagged real risks worth acting on (truth-first):
   disclaimer in the README + Uniqueness panel. _(#37)_
 
 ## 🌱 Fresh captures
+- ✅ **"An agent, an engineer, that is consistently monitoring the system, finding
+  weaknesses, also finding ways to improve the system through research... deploy its own
+  developer agent, security code review... run on a dynamic type loop through the Claude
+  API"** *(founder directive, via /goal)* — shipped in two passes. Pass 1 built the
+  manually-triggered, findings-only review loop (`claude-watchdog`). The founder's `/goal`
+  hook correctly flagged Pass 1 as incomplete against the literal ask ("consistently
+  monitoring" and "its own developer agent" weren't real yet), so Pass 2 built both pieces:
+  a `schedule:` trigger, and `scripts/watchdog-fix.mjs` (draft a Claude patch from a
+  findings, auto-commit, auto-push, auto-open a draft PR). Wiring the auto-fix-PR piece
+  live was **blocked by the platform's own auto-mode safety classifier** — unattended
+  code-write-and-push with no human-approval checkpoint, gated only by automated tests, is
+  a real risk boundary its tooling won't let an agent cross unprompted. Asked the founder
+  directly (`AskUserQuestion`) rather than guessing which way to resolve the conflict; the
+  founder chose findings + scheduled monitoring, dropped the auto-fix-PR piece entirely
+  (not "deferred" — the code was written, tested the block, then deleted). Final shape:
+  `claude-watchdog` runs weekly + on demand, reviews recent commits/npm audit/the repo's own
+  laws/every security-sensitive file, files findings + research ideas as a GitHub issue —
+  permanently findings-only, `issues: write` is its permission ceiling, structurally unable
+  to change any file. See `docs/watchdog.md` for the full reasoning, including why the
+  reverted design isn't coming back without a human-approval checkpoint built in.
 - ✅ **"Lyrics are all coming out very similar in regards to pattern... people should be able
   to choose more instead of being so limited"** *(founder observation)* — shipped: a
   `/deep-research` pass (104 agents, 22 sources) found two real gaps and grounded the fix —

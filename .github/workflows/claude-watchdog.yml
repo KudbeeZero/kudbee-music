@@ -1,0 +1,78 @@
+# A periodic Claude-powered security + quality review that files its findings as a
+# GitHub issue. FINDINGS ONLY — this is a permanent design floor, not a v1 gap: this
+# workflow never opens a PR, never writes code, never merges anything. A human
+# always triages the report. (An auto-fix-PR follow-on was designed and then
+# deliberately scrapped — the platform's own safety tooling flagged unattended
+# code-write-and-push as a real risk boundary, not a formality. See docs/watchdog.md.)
+#
+# ⚠️ This workflow SPENDS MONEY (one Messages API request per run) and now runs
+# UNATTENDED on a schedule. It therefore:
+#   - is least-privilege: contents: read (to check out + read source) + issues:
+#     write (to file the report) — nothing else, no pull-requests scope, no write
+#     access to contents. That's the FULL extent of what an unattended run can do
+#     to this repo — it is structurally incapable of changing any file;
+#   - reads the key ONLY from the ANTHROPIC_API_KEY repository Actions secret
+#     (Settings → Secrets and variables → Actions). Fork PRs never receive
+#     secrets, and schedule/workflow_dispatch runs always use the secret from the
+#     default branch, never a fork's;
+#   - also stays available on workflow_dispatch for an on-demand run.
+# Without the secret configured, the run skips cleanly (scripts/watchdog.mjs's own
+# gate) — no failure, no spend. Cadence is weekly by design — frequent enough to
+# read as "consistently monitoring," bounded enough that spend stays predictable;
+# tune the cron below if you want it tighter or looser.
+name: claude-watchdog
+on:
+  schedule:
+    - cron: '17 14 * * 1' # Mondays ~14:17 UTC — an off-the-hour minute avoids piling onto :00/:30
+  workflow_dispatch:
+    inputs:
+      model:
+        description: 'Claude model id (cost/quality dial)'
+        required: false
+        default: 'claude-opus-4-8'
+        type: choice
+        options:
+          - 'claude-opus-4-8'
+          - 'claude-sonnet-5'
+          - 'claude-haiku-4-5-20251001'
+permissions:
+  contents: read
+  issues: write
+concurrency:
+  group: claude-watchdog
+  cancel-in-progress: false
+jobs:
+  watchdog:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with: { fetch-depth: 25 } # scripts/watchdog.mjs reads the last 20 commits
+      - uses: actions/setup-node@v4
+        with: { node-version: '22' }
+      - run: npm ci || npm install
+      - name: Run the security + quality review
+        id: watchdog
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          CLAUDE_MODEL: ${{ inputs.model || 'claude-opus-4-8' }}
+          WATCHDOG_OUT_FILE: watchdog-report.md
+        run: node scripts/watchdog.mjs
+      - name: Render the report on the run page
+        if: always() && hashFiles('watchdog-report.md') != ''
+        run: cat watchdog-report.md >> "$GITHUB_STEP_SUMMARY"
+      - name: File the report as an issue
+        if: hashFiles('watchdog-report.md') != ''
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -e
+          gh label create watchdog-report --color BFD4F2 --description "Filed by the claude-watchdog workflow" 2>/dev/null || true
+          TITLE="🐕 Watchdog report — $(date -u +%Y-%m-%d)"
+          gh issue create --title "$TITLE" --label watchdog-report --body-file watchdog-report.md
+      - name: Upload report artifact
+        if: always() && hashFiles('watchdog-report.md') != ''
+        uses: actions/upload-artifact@v4
+        with:
+          name: watchdog-report
+          path: watchdog-report.md
+          retention-days: 30

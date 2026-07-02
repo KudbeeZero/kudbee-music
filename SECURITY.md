@@ -51,13 +51,34 @@ rules:
   applies only to the direct-browser-to-Anthropic design, never to a variant that
   touches our infrastructure.
 - **GitHub Actions repository secrets are the one approved *remote* home for a
-  founder-controlled key** (e.g. `ANTHROPIC_API_KEY` for the manual `claude-compare`
-  workflow). They're encrypted, log-masked, and never available to fork PRs. Any
-  workflow that reads a secret must be `workflow_dispatch`-only (never push/PR) with
-  `contents: read` — CI proper uses zero secrets and can never spend money. Honest
-  caveat: write-access
-  collaborators can author workflows that read secrets — keep write access tight and
-  secret-scanning/push-protection enabled.
+  founder-controlled key** (e.g. `ANTHROPIC_API_KEY` for the `claude-compare` and
+  `claude-watchdog` workflows). They're encrypted, log-masked, and never available
+  to fork PRs. Every workflow that reads a secret must hold the minimum
+  permissions the job actually needs — `claude-compare` is `contents: read` only;
+  `claude-watchdog` additionally needs `issues: write` to file its report, and
+  that's the full extent of it (no `pull-requests` scope, no `contents: write` —
+  it is structurally incapable of changing any file). CI proper (push/PR-triggered)
+  uses zero secrets and can never spend money. Honest caveat: write-access
+  collaborators can author workflows that read secrets — keep write access tight
+  and secret-scanning/push-protection enabled.
+- **Trigger rule: `workflow_dispatch`-only by default (never push/PR); a
+  `schedule:` trigger is a named, one-at-a-time exception, not a default.** A
+  timer means the key spends money with no human click in the loop — the same
+  trust boundary as push/PR, not a lesser one — so it needs the same deliberate
+  "yes, spend money unattended" decision every time, never a side effect of an
+  unrelated PR. `claude-compare` stays `workflow_dispatch`-only (manual, on
+  demand). `claude-watchdog` is the one named exception: it runs on a weekly
+  `schedule:` (see `docs/watchdog.md`) because it's genuinely findings-only —
+  `contents: read` + `issues: write`, no ability to change anything, so an
+  unattended run can spend money but cannot alter the repo. **The findings-only
+  constraint is exactly what makes the schedule exception safe; if a scheduled
+  workflow ever gains any write scope beyond `issues: write`, it must go back to
+  `workflow_dispatch`-only until re-reviewed.** An earlier attempt to extend
+  `claude-watchdog` into also drafting fix PRs (still gated by CI, still requiring
+  a human to merge) was built and then deliberately reverted — not because
+  drafting the code was unsafe, but because doing so with no human click between
+  "Claude wrote this" and "it's pushed to a new branch" wasn't. See
+  `docs/watchdog.md` for the full reasoning.
 
 ## If a secret is ever committed (incident response)
 

@@ -73,10 +73,21 @@ node scripts/mobile-matrix.mjs   # anything touching layout (build the export fi
   or log. **Grep every staged diff for `key_` before committing.** (A leaked Runway key
   once had to be rotated + scrubbed from history. Once is enough.)
 - The one approved **remote** home for a *founder-controlled* key: **GitHub Actions
-  repository secrets** (e.g. `ANTHROPIC_API_KEY` → the manual `claude-compare` workflow).
-  Any workflow reading a secret must be `workflow_dispatch`-only + `contents: read`; CI
-  proper uses zero secrets. Never put a founder key in Cloudflare Pages env — the static
-  client must never need one.
+  repository secrets** (e.g. `ANTHROPIC_API_KEY` → the `claude-compare` and
+  `claude-watchdog` workflows). Every workflow reading a secret holds the minimum
+  permissions the job needs (`contents: read`, plus `issues: write` only for
+  `claude-watchdog`, which needs it to file its report — no write access to
+  contents, ever); CI proper uses zero secrets. Never put a founder key in
+  Cloudflare Pages env — the static client must never need one.
+  **`workflow_dispatch`-only is the default; a `schedule:` trigger is a named,
+  one-at-a-time exception** (unattended spend is a deliberate policy decision, not
+  a routine code change) **and only safe when the workflow is structurally unable
+  to write to the repo** — `claude-watchdog` earns its weekly schedule specifically
+  because `issues: write` is its ceiling, not because it's trusted more generally.
+  A findings-only Claude review that also drafts+pushes fix PRs was built and then
+  deliberately reverted — the platform's safety tooling flagged unattended
+  code-write-and-push (no human click between generation and a pushed branch) as
+  a real boundary, not a formality. See SECURITY.md + docs/watchdog.md.
 - A third, distinct location: **the Engine Rack's bring-your-own-key slot**
   (`lib/hermes/claudeKey.ts`) — a *visitor's own* Anthropic key, pasted client-side, stored
   only in that visitor's `localStorage`, calling `api.anthropic.com` directly from their
@@ -104,7 +115,7 @@ node scripts/mobile-matrix.mjs   # anything touching layout (build the export fi
 ## Status board
 
 <!-- STATUS:BEGIN generated: edit brain/roadmap.json, then GEN_DOCS=1 npx vitest run status -->
-**📊 Status board:** ✅ 30 shipped · 🔨 1 in build · 💤 9 queued (40 tracked) — full tables in [`STATUS.md`](STATUS.md), source of truth [`brain/roadmap.json`](brain/roadmap.json).
+**📊 Status board:** ✅ 31 shipped · 🔨 1 in build · 💤 9 queued (41 tracked) — full tables in [`STATUS.md`](STATUS.md), source of truth [`brain/roadmap.json`](brain/roadmap.json).
 <!-- STATUS:END -->
 
 ## Memory layers — where the brain keeps things
@@ -127,7 +138,7 @@ node scripts/mobile-matrix.mjs   # anything touching layout (build the export fi
 | Identity / dev door (browser) | localStorage `hermes.profile.v1`, `hermes.devDoor.v1` via `lib/hermes/identity.ts` |
 | Claude Engine BYOK key (browser, visitor's own) | localStorage `hermes.claudeKey.v1`, `hermes.claudeEngineActive.v1` via `lib/hermes/claudeKey.ts` — never sent to any server we control |
 | Session RAM | `lib/hermes/workingMemory.ts` (decays + consolidates, in-memory) |
-| Docs index | `docs/` — hit-factory, brain-wiring (generated from brainMap — regen `GEN_DOCS=1 npx vitest run wiring`), mobile, share, og-unfurl, accounts, nft-standard, claude-engine, runway-plan, pattern-packs |
+| Docs index | `docs/` — hit-factory, brain-wiring (generated from brainMap — regen `GEN_DOCS=1 npx vitest run wiring`), mobile, share, og-unfurl, accounts, nft-standard, claude-engine, runway-plan, pattern-packs, watchdog |
 
 ## Maintenance
 
