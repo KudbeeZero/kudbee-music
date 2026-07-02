@@ -8,6 +8,7 @@
 import Link from 'next/link';
 import { useEffect, useRef, useState } from 'react';
 import { AGENT_DEFINITIONS } from '@/lib/hermes/agents';
+import LivePlayground from './LivePlayground';
 import styles from './landing.module.css';
 
 const POSTER = '/landing/social-preview.png';
@@ -269,6 +270,23 @@ export default function Landing() {
       </div>
 
       <main className={styles.main}>
+        {/* ================= LIVE PLAYGROUND — "try it right here" ================= */}
+        <section className={`${styles.section} ${styles.playSection}`} aria-labelledby="try-title">
+          <div data-reveal>
+            <p className={styles.sectionKicker}>Try it now</p>
+            <h2 id="try-title" className={styles.sectionTitle}>
+              Type a line. Watch it think.
+            </h2>
+            <p className={styles.sectionLede}>
+              No signup, no key — the real brain runs right here in your browser. Give it one
+              line and watch all 10 agents turn it into a hook and a scored song.
+            </p>
+          </div>
+          <div data-reveal>
+            <LivePlayground />
+          </div>
+        </section>
+
         {/* ================= HEMISPHERES ================= */}
         <section className={styles.section} aria-labelledby="brain-title">
           <div data-reveal>
