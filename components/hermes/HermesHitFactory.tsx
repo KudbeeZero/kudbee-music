@@ -31,7 +31,8 @@ import { createWorkingMemory } from '@/lib/hermes/workingMemory';
 import { brainHeat } from '@/lib/hermes/heat';
 import { deriveEmotion } from '@/lib/hermes/emotion';
 import { voiceMirror } from '@/lib/hermes/becomingYou';
-import { currentProfile, signOut, type Profile } from '@/lib/hermes/identity';
+import { currentProfile, signInGuest, signOut, type Profile } from '@/lib/hermes/identity';
+import { decodeShare } from '@/lib/hermes/shareLink';
 import WelcomeGate from '../auth/WelcomeGate';
 import authStyles from '../auth/auth.module.css';
 import styles from './hermes.module.css';
@@ -91,6 +92,28 @@ export default function HermesHitFactory() {
     setTaste(loadTaste());
   }, []);
 
+  // "HERMES Live" share link: a ?s= token deterministically REPRODUCES the exact
+  // song it encodes. On arrival we auto-enter as a guest (zero friction — the whole
+  // point is the visitor immediately watches the brain think), reproduce with the
+  // decoded seed, and strip the param so a reload doesn't re-fire. Runs once.
+  const sharedRef = useRef(false);
+  useEffect(() => {
+    if (!identityReady || sharedRef.current || typeof window === 'undefined') return;
+    const params = new URLSearchParams(window.location.search);
+    const token = params.get('s');
+    if (!token) return;
+    sharedRef.current = true;
+    const decoded = decodeShare(token);
+    // strip ?s= regardless (malformed or not) so reloads/back don't retrigger
+    const url = new URL(window.location.href);
+    url.searchParams.delete('s');
+    window.history.replaceState({}, '', url.toString());
+    if (!decoded) return; // hostile/garbage token → app just loads normally
+    if (!currentProfile()) setProfile(signInGuest());
+    void run(decoded.inputs, { seed: decoded.seed });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [identityReady]);
+
   // On mobile/tablet the deck stacks (form/tools above the brain), so when a run
   // starts, bring the brain-scan + result into view — the generation "moment"
   // shouldn't happen off-screen below the form. No-op on desktop (side-by-side).
@@ -138,19 +161,25 @@ export default function HermesHitFactory() {
     setPreset({ genre: pack.style.split(',')[0].trim(), mood: pack.description, references: `${pack.title} expansion — ${pack.hookGuidance}` });
   }
 
-  async function run(inputs: SongInputs, runOpts?: { forcedHook?: string; cognitionFeedback?: CritiqueKey[] }) {
+  async function run(inputs: SongInputs, runOpts?: { forcedHook?: string; cognitionFeedback?: CritiqueKey[]; seed?: number }) {
     setRunning(true);
     setPkg(null);
     setOutputs({});
     setError(null);
     try {
+      // Reproducing a shared song (an explicit seed): make it PORTABLE + byte-identical
+      // for every viewer — use the deterministic default avoid-list (not this browser's
+      // custom one) and an empty prior-vault (not the viewer's), so the reproduced song
+      // depends only on the encoded inputs + seed, never on local state.
+      const reproduce = runOpts?.seed !== undefined;
       // Compare against the vault, but never against earlier versions of THIS
       // song — regenerating the same title shouldn't read as copying itself.
-      const priorSongs = priorSongsForOriginality().filter(
+      const priorSongs = reproduce ? [] : priorSongsForOriginality().filter(
         (s) => s.title.trim().toLowerCase() !== inputs.title.trim().toLowerCase(),
       );
-      const seed = (Date.now() ^ (regenRef.current++ * 0x9e3779b1)) >>> 0;
-      const { pkg: result } = await runPipeline(inputs, { priorSongs, bannedWords: banned, seed, forcedHook: runOpts?.forcedHook, cognitionFeedback: runOpts?.cognitionFeedback });
+      const seed = runOpts?.seed ?? ((Date.now() ^ (regenRef.current++ * 0x9e3779b1)) >>> 0);
+      const bannedForRun = reproduce ? allAvoidWords(inputs.doNotUse ?? []) : banned;
+      const { pkg: result } = await runPipeline(inputs, { priorSongs, bannedWords: bannedForRun, seed, forcedHook: runOpts?.forcedHook, cognitionFeedback: runOpts?.cognitionFeedback });
 
       // new session: clear working memory, seed it with the committed hook
       const wm = wmRef.current; const ns = nsRef.current;

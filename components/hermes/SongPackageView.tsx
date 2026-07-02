@@ -6,6 +6,7 @@ import { deliberationForHook } from '@/lib/hermes/cognition';
 import { buildTrace } from '@/lib/hermes/trace';
 import { renderTraceHtml } from '@/lib/hermes/traceHtml';
 import { sunoStyle, sunoLyrics } from '@/lib/hermes/suno';
+import { encodeShare, shareUrl } from '@/lib/hermes/shareLink';
 import styles from './hermes.module.css';
 
 export default function SongPackageView({ pkg, onSaveEdit, onChooseHook, onRegenerateFromCritiques }: {
@@ -17,6 +18,7 @@ export default function SongPackageView({ pkg, onSaveEdit, onChooseHook, onRegen
   const [draft, setDraft] = useState(rawLyrics);
   const [learned, setLearned] = useState(false);
   const [copiedClip, setCopiedClip] = useState(-1);
+  const [shared, setShared] = useState(false);
 
   function save() {
     onSaveEdit?.(draft);
@@ -45,6 +47,13 @@ export default function SongPackageView({ pkg, onSaveEdit, onChooseHook, onRegen
     setTimeout(() => URL.revokeObjectURL(url), 60_000); // let the new tab load before revoking
   }
 
+  // "HERMES Live" — copy a link that reproduces this EXACT song (inputs + seed).
+  // Anyone who opens it watches the brain generate the identical package. $0, static.
+  function shareSong() {
+    const link = shareUrl(encodeShare(pkg.inputs, pkg.seed ?? 0));
+    navigator.clipboard?.writeText(link).then(() => { setShared(true); setTimeout(() => setShared(false), 1600); }).catch(() => {});
+  }
+
   function copyClip(text: string, i: number) {
     navigator.clipboard?.writeText(text).then(() => { setCopiedClip(i); setTimeout(() => setCopiedClip(-1), 1200); }).catch(() => {});
   }
@@ -54,6 +63,7 @@ export default function SongPackageView({ pkg, onSaveEdit, onChooseHook, onRegen
       <div className={styles.panelTitle} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
         <span>Song Package · “{pkg.title}” · v{pkg.version}</span>
         <span style={{ display: 'flex', gap: 6 }}>
+          <button className={styles.copyBtn} style={{ marginLeft: 0 }} onClick={shareSong} title="Copy a link that reproduces this exact song — anyone who opens it watches the brain generate the identical package ($0, no key)">{shared ? 'link copied ✓' : '🔗 Share'}</button>
           <button className={styles.copyBtn} style={{ marginLeft: 0 }} onClick={explainSong} title="Open the interactive brain trace for this song — heat-map, what each region did, and a copy-paste Suno prompt">🔍 Explain this song</button>
           <button className={styles.copyBtn} style={{ marginLeft: 0 }} onClick={exportSong} title="Download this song package as JSON (backup / re-import into your vault)">⬇ Export JSON</button>
         </span>
