@@ -33,6 +33,7 @@ import { deriveEmotion } from '@/lib/hermes/emotion';
 import { voiceMirror } from '@/lib/hermes/becomingYou';
 import { currentProfile, signInGuest, signOut, type Profile } from '@/lib/hermes/identity';
 import { decodeShare } from '@/lib/hermes/shareLink';
+import { useDevice } from './useDevice';
 import WelcomeGate from '../auth/WelcomeGate';
 import authStyles from '../auth/auth.module.css';
 import styles from './hermes.module.css';
@@ -40,6 +41,11 @@ import styles from './hermes.module.css';
 const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
 
 export default function HermesHitFactory() {
+  // Device intelligence — "recognizes what phone or browser and it adjusts". The
+  // profile/adaptations land as data- attributes on the shell so the CSS can key
+  // CAPABILITY-driven rules (touch, form factor, animation budget) instead of only
+  // viewport width — a landscape phone at 852px still gets 44px touch targets.
+  const device = useDevice();
   // identity gate — null until hydrated (client-only, avoids SSR mismatch)
   const [profile, setProfile] = useState<Profile | null>(null);
   const [identityReady, setIdentityReady] = useState(false);
@@ -295,7 +301,12 @@ export default function HermesHitFactory() {
   }
 
   return (
-    <div className={styles.shell}>
+    <div
+      className={styles.shell}
+      data-touch={device.profile.touch || undefined}
+      data-form={device.profile.formFactor}
+      data-anim={device.ui.animation}
+    >
       <header className={styles.header}>
         <div className={styles.brandMark}>H</div>
         <div className={styles.brandText}>

@@ -281,3 +281,21 @@
 @media (max-width: 420px) {
   .row2 { grid-template-columns: 1fr; }
 }
+
+/* ---- capability-driven adaptations (device.ts → data- attributes on .shell) ----
+   Width queries above catch small screens; these catch CAPABILITIES the viewport
+   can't express: a landscape phone at 852px or a tablet at 1024px is still touch,
+   and a low-end / Data-Saver device deserves the lighter glass budget at any size.
+   Set by useDevice() in HermesHitFactory — no UA sniffing in CSS or components. */
+.shell[data-touch] .ghostBtn { min-height: 44px; display: inline-flex; align-items: center; }
+.shell[data-touch] .copyBtn,
+.shell[data-touch] .personaChip,
+.shell[data-touch] .chip { min-height: 34px; display: inline-flex; align-items: center; }
+.shell[data-touch] .input,
+.shell[data-touch] .textarea,
+.shell[data-touch] .select { font-size: 16px; } /* iOS: no focus zoom, any width */
+
+/* Animation budget 'lite'/'off' (low-end device or Data Saver): drop the stacked
+   backdrop blurs — the single biggest paint cost — and fall back to solid panels. */
+.shell[data-anim='lite'] .panel,
+.shell[data-anim='off'] .panel { backdrop-filter: none; background: var(--panel-solid); }
