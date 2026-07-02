@@ -110,6 +110,11 @@
   },
   "ecosystem": {
     "note": "Bigger initiatives that integrate with the engine via API — kept OUT of the free local core so it stays $0. Tracked here so they don't get lost; built when the founder greenlights.",
+    "workersBuildsCheck": {
+      "status": "blocked-on-founder — delete the stray Worker",
+      "what": "A Workers service named kudbee-music is git-connected to this repo and fails a 'Workers Builds' GitHub check + posts a ❌ bot comment on EVERY push (the repo is a Pages app, not a Worker — wrangler.jsonc is Pages-style). Never a merge gate, but constant noise.",
+      "fix": "Cloudflare dashboard → Workers & Pages → select the WORKER named kudbee-music (NOT the wifi-dj-meme Pages project) → Settings → Builds → Disconnect — or delete the Worker entirely if it serves nothing. Do NOT uninstall the GitHub app (that would break the Pages deploys). 30 seconds; kills the red check + bot comments forever."
+    },
     "crossroadsBoard": {
       "status": "stage-1-shipped (#44)",
       "stage1": "SHIPPED (#44): lib/hermes/crossroads.ts (openCrossing/vote/tally/leader/decide, pure+immutable) + brain/crossroads.json (3 seeded crossings) + tests. The $0/local decision model.",

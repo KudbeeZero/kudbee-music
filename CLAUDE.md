@@ -38,7 +38,9 @@ node scripts/mobile-matrix.mjs   # anything touching layout (build the export fi
 - Playwright chromium is preinstalled at `/opt/pw-browsers` — **never** `playwright install`.
 - Serve `out/` with a Range-capable static server for browser walkthroughs (video seeks).
 - CI gates = **check / web / smoke**. The Cloudflare **"Workers Builds" check always fails
-  and is NOT a merge gate** (`brain/beliefs.json` → known-nonblocking-checks).
+  and is NOT a merge gate** (`brain/beliefs.json` → known-nonblocking-checks). It is tracked
+  for deletion — the founder's 30-second dashboard fix lives in TODO.md ("Blocked on you") +
+  roadmap `ecosystem.workersBuildsCheck`. Until deleted, ignore it for merging, never for tracking.
 
 ## Workflow (the repeated instructions, saved)
 
@@ -50,6 +52,11 @@ node scripts/mobile-matrix.mjs   # anything touching layout (build the export fi
   `brain/roadmap.json` (+ `README.md` when user-facing) together. *A PR that skips this is
   not done.* Tests move TODO items to Shipped.
 - **Capture every idea immediately** into `IDEAS.md` — it's the capture net.
+- **Recurring noise is never skipped silently.** The FIRST time anything repeats (a failing
+  check, a bot comment, a flaky step), it gets a spine/TODO item with a root cause and a fix
+  path — dispatch a research agent if needed. "Known, ignorable" is only acceptable WITH a
+  tracked deletion/fix item attached. (Founder directive, 2026-07-02 — the Workers Builds
+  check was skipped 30+ times before being tracked. Once is enough.)
 - **Status lives ONLY in `brain/roadmap.json`.** Every status table (STATUS.md + the
   STATUS-marker blocks in this file, README.md, BUILD_LOG.md) is GENERATED from the spine —
   never hand-edit between `STATUS:BEGIN`/`STATUS:END` markers, never add a hand checklist to

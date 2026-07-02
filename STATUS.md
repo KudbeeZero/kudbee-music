@@ -93,6 +93,7 @@
 
 | | Initiative | Status |
 |---|-----------|--------|
+| 🚧 | **workersBuildsCheck** | blocked-on-founder — delete the stray Worker |
 | ✅ | **crossroadsBoard** | stage-1-shipped (#44) |
 | 💤 | **lightningAI** | spike-pending |
 | ✅ | **livingBrainNft** | near-term-shipped (#45); chain mint blocked-on-founder |

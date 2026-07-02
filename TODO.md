@@ -23,6 +23,13 @@ chat. Detail for each is in [`brain/roadmap.json`](brain/roadmap.json) + [`IDEAS
 - [x] **Notion live roadmap mirror** · **Grok agent-image prompts** (10, delivered in chat)
 
 **Blocked on you (needs a key / account / decision — I can scaffold the $0 parts, you flip the switch):**
+- [ ] **Delete the stray 'Workers Builds' check** — a Workers service named `kudbee-music` is
+   git-connected to this repo and fails a red check + posts a ❌ bot comment on EVERY push
+   (repo is a Pages app; the real deploys are the `wifi-dj-meme` Pages project, unaffected).
+   Fix (30s, needs your Cloudflare login — I have no dashboard access): **dash.cloudflare.com →
+   Workers & Pages → the WORKER `kudbee-music` (not wifi-dj-meme) → Settings → Builds →
+   Disconnect** (or delete the Worker if it serves nothing). Do **not** uninstall the GitHub
+   app — Pages deploys depend on it.
 - [~] **Runway Gen-4 video** — **adapter shipped + live-tested** _(#83)_: `studio/runway.mjs`
    (`hermes runway --image <path> --prompt "..." --duration 5|10 --out <path>`) drives Runway's
    `image_to_video` (Gen-4 Turbo), polls the task, downloads the clip. Behind `RUNWAY_API_KEY`
