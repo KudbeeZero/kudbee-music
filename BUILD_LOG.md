@@ -1,15 +1,26 @@
 # HERMES — build log
 
 An autonomous build loop works through the backlog below: each iteration builds
-one item, verifies it, commits, and records it here.
+one item, verifies it, commits, and records it here. The backlog itself lives in
+[`brain/roadmap.json`](brain/roadmap.json) (`videoStudioTrack`) — the table below
+is generated from it and drift-tested, so it can never silently rot again.
 
-## Up next
-- [ ] Audio-novelty song-structure detection (segment from beats + energy when a
-      project has no structured `lyrics.md` headers; today sections come from headers)
-- [ ] `hermes-composer`: optional MusicGen wiring (opt-in, documented heavy deps)
-- [ ] Per-pack scene variety for generic projects (more than the shared scene cycle)
-- [ ] Right-brain variance: a `--seed` so the right hemisphere generates scene
-      variants and the left hemisphere (qa) picks the best-scoring one
+## Video-studio track
+
+<!-- STATUS:BEGIN generated: edit brain/roadmap.json, then GEN_DOCS=1 npx vitest run status -->
+**📊 Status board:** ✅ 27 shipped · 🔨 1 in build · 💤 9 queued (37 tracked) — full tables in [`STATUS.md`](STATUS.md), source of truth [`brain/roadmap.json`](brain/roadmap.json).
+
+| | Item | Where it lives | PR |
+|---|------|----------------|----|
+| ✅ | **hermes new — project scaffold (song/, assets/, hermes.json, lyrics.md)** | `studio/scaffold.mjs + bin/hermes` | — |
+| ✅ | **Scene packs vhs-lofi + lyric-minimal (4 packs total)** | `studio/player.html` | — |
+| ✅ | **Project-targeted build — hermes build <dir> via HERMES_DATA** | `studio/build-timeline.mjs + bin/hermes` | — |
+| ✅ | **Two-hemisphere brain model + --brain dial + left-brain eval gate (hermes qa)** | `studio/brain.mjs + studio/qa.mjs` | — |
+| 💤 | **Audio-novelty song-structure detection (segment from beats + energy when lyrics.md has no headers)** | `studio/analyze.mjs` | — |
+| 💤 | **hermes-composer — optional MusicGen wiring (opt-in, documented heavy deps)** | `.claude/agents/hermes-composer.md` | — |
+| 💤 | **Per-pack scene variety for generic projects (more than the shared scene cycle)** | `studio/build-timeline.mjs` | — |
+| 💤 | **Right-brain variance — a --seed so the right hemisphere generates scene variants and qa picks the best** | `studio/brain.mjs + studio/qa.mjs` | — |
+<!-- STATUS:END -->
 
 ## Done
 ### Iteration 4 — the two-hemisphere brain model + eval gate

@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { writeFileSync, mkdirSync } from 'node:fs';
+import { writeFileSync, mkdirSync, readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { renderWiringMermaid, renderWiringDoc } from '../wiringDoc';
 import { REGIONS, PATHWAYS } from '../brainMap';
@@ -32,6 +32,13 @@ describe('brain-wiring doc (generated from brainMap)', () => {
 
   it('is deterministic', () => {
     expect(renderWiringDoc()).toBe(renderWiringDoc());
+  });
+
+  // The drift lock (un-gated): the COMMITTED doc must match the generator, every run.
+  // Before this assertion the committed file could silently rot — never again.
+  it('docs/brain-wiring.md on disk matches the generator (no drift)', () => {
+    const committed = readFileSync(join(process.cwd(), 'docs', 'brain-wiring.md'), 'utf8');
+    expect(committed).toBe(renderWiringDoc());
   });
 
   // `GEN_DOCS=1 npx vitest run wiring` (re)mints the committed doc.

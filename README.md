@@ -299,11 +299,24 @@ flow, and the non-negotiables — plus the code-generated [brain-wiring diagram]
 - [x] **HERMES Live** — type a line on the landing and watch the brain think; every song gets a share link that **reproduces it byte-for-byte** + a downloadable PNG share card ([docs/share.md](docs/share.md))
 - [x] **Mobile intelligence + PWA** — detects phone/browser and adjusts; install to your home screen; device-matrix test harness ([docs/mobile.md](docs/mobile.md))
 
-**Next** — the phased plan is the spine [`brain/roadmap.json`](brain/roadmap.json); the human backlog is [`TODO.md`](TODO.md).
-- [ ] **Deepen the visible brain** — cognitive model (first→second thought→decision); the Council; brain-scan boot sequence
-- [ ] **Make it yours** — create-your-own-artist; community personas · **Durability** — vault backup so a cleared browser never loses your catalog
-- [ ] **Real AI (opt-in)** — the Claude engine + eval-comparison lane are wired ([docs/claude-engine.md](docs/claude-engine.md)); the live combinator-vs-AI comparison run is founder-triggered · **Influence Studio** (felt, never copied)
-- [ ] **Ecosystem (via API):** the **Crossroads Board** (community steering) · per-agent compute (Lightning AI) · WIFI DJ radio · token/governance
+**Next** — generated from the spine [`brain/roadmap.json`](brain/roadmap.json); the human backlog is [`TODO.md`](TODO.md), the full board is [`STATUS.md`](STATUS.md).
+
+<!-- STATUS:BEGIN generated: edit brain/roadmap.json, then GEN_DOCS=1 npx vitest run status -->
+**📊 Status board:** ✅ 27 shipped · 🔨 1 in build · 💤 9 queued (37 tracked) — full tables in [`STATUS.md`](STATUS.md), source of truth [`brain/roadmap.json`](brain/roadmap.json).
+
+| | Up next | id |
+|---|---------|----|
+| 💤 | **Community-authored personas (craft-DNA, like scene packs)** | `3.2` |
+| 💤 | **HERMES Studio workspace (Suno-Studio-style: section timeline + rack + meter bridge)** | `3.4` |
+| 💤 | **Optional durable cloud brain (Notion/Drive backing)** | `4.2` |
+| 🔌 | **claudeLyricsProvider behind ANTHROPIC_API_KEY (mock default)** | `5.1` |
+| 💤 | **Rhyme/BPM validation loop on generated output** | `5.2` |
+| 💤 | **Influence Studio** | `6.1` |
+| 💤 | **Audio-novelty song-structure detection (segment from beats + energy when lyrics.md has no headers)** | `V5` |
+| 💤 | **hermes-composer** | `V6` |
+| 💤 | **Per-pack scene variety for generic projects (more than the shared scene cycle)** | `V7` |
+| 💤 | **Right-brain variance** | `V8` |
+<!-- STATUS:END -->
 
 ---
 

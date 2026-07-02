@@ -50,6 +50,12 @@ node scripts/mobile-matrix.mjs   # anything touching layout (build the export fi
   `brain/roadmap.json` (+ `README.md` when user-facing) together. *A PR that skips this is
   not done.* Tests move TODO items to Shipped.
 - **Capture every idea immediately** into `IDEAS.md` — it's the capture net.
+- **Status lives ONLY in `brain/roadmap.json`.** Every status table (STATUS.md + the
+  STATUS-marker blocks in this file, README.md, BUILD_LOG.md) is GENERATED from the spine —
+  never hand-edit between `STATUS:BEGIN`/`STATUS:END` markers, never add a hand checklist to
+  a doc. Flip the status in the spine, then `GEN_DOCS=1 npx vitest run status`.
+  `statusBoard.test.ts` fails CI on drift and bans unchecked `- [ ]` boxes outside the
+  allowlist (TODO.md, LAUNCH.md pre-flight, .github templates).
 - Respect `.github/PULL_REQUEST_TEMPLATE.md`; commits carry the harness's
   `Co-Authored-By` + session-link footer.
 - Start-of-session orientation: the `resume` skill (`.claude/skills/resume/SKILL.md`).
@@ -76,10 +82,17 @@ node scripts/mobile-matrix.mjs   # anything touching layout (build the export fi
   the phone-testing workflow (`docs/mobile.md`): push, open on a real phone, thumb-test
   before merging.
 
+## Status board
+
+<!-- STATUS:BEGIN generated: edit brain/roadmap.json, then GEN_DOCS=1 npx vitest run status -->
+**📊 Status board:** ✅ 27 shipped · 🔨 1 in build · 💤 9 queued (37 tracked) — full tables in [`STATUS.md`](STATUS.md), source of truth [`brain/roadmap.json`](brain/roadmap.json).
+<!-- STATUS:END -->
+
 ## Memory layers — where the brain keeps things
 
 | Layer | Route |
 | --- | --- |
+| Status board (generated, never hand-edited) | `STATUS.md` ← `brain/roadmap.json` via `lib/hermes/statusBoard.ts` |
 | Brain anatomy (source of truth) | `lib/hermes/brainMap.ts` (regions + pathways; renders in BrainScan, trace, share card, OG card) |
 | Two-hemisphere manifesto | `brain/brain.json` (+ `brain/hemispheres.md`, the metaphor doc) |
 | Constitution / values | `brain/beliefs.json` → `lib/hermes/beliefs.ts` |
