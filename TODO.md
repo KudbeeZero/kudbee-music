@@ -108,10 +108,12 @@ chat. Detail for each is in [`brain/roadmap.json`](brain/roadmap.json) + [`IDEAS
    (decisions feed the taste model) is still queued.
 - [~] **2026-07-02 code-review findings (Fable 5 review → Sonnet verification)** — weakness #1
    (share-reproduction integrity) fixed _(this PR)_. Still open, in fix order:
-   - [ ] **Weakness #2 — quota-honest vault writes**: `storage.ts` `writeDurable` swallows
-     `setItem` failures, so on a full localStorage a "saved" song silently vanishes on reload.
-     Fix: surface write failure to the UI (honest banner + export nudge) and cap same-title
-     version history (~5) so quota pressure stops growing unbounded.
+   - [x] **Weakness #2 — quota-honest vault writes** — fixed _(this PR)_: `saveSong` now
+     returns `{ song, persisted }` (writeDurable reports whether the live write landed), the
+     app shows an honest amber banner ("won't survive a reload — Export now") with an
+     Open-Vault shortcut when persistence fails, and same-title version history is capped at
+     5 so quota pressure stops growing unbounded. Playwright-verified with a throwing
+     localStorage; 4 new tests incl. the quota-simulation path and the version cap.
    - [x] **Weakness #3 — short-form breaks non-AABB schemes** — fixed _(this PR)_: short-form
      now builds its 2-line unit directly (always a rhymed couplet via `layoutFor`'s 2-line
      rule) instead of slicing the 4-line scheme-arranged verse, built lazily inside the case
@@ -279,6 +281,19 @@ Board** governance / Solana / token / NFT layer integrates with this engine via 
 later (kept out of this repo's core so it stays free + local).
 
 ## ✅ Shipped (newest first)
+- [x] **Quota-honest vault writes + version-history cap (review weakness #2)** — on a full
+      localStorage, `writeDurable` swallowed the `setItem` failure, `saveSong` still returned
+      a "stored" package, and the UI rendered a song that silently vanished on reload — the
+      exact data loss the backup-mirror design exists to prevent, with zero user-facing
+      signal. Now: `writeDurable` reports whether the live write landed, `saveSong` returns
+      `{ song, persisted }`, and the studio shows an honest amber banner ("your song is on
+      screen but won't survive a reload — Export now") with an Open-Vault shortcut whenever
+      persistence fails. Also caps same-title version history at 5 (`pruneVersionHistory`) —
+      regenerating one title forever grew the vault unbounded, with every list mirrored so
+      quota pressure doubled. 4 new tests (simulated quota via `__simulateVaultQuota`,
+      version cap, cross-title isolation); Playwright-verified with a throwing localStorage:
+      banner appears after generate, Vault reads 0 (honesty warranted), dismiss works, zero
+      page errors. Completes all three confirmed weaknesses from the 2026-07-02 review. _(this PR)_
 - [x] **Short-form × rhyme-scheme fix (review weakness #3)** — `short-form` used to return
       `v1.slice(0, 2)` off the 4-line scheme-arranged verse; under ABAB/ABBA/XAXA those two
       lines belong to different rhyme families, so the shipped "couplet" didn't rhyme (both

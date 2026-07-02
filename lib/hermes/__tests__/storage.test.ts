@@ -15,7 +15,8 @@ describe('vault storage', () => {
   it('saves and lists without crashing (server/in-memory fallback)', async () => {
     const { pkg } = await runPipeline(idea, { id: 'a', now: '2026-01-01T00:00:00Z' });
     const stored = saveSong(pkg);
-    expect(stored.version).toBe(1);
+    expect(stored.song.version).toBe(1);
+    expect(stored.persisted).toBe(true);
     expect(listSongs().length).toBe(1);
     expect(getSong('a')?.title).toBe('Vault Test');
   });
@@ -25,7 +26,7 @@ describe('vault storage', () => {
     const b = (await runPipeline(idea, { id: 'b', now: '2026-01-02T00:00:00Z' })).pkg;
     saveSong(a);
     const second = saveSong(b);
-    expect(second.version).toBe(2);
+    expect(second.song.version).toBe(2);
   });
 
   it('exposes prior songs for the originality checker', async () => {

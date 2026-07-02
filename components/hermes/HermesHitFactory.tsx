@@ -70,6 +70,9 @@ export default function HermesHitFactory() {
   // words just auto-excluded this session (cut twice in an edit) — surfaced as a
   // visible, undo-able notice so learning never silently overrides the artist.
   const [autoExcluded, setAutoExcluded] = useState<string[]>([]);
+  // True when the last vault write didn't land (localStorage full/unavailable) — the
+  // song on screen would silently vanish on reload, so the user gets an honest banner.
+  const [vaultWriteFailed, setVaultWriteFailed] = useState(false);
   const regenRef = useRef(0); // bumps each run so the same idea yields a fresh take
   const nsRef = useRef(createNervousSystem());      // the nervous system (signal bus)
   const wmRef = useRef(createWorkingMemory(16));     // short-term (working) memory
@@ -153,7 +156,7 @@ export default function HermesHitFactory() {
       }
     }
     const updated = { ...pkg, finalLyrics: newText, sections: parseSections(newText) };
-    saveSong(updated);
+    setVaultWriteFailed(!saveSong(updated).persisted);
     setVault(listSongs());
     setPkg(getSong(updated.id) ?? updated);
   }
@@ -163,7 +166,7 @@ export default function HermesHitFactory() {
     if (!pkg || pkg.chosenHook?.text === h.text) return;
     const updated = withChosenHook(pkg, h);
     setTaste(recordTaste(keywords(h.text), []));
-    saveSong(updated);
+    setVaultWriteFailed(!saveSong(updated).persisted);
     setVault(listSongs());
     setPkg(getSong(updated.id) ?? updated);
   }
@@ -229,7 +232,8 @@ export default function HermesHitFactory() {
         await sleep(110);
       }
 
-      const saved = saveSong(result);
+      const { song: saved, persisted } = saveSong(result);
+      setVaultWriteFailed(!persisted);
       setPkg(saved);
       setVault(listSongs());
       // consolidate short-term → long-term: the session's salient words become voice
@@ -248,7 +252,7 @@ export default function HermesHitFactory() {
   // finished package (scores, agents, lyrics) before generating their own.
   function loadDemo() {
     const existing = getSong('example-cold-hard-gold');
-    const s = existing ?? saveSong(demoSong());
+    const s = existing ?? saveSong(demoSong()).song;
     setVault(listSongs());
     setError(null);
     setPkg(s);
@@ -426,6 +430,24 @@ export default function HermesHitFactory() {
           }}
         >
           ℹ {engineNotice}
+        </div>
+      )}
+
+      {vaultWriteFailed && (
+        <div
+          role="alert"
+          style={{
+            display: 'flex', alignItems: 'center', gap: 10, border: '1px solid rgba(255,206,90,0.5)',
+            background: 'rgba(255,206,90,0.1)', borderRadius: 12, padding: '10px 14px', margin: '4px 0 14px', fontSize: 13,
+          }}
+        >
+          <span style={{ flex: 1 }}>
+            ⚠️ Couldn&rsquo;t save to this browser&rsquo;s storage (it may be full). Your song is on
+            screen but <b>won&rsquo;t survive a reload</b> — open the Vault and Export now, then clear
+            some space.
+          </span>
+          <button className={styles.ghostBtn} onClick={() => setVaultOpen(true)}>Open Vault</button>
+          <button className={styles.ghostBtn} onClick={() => setVaultWriteFailed(false)}>×</button>
         </div>
       )}
 
