@@ -105,8 +105,8 @@
       ]
     },
     {
-      "id": 7, "name": "Tiny features — the standing cadence", "status": "in build",
-      "goal": "Founder directive, 2026-07-03: keep shipping small, self-contained features that each amplify one little area — one green-loop PR at a time, no fixed end.",
+      "id": 7, "name": "Tiny features — the standing cadence", "status": "paused",
+      "goal": "Founder directive, 2026-07-03: keep shipping small, self-contained features that each amplify one little area — one green-loop PR at a time, no fixed end. Paused by the founder after 7.25 (25 shipped) in favor of planned medium-sized features — see phase 8.",
       "items": [
         { "id": "7.1", "title": "🎲 Surprise me — a varied starter-brief pool for Song Lab", "status": "shipped", "home": "components/hermes/SongLabForm.tsx", "note": "loadExample() only ever loaded one fixed EXAMPLE_BRIEF; a new STARTER_BRIEFS pool (6 varied genre/mood/structure/rhyme-scheme combos) plus a 'Surprise me' button gives a blank-page visitor real variety, never a same-brief repeat click. Pure UI convenience, zero pipeline/determinism impact." },
         { "id": "7.2", "title": "📋 Copy lyrics — plain-text copy button", "status": "shipped", "home": "components/hermes/SongPackageView.tsx", "note": "The only ways to get lyrics out of a package were the full JSON export or one short-form clip caption at a time. SongPackageView's existing rawLyrics (section labels + lines) is now one click via a 'Copy lyrics' button next to Explain/Export, same copied-confirmation pattern already used elsewhere in the file." },
@@ -133,6 +133,13 @@
         { "id": "7.23", "title": "📅 'N songs today' stat in the Vault header", "status": "shipped", "home": "components/hermes/VaultDrawer.tsx", "note": "The Vault header only ever showed a flat total count, no sense of momentum. A new todayCount compares each song's createdAt against new Date().toDateString() (a UI-level Date() use, not the generation path — same convention identity.ts/album.ts's genId() already established) and appends '· N songs today' to the header, hidden when the count is 0 so an idle day shows nothing extra." },
         { "id": "7.24", "title": "📄 Copy all as Markdown — bulk vault export, richer format", "status": "shipped", "home": "components/hermes/VaultDrawer.tsx", "note": "Copy all lyrics (7.21) only carries lyrics — someone archiving the whole vault might want the richer per-song format (concept, brief, hook, production notes) that a single song's own 'Export Markdown' button already produces via songMarkdown(). New copyAllMarkdown() reuses that exact formatter across every vault song, '---'-separated, into one clipboard copy. A '📄 Copy all as Markdown' button sits next to '📋 Copy all lyrics'." },
         { "id": "7.25", "title": "🗑 Clear all vault notes", "status": "shipped", "home": "lib/hermes/storage.ts + components/hermes/VaultDrawer.tsx", "note": "Per-song notes (7.7) only ever cleared one at a time by blanking each field — no bulk reset, mirroring the gap clearAvoidWords() (7.17) closed for the avoid-words list. New storage.ts clearAllSongNotes() wipes the whole notes map; a confirm-gated '🗑 clear all notes' button in VaultDrawer.tsx, shown only when at least one note exists. +1 storage test." }
+      ]
+    },
+    {
+      "id": 8, "name": "Medium features — the planned arc", "status": "in build",
+      "goal": "Founder directive, 2026-07-03: stop the tiny-feature cadence after 7.25; plan and ship coherent, multi-PR capabilities instead. A research agent drafted six proposals (Producer's Chair, Talk to the Brain, Brief Interpreter, Artist HQ, Council load-bearing, Studio Flow); founder picked Studio Flow to start.",
+      "items": [
+        { "id": "8.1", "title": "🧭 Studio Flow PR1 — the Review/Refine/Keep/Release rail", "status": "shipped", "home": "components/hermes/HermesHitFactory.tsx + SongPackageView.tsx + hermes.module.css", "note": "Studio mode presented ~10 panels + an 8-button toolbar all at once with no guided path from 'song generated' to 'refined, kept, and released.' New flowStage state + a 4-tab rail (①Review ②Refine ③Keep ④Release) shown only once a song exists. Each tab is a focus state, not a wall — clicking one smooth-scrolls to and rings-highlights that stage's panels (Council + BangerScoreCard for Review, the lyrics editor for Refine, ArtistCard/Rack/Recommendations for Keep, the Song Package toolbar for Release) while every panel stays rendered and reachable, nothing hidden. Playwright-verified live: rail absent in compose mode, present after generating, default stage Review selected, each tab click sets aria-selected + the correct anchor's data-active + scrolls it into view, Keep-stage panel still visible while parked on Review (nothing hidden). Zero console errors. PR1 of ~3 — next up: the Release-desk regroup (PR2), then a mobile pass (PR3)." }
       ]
     }
   ],

@@ -350,6 +350,26 @@ A second-opinion review flagged real risks worth acting on (truth-first):
   today" (consecutive days with at least one song saved), a per-song
   "download as .txt" button for plain-text-only lyrics (today it's
   Markdown/JSON download or clipboard-only for plain text).
+- 🔨 **Medium-feature plan (post-tiny-cadence)** *(founder directive, 2026-07-03 —
+  "come up with a plan instead of having and creating little features")* — a
+  research agent (drafted on Fable 5, per founder's model preference) audited
+  the codebase and proposed six coherent, multi-PR capabilities, each checked
+  against the iron laws (no determinism-contract changes, no new $0-core
+  runtime deps, BYOK key stays browser-only): **Producer's Chair** (AI review
+  of a finished song via the Engine Rack), **Talk to the Brain** (conversational
+  natural-language lyric editing), **Brief Interpreter** (one messy sentence →
+  a full Song Lab brief), **Artist HQ** (unifying the app's scattered taste/
+  voice/identity learning into one steering surface — works with no key),
+  **Council load-bearing** (the four already-designed queued Council/Crossroads
+  steps, roadmap 2.6, packaged as one arc), and **Studio Flow** (a Review →
+  Refine → Keep → Release rail staging studio mode's ~10 panels into one
+  journey). Full plan text delivered to the founder in-conversation. Founder
+  picked **Studio Flow** to start — tracked as its own roadmap phase
+  (`brain/roadmap.json` phase 8, "Medium features — the planned arc") rather
+  than folded into the closed phase 7. PR1 (the rail + stage state, item 8.1)
+  shipped; PR2 (Release-desk regroup) and PR3 (mobile pass) queued next. The
+  other five proposals stay parked here as candidates for whenever the founder
+  wants to pick the next arc.
 - 🔨 **"Input their music" — upload an existing audio file, not just record live**
   *(founder question, 2026-07-03 — "I want to create something down the road
   where people can input their music... are you working on that?")* — a genuinely

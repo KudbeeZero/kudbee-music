@@ -15,9 +15,11 @@ import ScribeEditor from './ScribeEditor';
 import VoiceNotes from './VoiceNotes';
 import styles from './hermes.module.css';
 
-export default function SongPackageView({ pkg, onSaveEdit, onChooseHook, onRegenerateFromCritiques }: {
+export default function SongPackageView({ pkg, onSaveEdit, onChooseHook, onRegenerateFromCritiques, flowStage }: {
   pkg: SongPackage; onSaveEdit?: (newText: string) => void; onChooseHook?: (h: HookOption) => void;
   onRegenerateFromCritiques?: (keys: CritiqueKey[]) => void;
+  /** Studio Flow rail stage — highlights the toolbar (release) or lyrics section (refine) when active. */
+  flowStage?: 'review' | 'refine' | 'keep' | 'release';
 }) {
   const rawLyrics = pkg.sections.map((s) => `[${s.label}]\n${s.lines.join('\n')}`).join('\n\n');
   const [editing, setEditing] = useState(false);
@@ -185,7 +187,12 @@ export default function SongPackageView({ pkg, onSaveEdit, onChooseHook, onRegen
 
   return (
     <div className={styles.panel}>
-      <div className={styles.panelTitle} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+      <div
+        id="song-toolbar"
+        className={`${styles.panelTitle} ${styles.flowFocus}`}
+        data-active={flowStage === 'release'}
+        style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}
+      >
         <span>Song Package · “{pkg.title}” · v{pkg.version}</span>
         <span style={{ display: 'flex', gap: 6 }}>
           {shareable && (
@@ -259,7 +266,7 @@ export default function SongPackageView({ pkg, onSaveEdit, onChooseHook, onRegen
         {pkg.chosenHook && <Deliberation hook={pkg.chosenHook.text} pkg={pkg} onRegenerateFromCritiques={onRegenerateFromCritiques} />}
       </Section>
 
-      <div className={styles.pkgSection}>
+      <div id="song-lyrics" className={`${styles.pkgSection} ${styles.flowFocus}`} data-active={flowStage === 'refine'}>
         <div className={styles.pkgLabel}>
           Final lyrics
           <span className={styles.hint} style={{ marginLeft: 8, textTransform: 'none', letterSpacing: 'normal', fontWeight: 400 }}>

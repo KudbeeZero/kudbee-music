@@ -82,6 +82,20 @@ export default function HermesHitFactory() {
   const wmRef = useRef(createWorkingMemory(16));     // short-term (working) memory
   const [wmSize, setWmSize] = useState(0);
   const stageRef = useRef<HTMLDivElement>(null);     // the brain/result column (scroll target on mobile)
+  // Studio Flow: a Review -> Refine -> Keep -> Release rail over the existing studio-mode
+  // panels. A focus state, not a wall — every panel stays rendered and reachable; a tab
+  // click just scrolls to + highlights the panels for that stage of the journey.
+  const [flowStage, setFlowStage] = useState<'review' | 'refine' | 'keep' | 'release'>('review');
+  const FLOW_ANCHOR: Record<typeof flowStage, string> = {
+    review: 'stage-review',
+    refine: 'song-lyrics',
+    keep: 'stage-keep',
+    release: 'song-toolbar',
+  };
+  function focusFlowStage(s: typeof flowStage) {
+    setFlowStage(s);
+    document.getElementById(FLOW_ANCHOR[s])?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  }
 
   // how much of the current song is the artist's learned voice (feeds heat + the artist card)
   const becomingYou = useMemo(
@@ -448,6 +462,29 @@ export default function HermesHitFactory() {
         {running && <span className={styles.railDot}>{doneCount}/{AGENT_DEFINITIONS.length}</span>}
       </div>
 
+      {pkg && (
+        <div className={styles.flowRail} role="tablist" aria-label="Song workflow stage">
+          {([
+            { id: 'review', label: '① Review', title: 'Hooks, scores, and the Council verdict' },
+            { id: 'refine', label: '② Refine', title: 'Edit the lyrics, regenerate from critiques' },
+            { id: 'keep', label: '③ Keep', title: 'Artist profile, the crate, recommendations — save what you like' },
+            { id: 'release', label: '④ Release', title: 'Share link, PNG card, Suno prompt, exports' },
+          ] as const).map((s) => (
+            <button
+              key={s.id}
+              role="tab"
+              aria-selected={flowStage === s.id}
+              className={styles.flowTab}
+              data-active={flowStage === s.id}
+              title={s.title}
+              onClick={() => focusFlowStage(s.id)}
+            >
+              {s.label}
+            </button>
+          ))}
+        </div>
+      )}
+
       {error && (
         <div
           role="alert"
@@ -556,19 +593,26 @@ export default function HermesHitFactory() {
             )}
           </div>
 
-          <ArtistCard songs={vault} taste={taste} becomingYou={becomingYou} />
-          <Rack />
-          <RecommendationsPanel songs={vault} taste={taste} banned={banned} onAddExclusion={addExclusion} onApplyPack={applyPack} />
+          <div id="stage-keep" className={`${styles.col} ${styles.flowFocus}`} style={{ gap: 16, padding: 0 }} data-active={pkg != null && flowStage === 'keep'}>
+            <ArtistCard songs={vault} taste={taste} becomingYou={becomingYou} />
+            <Rack />
+            <RecommendationsPanel songs={vault} taste={taste} banned={banned} onAddExclusion={addExclusion} onApplyPack={applyPack} />
+          </div>
         </div>
 
         {/* center column — brain scan + agent board + package */}
         <div className={styles.col} ref={stageRef}>
           <BrainScan outputs={outputs} running={running} workingMemory={wmSize} heat={heat} />
           <AgentBoard outputs={outputs} />
-          {pkg && <Council outputs={outputs} pkg={pkg} taste={taste} />}
+          {pkg && (
+            <div id="stage-review" className={styles.flowFocus} data-active={flowStage === 'review'}>
+              <Council outputs={outputs} pkg={pkg} taste={taste} />
+            </div>
+          )}
           {pkg ? (
             <SongPackageView pkg={pkg} onSaveEdit={saveLyricEdit} onChooseHook={chooseHook}
-              onRegenerateFromCritiques={(keys) => run(pkg.inputs, { cognitionFeedback: keys })} />
+              onRegenerateFromCritiques={(keys) => run(pkg.inputs, { cognitionFeedback: keys })}
+              flowStage={flowStage} />
           ) : (
             <div className={styles.panel}>
               <div className={styles.emptyState}>
@@ -583,10 +627,12 @@ export default function HermesHitFactory() {
         <div className={styles.col}>
           {pkg ? (
             <>
-              <BangerScoreCard score={pkg.score} />
+              <div className={styles.flowFocus} data-active={flowStage === 'review'}>
+                <BangerScoreCard score={pkg.score} />
+              </div>
               <VoiceMirror pkg={pkg} taste={taste} priorSongs={vault.filter((s) => s.id !== pkg.id)} />
               <UniquenessReportView report={pkg.uniqueness} />
-              <div className={styles.panel}>
+              <div className={`${styles.panel} ${styles.flowFocus}`} data-active={flowStage === 'release'}>
                 <div className={styles.panelTitle}>Release Readiness</div>
                 {pkg.release.map((r, i) => (
                   <div key={i} className={styles.check}>
