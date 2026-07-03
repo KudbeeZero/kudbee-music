@@ -31,6 +31,7 @@ export default function VaultDrawer({
   const [noteDrafts, setNoteDrafts] = useState<Record<string, string>>(() => loadSongNotes());
   const [recentIds] = useState<string[]>(() => loadRecentlyViewed());
   const [query, setQuery] = useState('');
+  const [sortMode, setSortMode] = useState<'newest' | 'oldest' | 'title'>('newest');
   const [renamingId, setRenamingId] = useState<string | null>(null);
   const [renameDraft, setRenameDraft] = useState('');
 
@@ -80,10 +81,19 @@ export default function VaultDrawer({
     return () => window.removeEventListener('keydown', onKeydown);
   }, []);
 
-  // Favorites float to the top; a stable sort keeps each group's original
-  // (newest-first) order otherwise, so favoriting never reshuffles the rest.
+  // `songs` arrives newest-first from storage.ts's listSongs(); a sort mode
+  // reorders within that before favorites float to the top, so "oldest"/"title"
+  // change the base order without ever breaking the favorites-first promise.
+  function bySortMode(a: SongPackage, b: SongPackage) {
+    if (sortMode === 'oldest') return a.createdAt < b.createdAt ? -1 : 1;
+    if (sortMode === 'title') return a.title.localeCompare(b.title);
+    return a.createdAt < b.createdAt ? 1 : -1;
+  }
+  // Favorites float to the top; a stable sort keeps each group's chosen sort
+  // order otherwise, so favoriting never reshuffles the rest.
   const sortedSongs = [...songs]
     .filter((s) => s.title.toLowerCase().includes(query.trim().toLowerCase()))
+    .sort(bySortMode)
     .sort((a, b) => Number(favorites.has(b.id)) - Number(favorites.has(a.id)));
   const byId = new Map(songs.map((s) => [s.id, s]));
   // Filter out ids for songs that were since deleted — a stale recent-id is just
@@ -165,6 +175,20 @@ export default function VaultDrawer({
             placeholder="Search by title… (press / to focus)"
             aria-label="Search the vault by title"
           />
+        )}
+
+        {songs.length > 1 && (
+          <select
+            className={styles.select}
+            style={{ marginBottom: 14 }}
+            value={sortMode}
+            onChange={(e) => setSortMode(e.target.value as typeof sortMode)}
+            aria-label="Sort the vault"
+          >
+            <option value="newest">Newest first</option>
+            <option value="oldest">Oldest first</option>
+            <option value="title">Title A–Z</option>
+          </select>
         )}
 
         {recentSongs.length > 0 && (
