@@ -95,6 +95,12 @@ export default function VaultDrawer({
     return () => window.removeEventListener('keydown', onKeydown);
   }, []);
 
+  // A momentum stat, not a generation-path value — same "UI-level Date() is fine"
+  // convention as identity.ts/album.ts's genId(), never touches runPipeline's
+  // determinism contract. Recomputed each render so it flips over at midnight.
+  const todayKey = new Date().toDateString();
+  const todayCount = songs.filter((s) => new Date(s.createdAt).toDateString() === todayKey).length;
+
   // `songs` arrives newest-first from storage.ts's listSongs(); a sort mode
   // reorders within that before favorites float to the top, so "oldest"/"title"
   // change the base order without ever breaking the favorites-first promise.
@@ -165,7 +171,9 @@ export default function VaultDrawer({
       <div className={styles.scrim} onClick={onClose} />
       <div className={styles.drawer} role="dialog" aria-label="Song vault">
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 10 }}>
-          <div className={styles.panelTitle} style={{ marginBottom: 0 }}>Vault · {songs.length}</div>
+          <div className={styles.panelTitle} style={{ marginBottom: 0 }}>
+            Vault · {songs.length}{todayCount > 0 && ` · ${count(todayCount, 'song')} today`}
+          </div>
           <button className={styles.ghostBtn} onClick={onClose}>Close</button>
         </div>
         <div style={{ display: 'flex', gap: 8, marginBottom: 14 }}>
