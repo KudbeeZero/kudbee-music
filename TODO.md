@@ -303,6 +303,21 @@ Board** governance / Solana / token / NFT layer integrates with this engine via 
 later (kept out of this repo's core so it stays free + local).
 
 ## ✅ Shipped (newest first)
+- [x] **Voice Notes — record & attach your own take (Bring Your Own Sound, PR1)**
+      *(founder idea — "people should be able to record their voice... hum a melody...
+      updating our brain mechanism")* — first slice of a bigger plan (full writeup in
+      IDEAS.md): record a quick mic take with `MediaRecorder`, play it back, delete it,
+      all attached to the song. New `lib/hermes/audioVault.ts` stores clips in
+      IndexedDB — binary audio doesn't fit the localStorage JSON vault's ~5-10MB budget
+      — with an in-memory fallback (SSR/tests/unsupported browsers) mirroring
+      `storage.ts`'s `kv()` pattern; zero new npm deps, both APIs are browser
+      built-ins. Deliberately a pure attachment with **no effect on generation** —
+      the determinism contract only has to hold for the deterministic pipeline, and
+      an attached voice clip isn't part of it. Caps: 8MB/clip, 6 clips/song.
+      Playwright-verified live with a fake mic device: record → stop → save → list →
+      play → delete, all working, zero console errors. PR2 (instrument riff clips)
+      and PR3 (the actual "hum shapes the lyric's rhythm" brain wiring) are queued —
+      see IDEAS.md for the full phased plan. _(this PR)_
 - [x] **The Council, PR1 — your learned taste as a 4th voice** — first build step of the
       Council-improvement plan (a research agent audited the existing `council.ts` +
       `Council.tsx` and found the board's ranking used only 3 voices — challenge/reward/
