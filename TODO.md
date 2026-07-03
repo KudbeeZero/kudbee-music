@@ -302,6 +302,18 @@ Board** governance / Solana / token / NFT layer integrates with this engine via 
 later (kept out of this repo's core so it stays free + local).
 
 ## ✅ Shipped (newest first)
+- [x] **🩺 `hermes cloud-check` — Supabase readiness diagnostic (unblocks "logged-in + cloud save")** —
+      the auth + Brain-Pack sync wiring is deliberately NOT merged blind (docs/accounts.md law:
+      it needs a real project to test RLS against), so the blocker is two founder dashboard
+      steps. This turns those two vague steps into a **verified, self-service checklist**:
+      `studio/cloud-check.mjs` + `hermes cloud-check` reads `.env.local`, hits the live project
+      **read-only** (GET `/auth/v1/settings` + a probe of the `brains` table — publishable key
+      only, no writes, no account creation), and prints ✅/⬜ for each requirement plus the
+      ordered remaining steps; when it prints "🟢 Ready" the sync PR can land. Pure core
+      (`checkReadiness`/`summarize`) unit-tested with an injected fetch (`test/cloud-check.test.mjs`,
+      7 tests); **live-verified against the real project** — correctly reports the one remaining
+      step (create the `brains` table). Mirrors `hermes runway --balance` (a no-spend check).
+      $0, no new dep. _(this PR)_
 - [x] **⚡ Lightning AI adapter — the "unlock your own agent on compute" path, CLI half** —
       the founder's `/goal` Lightning piece, built the proven way (mirrors `studio/runway.mjs`
       + `lib/hermes/cloudSync.ts`): `studio/lightning.mjs` + `hermes lightning` is a key-gated

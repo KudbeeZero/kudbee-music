@@ -123,6 +123,13 @@ built + tested against the live project. Local dev reads the URL + key from a
 gitignored `.env.local`; production reads them from Cloudflare Pages env vars
 (`NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY`).
 
+**Self-check the remaining steps:** run `hermes cloud-check` (or
+`node studio/cloud-check.mjs`) — a read-only diagnostic that reads `.env.local`, hits
+the live project, and prints a ✅/⬜ checklist of what's done vs. the remaining founder
+steps. No writes, no account creation, publishable key only. When it prints "🟢 Ready",
+the auth + Brain-Pack sync wiring PR can land and be tested against the live project
+(this is the "small, testable PR" gate — see the "Why not just build it now" note above).
+
 ## Deferred (Phase 4)
 
 Per-profile vault namespacing (and any cloud-synced vault) is deliberately **not**
