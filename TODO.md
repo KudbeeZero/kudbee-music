@@ -169,6 +169,17 @@ _The autonomous `/loop` is working the phased roadmap. **Source of truth:
 [`brain/roadmap.json`](brain/roadmap.json)** — it indexes every item + the PR that
 shipped it. This file is the human-readable view; keep the two in sync._
 
+- [~] **WIFI DJ visual redesign** — founder-supplied "Production UI Kit" mockups
+  (Desktop/Mobile Studio + 24-element component library + a Lyrics Editor screen)
+  reimagine the whole Hit Factory UI. Full button/route directory, gap analysis
+  against existing code, and the phased build plan live in
+  [`docs/wifi-dj-redesign.md`](docs/wifi-dj-redesign.md) — read that first. Decided
+  **mobile-first** build order (matches the existing `useDevice`/capability-flag
+  responsive system). Phase 1 (Council redesign + new logo treatment) is the
+  founder's explicit first target, in progress now; each subsequent phase ships as
+  its own PR, screenshot-reviewed against the mockup by an independent agent
+  (target ≥9/10, escalate to the founder only after 5 failed rounds on one slice).
+
 ## 🧠 Brain buildout queue (autonomous /loop — research-informed)
 1. [x] **Local lexicon** (vocabulary cortex) — token-free word store. _(shipped)_
 2. [x] **Rhyme + meter engine** — `lib/hermes/rhyme.ts`: end-rhyme/scheme/density +

@@ -224,6 +224,26 @@ A second-opinion review flagged real risks worth acting on (truth-first):
   disclaimer in the README + Uniqueness panel. _(#37)_
 
 ## 🌱 Fresh captures
+- ✏️ **WIFI DJ visual redesign — the "Production UI Kit" + Lyrics Editor mockups**
+  *(founder-supplied concept images, 2026-07-03)* — a full DAW-style reimagining of
+  the Hit Factory UI: a Desktop Studio (sidebar nav, transport bar, track lanes,
+  mixer, AI Co-Pilot slide-out, community feed), a Mobile Studio landscape variant,
+  a 24-element component library, and a separate Lyrics Editor screen (violet theme,
+  inline verse editor with rhyme/word suggestions, section tools, lyric stats).
+  Founder's ask: dispatch mapping/architecture/design agents, map every button and
+  route into a directory, decide mobile vs. desktop build order, then build —
+  design agents get creative license to fill mockup gaps, and two agents agreeing
+  on a call is enough to proceed without asking first. Three parallel research
+  agents produced the full directory — see `docs/wifi-dj-redesign.md` for the
+  complete button-by-button mapping against existing code (what's a restyle vs.
+  genuinely net-new) and the phased build plan (roadmap item 8.10). Decided
+  mobile-first (matches the existing capability-flag responsive system). Flagged
+  two open questions for later: the mockups' DAW mixer/track-lane concept has no
+  real multi-stem-audio backing in HERMES today (building it as an honest UI
+  metaphor, not a literal claim — same discipline as the Brain Scan's honesty
+  rule), and the Lyrics Editor's violet accent vs. the Studio Kit's cyan/magenta
+  (treating as same token set, different section accent, until told otherwise).
+  Phase 1 (Council redesign + new logo) is in progress now.
 - ✅ **Agent Network codenames — from the "sneak peek" box-art** *(founder-supplied concept
   image, 2026-07-03)* — a game-console-style splash for WIFI DJ / Kudbee Studios visualized
   the whole brain metaphor already in this repo (HERMES Core, Crossroads Board, Shared

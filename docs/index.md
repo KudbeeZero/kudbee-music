@@ -18,6 +18,8 @@ entirely from code — no paid software.
 - [Watchdog](watchdog.md) — the scheduled Claude security/quality review
 - [OG unfurl](og-unfurl.md) — per-song link previews *(inert until founder-activated)*
 - [Living-Brain dNFT standard](nft-standard.md) — the metadata format decision
+- [WIFI DJ redesign](wifi-dj-redesign.md) — the founder's new production-UI mockups,
+  mapped to existing code, phased build plan
 
 ## 🎬 Video Studio
 
