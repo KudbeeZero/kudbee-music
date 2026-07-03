@@ -243,7 +243,12 @@ A second-opinion review flagged real risks worth acting on (truth-first):
      gauge libraries) against the $0-core no-new-deps rule.
   **Plan delivered** (architecture agent + design agent, both read the mockups and the real
   code, no edits made): **Phase A (Mockup B, build now)** — 6 same-day PRs in the mockup's own
-  order: ① sticky top app bar, ② sticky bottom Studio Flow rail (finishes wiring
+  order: ① ✅ **shipped this session** — a sticky top app bar, phone-only
+  (`device.ui.singleColumn`), hiding the decorative subtitle/mode-badge lines to stay
+  compact while pinned; deliberately not the full "logo | hamburger menu" redesign the
+  mockup shows — that needs Crossroads/Albums/New/Sign-out collapsed into a real menu,
+  scoped as a follow-up, not blocking this PR's real value (Crossroads/Albums/Sign-out
+  stay reachable without scrolling back up). ② sticky bottom Studio Flow rail (finishes wiring
   `lib/hermes/device.ts`'s already-computed-but-unused `stickyPrimaryAction`/`bottomSheets`
   flags — this isn't a new mobile system, it's finishing one that's half-wired), ③ collapse
   Song Lab into an accordion (reuses the existing `showAvoid` disclosure pattern), ④ Agent
@@ -254,7 +259,7 @@ A second-opinion review flagged real risks worth acting on (truth-first):
   Package/Vault, scrolling to anchors that already existed via the Studio Flow rail's own
   `focusFlowStage`/`FLOW_ANCHOR` mechanism — also closes the Suno-idea "Council globally
   wired" ask above in the same PR), ⑥ a spacing/typography audit (mostly already shipped,
-  closing small gaps). Still open: ①②③④. **Phase B
+  closing small gaps). Still open: ②③④. **Phase B
   (Mockup A, mixed verdict)** — the design agent's real opinion: decline the neon-trophy-
   confetti visual language outright (a genuine identity clash with the shipped "brain, not a
   game" aesthetic — see `BangerScoreCard.tsx`'s own "not a market or A&R prediction" copy) but

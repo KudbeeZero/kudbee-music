@@ -433,6 +433,7 @@ export default function HermesHitFactory() {
       data-form={device.profile.formFactor}
       data-anim={device.ui.animation}
       data-bottomnav={(profile && device.ui.singleColumn) || undefined}
+      data-sticky-header={(profile && device.ui.singleColumn) || undefined}
     >
       <header className={styles.header}>
         <div className={styles.brandMark}>H</div>
