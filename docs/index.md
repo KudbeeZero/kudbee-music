@@ -25,6 +25,7 @@ entirely from code — no paid software.
 - [CLI reference](cli.md) — every `hermes` command
 - [Build a scene pack](scene-packs.md) — add a new visual style (best way to contribute)
 - [Runway Gen-4 plan](runway-plan.md) — the AI-video adapter rollout
+- [Lightning AI plan](lightning-plan.md) — the opt-in "your own agent on compute" adapter
 - [Public testing URL](testing.md) — share a live preview of the studio
 
 ## Reference
