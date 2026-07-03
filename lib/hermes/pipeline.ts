@@ -306,7 +306,9 @@ export async function runPipeline(rawInputs: SongInputs, opts: RunOptions = {}):
   return { pkg, agentOutputs: outputs };
 }
 
-function buildClips(sections: SongSection[], hook: HookOption | null): ViralClip[] {
+/** Exported so an edit can re-derive viral clips from the new lyrics — same pure
+ *  logic the pipeline itself uses, just replayed against edited sections. */
+export function buildClips(sections: SongSection[], hook: HookOption | null): ViralClip[] {
   const clips: ViralClip[] = [];
   if (hook) {
     clips.push({ label: 'Hook hit', startHint: 'first chorus', durationSec: 15, caption: `“${hook.text}” 🎧 #newmusic`, hookLine: hook.text });

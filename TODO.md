@@ -303,6 +303,28 @@ Board** governance / Solana / token / NFT layer integrates with this engine via 
 later (kept out of this repo's core so it stays free + local).
 
 ## ✅ Shipped (newest first)
+- [x] **🔄 Live re-scoring on lyric edit — the panel ripples with an edit
+      (medium-feature arc, item 8.7)** — founder: "that needs to be recognized
+      throughout the rest of the globally. The rest of the panel has to be
+      linked up to what's going on." Confirmed the exact gap by reading
+      `saveLyricEdit`: it only ever updated `finalLyrics` + `sections`,
+      leaving the Banger Score, Uniqueness Report, and viral clips computed
+      from the *original* generation — stale after any edit. Fixed by
+      re-deriving everything downstream of the lyrics through the same pure
+      functions the pipeline itself already uses — `checkOriginality()`,
+      `scoreSong()`, `emotionClarity()`, and a newly-exported `buildClips()`
+      (previously private to `pipeline.ts`) — replayed against the edited
+      text on every save. The Council's ranking needed no fix: it already
+      reads `pkg.sections` fresh on every render, so it was already correctly
+      reactive. Playwright-verified live: replaced a real generated song's
+      lyrics with drastically different (short, repetitive, off-theme) text
+      and confirmed the Banger Score visibly dropped from 99 to 75 and the
+      word/line count label updated to match — proof the whole panel now
+      ripples with an edit instead of leaving only the text box current.
+      No new unit tests needed (reuses already-tested pure functions; only
+      `buildClips` was newly exported, not newly written). Full gate suite
+      green, all 65 files / 554 tests pass unchanged (confirming byte-identical
+      behavior for the parts that weren't touched). _(this PR)_
 - [x] **📖 Word ideas — a similar-words popup while editing lyrics (medium-feature
       arc, item 8.6)** — founder: "polishing off the lyric area and editing...
       an inline dictionary/thesaurus... really easy edit ability." New

@@ -4,7 +4,7 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 import Link from 'next/link';
 import type { SongInputs, SongPackage, AgentOutput, HookOption, CritiqueKey } from '@/lib/hermes/types';
 import { AGENT_DEFINITIONS } from '@/lib/hermes/agents';
-import { runPipeline } from '@/lib/hermes/pipeline';
+import { runPipeline, buildClips } from '@/lib/hermes/pipeline';
 import { mockProviders } from '@/lib/hermes/providers/mockProviders';
 import { createClaudeLyricsProvider, ClaudeProviderError } from '@/lib/hermes/providers/claudeLyricsProvider';
 import { getClaudeKey, claudeEngineReady } from '@/lib/hermes/claudeKey';
@@ -33,7 +33,9 @@ import VoiceMirror from './VoiceMirror';
 import { createNervousSystem, signalForAgent, type Signal } from '@/lib/hermes/nervousSystem';
 import { createWorkingMemory } from '@/lib/hermes/workingMemory';
 import { brainHeat } from '@/lib/hermes/heat';
-import { deriveEmotion } from '@/lib/hermes/emotion';
+import { deriveEmotion, emotionClarity } from '@/lib/hermes/emotion';
+import { checkOriginality } from '@/lib/hermes/originality';
+import { scoreSong } from '@/lib/hermes/scoring';
 import { voiceMirror } from '@/lib/hermes/becomingYou';
 import { currentProfile, signInGuest, signOut, type Profile } from '@/lib/hermes/identity';
 import { decodeShare } from '@/lib/hermes/shareLink';
@@ -185,7 +187,20 @@ export default function HermesHitFactory() {
         }
       }
     }
-    const updated = { ...pkg, finalLyrics: newText, sections: parseSections(newText) };
+    // Re-derive everything downstream of the lyrics so an edit ripples through
+    // the whole panel instead of leaving Banger Score/Uniqueness/clips stale —
+    // the same pure functions the pipeline itself uses, just replayed against
+    // the edited text. (Council's ranking already reads pkg.sections fresh on
+    // every render, so it needed no fix here.)
+    const sections = parseSections(newText);
+    const uniqueness = checkOriginality(newText, { bannedWords: banned, priorSongs: priorSongsForOriginality(pkg.id) });
+    const viralClips = buildClips(sections, pkg.chosenHook);
+    const clarity = emotionClarity(pkg.inputs, sections);
+    const score = scoreSong({
+      inputs: pkg.inputs, chosenHook: pkg.chosenHook, sections, uniqueness,
+      visuals: pkg.visuals, viralClips, emotionClarity: clarity,
+    });
+    const updated = { ...pkg, finalLyrics: newText, sections, uniqueness, viralClips, score };
     setVaultWriteFailed(!saveSong(updated).persisted);
     setVault(listSongs());
     setPkg(getSong(updated.id) ?? updated);

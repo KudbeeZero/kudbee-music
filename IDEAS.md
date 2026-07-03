@@ -469,10 +469,11 @@ A second-opinion review flagged real risks worth acting on (truth-first):
     a double-click popup in `ScribeEditor.tsx`. Honestly framed as
     "similar in feel" (imagery + affect), not a claimed thesaurus — the
     lexicon has no synonym data. See TODO.md Shipped.
-  - 💤 **8.7 — live re-scoring on edit** queued next: investigate
-    `saveLyricEdit` in `HermesHitFactory.tsx` to confirm whether Banger
-    Score/Uniqueness/Council actually go stale after a saved edit, then wire
-    a deterministic re-score path if so.
+  - ✅ **8.7 — live re-scoring on edit shipped.** Confirmed the gap (Banger
+    Score/Uniqueness/clips did go stale after a saved edit; Council's ranking
+    did not, since it already reads `pkg.sections` fresh). Fixed via the same
+    pure pipeline functions replayed against the edit. This closes out the
+    lyric-editing-polish arc (8.6-8.7). See TODO.md Shipped.
 - 🔨 **"Input their music" — upload an existing audio file, not just record live**
   *(founder question, 2026-07-03 — "I want to create something down the road
   where people can input their music... are you working on that?")* — a genuinely
