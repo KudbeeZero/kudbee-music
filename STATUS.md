@@ -2,7 +2,7 @@
 
 > **Generated from [`brain/roadmap.json`](brain/roadmap.json) — do not hand-edit.** Status lives ONLY in the spine; edit it there, then regenerate with `GEN_DOCS=1 npx vitest run status`. `statusBoard.test.ts` fails CI if this file drifts.
 
-**Scoreboard:** ✅ 64 shipped · 🔨 1 in build · 💤 10 queued — 75 tracked items
+**Scoreboard:** ✅ 65 shipped · 🔨 1 in build · 💤 10 queued — 76 tracked items
 (legend: ✅ shipped · 🔌 scaffold shipped, founder-gated · 🔨 in build · ⏭️ next · 💤 queued · 💭 idea · 🚧 blocked on founder)
 
 ## Tracks
@@ -115,7 +115,7 @@
 | ✅ | **📄 Copy all as Markdown — bulk vault export, richer format** | `components/hermes/VaultDrawer.tsx` | — |
 | ✅ | **🗑 Clear all vault notes** | `lib/hermes/storage.ts + components/hermes/VaultDrawer.tsx` | — |
 
-### Phase 8 — Medium features — the planned arc — `▰▰▰▰▰▰▰▰▰▰` 4/4
+### Phase 8 — Medium features — the planned arc — `▰▰▰▰▰▰▰▰▰▰` 5/5
 
 | | Item | Where it lives | PR |
 |---|------|----------------|----|
@@ -123,6 +123,7 @@
 | ✅ | **🖥️ Agent Board upgrade — live connection lines + terminal signal ticker** | `components/hermes/AgentBoard.tsx + SignalTicker.tsx + HermesHitFactory.tsx + hermes.module.css` | — |
 | ✅ | **🔌 Council-voice-registry refactor — the plug-in prerequisite** | `lib/hermes/council.ts` | — |
 | ✅ | **🎭 Guest Judges — pluggable Council personas** | `lib/hermes/guestJudges.ts + components/hermes/Council.tsx` | — |
+| ✅ | **🎛️ Agent Packs MVP — genre/scene Council voice bundles** | `lib/hermes/agentPacks.ts + components/hermes/Council.tsx` | — |
 
 ### Video studio — `▰▰▰▰▰▱▱▱▱▱` 4/8
 

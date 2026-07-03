@@ -7,7 +7,12 @@ import { AGENT_DEFINITIONS } from '@/lib/hermes/agents';
 import { deliberationForHook } from '@/lib/hermes/cognition';
 import { rankHooksByCouncil, COUNCIL_WEIGHTS, COUNCIL_WEIGHTS_WITH_VOICE } from '@/lib/hermes/council';
 import { GUEST_JUDGES } from '@/lib/hermes/guestJudges';
+import { AGENT_PACKS } from '@/lib/hermes/agentPacks';
 import styles from './hermes.module.css';
+
+// Guest Judges (personas) and Agent Packs (genre/scene lenses) are the same
+// underlying plug-in shape — seated the same way, at the same board.
+const SEATABLE = [...GUEST_JUDGES, ...AGENT_PACKS];
 
 // The Council — the agents as a deliberating board (the WIFI DJ "Crossroads Board"
 // made literal). The right hemisphere proposes, the left hemisphere challenges, and
@@ -15,13 +20,13 @@ import styles from './hermes.module.css';
 export default function Council({ outputs, pkg, taste }: { outputs: Record<string, AgentOutput>; pkg: SongPackage; taste?: Taste }) {
   const right = AGENT_DEFINITIONS.filter((d) => d.hemisphere === 'right');
   const left = AGENT_DEFINITIONS.filter((d) => d.hemisphere === 'left');
-  // Guest Judges — pluggable persona voices, seated by the artist for this session
-  // only (not persisted; a deliberate choice each time, not a sticky setting).
+  // Guest Judges + Agent Packs — pluggable voices, seated by the artist for this
+  // session only (not persisted; a deliberate choice each time, not a sticky setting).
   const [guestIds, setGuestIds] = useState<string[]>([]);
   function toggleGuest(id: string) {
     setGuestIds((ids) => (ids.includes(id) ? ids.filter((i) => i !== id) : [...ids, id]));
   }
-  const guestVoices = GUEST_JUDGES.filter((j) => guestIds.includes(j.id)).map((j) => j.voice);
+  const guestVoices = SEATABLE.filter((j) => guestIds.includes(j.id)).map((j) => j.voice);
   // Reuse the pipeline's stored verdict when it's for the current lead (stays consistent
   // with the Deliberation panel); recompute otherwise. Guard shape for older/imported songs.
   const d = pkg.chosenHook ? deliberationForHook(pkg.chosenHook.text, pkg.inputs, pkg.cognition) : null;
@@ -77,6 +82,29 @@ export default function Council({ outputs, pkg, taste }: { outputs: Record<strin
           })}
         </div>
       </div>
+      <div style={{ marginTop: 8 }}>
+        <div className={styles.hint}>🎛️ Agent Packs — genre/scene lenses, seated the same way</div>
+        <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap', marginTop: 5 }}>
+          {AGENT_PACKS.map((p) => {
+            const seated = guestIds.includes(p.id);
+            return (
+              <button
+                key={p.id}
+                className={styles.chip}
+                onClick={() => toggleGuest(p.id)}
+                title={p.description}
+                aria-pressed={seated}
+                style={{
+                  cursor: 'pointer', borderColor: seated ? 'var(--amber)' : undefined,
+                  color: seated ? 'var(--amber)' : undefined, background: seated ? 'rgba(255,177,78,0.1)' : undefined,
+                }}
+              >
+                {p.emoji} {p.label}
+              </button>
+            );
+          })}
+        </div>
+      </div>
       {ranking.length > 1 && (
         <div style={{ marginTop: 10, borderTop: '1px solid var(--line)', paddingTop: 8 }}>
           <div className={styles.hint}>
@@ -85,7 +113,7 @@ export default function Council({ outputs, pkg, taste }: { outputs: Record<strin
               {hasVoice
                 ? `(challenges ${w.challenge} · crave ${w.reward} · confidence ${w.confidence} · your voice ${(w as typeof COUNCIL_WEIGHTS_WITH_VOICE).voice})`
                 : `(challenges ${w.challenge} · crave ${w.reward} · confidence ${w.confidence})`}
-              {guestVoices.length > 0 && ` + ${guestIds.map((id) => GUEST_JUDGES.find((j) => j.id === id)?.label).join(', ')} seated`}
+              {guestVoices.length > 0 && ` + ${guestIds.map((id) => SEATABLE.find((j) => j.id === id)?.label).join(', ')} seated`}
             </span>
           </div>
           <div style={{ marginTop: 6, display: 'flex', flexDirection: 'column', gap: 4 }}>

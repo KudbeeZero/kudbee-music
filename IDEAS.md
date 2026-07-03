@@ -407,8 +407,16 @@ A second-opinion review flagged real risks worth acting on (truth-first):
     Exec, The TikTok Algorithm, Your Mom) built on real `lexicon.ts` data,
     toggleable as chips in `Council.tsx`, seated per-session only. See TODO.md
     Shipped.
-  - 💤 Agent Packs MVP queued as the next PR in this arc (`brain/roadmap.json`
-    phase 8).
+  - ✅ **8.5 — Agent Packs MVP shipped.** Scoped down from "new agent + new
+    voice" to genre/scene Council voices only (a new pipeline agent would mean
+    extending the closed `AgentId` union through the deterministic core — too
+    big/risky for an MVP). Three packs (Boom-Bap Traditionalist, Pop Radio,
+    Poetry Slam), same registry mechanism as Guest Judges, combine freely with
+    them. See TODO.md Shipped.
+  - This closes out the Council plug-in arc for now (8.3-8.5 shipped; Live
+    Multiplayer Council stays blocked per above). A genuinely new pipeline
+    agent (extending `AgentId`) remains a bigger, separately-scoped idea if
+    the founder wants it later.
 - 🔨 **"Becoming You" gamified onboarding — badges + the Mogul story arc**
   *(founder idea, 2026-07-03 — "people earn badges like you want to become
   the next Mogul... create the next hit, the greatest number one on the
