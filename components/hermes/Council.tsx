@@ -1,10 +1,12 @@
 'use client';
 
+import { useState } from 'react';
 import type { AgentOutput, SongPackage } from '@/lib/hermes/types';
 import type { Taste } from '@/lib/hermes/storage';
 import { AGENT_DEFINITIONS } from '@/lib/hermes/agents';
 import { deliberationForHook } from '@/lib/hermes/cognition';
 import { rankHooksByCouncil, COUNCIL_WEIGHTS, COUNCIL_WEIGHTS_WITH_VOICE } from '@/lib/hermes/council';
+import { GUEST_JUDGES } from '@/lib/hermes/guestJudges';
 import styles from './hermes.module.css';
 
 // The Council — the agents as a deliberating board (the WIFI DJ "Crossroads Board"
@@ -13,12 +15,19 @@ import styles from './hermes.module.css';
 export default function Council({ outputs, pkg, taste }: { outputs: Record<string, AgentOutput>; pkg: SongPackage; taste?: Taste }) {
   const right = AGENT_DEFINITIONS.filter((d) => d.hemisphere === 'right');
   const left = AGENT_DEFINITIONS.filter((d) => d.hemisphere === 'left');
+  // Guest Judges — pluggable persona voices, seated by the artist for this session
+  // only (not persisted; a deliberate choice each time, not a sticky setting).
+  const [guestIds, setGuestIds] = useState<string[]>([]);
+  function toggleGuest(id: string) {
+    setGuestIds((ids) => (ids.includes(id) ? ids.filter((i) => i !== id) : [...ids, id]));
+  }
+  const guestVoices = GUEST_JUDGES.filter((j) => guestIds.includes(j.id)).map((j) => j.voice);
   // Reuse the pipeline's stored verdict when it's for the current lead (stays consistent
   // with the Deliberation panel); recompute otherwise. Guard shape for older/imported songs.
   const d = pkg.chosenHook ? deliberationForHook(pkg.chosenHook.text, pkg.inputs, pkg.cognition) : null;
   // The Council's actual work: rank the hook candidates across the three (or, once the
-  // artist has real edit history, four — "your voice") voices.
-  const ranking = rankHooksByCouncil(pkg.hookOptions ?? [], pkg.inputs, pkg.sections ?? [], taste).slice(0, 4);
+  // artist has real edit history, four — "your voice") voices, plus any seated guests.
+  const ranking = rankHooksByCouncil(pkg.hookOptions ?? [], pkg.inputs, pkg.sections ?? [], taste, guestVoices).slice(0, 4);
   const chosenText = pkg.chosenHook?.text;
   const hasVoice = !!taste && taste.edits > 0;
   const w = hasVoice ? COUNCIL_WEIGHTS_WITH_VOICE : COUNCIL_WEIGHTS;
@@ -45,6 +54,29 @@ export default function Council({ outputs, pkg, taste }: { outputs: Record<strin
         <Bench title="✦ Proposes (right)" defs={right} tint="var(--magenta)" />
         <Bench title="⚖ Challenges (left)" defs={left} tint="var(--cyan)" />
       </div>
+      <div style={{ marginTop: 10 }}>
+        <div className={styles.hint}>🎭 Guest Judges — seat an extra voice at the board for this session</div>
+        <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap', marginTop: 5 }}>
+          {GUEST_JUDGES.map((j) => {
+            const seated = guestIds.includes(j.id);
+            return (
+              <button
+                key={j.id}
+                className={styles.chip}
+                onClick={() => toggleGuest(j.id)}
+                title={j.description}
+                aria-pressed={seated}
+                style={{
+                  cursor: 'pointer', borderColor: seated ? 'var(--amber)' : undefined,
+                  color: seated ? 'var(--amber)' : undefined, background: seated ? 'rgba(255,177,78,0.1)' : undefined,
+                }}
+              >
+                {j.emoji} {j.label}
+              </button>
+            );
+          })}
+        </div>
+      </div>
       {ranking.length > 1 && (
         <div style={{ marginTop: 10, borderTop: '1px solid var(--line)', paddingTop: 8 }}>
           <div className={styles.hint}>
@@ -53,6 +85,7 @@ export default function Council({ outputs, pkg, taste }: { outputs: Record<strin
               {hasVoice
                 ? `(challenges ${w.challenge} · crave ${w.reward} · confidence ${w.confidence} · your voice ${(w as typeof COUNCIL_WEIGHTS_WITH_VOICE).voice})`
                 : `(challenges ${w.challenge} · crave ${w.reward} · confidence ${w.confidence})`}
+              {guestVoices.length > 0 && ` + ${guestIds.map((id) => GUEST_JUDGES.find((j) => j.id === id)?.label).join(', ')} seated`}
             </span>
           </div>
           <div style={{ marginTop: 6, display: 'flex', flexDirection: 'column', gap: 4 }}>
