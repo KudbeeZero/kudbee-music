@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import type { SongInputs, SongStructure, RhymeSchemeId } from '@/lib/hermes/types';
 import { PATTERN_PACKS, findPatternPack } from '@/lib/hermes/patternPacks';
 import { OCCASION_PACKS, findOccasionPack } from '@/lib/hermes/occasionPacks';
+import { useDevice } from './useDevice';
 import styles from './hermes.module.css';
 
 const STRUCTURES: { value: SongStructure; label: string }[] = [
@@ -157,6 +158,13 @@ export default function SongLabForm({
 }) {
   const [v, setV] = useState<SongInputs>(DEFAULTS);
   const [doNotUseRaw, setDoNotUseRaw] = useState('');
+  // Mobile-mockup-plan Phase A step ③: on phone, the ~10 secondary fields collapse into
+  // named accordion sections behind the key fields (title/theme/mood/genre) + Surprise
+  // me — desktop is untouched, everything stays expanded exactly as before.
+  const device = useDevice();
+  const accordion = device.ui.singleColumn;
+  const [open, setOpen] = useState({ tempo: false, voice: false, structure: false });
+  const toggleSection = (k: keyof typeof open) => setOpen((o) => ({ ...o, [k]: !o[k] }));
 
   const set = <K extends keyof SongInputs>(k: K, val: SongInputs[K]) => setV((p) => ({ ...p, [k]: val }));
 
@@ -284,79 +292,85 @@ export default function SongLabForm({
         </Field>
       </div>
 
-      <div className={styles.row2}>
-        <Field label="Tempo min (BPM)" htmlFor="hf-tmin">
-          <input id="hf-tmin" className={styles.input} type="number" min={40} max={260} value={v.tempoMin} onChange={(e) => set('tempoMin', Number(e.target.value))} />
+      <Section id="tempo" title="Tempo & occasion" accordion={accordion} open={open.tempo} onToggle={() => toggleSection('tempo')}>
+        <div className={styles.row2}>
+          <Field label="Tempo min (BPM)" htmlFor="hf-tmin">
+            <input id="hf-tmin" className={styles.input} type="number" min={40} max={260} value={v.tempoMin} onChange={(e) => set('tempoMin', Number(e.target.value))} />
+          </Field>
+          <Field label="Tempo max (BPM)" htmlFor="hf-tmax">
+            <input id="hf-tmax" className={styles.input} type="number" min={40} max={260} value={v.tempoMax} onChange={(e) => set('tempoMax', Number(e.target.value))} />
+          </Field>
+        </div>
+
+        <Field label="Occasion — write it for someone, for a moment" htmlFor="hf-occasion">
+          <select
+            id="hf-occasion"
+            className={styles.select}
+            value={v.occasion ?? ''}
+            onChange={(e) => { if (e.target.value) applyOccasionPack(e.target.value); else set('occasion', undefined); }}
+          >
+            <option value="">No occasion — a regular song</option>
+            {OCCASION_PACKS.map((p) => <option key={p.id} value={p.id}>{p.emoji} {p.label}</option>)}
+          </select>
+          {v.occasion && (
+            <p className={styles.hint} style={{ marginTop: 5 }}>
+              {findOccasionPack(v.occasion)?.blurb} Mood, genre, form, and rhyme are set — Audience below becomes who it&rsquo;s dedicated to.
+            </p>
+          )}
         </Field>
-        <Field label="Tempo max (BPM)" htmlFor="hf-tmax">
-          <input id="hf-tmax" className={styles.input} type="number" min={40} max={260} value={v.tempoMax} onChange={(e) => set('tempoMax', Number(e.target.value))} />
+      </Section>
+
+      <Section id="voice" title="Voice, audience & references" accordion={accordion} open={open.voice} onToggle={() => toggleSection('voice')}>
+        <div className={styles.row2}>
+          <Field label="Voice / persona" htmlFor="hf-voice">
+            <input id="hf-voice" className={styles.input} value={v.voice} onChange={(e) => set('voice', e.target.value)} />
+          </Field>
+          <Field label={v.occasion ? 'Dedicated to (name)' : 'Audience'} htmlFor="hf-audience">
+            <input id="hf-audience" className={styles.input} value={v.audience} onChange={(e) => set('audience', e.target.value)} placeholder={v.occasion ? 'e.g. Mom' : ''} />
+          </Field>
+        </div>
+
+        <Field label="References / inspiration (feel only — never copied)" htmlFor="hf-refs">
+          <textarea id="hf-refs" className={styles.textarea} value={v.references} onChange={(e) => set('references', e.target.value)} />
         </Field>
-      </div>
 
-      <Field label="Occasion — write it for someone, for a moment" htmlFor="hf-occasion">
-        <select
-          id="hf-occasion"
-          className={styles.select}
-          value={v.occasion ?? ''}
-          onChange={(e) => { if (e.target.value) applyOccasionPack(e.target.value); else set('occasion', undefined); }}
-        >
-          <option value="">No occasion — a regular song</option>
-          {OCCASION_PACKS.map((p) => <option key={p.id} value={p.id}>{p.emoji} {p.label}</option>)}
-        </select>
-        {v.occasion && (
-          <p className={styles.hint} style={{ marginTop: 5 }}>
-            {findOccasionPack(v.occasion)?.blurb} Mood, genre, form, and rhyme are set — Audience below becomes who it&rsquo;s dedicated to.
-          </p>
-        )}
-      </Field>
-
-      <div className={styles.row2}>
-        <Field label="Voice / persona" htmlFor="hf-voice">
-          <input id="hf-voice" className={styles.input} value={v.voice} onChange={(e) => set('voice', e.target.value)} />
+        <Field label="Do-not-use words (comma separated)" htmlFor="hf-dnu">
+          <input id="hf-dnu" className={styles.input} value={doNotUseRaw} onChange={(e) => setDoNotUseRaw(e.target.value)} placeholder="corny, generic, ..." />
         </Field>
-        <Field label={v.occasion ? 'Dedicated to (name)' : 'Audience'} htmlFor="hf-audience">
-          <input id="hf-audience" className={styles.input} value={v.audience} onChange={(e) => set('audience', e.target.value)} placeholder={v.occasion ? 'e.g. Mom' : ''} />
-        </Field>
-      </div>
+      </Section>
 
-      <Field label="References / inspiration (feel only — never copied)" htmlFor="hf-refs">
-        <textarea id="hf-refs" className={styles.textarea} value={v.references} onChange={(e) => set('references', e.target.value)} />
-      </Field>
-
-      <Field label="Do-not-use words (comma separated)" htmlFor="hf-dnu">
-        <input id="hf-dnu" className={styles.input} value={doNotUseRaw} onChange={(e) => setDoNotUseRaw(e.target.value)} placeholder="corny, generic, ..." />
-      </Field>
-
-      <Field label="Pattern pack — apply a form + rhyme-scheme preset at once" htmlFor="hf-pack">
-        <select
-          id="hf-pack"
-          className={styles.select}
-          value=""
-          onChange={(e) => { if (e.target.value) applyPatternPack(e.target.value); e.target.value = ''; }}
-        >
-          <option value="">Choose a pattern pack…</option>
-          {PATTERN_PACKS.map((p) => <option key={p.id} value={p.id}>{p.label}</option>)}
-        </select>
-      </Field>
-
-      <div className={styles.row2}>
-        <Field label="Structure" htmlFor="hf-structure">
-          <select id="hf-structure" className={styles.select} value={v.structure} onChange={(e) => set('structure', e.target.value as SongStructure)}>
-            {STRUCTURES.map((s) => <option key={s.value} value={s.value}>{s.label}</option>)}
+      <Section id="structure" title="Pattern, structure & rhyme" accordion={accordion} open={open.structure} onToggle={() => toggleSection('structure')}>
+        <Field label="Pattern pack — apply a form + rhyme-scheme preset at once" htmlFor="hf-pack">
+          <select
+            id="hf-pack"
+            className={styles.select}
+            value=""
+            onChange={(e) => { if (e.target.value) applyPatternPack(e.target.value); e.target.value = ''; }}
+          >
+            <option value="">Choose a pattern pack…</option>
+            {PATTERN_PACKS.map((p) => <option key={p.id} value={p.id}>{p.label}</option>)}
           </select>
         </Field>
-        <Field label="Rhyme" htmlFor="hf-rhyme">
-          <select id="hf-rhyme" className={styles.select} value={v.rhymeTemp ?? 'balanced'} onChange={(e) => set('rhymeTemp', e.target.value as RhymeTempOpt)}>
-            {RHYME_TEMPS.map((s) => <option key={s.value} value={s.value}>{s.label}</option>)}
+
+        <div className={styles.row2}>
+          <Field label="Structure" htmlFor="hf-structure">
+            <select id="hf-structure" className={styles.select} value={v.structure} onChange={(e) => set('structure', e.target.value as SongStructure)}>
+              {STRUCTURES.map((s) => <option key={s.value} value={s.value}>{s.label}</option>)}
+            </select>
+          </Field>
+          <Field label="Rhyme" htmlFor="hf-rhyme">
+            <select id="hf-rhyme" className={styles.select} value={v.rhymeTemp ?? 'balanced'} onChange={(e) => set('rhymeTemp', e.target.value as RhymeTempOpt)}>
+              {RHYME_TEMPS.map((s) => <option key={s.value} value={s.value}>{s.label}</option>)}
+            </select>
+          </Field>
+        </div>
+
+        <Field label="Rhyme scheme" htmlFor="hf-scheme">
+          <select id="hf-scheme" className={styles.select} value={v.rhymeScheme ?? 'AABB'} onChange={(e) => set('rhymeScheme', e.target.value as RhymeSchemeId)}>
+            {RHYME_SCHEMES.map((s) => <option key={s.value} value={s.value}>{s.label}</option>)}
           </select>
         </Field>
-      </div>
-
-      <Field label="Rhyme scheme" htmlFor="hf-scheme">
-        <select id="hf-scheme" className={styles.select} value={v.rhymeScheme ?? 'AABB'} onChange={(e) => set('rhymeScheme', e.target.value as RhymeSchemeId)}>
-          {RHYME_SCHEMES.map((s) => <option key={s.value} value={s.value}>{s.label}</option>)}
-        </select>
-      </Field>
+      </Section>
 
       <button className={styles.runBtn} disabled={running || !briefReady} onClick={submit}>
         {running ? 'HERMES is working…' : 'Generate Song Package ▸'}
@@ -375,6 +389,32 @@ function Field({ label, htmlFor, children }: { label: string; htmlFor?: string; 
     <div className={styles.field}>
       <label className={styles.label} htmlFor={htmlFor}>{label}</label>
       {children}
+    </div>
+  );
+}
+
+/** A named collapsible group of fields — phone-only (`accordion`); on desktop it's a
+ *  no-op passthrough so nothing about the existing layout changes there. */
+function Section({ id, title, accordion, open, onToggle, children }: {
+  id: string; title: string; accordion: boolean; open: boolean; onToggle: () => void; children: React.ReactNode;
+}) {
+  if (!accordion) return <>{children}</>;
+  return (
+    <div>
+      <div
+        className={styles.panelTitle}
+        style={{ display: 'flex', justifyContent: 'space-between', cursor: 'pointer', marginTop: 14 }}
+        onClick={onToggle}
+        role="button"
+        tabIndex={0}
+        aria-expanded={open}
+        aria-controls={`section-${id}`}
+        onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); onToggle(); } }}
+      >
+        <span>{title}</span>
+        <span>{open ? '–' : '+'}</span>
+      </div>
+      {open && <div id={`section-${id}`}>{children}</div>}
     </div>
   );
 }

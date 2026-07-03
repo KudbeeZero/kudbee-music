@@ -302,6 +302,28 @@ Board** governance / Solana / token / NFT layer integrates with this engine via 
 later (kept out of this repo's core so it stays free + local).
 
 ## ✅ Shipped (newest first)
+- [x] **🪗 Song Lab accordion on phone** — autonomous-loop medium PR, fifth of the
+      session, Phase A step ③ of the mobile-mockup implementation plan (`IDEAS.md`).
+      `SongLabForm.tsx` put all ~14 fields on screen at once — a wall of inputs before
+      you'd even typed a title. The four key fields (title/theme/mood/genre) plus
+      Surprise-me/Load-example stay always visible; the other ~10 fields (tempo/
+      occasion, voice/audience/references/do-not-use words, pattern-pack/structure/
+      rhyme/rhyme-scheme) now collapse into three named accordion sections — "Tempo &
+      occasion," "Voice, audience & references," "Pattern, structure & rhyme" — phone-
+      only (`device.ui.singleColumn`), all collapsed by default. Reuses the exact
+      `showAvoid` disclosure pattern already established in `HermesHitFactory.tsx` (a
+      clickable `panelTitle` row toggling a `+`/`–`) rather than inventing a new
+      pattern. A new `Section` component wraps each group; on desktop it's a pure
+      passthrough (renders children directly, no toggle UI at all), so desktop's
+      layout is untouched. Playwright-verified live at 390×844: confirmed the form
+      loads with only the 4 key fields + buttons visible (no wall of inputs), expanded
+      "Voice, audience & references," typed into the newly-revealed Voice field and
+      confirmed the value stuck, filled the 3 key fields and confirmed the Generate
+      button correctly enabled (accordion state doesn't interfere with `briefReady`).
+      Confirmed at a 1440px desktop viewport that no accordion toggle renders at all
+      and every field (including ones behind accordion sections on phone) is visible
+      without clicking anything. Zero console errors. Full gate suite green (65 files
+      / 556 tests, `tsc --noEmit` clean, static export builds). _(this PR)_
 - [x] **🧭 Sticky Studio Flow rail on phone** — autonomous-loop medium PR, fourth of the
       session, Phase A step ② of the mobile-mockup implementation plan (`IDEAS.md`).
       The Review/Refine/Keep/Release/Studio tab rail used to scroll away with everything

@@ -257,8 +257,14 @@ A second-opinion review flagged real risks worth acting on (truth-first):
   ended up reusing `device.ui.singleColumn` (the same flag the header and bottom nav use),
   not `stickyPrimaryAction`/`bottomSheets` — those two remain genuinely unused, a real
   follow-up if a future PR wants a sticky primary CTA above the keyboard or bottom-sheet-style
-  drawers. ③ collapse
-  Song Lab into an accordion (reuses the existing `showAvoid` disclosure pattern), ④ Agent
+  drawers. ③ ✅ **shipped this session** — `SongLabForm.tsx`'s ~10 secondary fields
+  (tempo/occasion, voice/audience/references/do-not-use, pattern-pack/structure/rhyme) now
+  collapse into three named accordion sections on phone, reusing the exact `showAvoid`
+  disclosure pattern (a clickable `panelTitle` row + `+`/`–`); the four key fields
+  (title/theme/mood/genre) plus Surprise-me/Load-example stay always visible above them,
+  matching the mockup's "show only key fields first." Desktop is a pure passthrough — the
+  `Section` wrapper renders its children directly with no toggle UI when `!accordion`, so
+  desktop's layout is byte-identical to before. ④ Agent
   Board as Proposes/Challenges/Judges tabs (reuses `Council.tsx`'s hemisphere split — flagged
   risk: `AgentBoard.tsx`'s live connector-line SVG assumes both wired cards are visible at
   once, needs an explicit fallback so 8.2's "it's literally them thinking" doesn't silently
@@ -266,7 +272,7 @@ A second-opinion review flagged real risks worth acting on (truth-first):
   Package/Vault, scrolling to anchors that already existed via the Studio Flow rail's own
   `focusFlowStage`/`FLOW_ANCHOR` mechanism — also closes the Suno-idea "Council globally
   wired" ask above in the same PR), ⑥ a spacing/typography audit (mostly already shipped,
-  closing small gaps). Still open: ③④. **Phase B
+  closing small gaps). Still open: ④. **Phase B
   (Mockup A, mixed verdict)** — the design agent's real opinion: decline the neon-trophy-
   confetti visual language outright (a genuine identity clash with the shipped "brain, not a
   game" aesthetic — see `BangerScoreCard.tsx`'s own "not a market or A&R prediction" copy) but
