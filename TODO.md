@@ -302,6 +302,39 @@ Board** governance / Solana / token / NFT layer integrates with this engine via 
 later (kept out of this repo's core so it stays free + local).
 
 ## ✅ Shipped (newest first)
+- [x] **📱 Bottom nav — Council (and everything else) one tap away on phone** —
+      autonomous-loop medium PR, second of the session. Two backlog items closed at
+      once: the Suno-reference "persistent bottom nav bar" idea, and "the Council
+      globally wired" idea (the founder read Suno Studio's integrated single-workspace
+      feel as a model for the Council no longer being buried inside the Studio Flow
+      rail). Also finishes Phase A step ⑤ of the mobile-mockup implementation plan
+      (`IDEAS.md`). New `components/hermes/BottomNav.tsx`: five destinations — Lab ·
+      Council · Studio · Package · Vault — fixed to the bottom of the viewport,
+      phone-only via `device.ui.singleColumn` (the first real UI consumer of that
+      `lib/hermes/device.ts` flag — it was computed since the original mobile pass but
+      never wired to anything). Lab and Vault work with or without a song; Council/
+      Studio/Package are disabled until one exists. Reuses existing mechanisms end to
+      end — Council/Studio/Package route through the exact same `focusFlowStage()` +
+      `FLOW_ANCHOR` the Studio Flow rail's own tabs already use, so the Council is one
+      tap from anywhere instead of only ring-highlighting during the Review stage; Lab
+      scrolls to a new `song-lab-anchor` id; Vault reuses `setVaultOpen(true)`. No new
+      state, no new deps. Caught and fixed a real Playwright-testing gotcha along the
+      way (not a product bug): the pre-installed Chromium's mobile-viewport CDP
+      emulation (`isMobile`/device descriptors) reports a bogus, much-wider
+      `window.innerWidth` on this environment's browser build — verified the real bug
+      wasn't in the code by cross-checking with `getBoundingClientRect()` +
+      `document.documentElement.scrollWidth`, then re-tested with a plain narrow
+      `setViewportSize` (no mobile-emulation flags), which reports correctly; that's
+      the reliable pattern for any future phone-viewport Playwright check in this repo.
+      Playwright-verified live at a real 390×844 viewport: compose mode shows Lab/Vault
+      active and Council/Studio/Package correctly disabled before a song exists;
+      loading the demo enables all five; tapping Council scrolls straight to a fully
+      rendered Council panel (10 agent findings, guest judges, agent packs, live
+      ranking); tapping Studio ring-highlights the Studio timeline; tapping Vault opens
+      the Vault drawer as a bottom sheet with the nav still visible beneath it;
+      confirmed the nav is entirely absent at a 1440px desktop viewport (no
+      regression). Zero console errors. Full gate suite green (65 files / 556 tests,
+      `tsc --noEmit` clean, static export builds). _(this PR)_
 - [x] **🎚️ HERMES Studio workspace — the arrangement timeline (roadmap 3.4)** —
       founder shared five Suno reference screenshots (Suno Studio's integrated
       workspace, its bottom nav, its "Studio" upsell, its sign-up modal) and asked

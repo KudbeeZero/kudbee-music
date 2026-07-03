@@ -306,6 +306,7 @@ flow, and the non-negotiables — plus the code-generated [brain-wiring diagram]
 - [x] **Occasion Packs** — write a song FOR someone: Christmas, Valentine's, Mother's/Father's Day, Birthday, Anniversary, Graduation, or New Year, each with its own imagery and a dedication line ("Merry Christmas, Mom")
 - [x] **Song Gifts** — share an Occasion Pack song and the link itself becomes the gift: a one-line gift message instead of a bare URL, a themed reveal on open, gift-framed card + link preview
 - [x] **HERMES Studio** — a Suno-Studio-style arrangement timeline: your song's real sections as clips, a click-to-preview lyric readout, and a "meter bridge" reading the live 11-region brain state — a 5th tab on the Studio Flow rail, read-only for now
+- [x] **Bottom nav on phone** — Lab · Council · Studio · Package · Vault, one tap away from anywhere; the Council is no longer buried inside the Studio Flow rail
 
 **Next** — generated from the spine [`brain/roadmap.json`](brain/roadmap.json); the human backlog is [`TODO.md`](TODO.md), the full board is [`STATUS.md`](STATUS.md).
 

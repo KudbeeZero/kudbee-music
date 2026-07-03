@@ -21,6 +21,7 @@ import AgentBoard from './AgentBoard';
 import Council from './Council';
 import SongPackageView from './SongPackageView';
 import Studio from './Studio';
+import BottomNav from './BottomNav';
 import BangerScoreCard from './BangerScoreCard';
 import UniquenessReportView from './UniquenessReport';
 import VaultDrawer from './VaultDrawer';
@@ -108,6 +109,12 @@ export default function HermesHitFactory() {
   function focusFlowStage(s: typeof flowStage) {
     setFlowStage(s);
     document.getElementById(FLOW_ANCHOR[s])?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  }
+  // Bottom nav (phone-only) — Lab/Vault work with or without a song; Council/Studio/
+  // Package reuse the exact same Studio Flow focus mechanism the rail tabs use, so the
+  // Council is one tap away from anywhere instead of buried in the Review stage only.
+  function scrollToLab() {
+    document.getElementById('song-lab-anchor')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
   }
 
   // how much of the current song is the artist's learned voice (feeds heat + the artist card)
@@ -425,6 +432,7 @@ export default function HermesHitFactory() {
       data-touch={device.profile.touch || undefined}
       data-form={device.profile.formFactor}
       data-anim={device.ui.animation}
+      data-bottomnav={(profile && device.ui.singleColumn) || undefined}
     >
       <header className={styles.header}>
         <div className={styles.brandMark}>H</div>
@@ -478,7 +486,7 @@ export default function HermesHitFactory() {
               Describe a song — a feeling, a story, a genre. {AGENT_DEFINITIONS.length} cross-checking
               agents turn it into a complete original package: hooks, lyrics, production, and a Suno prompt.
             </p>
-            <SongLabForm running={running} onRun={run} preset={preset} />
+            <div id="song-lab-anchor"><SongLabForm running={running} onRun={run} preset={preset} /></div>
             <div className={styles.composeDivider}>or</div>
             <div className={styles.composeDemo}>
               <button className={styles.ghostBtn} onClick={loadDemo}>▶ See a finished example — “Cold Hard Gold” (99/100)</button>
@@ -598,7 +606,7 @@ export default function HermesHitFactory() {
       <div className={styles.deck}>
         {/* left column — input + avoid words */}
         <div className={styles.col}>
-          <SongLabForm running={running} onRun={run} preset={preset} />
+          <div id="song-lab-anchor"><SongLabForm running={running} onRun={run} preset={preset} /></div>
 
           <div className={styles.panel}>
             <div className={styles.panelTitle} style={{ display: 'flex', justifyContent: 'space-between', cursor: 'pointer' }} onClick={() => setShowAvoid((s) => !s)}>
@@ -726,6 +734,16 @@ export default function HermesHitFactory() {
           onGenerate={({ inputs, forcedHook }) => { setLabOpen(false); run(inputs, { forcedHook }); }}
         />
       )}
+
+      <BottomNav
+        visible={device.ui.singleColumn}
+        hasPkg={pkg != null}
+        onLab={scrollToLab}
+        onCouncil={() => focusFlowStage('review')}
+        onStudio={() => focusFlowStage('studio')}
+        onPackage={() => focusFlowStage('release')}
+        onVault={() => setVaultOpen(true)}
+      />
       </>
       )}
     </div>
