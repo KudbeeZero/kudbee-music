@@ -304,6 +304,24 @@ Board** governance / Solana / token / NFT layer integrates with this engine via 
 later (kept out of this repo's core so it stays free + local).
 
 ## ✅ Shipped (newest first)
+- [~] **🕸️ Agent Lifecycle library — data layer only, no UI wired up yet (medium-feature
+      arc, item 8.9)** — Foundry-inspired `BeaconState` + selector pattern for the agent
+      brain: `lib/hermes/agentLifecycle.ts`'s `buildAgentLifecycleState(songs, opts?)`
+      aggregates every agent's contributions across the whole vault into persistent
+      `AgentProfile` records (total contributions, collaborators, milestones) plus a
+      collaboration social graph, with pure selectors (`selectTopAgentsByContribution`,
+      `selectAgentByIdWithCollaborators`, `selectCollaborationNetwork`, `selectAgentStats`)
+      projecting over that state. A first review round caught real bugs before any UI
+      shipped — two CSS class collisions in the also-added (not-yet-wired) dashboard
+      styles that would have silently reskinned 17+ live components, an asymmetric
+      collaboration graph leaving later-iterated agents with an empty collaborators
+      list, an empty-array truthiness bug skipping the legacy-song fallback, an
+      always-0-or-1 `totalSongs` stat, and a non-deterministic `new Date()` call —
+      all fixed, and the function now takes `opts.now` like `pipeline.ts`'s
+      `RunOptions` (Iron Law #1). Zero callers anywhere in the repo yet, by design —
+      next PR wires an `AgentLifecycleDashboard` component (roster grid + per-agent
+      detail + collaboration table) on top of this data layer, using the
+      now-collision-free dashboard CSS block. See `brain/roadmap.json` 8.9. _(this PR)_
 - [x] **🌿 Branch ledger — every branch audited against its PR + merge status** — founder ask:
       go through every branch, check nothing's been missed, confirm it's all merged to main, and
       give it a memory layer. Unshallowed the sandbox's git clone first (it was silently capped at
