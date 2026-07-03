@@ -2,7 +2,7 @@
 
 > **Generated from [`brain/roadmap.json`](brain/roadmap.json) — do not hand-edit.** Status lives ONLY in the spine; edit it there, then regenerate with `GEN_DOCS=1 npx vitest run status`. `statusBoard.test.ts` fails CI if this file drifts.
 
-**Scoreboard:** ✅ 72 shipped · 🔨 2 in build · 💤 8 queued — 82 tracked items
+**Scoreboard:** ✅ 73 shipped · 🔨 2 in build · 💤 8 queued — 83 tracked items
 (legend: ✅ shipped · 🔌 scaffold shipped, founder-gated · 🔨 in build · ⏭️ next · 💤 queued · 💭 idea · 🚧 blocked on founder)
 
 ## Tracks
@@ -37,7 +37,7 @@
 | ✅ | **One-command demo (npm run demo) — full song end-to-end** | `lib/hermes/__tests__/demo.test.ts` | #38 |
 | ✅ | **LAUNCH.md kit (star checklist + Twitter thread + demo-recording script)** | `LAUNCH.md` | #43 |
 
-### Phase 2 — Deepen the visible brain — `▰▰▰▰▰▰▰▰▰▰` 7/7
+### Phase 2 — Deepen the visible brain — `▰▰▰▰▰▰▰▰▰▰` 8/8
 
 | | Item | Where it lives | PR |
 |---|------|----------------|----|
@@ -48,6 +48,7 @@
 | ✅ | **Deep Brain Atlas — 37 anatomy-named subregions, each mapped to a real module** | `lib/hermes/brainMap.ts` | — |
 | ✅ | **Council build plan, PR1 — your learned taste as a 4th voice** | `lib/hermes/council.ts` | — |
 | ✅ | **Agent Network codenames — Council companion identities** | `lib/hermes/agents.ts + components/hermes/Council.tsx` | #185 |
+| ✅ | **AgentAvatar — $0 SVG glyphs for the Agent Network codenames** | `components/hermes/AgentAvatar.tsx` | #186 |
 
 ### Phase 3 — Make it yours (the living world) — `▰▰▰▰▰▰▰▰▱▱` 5/6
 

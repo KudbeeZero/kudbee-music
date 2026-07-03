@@ -66,6 +66,21 @@ export interface SongInputs {
   occasion?: string;
 }
 
+/** The 10 Agent Network display codenames — kept in sync with AGENT_DEFINITIONS
+ *  by the agents.test.ts completeness guard. Used by AgentAvatar.tsx to type
+ *  its glyph map. */
+export type AgentCodename =
+  | 'Nexus'
+  | 'Synapse'
+  | 'Vylo'
+  | 'Rhythmix'
+  | 'Echo'
+  | 'Sentinel'
+  | 'Harmony'
+  | 'Lumi'
+  | 'Drifter'
+  | 'Beacon';
+
 /** Static metadata describing an agent (its job), independent of any run. */
 export interface AgentDefinition {
   id: AgentId;
@@ -81,7 +96,7 @@ export interface AgentDefinition {
    *  generated SongPackage text, so it carries zero determinism-contract risk and
    *  the committed example/golden fixtures (which embed `name`, e.g. "Hooksmith")
    *  stay byte-identical. */
-  codename?: string;
+  codename?: AgentCodename;
 }
 
 /** The result of running one agent in the pipeline. */
