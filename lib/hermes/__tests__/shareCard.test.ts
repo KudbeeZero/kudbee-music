@@ -1,9 +1,16 @@
 import { describe, it, expect } from 'vitest';
 import {
   wrapText, scalePoint, clampText, footerString, cardFileName,
-  FOOTER_TAGLINE, CARD_W, CARD_H, BRAIN_W, BRAIN_H, renderShareCard,
+  FOOTER_TAGLINE, CARD_W, CARD_H, BRAIN_W, BRAIN_H, renderShareCard, giftEyebrow,
   type TextMeasurer,
 } from '../shareCard';
+import type { SongInputs } from '../types';
+
+const base: SongInputs = {
+  title: 'For Mom', theme: 'everything she gave', mood: 'warm', genre: 'pop',
+  tempoMin: 100, tempoMax: 120, voice: '', audience: 'Mom',
+  doNotUse: [], references: '', structure: 'hook-first',
+};
 
 // A fake canvas measurer: width ∝ character count (deterministic, no DOM).
 function fakeCtx(pxPerChar = 10): TextMeasurer {
@@ -104,5 +111,17 @@ describe('shareCard — footer + filename composition', () => {
     expect(cardFileName({ title: 'Out the Mud!' })).toBe('out-the-mud-hermes-card.png');
     expect(cardFileName({ title: '  ✨  ' })).toBe('song-hermes-card.png');
     expect(cardFileName({ title: '' })).toBe('song-hermes-card.png');
+  });
+});
+
+describe('shareCard — Song Gifts (phase 2): the card eyebrow becomes the gift framing', () => {
+  it('a package with an occasion + a dedicated name gets the gift eyebrow', () => {
+    expect(giftEyebrow({ inputs: { ...base, occasion: 'christmas' } })).toBe('🎄 A CHRISTMAS SONG FOR MOM');
+  });
+
+  it('no occasion, or no audience name, falls back to null (the generic receipt line)', () => {
+    expect(giftEyebrow({ inputs: base })).toBeNull();
+    expect(giftEyebrow({ inputs: { ...base, occasion: 'christmas', audience: '' } })).toBeNull();
+    expect(giftEyebrow({ inputs: { ...base, occasion: 'evil' } })).toBeNull();
   });
 });

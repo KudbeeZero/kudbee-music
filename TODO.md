@@ -106,6 +106,12 @@ chat. Detail for each is in [`brain/roadmap.json`](brain/roadmap.json) + [`IDEAS
      verbs (`carry`/`grind`/…) are rejected by `nounable` (`VERB_SET` derived from `VERBS`). Regression-tested.
 - [~] **Crossroads Stages 2–3** — Stage 2 shipped _(#116)_: a `/crossroads` board UI. Stage 3
    (decisions feed the taste model) is still queued.
+- [ ] **PNG share card has no UI trigger** — surfaced while shipping Song Gifts phase 2
+   (roadmap 5.9): `shareCard.ts`'s `renderShareCard`/`downloadShareCard` are tested and
+   correct, but nothing in `components/` or `app/` calls them — a visitor cannot download
+   the card at all today. Fix: wire a "⬇ Download card" button into `SongPackageView`
+   (next to Share/Explain/Export), or if this was deliberately deferred, say so explicitly
+   in `brain/roadmap.json` instead of the item silently reading as shipped.
 - [~] **2026-07-02 code-review findings (Fable 5 review → Sonnet verification)** — weakness #1
    (share-reproduction integrity) fixed _(this PR)_. Still open, in fix order:
    - [x] **Weakness #2 — quota-honest vault writes** — fixed _(this PR)_: `saveSong` now
@@ -299,6 +305,22 @@ Board** governance / Solana / token / NFT layer integrates with this engine via 
 later (kept out of this repo's core so it stays free + local).
 
 ## ✅ Shipped (newest first)
+- [x] **Song Gifts — gift-framed share link, PNG card, and OG unfurl (roadmap 5.9, Song
+      Gifts phase 2)** — completes the pitch from 5.8. Every existing share surface becomes
+      gift-aware whenever a package carries an Occasion Pack + a dedicated audience name —
+      deliberately no NEW surfaces, just the existing ones telling the truth about what a
+      gift link is. `shareLink.ts`'s new `giftMessage()` turns the clipboard text into a
+      one-line message ("🎄 A Christmas song for Mom — open it to watch the brain write it:
+      <url>") instead of a bare URL; `SongPackageView`'s Share button becomes "🎄 Share the
+      gift" and copies that message; opening a gift link shows a themed "gift reveal" banner
+      (`HermesHitFactory`) before the brain scan runs. The downloadable PNG card
+      (`shareCard.ts`'s new `giftEyebrow()`) and the env-gated OG unfurl
+      (`functions/_lib/ogCard.ts`, still `OG_UNFURL=1`-gated + inert by default) both swap
+      their eyebrow/title/description to the gift framing, so a shared gift link previews
+      correctly in iMessage/Slack/Discord once the founder activates unfurl. ~30 new tests
+      across `shareCard`/`shareLink`/`ogFunction`. Playwright-verified live end to end:
+      generated a Christmas gift for "Mom," copied the gift message, opened it fresh, watched
+      the reveal banner render — zero console errors on either side. _(this PR)_
 - [x] **Occasion Packs — holiday/life-moment lexicon + dedication (roadmap 5.8, Song Gifts
       phase 1)** — the founder's holiday-song-pack idea, generalized to 8 life moments
       (Christmas, Valentine's, Mother's/Father's Day, Birthday, Anniversary, Graduation, New

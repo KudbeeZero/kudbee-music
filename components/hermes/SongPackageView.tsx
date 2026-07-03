@@ -6,7 +6,8 @@ import { deliberationForHook } from '@/lib/hermes/cognition';
 import { buildTrace } from '@/lib/hermes/trace';
 import { renderTraceHtml } from '@/lib/hermes/traceHtml';
 import { sunoStyle, sunoLyrics } from '@/lib/hermes/suno';
-import { encodeShare, shareUrl } from '@/lib/hermes/shareLink';
+import { encodeShare, shareUrl, giftMessage } from '@/lib/hermes/shareLink';
+import { findOccasionPack } from '@/lib/hermes/occasionPacks';
 import ScribeEditor from './ScribeEditor';
 import styles from './hermes.module.css';
 
@@ -56,10 +57,15 @@ export default function SongPackageView({ pkg, onSaveEdit, onChooseHook, onRegen
   // share seed 0 and reproduce a DIFFERENT song than the one on screen — a silent
   // break of the "reproduces it exactly" promise, so the button hides instead.
   const shareable = typeof pkg.seed === 'number';
+  // Song Gifts (phase 2): an occasion + a dedicated name turns the share button into
+  // a gift button — the clipboard text becomes a one-line gift message, not a bare URL.
+  const giftPack = findOccasionPack(pkg.inputs.occasion);
+  const isGift = shareable && !!giftPack && !!pkg.inputs.audience.trim();
   function shareSong() {
     if (!shareable) return;
     const link = shareUrl(encodeShare(pkg.inputs, pkg.seed as number));
-    navigator.clipboard?.writeText(link).then(() => { setShared(true); setTimeout(() => setShared(false), 1600); }).catch(() => {});
+    const text = isGift ? giftMessage(pkg.inputs, link) : link;
+    navigator.clipboard?.writeText(text).then(() => { setShared(true); setTimeout(() => setShared(false), 1600); }).catch(() => {});
   }
 
   function copyClip(text: string, i: number) {
@@ -72,7 +78,16 @@ export default function SongPackageView({ pkg, onSaveEdit, onChooseHook, onRegen
         <span>Song Package · “{pkg.title}” · v{pkg.version}</span>
         <span style={{ display: 'flex', gap: 6 }}>
           {shareable && (
-            <button className={styles.copyBtn} style={{ marginLeft: 0 }} onClick={shareSong} title="Copy a link that regenerates this song from the same brief + seed — anyone who opens it watches the brain think ($0, no key). Personal avoid-words don't travel with the link, so a heavily customized brain may render small differences.">{shared ? 'link copied ✓' : '🔗 Share'}</button>
+            <button
+              className={styles.copyBtn}
+              style={{ marginLeft: 0 }}
+              onClick={shareSong}
+              title={isGift
+                ? `Copy a gift message + link for ${pkg.inputs.audience.trim()} — opening it plays this exact ${giftPack!.label} song, dedication and all ($0, no key).`
+                : "Copy a link that regenerates this song from the same brief + seed — anyone who opens it watches the brain think ($0, no key). Personal avoid-words don't travel with the link, so a heavily customized brain may render small differences."}
+            >
+              {shared ? (isGift ? 'gift copied ✓' : 'link copied ✓') : (isGift ? `${giftPack!.emoji} Share the gift` : '🔗 Share')}
+            </button>
           )}
           <button className={styles.copyBtn} style={{ marginLeft: 0 }} onClick={explainSong} title="Open the interactive brain trace for this song — heat-map, what each region did, and a copy-paste Suno prompt">🔍 Explain this song</button>
           <button className={styles.copyBtn} style={{ marginLeft: 0 }} onClick={exportSong} title="Download this song package as JSON (backup / re-import into your vault)">⬇ Export JSON</button>

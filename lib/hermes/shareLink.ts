@@ -7,7 +7,7 @@
 // hardening) and can never throw or pollute the prototype.
 import type { SongInputs, SongStructure, RhymeSchemeId } from './types';
 import { RHYME_SCHEME_IDS } from './types';
-import { isValidOccasionId } from './occasionPacks';
+import { isValidOccasionId, findOccasionPack } from './occasionPacks';
 
 /** Bumped if the token layout changes; decodeShare rejects unknown versions. */
 const SHARE_VERSION = 1;
@@ -97,4 +97,15 @@ export function decodeShare(token: string): { inputs: SongInputs; seed: number }
 export function shareUrl(token: string, origin?: string): string {
   const base = origin ?? (typeof window !== 'undefined' ? window.location.origin : '');
   return `${base}/hermes?s=${token}`;
+}
+
+/** Song Gifts (phase 2): when a package carries an Occasion Pack + a dedicated
+ *  audience name, the clipboard text becomes a one-line gift message instead of a
+ *  bare URL — "here's what this link IS" is the whole point of a gift link. Falls
+ *  back to the plain URL for a regular (non-gift) song. */
+export function giftMessage(inputs: SongInputs, url: string): string {
+  const who = inputs.audience.trim();
+  const pack = findOccasionPack(inputs.occasion);
+  if (!pack || !who) return url;
+  return `${pack.emoji} A ${pack.label} song for ${who} — open it to watch the brain write it: ${url}`;
 }
