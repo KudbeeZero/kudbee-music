@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeEach } from 'vitest';
-import { saveSong, listSongs, getSong, deleteSong, duplicateSong, renameSong, __clearVault, priorSongsForOriginality, loadFavorites, toggleFavorite, loadSongNotes, setSongNote, loadRecentlyViewed, recordRecentlyViewed } from '../storage';
+import { saveSong, listSongs, getSong, deleteSong, duplicateSong, renameSong, __clearVault, priorSongsForOriginality, loadFavorites, toggleFavorite, loadSongNotes, setSongNote, clearAllSongNotes, loadRecentlyViewed, recordRecentlyViewed } from '../storage';
 import { runPipeline } from '../pipeline';
 import type { SongInputs } from '../types';
 
@@ -137,6 +137,14 @@ describe('song notes — a free-text sticky note per song id (tiny-feature caden
     const notes = loadSongNotes();
     expect(notes.a).toBe('note A');
     expect(notes.b).toBe('note B');
+  });
+
+  it('clearAllSongNotes wipes every note at once (tiny-feature cadence, #25)', () => {
+    setSongNote('a', 'note A');
+    setSongNote('b', 'note B');
+    const cleared = clearAllSongNotes();
+    expect(cleared).toEqual({});
+    expect(loadSongNotes()).toEqual({});
   });
 });
 

@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from 'react';
 import type { SongPackage } from '@/lib/hermes/types';
-import { exportVault, importVault, vaultBackupStatus, restoreFromBackup, loadFavorites, toggleFavorite, loadSongNotes, setSongNote, loadRecentlyViewed } from '@/lib/hermes/storage';
+import { exportVault, importVault, vaultBackupStatus, restoreFromBackup, loadFavorites, toggleFavorite, loadSongNotes, setSongNote, clearAllSongNotes, loadRecentlyViewed } from '@/lib/hermes/storage';
 import { songMarkdown } from '@/lib/hermes/markdownExport';
 import styles from './hermes.module.css';
 
@@ -158,6 +158,17 @@ export default function VaultDrawer({
       setTimeout(() => setCopiedAllMd(false), 1600);
     }).catch(() => {});
   }
+
+  // Same confirm-then-wipe caution as clearAvoidWords() in HermesHitFactory.tsx —
+  // a growing pile of per-song notes has no per-note bulk-delete, only one at a
+  // time by clearing each field, so a one-click reset matters here too.
+  const noteCount = Object.keys(noteDrafts).length;
+  function clearAllNotes() {
+    if (!noteCount) return;
+    const ok = window.confirm(`Clear all ${count(noteCount, 'note')}? This can't be undone.`);
+    if (!ok) return;
+    setNoteDrafts(clearAllSongNotes());
+  }
   function doImport(e: React.ChangeEvent<HTMLInputElement>) {
     const file = e.target.files?.[0];
     if (!file) return;
@@ -201,6 +212,11 @@ export default function VaultDrawer({
           {songs.length > 0 && (
             <button className={styles.copyBtn} style={{ marginLeft: 0 }} onClick={copyAllMarkdown} title="Copy every song as Markdown — concept, brief, hook, lyrics, and production notes, not just lyrics — separated per song, for archiving the whole vault at once">
               {copiedAllMd ? 'all Markdown copied ✓' : '📄 Copy all as Markdown'}
+            </button>
+          )}
+          {noteCount > 0 && (
+            <button className={styles.copyBtn} style={{ marginLeft: 0 }} onClick={clearAllNotes} title="Clear every per-song note in the vault at once">
+              🗑 clear all notes
             </button>
           )}
         </div>

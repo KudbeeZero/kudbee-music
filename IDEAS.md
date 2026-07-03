@@ -339,12 +339,17 @@ A second-opinion review flagged real risks worth acting on (truth-first):
   - ✅ **📄 Copy all as Markdown — bulk vault export, richer format** — reuses
     the same per-song `songMarkdown()` formatter Export Markdown already uses,
     across the whole vault at once, `---`-separated. See TODO.md Shipped.
-  Candidates queued for the next few rounds (pick one, ship it, move to the next):
-  a "clear all vault notes" one-click reset mirroring 7.17's
-  clear-all-avoid-words pattern, a "longest streak" stat alongside "songs
+  - ✅ **🗑 Clear all vault notes** — a confirm-gated one-click reset for the
+    per-song notes list, mirroring 7.17's clear-all-avoid-words pattern. See
+    TODO.md Shipped.
+  **Cadence paused here at 7.25** *(founder directive, 2026-07-03 — "finish up
+  your last little feature and then stop... let's come up with medium sized
+  features that are more focused on application flow, UI integration, also
+  utilizing the API more")*. Remaining un-shipped candidates left parked for
+  whenever tiny-feature work resumes: a "longest streak" stat alongside "songs
   today" (consecutive days with at least one song saved), a per-song
-  "download as .txt" button for people who just want the lyrics as a plain
-  file (today it's Markdown/JSON download or clipboard-only for plain text).
+  "download as .txt" button for plain-text-only lyrics (today it's
+  Markdown/JSON download or clipboard-only for plain text).
 - 🔨 **"Input their music" — upload an existing audio file, not just record live**
   *(founder question, 2026-07-03 — "I want to create something down the road
   where people can input their music... are you working on that?")* — a genuinely
