@@ -32,6 +32,7 @@ export default function VaultDrawer({
   const [recentIds] = useState<string[]>(() => loadRecentlyViewed());
   const [query, setQuery] = useState('');
   const [sortMode, setSortMode] = useState<'newest' | 'oldest' | 'title'>('newest');
+  const [copiedAll, setCopiedAll] = useState(false);
   const [renamingId, setRenamingId] = useState<string | null>(null);
   const [renameDraft, setRenameDraft] = useState('');
 
@@ -112,6 +113,19 @@ export default function VaultDrawer({
     a.href = url; a.download = 'hermes-vault.json'; a.click();
     URL.revokeObjectURL(url);
   }
+
+  // Copying one song's lyrics at a time (7.2) doesn't help someone archiving the
+  // whole catalog at once — one clipboard copy of every song, title-headed and
+  // separated, same [Section] format each song's own "Copy lyrics" button uses.
+  function copyAllLyrics() {
+    const text = songs
+      .map((s) => `# ${s.title}\n\n${s.sections.map((sec) => `[${sec.label}]\n${sec.lines.join('\n')}`).join('\n\n')}`)
+      .join('\n\n---\n\n');
+    navigator.clipboard?.writeText(text).then(() => {
+      setCopiedAll(true);
+      setTimeout(() => setCopiedAll(false), 1600);
+    }).catch(() => {});
+  }
   function doImport(e: React.ChangeEvent<HTMLInputElement>) {
     const file = e.target.files?.[0];
     if (!file) return;
@@ -145,6 +159,11 @@ export default function VaultDrawer({
           <button className={styles.copyBtn} style={{ marginLeft: 0 }} onClick={doExport}>⬇ Export vault</button>
           <button className={styles.copyBtn} style={{ marginLeft: 0 }} onClick={() => fileRef.current?.click()}>⬆ Import</button>
           <input ref={fileRef} type="file" accept="application/json" onChange={doImport} style={{ display: 'none' }} />
+          {songs.length > 0 && (
+            <button className={styles.copyBtn} style={{ marginLeft: 0 }} onClick={copyAllLyrics} title="Copy every song's lyrics as plain text, title-headed and separated — for archiving the whole vault at once">
+              {copiedAll ? 'all lyrics copied ✓' : '📋 Copy all lyrics'}
+            </button>
+          )}
         </div>
         <div
           className={backupWarn ? styles.backupWarn : styles.hint}
