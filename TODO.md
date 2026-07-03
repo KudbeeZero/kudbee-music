@@ -303,6 +303,22 @@ Board** governance / Solana / token / NFT layer integrates with this engine via 
 later (kept out of this repo's core so it stays free + local).
 
 ## ✅ Shipped (newest first)
+- [x] **🕐 Recently viewed strip in the Vault (tiny-feature cadence, #14)** — no
+      quick way back to a song you had open a minute ago without scrolling/
+      hunting the full list. New `storage.ts` `loadRecentlyViewed()`/
+      `recordRecentlyViewed(id)` (newest-first, capped at 5, moves a re-viewed id
+      back to the front instead of duplicating it — its own localStorage key,
+      best-effort like favorites/notes). Recorded on every vault-open
+      (`openFromVault` in `HermesHitFactory.tsx`); a "🕐 Recently viewed" chip strip
+      renders above the main list in `VaultDrawer.tsx` — stale ids (a since-deleted
+      song) are silently filtered, never shown as a broken chip. +4 tests.
+      Descoped a dark/light theme toggle in the same round after checking
+      `app/globals.css`: the app is fully dark-only with ~20 hardcoded color
+      variables and no light-mode infrastructure at all — a real light theme is a
+      design-system project, not a same-day tiny build. Playwright-verified the
+      shipped feature live: strip absent with nothing viewed, opened a song from
+      the vault list, reopened the drawer, confirmed the correct title chip
+      appeared, zero console errors. _(this PR)_
 - [x] **↺ Reset to defaults on Song Lab (tiny-feature cadence, #13)** — after
       trying Surprise Me / Load Example / a Pattern Pack, the only way back to a
       blank form was reloading the page. `SongLabForm.tsx`'s new `resetForm()`

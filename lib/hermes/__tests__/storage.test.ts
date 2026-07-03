@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeEach } from 'vitest';
-import { saveSong, listSongs, getSong, deleteSong, duplicateSong, __clearVault, priorSongsForOriginality, loadFavorites, toggleFavorite, loadSongNotes, setSongNote } from '../storage';
+import { saveSong, listSongs, getSong, deleteSong, duplicateSong, __clearVault, priorSongsForOriginality, loadFavorites, toggleFavorite, loadSongNotes, setSongNote, loadRecentlyViewed, recordRecentlyViewed } from '../storage';
 import { runPipeline } from '../pipeline';
 import type { SongInputs } from '../types';
 
@@ -137,5 +137,31 @@ describe('song notes — a free-text sticky note per song id (tiny-feature caden
     const notes = loadSongNotes();
     expect(notes.a).toBe('note A');
     expect(notes.b).toBe('note B');
+  });
+});
+
+describe('recently viewed — the last few songs opened (tiny-feature cadence, #14)', () => {
+  beforeEach(() => __clearVault());
+
+  it('starts empty', () => {
+    expect(loadRecentlyViewed()).toEqual([]);
+  });
+
+  it('puts the most recently viewed id first', () => {
+    recordRecentlyViewed('a');
+    recordRecentlyViewed('b');
+    expect(loadRecentlyViewed()).toEqual(['b', 'a']);
+  });
+
+  it('moves a re-viewed id back to the front instead of duplicating it', () => {
+    recordRecentlyViewed('a');
+    recordRecentlyViewed('b');
+    recordRecentlyViewed('a');
+    expect(loadRecentlyViewed()).toEqual(['a', 'b']);
+  });
+
+  it('caps at 5, dropping the oldest', () => {
+    for (const id of ['a', 'b', 'c', 'd', 'e', 'f']) recordRecentlyViewed(id);
+    expect(loadRecentlyViewed()).toEqual(['f', 'e', 'd', 'c', 'b']);
   });
 });

@@ -219,6 +219,21 @@ A second-opinion review flagged real risks worth acting on (truth-first):
   disclaimer in the README + Uniqueness panel. _(#37)_
 
 ## 🌱 Fresh captures
+- 💭 **"WIFI radio will have like a jukebox songs. People can submit songs. We have
+  contest stuff — bring more value"** *(founder idea, 2026-07-03)* — this already
+  had a home: `brain/roadmap.json`'s `ecosystem.wifiDjRadio` ("A live radio
+  streaming engine-made music; community submits + shapes"), previously a
+  one-liner. Expanded with the concrete shape: a jukebox/playlist surface where
+  the community submits finished HERMES songs, plus contest mechanics (voting,
+  winners, featured drops). Natural extension of two things already built —
+  `crossroads.ts`'s vote/tally/leader model (currently used for governance
+  crossings, reusable for song-submission voting) and the Vault/Song-Gifts
+  share-link infra (already gets a song out of one artist's browser onto a
+  shareable URL). Not started — genuinely blocked on the community layer
+  (`crossroadsBoard`'s own stage 4: an opt-in backend), since submissions need to
+  be visible across visitors, not just live in one browser's localStorage vault
+  like everything else in the free core. Distinct from the tiny-feature cadence
+  below — this is ecosystem-scale, not a same-day build.
 - 🔨 **"Keep coming up with new little features, real tiny builds that amplify one
   little area... do this enough times, things will be amazing"** *(founder directive,
   standing goal, 2026-07-03)* — a continuous cadence, not a one-off feature: small,
@@ -273,9 +288,21 @@ A second-opinion review flagged real risks worth acting on (truth-first):
     state. See TODO.md Shipped.
   - ✅ **↺ Reset to defaults on Song Lab** — a "Reset" button clears the form back
     to blank, shown only when the form is actually dirty. See TODO.md Shipped.
+  - 🔻 **Dark/light theme toggle — descoped, not a tiny feature.** Checked
+    `app/globals.css` before starting: the app is fully dark-only — ~20 CSS
+    variables (`--bg-0`/`--panel`/`--ink`/`--amber`/`--cyan`/`--magenta`/etc.), no
+    light-mode values, no `data-theme` or `prefers-color-scheme` infrastructure
+    anywhere. A real light theme means designing a full second palette and
+    checking contrast/readability across every component — a design-system
+    project, not a same-day tiny build. Left un-shipped; queued as its own bigger
+    item if the founder wants it (see brain/roadmap.json if promoted later).
+  - ✅ **🕐 Recently viewed strip in the Vault** — `loadRecentlyViewed()`/
+    `recordRecentlyViewed()` (newest-first, capped at 5), recorded on every
+    vault-open, a chip strip above the main Vault list. See TODO.md Shipped.
   Candidates queued for the next few rounds (pick one, ship it, move to the next):
-  a dark/light theme toggle, a "recently viewed" strip in the Vault for the last
-  few songs opened.
+  a vault search/filter box (type to filter by title once the list grows past a
+  screenful), an inline rename for a vault song's title (separate from bumping a
+  new version).
 - 🔨 **"Input their music" — upload an existing audio file, not just record live**
   *(founder question, 2026-07-03 — "I want to create something down the road
   where people can input their music... are you working on that?")* — a genuinely
