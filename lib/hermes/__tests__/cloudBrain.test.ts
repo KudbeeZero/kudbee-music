@@ -18,6 +18,16 @@ describe('cloudBrain config seam', () => {
     expect(cloudEnabled(GOOD)).toBe(true);
   });
 
+  it('accepts the new sb_publishable_ key format (not just legacy eyJ JWTs)', () => {
+    // A fake key in the real format — never the project's actual key in committed source.
+    const env = {
+      NEXT_PUBLIC_SUPABASE_URL: 'https://abcdefgh.supabase.co',
+      NEXT_PUBLIC_SUPABASE_ANON_KEY: 'sb_publishable_FAKEfakeFAKEfakeFAKEfake0000',
+    };
+    expect(cloudEnabled(env)).toBe(true);
+    expect(cloudConfig(env)?.anonKey).toMatch(/^sb_publishable_/);
+  });
+
   it('parses a valid config and strips a trailing slash', () => {
     const cfg = cloudConfig({ ...GOOD, NEXT_PUBLIC_SUPABASE_URL: 'https://abcdefgh.supabase.co/' });
     expect(cfg).toEqual({ url: 'https://abcdefgh.supabase.co', anonKey: GOOD.NEXT_PUBLIC_SUPABASE_ANON_KEY });
