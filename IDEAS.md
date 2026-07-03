@@ -260,7 +260,16 @@ A second-opinion review flagged real risks worth acting on (truth-first):
     → the `brains` row on sign-in/save) is a small, testable PR — "saved server-side, restored
     on any device" becomes a thin layer over the #171 Brain Pack, not a rewrite. Security: the
     anon key is publishable (RLS is the guard); the `service_role` secret must never touch the
-    client.
+    client. **Update (founder connected the project + gave the publishable key):** a live
+    connection check confirmed the key works but found the `brains` table missing + only email
+    auth on (Google off, email-confirm on) — see docs/accounts.md. The real auth + sync ENGINE
+    is now built + fully unit-tested: `lib/hermes/cloudSync.ts` (raw `fetch` against Supabase's
+    GoTrue + PostgREST APIs — no SDK, no new dep, same $0 discipline as Claude BYOK):
+    `signUp`/`signIn`/`signOut`/`refresh` + session persistence, and `pushBrain`/`pullBrain`
+    upsert/read of the #171 Brain Pack to an RLS-guarded `brains` row, all inert behind the
+    config seam. 11 tests cover every request shape against a mocked fetch. Remaining before
+    UI-wiring + live test: the two founder dashboard steps (create the `brains` table; turn off
+    email-confirmation or enable Google).
   - **(D) Lightning AI — "unlock your own agent / your own brain"** — *blocked on the founder*:
     needs a Lightning Studio running a HERMES agent behind HTTPS/SSL the founder connects
     (already tracked in TODO "Lightning AI spike"). The security laws forbid routing a key
