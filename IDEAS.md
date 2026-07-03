@@ -367,9 +367,60 @@ A second-opinion review flagged real risks worth acting on (truth-first):
   picked **Studio Flow** to start — tracked as its own roadmap phase
   (`brain/roadmap.json` phase 8, "Medium features — the planned arc") rather
   than folded into the closed phase 7. PR1 (the rail + stage state, item 8.1)
-  shipped; PR2 (Release-desk regroup) and PR3 (mobile pass) queued next. The
+  shipped. PR2 (Release-desk regroup) and PR3 (mobile pass) queued next. The
   other five proposals stay parked here as candidates for whenever the founder
   wants to pick the next arc.
+  - ✅ **8.2 — Agent Board upgrade: live connection lines + terminal signal
+    ticker** *(founder: "it's literally them thinking")* — surfaces
+    `nervousSystem.ts`'s already-computed `Signal` bus (previously invisible)
+    as animated connector lines between agent cards + a retro-terminal-styled
+    live transcript. See TODO.md Shipped.
+- 🔨 **The Council as a real plug-in architecture** *(founder directive,
+  2026-07-03 — "if we were to connect another panel or another council into
+  this, that would alter... the outcome... come up with three ideas that
+  would make this take #1 on the App Store")* — audited the code: `AgentId`
+  (`lib/hermes/types.ts`) is a closed 10-agent union and `COUNCIL_WEIGHTS`
+  (`lib/hermes/council.ts`) is a hardcoded 3–4-voice object — today there is
+  no real extension point, despite the app's own "rack" metaphor (the Engine
+  Rack already proves swappable engines work). Proposed making the Council's
+  voices an open, weighted registry (`CouncilVoice[]`, renormalized to 100 as
+  voices are added/removed) as the prerequisite, then three ideas built on it:
+  **Guest Judges** (selectable persona voices — "the A&R exec," "the TikTok
+  algorithm," "your mom" — each a pluggable scoring lens), **Agent Packs**
+  (genre/culture bundles that each register a new agent + Council voice,
+  reusing the patternPacks/occasionPacks precedent — an "app store inside the
+  app"), and **Live Multiplayer Council** (friends/fans vote live on hooks via
+  a share link, becoming a real-time "Crowd" voice). Founder approved all
+  three ("implement all of that"). **Live Multiplayer Council is genuinely
+  blocked**: it needs real-time cross-device vote aggregation, which needs a
+  backend the $0 static-export core doesn't have — same blocker already
+  documented for the WIFI-radio jukebox idea (`crossroadsBoard`'s unbuilt
+  stage-4 opt-in backend). Not faking a local approximation; parked here until
+  that backend exists. Registry refactor + Guest Judges + Agent Packs MVP
+  queued as the next PRs in the medium-feature arc (`brain/roadmap.json`
+  phase 8).
+- 🔨 **Agent personality plug-ins** *(founder idea, 2026-07-03 — "some sort of
+  personality feature... some sort of plug-in people could select for each
+  agent")* — related to but distinct from the Council-voice-registry above:
+  that one is pluggable *scoring/ranking* voices, this is pluggable
+  *generation-time behavior* per agent (e.g. Hooksmith running an "aggressive"
+  vs. "gentle" mode). Same underlying registry pattern, applied one layer
+  earlier in the pipeline. Design queued behind the voice-registry PR so it
+  can reuse the same plug-in shape once that lands.
+- 🔨 **Lyric editing polish — inline thesaurus + live re-scoring** *(founder
+  directive, 2026-07-03 — "polishing off the lyric area and editing... an
+  inline dictionary/thesaurus... really easy edit ability, and then that
+  needs to be recognized throughout... globally")* — two related gaps:
+  (1) a synonym/definition popup while editing, parallel to the existing
+  click-a-word rhyme helper in `SongPackageView.tsx` (which already does
+  click-a-word → `rhymesWith()`) — same interaction, a thesaurus lookup
+  instead of a rhyme lookup; (2) today a saved lyric edit likely only updates
+  the raw text without re-running the Banger Score / Uniqueness Report /
+  Council ranking against the new words, so the rest of the studio view goes
+  stale after an edit. Needs investigating `saveLyricEdit` in
+  `HermesHitFactory.tsx` to confirm the exact gap, then a deterministic,
+  no-network re-score-on-edit path so editing a lyric visibly ripples through
+  the whole panel, not just the text box. Two separate PRs queued.
 - 🔨 **"Input their music" — upload an existing audio file, not just record live**
   *(founder question, 2026-07-03 — "I want to create something down the road
   where people can input their music... are you working on that?")* — a genuinely

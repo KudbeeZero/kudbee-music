@@ -303,6 +303,30 @@ Board** governance / Solana / token / NFT layer integrates with this engine via 
 later (kept out of this repo's core so it stays free + local).
 
 ## ✅ Shipped (newest first)
+- [x] **🖥️ Agent Board upgrade — live connection lines + terminal signal ticker
+      (medium-feature arc, item 8.2)** — founder: "it's literally them
+      thinking." The Agent Board was a static snapshot grid even though
+      `lib/hermes/nervousSystem.ts` already models real `Signal` message-passing
+      between regions that nothing displayed. New `signalLog` state in
+      `HermesHitFactory.tsx` subscribes to the nervous system live;
+      `AgentBoard.tsx` now draws a short-lived animated SVG connector line
+      between the two most-recently-fired agent cards whenever their regions
+      share a real `brainMap.ts` pathway — no invented edges, only what the
+      brain actually wired. A new `SignalTicker.tsx` renders the same signals
+      as a retro terminal readout (monospace font, traffic-light title bar,
+      blinking cursor) per founder's explicit request for "some sort of
+      terminal look." **Caught a real gap while testing this feature's own
+      flagship case**: `loadDemo()` — the "See a finished example" button, the
+      most common first-touch path for a new visitor — bypassed `run()`
+      entirely and never fired any signals, so the new ticker/lines stayed
+      empty exactly where they'd be seen first. Fixed by replaying the demo
+      song's own already-computed `agentOutputs` through the same
+      `signalForAgent()` path `run()` uses, so the showcase is an honest replay
+      of what the pipeline actually did, not an empty shell. Playwright-verified
+      live: the ticker shows real signal lines (not the idle placeholder) after
+      both the demo path and a real generation, the cursor blinks, and at least
+      one connection line renders during agent-by-agent playback. Zero console
+      errors. Full gate suite green. _(this PR)_
 - [x] **🧭 Studio Flow PR1 — the Review/Refine/Keep/Release rail (medium-feature
       arc, item 8.1)** — studio mode presented ~10 panels + an 8-button toolbar
       all at once, with no guided path from "song generated" to "refined, kept,

@@ -92,16 +92,46 @@
 .railDot[data-on="warning"] { color: var(--warn); border-color: rgba(255, 206, 90, 0.4); }
 
 /* ---------- agent board ---------- */
-.agentGrid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
+.agentGridWrap { position: relative; }
+.agentConnSvg { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; overflow: visible; z-index: 1; }
+.agentConnLine {
+  stroke: var(--amber); stroke-width: 2; stroke-linecap: round;
+  animation: connFade 1.2s ease-out forwards;
+}
+@keyframes connFade {
+  0% { opacity: 0; stroke-dashoffset: 12; }
+  15% { opacity: 1; }
+  70% { opacity: 0.9; }
+  100% { opacity: 0; stroke-dashoffset: 0; }
+}
+.agentGrid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; position: relative; z-index: 0; }
 @media (max-width: 560px) { .agentGrid { grid-template-columns: 1fr; } }
 .agentCard {
   border: 1px solid var(--line); border-radius: 12px; padding: 12px; background: var(--bg-1);
-  position: relative; overflow: hidden; transition: border-color 0.25s, transform 0.25s;
+  position: relative; overflow: hidden; transition: border-color 0.25s, transform 0.25s, box-shadow 0.3s;
 }
 .agentCard[data-status="running"] { border-color: var(--amber); }
 .agentCard[data-status="done"] { border-color: rgba(87, 217, 138, 0.35); }
 .agentCard[data-status="warning"] { border-color: rgba(255, 206, 90, 0.45); }
 .agentCard[data-status="error"] { border-color: rgba(255, 93, 108, 0.5); }
+.agentCard[data-wired="true"] { border-color: var(--amber); box-shadow: 0 0 0 3px rgba(255, 177, 78, 0.15); }
+
+/* ---------- signal ticker (terminal look) ---------- */
+.terminal {
+  margin-top: 12px; border-radius: 10px; overflow: hidden; border: 1px solid var(--line-strong);
+  background: #0a0d10; font-family: ui-monospace, 'SFMono-Regular', Menlo, Consolas, monospace;
+}
+.terminalBar { display: flex; align-items: center; gap: 6px; padding: 7px 10px; background: #12161a; border-bottom: 1px solid var(--line); }
+.terminalDot { width: 9px; height: 9px; border-radius: 50%; display: inline-block; }
+.terminalDot[data-c="r"] { background: #ff5d6c; }
+.terminalDot[data-c="y"] { background: #ffce5a; }
+.terminalDot[data-c="g"] { background: #57d98a; }
+.terminalLabel { margin-left: 6px; font-size: 10.5px; color: var(--ink-faint); letter-spacing: 0.04em; }
+.terminalBody { padding: 10px 12px; min-height: 118px; max-height: 160px; overflow-y: auto; }
+.terminalLine { font-size: 11.5px; line-height: 1.6; color: var(--cyan); white-space: pre-wrap; word-break: break-word; }
+.terminalPrompt { color: var(--amber); margin-right: 5px; }
+.terminalCursor { color: var(--amber); animation: termBlink 1s step-start infinite; }
+@keyframes termBlink { 50% { opacity: 0; } }
 .agentTop { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
 .agentName { font-weight: 700; font-size: 13.5px; }
 .agentRole { font-size: 10.5px; color: var(--ink-faint); }
