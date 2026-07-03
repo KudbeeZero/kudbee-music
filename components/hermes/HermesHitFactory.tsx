@@ -30,7 +30,7 @@ import AlbumView from './AlbumView';
 import LyricLab from './LyricLab';
 import BrainScan from './BrainScan';
 import VoiceMirror from './VoiceMirror';
-import { createNervousSystem, signalForAgent } from '@/lib/hermes/nervousSystem';
+import { createNervousSystem, signalForAgent, type Signal } from '@/lib/hermes/nervousSystem';
 import { createWorkingMemory } from '@/lib/hermes/workingMemory';
 import { brainHeat } from '@/lib/hermes/heat';
 import { deriveEmotion } from '@/lib/hermes/emotion';
@@ -81,6 +81,15 @@ export default function HermesHitFactory() {
   const nsRef = useRef(createNervousSystem());      // the nervous system (signal bus)
   const wmRef = useRef(createWorkingMemory(16));     // short-term (working) memory
   const [wmSize, setWmSize] = useState(0);
+  // A live window onto the nervous system's signal bus — the Agent Board's connection
+  // lines and terminal ticker both read off this, capped so a long session can't grow
+  // it unbounded. Subscribed once; nsRef itself is stable for the component's life.
+  const [signalLog, setSignalLog] = useState<Signal[]>([]);
+  useEffect(() => {
+    const unsub = nsRef.current.subscribe((s) => setSignalLog((log) => [...log.slice(-39), s]));
+    return unsub;
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
   const stageRef = useRef<HTMLDivElement>(null);     // the brain/result column (scroll target on mobile)
   // Studio Flow: a Review -> Refine -> Keep -> Release rail over the existing studio-mode
   // panels. A focus state, not a wall — every panel stays rendered and reachable; a tab
@@ -239,7 +248,7 @@ export default function HermesHitFactory() {
 
       // new session: clear working memory, seed it with the committed hook
       const wm = wmRef.current; const ns = nsRef.current;
-      wm.clear(); setWmSize(0);
+      wm.clear(); setWmSize(0); setSignalLog([]);
       if (result.chosenHook?.text) wm.note({ kind: 'choice', text: result.chosenHook.text });
 
       // play the pipeline back so the board + brain scan update agent-by-agent;
@@ -285,6 +294,16 @@ export default function HermesHitFactory() {
     const map: Record<string, AgentOutput> = {};
     for (const o of s.agentOutputs) map[o.id] = o;
     setOutputs(map);
+    // The demo is the most common first-touch entry point, so it needs to be an
+    // honest replay of what actually happened — not an empty nervous system. Feed
+    // this song's own already-computed agentOutputs through the same signal path
+    // run() uses, so the Agent Board's connection lines + terminal ticker have
+    // something real to show instead of staying idle.
+    setSignalLog([]);
+    for (const o of s.agentOutputs) {
+      const sig = signalForAgent(o.id, o.finding || o.name);
+      if (sig) nsRef.current.fire(sig);
+    }
   }
 
   function openFromVault(id: string) {
@@ -603,7 +622,7 @@ export default function HermesHitFactory() {
         {/* center column — brain scan + agent board + package */}
         <div className={styles.col} ref={stageRef}>
           <BrainScan outputs={outputs} running={running} workingMemory={wmSize} heat={heat} />
-          <AgentBoard outputs={outputs} />
+          <AgentBoard outputs={outputs} signalLog={signalLog} />
           {pkg && (
             <div id="stage-review" className={styles.flowFocus} data-active={flowStage === 'review'}>
               <Council outputs={outputs} pkg={pkg} taste={taste} />
