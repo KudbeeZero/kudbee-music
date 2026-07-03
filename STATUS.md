@@ -2,7 +2,7 @@
 
 > **Generated from [`brain/roadmap.json`](brain/roadmap.json) — do not hand-edit.** Status lives ONLY in the spine; edit it there, then regenerate with `GEN_DOCS=1 npx vitest run status`. `statusBoard.test.ts` fails CI if this file drifts.
 
-**Scoreboard:** ✅ 70 shipped · 🔨 1 in build · 💤 8 queued — 79 tracked items
+**Scoreboard:** ✅ 71 shipped · 🔨 1 in build · 💤 8 queued — 80 tracked items
 (legend: ✅ shipped · 🔌 scaffold shipped, founder-gated · 🔨 in build · ⏭️ next · 💤 queued · 💭 idea · 🚧 blocked on founder)
 
 ## Tracks
@@ -18,7 +18,7 @@
 | ✅ | **Council scoring → hook ranking + learn→vector recall** | `council.ts (rankHooksByCouncil) + Council.tsx + vectorRecall.ts (rememberSong/recommendSimilar)` | #53 |
 | ✅ | **ARCHITECTURE.md + brain-wiring diagram (generated from brainMap)** | `ARCHITECTURE.md + docs/brain-wiring.md + lib/hermes/wiringDoc.ts` | #51 |
 
-### Phase 0 — Living-state spine — `▰▰▰▰▰▰▰▰▰▰` 4/4
+### Phase 0 — Living-state spine — `▰▰▰▰▰▰▰▰▰▰` 5/5
 
 | | Item | Where it lives | PR |
 |---|------|----------------|----|
@@ -26,6 +26,7 @@
 | ✅ | **Refresh TODO.md to reality (mark #30–#34 shipped)** | `TODO.md` | — |
 | ✅ | **CLAUDE.md memory spine — saved conventions + routing table, guard-tested** | `CLAUDE.md` | #107 |
 | ✅ | **Status Board — spine-generated status tables + drift tests (never-stale checklists)** | `lib/hermes/statusBoard.ts` | — |
+| ✅ | **Branch ledger — every branch cross-referenced against its PR + merge status** | `brain/branches.json + scripts/branch-ledger.mjs` | — |
 
 ### Phase 1 — Measure & make it safe — `▰▰▰▰▰▰▰▰▰▰` 4/4
 

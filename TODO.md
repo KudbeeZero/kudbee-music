@@ -304,6 +304,16 @@ Board** governance / Solana / token / NFT layer integrates with this engine via 
 later (kept out of this repo's core so it stays free + local).
 
 ## ✅ Shipped (newest first)
+- [x] **🌿 Branch ledger — every branch audited against its PR + merge status** — founder ask:
+      go through every branch, check nothing's been missed, confirm it's all merged to main, and
+      give it a memory layer. Unshallowed the sandbox's git clone first (it was silently capped at
+      exactly 50 commits, which faked every ahead/behind count against `main`), then cross-referenced
+      all 111 remote branches against all 169 PRs via the GitHub API. Result: **100% merged, 0 open
+      PRs, 0 branches with no PR, 0 closed-without-merging** — nothing lost. `brain/branches.json` is
+      the new ledger (see `brain/README.md`); `scripts/branch-ledger.mjs` refreshes its git-derived
+      fields on demand ($0/local, no token needed) while PR/status stays a periodic human/agent audit,
+      same findings-only boundary the watchdog already draws. Routed in `CLAUDE.md`'s memory-layers
+      table + a new "no branch goes quiet" workflow rule. See `brain/roadmap.json` 0.5. _(this PR)_
 - [x] **👤 Per-account memory layer — each profile gets its own saved vault (the `/goal`'s local path)** —
       the founder's `/goal` wants "their account… information saved… their own memory layer," and
       the local path (their explicit "documents locally right now" fallback) is fully buildable:
