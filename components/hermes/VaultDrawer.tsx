@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from 'react';
 import type { SongPackage } from '@/lib/hermes/types';
-import { exportVault, importVault, vaultBackupStatus, restoreFromBackup, loadFavorites, toggleFavorite, loadSongNotes, setSongNote } from '@/lib/hermes/storage';
+import { exportVault, importVault, vaultBackupStatus, restoreFromBackup, loadFavorites, toggleFavorite, loadSongNotes, setSongNote, loadRecentlyViewed } from '@/lib/hermes/storage';
 import styles from './hermes.module.css';
 
 const count = (n: number, word: string) => `${n} ${word}${n === 1 ? '' : 's'}`;
@@ -26,6 +26,7 @@ export default function VaultDrawer({
   const [restoreNote, setRestoreNote] = useState<string | null>(null);
   const [favorites, setFavorites] = useState<Set<string>>(() => loadFavorites());
   const [noteDrafts, setNoteDrafts] = useState<Record<string, string>>(() => loadSongNotes());
+  const [recentIds] = useState<string[]>(() => loadRecentlyViewed());
 
   function toggleFav(id: string, e: React.MouseEvent) {
     e.stopPropagation();
@@ -49,6 +50,10 @@ export default function VaultDrawer({
   // Favorites float to the top; a stable sort keeps each group's original
   // (newest-first) order otherwise, so favoriting never reshuffles the rest.
   const sortedSongs = [...songs].sort((a, b) => Number(favorites.has(b.id)) - Number(favorites.has(a.id)));
+  const byId = new Map(songs.map((s) => [s.id, s]));
+  // Filter out ids for songs that were since deleted — a stale recent-id is just
+  // dropped, never shown as a broken chip.
+  const recentSongs = recentIds.map((id) => byId.get(id)).filter((s): s is SongPackage => !!s);
   // Cheap localStorage reads — recomputed on each render so the line stays current.
   // Warn only when the mirror holds more than the live vault (missing/corrupt live
   // reads as 0 songs); a fresh, empty vault is not a warning state.
@@ -113,6 +118,19 @@ export default function VaultDrawer({
         </div>
         {restoreNote && (
           <div className={styles.hint} style={{ marginBottom: 14 }} role="status">{restoreNote}</div>
+        )}
+
+        {recentSongs.length > 0 && (
+          <div style={{ marginBottom: 14 }}>
+            <div className={styles.hint} style={{ marginBottom: 6 }}>🕐 Recently viewed</div>
+            <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap' }}>
+              {recentSongs.map((s) => (
+                <button key={s.id} className={styles.copyBtn} style={{ marginLeft: 0 }} onClick={() => onOpen(s.id)} title={s.title}>
+                  {s.title}
+                </button>
+              ))}
+            </div>
+          </div>
         )}
 
         {songs.length === 0 ? (

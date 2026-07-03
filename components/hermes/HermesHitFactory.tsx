@@ -10,7 +10,7 @@ import { createClaudeLyricsProvider, ClaudeProviderError } from '@/lib/hermes/pr
 import { getClaudeKey, claudeEngineReady } from '@/lib/hermes/claudeKey';
 import { withChosenHook } from '@/lib/hermes/rescore';
 import { keywords } from '@/lib/hermes/text';
-import { listSongs, saveSong, getSong, deleteSong, duplicateSong, priorSongsForOriginality, loadBannedWords, saveBannedWords, listAlbums, saveAlbum, deleteAlbum, loadTaste, recordTaste, type Taste } from '@/lib/hermes/storage';
+import { listSongs, saveSong, getSong, deleteSong, duplicateSong, recordRecentlyViewed, priorSongsForOriginality, loadBannedWords, saveBannedWords, listAlbums, saveAlbum, deleteAlbum, loadTaste, recordTaste, type Taste } from '@/lib/hermes/storage';
 import { allAvoidWords, newLearnedExclusions } from '@/lib/hermes/memory';
 import { diffEdit, parseSections } from '@/lib/hermes/edits';
 import { demoSong } from '@/lib/hermes/exampleSong';
@@ -276,6 +276,7 @@ export default function HermesHitFactory() {
   function openFromVault(id: string) {
     const s = getSong(id);
     if (!s) return;
+    recordRecentlyViewed(id);
     setPkg(s);
     const map: Record<string, AgentOutput> = {};
     for (const o of s.agentOutputs) map[o.id] = o;

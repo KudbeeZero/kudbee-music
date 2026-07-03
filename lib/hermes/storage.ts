@@ -13,6 +13,7 @@ const TASTE_KEY = 'hermes.taste.v1';
 const ALIAS_KEY = 'hermes.artistAlias.v1';
 const FAVORITES_KEY = 'hermes.favorites.v1';
 const SONG_NOTES_KEY = 'hermes.songNotes.v1';
+const RECENT_KEY = 'hermes.recentlyViewed.v1';
 
 /** Backup mirror suffix — every durable list is written to `<key>` AND `<key>.bak`. */
 const BAK = '.bak';
@@ -472,6 +473,24 @@ export function setSongNote(id: string, note: string): Record<string, string> {
   if (trimmed) notes[id] = trimmed; else delete notes[id];
   try { kv().setItem(SONG_NOTES_KEY, JSON.stringify(notes)); } catch { /* ignore */ }
   return notes;
+}
+
+// ---- recently viewed (vault): the last few songs opened, newest first -------------
+// Best-effort like favorites/notes — a UI convenience, no bearing on generation.
+const RECENT_MAX = 5;
+
+export function loadRecentlyViewed(): string[] {
+  try {
+    const raw = kv().getItem(RECENT_KEY);
+    if (raw) { const arr = JSON.parse(raw); if (Array.isArray(arr)) return arr.filter((x) => typeof x === 'string'); }
+  } catch { /* ignore */ }
+  return [];
+}
+
+export function recordRecentlyViewed(id: string): string[] {
+  const next = [id, ...loadRecentlyViewed().filter((x) => x !== id)].slice(0, RECENT_MAX);
+  try { kv().setItem(RECENT_KEY, JSON.stringify(next)); } catch { /* ignore */ }
+  return next;
 }
 
 export function recordTaste(added: string[], removed: string[]): Taste {
