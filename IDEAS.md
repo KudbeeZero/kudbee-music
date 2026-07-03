@@ -245,6 +245,15 @@ A second-opinion review flagged real risks worth acting on (truth-first):
   production-ready — saved as reference at `assets/concept-art/` rather than wired into the
   live hero/OG card. Feeds `docs/runway-plan.md` Phase 3 (agent avatars → living characters),
   which was blocked on exactly this naming decision.
+  - **Follow-on, same session: `AgentAvatar.tsx` — a $0 SVG glyph per codename.** The literal
+    next TODO item (real avatar portraits) is founder-gated on Grok/Gen-4-image generation +
+    `RUNWAY_API_KEY` for animation — neither available in this session. Rather than stall,
+    shipped the buildable-now piece: a small deterministic line-art glyph per codename (same
+    stroke-only SVG style as `BrainScan.tsx`, tinted by hemisphere via `currentColor`, zero
+    image assets/API keys/network calls). `AgentCodename` moved to `types.ts` so
+    `AgentDefinition.codename` and the glyph map share one type — `tsc` itself now guarantees
+    every codename has a glyph. Wired into `Council.tsx`, screenshot-verified live (all 10
+    render distinctly, correctly tinted, no console errors).
 - 🔨 **`/goal`: per-user Claude brain + real accounts + own memory layer + own launchable
   agent (Lightning)** *(founder directive, 2026-07-03, set as a session `/goal`)* — the
   founder's words: "the Claude API should be tied in and actually generate the lyrics for the

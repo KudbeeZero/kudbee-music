@@ -1,6 +1,7 @@
 // The 10 HERMES Hit Factory agents — static definitions the Agent Board renders.
 // Run logic lives in pipeline.ts (each agent emits a typed AgentOutput).
 import type { AgentDefinition } from './types';
+export type { AgentCodename } from './types';
 
 export const AGENT_DEFINITIONS: AgentDefinition[] = [
   {
