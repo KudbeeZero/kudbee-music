@@ -9,6 +9,7 @@ import { sunoStyle, sunoLyrics } from '@/lib/hermes/suno';
 import { encodeShare, shareUrl, giftMessage } from '@/lib/hermes/shareLink';
 import { findOccasionPack } from '@/lib/hermes/occasionPacks';
 import { downloadShareCard } from '@/lib/hermes/shareCard';
+import { rhymesWith } from '@/lib/hermes/lexicon';
 import ScribeEditor from './ScribeEditor';
 import VoiceNotes from './VoiceNotes';
 import styles from './hermes.module.css';
@@ -26,6 +27,8 @@ export default function SongPackageView({ pkg, onSaveEdit, onChooseHook, onRegen
   const [shared, setShared] = useState(false);
   const [cardState, setCardState] = useState<'idle' | 'busy' | 'error'>('idle');
   const [copiedLyrics, setCopiedLyrics] = useState(false);
+  const [rhymeWord, setRhymeWord] = useState<string | null>(null);
+  const rhymeSuggestions = rhymeWord ? rhymesWith(rhymeWord, { max: 10 }) : [];
 
   function saveText(text: string) {
     onSaveEdit?.(text);
@@ -42,6 +45,43 @@ export default function SongPackageView({ pkg, onSaveEdit, onChooseHook, onRegen
       setCopiedLyrics(true);
       setTimeout(() => setCopiedLyrics(false), 1600);
     }).catch(() => {});
+  }
+
+  // Rhyme helper — click any word in the read-only lyric view to see what else in
+  // the lexicon rhymes with it. Reference only: it never edits the lyric, just
+  // surfaces rhymesWith() (already built for generation) as a writer's tool.
+  function clickWord(raw: string) {
+    const clean = raw.toLowerCase().replace(/[^a-z']/g, '');
+    if (!clean) return;
+    setRhymeWord((prev) => (prev === clean ? null : clean));
+  }
+
+  function renderClickableLine(line: string, key: string) {
+    const tokens = line.split(/(\s+)/);
+    return (
+      <span key={key}>
+        {tokens.map((tok, i) => {
+          if (!tok || /^\s+$/.test(tok)) return tok;
+          const clean = tok.toLowerCase().replace(/[^a-z']/g, '');
+          const active = !!clean && clean === rhymeWord;
+          return (
+            <span
+              key={i}
+              onClick={() => clickWord(tok)}
+              title="Click for rhymes"
+              style={{
+                cursor: 'pointer',
+                borderBottom: '1px dotted var(--ink-faint)',
+                background: active ? 'rgba(54, 224, 212, 0.18)' : undefined,
+                borderRadius: active ? 3 : undefined,
+              }}
+            >
+              {tok}
+            </span>
+          );
+        })}
+      </span>
+    );
   }
 
   function exportSong() {
@@ -196,14 +236,32 @@ export default function SongPackageView({ pkg, onSaveEdit, onChooseHook, onRegen
             <ScribeEditor sections={pkg.sections} inputs={pkg.inputs} onSave={saveText} onCancel={() => setEditing(false)} />
           )
         ) : (
-          <div className={styles.lyricBlock}>
-            {pkg.sections.map((s, i) => (
-              <div key={i} style={{ marginBottom: 12 }}>
-                <span className={styles.sectionTag}>[{s.label}]</span>
-                {'\n'}{s.lines.join('\n')}
+          <>
+            <div className={styles.lyricBlock}>
+              {pkg.sections.map((s, i) => (
+                <div key={i} style={{ marginBottom: 12 }}>
+                  <span className={styles.sectionTag}>[{s.label}]</span>
+                  {'\n'}
+                  {s.lines.map((line, j) => (
+                    <div key={j}>{renderClickableLine(line, `${i}-${j}`)}</div>
+                  ))}
+                </div>
+              ))}
+            </div>
+            {rhymeWord && (
+              <div className={styles.hint} style={{ marginTop: 6, display: 'flex', alignItems: 'center', gap: 6, flexWrap: 'wrap' }}>
+                <span>Rhymes with “{rhymeWord}”:</span>
+                {rhymeSuggestions.length ? (
+                  rhymeSuggestions.map((r) => (
+                    <span key={r.w} className={styles.copyBtn} style={{ marginLeft: 0, cursor: 'default' }}>{r.w}</span>
+                  ))
+                ) : (
+                  <span>nothing in the lexicon rhymes with that</span>
+                )}
+                <button className={styles.copyBtn} style={{ marginLeft: 0 }} onClick={() => setRhymeWord(null)}>×</button>
               </div>
-            ))}
-          </div>
+            )}
+          </>
         )}
       </div>
 

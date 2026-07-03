@@ -303,6 +303,16 @@ Board** governance / Solana / token / NFT layer integrates with this engine via 
 later (kept out of this repo's core so it stays free + local).
 
 ## ✅ Shipped (newest first)
+- [x] **🎤 Click-a-word rhyme helper (tiny-feature cadence, #4)** — the read-only
+      lyrics view had no way to check a word's rhyme options without leaving the
+      page. Every word in `SongPackageView`'s Final Lyrics block is now clickable
+      (a subtle dotted underline), surfacing `lexicon.ts`'s existing `rhymesWith()`
+      — already built for generation, never exposed to the writer directly — in a
+      small "Rhymes with '<word>'" row at the bottom, with an honest "nothing in
+      the lexicon rhymes with that" fallback. Reference only: never edits the
+      lyric. Playwright-verified live: clicked "mind" in the demo song, got
+      grind/find/blind/kind/behind back, closed the panel cleanly, zero console
+      errors. _(this PR)_
 - [x] **⭐ Vault favorites — pin your best takes (tiny-feature cadence, #3)** — the
       Vault list had no way to mark a song as a keeper; a growing catalog buries the
       songs you actually love under whatever generated most recently. New
