@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { encodeShare, decodeShare, shareUrl } from '../shareLink';
+import { encodeShare, decodeShare, shareUrl, giftMessage } from '../shareLink';
 import { runPipeline } from '../pipeline';
 import type { SongInputs } from '../types';
 
@@ -113,5 +113,24 @@ describe('shareLink — the determinism promise (a link reproduces the EXACT son
     // and the scheme genuinely changes output vs the default (the dial is live)
     const aabbDefault = (await runPipeline(INPUTS, { ...opts, seed: 11 })).pkg;
     expect(original.finalLyrics).not.toBe(aabbDefault.finalLyrics);
+  });
+});
+
+describe('shareLink — giftMessage (Song Gifts phase 2)', () => {
+  const url = 'https://wifi-dj-meme.pages.dev/hermes?s=abc';
+
+  it('builds a one-line gift message when occasion + audience are both set', () => {
+    const msg = giftMessage({ ...INPUTS, occasion: 'birthday', audience: 'Sarah' }, url);
+    expect(msg).toContain('🎂');
+    expect(msg).toContain('Birthday');
+    expect(msg).toContain('Sarah');
+    expect(msg).toContain(url);
+  });
+
+  it('falls back to the bare URL with no occasion, no audience, or a hostile occasion', () => {
+    expect(giftMessage(INPUTS, url)).toBe(url);
+    expect(giftMessage({ ...INPUTS, occasion: 'birthday', audience: '' }, url)).toBe(url);
+    expect(giftMessage({ ...INPUTS, occasion: 'birthday', audience: '   ' }, url)).toBe(url);
+    expect(giftMessage({ ...INPUTS, occasion: 'evil', audience: 'Sarah' } as SongInputs, url)).toBe(url);
   });
 });

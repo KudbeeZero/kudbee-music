@@ -8,7 +8,7 @@ import { encodeShare } from '../shareLink';
 import type { SongInputs } from '../types';
 import { onRequestGet as ogHandler } from '../../../functions/og';
 import { onRequestGet as shimHandler } from '../../../functions/s/[token]';
-import { renderOgSvg, cardTitle, cardData } from '../../../functions/_lib/ogCard';
+import { renderOgSvg, cardTitle, cardData, cardDescription } from '../../../functions/_lib/ogCard';
 
 const inputs: SongInputs = {
   title: 'Neon Gospel',
@@ -121,5 +121,36 @@ describe('renderOgSvg is well-formed + safe', () => {
     const d = cardData(inputs, 4242);
     expect(cardTitle(d)).toContain('Neon Gospel');
     expect(d.genre).toBe('synthwave gospel');
+  });
+});
+
+describe('Song Gifts (phase 2): the OG card + shim take on gift framing', () => {
+  const giftInputs = { ...inputs, occasion: 'christmas', audience: 'Mom' };
+  const giftToken = encodeShare(giftInputs, 7);
+
+  it('cardData/cardTitle/cardDescription frame a gift, not the generic receipt', () => {
+    const d = cardData(giftInputs, 7);
+    expect(d.gift).toEqual({ emoji: '🎄', label: 'Christmas', who: 'Mom' });
+    expect(cardTitle(d)).toBe('🎄 A Christmas song for Mom');
+    expect(cardDescription(d)).toContain('Mom');
+    expect(cardDescription(d)).toContain('Christmas');
+  });
+
+  it('a non-gift package has gift: null and the ordinary title', () => {
+    const d = cardData(inputs, 4242);
+    expect(d.gift).toBeNull();
+  });
+
+  it('the rendered SVG carries the gift eyebrow + title instead of "HERMES LIVE"', () => {
+    const svg = renderOgSvg(giftInputs, 7);
+    expect(svg).toContain('A SONG GIFT');
+    expect(svg).toContain('Mom');
+    expect(svg).not.toContain('>HERMES LIVE<');
+  });
+
+  it('the unfurl shim carries the gift og:title for a gift token', async () => {
+    const res = await shimHandler(shimCtx(giftToken));
+    const html = await res.text();
+    expect(html).toContain('A Christmas song for Mom');
   });
 });

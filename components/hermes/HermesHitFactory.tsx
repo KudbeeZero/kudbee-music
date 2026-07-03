@@ -37,6 +37,7 @@ import { deriveEmotion } from '@/lib/hermes/emotion';
 import { voiceMirror } from '@/lib/hermes/becomingYou';
 import { currentProfile, signInGuest, signOut, type Profile } from '@/lib/hermes/identity';
 import { decodeShare } from '@/lib/hermes/shareLink';
+import { findOccasionPack, type OccasionPack } from '@/lib/hermes/occasionPacks';
 import { useDevice } from './useDevice';
 import WelcomeGate from '../auth/WelcomeGate';
 import authStyles from '../auth/auth.module.css';
@@ -73,6 +74,9 @@ export default function HermesHitFactory() {
   // True when the last vault write didn't land (localStorage full/unavailable) — the
   // song on screen would silently vanish on reload, so the user gets an honest banner.
   const [vaultWriteFailed, setVaultWriteFailed] = useState(false);
+  // Song Gifts (phase 2): set when an opened share link decodes to a package with an
+  // Occasion Pack + a dedicated name — the "gift reveal" moment before the brain scan.
+  const [giftReveal, setGiftReveal] = useState<{ pack: OccasionPack; who: string } | null>(null);
   const regenRef = useRef(0); // bumps each run so the same idea yields a fresh take
   const nsRef = useRef(createNervousSystem());      // the nervous system (signal bus)
   const wmRef = useRef(createWorkingMemory(16));     // short-term (working) memory
@@ -124,6 +128,9 @@ export default function HermesHitFactory() {
     window.history.replaceState({}, '', url.toString());
     if (!decoded) return; // hostile/garbage token → app just loads normally
     if (!currentProfile()) setProfile(signInGuest());
+    const giftPack = findOccasionPack(decoded.inputs.occasion);
+    const who = decoded.inputs.audience.trim();
+    if (giftPack && who) setGiftReveal({ pack: giftPack, who });
     void run(decoded.inputs, { seed: decoded.seed });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [identityReady]);
@@ -435,6 +442,22 @@ export default function HermesHitFactory() {
           }}
         >
           ℹ {engineNotice}
+        </div>
+      )}
+
+      {giftReveal && (
+        <div
+          role="status"
+          style={{
+            display: 'flex', alignItems: 'center', gap: 10, border: '1px solid rgba(210,75,255,0.4)',
+            background: 'rgba(210,75,255,0.08)', borderRadius: 12, padding: '10px 14px', margin: '4px 0 14px', fontSize: 13,
+          }}
+        >
+          <span style={{ flex: 1 }}>
+            {giftReveal.pack.emoji} A <b>{giftReveal.pack.label}</b> song, written for <b>{giftReveal.who}</b> —
+            watch the brain write it below.
+          </span>
+          <button className={styles.ghostBtn} onClick={() => setGiftReveal(null)}>×</button>
         </div>
       )}
 

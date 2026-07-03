@@ -230,17 +230,27 @@ A second-opinion review flagged real risks worth acting on (truth-first):
   own flagship case (a Mother's Day dedication) surfaced a real pre-existing bug — pronouns
   weren't filtered anywhere, so "everything she gave" leaked "she" into a noun slot — fixed
   in the same PR. See TODO.md Shipped for the full writeup.
-  **The sell wrapped around it — "Song Gifts" (still proposed, phase 2)**: type a name +
-  occasion + one memory → HERMES writes a song FOR that person (name threaded into the
-  Occasion Pack's dedication line, already live), delivered as the existing deterministic
-  share link + PNG share card + OG unfurl, framed as a gift ("A Christmas song for Mom 🎁")
-  instead of the generic "HERMES Live" share text. Gifting is a proven paid behavior (the
+  **The sell wrapped around it — "Song Gifts" shipped (roadmap 5.9, phase 2)**: every
+  existing share surface became gift-aware whenever a package carries an Occasion Pack +
+  a dedicated audience name — deliberately no new surfaces, the existing ones just tell
+  the truth about what a gift link is. `shareLink.giftMessage()` turns the copied text into
+  "🎄 A Christmas song for Mom — open it to watch the brain write it: <url>" instead of a
+  bare URL; the Share button becomes "🎄 Share the gift"; opening a gift link shows a themed
+  reveal banner before the brain scan; the downloadable PNG card and the (still inert,
+  `OG_UNFURL=1`-gated) OG unfurl both swap to gift framing too, so a gift link previews
+  correctly in iMessage/Slack/Discord once activated. Gifting is a proven paid behavior (the
   greeting-card market), every gift recruits the recipient, and the deterministic-permalink
-  angle is a moat no other tool has (the gift can't rot; later it's mintable — ties straight
-  into the Living-Brain dNFT lane). Concretely: (1) a dedicated entry point/CTA near the
-  Occasion picker ("🎁 Make it a gift"), (2) gift-framed copy in `shareCard`/OG-unfurl
-  metadata reading the pack + audience name, (3) a first-open "gift reveal" moment on the
-  recipient's side before the normal brain-scan view. Next up.
+  angle is a moat no other tool has — later it's mintable, straight into the Living-Brain
+  dNFT lane. See TODO.md Shipped for the full writeup.
+  **Gap surfaced while building this (not fixed — out of scope for Song Gifts)**: the
+  downloadable-PNG-share-card feature (`shareCard.ts`, `renderShareCard`/`downloadShareCard`,
+  tested and apparently shipped per an earlier roadmap item) has **no button wired to it
+  anywhere in the UI** — `grep`ing `components/` and `app/` for `downloadShareCard` /
+  `renderShareCard` turns up nothing outside tests. The gift-eyebrow work in this PR makes
+  the function itself gift-aware and correct, but a visitor currently has no way to trigger
+  it at all. Worth a small follow-up: either wire a "⬇ Download card" button into
+  `SongPackageView` (natural home, next to Share/Explain/Export), or if this was deliberately
+  deferred, note that explicitly in the roadmap instead of silently claiming it as shipped.
   **Cheap viral follow-up — "HERMES Wrapped" (still proposed)**: a Spotify-Wrapped-style
   shareable artist card from the vault (brainSignature already computes hemisphere/
   temperature/signature-words/becoming-you) — zero new engine work, pure share-card

@@ -14,6 +14,7 @@ import type { SongPackage } from './types';
 import { buildTrace, type SongTrace } from './trace';
 import { regionHeat } from './traceHtml';
 import { REGIONS } from './brainMap';
+import { findOccasionPack } from './occasionPacks';
 
 // ---- canvas geometry ------------------------------------------------------------
 /** OG aspect (1.91:1) — the size Twitter/Discord/OG unfurl at. */
@@ -211,8 +212,18 @@ function drawBrain(ctx: CanvasRenderingContext2D, t: SongTrace, box: { x: number
   ctx.textBaseline = 'alphabetic';
 }
 
+/** Song Gifts (phase 2): the card's eyebrow line becomes the gift framing — "here's
+ *  what this IS" — whenever the package carries an Occasion Pack + a dedicated name.
+ *  Pure; exported for testing without a canvas. */
+export function giftEyebrow(pkg: Pick<SongPackage, 'inputs'>): string | null {
+  const pack = findOccasionPack(pkg.inputs.occasion);
+  const who = pkg.inputs.audience.trim();
+  if (!pack || !who) return null;
+  return `${pack.emoji} A ${pack.label.toUpperCase()} SONG FOR ${who.toUpperCase()}`;
+}
+
 /** Draw the whole card. Pure w.r.t. the trace — deterministic given the package. */
-function drawCard(ctx: CanvasRenderingContext2D, t: SongTrace) {
+function drawCard(ctx: CanvasRenderingContext2D, t: SongTrace, gift: string | null = null) {
   // Background + brand glows (echoes the landing / globals.css).
   ctx.fillStyle = BG_0;
   ctx.fillRect(0, 0, CARD_W, CARD_H);
@@ -232,10 +243,11 @@ function drawCard(ctx: CanvasRenderingContext2D, t: SongTrace) {
   ctx.textAlign = 'left';
   ctx.textBaseline = 'alphabetic';
 
-  // Eyebrow.
+  // Eyebrow — a gift's framing takes over the line entirely (it IS the message);
+  // otherwise the usual brain-scan receipt.
   ctx.font = `600 16px ${BODY}`;
-  ctx.fillStyle = INK_FAINT;
-  ctx.fillText(`HERMES · BRAIN SCAN · SEED ${t.seed} · $0 LOCAL`, x0, 66);
+  ctx.fillStyle = gift ? HUE.center : INK_FAINT;
+  ctx.fillText(gift ?? `HERMES · BRAIN SCAN · SEED ${t.seed} · $0 LOCAL`, x0, 66);
 
   // Brief line (theme · mood · genre), clamped.
   const brief = clampText(
@@ -337,7 +349,7 @@ export function renderShareCard(pkg: SongPackage): Promise<Blob> {
   canvas.height = CARD_H;
   const ctx = canvas.getContext('2d');
   if (!ctx) return Promise.reject(new Error('2D canvas context unavailable.'));
-  drawCard(ctx, trace);
+  drawCard(ctx, trace, giftEyebrow(pkg));
   return new Promise<Blob>((resolve, reject) => {
     canvas.toBlob((blob) => {
       if (blob) resolve(blob);

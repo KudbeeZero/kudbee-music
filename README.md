@@ -304,11 +304,12 @@ flow, and the non-negotiables — plus the code-generated [brain-wiring diagram]
 - [x] **Watchdog** — a weekly (+ on-demand) Claude review of the repo's security posture + quality, filed as a GitHub issue with concrete findings and research ideas — findings-only, structurally unable to write code ([docs/watchdog.md](docs/watchdog.md))
 - [x] **Crossroads Board (Stage 2)** — a `/crossroads` route where you can vote on open creative/ecosystem decisions — ranked options, rationale, a live vote bar, your own vote recorded to this browser only
 - [x] **Occasion Packs** — write a song FOR someone: Christmas, Valentine's, Mother's/Father's Day, Birthday, Anniversary, Graduation, or New Year, each with its own imagery and a dedication line ("Merry Christmas, Mom")
+- [x] **Song Gifts** — share an Occasion Pack song and the link itself becomes the gift: a one-line gift message instead of a bare URL, a themed reveal on open, gift-framed card + link preview
 
 **Next** — generated from the spine [`brain/roadmap.json`](brain/roadmap.json); the human backlog is [`TODO.md`](TODO.md), the full board is [`STATUS.md`](STATUS.md).
 
 <!-- STATUS:BEGIN generated: edit brain/roadmap.json, then GEN_DOCS=1 npx vitest run status -->
-**📊 Status board:** ✅ 32 shipped · 🔨 1 in build · 💤 9 queued (42 tracked) — full tables in [`STATUS.md`](STATUS.md), source of truth [`brain/roadmap.json`](brain/roadmap.json).
+**📊 Status board:** ✅ 33 shipped · 🔨 1 in build · 💤 9 queued (43 tracked) — full tables in [`STATUS.md`](STATUS.md), source of truth [`brain/roadmap.json`](brain/roadmap.json).
 
 | | Up next | id |
 |---|---------|----|

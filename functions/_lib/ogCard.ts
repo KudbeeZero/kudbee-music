@@ -13,6 +13,7 @@
 
 import type { SongInputs } from '../../lib/hermes/types';
 import { REGIONS, PATHWAYS, region } from '../../lib/hermes/brainMap';
+import { findOccasionPack } from '../../lib/hermes/occasionPacks';
 
 // ---- environment gate -----------------------------------------------------------
 // The whole feature is OFF until the founder sets OG_UNFURL=1 in the Cloudflare Pages
@@ -104,24 +105,32 @@ export interface CardData {
   mood: string;
   theme: string;
   seed: number;
+  /** Song Gifts (phase 2): set only when the link carries a real Occasion Pack + a
+   *  dedicated name — "A Christmas song for Mom", not the generic HERMES receipt. */
+  gift: { emoji: string; label: string; who: string } | null;
 }
 
 export function cardData(inputs: Partial<SongInputs> | null, seed: number): CardData {
   const i = inputs ?? {};
+  const pack = findOccasionPack(i.occasion);
+  const who = clean(i.audience || '', 40);
   return {
     title: clean(i.title || i.theme || '', 80),
     genre: clean(i.genre || '', 40),
     mood: clean(i.mood || '', 40),
     theme: clean(i.theme || '', 80),
     seed: (Number.isFinite(seed) ? seed : 0) >>> 0,
+    gift: pack && who ? { emoji: pack.emoji, label: pack.label, who } : null,
   };
 }
 
 /** Short human description used for og:title / og:description. */
 export function cardTitle(d: CardData): string {
+  if (d.gift) return `${d.gift.emoji} A ${d.gift.label} song for ${d.gift.who}`;
   return d.title ? `“${d.title}” — a HERMES Live song` : 'A HERMES Live song';
 }
 export function cardDescription(d: CardData): string {
+  if (d.gift) return `Someone wrote ${d.gift.who} a ${d.gift.label} song with HERMES — open it to watch the brain write it. $0, no API key.`;
   const bits = [d.genre, d.mood].filter(Boolean).join(' · ');
   const lead = bits ? `${bits}. ` : '';
   return `${lead}A deterministic brain wrote this — open to watch it think. $0, no API key.`;
@@ -134,9 +143,10 @@ const H = 630;
 /** Render the 1200×630 Open Graph card as an SVG string. Pure + deterministic. */
 export function renderOgSvg(inputs: Partial<SongInputs> | null, seed: number): string {
   const d = cardData(inputs, seed);
-  const titleLines = wrap(d.title || 'an untitled brain-song', 20, 3);
+  const titleLines = wrap(d.gift ? `A ${d.gift.label} song for ${d.gift.who}` : (d.title || 'an untitled brain-song'), 20, 3);
   const subBits = [d.genre, d.mood].filter(Boolean).map((s) => xmlEscape(s));
-  const sub = subBits.length ? subBits.join('  ·  ') : 'deterministic songwriting';
+  const sub = d.gift ? xmlEscape(d.title || 'a song, written for someone') : (subBits.length ? subBits.join('  ·  ') : 'deterministic songwriting');
+  const eyebrow = d.gift ? xmlEscape(`${d.gift.emoji} A SONG GIFT`) : 'HERMES LIVE';
 
   // Brain heat-map: place REGION dots into a 480×360 box on the right. The brain
   // coordinate space is 440×300 (see brainMap.ts).
@@ -192,7 +202,7 @@ export function renderOgSvg(inputs: Partial<SongInputs> | null, seed: number): s
   <rect x="0" y="0" width="8" height="${H}" fill="${AMBER}"/>
 
   <g font-family="'Space Grotesk', ui-sans-serif, system-ui, sans-serif">
-    <text x="80" y="96" font-size="24" letter-spacing="6" fill="${AMBER}" font-weight="700">HERMES LIVE</text>
+    <text x="80" y="96" font-size="24" letter-spacing="6" fill="${AMBER}" font-weight="700">${eyebrow}</text>
     <text x="80" y="230" font-size="58" font-weight="700" fill="${INK}">${titleTspans}</text>
     <text x="80" y="${230 + (titleLines.length - 1) * 66 + 70}" font-size="27" fill="${INK_DIM}" font-family="ui-sans-serif, system-ui, sans-serif">${sub}</text>
     <text x="80" y="${230 + (titleLines.length - 1) * 66 + 118}" font-size="21" fill="${INK_FAINT}" font-family="ui-sans-serif, system-ui, sans-serif">a deterministic brain wrote this — open to hear it</text>
