@@ -2,7 +2,8 @@
 
 import { useEffect, useRef, useState } from 'react';
 import type { SongPackage } from '@/lib/hermes/types';
-import { exportVault, importVault, vaultBackupStatus, restoreFromBackup, loadFavorites, toggleFavorite, loadSongNotes, setSongNote, clearAllSongNotes, loadRecentlyViewed } from '@/lib/hermes/storage';
+import { exportVault, importVault, exportBrain, importBrain, vaultBackupStatus, restoreFromBackup, loadFavorites, toggleFavorite, loadSongNotes, setSongNote, clearAllSongNotes, loadRecentlyViewed } from '@/lib/hermes/storage';
+import { currentProfile, restoreProfile } from '@/lib/hermes/identity';
 import { songMarkdown } from '@/lib/hermes/markdownExport';
 import styles from './hermes.module.css';
 
@@ -37,6 +38,8 @@ export default function VaultDrawer({
   const [copiedAllMd, setCopiedAllMd] = useState(false);
   const [renamingId, setRenamingId] = useState<string | null>(null);
   const [renameDraft, setRenameDraft] = useState('');
+  const brainFileRef = useRef<HTMLInputElement>(null);
+  const [brainNote, setBrainNote] = useState<string | null>(null);
 
   function startRename(s: SongPackage, e: React.MouseEvent) {
     e.stopPropagation();
@@ -175,6 +178,33 @@ export default function VaultDrawer({
     file.text().then((txt) => { importVault(txt, 'merge'); onImported?.(); }).catch(() => {});
     e.target.value = '';
   }
+
+  // Your whole agent as one document — identity + vault + everything the brain learned
+  // about you (taste, avoid-words, alias, notes, favorites). Take it to another device /
+  // reinstall the app and "launch your agent" as yourself. The BYOK Claude key is never
+  // written into it (re-enter it on the new device) — see storage.ts exportBrain.
+  function doExportBrain() {
+    const blob = new Blob([exportBrain(currentProfile())], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url; a.download = 'hermes-brain.json'; a.click();
+    URL.revokeObjectURL(url);
+  }
+  function doImportBrain(e: React.ChangeEvent<HTMLInputElement>) {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    file.text().then((txt) => {
+      const res = importBrain(txt, 'merge');
+      if (!res.ok) { setBrainNote("that file isn't a HERMES Brain export"); window.setTimeout(() => setBrainNote(null), 5000); return; }
+      restoreProfile(res.profile);
+      setFavorites(loadFavorites());
+      setNoteDrafts(loadSongNotes());
+      onImported?.();
+      setBrainNote(`restored your brain — ${count(res.songs, 'song')}, ${count(res.bannedWords, 'avoid-word')}, ${count(res.favorites, 'favorite')}`);
+      window.setTimeout(() => setBrainNote(null), 6000);
+    }).catch(() => {});
+    e.target.value = '';
+  }
   function doRestore() {
     const ok = window.confirm(
       'Restore from backup replaces your live catalog (songs + albums) with the backup mirror. This cannot be undone. Continue?'
@@ -219,6 +249,17 @@ export default function VaultDrawer({
               🗑 clear all notes
             </button>
           )}
+        </div>
+        <div style={{ border: '1px solid var(--line-strong)', borderRadius: 12, padding: '10px 12px', marginBottom: 14 }}>
+          <div className={styles.hint} style={{ marginBottom: 6 }}>
+            🧠 <strong>Your HERMES Brain</strong> — your whole agent as one file: identity, every song, and everything the brain learned about you (taste, avoid-words, artist name, notes, favorites). Take it to another device or reinstall the app and launch your agent as yourself. Your Claude key is never included — re-enter it there.
+          </div>
+          <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
+            <button className={styles.copyBtn} style={{ marginLeft: 0 }} onClick={doExportBrain} title="Download your whole agent as one portable document">🧠 Export my Brain</button>
+            <button className={styles.copyBtn} style={{ marginLeft: 0 }} onClick={() => brainFileRef.current?.click()} title="Load a HERMES Brain export — merges it into this browser">🧠 Import a Brain</button>
+            <input ref={brainFileRef} type="file" accept="application/json" onChange={doImportBrain} style={{ display: 'none' }} />
+          </div>
+          {brainNote && <div className={styles.hint} style={{ marginTop: 6, color: 'var(--good)' }}>{brainNote}</div>}
         </div>
         <div
           className={backupWarn ? styles.backupWarn : styles.hint}
