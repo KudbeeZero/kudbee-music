@@ -309,6 +309,7 @@ flow, and the non-negotiables — plus the code-generated [brain-wiring diagram]
 - [x] **Bottom nav on phone** — Lab · Council · Studio · Package · Vault, one tap away from anywhere; the Council is no longer buried inside the Studio Flow rail
 - [x] **Sticky top app bar on phone** — Crossroads/Albums/Vault/Sign-out stay reachable without scrolling back to the top
 - [x] **Sticky Studio Flow rail on phone** — Review/Refine/Keep/Release/Studio stays visible flush under the app bar, no matter how far you've scrolled
+- [x] **Song Lab accordion on phone** — the 4 key fields + Surprise Me lead; the other ~10 fields collapse into three named sections instead of one long wall of inputs
 
 **Next** — generated from the spine [`brain/roadmap.json`](brain/roadmap.json); the human backlog is [`TODO.md`](TODO.md), the full board is [`STATUS.md`](STATUS.md).
 
