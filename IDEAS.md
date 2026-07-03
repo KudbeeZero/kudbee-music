@@ -231,12 +231,15 @@ A second-opinion review flagged real risks worth acting on (truth-first):
     genre/mood/structure/rhyme-scheme combos) plus a button that always picks a
     *different* one than what's showing gives a blank-page visitor real variety
     instead of the same canned example every time. See TODO.md Shipped.
+  - ✅ **📋 Copy lyrics — plain-text copy button** — the only ways to get lyrics out
+    of a package were the full JSON export or one short-form clip caption at a time;
+    now `SongPackageView`'s existing `rawLyrics` is one click away. See TODO.md
+    Shipped.
   Candidates queued for the next few rounds (pick one, ship it, move to the next):
-  a plain-text "copy full lyrics" button (today only JSON export + per-line clip
-  copy exist), a per-song ⭐ favorite/pin in the Vault list, a click-a-word rhyme
-  helper on the lyric view (reusing `rhyme.ts`'s existing rhyme-family logic), a
-  word/line/estimated-runtime counter on the lyrics section, a "duplicate this song"
-  vault action to branch a version without overwriting it.
+  a per-song ⭐ favorite/pin in the Vault list, a click-a-word rhyme helper on the
+  lyric view (reusing `rhyme.ts`'s existing rhyme-family logic), a word/line/
+  estimated-runtime counter on the lyrics section, a "duplicate this song" vault
+  action to branch a version without overwriting it.
 - ✅ **"Make sure Claude.md files are getting updated, memory layer files... each file
   should have a chapter/head-type page with the contents of the entire folder"**
   *(founder directive, 2026-07-03)* — shipped: `brain/README.md` + rewritten `docs/index.md`,

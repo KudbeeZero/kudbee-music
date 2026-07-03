@@ -303,6 +303,15 @@ Board** governance / Solana / token / NFT layer integrates with this engine via 
 later (kept out of this repo's core so it stays free + local).
 
 ## ✅ Shipped (newest first)
+- [x] **📋 Copy lyrics — plain-text copy button (tiny-feature cadence, #2)** — the only
+      ways to get lyrics out of a package were the full JSON export or copying one
+      short-form clip caption at a time; there was no single "just give me the
+      words" action. `SongPackageView`'s existing `rawLyrics` (section labels + lines)
+      is now one click via a "📋 Copy lyrics" button next to Explain/Export, with the
+      same copied-confirmation pattern already used elsewhere in the file. Playwright-
+      verified live: clicked, clipboard held the full lyrics text (`[Hook]` present,
+      965 chars for the demo song), button label swapped to "lyrics copied ✓" within
+      ~100ms and reverted after ~1.6s, zero console errors. _(this PR)_
 - [x] **🎲 Surprise me — a varied starter-brief pool for Song Lab** *(tiny-feature
       cadence — "keep coming up with new little features... that amplify one little
       area")* — `SongLabForm.tsx`'s `loadExample()` only ever loaded the one fixed

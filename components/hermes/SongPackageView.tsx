@@ -25,12 +25,23 @@ export default function SongPackageView({ pkg, onSaveEdit, onChooseHook, onRegen
   const [copiedClip, setCopiedClip] = useState(-1);
   const [shared, setShared] = useState(false);
   const [cardState, setCardState] = useState<'idle' | 'busy' | 'error'>('idle');
+  const [copiedLyrics, setCopiedLyrics] = useState(false);
 
   function saveText(text: string) {
     onSaveEdit?.(text);
     setEditing(false);
     setLearned(true);
     setTimeout(() => setLearned(false), 2600);
+  }
+
+  // A plain-text copy of the full lyrics (section labels + lines, no JSON wrapper) —
+  // the fastest way to paste into Suno/Notes/a text/lyric sheet without the
+  // full-package export or hunting down each short-form clip one at a time.
+  function copyLyrics() {
+    navigator.clipboard?.writeText(rawLyrics).then(() => {
+      setCopiedLyrics(true);
+      setTimeout(() => setCopiedLyrics(false), 1600);
+    }).catch(() => {});
   }
 
   function exportSong() {
@@ -118,6 +129,9 @@ export default function SongPackageView({ pkg, onSaveEdit, onChooseHook, onRegen
             {cardState === 'busy' ? 'rendering…' : cardState === 'error' ? 'failed — retry' : '🖼 Download card'}
           </button>
           <button className={styles.copyBtn} style={{ marginLeft: 0 }} onClick={explainSong} title="Open the interactive brain trace for this song — heat-map, what each region did, and a copy-paste Suno prompt">🔍 Explain this song</button>
+          <button className={styles.copyBtn} style={{ marginLeft: 0 }} onClick={copyLyrics} title="Copy the full lyrics as plain text — section labels + lines, ready to paste into Suno or a lyric sheet">
+            {copiedLyrics ? 'lyrics copied ✓' : '📋 Copy lyrics'}
+          </button>
           <button className={styles.copyBtn} style={{ marginLeft: 0 }} onClick={exportSong} title="Download this song package as JSON (backup / re-import into your vault)">⬇ Export JSON</button>
         </span>
       </div>
