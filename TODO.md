@@ -303,6 +303,17 @@ Board** governance / Solana / token / NFT layer integrates with this engine via 
 later (kept out of this repo's core so it stays free + local).
 
 ## ✅ Shipped (newest first)
+- [x] **🎲 Surprise me — a varied starter-brief pool for Song Lab** *(tiny-feature
+      cadence — "keep coming up with new little features... that amplify one little
+      area")* — `SongLabForm.tsx`'s `loadExample()` only ever loaded the one fixed
+      `EXAMPLE_BRIEF`, so a returning visitor who'd already tried it saw nothing new.
+      New `STARTER_BRIEFS` pool (6 varied genre/mood/structure/rhyme-scheme combos —
+      indie pop, country, alt R&B, pop-rock, lo-fi soul, plus the original trap
+      example) and a "🎲 Surprise me" button beside it that picks a different one than
+      whatever's currently loaded (never a same-brief no-op click). Pure UI
+      convenience, no pipeline/determinism impact. Playwright-verified: 8 clicks
+      surfaced 5 of 6 distinct briefs, every field (mood/genre/tempo/voice/audience/
+      references/structure/rhyme) filled correctly, zero console errors. _(this PR)_
 - [x] **Voice Notes — record & attach your own take (Bring Your Own Sound, PR1)**
       *(founder idea — "people should be able to record their voice... hum a melody...
       updating our brain mechanism")* — first slice of a bigger plan (full writeup in

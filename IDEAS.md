@@ -219,6 +219,24 @@ A second-opinion review flagged real risks worth acting on (truth-first):
   disclaimer in the README + Uniqueness panel. _(#37)_
 
 ## 🌱 Fresh captures
+- 🔨 **"Keep coming up with new little features, real tiny builds that amplify one
+  little area... do this enough times, things will be amazing"** *(founder directive,
+  standing goal, 2026-07-03)* — a continuous cadence, not a one-off feature: small,
+  self-contained, one-green-loop-PR-at-a-time amplifications to any part of HERMES.
+  Tracked as its own open-ended roadmap phase (`brain/roadmap.json` phase 7, "Tiny
+  features — the standing cadence") so each tiny ship has a real home instead of
+  getting lost between bigger builds. Shipped so far:
+  - ✅ **🎲 Surprise me — a varied starter-brief pool for Song Lab** — `loadExample()`
+    only ever loaded one fixed `EXAMPLE_BRIEF`; a new `STARTER_BRIEFS` pool (6 varied
+    genre/mood/structure/rhyme-scheme combos) plus a button that always picks a
+    *different* one than what's showing gives a blank-page visitor real variety
+    instead of the same canned example every time. See TODO.md Shipped.
+  Candidates queued for the next few rounds (pick one, ship it, move to the next):
+  a plain-text "copy full lyrics" button (today only JSON export + per-line clip
+  copy exist), a per-song ⭐ favorite/pin in the Vault list, a click-a-word rhyme
+  helper on the lyric view (reusing `rhyme.ts`'s existing rhyme-family logic), a
+  word/line/estimated-runtime counter on the lyrics section, a "duplicate this song"
+  vault action to branch a version without overwriting it.
 - ✅ **"Make sure Claude.md files are getting updated, memory layer files... each file
   should have a chapter/head-type page with the contents of the entire folder"**
   *(founder directive, 2026-07-03)* — shipped: `brain/README.md` + rewritten `docs/index.md`,

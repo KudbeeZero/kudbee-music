@@ -64,6 +64,88 @@ export const EXAMPLE_BRIEF: SongInputs = {
   rhymeScheme: 'AABB',
 };
 
+/** A small pool of varied starter briefs across genre/mood/structure/rhyme — "Surprise
+ *  me" picks one at random so a blank-page visitor sees real variety, not just the one
+ *  fixed EXAMPLE_BRIEF every time. Never preloaded; only ever loaded on an explicit click. */
+export const STARTER_BRIEFS: SongInputs[] = [
+  EXAMPLE_BRIEF,
+  {
+    title: 'Golden Hour',
+    theme: 'falling for someone during a slow, lingering summer',
+    mood: 'warm, dreamy, a little nervous',
+    genre: 'indie pop',
+    tempoMin: 96,
+    tempoMax: 108,
+    voice: 'breathy, conversational',
+    audience: 'someone you just met',
+    doNotUse: [],
+    references: 'sun-soaked synths, breezy guitar — feel only, never copy',
+    structure: 'verse-first',
+    rhymeTemp: 'balanced',
+    rhymeScheme: 'ABAB',
+  },
+  {
+    title: 'Dirt Road Home',
+    theme: "leaving the small town you swore you'd never miss",
+    mood: 'nostalgic, bittersweet',
+    genre: 'country',
+    tempoMin: 84,
+    tempoMax: 96,
+    voice: 'plainspoken, warm',
+    audience: 'the town you grew up in',
+    doNotUse: [],
+    references: 'porch-light storytelling, steel guitar ache — feel only, never copy',
+    structure: 'verse-first',
+    rhymeTemp: 'tight',
+    rhymeScheme: 'AABB',
+  },
+  {
+    title: 'Static',
+    theme: 'a relationship going quiet, both people too proud to say it first',
+    mood: 'moody, tense',
+    genre: 'alt R&B',
+    tempoMin: 70,
+    tempoMax: 82,
+    voice: 'restrained, a little cold',
+    audience: 'the person going quiet on you',
+    doNotUse: [],
+    references: 'dark synth pads, minimal drums — feel only, never copy',
+    structure: 'hook-first',
+    rhymeTemp: 'loose',
+    rhymeScheme: 'ABBA',
+  },
+  {
+    title: 'Bright Lights, Long Nights',
+    theme: "chasing a dream in a city that doesn't care if you make it",
+    mood: 'defiant, hungry',
+    genre: 'pop-rock',
+    tempoMin: 128,
+    tempoMax: 140,
+    voice: 'anthemic, gritty',
+    audience: 'everyone who doubted you',
+    doNotUse: [],
+    references: 'stadium chorus energy, driving guitars — feel only, never copy',
+    structure: 'hook-first',
+    rhymeTemp: 'balanced',
+    rhymeScheme: 'AABB',
+  },
+  {
+    title: 'Slow Bloom',
+    theme: 'healing at your own pace after a hard year',
+    mood: 'gentle, hopeful',
+    genre: 'lo-fi soul',
+    tempoMin: 72,
+    tempoMax: 84,
+    voice: 'soft, intimate',
+    audience: 'yourself, a year from now',
+    doNotUse: [],
+    references: 'warm vinyl crackle, Rhodes keys — feel only, never copy',
+    structure: 'verse-first',
+    rhymeTemp: 'loose',
+    rhymeScheme: 'XAXA',
+  },
+];
+
 export default function SongLabForm({
   running,
   onRun,
@@ -90,6 +172,16 @@ export default function SongLabForm({
 
   function loadExample() {
     setV(EXAMPLE_BRIEF);
+    setDoNotUseRaw('');
+  }
+
+  // Picks a different starter brief than whatever's showing now, so two clicks in a
+  // row never look like a no-op. Pure UI convenience — never part of generation, so
+  // Math.random() here doesn't touch the determinism contract.
+  function surpriseMe() {
+    const others = STARTER_BRIEFS.filter((b) => b.title !== v.title);
+    const pool = others.length ? others : STARTER_BRIEFS;
+    setV(pool[Math.floor(Math.random() * pool.length)]);
     setDoNotUseRaw('');
   }
 
@@ -126,9 +218,20 @@ export default function SongLabForm({
     <div className={styles.panel}>
       <div className={styles.panelTitle} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 8 }}>
         <span>Song Lab</span>
-        <button type="button" className={styles.copyBtn} style={{ marginLeft: 0, textTransform: 'none', letterSpacing: 'normal' }} onClick={loadExample}>
-          ✨ Load an example brief
-        </button>
+        <span style={{ display: 'flex', gap: 6 }}>
+          <button
+            type="button"
+            className={styles.copyBtn}
+            style={{ marginLeft: 0, textTransform: 'none', letterSpacing: 'normal' }}
+            onClick={surpriseMe}
+            title="Fill the brief with a random starter idea — a different genre/mood/structure combo each time"
+          >
+            🎲 Surprise me
+          </button>
+          <button type="button" className={styles.copyBtn} style={{ marginLeft: 0, textTransform: 'none', letterSpacing: 'normal' }} onClick={loadExample}>
+            ✨ Load an example brief
+          </button>
+        </span>
       </div>
 
       <Field label="Song title" htmlFor="hf-title">
