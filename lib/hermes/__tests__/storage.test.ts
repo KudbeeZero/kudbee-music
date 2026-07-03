@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeEach } from 'vitest';
-import { saveSong, listSongs, getSong, deleteSong, duplicateSong, renameSong, __clearVault, priorSongsForOriginality, loadFavorites, toggleFavorite, loadSongNotes, setSongNote, clearAllSongNotes, loadRecentlyViewed, recordRecentlyViewed } from '../storage';
+import { saveSong, listSongs, getSong, deleteSong, duplicateSong, renameSong, __clearVault, priorSongsForOriginality, loadFavorites, toggleFavorite, loadSongNotes, setSongNote, clearAllSongNotes, loadRecentlyViewed, recordRecentlyViewed, hasSeenScribeTour, markScribeTourSeen } from '../storage';
 import { runPipeline } from '../pipeline';
 import type { SongInputs } from '../types';
 
@@ -42,6 +42,19 @@ describe('vault storage', () => {
     saveSong(a);
     deleteSong('a');
     expect(listSongs().length).toBe(0);
+  });
+});
+
+describe('Scribe editor guided tour — a one-time "seen it" flag', () => {
+  beforeEach(() => __clearVault());
+
+  it('starts unseen', () => {
+    expect(hasSeenScribeTour()).toBe(false);
+  });
+
+  it('marks seen and stays seen', () => {
+    markScribeTourSeen();
+    expect(hasSeenScribeTour()).toBe(true);
   });
 });
 

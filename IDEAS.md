@@ -474,6 +474,21 @@ A second-opinion review flagged real risks worth acting on (truth-first):
     did not, since it already reads `pkg.sections` fresh). Fixed via the same
     pure pipeline functions replayed against the edit. This closes out the
     lyric-editing-polish arc (8.6-8.7). See TODO.md Shipped.
+- ✅ **"SCRIBE... completely copy how this application functions... apply it to
+  our lyrical area"** *(founder directive, 2026-07-03)* — researched Scribe
+  (scribehow.com/scribe.com): it auto-converts a recorded real-world workflow
+  into an annotated step-by-step guide (screenshots + text per step), not a
+  songwriting app — no dedicated lyric-writing "Scribe" product exists. Asked
+  via `AskUserQuestion` which interpretation to build: an auto-generated
+  "how this song was written" replay, or a guided onboarding tour of the
+  editor itself. Founder picked **the guided tour**. Shipped as item 8.8 (new
+  `GuidedTour.tsx` + 5 coach-mark steps in `ScribeEditor.tsx`). The "replay
+  how a song was written" interpretation stays parked here as a genuinely
+  different, bigger idea if wanted later — it would build on the existing
+  version-history + brain-trace explainer (`buildTrace()`/`renderTraceHtml()`)
+  to auto-capture each meaningful edit/hook-choice as a "step" with a
+  before/after snapshot, closer to Scribe's actual mechanic than the
+  onboarding tour is.
 - 🔨 **"Input their music" — upload an existing audio file, not just record live**
   *(founder question, 2026-07-03 — "I want to create something down the road
   where people can input their music... are you working on that?")* — a genuinely

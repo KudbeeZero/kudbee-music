@@ -115,7 +115,7 @@ node scripts/mobile-matrix.mjs   # anything touching layout (build the export fi
 ## Status board
 
 <!-- STATUS:BEGIN generated: edit brain/roadmap.json, then GEN_DOCS=1 npx vitest run status -->
-**📊 Status board:** ✅ 67 shipped · 🔨 1 in build · 💤 10 queued (78 tracked) — full tables in [`STATUS.md`](STATUS.md), source of truth [`brain/roadmap.json`](brain/roadmap.json).
+**📊 Status board:** ✅ 68 shipped · 🔨 1 in build · 💤 10 queued (79 tracked) — full tables in [`STATUS.md`](STATUS.md), source of truth [`brain/roadmap.json`](brain/roadmap.json).
 <!-- STATUS:END -->
 
 ## Memory layers — where the brain keeps things
@@ -143,7 +143,7 @@ table is the top-level index across *all* memory tiers, folder pages included.
 | Living-state spine (machine-readable) | `brain/roadmap.json` |
 | Vector memory (generated, gitignored) | `brain/vector-memory.json` → `lib/hermes/vectorMemory.ts` / `vectorRecall.ts` (node-only) |
 | Working list / idea inbox / build log | `TODO.md` · `IDEAS.md` · `BUILD_LOG.md` |
-| Per-user vault (browser) | localStorage `hermes.vault.v1`, `hermes.albums.v1`, `hermes.taste.v1`, `hermes.bannedWords.v1`, `hermes.artistAlias.v1`, `hermes.favorites.v1`, `hermes.songNotes.v1`, `hermes.recentlyViewed.v1` (each mirrored to a `.bak` key) via `lib/hermes/storage.ts` |
+| Per-user vault (browser) | localStorage `hermes.vault.v1`, `hermes.albums.v1`, `hermes.taste.v1`, `hermes.bannedWords.v1`, `hermes.artistAlias.v1`, `hermes.favorites.v1`, `hermes.songNotes.v1`, `hermes.recentlyViewed.v1` (each mirrored to a `.bak` key), `hermes.scribeTourSeen.v1` (a plain one-time "seen it" flag, not `.bak`-mirrored) via `lib/hermes/storage.ts` |
 | Audio clip vault (browser, voice/riff takes) | IndexedDB `hermes.audioVault.v1` via `lib/hermes/audioVault.ts` — binary, so it lives outside the JSON localStorage vault; falls back to an in-memory store with no IndexedDB (SSR/tests). Pure attachment, never fed into generation. |
 | Identity / dev door (browser) | localStorage `hermes.profile.v1`, `hermes.devDoor.v1` via `lib/hermes/identity.ts` |
 | Claude Engine BYOK key (browser, visitor's own) | localStorage `hermes.claudeKey.v1`, `hermes.claudeEngineActive.v1` via `lib/hermes/claudeKey.ts` — never sent to any server we control |

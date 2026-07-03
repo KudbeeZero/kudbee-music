@@ -6,10 +6,20 @@ import { renderSections } from '@/lib/hermes/edits';
 import { claudeEngineReady, getClaudeKey } from '@/lib/hermes/claudeKey';
 import { suggestLineRewrites, ClaudeProviderError } from '@/lib/hermes/providers/claudeLyricsProvider';
 import { similarWords } from '@/lib/hermes/lexicon';
+import { hasSeenScribeTour, markScribeTourSeen } from '@/lib/hermes/storage';
+import GuidedTour, { type TourStep } from './GuidedTour';
 import styles from './hermes.module.css';
 
 interface Target { section: number; line: number }
 interface WordTarget { section: number; line: number; word: string; start: number; end: number }
+
+const TOUR_STEPS: TourStep[] = [
+  { selector: '[data-tour="scribe-line-input"]', title: 'Edit any line', body: 'Every line is its own field — click in and type, just like a text box.' },
+  { selector: '[data-tour="scribe-line-input"]', title: 'Word ideas', body: 'Double-click a word for similar words — same imagery and mood, sourced from the real lexicon.' },
+  { selector: '[data-tour="scribe-ai-rewrite"]', title: 'AI rewrite', body: 'Get 3 alternate phrasings for this line. Unlocks once you paste your own Anthropic key into the Engine Rack.' },
+  { selector: '[data-tour="scribe-add-line"]', title: 'Add a line', body: 'Insert a new blank line right below this one.' },
+  { selector: '[data-tour="scribe-delete-line"]', title: 'Delete a line', body: "Remove a line you don't need." },
+];
 
 // The Scribe editor — edit lyrics line by line instead of one big text block.
 // Every line gets its own field plus a small toolbar (✨ AI rewrite when the
@@ -32,6 +42,13 @@ export default function ScribeEditor({
   // never invented. Click a suggestion to replace the double-clicked word in place.
   const [wordTarget, setWordTarget] = useState<WordTarget | null>(null);
   const wordIdeas = wordTarget ? similarWords(wordTarget.word) : [];
+  // Guided tour — shown once automatically (first time this browser opens the
+  // Scribe editor), replayable anytime via "? Show me around".
+  const [tourOpen, setTourOpen] = useState(() => !hasSeenScribeTour());
+  function closeTour() {
+    setTourOpen(false);
+    markScribeTourSeen();
+  }
 
   function updateLine(section: number, line: number, text: string) {
     setSections((prev) => prev.map((s, si) => si !== section ? s : { ...s, lines: s.lines.map((l, li) => li === line ? text : l) }));
@@ -127,17 +144,19 @@ export default function ScribeEditor({
                     onDoubleClick={(e) => handleWordDoubleClick(si, li, e)}
                     title="Double-click a word for similar-word ideas"
                     aria-label={`${s.label} line ${li + 1}`}
+                    data-tour={si === 0 && li === 0 ? 'scribe-line-input' : undefined}
                   />
                   <button
                     className={styles.copyBtn}
                     style={{ marginLeft: 0 }}
                     onClick={() => requestRewrite(si, li)}
                     title={claudeReady ? 'AI rewrite — 3 alternate phrasings from the Claude Engine' : 'Unlock the Claude Engine in the rack to enable AI rewrites'}
+                    data-tour={si === 0 && li === 0 ? 'scribe-ai-rewrite' : undefined}
                   >
                     ✨
                   </button>
-                  <button className={styles.copyBtn} style={{ marginLeft: 0 }} onClick={() => addLineAfter(si, li)} title="Add a line below">+</button>
-                  <button className={styles.copyBtn} style={{ marginLeft: 0 }} onClick={() => deleteLine(si, li)} title="Delete this line">×</button>
+                  <button className={styles.copyBtn} style={{ marginLeft: 0 }} onClick={() => addLineAfter(si, li)} title="Add a line below" data-tour={si === 0 && li === 0 ? 'scribe-add-line' : undefined}>+</button>
+                  <button className={styles.copyBtn} style={{ marginLeft: 0 }} onClick={() => deleteLine(si, li)} title="Delete this line" data-tour={si === 0 && li === 0 ? 'scribe-delete-line' : undefined}>×</button>
                 </div>
                 {suggestFor?.section === si && suggestFor.line === li && (
                   <div style={{ marginTop: 4, marginLeft: 4, padding: 8, border: '1px solid var(--line)', borderRadius: 8, background: 'var(--bg-1)' }}>
@@ -197,7 +216,9 @@ export default function ScribeEditor({
       <div style={{ display: 'flex', gap: 8, marginTop: 8 }}>
         <button className={styles.runBtn} style={{ width: 'auto', flex: 1, padding: 10 }} onClick={save}>Save — teach the brain</button>
         <button className={styles.ghostBtn} onClick={onCancel}>Cancel</button>
+        <button className={styles.ghostBtn} onClick={() => setTourOpen(true)} title="Replay the guided tour of this editor">? Show me around</button>
       </div>
+      {tourOpen && <GuidedTour steps={TOUR_STEPS} onDone={closeTour} />}
     </div>
   );
 }
