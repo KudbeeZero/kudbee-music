@@ -13,6 +13,7 @@ import { downloadShareCard } from '@/lib/hermes/shareCard';
 import { rhymesWith } from '@/lib/hermes/lexicon';
 import ScribeEditor from './ScribeEditor';
 import VoiceNotes from './VoiceNotes';
+import HookBattle from './HookBattle';
 import styles from './hermes.module.css';
 
 export default function SongPackageView({ pkg, onSaveEdit, onChooseHook, onRegenerateFromCritiques, flowStage }: {
@@ -34,6 +35,9 @@ export default function SongPackageView({ pkg, onSaveEdit, onChooseHook, onRegen
   const [copiedJson, setCopiedJson] = useState(false);
   const [rhymeWord, setRhymeWord] = useState<string | null>(null);
   const rhymeSuggestions = rhymeWord ? rhymesWith(rhymeWord, { max: 10 }) : [];
+  // Mobile-mockup-plan Phase B: "Hook Battle" — a bracket-style reskin of picking the
+  // lead hook, sitting alongside the existing flat list rather than replacing it.
+  const [battleMode, setBattleMode] = useState(false);
 
   // A rough length estimate, not a claim of precision — 2 bars/line in 4/4 time at
   // the production tempo is a common songwriting rule of thumb, not a measurement.
@@ -242,27 +246,41 @@ export default function SongPackageView({ pkg, onSaveEdit, onChooseHook, onRegen
       </Section>
 
       <Section label={onChooseHook ? 'Hook options — tap one to make it the lead' : 'Hook options'}>
-        {pkg.hookOptions.map((h, i) => {
-          const chosen = pkg.chosenHook?.text === h.text;
-          const pick = onChooseHook && !chosen ? () => onChooseHook(h) : undefined;
-          return (
-            <div
-              key={i}
-              className={styles.hookCard}
-              data-chosen={chosen}
-              onClick={pick}
-              role={pick ? 'button' : undefined}
-              tabIndex={pick ? 0 : undefined}
-              onKeyDown={pick ? (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); pick(); } } : undefined}
-              style={pick ? { cursor: 'pointer' } : undefined}
-              aria-pressed={onChooseHook ? chosen : undefined}
-              title={onChooseHook ? (chosen ? 'Current lead hook' : 'Set as the lead hook — the brain learns your pick and re-scores') : undefined}
-            >
-              <div className={styles.hookText}>“{h.text}”</div>
-              <div className={styles.hookMeta}>{h.angle} · {h.cadence} · stickiness {h.score}{chosen ? ' · ★ lead' : onChooseHook ? ' · tap to lead' : ''}</div>
-            </div>
-          );
-        })}
+        {onChooseHook && pkg.hookOptions.length >= 2 && (
+          <button
+            type="button"
+            className={styles.copyBtn}
+            style={{ marginLeft: 0, marginBottom: 8, textTransform: 'none', letterSpacing: 'normal' }}
+            onClick={() => setBattleMode((b) => !b)}
+          >
+            {battleMode ? '☰ Show as a list' : '⚔️ Hook Battle'}
+          </button>
+        )}
+        {battleMode && onChooseHook && pkg.hookOptions.length >= 2 ? (
+          <HookBattle hooks={pkg.hookOptions} inputs={pkg.inputs} sections={pkg.sections} onWinner={onChooseHook} />
+        ) : (
+          pkg.hookOptions.map((h, i) => {
+            const chosen = pkg.chosenHook?.text === h.text;
+            const pick = onChooseHook && !chosen ? () => onChooseHook(h) : undefined;
+            return (
+              <div
+                key={i}
+                className={styles.hookCard}
+                data-chosen={chosen}
+                onClick={pick}
+                role={pick ? 'button' : undefined}
+                tabIndex={pick ? 0 : undefined}
+                onKeyDown={pick ? (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); pick(); } } : undefined}
+                style={pick ? { cursor: 'pointer' } : undefined}
+                aria-pressed={onChooseHook ? chosen : undefined}
+                title={onChooseHook ? (chosen ? 'Current lead hook' : 'Set as the lead hook — the brain learns your pick and re-scores') : undefined}
+              >
+                <div className={styles.hookText}>“{h.text}”</div>
+                <div className={styles.hookMeta}>{h.angle} · {h.cadence} · stickiness {h.score}{chosen ? ' · ★ lead' : onChooseHook ? ' · tap to lead' : ''}</div>
+              </div>
+            );
+          })
+        )}
         {pkg.chosenHook && <Deliberation hook={pkg.chosenHook.text} pkg={pkg} onRegenerateFromCritiques={onRegenerateFromCritiques} />}
       </Section>
 

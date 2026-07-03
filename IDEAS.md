@@ -290,8 +290,21 @@ A second-opinion review flagged real risks worth acting on (truth-first):
   confetti visual language outright (a genuine identity clash with the shipped "brain, not a
   game" aesthetic — see `BangerScoreCard.tsx`'s own "not a market or A&R prediction" copy) but
   build the retention *mechanics* underneath it, because nearly all of them already have a
-  home: Hook Battle is a reskin of `rankHooksByCouncil()` (zero new logic — build first),
-  XP/levels reads `becomingYou.youPercent` + `pkg.score`'s 7 subcategories (new presentation
+  home: Hook Battle is a reskin of `rankHooksByCouncil()` (zero new logic — build first) — ✅
+  **shipped this session**: `components/hermes/HookBattle.tsx`, a single-elimination bracket
+  over the same top 2-4 council-ranked hooks Council.tsx already shows as a flat list
+  (`rankHooksByCouncil(pkg.hookOptions, pkg.inputs, pkg.sections)`, no taste-personalization
+  wiring needed to keep the change self-contained). Sits alongside the existing flat list in
+  `SongPackageView.tsx` (a "⚔️ Hook Battle" / "☰ Show as a list" toggle), not a replacement —
+  the simple picker still works standalone. Picking the bracket's final winner calls the
+  exact same `onChooseHook` the flat list already used, so it's wired into the real
+  re-scoring pipeline, not a UI-only mockup. Playwright-verified live: a real 4-seed bracket
+  round rendered with correct stickiness metadata, picked both round-1 winners, the final
+  round correctly narrowed to 2, picked the champion, confirmed the 🏆 Winner card rendered
+  with the right hook text, and confirmed the song package genuinely re-scored (v1→v2, the
+  Council's deliberation panel flipped to "✓ true to the brief ✓ original ✓ earn it") —
+  proof this reuses the real pipeline, not a fake win screen. XP/levels reads
+  `becomingYou.youPercent` + `pkg.score`'s 7 subcategories (new presentation
   only), streaks extend `heat.ts`, quests/chapters extend `story.ts` (a new `hermes.quests.v1`
   key for session-scoped counters, same `.bak`-mirror shape as every other store), confetti is
   a hand-rolled canvas particle burst same house pattern as `BrainScan.tsx` (no library — the

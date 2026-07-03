@@ -302,6 +302,29 @@ Board** governance / Solana / token / NFT layer integrates with this engine via 
 later (kept out of this repo's core so it stays free + local).
 
 ## ✅ Shipped (newest first)
+- [x] **⚔️ Hook Battle** — autonomous-loop medium PR, seventh of the session, the first
+      Phase B piece of the mobile-mockup implementation plan (`IDEAS.md`) — skipped
+      Phase A step ⑥ (a spacing/typography audit, judged low-value on its own: "mostly
+      already shipped, closing small gaps") in favor of a real feature. New
+      `components/hermes/HookBattle.tsx`: a single-elimination bracket over the same
+      top 2-4 council-ranked hooks `Council.tsx` already shows as a flat list
+      (`rankHooksByCouncil()` — zero new scoring logic, exactly the reskin the plan
+      called for). Sits alongside the existing flat picker in `SongPackageView.tsx` via
+      a "⚔️ Hook Battle" / "☰ Show as a list" toggle rather than replacing it — the
+      simple list still works standalone for anyone who doesn't want the bracket.
+      Picking the bracket's final winner calls the exact same `onChooseHook` the flat
+      list already used, so it's wired into the real re-scoring pipeline, not a UI-only
+      mockup. Playwright-verified live: a real round-of-4 bracket rendered with correct
+      stickiness metadata, picked both round-1 winners, the final round correctly
+      narrowed to the last 2, picked the champion, confirmed the 🏆 Winner card showed
+      the right hook text with a "↺ Battle again" reset — and confirmed the song
+      package genuinely re-scored (version bumped v1→v2, the Council's deliberation
+      panel flipped from 1/3 challenges passed to "✓ true to the brief ✓ original ✓
+      earn it," the Banger Score panel updated) — proof this reuses the real pipeline
+      end to end, not a fake win screen. Zero console errors. Full gate suite green (65
+      files / 556 tests, `tsc --noEmit` clean, static export builds). Not phone-gated
+      like the Phase A items — a genuinely useful feature at any screen size, not a
+      mobile ergonomics fix. _(this PR)_
 - [x] **⚖️ Agent Board Proposes/Challenges/Judges tabs on phone** — autonomous-loop
       medium PR, sixth of the session, Phase A step ④ of the mobile-mockup
       implementation plan (`IDEAS.md`) — the last risky one, and the risk was real. The

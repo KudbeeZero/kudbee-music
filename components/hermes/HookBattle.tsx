@@ -1,0 +1,96 @@
+'use client';
+
+import { useState } from 'react';
+import type { HookOption, SongInputs, SongSection } from '@/lib/hermes/types';
+import { rankHooksByCouncil } from '@/lib/hermes/council';
+import styles from './hermes.module.css';
+
+/**
+ * A bracket-style reskin of the same ranking Council.tsx already shows as a flat list
+ * (mobile-mockup-plan Phase B, "Hook Battle") — zero new scoring logic, `rankHooksByCouncil`
+ * does the seeding, this just turns "the top 2-4 hooks" into a single-elimination "pick
+ * the stronger one" bracket instead of a ranked list. Callers should only render this
+ * when there are ≥2 hook options; it returns null itself as a second guard.
+ */
+export default function HookBattle({ hooks, inputs, sections, onWinner }: {
+  hooks: HookOption[];
+  inputs: SongInputs;
+  sections: SongSection[];
+  onWinner: (h: HookOption) => void;
+}) {
+  const seeds = rankHooksByCouncil(hooks, inputs, sections)
+    .slice(0, hooks.length >= 4 ? 4 : 2)
+    .map((r) => r.hook);
+
+  const [round, setRound] = useState<HookOption[]>(seeds);
+  const [next, setNext] = useState<HookOption[]>([]);
+
+  if (seeds.length < 2) return null;
+  const winner = round.length === 1 ? round[0] : null;
+
+  function pick(h: HookOption) {
+    if (round.length === 2) {
+      onWinner(h);
+      setRound([h]);
+      return;
+    }
+    if (next.some((n) => n.text === h.text)) return; // already decided this pair
+    const merged = [...next, h];
+    if (merged.length === round.length / 2) { setRound(merged); setNext([]); }
+    else setNext(merged);
+  }
+
+  function reset() {
+    setRound(seeds);
+    setNext([]);
+  }
+
+  if (winner) {
+    return (
+      <div className={styles.flag} style={{ textAlign: 'center', borderLeft: '3px solid var(--amber)' }}>
+        <div className={styles.flagKind}>🏆 Winner</div>
+        <div style={{ fontSize: 14, fontWeight: 700, margin: '4px 0' }}>&ldquo;{winner.text}&rdquo;</div>
+        <button className={styles.ghostBtn} onClick={reset}>↺ Battle again</button>
+      </div>
+    );
+  }
+
+  const pairs: [HookOption, HookOption][] = [];
+  for (let i = 0; i < round.length; i += 2) pairs.push([round[i], round[i + 1]]);
+
+  return (
+    <div>
+      <p className={styles.hint} style={{ marginBottom: 6 }}>
+        {round.length === 2 ? '⚔️ Final round' : `⚔️ Round of ${round.length}`} — tap the stronger hook.
+      </p>
+      {pairs.map(([a, b], i) => {
+        const decided = next.find((h) => h.text === a.text || h.text === b.text);
+        return (
+          <div key={i} style={{ display: 'flex', alignItems: 'stretch', gap: 8, marginBottom: 8 }}>
+            {[a, b].map((h) => {
+              const won = decided?.text === h.text;
+              const lost = !!decided && !won;
+              return (
+                <button
+                  key={h.text}
+                  type="button"
+                  className={styles.hookCard}
+                  disabled={!!decided}
+                  onClick={() => pick(h)}
+                  style={{
+                    flex: 1, textAlign: 'left', cursor: decided ? 'default' : 'pointer',
+                    opacity: lost ? 0.4 : 1, borderColor: won ? 'var(--amber)' : undefined,
+                    color: 'var(--ink)', width: '100%',
+                  }}
+                >
+                  <div className={styles.hookText}>&ldquo;{h.text}&rdquo;</div>
+                  <div className={styles.hookMeta}>{h.angle} · stickiness {h.score}</div>
+                </button>
+              );
+            })}
+          </div>
+        );
+      })}
+    </div>
+  );
+}
