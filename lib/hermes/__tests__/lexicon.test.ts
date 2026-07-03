@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import {
-  LEXICON, syllableCount, rhymeKey, doesRhyme, rhymesWith, byAffect, byImagery, wordInfo, imageryTags,
+  LEXICON, syllableCount, rhymeKey, doesRhyme, rhymesWith, byAffect, byImagery, wordInfo, imageryTags, similarWords,
 } from '../lexicon';
 
 describe('mental lexicon (token-free vocabulary cortex)', () => {
@@ -47,5 +47,30 @@ describe('mental lexicon (token-free vocabulary cortex)', () => {
     expect(byImagery('money').every((e) => e.i === 'money')).toBe(true);
     expect(imageryTags()).toContain('struggle');
     expect(imageryTags()).toContain('hope');
+  });
+});
+
+describe('similarWords — word-ideas popup while editing', () => {
+  it('returns words sharing the imagery category, never the word itself', () => {
+    const out = similarWords('gold');
+    expect(out.length).toBeGreaterThan(0);
+    expect(out.every((e) => e.i === wordInfo('gold')!.i)).toBe(true);
+    expect(out.some((e) => e.w === 'gold')).toBe(false);
+  });
+
+  it('returns an empty list for a word not in the lexicon', () => {
+    expect(similarWords('zzzznotaword')).toEqual([]);
+  });
+
+  it('is deterministic — same word returns the same list every time', () => {
+    expect(similarWords('gold')).toEqual(similarWords('gold'));
+  });
+
+  it('respects the max cap', () => {
+    expect(similarWords('gold', 2).length).toBeLessThanOrEqual(2);
+  });
+
+  it('is case-insensitive', () => {
+    expect(similarWords('GOLD')).toEqual(similarWords('gold'));
   });
 });

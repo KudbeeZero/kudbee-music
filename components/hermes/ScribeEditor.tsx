@@ -5,9 +5,11 @@ import type { SongInputs, SongSection } from '@/lib/hermes/types';
 import { renderSections } from '@/lib/hermes/edits';
 import { claudeEngineReady, getClaudeKey } from '@/lib/hermes/claudeKey';
 import { suggestLineRewrites, ClaudeProviderError } from '@/lib/hermes/providers/claudeLyricsProvider';
+import { similarWords } from '@/lib/hermes/lexicon';
 import styles from './hermes.module.css';
 
 interface Target { section: number; line: number }
+interface WordTarget { section: number; line: number; word: string; start: number; end: number }
 
 // The Scribe editor — edit lyrics line by line instead of one big text block.
 // Every line gets its own field plus a small toolbar (✨ AI rewrite when the
@@ -25,6 +27,11 @@ export default function ScribeEditor({
   const [suggestLoading, setSuggestLoading] = useState(false);
   const [suggestError, setSuggestError] = useState<string | null>(null);
   const claudeReady = claudeEngineReady();
+  // Word ideas — double-click any word while editing to see similar words (same
+  // imagery category, closest affect), sourced from lexicon.ts's real word store,
+  // never invented. Click a suggestion to replace the double-clicked word in place.
+  const [wordTarget, setWordTarget] = useState<WordTarget | null>(null);
+  const wordIdeas = wordTarget ? similarWords(wordTarget.word) : [];
 
   function updateLine(section: number, line: number, text: string) {
     setSections((prev) => prev.map((s, si) => si !== section ? s : { ...s, lines: s.lines.map((l, li) => li === line ? text : l) }));
@@ -82,6 +89,23 @@ export default function ScribeEditor({
     closeSuggestions();
   }
 
+  function handleWordDoubleClick(section: number, line: number, e: React.MouseEvent<HTMLInputElement>) {
+    const input = e.currentTarget;
+    const start = input.selectionStart ?? 0;
+    const end = input.selectionEnd ?? 0;
+    const word = input.value.slice(start, end).replace(/[^a-zA-Z']/g, '');
+    if (!word || start === end) return;
+    setWordTarget({ section, line, word, start, end });
+  }
+
+  function applyWordIdea(replacement: string) {
+    if (!wordTarget) return;
+    const current = sections[wordTarget.section].lines[wordTarget.line];
+    const next = current.slice(0, wordTarget.start) + replacement + current.slice(wordTarget.end);
+    updateLine(wordTarget.section, wordTarget.line, next);
+    setWordTarget(null);
+  }
+
   function save() {
     onSave(renderSections(sections));
   }
@@ -100,6 +124,8 @@ export default function ScribeEditor({
                     style={{ flex: 1, fontFamily: 'ui-monospace, "SF Mono", Menlo, monospace', fontSize: 13.5 }}
                     value={line}
                     onChange={(e) => updateLine(si, li, e.target.value)}
+                    onDoubleClick={(e) => handleWordDoubleClick(si, li, e)}
+                    title="Double-click a word for similar-word ideas"
                     aria-label={`${s.label} line ${li + 1}`}
                   />
                   <button
@@ -133,6 +159,31 @@ export default function ScribeEditor({
                     {!suggestLoading && (suggestions.length > 0 || suggestError) && (
                       <button className={styles.copyBtn} style={{ marginLeft: 0 }} onClick={closeSuggestions}>dismiss</button>
                     )}
+                  </div>
+                )}
+                {wordTarget?.section === si && wordTarget.line === li && (
+                  <div style={{ marginTop: 4, marginLeft: 4, padding: 8, border: '1px solid var(--line)', borderRadius: 8, background: 'var(--bg-1)' }}>
+                    <div className={styles.hint} style={{ marginBottom: 4 }}>Similar to “{wordTarget.word}”:</div>
+                    {wordIdeas.length ? (
+                      <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap' }}>
+                        {wordIdeas.map((w) => (
+                          <span
+                            key={w.w}
+                            className={styles.copyBtn}
+                            style={{ marginLeft: 0, cursor: 'pointer' }}
+                            onClick={() => applyWordIdea(w.w)}
+                            role="button"
+                            tabIndex={0}
+                            onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); applyWordIdea(w.w); } }}
+                          >
+                            {w.w}
+                          </span>
+                        ))}
+                      </div>
+                    ) : (
+                      <div className={styles.hint}>nothing in the lexicon is close to that word</div>
+                    )}
+                    <button className={styles.copyBtn} style={{ marginLeft: 0, marginTop: 6 }} onClick={() => setWordTarget(null)}>dismiss</button>
                   </div>
                 )}
               </div>
