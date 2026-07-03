@@ -302,6 +302,18 @@ Board** governance / Solana / token / NFT layer integrates with this engine via 
 later (kept out of this repo's core so it stays free + local).
 
 ## ✅ Shipped (newest first)
+- [x] **🚀 "Agent" header button — your key/brain/install one tap away, anywhere** —
+      small goal-aligned follow-up: the "Your Agent" panel (with the up-front BYOK Claude
+      key entry from #172) was reachable only in compose mode + the Keep-stage column, so
+      the founder's "I should be able to enter it right there" only held on those screens.
+      Added a "🚀 Agent" button to the (now sticky-on-phone) header that, in studio mode,
+      runs `focusFlowStage('keep')` and scrolls the `#your-agent` panel to the top; in
+      compose mode the panel is already visible. Both YourAgent render sites now carry the
+      `your-agent` anchor id (only one is mounted at a time — compose XOR studio — so the
+      id is unique). Playwright-verified: the header button appears in studio mode and
+      scrolls the Your Agent panel into view (`getBoundingClientRect().top` = 0) from a
+      scrolled-to-top start. Zero console errors. Full gate suite green (68 files / 577
+      tests, `tsc --noEmit` clean, static export builds). _(this PR)_
 - [x] **☁️ Cloud Brain config seam + Supabase setup checklist (goal part C scaffold)** —
       the founder chose **Supabase** (via AskUserQuestion) for real accounts + server-side
       "saved" brains. The live auth + sync wiring can't be built blind (OAuth redirect + RLS

@@ -24,7 +24,7 @@ interface InstallPromptEvent extends Event {
  * as honest locked rows — the same "never fake it" seam the OAuth buttons and the Rack's
  * Lightning slot already hold — so the path is visible without pretending it's live.
  */
-export default function YourAgent({ songs, taste, becomingYou }: { songs: SongPackage[]; taste?: Taste; becomingYou: number }) {
+export default function YourAgent({ songs, taste, becomingYou, id }: { songs: SongPackage[]; taste?: Taste; becomingYou: number; id?: string }) {
   const [profile, setProfile] = useState<Profile | null>(null);
   const [standalone, setStandalone] = useState(false);
   const [installEvt, setInstallEvt] = useState<InstallPromptEvent | null>(null);
@@ -103,7 +103,7 @@ export default function YourAgent({ songs, taste, becomingYou }: { songs: SongPa
   }
 
   return (
-    <div className={styles.panel}>
+    <div className={styles.panel} id={id}>
       <div className={styles.panelTitle}>🚀 Your Agent</div>
       <div className={styles.hint}>
         Signed in as <strong>{profile.name}</strong> — your local-first HERMES agent lives in this browser.
