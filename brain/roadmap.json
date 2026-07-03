@@ -102,6 +102,13 @@
       "items": [
         { "id": "6.1", "title": "Influence Studio — thematic cartography + lexical fingerprinting", "status": "queued", "home": "lib/hermes/influence.ts" }
       ]
+    },
+    {
+      "id": 7, "name": "Tiny features — the standing cadence", "status": "in build",
+      "goal": "Founder directive, 2026-07-03: keep shipping small, self-contained features that each amplify one little area — one green-loop PR at a time, no fixed end.",
+      "items": [
+        { "id": "7.1", "title": "🎲 Surprise me — a varied starter-brief pool for Song Lab", "status": "shipped", "home": "components/hermes/SongLabForm.tsx", "note": "loadExample() only ever loaded one fixed EXAMPLE_BRIEF; a new STARTER_BRIEFS pool (6 varied genre/mood/structure/rhyme-scheme combos) plus a 'Surprise me' button gives a blank-page visitor real variety, never a same-brief repeat click. Pure UI convenience, zero pipeline/determinism impact." }
+      ]
     }
   ],
   "videoStudioTrack": {
