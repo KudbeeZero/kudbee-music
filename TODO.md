@@ -175,10 +175,25 @@ shipped it. This file is the human-readable view; keep the two in sync._
   against existing code, and the phased build plan live in
   [`docs/wifi-dj-redesign.md`](docs/wifi-dj-redesign.md) — read that first. Decided
   **mobile-first** build order (matches the existing `useDevice`/capability-flag
-  responsive system). Phase 1 (Council redesign + new logo treatment) is the
-  founder's explicit first target, in progress now; each subsequent phase ships as
-  its own PR, screenshot-reviewed against the mockup by an independent agent
-  (target ≥9/10, escalate to the founder only after 5 failed rounds on one slice).
+  responsive system).
+  - **Phase 1 (Council redesign + new logo treatment) — attempted, escalating to
+    founder.** 5 build→screenshot→independent-review rounds against the mockup
+    (6 → 8 → 8 → 8 → 8/10, including dedicated desktop- and mobile-specialist
+    polish passes between rounds 2-3) never cleared the 9/10 bar. Per the
+    founder's own instruction ("after the fifth attempt stop and ask me for
+    help"), stopped rather than keep iterating blind. Precise remaining gaps
+    from the final review: a green/teal hue reads as present in the Challenges
+    bench + default chips/badges alongside the mockup's cyan/magenta/amber trio
+    (this is the existing `--cyan` token, used everywhere else in the app too —
+    flagging as reviewer feedback to weigh, not a confirmed defect); amber only
+    has one foothold (Agent Pack chips) versus appearing throughout the mockup;
+    the two hemisphere hues sit on two different card *types* rather than
+    blending within one card face the way the mockup's Council Card does.
+    Fully gated and working on `claude/github-pr-review-z0zjwi`
+    (screenshots: `assets/concept-art/council-redesign-attempts/`) — held as a
+    draft PR pending founder direction rather than merged as "done." See
+    `brain/roadmap.json` 8.11 for the full round-by-round history.
+  - Every subsequent phase still ships as its own PR, same review-loop discipline.
 
 ## 🧠 Brain buildout queue (autonomous /loop — research-informed)
 1. [x] **Local lexicon** (vocabulary cortex) — token-free word store. _(shipped)_

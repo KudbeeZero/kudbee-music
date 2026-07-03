@@ -177,6 +177,168 @@
 .flagLine { color: var(--ink-faint); font-style: italic; }
 .chip { display: inline-block; font-size: 10.5px; padding: 3px 8px; border-radius: 999px; border: 1px solid rgba(255, 93, 108, 0.4); color: var(--bad); margin: 3px 3px 0 0; }
 
+/* ---------- Council redesign (WIFI DJ visual language, docs/wifi-dj-redesign.md phase 1) ----------
+   Round 2: an independent review agent scored round 1 a 6/10 — layout/color-coding logic was sound,
+   but it read as generic "dark mode" rather than "neon DAW": no glow, thin flat borders, outline-only
+   chips where the mockup uses filled+glowing ones, no gradient wash. This pass adds real box-shadow
+   bloom, filled chip states, and stronger gradient washes — all still built from the existing
+   --cyan/--magenta/--violet/--amber tokens (never new hex values, so the rest of the app is untouched). */
+.councilPanelHead { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; margin-bottom: 8px; }
+.councilLogo { display: flex; align-items: center; gap: 6px; opacity: 0.95; flex: none; filter: drop-shadow(0 0 6px rgba(139, 92, 255, 0.5)); }
+.councilLogoWord { font-family: var(--ff-display); font-size: 13px; font-weight: 700; letter-spacing: 0.02em; }
+.councilLogoWord strong { background: linear-gradient(135deg, var(--violet), var(--magenta)); -webkit-background-clip: text; background-clip: text; color: transparent; }
+
+.councilBenches { display: flex; gap: 10px; margin-top: 8px; }
+@media (max-width: 640px) { .councilBenches { flex-direction: column; } }
+.councilBenchLabel { font-size: var(--fs-xs); font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; display: flex; align-items: center; gap: 5px; padding: 4px 2px; text-shadow: 0 0 10px currentColor; }
+.councilBenchList { margin-top: 6px; display: flex; flex-direction: column; gap: 8px; }
+
+.councilCard {
+  /* --tint is set inline per-card (Bench passes the bench's magenta/cyan token) so each
+     agent card carries a real ambient halo in its own hemisphere color, not a generic one —
+     round 2 review: cards read as flat solid-fill with only a thin accent, no bleed. */
+  position: relative; display: flex; gap: 8px; padding: 9px 10px; border-radius: 14px;
+  border: 1px solid color-mix(in srgb, var(--tint, var(--violet)) 42%, rgba(255, 255, 255, 0.12));
+  background:
+    linear-gradient(135deg, color-mix(in srgb, var(--tint, var(--violet)) 28%, transparent), color-mix(in srgb, var(--tint, var(--violet)) 9%, transparent) 55%, rgba(10, 12, 20, 0.5)),
+    var(--bg-1);
+  box-shadow:
+    0 0 0 1px rgba(255, 255, 255, 0.03),
+    0 0 28px -8px color-mix(in srgb, var(--tint, var(--violet)) 70%, transparent),
+    0 8px 20px -12px rgba(4, 6, 12, 0.65);
+  transition: border-color 0.15s ease, box-shadow 0.15s ease, transform 0.15s ease, background 0.15s ease;
+}
+.councilCard:hover {
+  border-color: color-mix(in srgb, var(--tint, var(--violet)) 62%, rgba(255, 255, 255, 0.24));
+  box-shadow:
+    0 0 0 1px rgba(255, 255, 255, 0.05),
+    0 0 36px -6px color-mix(in srgb, var(--tint, var(--violet)) 85%, transparent),
+    0 10px 26px -10px rgba(4, 6, 12, 0.75);
+  transform: translateY(-1px);
+}
+.councilAvatarWrap {
+  width: 28px; height: 28px; border-radius: 50%; flex: none;
+  display: flex; align-items: center; justify-content: center;
+  background: rgba(255, 255, 255, 0.06);
+}
+.councilCardBody { flex: 1; min-width: 0; }
+.councilCardName { font-size: var(--fs-sm); font-weight: 700; display: flex; align-items: center; gap: 5px; color: var(--ink); }
+.councilCardCodename { font-weight: 400; color: var(--ink-faint); font-size: var(--fs-xs); }
+.councilCardFinding { font-size: var(--fs-xs); color: var(--ink-dim); margin-top: 2px; line-height: 1.35; }
+
+.councilSeatChip {
+  /* Default (unseated) state is a real filled+glowing neon chip (Vote Button /
+     Segmented Tab language) — round 2 review: unseated chips read as outline-only
+     next to the seated fill. Seated stays visibly *more* emphasized (brighter fill,
+     wider glow, solid border) so the two states are still easy to tell apart. */
+  /* Round 4 review: the round-3 cyan/amber gradient was correct in principle but
+     too low-opacity (~0.14) to actually read as two hues — it averaged into a
+     slightly-warm neutral. Near-solid stops (matching the picked-state badge's
+     intensity below) so the amber half is genuinely visible, not just present
+     in the CSS. Dark text for contrast against the now much brighter fill,
+     same convention as .runBtn's amber gradient. */
+  display: inline-flex; align-items: center; gap: 6px; padding: 4px 10px 4px 4px; border-radius: 999px;
+  border: 1px solid rgba(54, 224, 212, 0.5);
+  background: linear-gradient(135deg, rgba(54, 224, 212, 0.88), rgba(255, 177, 78, 0.68));
+  font-size: var(--fs-xs);
+  color: #0a0d12; font-weight: 600; cursor: pointer;
+  box-shadow: 0 0 14px -4px rgba(54, 224, 212, 0.8), inset 0 0 0 1px rgba(255, 255, 255, 0.03);
+  transition: border-color 0.15s ease, background 0.15s ease, color 0.15s ease, box-shadow 0.15s ease;
+}
+.councilSeatChip:hover {
+  border-color: rgba(54, 224, 212, 0.7);
+  box-shadow: 0 0 18px -3px rgba(54, 224, 212, 0.9), inset 0 0 0 1px rgba(255, 255, 255, 0.05);
+}
+.councilSeatChip[aria-pressed="true"] {
+  border-color: rgba(210, 75, 255, 0.7); color: var(--ink);
+  background: linear-gradient(135deg, rgba(210, 75, 255, 0.48), rgba(139, 92, 255, 0.3));
+  box-shadow: 0 0 22px -3px rgba(210, 75, 255, 0.95), inset 0 0 0 1px rgba(255, 255, 255, 0.06);
+}
+.councilSeatChip[aria-pressed="true"]:hover {
+  border-color: rgba(210, 75, 255, 0.85);
+  box-shadow: 0 0 26px -2px rgba(210, 75, 255, 1), inset 0 0 0 1px rgba(255, 255, 255, 0.08);
+}
+.councilVoteIcon {
+  width: 16px; height: 16px; border-radius: 50%; flex: none;
+  display: flex; align-items: center; justify-content: center;
+  /* Dark circle (not a cyan tint) so the chevron stays legible against the
+     chip's own now much brighter cyan/amber fill (round 4). */
+  background: rgba(10, 13, 18, 0.55); color: #0a0d12; box-shadow: 0 0 6px -1px rgba(255, 255, 255, 0.4);
+}
+.councilSeatChip[aria-pressed="true"] .councilVoteIcon { background: rgba(210, 75, 255, 0.4); color: #fff; box-shadow: 0 0 9px -1px rgba(210, 75, 255, 1); }
+
+.councilRankRow {
+  /* Non-pick rows get a touch more neon presence than the round-2 flat gray (a visible
+     hairline border + a violet bloom + a lifted fill) so they read as UI elements, not
+     disabled text — still clearly a rung below the winning row, which keeps the full
+     magenta/violet fill treatment below. */
+  display: flex; align-items: center; gap: 8px; padding: 6px 8px; border-radius: 10px;
+  border: 1px solid rgba(139, 92, 255, 0.16);
+  background: rgba(139, 92, 255, 0.07);
+  box-shadow: 0 0 14px -7px rgba(139, 92, 255, 0.7);
+}
+.councilRankScore {
+  /* Round 3 review: flat single-hue fill read as plain next to the mockup's
+     gradient-driven buttons/rings. Round 4: the first cyan/amber attempt used
+     ~0.14-0.24 alpha stops that averaged into a neutral instead of reading as
+     two hues — bumped to near-solid (matching the picked-badge's full-token-
+     color intensity below) so amber is actually visible, restoring the panel's
+     3-way palette without touching the vote-icon's cyan=unseated/magenta=seated logic. */
+  width: 30px; height: 22px; flex: none; border-radius: 8px; display: flex; align-items: center; justify-content: center;
+  font-weight: 700; font-size: 12px; color: #0a0d12;
+  background: linear-gradient(135deg, var(--cyan), var(--amber));
+}
+.councilRankRow[data-pick="true"] {
+  background: linear-gradient(90deg, rgba(210, 75, 255, 0.18), rgba(139, 92, 255, 0.08));
+  border: 1px solid rgba(210, 75, 255, 0.4);
+  box-shadow: 0 0 16px -6px rgba(210, 75, 255, 0.6);
+}
+.councilRankRow[data-pick="true"] .councilRankScore {
+  color: #fff; background: linear-gradient(135deg, var(--magenta), var(--violet)); box-shadow: 0 0 10px -1px rgba(210, 75, 255, 0.8);
+}
+
+.councilVerdictCard {
+  margin-top: 10px; padding: 12px; border-radius: 14px; border: 1px solid rgba(139, 92, 255, 0.4);
+  background: linear-gradient(135deg, rgba(139, 92, 255, 0.18), rgba(54, 224, 212, 0.07));
+  box-shadow: 0 0 20px -8px rgba(139, 92, 255, 0.7);
+}
+
+/* ---------- Council redesign — phone-width pass (≤640px) ----------
+   Desktop's glow/gradient treatment above stays untouched; this block only overrides
+   what needs to change once the two benches stack into one long column and everything
+   sits closer together on a narrow screen:
+   1. Seat chips (Guest Judges / Agent Packs) were a 26px-tall pill — comfortably below
+      the ~40-44px tap-target convention the rest of the app uses on phone (.ghostBtn,
+      .shell[data-touch] .chip). Bump to a real touch target.
+   2. The card glow's 28px blur was tuned for desktop's two-column density, where
+      neighboring cards sit further apart; in a single tightly-packed mobile column the
+      same blur bleeds into the next card and reads as a muddy wash rather than a crisp
+      per-card halo. Shrink the blur/spread specifically on mobile.
+   3. Ten cards in one column reads tall/scrolly next to desktop's two-column density —
+      trim card padding and inter-card gap slightly to tighten the vertical rhythm. */
+@media (max-width: 640px) {
+  .councilSeatChip {
+    min-height: 40px; padding: 4px 12px 4px 5px;
+  }
+  .councilVoteIcon { width: 18px; height: 18px; }
+
+  .councilCard { padding: 8px 9px; }
+  .councilBenchList { gap: 6px; }
+
+  .councilCard {
+    box-shadow:
+      0 0 0 1px rgba(255, 255, 255, 0.04),
+      0 0 14px -7px color-mix(in srgb, var(--tint, var(--violet)) 60%, transparent),
+      0 4px 12px -10px rgba(4, 6, 12, 0.6);
+  }
+  .councilCard:hover {
+    box-shadow:
+      0 0 0 1px rgba(255, 255, 255, 0.06),
+      0 0 18px -6px color-mix(in srgb, var(--tint, var(--violet)) 75%, transparent),
+      0 5px 14px -9px rgba(4, 6, 12, 0.7);
+  }
+}
+
 /* ---------- guided tour (coach-marks) ---------- */
 .tourSpotlight {
   position: fixed; border-radius: 10px; pointer-events: none; z-index: 1000;

@@ -244,6 +244,32 @@ A second-opinion review flagged real risks worth acting on (truth-first):
   rule), and the Lyrics Editor's violet accent vs. the Studio Kit's cyan/magenta
   (treating as same token set, different section accent, until told otherwise).
   Phase 1 (Council redesign + new logo) is in progress now.
+  - **Phase 1 outcome — escalating to founder after 5 attempts.** Two independent
+    design agents proposed the redesign (converged closely on a glowing avatar-
+    ringed card language, filled+glowing seat chips, a diamond-mark "WiFi DJ"
+    logo lockup in the panel header, a violet-tinted verdict card) — implemented,
+    then put through 5 build→screenshot→independent-review rounds against the
+    mockup: **6 → 8 → 8 → 8 → 8/10**, including a dedicated desktop-specialist
+    polish pass (real per-card ambient glow, filled chips) and a mobile-
+    specialist pass (tap targets, glow-radius/density tuning at ≤640px) between
+    rounds 2 and 3, plus a targeted gradient-opacity fix in round 4→5 after a
+    review specifically said the fix was "present in the CSS but doesn't land
+    visually." Never reached the founder's 9/10 bar. Per his own instruction —
+    "after the fifth attempt then you stop and then ask me for help" — stopped
+    rather than keep spending attempts blind. Final review's precise gaps: a
+    green/teal hue reads as present in the Challenges bench + default chips
+    alongside the mockup's cyan/magenta/amber trio (this is the pre-existing
+    `--cyan` token used everywhere else in the app, not a new hue introduced by
+    the redesign — noting the reviewer's read, not asserting it's a confirmed
+    defect); amber has only one foothold (Agent Pack chips) instead of
+    appearing throughout like the mockup; the mockup's Council Card blends both
+    hemisphere hues within one card face, while this implementation splits them
+    across two different card *types* (one bench per hue) instead. Fully gated
+    (tsc/tests/build/mobile-matrix/eval green) on `claude/github-pr-review-z0zjwi`,
+    screenshots at `assets/concept-art/council-redesign-attempts/` — held as a
+    draft PR, not merged as "done," pending founder direction on whether to
+    accept as an interim improvement, redirect the palette balance, or take it
+    a different way entirely.
 - ✅ **Agent Network codenames — from the "sneak peek" box-art** *(founder-supplied concept
   image, 2026-07-03)* — a game-console-style splash for WIFI DJ / Kudbee Studios visualized
   the whole brain metaphor already in this repo (HERMES Core, Crossroads Board, Shared
