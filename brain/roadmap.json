@@ -1,6 +1,6 @@
 {
   "note": "The living-state spine — every roadmap item + the PR/status that shipped it (see livingState below for the full sync rule). Read by lib/hermes/statusBoard.ts to generate STATUS.md + the STATUS blocks in CLAUDE.md/README.md/BUILD_LOG.md. See brain/README.md for the full brain/ folder index.",
-  "updated": "2026-07-02",
+  "updated": "2026-07-03",
   "northStar": "The AI-engine pillar of WIFI DJ (wifidj.xyz). The lyrical process + the brain are the moat — not the video studio.",
   "principles": [
     "$0 / local / original-only by default",
@@ -58,7 +58,8 @@
         { "id": "2.2", "title": "The Council — agents as a deliberating board", "status": "shipped", "pr": "#41", "home": "components/hermes/Council.tsx", "note": "right hemisphere proposes / left challenges / artist decides; reuses agent findings + cognition deliberate(). The Crossroads Board made literal. Also added a .env* gitignore guard + .env.example (RUNWAY/ANTHROPIC placeholders) so a founder key can never be committed." },
         { "id": "2.3", "title": "Brain-scan boot sequence + live per-agent drive", "status": "shipped", "pr": "#42", "home": "components/hermes/BrainScan.tsx", "note": "a scan-line boot sweep while running (reduced-motion aware) + regions/agents ignite in sequence live off the per-agent onProgress stream. COMPLETES PHASE 2." },
         { "id": "2.4", "title": "Particle Brain + artist heat-map (living Brain Scan)", "status": "shipped", "pr": "#40", "home": "components/hermes/BrainScan.tsx + lib/hermes/heat.ts", "note": "SHIPPED (founder idea): canvas particle layer over the SVG brain + a thermal heat-map; brainHeat() (tested) colors regions by artist type (right/generative=hot magenta, analytical=cyan, emotion raises temp, more 'becoming-you'=hotter). Reduced-motion aware. Header shows the artist type + brain temp. Feeds the Living-Brain dNFT." },
-        { "id": "2.5", "title": "Deep Brain Atlas — 37 anatomy-named subregions, each mapped to a real module", "status": "shipped", "home": "lib/hermes/brainMap.ts", "note": "constellation expansion in BrainScan + per-subsection trace notes + atlas tables in docs/brain-wiring.md; honesty rule enforced by brainAtlas.test.ts" }
+        { "id": "2.5", "title": "Deep Brain Atlas — 37 anatomy-named subregions, each mapped to a real module", "status": "shipped", "home": "lib/hermes/brainMap.ts", "note": "constellation expansion in BrainScan + per-subsection trace notes + atlas tables in docs/brain-wiring.md; honesty rule enforced by brainAtlas.test.ts" },
+        { "id": "2.6", "title": "Council build plan, PR1 — your learned taste as a 4th voice", "status": "shipped", "home": "lib/hermes/council.ts", "note": "A research agent audited council.ts/Council.tsx and found the board's ranking was display-only, disconnected from the artist's own learned Taste vault even though becomingYou.ts's voiceMirror already scores whole songs against it. voiceFit(hookText, taste) scores a single hook the same way; rankHooksByCouncil() takes taste as an optional 4th voice, active only once taste.edits > 0 (byte-identical ranking otherwise). 4 more PRs queued (see IDEAS.md): Council verdicts as real Crossroads crossings, Council judging across vault takes, a hookFinale field the Council's vote actually steers, and live deliberation in the Lyric Lab." }
       ]
     },
     {

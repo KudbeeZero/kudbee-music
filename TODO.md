@@ -303,6 +303,21 @@ Board** governance / Solana / token / NFT layer integrates with this engine via 
 later (kept out of this repo's core so it stays free + local).
 
 ## ✅ Shipped (newest first)
+- [x] **The Council, PR1 — your learned taste as a 4th voice** — first build step of the
+      Council-improvement plan (a research agent audited the existing `council.ts` +
+      `Council.tsx` and found the board's ranking used only 3 voices — challenge/reward/
+      confidence — with zero connection to the artist's own learned `Taste` vault, even
+      though `becomingYou.ts`'s `voiceMirror` already scores whole songs against it).
+      `council.ts`'s new `voiceFit(hookText, taste)` scores a single hook against
+      liked/disliked word tallies (neutral 50 with no signal, same idiom as
+      `voiceMirror`); `rankHooksByCouncil()` takes an optional 4th `taste` argument that
+      only activates once the artist has real edit history (`taste.edits > 0`) —
+      re-normalizing the weights to challenge 40 / crave 30 / confidence 15 / your voice
+      15. With no taste, or a fresh vault with zero edits, the ranking is byte-identical
+      to the 3-voice baseline (verified in tests). `Council.tsx` shows a 🎙 chip per hook
+      and the caption's weight breakdown flexes to match. Playwright-verified both states
+      live: no taste → 3-voice caption, no chips; taste with edit history → 4-voice
+      caption + a 🎙 50 chip on every ranked hook. _(this PR)_
 - [x] **Memory-vault head pages (`brain/README.md` + `docs/index.md`)** — founder directive:
       every memory-layer folder needs a "chapter index" page, and every file its own
       organizing note. `brain/README.md` now indexes all 12 files in `brain/` (what it is,
