@@ -303,6 +303,16 @@ Board** governance / Solana / token / NFT layer integrates with this engine via 
 later (kept out of this repo's core so it stays free + local).
 
 ## ✅ Shipped (newest first)
+- [x] **🎵 One-click Copy Suno prompt (tiny-feature cadence, #9)** — the Suno-ready
+      prompt (style of music + tagged lyrics) was only reachable by opening
+      "Explain this song" and finding it inside the full trace explorer.
+      `SongPackageView` now has a direct "🎵 Copy Suno prompt" button next to Copy
+      Lyrics/Export JSON, reusing `suno.ts`'s existing `sunoTrack()` — no new
+      generation logic, just a shorter path to something the brain already builds.
+      Playwright-verified live: clicked it, read the real clipboard back (title +
+      "Style of Music:" + tagged `[Hook]` lyrics, 1209 chars for the demo song),
+      button label swapped to "suno prompt copied ✓" and reverted, zero console
+      errors. _(this PR)_
 - [x] **⌨️ Cmd/Ctrl+Enter to generate (tiny-feature cadence, #8)** — submitting Song
       Lab required reaching for the mouse every time, even from mid-typing. A
       window-level keydown listener in `SongLabForm.tsx` now submits on Cmd/Ctrl+Enter

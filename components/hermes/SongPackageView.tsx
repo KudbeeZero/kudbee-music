@@ -5,7 +5,7 @@ import type { HookOption, SongPackage, CritiqueKey } from '@/lib/hermes/types';
 import { deliberationForHook } from '@/lib/hermes/cognition';
 import { buildTrace } from '@/lib/hermes/trace';
 import { renderTraceHtml } from '@/lib/hermes/traceHtml';
-import { sunoStyle, sunoLyrics } from '@/lib/hermes/suno';
+import { sunoStyle, sunoLyrics, sunoTrack } from '@/lib/hermes/suno';
 import { encodeShare, shareUrl, giftMessage } from '@/lib/hermes/shareLink';
 import { findOccasionPack } from '@/lib/hermes/occasionPacks';
 import { downloadShareCard } from '@/lib/hermes/shareCard';
@@ -27,6 +27,7 @@ export default function SongPackageView({ pkg, onSaveEdit, onChooseHook, onRegen
   const [shared, setShared] = useState(false);
   const [cardState, setCardState] = useState<'idle' | 'busy' | 'error'>('idle');
   const [copiedLyrics, setCopiedLyrics] = useState(false);
+  const [copiedSuno, setCopiedSuno] = useState(false);
   const [rhymeWord, setRhymeWord] = useState<string | null>(null);
   const rhymeSuggestions = rhymeWord ? rhymesWith(rhymeWord, { max: 10 }) : [];
 
@@ -54,6 +55,16 @@ export default function SongPackageView({ pkg, onSaveEdit, onChooseHook, onRegen
     navigator.clipboard?.writeText(rawLyrics).then(() => {
       setCopiedLyrics(true);
       setTimeout(() => setCopiedLyrics(false), 1600);
+    }).catch(() => {});
+  }
+
+  // The Suno-ready prompt (style + tagged lyrics) was only reachable by opening
+  // "Explain this song" and finding it inside the full trace explorer. One click
+  // straight to the clipboard now, using the same sunoTrack() the trace already builds.
+  function copySunoPrompt() {
+    navigator.clipboard?.writeText(sunoTrack(pkg)).then(() => {
+      setCopiedSuno(true);
+      setTimeout(() => setCopiedSuno(false), 1600);
     }).catch(() => {});
   }
 
@@ -181,6 +192,9 @@ export default function SongPackageView({ pkg, onSaveEdit, onChooseHook, onRegen
           <button className={styles.copyBtn} style={{ marginLeft: 0 }} onClick={explainSong} title="Open the interactive brain trace for this song — heat-map, what each region did, and a copy-paste Suno prompt">🔍 Explain this song</button>
           <button className={styles.copyBtn} style={{ marginLeft: 0 }} onClick={copyLyrics} title="Copy the full lyrics as plain text — section labels + lines, ready to paste into Suno or a lyric sheet">
             {copiedLyrics ? 'lyrics copied ✓' : '📋 Copy lyrics'}
+          </button>
+          <button className={styles.copyBtn} style={{ marginLeft: 0 }} onClick={copySunoPrompt} title="Copy the Suno-ready prompt (style of music + tagged lyrics) straight to the clipboard">
+            {copiedSuno ? 'suno prompt copied ✓' : '🎵 Copy Suno prompt'}
           </button>
           <button className={styles.copyBtn} style={{ marginLeft: 0 }} onClick={exportSong} title="Download this song package as JSON (backup / re-import into your vault)">⬇ Export JSON</button>
         </span>
