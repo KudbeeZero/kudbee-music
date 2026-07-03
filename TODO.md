@@ -303,6 +303,20 @@ Board** governance / Solana / token / NFT layer integrates with this engine via 
 later (kept out of this repo's core so it stays free + local).
 
 ## ✅ Shipped (newest first)
+- [x] **🗑 Clear all avoid-words (tiny-feature cadence, #17)** — a learned
+      avoid-words list only ever grew, one word removed at a time — no fast way
+      to wipe it after retiring an old artist alias or starting fresh. New
+      `clearAvoidWords()` in `HermesHitFactory.tsx`, gated by the same
+      `window.confirm()` pattern already used for "Restore from backup" (the
+      only other destructive-action confirm in the app) — the only two
+      `window.confirm` call sites in the app now share this caution. A
+      "🗑 clear all" button renders next to the Avoid-words panel header only
+      when the list is non-empty. Playwright-verified live: generated a song to
+      enter studio mode, confirmed the button appeared with a real 56-word
+      learned list, confirmed the dialog text read "Clear all 56 avoid-words?
+      This can't be undone.", accepted it and confirmed the header dropped to
+      "(0)" and the button disappeared, reloaded and re-entered studio mode to
+      confirm the cleared state persisted. Zero console errors. _(this PR)_
 - [x] **✎ Inline vault-song rename (tiny-feature cadence, #16)** — no way to fix a
       typo or retitle a song without a full regenerate (which bumps a new version)
       or duplicating it. New `storage.ts` `renameSong(id, newTitle)`: an in-place
