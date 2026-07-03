@@ -6,6 +6,7 @@ import { deliberationForHook } from '@/lib/hermes/cognition';
 import { buildTrace } from '@/lib/hermes/trace';
 import { renderTraceHtml } from '@/lib/hermes/traceHtml';
 import { sunoStyle, sunoLyrics, sunoTrack } from '@/lib/hermes/suno';
+import { songMarkdown } from '@/lib/hermes/markdownExport';
 import { encodeShare, shareUrl, giftMessage } from '@/lib/hermes/shareLink';
 import { findOccasionPack } from '@/lib/hermes/occasionPacks';
 import { downloadShareCard } from '@/lib/hermes/shareCard';
@@ -113,6 +114,16 @@ export default function SongPackageView({ pkg, onSaveEdit, onChooseHook, onRegen
     URL.revokeObjectURL(url);
   }
 
+  // A clean Markdown export — for Notion, GitHub, a lyric sheet, anywhere the
+  // full JSON package is overkill.
+  function exportMarkdown() {
+    const blob = new Blob([songMarkdown(pkg)], { type: 'text/markdown' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url; a.download = `${pkg.title.toLowerCase().replace(/[^a-z0-9]+/g, '-') || 'song'}.md`; a.click();
+    URL.revokeObjectURL(url);
+  }
+
   // "Show your work" — build the per-region generation trace for THIS song and open the
   // interactive explorer (brain heat-map + collapsible region cards + copy-paste Suno prompt)
   // in a new tab. All client-side + deterministic: renders the same self-contained HTML the
@@ -196,6 +207,7 @@ export default function SongPackageView({ pkg, onSaveEdit, onChooseHook, onRegen
           <button className={styles.copyBtn} style={{ marginLeft: 0 }} onClick={copySunoPrompt} title="Copy the Suno-ready prompt (style of music + tagged lyrics) straight to the clipboard">
             {copiedSuno ? 'suno prompt copied ✓' : '🎵 Copy Suno prompt'}
           </button>
+          <button className={styles.copyBtn} style={{ marginLeft: 0 }} onClick={exportMarkdown} title="Download a clean Markdown version — title, concept, hook, lyrics, production notes. For Notion, GitHub, or a lyric sheet.">⬇ Export Markdown</button>
           <button className={styles.copyBtn} style={{ marginLeft: 0 }} onClick={exportSong} title="Download this song package as JSON (backup / re-import into your vault)">⬇ Export JSON</button>
         </span>
       </div>
