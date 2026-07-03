@@ -219,6 +219,103 @@ A second-opinion review flagged real risks worth acting on (truth-first):
   disclaimer in the README + Uniqueness panel. _(#37)_
 
 ## 🌱 Fresh captures
+- 💭 **Two mobile mockup sets — a structural fix plan + a gamification pass** *(founder
+  directive, 2026-07-03, three attachments: a PDF export of the current live app as ground
+  truth, plus two mockup images)* — asked for an architecture agent + a design agent to turn
+  these into an implementation plan (running as of this capture; outcome to follow in TODO.md
+  once synthesized). Two distinct mockups, deliberately not conflated:
+  1. **"Mobile Layout Fix Plan"** — a grounded, non-gamified mobile restructuring: sticky top
+     app bar, sticky Review/Refine/Keep/Release stepper, an accordion-collapsed Song Lab
+     (~15 fields down to key fields + a prominent "Surprise me"), a sticky bottom action bar,
+     the Agent Board as tabs (Proposes/Challenges/Judges) instead of one dense grid, Brain
+     Recommendations as a swipeable one-card carousel, the Song Package as tabs, a bottom nav
+     (Lab/Agents/Brain/Package), plus concrete spacing/typography specs. Mostly CSS/structural
+     work on already-shipped components — the lower-risk, more buildable half.
+  2. **"HERMES Hit Factory Mobile Upgrade Series"** — a gamification pass: a dashboard with
+     XP/energy/streak meters, a quest/chapter "journey" view, the Agent Board as character
+     avatars around a "YOU — THE ARTIST" hub, a stepped Song Lab flow, a bracket-style "Hook
+     Battle" for picking the lead hook, achievement badges, a collectible-rewards grid, a
+     leaderboard + community challenge, and a full-screen confetti "BANGER CONFIRMED" moment.
+     Overlaps a lot with the already-queued **"'Becoming You' gamified onboarding — badges +
+     the Mogul story arc"** idea above (`lib/hermes/story.ts` chapters already exist) — the two
+     agents are checking how much of this is new UI over already-computed data vs. genuinely
+     new tracking, and flagging anything that would need a new npm dependency (confetti/carousel/
+     gauge libraries) against the $0-core no-new-deps rule.
+  **Plan delivered** (architecture agent + design agent, both read the mockups and the real
+  code, no edits made): **Phase A (Mockup B, build now)** — 6 same-day PRs in the mockup's own
+  order: ① sticky top app bar, ② sticky bottom Studio Flow rail (finishes wiring
+  `lib/hermes/device.ts`'s already-computed-but-unused `stickyPrimaryAction`/`bottomSheets`
+  flags — this isn't a new mobile system, it's finishing one that's half-wired), ③ collapse
+  Song Lab into an accordion (reuses the existing `showAvoid` disclosure pattern), ④ Agent
+  Board as Proposes/Challenges/Judges tabs (reuses `Council.tsx`'s hemisphere split — flagged
+  risk: `AgentBoard.tsx`'s live connector-line SVG assumes both wired cards are visible at
+  once, needs an explicit fallback so 8.2's "it's literally them thinking" doesn't silently
+  break), ⑤ a bottom nav (Lab/Agents/Brain/Package, scrolling to anchors that already exist),
+  ⑥ a spacing/typography audit (mostly already shipped, closing small gaps). **Phase B
+  (Mockup A, mixed verdict)** — the design agent's real opinion: decline the neon-trophy-
+  confetti visual language outright (a genuine identity clash with the shipped "brain, not a
+  game" aesthetic — see `BangerScoreCard.tsx`'s own "not a market or A&R prediction" copy) but
+  build the retention *mechanics* underneath it, because nearly all of them already have a
+  home: Hook Battle is a reskin of `rankHooksByCouncil()` (zero new logic — build first),
+  XP/levels reads `becomingYou.youPercent` + `pkg.score`'s 7 subcategories (new presentation
+  only), streaks extend `heat.ts`, quests/chapters extend `story.ts` (a new `hermes.quests.v1`
+  key for session-scoped counters, same `.bak`-mirror shape as every other store), confetti is
+  a hand-rolled canvas particle burst same house pattern as `BrainScan.tsx` (no library — the
+  $0-core no-new-deps rule holds). This is explicitly the SAME arc as the already-queued
+  "'Becoming You' gamified onboarding — badges + the Mogul story arc" idea above — treat as one
+  arc, not two. **Parked, not built**: a real leaderboard/community-challenge — needs
+  cross-visitor data aggregation the static $0 core structurally can't provide, same blocker
+  already logged twice (Live Multiplayer Council, the WIFI-radio jukebox). Cross-cutting risk
+  flagged by both agents: `FLOW_ANCHOR`'s five DOM ids (`stage-review`/`song-lyrics`/
+  `stage-keep`/`song-toolbar`/`stage-studio`) are literal scroll targets — any restructuring PR
+  must keep them wired or update the map in the same PR. Founder to pick a starting PR; full
+  reasoning in the two agents' reports (not persisted verbatim — available on request).
+- 💭 **Suno-inspired global nav + Council "wired everywhere" + dream-big Studio + wallet/fiat
+  sign-up** *(founder idea, 2026-07-03, five Suno reference screenshots — continuing a
+  session that ran out of Fable 5 credits mid-conversation; no code was left in progress,
+  `main`/this branch were identical and TODO/IDEAS were already current, so this is a fresh
+  capture, not a resume)* — four related asks from the reference images:
+  1. **A persistent bottom nav bar** (mobile) that switches between top-level areas the way
+     Suno's app does (Home / Explore / Create / Library / Profile icons pinned to the bottom
+     of every screen). HERMES has no equivalent today — checked `app/`: routes are `/`
+     (landing), `/hermes` (Song Lab + studio flow), `/crossroads`, `/hit-factory`, each its
+     own page with no shared chrome/nav between them. A bottom tab bar would be the first
+     real cross-page navigation shell.
+  2. **The Council "globally wired"** — the founder read Suno Studio's single integrated
+     workspace (audio, lyrics, styles, timeline, cover art all visible + linked together at
+     once, screenshot 1) as a model for how the Council should feel: reachable from
+     anywhere, not buried inside the Studio Flow rail (8.1) as one panel among many. Natural
+     shape: the Council becomes one of the bottom-nav destinations (or a persistent
+     mini-widget) so its live ranking is visible/reachable regardless of what else is on
+     screen, not just seated inside `HermesHitFactory.tsx`'s studio mode.
+  3. **"Studio" — dream big** (screenshot 3, Suno's own Studio upsell modal: "Your complete
+     creative workspace") — ✅ **shipped this session**: `components/hermes/Studio.tsx`, a
+     read-only arrangement timeline (the song's real sections as clips, sized off the
+     existing runtime-estimate rule) + a "meter bridge" reading the real 11-region brain
+     state, wired as a 5th Studio Flow rail tab that ring-highlights alongside the
+     already-existing Brain Scan and Engine Rack rather than duplicating either. See
+     TODO.md Shipped ("HERMES Studio workspace — the arrangement timeline, roadmap 3.4").
+     Clip editing stays a later step, per the original scope note.
+  4. **Sign-up: wallet OR any other account, plus a currency conversion** (screenshots 4-5,
+     Suno's own sign-up modal: Google/Apple/Phone + Discord/Facebook/Microsoft) — founder
+     wants two paths: sign up with a **Blockchain wallet** (this repo already plans Solana —
+     see the Living Brain dNFT entry + the landing page's parked wallet-connect slot), or
+     sign up with **any other account** (email/Google/etc.) — and whichever path someone
+     *didn't* pick, offer a **currency conversion** between crypto and fiat (e.g. show a
+     wallet user their balance in USD, or a fiat user what their subscription costs in
+     SOL/USDC). Real tension with the iron laws worth flagging before building: this needs a
+     **live exchange-rate lookup**, which is a network call — the same category of decision
+     already flagged as blocked on the founder in the "Accounts / sign-in" TODO item (needs a
+     real hosted-auth provider + OAuth app registration) and the Solana wallet-connect slot in
+     `Landing.tsx`. A **BYOK-style pattern** (the visitor's own browser calling a public
+     exchange-rate API directly, same shape as `lib/hermes/claudeKey.ts` — no founder server,
+     no founder key) could keep a *display-only* conversion inside the $0 rules; real wallet
+     auth + real account auth both still need the founder's hosted-auth decision first.
+  Piece 3 shipped this session (see above). Pieces 1-2 (bottom nav, Council globally
+  reachable) are $0/local and buildable now without a founder decision. Piece 4 splits into
+  a buildable-now UI (the sign-up modal itself, wallet-or-account choice, BYOK-style display
+  conversion) and a founder-blocked piece (real wallet connect + real account auth), same
+  shape as the existing "Accounts / sign-in" item. Not started.
 - 💭 **"WIFI radio will have like a jukebox songs. People can submit songs. We have
   contest stuff — bring more value"** *(founder idea, 2026-07-03)* — this already
   had a home: `brain/roadmap.json`'s `ecosystem.wifiDjRadio` ("A live radio

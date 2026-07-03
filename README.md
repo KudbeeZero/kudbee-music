@@ -305,16 +305,16 @@ flow, and the non-negotiables — plus the code-generated [brain-wiring diagram]
 - [x] **Crossroads Board (Stage 2)** — a `/crossroads` route where you can vote on open creative/ecosystem decisions — ranked options, rationale, a live vote bar, your own vote recorded to this browser only
 - [x] **Occasion Packs** — write a song FOR someone: Christmas, Valentine's, Mother's/Father's Day, Birthday, Anniversary, Graduation, or New Year, each with its own imagery and a dedication line ("Merry Christmas, Mom")
 - [x] **Song Gifts** — share an Occasion Pack song and the link itself becomes the gift: a one-line gift message instead of a bare URL, a themed reveal on open, gift-framed card + link preview
+- [x] **HERMES Studio** — a Suno-Studio-style arrangement timeline: your song's real sections as clips, a click-to-preview lyric readout, and a "meter bridge" reading the live 11-region brain state — a 5th tab on the Studio Flow rail, read-only for now
 
 **Next** — generated from the spine [`brain/roadmap.json`](brain/roadmap.json); the human backlog is [`TODO.md`](TODO.md), the full board is [`STATUS.md`](STATUS.md).
 
 <!-- STATUS:BEGIN generated: edit brain/roadmap.json, then GEN_DOCS=1 npx vitest run status -->
-**📊 Status board:** ✅ 68 shipped · 🔨 1 in build · 💤 10 queued (79 tracked) — full tables in [`STATUS.md`](STATUS.md), source of truth [`brain/roadmap.json`](brain/roadmap.json).
+**📊 Status board:** ✅ 69 shipped · 🔨 1 in build · 💤 9 queued (79 tracked) — full tables in [`STATUS.md`](STATUS.md), source of truth [`brain/roadmap.json`](brain/roadmap.json).
 
 | | Up next | id |
 |---|---------|----|
 | 💤 | **Community-authored personas (craft-DNA, like scene packs)** | `3.2` |
-| 💤 | **HERMES Studio workspace (Suno-Studio-style: section timeline + rack + meter bridge)** | `3.4` |
 | 💤 | **Bring Your Own Sound** | `3.6` |
 | 💤 | **Optional durable cloud brain (Notion/Drive backing)** | `4.2` |
 | 🔌 | **claudeLyricsProvider behind ANTHROPIC_API_KEY (mock default)** | `5.1` |
