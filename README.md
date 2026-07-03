@@ -308,6 +308,7 @@ flow, and the non-negotiables — plus the code-generated [brain-wiring diagram]
 - [x] **HERMES Studio** — a Suno-Studio-style arrangement timeline: your song's real sections as clips, a click-to-preview lyric readout, and a "meter bridge" reading the live 11-region brain state — a 5th tab on the Studio Flow rail, read-only for now
 - [x] **Bottom nav on phone** — Lab · Council · Studio · Package · Vault, one tap away from anywhere; the Council is no longer buried inside the Studio Flow rail
 - [x] **Sticky top app bar on phone** — Crossroads/Albums/Vault/Sign-out stay reachable without scrolling back to the top
+- [x] **Sticky Studio Flow rail on phone** — Review/Refine/Keep/Release/Studio stays visible flush under the app bar, no matter how far you've scrolled
 
 **Next** — generated from the spine [`brain/roadmap.json`](brain/roadmap.json); the human backlog is [`TODO.md`](TODO.md), the full board is [`STATUS.md`](STATUS.md).
 

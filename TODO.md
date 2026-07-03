@@ -302,6 +302,26 @@ Board** governance / Solana / token / NFT layer integrates with this engine via 
 later (kept out of this repo's core so it stays free + local).
 
 ## ✅ Shipped (newest first)
+- [x] **🧭 Sticky Studio Flow rail on phone** — autonomous-loop medium PR, fourth of the
+      session, Phase A step ② of the mobile-mockup implementation plan (`IDEAS.md`).
+      The Review/Refine/Keep/Release/Studio tab rail used to scroll away with everything
+      else — once you'd scrolled deep into the Council or a song section, there was no
+      way to see which stage you were focused on or jump to another without scrolling
+      back up. Now the rail is sticky too (phone-only, `device.ui.singleColumn`), sitting
+      flush under the sticky top app bar from the previous PR — a `ResizeObserver` on the
+      header feeds its actual rendered height into the rail's inline `top` offset, so the
+      two stay pixel-flush even though the header's height varies with how many action
+      buttons wrap to a second row (a hardcoded pixel offset would have drifted). This is
+      a different job from the bottom nav (which jumps between panels) — the rail shows
+      and switches which *workflow stage* you're in, matching the mockup's own separate
+      "Progress Steps (sticky)" element. Playwright-verified live at 390×844: loaded the
+      demo song, scrolled 2200px into the page, confirmed `header.getBoundingClientRect()
+      .bottom` and `rail.getBoundingClientRect().top` matched exactly (zero gap, zero
+      overlap), tapped the Studio tab from the scrolled position and confirmed it
+      correctly scrolled to and ring-highlighted the Studio timeline panel below.
+      Confirmed the rail is plain `position: static` at a 1440px desktop viewport (no
+      regression). Zero console errors. Full gate suite green (65 files / 556 tests,
+      `tsc --noEmit` clean, static export builds). _(this PR)_
 - [x] **📌 Sticky top app bar on phone** — autonomous-loop medium PR, third of the
       session, Phase A step ① of the mobile-mockup implementation plan (`IDEAS.md`).
       The header (brand, mode badge, Lyric Lab/Crossroads/Albums/Vault/Sign-out) used

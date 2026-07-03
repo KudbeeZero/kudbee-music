@@ -369,6 +369,17 @@
 .shell[data-sticky-header] .subtitle,
 .shell[data-sticky-header] .modeBadge { display: none; }
 
+/* ---- sticky Studio Flow rail (phone-only) ----
+   Mobile-mockup-plan Phase A step ②. Sits flush under the sticky header (top set
+   inline from a measured header height — the header's wrap height varies with content,
+   so a hardcoded offset would drift) so which stage you're in — and the ability to jump
+   stages — stays visible no matter how far you've scrolled into a long single-column page. */
+.shell[data-sticky-rail] .flowRail {
+  position: sticky; z-index: 44;
+  background: var(--bg-0); padding: 8px 2px; margin: 0 -2px 14px;
+  border-bottom: 1px solid var(--line-strong);
+}
+
 /* ---- bottom nav (phone-only, device.ui.singleColumn) ---- */
 .shell[data-bottomnav] { padding-bottom: 78px; }
 .bottomNav {

@@ -95,6 +95,18 @@ export default function HermesHitFactory() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   const stageRef = useRef<HTMLDivElement>(null);     // the brain/result column (scroll target on mobile)
+  // Measured so the sticky Studio Flow rail (phone-only) can sit flush under the sticky
+  // header instead of overlapping it — the header wraps to a different height depending
+  // on how many action buttons fit per row, so a hardcoded offset would drift.
+  const headerRef = useRef<HTMLElement>(null);
+  const [headerH, setHeaderH] = useState(0);
+  useEffect(() => {
+    if (!device.ui.singleColumn || !headerRef.current) return;
+    const el = headerRef.current;
+    const ro = new ResizeObserver(() => setHeaderH(el.getBoundingClientRect().height));
+    ro.observe(el);
+    return () => ro.disconnect();
+  }, [device.ui.singleColumn]);
   // Studio Flow: a Review -> Refine -> Keep -> Release rail over the existing studio-mode
   // panels. A focus state, not a wall — every panel stays rendered and reachable; a tab
   // click just scrolls to + highlights the panels for that stage of the journey.
@@ -434,8 +446,9 @@ export default function HermesHitFactory() {
       data-anim={device.ui.animation}
       data-bottomnav={(profile && device.ui.singleColumn) || undefined}
       data-sticky-header={(profile && device.ui.singleColumn) || undefined}
+      data-sticky-rail={(profile && device.ui.singleColumn) || undefined}
     >
-      <header className={styles.header}>
+      <header className={styles.header} ref={headerRef}>
         <div className={styles.brandMark}>H</div>
         <div className={styles.brandText}>
           <span className={styles.kicker}>HERMES</span>
@@ -508,7 +521,12 @@ export default function HermesHitFactory() {
       </div>
 
       {pkg && (
-        <div className={styles.flowRail} role="tablist" aria-label="Song workflow stage">
+        <div
+          className={styles.flowRail}
+          role="tablist"
+          aria-label="Song workflow stage"
+          style={device.ui.singleColumn ? { top: headerH || undefined } : undefined}
+        >
           {([
             { id: 'review', label: '① Review', title: 'Hooks, scores, and the Council verdict' },
             { id: 'refine', label: '② Refine', title: 'Edit the lyrics, regenerate from critiques' },
