@@ -303,6 +303,25 @@ Board** governance / Solana / token / NFT layer integrates with this engine via 
 later (kept out of this repo's core so it stays free + local).
 
 ## ✅ Shipped (newest first)
+- [x] **🧭 Studio Flow PR1 — the Review/Refine/Keep/Release rail (medium-feature
+      arc, item 8.1)** — studio mode presented ~10 panels + an 8-button toolbar
+      all at once, with no guided path from "song generated" to "refined, kept,
+      and released." New `flowStage` state in `HermesHitFactory.tsx` + a 4-tab
+      rail (①Review ②Refine ③Keep ④Release), shown only once a song exists.
+      Each tab is a **focus state, not a wall**: clicking one smooth-scrolls to
+      and rings-highlights that stage's panels — Council + BangerScoreCard for
+      Review, the lyrics editor for Refine, ArtistCard/Rack/Recommendations for
+      Keep, the Song Package toolbar for Release — while every panel stays
+      rendered and reachable; nothing is hidden. Playwright-verified live: the
+      rail is absent in compose mode, appears after generating, defaults to
+      Review selected, each tab click sets `aria-selected` + the correct
+      anchor's `data-active` + scrolls it into view, and a Keep-stage panel
+      stays visible even while parked on the Review stage (confirming nothing
+      is hidden). Zero console errors. Full gate suite green. This is PR1 of a
+      ~3-PR arc (see IDEAS.md/roadmap.json 8.1) — next up is the Release-desk
+      regroup, then a mobile pass. Founder chose this as the first medium
+      feature after explicitly pausing the tiny-feature cadence at #25 in
+      favor of a research-backed plan. _(this PR)_
 - [x] **🗑 Clear all vault notes (tiny-feature cadence, #25)** — per-song notes
       (7.7) only ever cleared one at a time by blanking each field, mirroring
       the gap `clearAvoidWords()` (7.17) closed for the avoid-words list. New

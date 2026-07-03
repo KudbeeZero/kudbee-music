@@ -2,7 +2,7 @@
 
 > **Generated from [`brain/roadmap.json`](brain/roadmap.json) — do not hand-edit.** Status lives ONLY in the spine; edit it there, then regenerate with `GEN_DOCS=1 npx vitest run status`. `statusBoard.test.ts` fails CI if this file drifts.
 
-**Scoreboard:** ✅ 60 shipped · 🔨 1 in build · 💤 10 queued — 71 tracked items
+**Scoreboard:** ✅ 61 shipped · 🔨 1 in build · 💤 10 queued — 72 tracked items
 (legend: ✅ shipped · 🔌 scaffold shipped, founder-gated · 🔨 in build · ⏭️ next · 💤 queued · 💭 idea · 🚧 blocked on founder)
 
 ## Tracks
@@ -114,6 +114,12 @@
 | ✅ | **📅 'N songs today' stat in the Vault header** | `components/hermes/VaultDrawer.tsx` | — |
 | ✅ | **📄 Copy all as Markdown — bulk vault export, richer format** | `components/hermes/VaultDrawer.tsx` | — |
 | ✅ | **🗑 Clear all vault notes** | `lib/hermes/storage.ts + components/hermes/VaultDrawer.tsx` | — |
+
+### Phase 8 — Medium features — the planned arc — `▰▰▰▰▰▰▰▰▰▰` 1/1
+
+| | Item | Where it lives | PR |
+|---|------|----------------|----|
+| ✅ | **🧭 Studio Flow PR1 — the Review/Refine/Keep/Release rail** | `components/hermes/HermesHitFactory.tsx + SongPackageView.tsx + hermes.module.css` | — |
 
 ### Video studio — `▰▰▰▰▰▱▱▱▱▱` 4/8
 
