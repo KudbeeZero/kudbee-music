@@ -2,7 +2,7 @@
 
 import { useRef, useState } from 'react';
 import type { SongPackage } from '@/lib/hermes/types';
-import { exportVault, importVault, vaultBackupStatus, restoreFromBackup } from '@/lib/hermes/storage';
+import { exportVault, importVault, vaultBackupStatus, restoreFromBackup, loadFavorites, toggleFavorite } from '@/lib/hermes/storage';
 import styles from './hermes.module.css';
 
 const count = (n: number, word: string) => `${n} ${word}${n === 1 ? '' : 's'}`;
@@ -22,6 +22,16 @@ export default function VaultDrawer({
 }) {
   const fileRef = useRef<HTMLInputElement>(null);
   const [restoreNote, setRestoreNote] = useState<string | null>(null);
+  const [favorites, setFavorites] = useState<Set<string>>(() => loadFavorites());
+
+  function toggleFav(id: string, e: React.MouseEvent) {
+    e.stopPropagation();
+    setFavorites(new Set(toggleFavorite(id)));
+  }
+
+  // Favorites float to the top; a stable sort keeps each group's original
+  // (newest-first) order otherwise, so favoriting never reshuffles the rest.
+  const sortedSongs = [...songs].sort((a, b) => Number(favorites.has(b.id)) - Number(favorites.has(a.id)));
   // Cheap localStorage reads — recomputed on each render so the line stays current.
   // Warn only when the mirror holds more than the live vault (missing/corrupt live
   // reads as 0 songs); a fresh, empty vault is not a warning state.
@@ -91,10 +101,20 @@ export default function VaultDrawer({
         {songs.length === 0 ? (
           <div className={styles.emptyState}>No saved songs yet.<br />Generate a package and it lands here.</div>
         ) : (
-          songs.map((s) => (
+          sortedSongs.map((s) => (
             <div key={s.id} className={styles.vaultItem} onClick={() => onOpen(s.id)}>
               <div className={styles.vaultTitle}>
-                <span>{s.title}</span>
+                <span>
+                  <button
+                    className={styles.copyBtn}
+                    style={{ marginLeft: 0, marginRight: 6, padding: '2px 6px' }}
+                    onClick={(e) => toggleFav(s.id, e)}
+                    title={favorites.has(s.id) ? 'Unpin from favorites' : 'Pin as a favorite'}
+                  >
+                    {favorites.has(s.id) ? '⭐' : '☆'}
+                  </button>
+                  {s.title}
+                </span>
                 <span className={styles.ver}>v{s.version}</span>
               </div>
               <div className={styles.vaultMeta}>

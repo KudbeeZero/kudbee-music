@@ -235,10 +235,14 @@ A second-opinion review flagged real risks worth acting on (truth-first):
     of a package were the full JSON export or one short-form clip caption at a time;
     now `SongPackageView`'s existing `rawLyrics` is one click away. See TODO.md
     Shipped.
+  - ✅ **⭐ Vault favorites — pin your best takes** — a growing vault had no way to
+    mark a keeper; a ☆/⭐ toggle per row (new `storage.ts` favorites store, its own
+    localStorage key, no bearing on generation) sorts favorites to the top. See
+    TODO.md Shipped.
   Candidates queued for the next few rounds (pick one, ship it, move to the next):
-  a per-song ⭐ favorite/pin in the Vault list, a click-a-word rhyme helper on the
-  lyric view (reusing `rhyme.ts`'s existing rhyme-family logic), a word/line/
-  estimated-runtime counter on the lyrics section, a "duplicate this song" vault
+  a click-a-word rhyme helper on the lyric view (reusing `rhyme.ts`'s existing
+  rhyme-family logic), a word/line/estimated-runtime counter on the lyrics section,
+  a "duplicate this song" vault
   action to branch a version without overwriting it.
 - ✅ **"Make sure Claude.md files are getting updated, memory layer files... each file
   should have a chapter/head-type page with the contents of the entire folder"**
