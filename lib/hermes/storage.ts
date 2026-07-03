@@ -131,6 +131,30 @@ export function deleteSong(id: string): void {
   writeAll(readAll().filter((s) => s.id !== id));
 }
 
+function genId(): string {
+  if (typeof crypto !== 'undefined' && 'randomUUID' in crypto) return crypto.randomUUID();
+  return 'song_' + Math.random().toString(36).slice(2, 10);
+}
+
+/** Fork a stored song into a new, independently-versioned entry — a title bump
+ *  (saveSong's version history) still overwrites-in-place conceptually; this gives
+ *  the artist a real branch to diverge from without touching the original. The new
+ *  title gets a "(copy)" suffix, bumped to "(copy 2)", "(copy 3)"... if that title
+ *  is already taken, so duplicating the same song twice never collides. Returns
+ *  null if the source song isn't found or the write didn't land (full quota). */
+export function duplicateSong(id: string, opts: { id?: string; now?: string } = {}): SongPackage | null {
+  const all = readAll();
+  const source = all.find((s) => s.id === id);
+  if (!source) return null;
+  const baseTitle = source.title.replace(/\s*\(copy(?: \d+)?\)$/i, '');
+  const taken = new Set(all.map((s) => s.title.toLowerCase()));
+  let title = `${baseTitle} (copy)`;
+  for (let n = 2; taken.has(title.toLowerCase()); n++) title = `${baseTitle} (copy ${n})`;
+  const clone: SongPackage = { ...source, id: opts.id ?? genId(), title, version: 1, createdAt: opts.now ?? new Date().toISOString() };
+  const persisted = writeAll(pruneVersionHistory([...all, clone]));
+  return persisted ? clone : null;
+}
+
 /** Prior songs in the shape the originality checker expects. */
 export function priorSongsForOriginality(excludeId?: string) {
   return readAll()
