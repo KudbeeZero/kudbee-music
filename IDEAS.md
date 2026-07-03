@@ -219,8 +219,28 @@ A second-opinion review flagged real risks worth acting on (truth-first):
   disclaimer in the README + Uniqueness panel. _(#37)_
 
 ## 🌱 Fresh captures
-- ✅ **"Holiday song packs... what would be another feature that could sell something like
-  this?"** *(founder idea + prompt, 2026-07-03)* — **Occasion Packs shipped** (roadmap 5.8):
+- ✅ **"Make sure Claude.md files are getting updated, memory layer files... each file
+  should have a chapter/head-type page with the contents of the entire folder"**
+  *(founder directive, 2026-07-03)* — shipped: `brain/README.md` + rewritten `docs/index.md`,
+  guard-tested (`memoryIndexes.test.ts`). See TODO.md Shipped for the full writeup.
+- 💭 **"Is there a way to provide more interactive help — like the app Scribe?"** *(founder
+  question, 2026-07-03)* — Scribe (scribehow.com) records a real screen workflow, auto-
+  detects each click/field via DOM inspection, captures + annotates a screenshot per step,
+  and generates step-by-step text (heuristic + AI-assisted) into a shareable guide. A literal
+  clone doesn't fit HERMES's $0/static/no-server model (no screen-recording pipeline, no
+  server to process it) — but two honest equivalents:
+  1. **A hand-rolled "Guided Tour" coach-mark overlay** for onboarding — a small, static
+     config of `{ selector, title, body }` steps anchored to Song Lab's existing element ids
+     (`#hf-title`, `#hf-theme`, `#hf-occasion`, …), stepped through with a spotlight/scrim
+     overlay (pure CSS, zero new deps). Same end-user experience as opening a Scribe guide —
+     just authored once instead of recorded, since a static client can't capture a live
+     session. Natural v1 scope: walk a first-time visitor through Song Lab → Generate →
+     Explain this song.
+  2. **HERMES already ships the *other* half of Scribe's idea** — "🔍 Explain this song"
+     (`lib/hermes/traceHtml.ts`) auto-generates a step-by-step annotated walkthrough, just of
+     the BRAIN's reasoning instead of a human's clicks. Worth naming and leaning into that
+     framing rather than treating "interactive help" as unbuilt from scratch.
+  Not built yet — needs a priority call against the Council build plan below.
   `brain/occasionPacks.json` + `lib/hermes/occasionPacks.ts` — Christmas, Valentine's,
   Mother's/Father's Day, Birthday, Anniversary, Graduation, New Year, each a mood/genre/
   structure/rhymeScheme preset PLUS real new imagery vocabulary (stocking, mistletoe,

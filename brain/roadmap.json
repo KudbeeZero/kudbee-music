@@ -1,4 +1,5 @@
 {
+  "note": "The living-state spine — every roadmap item + the PR/status that shipped it (see livingState below for the full sync rule). Read by lib/hermes/statusBoard.ts to generate STATUS.md + the STATUS blocks in CLAUDE.md/README.md/BUILD_LOG.md. See brain/README.md for the full brain/ folder index.",
   "updated": "2026-07-02",
   "northStar": "The AI-engine pillar of WIFI DJ (wifidj.xyz). The lyrical process + the brain are the moat — not the video studio.",
   "principles": [

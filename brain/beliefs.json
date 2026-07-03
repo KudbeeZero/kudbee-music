@@ -1,4 +1,5 @@
 {
+  "note": "The values cortex — the brain's constitution. Read by lib/hermes/beliefs.ts; the writers-room and recommender consult it so the platform's principles are explicit, version-controlled memory, not an unwritten assumption. See brain/README.md for the full brain/ folder index.",
   "version": 1,
   "name": "HERMES Brain — Belief System",
   "updated": "2026-07-01",
