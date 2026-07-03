@@ -144,6 +144,14 @@
 .statusPip[data-status="warning"] { background: var(--warn); }
 .statusPip[data-status="error"] { background: var(--bad); }
 @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
+/* Agent Board tabs (phone-only): a non-active-bucket card collapses to a one-line chip
+   instead of unmounting — it stays a real, positioned DOM node so the connector-line
+   SVG's getBoundingClientRect() math (in AgentBoard.tsx) keeps working across tabs. */
+.agentCard[data-collapsed] { padding: 8px 10px; }
+.agentCard[data-collapsed] .agentRole,
+.agentCard[data-collapsed] .agentFinding,
+.agentCard[data-collapsed] .agentMeta,
+.agentCard[data-collapsed] .agentWarn { display: none; }
 .agentFinding { font-size: 12px; color: var(--ink-dim); margin-top: 9px; min-height: 30px; line-height: 1.4; }
 .agentMeta { display: flex; align-items: center; justify-content: space-between; margin-top: 9px; }
 .conf { font-size: 10.5px; color: var(--ink-faint); }

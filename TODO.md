@@ -302,6 +302,37 @@ Board** governance / Solana / token / NFT layer integrates with this engine via 
 later (kept out of this repo's core so it stays free + local).
 
 ## ✅ Shipped (newest first)
+- [x] **⚖️ Agent Board Proposes/Challenges/Judges tabs on phone** — autonomous-loop
+      medium PR, sixth of the session, Phase A step ④ of the mobile-mockup
+      implementation plan (`IDEAS.md`) — the last risky one, and the risk was real. The
+      Agent Board's 10-card grid was dense on phone; the mockup called for tabbing it
+      into Proposes/Challenges/Judges, reusing `Council.tsx`'s existing hemisphere
+      split (plus a third bucket: A&R Judge + Rights & Release Guard pulled out of
+      Challenges, since their role is a verdict, not a critique). The flagged risk from
+      the architecture agent's review: `AgentBoard.tsx`'s live connector-line SVG
+      (medium-feature-arc item 8.2, "it's literally them thinking") measures BOTH
+      endpoint cards via `cardRefs`/`getBoundingClientRect()` to draw a line between
+      the two most-recently-fired agents — and the single most interesting case (a
+      signal crossing hemispheres, i.e. right proposing → left challenging) is exactly
+      the case that would span two different tabs. Read the connector logic first, as
+      instructed, before writing anything. Resolution: **all 10 cards stay mounted on
+      every tab** — a non-active-bucket card collapses to a real, positioned one-line
+      chip (`data-collapsed`, pure CSS: hides the role/finding/confidence-bar/warning
+      rows, keeps the name+status row) instead of unmounting, so `cardRefs` stays fully
+      populated and the connector math is completely unchanged — zero lines touched in
+      the actual line-drawing `useEffect`. Playwright-verified **structurally, not just
+      visually**: read every card's `getBoundingClientRect()` while the Judges tab was
+      active and confirmed all 10 have non-zero width/height and are still
+      `document.contains()`-true (8 collapsed to 332×35 chips, the 2 active-tab judges
+      full-size) — proof the connector can still draw to any of the 10 regardless of
+      which tab is showing. Also visually confirmed: the Proposes tab shows Hooksmith/
+      Lyric Chemist full-size with Conductor collapsed; the Judges tab shows A&R Judge
+      full-size with everything else collapsed. Confirmed zero tabs/collapsed cards
+      render at a 1440px desktop viewport (pure passthrough, matching every other
+      phone-only feature this session). Zero console errors. Full gate suite green (65
+      files / 556 tests, `tsc --noEmit` clean, static export builds). This completes
+      Phase A steps ①-⑤ of the mobile-mockup plan; only step ⑥ (a spacing/typography
+      audit, mostly already shipped) remains open. _(this PR)_
 - [x] **🪗 Song Lab accordion on phone** — autonomous-loop medium PR, fifth of the
       session, Phase A step ③ of the mobile-mockup implementation plan (`IDEAS.md`).
       `SongLabForm.tsx` put all ~14 fields on screen at once — a wall of inputs before

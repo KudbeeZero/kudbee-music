@@ -264,15 +264,28 @@ A second-opinion review flagged real risks worth acting on (truth-first):
   (title/theme/mood/genre) plus Surprise-me/Load-example stay always visible above them,
   matching the mockup's "show only key fields first." Desktop is a pure passthrough — the
   `Section` wrapper renders its children directly with no toggle UI when `!accordion`, so
-  desktop's layout is byte-identical to before. ④ Agent
-  Board as Proposes/Challenges/Judges tabs (reuses `Council.tsx`'s hemisphere split — flagged
-  risk: `AgentBoard.tsx`'s live connector-line SVG assumes both wired cards are visible at
-  once, needs an explicit fallback so 8.2's "it's literally them thinking" doesn't silently
-  break), ⑤ ✅ **shipped this session** — a bottom nav (`BottomNav.tsx`: Lab/Council/Studio/
+  desktop's layout is byte-identical to before. ④ ✅ **shipped this session, risk handled
+  as flagged** — Agent Board Proposes/Challenges/Judges tabs (a third bucket pulled out of
+  Council.tsx's Proposes/Challenges hemisphere split, for the two agents whose role is a
+  verdict — A&R Judge/Rights & Release Guard — not a critique). Read `AgentBoard.tsx`'s
+  connector-line logic first, as instructed: it measures BOTH endpoint cards via
+  `cardRefs`/`getBoundingClientRect()`, and the single most interesting connector case (a
+  signal crossing hemispheres) is exactly the case that would span two different tabs — so
+  went with the "keep all cards mounted, only change visual density" option, not a drawing
+  fallback. All 10 cards stay mounted on every tab; a non-active-bucket card collapses to a
+  real, positioned one-line chip (`data-collapsed`, CSS-only) instead of unmounting, so
+  `cardRefs` stays fully populated and the connector math is completely unchanged.
+  Playwright-verified structurally, not just visually: read every card's
+  `getBoundingClientRect()` while the Judges tab was active and confirmed all 10 have
+  non-zero width/height and are still `document.contains()`-true — the 8.2 "it's literally
+  them thinking" feature keeps working across every tab combination. ⑤ ✅ **shipped this
+  session** — a bottom nav (`BottomNav.tsx`: Lab/Council/Studio/
   Package/Vault, scrolling to anchors that already existed via the Studio Flow rail's own
   `focusFlowStage`/`FLOW_ANCHOR` mechanism — also closes the Suno-idea "Council globally
   wired" ask above in the same PR), ⑥ a spacing/typography audit (mostly already shipped,
-  closing small gaps). Still open: ④. **Phase B
+  closing small gaps, still open — the only unshipped Phase A step). **Phase A ①-⑤ all
+  shipped this session** (5 PRs: HERMES Studio was actually 3.4/piece-3 above, then bottom
+  nav, sticky header, sticky rail, Song Lab accordion, Agent Board tabs). **Phase B
   (Mockup A, mixed verdict)** — the design agent's real opinion: decline the neon-trophy-
   confetti visual language outright (a genuine identity clash with the shipped "brain, not a
   game" aesthetic — see `BangerScoreCard.tsx`'s own "not a market or A&R prediction" copy) but
