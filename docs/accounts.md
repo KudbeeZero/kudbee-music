@@ -101,6 +101,28 @@ without a live project + registered redirect URI, and shipping unverified auth i
 one place "looks done" is worse than "honestly not yet." The moment you finish steps
 1–3, step 4 is a small, testable PR.
 
+### Live project status (verified 2026-07-03)
+
+The founder connected a Supabase project (`lgpoifxuhmmmllkdjkgn`) and provided the
+**publishable** key (`sb_publishable_…` — the client-safe one; RLS is the guard). A
+live connection check against `…/auth/v1/settings` + `…/rest/v1/brains` confirmed:
+
+- ✅ **Key + URL work** — the project is reachable and the config seam
+  (`cloudBrain.ts` `cloudConfig()`) accepts the key.
+- ⚠️ **Google sign-in is OFF** — only `email` auth is enabled today. Enable Google
+  (Authentication → Providers) to match the Suno-style sign-in the mockups show, *or*
+  we start with email sign-in (already on — no extra provider setup, but new signups
+  need email confirmation unless you flip Authentication → mailer autoconfirm on).
+- ⚠️ **The `brains` table does not exist yet** — cloud save needs the table + RLS from
+  the SQL block above. The publishable key can't create tables (DDL needs the SQL
+  editor or the MCP authenticated in your terminal), so this is a founder step.
+
+**Remaining to light up "logged in + cloud save":** (a) enable Google *or* confirm
+email is fine; (b) run the `brains` table SQL. Then the auth + Brain-Pack sync PR is
+built + tested against the live project. Local dev reads the URL + key from a
+gitignored `.env.local`; production reads them from Cloudflare Pages env vars
+(`NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY`).
+
 ## Deferred (Phase 4)
 
 Per-profile vault namespacing (and any cloud-synced vault) is deliberately **not**
