@@ -252,7 +252,12 @@ export default function HermesHitFactory() {
   // finished package (scores, agents, lyrics) before generating their own.
   function loadDemo() {
     const existing = getSong('example-cold-hard-gold');
-    const s = existing ?? saveSong(demoSong()).song;
+    let s = existing;
+    if (!s) {
+      const res = saveSong(demoSong());
+      s = res.song;
+      setVaultWriteFailed(!res.persisted); // keep the quota banner truthful here too
+    }
     setVault(listSongs());
     setError(null);
     setPkg(s);

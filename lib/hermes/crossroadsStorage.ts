@@ -43,7 +43,9 @@ export function castVote(crossingId: string, optionId: string): CrossroadsVotes 
   try {
     kv().setItem(VOTES_KEY, JSON.stringify(next));
   } catch {
-    /* quota / unavailable — the vote still shows for this session via memoryKV */
+    /* quota / unavailable — the returned map still drives this render via component
+       state; the vote just won't survive a reload (soft state, silently best-effort
+       by design — see storage.ts's quota-reporting scope note) */
   }
   return next;
 }

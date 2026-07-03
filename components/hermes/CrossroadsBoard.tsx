@@ -17,12 +17,14 @@ function CrossingCard({ crossing, myVote, onVote }: { crossing: Crossing; myVote
   const top = leader(crossing);
   const totalVotes = crossing.options.reduce((sum, o) => sum + o.votes, 0);
   const decided = crossing.status === 'decided';
+  // outcome stores the option ID — show the human label (audit fix)
+  const outcomeLabel = crossing.options.find((o) => o.id === crossing.outcome)?.label ?? crossing.outcome;
 
   return (
     <div className={styles.crossingCard}>
       <div className={styles.crossingQuestion}>{crossing.question}</div>
       <div className={styles.crossingStatus} data-status={crossing.status}>
-        {decided ? `Decided — ${crossing.outcome}` : 'Open — cast your vote'}
+        {decided ? `Decided — ${outcomeLabel}` : 'Open — cast your vote'}
       </div>
       {ranked.map((o) => {
         const isMine = myVote === o.id;
@@ -35,6 +37,7 @@ function CrossingCard({ crossing, myVote, onVote }: { crossing: Crossing; myVote
             className={styles.optionRow}
             data-mine={isMine}
             data-outcome={isOutcome}
+            aria-pressed={isMine}
             disabled={decided}
             onClick={() => !decided && onVote(o.id)}
           >

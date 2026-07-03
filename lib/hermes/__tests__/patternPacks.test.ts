@@ -80,6 +80,19 @@ describe('pattern packs — structure grammar', () => {
     },
   );
 
+  it('short-form still ships two distinct couplet lines when banned words shrink the frame pool (audit fix)', async () => {
+    // The couplet used to share v1's `used` set (4 of 6 setup frames consumed by a
+    // DISCARDED verse) — with banned-word filtering the pool starved and dedupe could
+    // collapse the couplet to one line. bannedWords here knocks out frame vocabulary.
+    const { pkg } = await runPipeline(
+      { ...base, structure: 'short-form', rhymeScheme: 'ABAB', doNotUse: ['nothing', 'started', 'handed', 'grew'] },
+      { id: 'sf-starve', now: '2026-01-01T00:00:00Z', seed: 4 },
+    );
+    const verse = pkg.sections.find((s) => s.label === 'Verse 1')!.lines;
+    expect(verse).toHaveLength(2);
+    expect(verse[0].toLowerCase()).not.toBe(verse[1].toLowerCase());
+  });
+
   it('short-form stays deterministic and does not disturb other structures', async () => {
     const a = await runPipeline({ ...base, structure: 'short-form', rhymeScheme: 'ABAB' }, { id: 's', now: '2026-01-01T00:00:00Z', seed: 6 });
     const b = await runPipeline({ ...base, structure: 'short-form', rhymeScheme: 'ABAB' }, { id: 's', now: '2026-01-01T00:00:00Z', seed: 6 });

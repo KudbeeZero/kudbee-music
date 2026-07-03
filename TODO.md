@@ -131,30 +131,17 @@ chat. Detail for each is in [`brain/roadmap.json`](brain/roadmap.json) + [`IDEAS
      arrays per section, add a word-frequency metric to eval.
    - [ ] **Improvement — cross-section diversity guard is dead code**: the `used` set threaded
      across verses can never cross-filter (disjoint pools). Unite the pools or fix the comment.
-- [ ] **2026-07-03 post-merge audit findings (agent audit of #116–#119)** — never skip
-   silently; each gets fixed or explicitly waived:
-   - [ ] **#118 med — short-form frame starvation**: `shortV1` shares the `used` set with the
-     discarded 4-line `v1` (which consumed 4 of SETUP_LINES' 6 frames); with banned-word
-     filtering the pool starves, `pickFresh` falls back to reuse, and `dedupe` can collapse
-     the couplet to ONE line. Fix: give `shortV1` its own fresh `used` set.
-   - [ ] **#119 med — `importVault` ignores the `writeAll` boolean**: under a full
-     localStorage it reports songs as imported that never persisted — contradicts its own
-     "honest counts" comment. Fix: report 0 / a failure flag when the write didn't land.
-   - [ ] **#119 low — import bypasses the version cap**: merge-mode import can push a title
-     past KEEP_VERSIONS=5. Fix: prune the merged list before writing.
-   - [ ] **#116 med — decided crossing renders the raw option id**: `Decided — ${outcome}`
-     shows the slug, not the label (branch unreachable with today's all-open seed). Fix:
-     resolve the label. Also add `aria-pressed` to option rows (a11y nit).
-   - [ ] **#119 low — `loadDemo` doesn't refresh the quota banner**: a stale failure banner
-     survives a successful demo save. Fix: set the flag there too.
-   - [ ] **#117 low — Share tooltip overstates**: a sharer with custom global banned words
-     gets a near-but-not-exact reproduction (banned list isn't part of SongInputs). Fix:
-     soften the tooltip wording, or note the caveat.
-   - [ ] **#119 low — non-song writers still swallow quota errors** (saveAlbum, recordTaste,
-     saveBannedWords, castVote): document that only song writes are quota-reported, or thread
-     the boolean for parity.
-   - [ ] **#116 low — `castVote` catch comment describes memoryKV behavior a real browser
-     doesn't have**. Fix: reword.
+- [x] **2026-07-03 post-merge audit findings (agent audit of #116–#119)** — ALL FIXED
+   _(this PR)_: short-form starvation (fresh `used` set for `shortV1` + a deeper pre-existing
+   crash the new test exposed — `pick()` on an empty array returns undefined when banned
+   words shrink a frame pool to 1 and the prevFrame exclusion empties it, reachable from the
+   public doNotUse field; the exclusion now never empties a pool); `importVault` quota
+   honesty (reports 0 when the write doesn't land) + version-cap on import; decided-crossing
+   label resolution + `aria-pressed` on vote rows; `loadDemo` keeps the quota banner
+   truthful; Share tooltip softened (personal avoid-words don't travel with a link);
+   quota-reporting scope documented (songs only — albums/taste/votes are reconstructable
+   soft state, deliberately best-effort); `castVote` comment reworded to describe real
+   browser behavior.
 - [ ] **2 review cleanups** — stronger memory-id hash · independent "earns-it" critique. _(the third —
    guaranteed vault mirror — is now surfaced in the Vault drawer with status + restore)_
 - [x] **Star-launch kit** — `LAUNCH.md` shipped _(#43)_: pre-flight checklist + draft X thread + demo-recording script. Posting it stays yours (the pre-flight boxes in `LAUNCH.md` are your launch-day gate).
@@ -307,6 +294,19 @@ Board** governance / Solana / token / NFT layer integrates with this engine via 
 later (kept out of this repo's core so it stays free + local).
 
 ## ✅ Shipped (newest first)
+- [x] **Post-merge audit fixes for #116–#119 (8 findings + 1 deeper crash)** — a review agent
+      audited the day's four merged PRs; every finding fixed the same session (never-skip-
+      silently). Mediums: short-form's couplet no longer shares a frame-`used` set with the
+      discarded 4-line verse (starvation), `importVault` now reports honest counts under
+      quota failure and holds imports to the 5-version cap, decided Crossroads crossings
+      render the option label (not the raw id). The starvation regression test then exposed a
+      deeper PRE-EXISTING crash: `pick()` on an empty array returns undefined when banned
+      words shrink a section's frame pool to one and the prevFrame exclusion empties it —
+      reachable from the public doNotUse form field; the exclusion now never empties a pool
+      (repeating a frame with different slot words beats crashing). Lows: loadDemo keeps the
+      quota banner truthful, Share tooltip softened (personal avoid-words don't travel),
+      quota-reporting scope documented (songs only, deliberately), castVote comment fixed,
+      aria-pressed on vote rows. +4 tests. _(this PR)_
 - [x] **Determiner–noun number agreement + eval grammar metric (review improvement #1)** —
       "All this winters, I earned it slow" and "Took that records and turned it to an art"
       shipped in the flagship demo because frames like `all this {noun}` slot arbitrary theme

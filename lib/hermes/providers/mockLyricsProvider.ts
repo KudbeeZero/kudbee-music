@@ -332,7 +332,11 @@ function buildRhymedVerse(
   let prevFrame = '';
   for (let i = 0; i < lineCount; i++) {
     const word = wordQueues.get(layout[i])!.shift() ?? FALLBACK_RHYME_WORDS[i % FALLBACK_RHYME_WORDS.length];
-    const framePool = prevFrame ? pool.filter((x) => x !== prevFrame) : pool;
+    // Excluding prevFrame must never EMPTY the pool: when banned words shrink a
+    // section's pool to a single frame, repeating it (different slot words) beats
+    // pick(<empty>) returning undefined and crashing — reachable from the public
+    // doNotUse field (audit follow-up).
+    const framePool = prevFrame && pool.length > 1 ? pool.filter((x) => x !== prevFrame) : pool;
     const t = pickFresh(framePool, used, rng);
     prevFrame = t;
     // anchor threading: only the first line of every 2-line unit carries the theme anchor
@@ -451,7 +455,10 @@ export const mockLyricsProvider: LyricsProvider = {
         // ABAB/ABBA/XAXA the first two lines of v1 belong to DIFFERENT rhyme
         // families, so the sliced "couplet" didn't rhyme. Built lazily inside this
         // case so every other structure's RNG draw order stays byte-identical.
-        const shortV1 = buildRhymedVerse(inputs, rng, valence, 2, { pool: filterFrames(SETUP_LINES, banned), thread, used, temp, anchorIdx: 0, banned }, scheme);
+        // Fresh `used` set (audit fix): v1's output is discarded for short-form but
+        // had consumed most of SETUP_LINES — sharing its set could starve the pool
+        // under banned-word filtering and collapse the couplet to one deduped line.
+        const shortV1 = buildRhymedVerse(inputs, rng, valence, 2, { pool: filterFrames(SETUP_LINES, banned), thread, used: new Set<string>(), temp, anchorIdx: 0, banned }, scheme);
         return [{ label: 'Hook', lines: hookLines }, { label: 'Verse 1', lines: shortV1 }];
       }
       case 'radio-edit':
