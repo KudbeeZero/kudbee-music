@@ -20,6 +20,7 @@ import SongLabForm from './SongLabForm';
 import AgentBoard from './AgentBoard';
 import Council from './Council';
 import SongPackageView from './SongPackageView';
+import Studio from './Studio';
 import BangerScoreCard from './BangerScoreCard';
 import UniquenessReportView from './UniquenessReport';
 import VaultDrawer from './VaultDrawer';
@@ -96,12 +97,13 @@ export default function HermesHitFactory() {
   // Studio Flow: a Review -> Refine -> Keep -> Release rail over the existing studio-mode
   // panels. A focus state, not a wall — every panel stays rendered and reachable; a tab
   // click just scrolls to + highlights the panels for that stage of the journey.
-  const [flowStage, setFlowStage] = useState<'review' | 'refine' | 'keep' | 'release'>('review');
+  const [flowStage, setFlowStage] = useState<'review' | 'refine' | 'keep' | 'release' | 'studio'>('review');
   const FLOW_ANCHOR: Record<typeof flowStage, string> = {
     review: 'stage-review',
     refine: 'song-lyrics',
     keep: 'stage-keep',
     release: 'song-toolbar',
+    studio: 'stage-studio',
   };
   function focusFlowStage(s: typeof flowStage) {
     setFlowStage(s);
@@ -503,6 +505,7 @@ export default function HermesHitFactory() {
             { id: 'refine', label: '② Refine', title: 'Edit the lyrics, regenerate from critiques' },
             { id: 'keep', label: '③ Keep', title: 'Artist profile, the crate, recommendations — save what you like' },
             { id: 'release', label: '④ Release', title: 'Share link, PNG card, Suno prompt, exports' },
+            { id: 'studio', label: '🎚️ Studio', title: 'The arrangement timeline, the Engine Rack, and the Brain Scan as one workspace' },
           ] as const).map((s) => (
             <button
               key={s.id}
@@ -627,7 +630,7 @@ export default function HermesHitFactory() {
             )}
           </div>
 
-          <div id="stage-keep" className={`${styles.col} ${styles.flowFocus}`} style={{ gap: 16, padding: 0 }} data-active={pkg != null && flowStage === 'keep'}>
+          <div id="stage-keep" className={`${styles.col} ${styles.flowFocus}`} style={{ gap: 16, padding: 0 }} data-active={pkg != null && (flowStage === 'keep' || flowStage === 'studio')}>
             <ArtistCard songs={vault} taste={taste} becomingYou={becomingYou} />
             <Rack />
             <RecommendationsPanel songs={vault} taste={taste} banned={banned} onAddExclusion={addExclusion} onApplyPack={applyPack} />
@@ -636,7 +639,10 @@ export default function HermesHitFactory() {
 
         {/* center column — brain scan + agent board + package */}
         <div className={styles.col} ref={stageRef}>
-          <BrainScan outputs={outputs} running={running} workingMemory={wmSize} heat={heat} />
+          <div className={styles.flowFocus} data-active={flowStage === 'studio'}>
+            <BrainScan outputs={outputs} running={running} workingMemory={wmSize} heat={heat} />
+          </div>
+          <Studio pkg={pkg} outputs={outputs} id="stage-studio" active={flowStage === 'studio'} />
           <AgentBoard outputs={outputs} signalLog={signalLog} />
           {pkg && (
             <div id="stage-review" className={styles.flowFocus} data-active={flowStage === 'review'}>

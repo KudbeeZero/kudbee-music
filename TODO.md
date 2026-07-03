@@ -68,7 +68,6 @@ chat. Detail for each is in [`brain/roadmap.json`](brain/roadmap.json) + [`IDEAS
 - [ ] **Lightning AI spike** — one Studio running a HERMES agent behind **HTTPS/SSL** as an opt-in provider (you connect SSL).
 - [ ] **Discord server** (+ GitHub→Discord webhook) — channels/roles/listening parties; wire on your go-ahead.
 - [ ] **Cloud brain** — server-side vault/memory (Notion/Drive/Supabase creds) so it's not localStorage-only.
-- [ ] **Suno-Studio workspace** — section/arrangement timeline + rack + meter bridge ($0 read-only now; clip editing later).
 
 **$0/local, no key — I can just build these next:**
 - [x] **Deeper lyric craft** (the moat) — grammaticality shipped _(#58)_; imagery coherence shipped
@@ -303,6 +302,37 @@ Board** governance / Solana / token / NFT layer integrates with this engine via 
 later (kept out of this repo's core so it stays free + local).
 
 ## ✅ Shipped (newest first)
+- [x] **🎚️ HERMES Studio workspace — the arrangement timeline (roadmap 3.4)** —
+      founder shared five Suno reference screenshots (Suno Studio's integrated
+      workspace, its bottom nav, its "Studio" upsell, its sign-up modal) and asked
+      to build the "dream big" Studio piece first. New `components/hermes/Studio.tsx`:
+      a read-only clip timeline built from the song's real `pkg.sections` (no new
+      parsing — `sections` was already there), each clip sized off the exact same
+      "2 bars/line at production tempo" rough-estimate rule `SongPackageView`
+      already uses for its runtime label (so the timeline is honest about being an
+      estimate, not a measurement); clicking a clip shows its lyric lines read-only.
+      Below it, a "🎚️ Meter bridge" row reads the real 11-region brain state
+      (`REGIONS` + `regionState()` from `brainMap.ts`) as a mixing-desk-style strip.
+      Wired in as a 5th tab ("🎚️ Studio") on the existing Studio Flow rail
+      (`HermesHitFactory.tsx`) — activating it ring-highlights this new panel
+      *alongside* the already-existing Brain Scan and Engine Rack panels rather
+      than mounting second copies of either component (Brain Scan runs a live
+      particle canvas; a duplicate instance would double that animation on every
+      page load). No new unit tests — the panel is pure presentation over
+      already-tested data (`pkg.sections`, `regionState()`), so the existing 556
+      tests cover the data it reads; correctness verified live instead. Playwright-
+      verified end to end: loaded the demo song, opened the Studio tab, confirmed
+      the clip row renders all 7 real sections with correct line counts/estimated
+      lengths, clicked a non-default clip ("Hook") and confirmed its actual 4 lyric
+      lines rendered, confirmed the meter bridge shows all 11 real regions colored
+      by their actual post-run state, and confirmed Brain Scan visibly ring-
+      highlights at the same time. Zero console errors. Full gate suite green (65
+      files / 556 tests, `tsc --noEmit` clean, static export builds). Scoped exactly
+      to the existing roadmap note: "$0 read-only timeline now; clip editing later."
+      The other three ideas from the same screenshots (a persistent bottom nav, the
+      Council made reachable from anywhere, and the wallet-or-account sign-up +
+      currency conversion) are captured in `IDEAS.md`'s fresh-captures section,
+      not started. _(this PR)_
 - [x] **🧭 Guided tour of the Scribe lyric editor — coach-marks (medium-feature
       arc, item 8.8)** — founder asked to research how Scribe
       (scribehow.com — auto-converts a real workflow into an annotated

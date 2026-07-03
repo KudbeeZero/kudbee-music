@@ -219,6 +219,52 @@ A second-opinion review flagged real risks worth acting on (truth-first):
   disclaimer in the README + Uniqueness panel. _(#37)_
 
 ## 🌱 Fresh captures
+- 💭 **Suno-inspired global nav + Council "wired everywhere" + dream-big Studio + wallet/fiat
+  sign-up** *(founder idea, 2026-07-03, five Suno reference screenshots — continuing a
+  session that ran out of Fable 5 credits mid-conversation; no code was left in progress,
+  `main`/this branch were identical and TODO/IDEAS were already current, so this is a fresh
+  capture, not a resume)* — four related asks from the reference images:
+  1. **A persistent bottom nav bar** (mobile) that switches between top-level areas the way
+     Suno's app does (Home / Explore / Create / Library / Profile icons pinned to the bottom
+     of every screen). HERMES has no equivalent today — checked `app/`: routes are `/`
+     (landing), `/hermes` (Song Lab + studio flow), `/crossroads`, `/hit-factory`, each its
+     own page with no shared chrome/nav between them. A bottom tab bar would be the first
+     real cross-page navigation shell.
+  2. **The Council "globally wired"** — the founder read Suno Studio's single integrated
+     workspace (audio, lyrics, styles, timeline, cover art all visible + linked together at
+     once, screenshot 1) as a model for how the Council should feel: reachable from
+     anywhere, not buried inside the Studio Flow rail (8.1) as one panel among many. Natural
+     shape: the Council becomes one of the bottom-nav destinations (or a persistent
+     mini-widget) so its live ranking is visible/reachable regardless of what else is on
+     screen, not just seated inside `HermesHitFactory.tsx`'s studio mode.
+  3. **"Studio" — dream big** (screenshot 3, Suno's own Studio upsell modal: "Your complete
+     creative workspace") — ✅ **shipped this session**: `components/hermes/Studio.tsx`, a
+     read-only arrangement timeline (the song's real sections as clips, sized off the
+     existing runtime-estimate rule) + a "meter bridge" reading the real 11-region brain
+     state, wired as a 5th Studio Flow rail tab that ring-highlights alongside the
+     already-existing Brain Scan and Engine Rack rather than duplicating either. See
+     TODO.md Shipped ("HERMES Studio workspace — the arrangement timeline, roadmap 3.4").
+     Clip editing stays a later step, per the original scope note.
+  4. **Sign-up: wallet OR any other account, plus a currency conversion** (screenshots 4-5,
+     Suno's own sign-up modal: Google/Apple/Phone + Discord/Facebook/Microsoft) — founder
+     wants two paths: sign up with a **Blockchain wallet** (this repo already plans Solana —
+     see the Living Brain dNFT entry + the landing page's parked wallet-connect slot), or
+     sign up with **any other account** (email/Google/etc.) — and whichever path someone
+     *didn't* pick, offer a **currency conversion** between crypto and fiat (e.g. show a
+     wallet user their balance in USD, or a fiat user what their subscription costs in
+     SOL/USDC). Real tension with the iron laws worth flagging before building: this needs a
+     **live exchange-rate lookup**, which is a network call — the same category of decision
+     already flagged as blocked on the founder in the "Accounts / sign-in" TODO item (needs a
+     real hosted-auth provider + OAuth app registration) and the Solana wallet-connect slot in
+     `Landing.tsx`. A **BYOK-style pattern** (the visitor's own browser calling a public
+     exchange-rate API directly, same shape as `lib/hermes/claudeKey.ts` — no founder server,
+     no founder key) could keep a *display-only* conversion inside the $0 rules; real wallet
+     auth + real account auth both still need the founder's hosted-auth decision first.
+  Piece 3 shipped this session (see above). Pieces 1-2 (bottom nav, Council globally
+  reachable) are $0/local and buildable now without a founder decision. Piece 4 splits into
+  a buildable-now UI (the sign-up modal itself, wallet-or-account choice, BYOK-style display
+  conversion) and a founder-blocked piece (real wallet connect + real account auth), same
+  shape as the existing "Accounts / sign-in" item. Not started.
 - 💭 **"WIFI radio will have like a jukebox songs. People can submit songs. We have
   contest stuff — bring more value"** *(founder idea, 2026-07-03)* — this already
   had a home: `brain/roadmap.json`'s `ecosystem.wifiDjRadio` ("A live radio
