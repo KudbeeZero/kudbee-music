@@ -4,6 +4,8 @@
 // separate service — this stage is honest that today's tally reflects only your
 // own browser's vote layered on the seeded base, not a real community count.
 
+import { recordTaste } from './storage';
+
 const VOTES_KEY = 'hermes.crossroadsVotes.v1';
 
 interface KV {
@@ -48,6 +50,22 @@ export function castVote(crossingId: string, optionId: string): CrossroadsVotes 
        by design — see storage.ts's quota-reporting scope note) */
   }
   return next;
+}
+
+/** Stage 3 (signals feed the brain): cast a vote + record its taste signal.
+ * Called when you vote on a crossing option that has a tasteSignal.
+ * Wires into lib/hermes/storage.ts's recordTaste() so your taste updates
+ * and the next song reflects your crossroads choice. */
+export function castVoteAndRecordTaste(
+  crossingId: string,
+  optionId: string,
+  tasteSignal?: { liked?: string[]; disliked?: string[] }
+): CrossroadsVotes {
+  const votes = castVote(crossingId, optionId);
+  if (tasteSignal) {
+    recordTaste(tasteSignal.liked ?? [], tasteSignal.disliked ?? []);
+  }
+  return votes;
 }
 
 /** test-only reset */

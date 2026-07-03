@@ -6,9 +6,9 @@
       "question": "Which sound should the next expansion pack chase?",
       "status": "open",
       "options": [
-        { "id": "west-coast-g-funk", "label": "West-coast G-funk", "rationale": "Warm synth leads + laid-back bounce — a lane the current packs don't cover.", "votes": 0 },
-        { "id": "uk-drill", "label": "UK drill", "rationale": "Sliding 808s + sparse menace; pairs with the vhs-lofi scene pack.", "votes": 0 },
-        { "id": "soul-gospel", "label": "Soul / gospel", "rationale": "Choir stacks + live-room warmth for the emotional, triumphant records.", "votes": 0 }
+        { "id": "west-coast-g-funk", "label": "West-coast G-funk", "rationale": "Warm synth leads + laid-back bounce — a lane the current packs don't cover.", "votes": 0, "tasteSignal": { "liked": ["laid-back", "smooth", "warm", "funky"] } },
+        { "id": "uk-drill", "label": "UK drill", "rationale": "Sliding 808s + sparse menace; pairs with the vhs-lofi scene pack.", "votes": 0, "tasteSignal": { "liked": ["menacing", "sparse", "dark", "aggressive"] } },
+        { "id": "soul-gospel", "label": "Soul / gospel", "rationale": "Choir stacks + live-room warmth for the emotional, triumphant records.", "votes": 0, "tasteSignal": { "liked": ["soulful", "uplifting", "church", "triumphant"] } }
       ]
     },
     {
@@ -16,8 +16,8 @@
       "question": "On the final chorus, should the hook repeat verbatim or evolve one line?",
       "status": "open",
       "options": [
-        { "id": "repeat", "label": "Repeat verbatim", "rationale": "Maximum singability and payoff — the reward circuit loves the return.", "votes": 0 },
-        { "id": "evolve", "label": "Evolve one line", "rationale": "A small mutation on the last pass rewards close listeners and lifts replay value.", "votes": 0 }
+        { "id": "repeat", "label": "Repeat verbatim", "rationale": "Maximum singability and payoff — the reward circuit loves the return.", "votes": 0, "tasteSignal": { "liked": ["catchy", "singable", "memorable", "repetition"] } },
+        { "id": "evolve", "label": "Evolve one line", "rationale": "A small mutation on the last pass rewards close listeners and lifts replay value.", "votes": 0, "tasteSignal": { "liked": ["surprise", "evolution", "variation", "replay-value"] } }
       ]
     },
     {
@@ -25,9 +25,9 @@
       "question": "What should the brain grow next?",
       "status": "open",
       "options": [
-        { "id": "influence-studio", "label": "Influence Studio", "rationale": "Describe a feel → craft parameters (felt, never copied) — the WIFI DJ framework Part 1.", "votes": 0 },
-        { "id": "story-mode", "label": "Story Mode", "rationale": "A playable come-up arc that unlocks personas/regions as the brain becomes you.", "votes": 0 },
-        { "id": "pro-rack", "label": "Pro Studio Rack", "rationale": "A DAW-style rack of swappable, upgradeable engine units — the professional stack.", "votes": 0 }
+        { "id": "influence-studio", "label": "Influence Studio", "rationale": "Describe a feel → craft parameters (felt, never copied) — the WIFI DJ framework Part 1.", "votes": 0, "tasteSignal": { "liked": ["felt", "parameter-driven", "intentional", "craft"] } },
+        { "id": "story-mode", "label": "Story Mode", "rationale": "A playable come-up arc that unlocks personas/regions as the brain becomes you.", "votes": 0, "tasteSignal": { "liked": ["journey", "growth", "becoming", "narrative"] } },
+        { "id": "pro-rack", "label": "Pro Studio Rack", "rationale": "A DAW-style rack of swappable, upgradeable engine units — the professional stack.", "votes": 0, "tasteSignal": { "liked": ["professional", "modular", "upgradeable", "daw-style"] } }
       ]
     }
   ]

@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeEach } from 'vitest';
-import { getMyVotes, castVote, __clearCrossroadsVotesState } from '../crossroadsStorage';
+import { getMyVotes, castVote, castVoteAndRecordTaste, __clearCrossroadsVotesState } from '../crossroadsStorage';
 
 describe('crossroadsStorage — this browser\'s own votes only', () => {
   beforeEach(() => __clearCrossroadsVotesState());
@@ -23,5 +23,15 @@ describe('crossroadsStorage — this browser\'s own votes only', () => {
     castVote('next-expansion-pack', 'uk-drill');
     castVote('hook-repeat-vs-evolve', 'evolve');
     expect(getMyVotes()).toEqual({ 'next-expansion-pack': 'uk-drill', 'hook-repeat-vs-evolve': 'evolve' });
+  });
+
+  it('castVoteAndRecordTaste casts a vote (stage 3: signals feed the brain)', () => {
+    castVoteAndRecordTaste('next-expansion-pack', 'soul-gospel', { liked: ['soulful', 'uplifting'] });
+    expect(getMyVotes()).toEqual({ 'next-expansion-pack': 'soul-gospel' });
+  });
+
+  it('castVoteAndRecordTaste handles empty taste signal gracefully', () => {
+    castVoteAndRecordTaste('hook-repeat-vs-evolve', 'repeat');
+    expect(getMyVotes()).toEqual({ 'hook-repeat-vs-evolve': 'repeat' });
   });
 });
