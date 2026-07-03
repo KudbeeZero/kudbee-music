@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from 'react';
 import type { SongPackage } from '@/lib/hermes/types';
 import { exportVault, importVault, vaultBackupStatus, restoreFromBackup, loadFavorites, toggleFavorite, loadSongNotes, setSongNote, loadRecentlyViewed } from '@/lib/hermes/storage';
+import { songMarkdown } from '@/lib/hermes/markdownExport';
 import styles from './hermes.module.css';
 
 const count = (n: number, word: string) => `${n} ${word}${n === 1 ? '' : 's'}`;
@@ -33,6 +34,7 @@ export default function VaultDrawer({
   const [query, setQuery] = useState('');
   const [sortMode, setSortMode] = useState<'newest' | 'oldest' | 'title'>('newest');
   const [copiedAll, setCopiedAll] = useState(false);
+  const [copiedAllMd, setCopiedAllMd] = useState(false);
   const [renamingId, setRenamingId] = useState<string | null>(null);
   const [renameDraft, setRenameDraft] = useState('');
 
@@ -145,6 +147,17 @@ export default function VaultDrawer({
       setTimeout(() => setCopiedAll(false), 1600);
     }).catch(() => {});
   }
+
+  // Same bulk idea as copyAllLyrics(), but reusing the richer per-song Markdown
+  // format (concept/brief/hook/production notes, not just the lyrics) that a
+  // single song's own "Export Markdown" button already produces via songMarkdown().
+  function copyAllMarkdown() {
+    const text = songs.map((s) => songMarkdown(s)).join('\n\n---\n\n');
+    navigator.clipboard?.writeText(text).then(() => {
+      setCopiedAllMd(true);
+      setTimeout(() => setCopiedAllMd(false), 1600);
+    }).catch(() => {});
+  }
   function doImport(e: React.ChangeEvent<HTMLInputElement>) {
     const file = e.target.files?.[0];
     if (!file) return;
@@ -183,6 +196,11 @@ export default function VaultDrawer({
           {songs.length > 0 && (
             <button className={styles.copyBtn} style={{ marginLeft: 0 }} onClick={copyAllLyrics} title="Copy every song's lyrics as plain text, title-headed and separated — for archiving the whole vault at once">
               {copiedAll ? 'all lyrics copied ✓' : '📋 Copy all lyrics'}
+            </button>
+          )}
+          {songs.length > 0 && (
+            <button className={styles.copyBtn} style={{ marginLeft: 0 }} onClick={copyAllMarkdown} title="Copy every song as Markdown — concept, brief, hook, lyrics, and production notes, not just lyrics — separated per song, for archiving the whole vault at once">
+              {copiedAllMd ? 'all Markdown copied ✓' : '📄 Copy all as Markdown'}
             </button>
           )}
         </div>

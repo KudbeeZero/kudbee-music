@@ -303,6 +303,20 @@ Board** governance / Solana / token / NFT layer integrates with this engine via 
 later (kept out of this repo's core so it stays free + local).
 
 ## ✅ Shipped (newest first)
+- [x] **📄 Copy all as Markdown — bulk vault export, richer format
+      (tiny-feature cadence, #24)** — Copy all lyrics (7.21) only carries
+      lyrics; someone archiving the whole vault might want the richer
+      per-song format (concept, brief, hook, production notes) that a single
+      song's own "Export Markdown" button already produces via
+      `songMarkdown()`. New `copyAllMarkdown()` in `VaultDrawer.tsx` reuses
+      that exact formatter across every vault song, `---`-separated, into one
+      clipboard copy. A "📄 Copy all as Markdown" button sits next to
+      "📋 Copy all lyrics". Playwright-verified live: generated 2 songs,
+      clicked the button, read the clipboard back and confirmed it contained
+      an H1 title heading, a Creative Brief section, and the `---` separator
+      (2 song blocks), confirmed the button label flips to "all Markdown
+      copied ✓" and reverts after the timeout. Zero console errors. _(this
+      PR)_
 - [x] **📅 "N songs today" stat in the Vault header (tiny-feature cadence,
       #23)** — the Vault header only ever showed a flat total count, no sense
       of momentum session to session. A new `todayCount` in `VaultDrawer.tsx`
