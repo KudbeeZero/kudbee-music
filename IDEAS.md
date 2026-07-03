@@ -242,15 +242,10 @@ A second-opinion review flagged real risks worth acting on (truth-first):
   greeting-card market), every gift recruits the recipient, and the deterministic-permalink
   angle is a moat no other tool has — later it's mintable, straight into the Living-Brain
   dNFT lane. See TODO.md Shipped for the full writeup.
-  **Gap surfaced while building this (not fixed — out of scope for Song Gifts)**: the
-  downloadable-PNG-share-card feature (`shareCard.ts`, `renderShareCard`/`downloadShareCard`,
-  tested and apparently shipped per an earlier roadmap item) has **no button wired to it
-  anywhere in the UI** — `grep`ing `components/` and `app/` for `downloadShareCard` /
-  `renderShareCard` turns up nothing outside tests. The gift-eyebrow work in this PR makes
-  the function itself gift-aware and correct, but a visitor currently has no way to trigger
-  it at all. Worth a small follow-up: either wire a "⬇ Download card" button into
-  `SongPackageView` (natural home, next to Share/Explain/Export), or if this was deliberately
-  deferred, note that explicitly in the roadmap instead of silently claiming it as shipped.
+  **Gap surfaced while building this — fixed same-session**: the downloadable-PNG-share-card
+  feature (`shareCard.ts`) had no button wired to it anywhere in the UI. Fixed: a "🖼 Download
+  card" button now lives in `SongPackageView`, next to Share/Explain/Export. See TODO.md
+  Shipped.
   **Cheap viral follow-up — "HERMES Wrapped" (still proposed)**: a Spotify-Wrapped-style
   shareable artist card from the vault (brainSignature already computes hemisphere/
   temperature/signature-words/becoming-you) — zero new engine work, pure share-card

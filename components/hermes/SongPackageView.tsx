@@ -8,6 +8,7 @@ import { renderTraceHtml } from '@/lib/hermes/traceHtml';
 import { sunoStyle, sunoLyrics } from '@/lib/hermes/suno';
 import { encodeShare, shareUrl, giftMessage } from '@/lib/hermes/shareLink';
 import { findOccasionPack } from '@/lib/hermes/occasionPacks';
+import { downloadShareCard } from '@/lib/hermes/shareCard';
 import ScribeEditor from './ScribeEditor';
 import styles from './hermes.module.css';
 
@@ -22,6 +23,7 @@ export default function SongPackageView({ pkg, onSaveEdit, onChooseHook, onRegen
   const [learned, setLearned] = useState(false);
   const [copiedClip, setCopiedClip] = useState(-1);
   const [shared, setShared] = useState(false);
+  const [cardState, setCardState] = useState<'idle' | 'busy' | 'error'>('idle');
 
   function saveText(text: string) {
     onSaveEdit?.(text);
@@ -72,6 +74,20 @@ export default function SongPackageView({ pkg, onSaveEdit, onChooseHook, onRegen
     navigator.clipboard?.writeText(text).then(() => { setCopiedClip(i); setTimeout(() => setCopiedClip(-1), 1200); }).catch(() => {});
   }
 
+  // The shareable PNG card (shareCard.ts) — a deterministic canvas render of this
+  // song's brain trace, brought over from Song Gifts' gift-eyebrow work but never
+  // actually wired to a button until now. Same gift framing as the Share link.
+  async function downloadCard() {
+    setCardState('busy');
+    try {
+      await downloadShareCard(pkg);
+      setCardState('idle');
+    } catch {
+      setCardState('error');
+      setTimeout(() => setCardState('idle'), 2400);
+    }
+  }
+
   return (
     <div className={styles.panel}>
       <div className={styles.panelTitle} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
@@ -89,6 +105,17 @@ export default function SongPackageView({ pkg, onSaveEdit, onChooseHook, onRegen
               {shared ? (isGift ? 'gift copied ✓' : 'link copied ✓') : (isGift ? `${giftPack!.emoji} Share the gift` : '🔗 Share')}
             </button>
           )}
+          <button
+            className={styles.copyBtn}
+            style={{ marginLeft: 0 }}
+            onClick={downloadCard}
+            disabled={cardState === 'busy'}
+            title={isGift
+              ? `Download a shareable PNG card for this ${giftPack!.label} song — the same brain heat-map + hook, framed as a gift for ${pkg.inputs.audience.trim()}.`
+              : 'Download a shareable PNG card of this song — brain heat-map, lead hook, and banger score. Deterministic: this song always renders the same image.'}
+          >
+            {cardState === 'busy' ? 'rendering…' : cardState === 'error' ? 'failed — retry' : '🖼 Download card'}
+          </button>
           <button className={styles.copyBtn} style={{ marginLeft: 0 }} onClick={explainSong} title="Open the interactive brain trace for this song — heat-map, what each region did, and a copy-paste Suno prompt">🔍 Explain this song</button>
           <button className={styles.copyBtn} style={{ marginLeft: 0 }} onClick={exportSong} title="Download this song package as JSON (backup / re-import into your vault)">⬇ Export JSON</button>
         </span>
