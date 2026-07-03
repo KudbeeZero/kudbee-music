@@ -110,13 +110,13 @@
       "label": "Hook",
       "lines": [
         "This one's for the yourself that raised me",
+        "And doubters know I hold on for it",
         "This one's for the yourself that raised me",
-        "All this game, I earned it slow",
         "This one's for the yourself that raised me"
       ]
     }
   ],
-  "finalLyrics": "[Intro]\nDoubters, this one's for you\n\n[Hook]\nThis one's for the yourself that raised me\nThis one's for the yourself that raised me\nAll this game, I earned it slow\nThis one's for the yourself that raised me\n\n[Verse 1]\nGrew up on status, chasing the time\nAll I had was scar and the crime\nThey handed me games instead of the time\nIt started with the terms and the crime\n\n[Hook]\nThis one's for the yourself that raised me\nThis one's for the yourself that raised me\nAll this game, I earned it slow\nThis one's for the yourself that raised me\n\n[Verse 2]\nNow I survive the games into the blood\nStakes got higher, status became the hood\nEverything changed, traded yourself for the steel\nTook that yourself and turned it to a wheel\n\n[Bridge]\nMade my peace with yourself and the night\nSomewhere in the yourself I found the sight\n\n[Hook]\nThis one's for the yourself that raised me\nThis one's for the yourself that raised me\nAll this game, I earned it slow\nThis one's for the yourself that raised me",
+  "finalLyrics": "[Intro]\nDoubters, this one's for you\n\n[Hook]\nThis one's for the yourself that raised me\nThis one's for the yourself that raised me\nAll this game, I earned it slow\nThis one's for the yourself that raised me\n\n[Verse 1]\nGrew up on status, chasing the time\nAll I had was scar and the crime\nThey handed me games instead of the time\nIt started with the terms and the crime\n\n[Hook]\nThis one's for the yourself that raised me\nThis one's for the yourself that raised me\nAll this game, I earned it slow\nThis one's for the yourself that raised me\n\n[Verse 2]\nNow I survive the games into the blood\nStakes got higher, status became the hood\nEverything changed, traded yourself for the steel\nTook that yourself and turned it to a wheel\n\n[Bridge]\nMade my peace with yourself and the night\nSomewhere in the yourself I found the sight\n\n[Hook]\nThis one's for the yourself that raised me\nAnd doubters know I hold on for it\nThis one's for the yourself that raised me\nThis one's for the yourself that raised me",
   "production": {
     "tempoBpm": 143,
     "drums": "minimal knock, heavy kick",
@@ -216,8 +216,8 @@
       "80b68ec5",
       "f12bcb84",
       "e679f5ef",
+      "afcd0b06",
       "e679f5ef",
-      "aa22ec8e",
       "e679f5ef"
     ],
     "bannedWordsHit": [],
@@ -403,8 +403,8 @@
             "label": "Hook",
             "lines": [
               "This one's for the yourself that raised me",
+              "And doubters know I hold on for it",
               "This one's for the yourself that raised me",
-              "All this game, I earned it slow",
               "This one's for the yourself that raised me"
             ]
           }
@@ -531,8 +531,8 @@
             "80b68ec5",
             "f12bcb84",
             "e679f5ef",
+            "afcd0b06",
             "e679f5ef",
-            "aa22ec8e",
             "e679f5ef"
           ],
           "bannedWordsHit": [],

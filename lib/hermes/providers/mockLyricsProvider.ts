@@ -427,7 +427,10 @@ export const mockLyricsProvider: LyricsProvider = {
     const temp: RhymeTemp = inputs.rhymeTemp ?? 'balanced';
     const scheme: RhymeSchemeId = inputs.rhymeScheme ?? 'AABB';
     // the thread: a few theme words carried across every section so the song develops
-    // one idea; the diversity guard stops any frame template being reused song-wide.
+    // one idea; the `used` guard stops a frame template repeating WITHIN a section
+    // (the pools are disjoint per section type, so it never filters across sections —
+    // honest-comment fix, review improvement #3; per-section variety comes from each
+    // section having its own goal-specific pool, not from this set).
     // anchor words carried across sections must be real, DISTINCT nouns — on-theme first,
     // padded from the concrete bank so a thin theme (1 usable noun) doesn't repeat it every verse.
     const thread = [...themeNouns(inputs).filter((n) => !banned.has(n.toLowerCase())), ...imageryNouns(inputs, rng, banned)].slice(0, 3);
@@ -437,6 +440,20 @@ export const mockLyricsProvider: LyricsProvider = {
     const v2 = buildRhymedVerse(inputs, rng, valence, 4, { pool: filterFrames(TURN_LINES, banned), thread, used, temp, anchorIdx: 1, banned }, scheme);
     const bridge = buildRhymedVerse(inputs, rng, valence, 2, { pool: filterFrames(REFLECT_LINES, banned), thread, used, temp, anchorIdx: 2, banned }, scheme);
     const hookLines = [hook.text, hook.text, secondHookLine(inputs, rng, banned), hook.text];
+    // Final-chorus lift (review improvement #2): the LAST hook of the arrangement
+    // evolves one repeat into a fresh second line — the engine's own uniqueness
+    // critique ("hook line repeats 9× — consider varying one word") and the seeded
+    // Crossroads question's 'evolve' path, made real. The hook line itself stays the
+    // anchor (3 of 4 lines), per the AABA return-to-A convention.
+    const finalHookLines = [hook.text, secondHookLine(inputs, rng, banned), hook.text, hook.text];
+    // Every Hook section gets its OWN array copy — the shared reference across
+    // sections was a latent aliasing hazard (audit finding on #118): one in-place
+    // mutation would have silently rewritten every chorus.
+    const arrange = (sections: SongSection[]): SongSection[] => {
+      const lastHook = sections.reduce((acc, s, i) => (s.label === 'Hook' ? i : acc), -1);
+      return sections.map((s, i) =>
+        s.label === 'Hook' ? { ...s, lines: i === lastHook ? [...finalHookLines] : [...hookLines] } : s);
+    };
 
     const full: SongSection[] = [
       { label: 'Intro', lines: [capitalize(fill('{who}, this one\'s for you', inputs, rng, '', 0, '', banned))] },
@@ -459,22 +476,22 @@ export const mockLyricsProvider: LyricsProvider = {
         // had consumed most of SETUP_LINES — sharing its set could starve the pool
         // under banned-word filtering and collapse the couplet to one deduped line.
         const shortV1 = buildRhymedVerse(inputs, rng, valence, 2, { pool: filterFrames(SETUP_LINES, banned), thread, used: new Set<string>(), temp, anchorIdx: 0, banned }, scheme);
-        return [{ label: 'Hook', lines: hookLines }, { label: 'Verse 1', lines: shortV1 }];
+        return arrange([{ label: 'Hook', lines: hookLines }, { label: 'Verse 1', lines: shortV1 }]);
       }
       case 'radio-edit':
-        return full.filter((s) => s.label !== 'Bridge');
+        return arrange(full.filter((s) => s.label !== 'Bridge'));
       case 'hook-first':
-        return full;
+        return arrange(full);
       case 'verse-first':
-        return [{ label: 'Verse 1', lines: v1 }, { label: 'Hook', lines: hookLines }, { label: 'Verse 2', lines: v2 }, { label: 'Hook', lines: hookLines }];
+        return arrange([{ label: 'Verse 1', lines: v1 }, { label: 'Hook', lines: hookLines }, { label: 'Verse 2', lines: v2 }, { label: 'Hook', lines: hookLines }]);
       case 'full-song':
         // A genuinely longer arrangement, not a hook-first duplicate: rides out on a
         // repeated final hook rather than a single closing one — closer to the AABA
         // craft convention of returning to the A material without new lyrics after the
         // first cycle (see docs/pattern-packs.md). hook-first stays the shorter, single-outro shape.
-        return [...full, { label: 'Hook', lines: hookLines }];
+        return arrange([...full, { label: 'Hook', lines: hookLines }]);
       default:
-        return full;
+        return arrange(full);
     }
   },
 };

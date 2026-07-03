@@ -67,7 +67,7 @@ describe('compareProviders (offline orchestration)', () => {
       for (const rep of run.reports) {
         expect(rep.metrics.map((m) => m.name)).toEqual([
           'rhyme density', 'line diversity', 'thematic coherence', 'imagery coherence', 'hook strength',
-          'determiner agreement',
+          'determiner agreement', 'repetition budget',
         ]);
       }
     }

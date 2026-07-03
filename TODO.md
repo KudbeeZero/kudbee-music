@@ -125,12 +125,17 @@ chat. Detail for each is in [`brain/roadmap.json`](brain/roadmap.json) + [`IDEAS
      shipping and redesigned), + a `determiner agreement` metric in `eval.ts` (a/an/every —
      the always-determiners) so the golden set can see the defect class forever. Demos
      regenerated ("All this games" → "All this game").
-   - [ ] **Improvement — chorus variation + repetition budget**: the hook line appears 9–12×
-     per song; every Hook section shares the same array reference (latent aliasing). Fix:
-     evolve one line on the final hook (the seeded Crossroads question, made real), copy
-     arrays per section, add a word-frequency metric to eval.
-   - [ ] **Improvement — cross-section diversity guard is dead code**: the `used` set threaded
-     across verses can never cross-filter (disjoint pools). Unite the pools or fix the comment.
+   - [x] **Improvement — chorus variation + repetition budget** — fixed _(this PR)_: the
+     final chorus of every arrangement evolves one repeat into a fresh second line (the
+     engine's own uniqueness critique + the seeded Crossroads 'evolve' path, made real);
+     every Hook section gets its own array copy (aliasing hazard closed); and a 7th golden
+     metric, `repetition budget` (inverse share of the most-repeated content word,
+     calibrated 0.83–0.90 on the golden set, threshold 0.8), watches song-wide repetition
+     forever. Demos regenerated.
+   - [x] **Improvement — cross-section diversity guard is dead code** — resolved _(this PR)_
+     as an honest-comment fix: the `used` set dedupes frames WITHIN a section; cross-section
+     variety comes from each section's goal-specific pool (setup/turn/reflect), which is the
+     actual design — the comment now says so instead of overclaiming.
 - [x] **2026-07-03 post-merge audit findings (agent audit of #116–#119)** — ALL FIXED
    _(this PR)_: short-form starvation (fresh `used` set for `shortV1` + a deeper pre-existing
    crash the new test exposed — `pick()` on an empty array returns undefined when banned
@@ -294,6 +299,17 @@ Board** governance / Solana / token / NFT layer integrates with this engine via 
 later (kept out of this repo's core so it stays free + local).
 
 ## ✅ Shipped (newest first)
+- [x] **Final-chorus lift + repetition budget (review improvements #2 + #3)** — the hook
+      line repeated 9–15× per song with zero variation, every Hook section shared one array
+      reference (latent aliasing), and nothing measured song-wide repetition. Now: the LAST
+      chorus of every arrangement evolves one repeat into a fresh second line (hook stays
+      the anchor, 3 of 4 lines, per the AABA return-to-A convention — and it's literally the
+      seeded Crossroads "repeat vs evolve" question's evolve path made real); every Hook
+      section owns its lines array; `eval.ts` gains a 7th metric, `repetition budget`
+      (1 − max content-word share, calibrated 0.83–0.90 across the golden set, threshold
+      0.8). The dead cross-section diversity guard got an honest-comment fix (#3): `used`
+      dedupes within a section; variety across sections comes from the goal-specific pools.
+      Demos regenerated — completes all three improvements from the 2026-07-02 review. _(this PR)_
 - [x] **Post-merge audit fixes for #116–#119 (8 findings + 1 deeper crash)** — a review agent
       audited the day's four merged PRs; every finding fixed the same session (never-skip-
       silently). Mediums: short-form's couplet no longer shares a frame-`used` set with the
