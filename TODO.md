@@ -119,16 +119,42 @@ chat. Detail for each is in [`brain/roadmap.json`](brain/roadmap.json) + [`IDEAS
      rule) instead of slicing the 4-line scheme-arranged verse, built lazily inside the case
      so every other structure's RNG draw order stays byte-identical (demos unchanged).
      5 new tests prove the couplet rhymes under every scheme.
-   - [ ] **Improvement — determiner–noun number agreement (the moat)**: frames like
-     `all this {noun}` accept plural theme nouns ("All this winters" ships in the flagship
-     demo). Fix: deterministic plural heuristic + flex the determiner (this→these, that→those);
-     regenerate demos; add a grammar-agreement metric to `eval.ts` so the golden set can see it.
+   - [x] **Improvement — determiner–noun number agreement** — fixed _(this PR)_: slot-level
+     singularization in `fill()` (template context makes this/that unambiguous — a first-pass
+     line-level regex was caught corrupting relative clauses like "the hook that lifts" before
+     shipping and redesigned), + a `determiner agreement` metric in `eval.ts` (a/an/every —
+     the always-determiners) so the golden set can see the defect class forever. Demos
+     regenerated ("All this games" → "All this game").
    - [ ] **Improvement — chorus variation + repetition budget**: the hook line appears 9–12×
      per song; every Hook section shares the same array reference (latent aliasing). Fix:
      evolve one line on the final hook (the seeded Crossroads question, made real), copy
      arrays per section, add a word-frequency metric to eval.
    - [ ] **Improvement — cross-section diversity guard is dead code**: the `used` set threaded
      across verses can never cross-filter (disjoint pools). Unite the pools or fix the comment.
+- [ ] **2026-07-03 post-merge audit findings (agent audit of #116–#119)** — never skip
+   silently; each gets fixed or explicitly waived:
+   - [ ] **#118 med — short-form frame starvation**: `shortV1` shares the `used` set with the
+     discarded 4-line `v1` (which consumed 4 of SETUP_LINES' 6 frames); with banned-word
+     filtering the pool starves, `pickFresh` falls back to reuse, and `dedupe` can collapse
+     the couplet to ONE line. Fix: give `shortV1` its own fresh `used` set.
+   - [ ] **#119 med — `importVault` ignores the `writeAll` boolean**: under a full
+     localStorage it reports songs as imported that never persisted — contradicts its own
+     "honest counts" comment. Fix: report 0 / a failure flag when the write didn't land.
+   - [ ] **#119 low — import bypasses the version cap**: merge-mode import can push a title
+     past KEEP_VERSIONS=5. Fix: prune the merged list before writing.
+   - [ ] **#116 med — decided crossing renders the raw option id**: `Decided — ${outcome}`
+     shows the slug, not the label (branch unreachable with today's all-open seed). Fix:
+     resolve the label. Also add `aria-pressed` to option rows (a11y nit).
+   - [ ] **#119 low — `loadDemo` doesn't refresh the quota banner**: a stale failure banner
+     survives a successful demo save. Fix: set the flag there too.
+   - [ ] **#117 low — Share tooltip overstates**: a sharer with custom global banned words
+     gets a near-but-not-exact reproduction (banned list isn't part of SongInputs). Fix:
+     soften the tooltip wording, or note the caveat.
+   - [ ] **#119 low — non-song writers still swallow quota errors** (saveAlbum, recordTaste,
+     saveBannedWords, castVote): document that only song writes are quota-reported, or thread
+     the boolean for parity.
+   - [ ] **#116 low — `castVote` catch comment describes memoryKV behavior a real browser
+     doesn't have**. Fix: reword.
 - [ ] **2 review cleanups** — stronger memory-id hash · independent "earns-it" critique. _(the third —
    guaranteed vault mirror — is now surfaced in the Vault drawer with status + restore)_
 - [x] **Star-launch kit** — `LAUNCH.md` shipped _(#43)_: pre-flight checklist + draft X thread + demo-recording script. Posting it stays yours (the pre-flight boxes in `LAUNCH.md` are your launch-day gate).
@@ -281,6 +307,19 @@ Board** governance / Solana / token / NFT layer integrates with this engine via 
 later (kept out of this repo's core so it stays free + local).
 
 ## ✅ Shipped (newest first)
+- [x] **Determiner–noun number agreement + eval grammar metric (review improvement #1)** —
+      "All this winters, I earned it slow" and "Took that records and turned it to an art"
+      shipped in the flagship demo because frames like `all this {noun}` slot arbitrary theme
+      nouns after singular determiners and no metric could see it. Fixed at the SLOT level in
+      `fill()` — when a template puts a noun slot right after a/an/this/that/every, a plural
+      theme word is singularized (`singularizeIfPlural`, conservative heuristic + exception
+      list); the determiner is kept (not flexed) so downstream singular pronouns stay correct
+      ("took that record and turned IT to an art"). A first-pass line-level regex was caught
+      corrupting relative clauses ("the hook that lifts" → "that lift") during verification
+      and redesigned — template context is what makes this/that unambiguous. Plus a 6th golden
+      metric, `determiner agreement` (a/an/every only — what free text can prove), so the
+      class is measured forever. Demos regenerated (paper-crowns "games"→"game"); noun
+      consumption order unchanged so everything else is byte-identical. _(this PR)_
 - [x] **Quota-honest vault writes + version-history cap (review weakness #2)** — on a full
       localStorage, `writeDurable` swallowed the `setItem` failure, `saveSong` still returned
       a "stored" package, and the UI rendered a song that silently vanished on reload — the

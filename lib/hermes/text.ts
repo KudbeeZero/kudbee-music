@@ -80,6 +80,46 @@ export function tokenSetSimilarity(a: string, b: string): number {
   return inter / (A.size + B.size - inter);
 }
 
+/** s-ending words that are NOT plurals — never "singularize" these. */
+const NON_PLURAL_S = new Set(['news', 'chaos', 'blues', 'kudos', 'lens', 'bliss', 'brass', 'glass', 'grass', 'class', 'canvas', 'atlas', 'alias']);
+
+/** Conservative plural test for a word (theme words are arbitrary user text). */
+function looksPlural(w: string): boolean {
+  const lw = w.toLowerCase();
+  if (lw.length < 4 || NON_PLURAL_S.has(lw)) return false;
+  return /[^sui]s$/.test(lw); // winters/records/pockets — but not loss/chorus/basis
+}
+
+/** Conservative singular form — only shapes we can strip safely. */
+function singularize(w: string): string {
+  if (/ies$/i.test(w)) return w.replace(/ies$/i, 'y').replace(/IES$/, 'Y');
+  if (/(ch|sh|x|z|ss)es$/i.test(w)) return w.slice(0, -2);
+  return w.slice(0, -1);
+}
+
+/** Singularize a word only if it conservatively reads as a plural. Used by the
+ *  combinator's slot filler when a template puts a noun slot right after a singular
+ *  determiner ("took that {noun}") — the TEMPLATE guarantees determiner context, so
+ *  this never touches relative-pronoun "that" ("the hook that lifts"). The noun is
+ *  singularized (not the determiner flexed) so any downstream singular pronoun in the
+ *  frame stays correct ("took that record and turned IT to an art"). */
+export function singularizeIfPlural(w: string): string {
+  return looksPlural(w) ? singularize(w) : w;
+}
+
+/** Determiner–noun number-agreement violations, for the eval regression guard.
+ *  Deliberately limited to `a/an/every` — words that are ALWAYS determiners — because
+ *  "this/that" are ambiguous in free text ("proof that pockets turn to gold" is
+ *  grammatical); the generation-side fix (slot-level, template context known) covers
+ *  this/that, while the metric only asserts what free text can prove. */
+export function determinerAgreementViolations(text: string): string[] {
+  const out: string[] = [];
+  for (const m of text.matchAll(/\b(a|an|every)\s+([a-z]+s)\b/gi)) {
+    if (looksPlural(m[2])) out.push(m[0]);
+  }
+  return out;
+}
+
 /** Clean a generated line: collapse spaces, fix a/an agreement, capitalize. */
 export function tidyLine(s: string): string {
   let out = s.replace(/\s+/g, ' ').trim();

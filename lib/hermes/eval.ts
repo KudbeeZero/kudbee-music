@@ -5,7 +5,7 @@
 // guard: if a change makes the songs worse, the numbers say so. $0, deterministic.
 import type { SongPackage } from './types';
 import { rhymeDensity } from './rhyme';
-import { selfSimilarity, keywords } from './text';
+import { selfSimilarity, keywords, determinerAgreementViolations } from './text';
 import { imageryCoherence } from './providers/mockLyricsProvider';
 
 export interface EvalMetric {
@@ -38,6 +38,11 @@ export function evaluateSong(pkg: SongPackage): EvalReport {
     : 0;
   const imagery = imageryCoherence(verseLines, pkg.inputs);
   const hook = Math.min(1, pkg.score.hookStrength / 20);
+  // grammaticality: "all this winters" shipped in the flagship demo for weeks because
+  // no metric could see it — the most user-visible defect class is now measured.
+  const allLines = pkg.sections.flatMap((s) => s.lines);
+  const agreementViolations = determinerAgreementViolations(allLines.join('\n'));
+  const agreement = allLines.length ? 1 - agreementViolations.length / allLines.length : 1;
 
   const metric = (name: string, value: number, threshold: number, detail: string): EvalMetric =>
     ({ name, value: +value.toFixed(2), threshold, pass: value >= threshold, detail });
@@ -48,6 +53,9 @@ export function evaluateSong(pkg: SongPackage): EvalReport {
     metric('thematic coherence', coherent, 0.5, 'verse sections that reference the theme'),
     metric('imagery coherence', imagery, 0.5, 'imagery-bank nouns that share the song\'s top visual register'),
     metric('hook strength', hook, 0.5, "A&R hook score (honest signals), normalized"),
+    metric('determiner agreement', agreement, 1, agreementViolations.length
+      ? `ungrammatical: ${agreementViolations.join(', ')}`
+      : 'no singular-determiner + plural-noun clashes ("this winters")'),
   ];
 
   return {

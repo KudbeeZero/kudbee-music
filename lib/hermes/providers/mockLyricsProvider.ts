@@ -5,7 +5,7 @@
 // uniqueness vault).
 import type { LyricsProvider } from './providerTypes';
 import type { SongInputs, HookOption, SongSection, RhymeSchemeId } from '../types';
-import { makeRng, hashString, pick, keywords, titleCase, shuffle, tidyLine } from '../text';
+import { makeRng, hashString, pick, keywords, titleCase, shuffle, tidyLine, singularizeIfPlural } from '../text';
 import { rhymeFamily, type RhymeTemp } from '../rhyme';
 import { deriveEmotion } from '../emotion';
 
@@ -360,14 +360,23 @@ function fill(frame: string, inputs: SongInputs, rng: () => number, rhyme = '', 
   const WHO_STOP = new Set(['the', 'a', 'an', 'my', 'for', 'to', 'of', 'all']);
   const whoTokens = (inputs.audience || '').split(/\s+/).filter(Boolean);
   const who = whoTokens.find((w) => !WHO_STOP.has(w.toLowerCase())) || whoTokens[whoTokens.length - 1] || 'mine';
+  // Determiner–noun number agreement, decided at the SLOT (review improvement #1):
+  // when the template puts a noun slot right after a singular determiner ("took that
+  // {noun}", "all this {noun}"), a plural theme word gets singularized — "took that
+  // records" shipped in the flagship demo because nothing owned this. Template context
+  // makes it unambiguous (unlike a line-level regex, which would corrupt relative
+  // clauses like "the hook that lifts"). Noun consumption order is unchanged, so all
+  // other output stays byte-identical.
+  const SG_DET = /(\b(?:a|an|this|that|every)\s+)?/.source;
+  const agree = (d: string | undefined, w: string) => (d ? d + singularizeIfPlural(w) : w);
   const out = frame
-    .replace(/\{k\}/g, () => titleCase(nextNoun()))
-    .replace(/\{noun\}/g, () => nextNoun())
+    .replace(new RegExp(SG_DET + '\\{k\\}', 'g'), (_m, d?: string) => (d ?? '') + titleCase(d ? singularizeIfPlural(nextNoun()) : nextNoun()))
+    .replace(new RegExp(SG_DET + '\\{noun\\}', 'g'), (_m, d?: string) => agree(d, nextNoun()))
     .replace(/\{verb\}/g, () => verbs[vi++ % verbs.length])
     .replace(/\{adj\}/g, () => adjs[ai++ % adjs.length])
     .replace(/\{who\}/g, () => who)
-    .replace(/\{rhyme\}/g, () => rhyme || nouns[ni++ % nouns.length])
-    .replace(/\{place\}/g, () => nextNoun());
+    .replace(new RegExp(SG_DET + '\\{rhyme\\}', 'g'), (_m, d?: string) => agree(d, rhyme || nouns[ni++ % nouns.length]))
+    .replace(new RegExp(SG_DET + '\\{place\\}', 'g'), (_m, d?: string) => agree(d, nextNoun()));
   return tidyLine(out);
 }
 
