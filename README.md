@@ -312,6 +312,7 @@ flow, and the non-negotiables — plus the code-generated [brain-wiring diagram]
 - [x] **Song Lab accordion on phone** — the 4 key fields + Surprise Me lead; the other ~10 fields collapse into three named sections instead of one long wall of inputs
 - [x] **Agent Board tabs on phone** — Proposes/Challenges/Judges, without breaking the live "it's literally them thinking" connector line (all 10 cards stay mounted; only their visual density changes)
 - [x] **⚔️ Hook Battle** — a single-elimination bracket over the same council-ranked hooks, an alternative to the flat hook-options list; picking a winner wires into the real re-scoring pipeline
+- [x] **🏅 Badges** — a collectible achievement strip on your Artist card (Certified Banger, Sharp Ear, Gift Giver, Editor, Prolific, plus a badge per unlocked Story chapter) — every one computed from data that already exists, no new tracking
 
 **Next** — generated from the spine [`brain/roadmap.json`](brain/roadmap.json); the human backlog is [`TODO.md`](TODO.md), the full board is [`STATUS.md`](STATUS.md).
 
