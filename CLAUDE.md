@@ -52,6 +52,11 @@ node scripts/mobile-matrix.mjs   # anything touching layout (build the export fi
   `brain/roadmap.json` (+ `README.md` when user-facing) together. *A PR that skips this is
   not done.* Tests move TODO items to Shipped.
 - **Capture every idea immediately** into `IDEAS.md` — it's the capture net.
+- **No branch goes quiet.** Every pushed branch is tracked in `brain/branches.json` against
+  its PR + merge status (`node scripts/branch-ledger.mjs` refreshes the git-derived fields;
+  PR/status comes from a periodic branch audit). Old branches are routinely left undeleted
+  after a squash-merge — that's expected and harmless as long as the ledger shows the PR
+  merged; an entry with no PR or an open/unmerged one is the thing to chase down.
 - **Recurring noise is never skipped silently.** The FIRST time anything repeats (a failing
   check, a bot comment, a flaky step), it gets a spine/TODO item with a root cause and a fix
   path — dispatch a research agent if needed. "Known, ignorable" is only acceptable WITH a
@@ -115,7 +120,7 @@ node scripts/mobile-matrix.mjs   # anything touching layout (build the export fi
 ## Status board
 
 <!-- STATUS:BEGIN generated: edit brain/roadmap.json, then GEN_DOCS=1 npx vitest run status -->
-**📊 Status board:** ✅ 70 shipped · 🔨 1 in build · 💤 8 queued (79 tracked) — full tables in [`STATUS.md`](STATUS.md), source of truth [`brain/roadmap.json`](brain/roadmap.json).
+**📊 Status board:** ✅ 71 shipped · 🔨 1 in build · 💤 8 queued (80 tracked) — full tables in [`STATUS.md`](STATUS.md), source of truth [`brain/roadmap.json`](brain/roadmap.json).
 <!-- STATUS:END -->
 
 ## Memory layers — where the brain keeps things
@@ -141,6 +146,7 @@ table is the top-level index across *all* memory tiers, folder pages included.
 | Pattern packs (form + rhyme-scheme presets) | `brain/patternPacks.json` → `lib/hermes/patternPacks.ts` — see `docs/pattern-packs.md` |
 | Occasion packs (holiday/life-moment lexicon + dedication) | `brain/occasionPacks.json` → `lib/hermes/occasionPacks.ts` |
 | Living-state spine (machine-readable) | `brain/roadmap.json` |
+| Branch ledger (every branch, cross-referenced against its PR + merge status) | `brain/branches.json` ← `scripts/branch-ledger.mjs` refreshes git-derived fields; PR/status filled in by a periodic branch audit |
 | Vector memory (generated, gitignored) | `brain/vector-memory.json` → `lib/hermes/vectorMemory.ts` / `vectorRecall.ts` (node-only) |
 | Working list / idea inbox / build log | `TODO.md` · `IDEAS.md` · `BUILD_LOG.md` |
 | Per-user vault (browser) | localStorage `hermes.vault.v1`, `hermes.albums.v1`, `hermes.taste.v1`, `hermes.bannedWords.v1`, `hermes.artistAlias.v1`, `hermes.favorites.v1`, `hermes.songNotes.v1`, `hermes.recentlyViewed.v1` (each mirrored to a `.bak` key), `hermes.scribeTourSeen.v1` (a plain one-time "seen it" flag, not `.bak`-mirrored) via `lib/hermes/storage.ts`. Each of these keys is **namespaced per signed-in profile** (`<key>::<profileId>`) so every account has its own saved memory; the first profile "adopts" the un-namespaced legacy keys (no migration), tracked by `hermes.primaryProfile.v1` |

@@ -23,6 +23,7 @@ entry point — starting here or opening the file directly — orients you immed
 | [`occasionPacks.json`](occasionPacks.json) | Holiday/life-moment lexicon + dedication packs (Christmas, Birthday, …) — the Song Gifts engine. | `lib/hermes/occasionPacks.ts` | Live |
 | [`lexicon/core.json`](lexicon/core.json) | The vocabulary cortex — rhyme-family word bank (word, part of speech, affect, imagery cluster). | `lib/hermes/lexicon.ts` | Live |
 | [`roadmap.json`](roadmap.json) | The living-state spine — every roadmap item + the PR/status that shipped it. Source of truth for the generated status board. | `lib/hermes/statusBoard.ts` → `STATUS.md` + the STATUS blocks in `CLAUDE.md`/`README.md`/`BUILD_LOG.md` | Live |
+| [`branches.json`](branches.json) | The branch ledger — every remote branch ever pushed, cross-referenced against its GitHub PR(s) and merge status, so nothing goes quiet in `git branch -r`. | `scripts/branch-ledger.mjs` refreshes the git-derived fields; PR/status fields are filled in by a periodic branch audit | Live |
 | `vector-memory.json` *(generated, gitignored)* | Local embeddings for semantic recall (opt-in, node-only). | `lib/hermes/vectorMemory.ts` / `vectorRecall.ts` | Opt-in |
 
 ## Design / manifesto (reference docs, not imported by runtime code)

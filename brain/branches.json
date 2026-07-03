@@ -1,0 +1,2028 @@
+{
+  "note": "The branch ledger — every remote branch this repo has ever pushed, cross-referenced against its GitHub PR(s) and merge status. Exists so a branch never goes quiet: a stale/abandoned branch or a PR that never got merged shows up here instead of hiding in `git branch -r`. Regenerate the git-derived fields (lastCommitDate/lastCommitSubject/aheadOfMainCommits) with `node scripts/branch-ledger.mjs`; the `prs`/`status` fields are filled in during a periodic branch audit (cross-reference GitHub's PR list) since PR lookups need network/API access this repo's $0 core never has — see brain/README.md for the full brain/ folder index.",
+  "lastAudited": "2026-07-03",
+  "lastAuditedBy": "branch-audit session (claude/branch-audit-memory-fv9etj)",
+  "summary": {
+    "totalBranches": 111,
+    "totalPRsSeen": 169,
+    "branchesFullyMerged": 111,
+    "branchesWithNoPR": [],
+    "branchesWithOpenPR": [],
+    "branchesWithUnmergedClosedPR": []
+  },
+  "branches": [
+    {
+      "name": "claude/fabel-session-continuation-gdv16g",
+      "lastCommitDate": "2026-07-03T16:02:22+00:00",
+      "lastCommitSubject": "Crossroads Stage 3: board decisions feed the taste model",
+      "aheadOfMainCommits": 1,
+      "prs": [
+        {
+          "number": 163,
+          "title": "base=main|HERMES Studio: the arrangement timeline workspace (roadmap 3.4)",
+          "state": "closed",
+          "merged": true
+        },
+        {
+          "number": 178,
+          "title": "base=main|Code-review hardening: 10 verified fixes across the last session's work",
+          "state": "closed",
+          "merged": true
+        },
+        {
+          "number": 179,
+          "title": "base=main|Lightning AI adapter: your-own-agent lyric inference, CLI half (opt-in, key-gated)",
+          "state": "closed",
+          "merged": true
+        },
+        {
+          "number": 180,
+          "title": "base=main|hermes cloud-check: read-only Supabase readiness diagnostic",
+          "state": "closed",
+          "merged": true
+        },
+        {
+          "number": 181,
+          "title": "base=main|Per-account memory layer: each profile gets its own saved vault (local path)",
+          "state": "closed",
+          "merged": true
+        },
+        {
+          "number": 182,
+          "title": "base=main|Crossroads Stage 3: board decisions feed the taste model",
+          "state": "closed",
+          "merged": true
+        }
+      ],
+      "status": "merged"
+    },
+    {
+      "name": "claude/cloud-sync-engine",
+      "lastCommitDate": "2026-07-03T13:34:58+00:00",
+      "lastCommitSubject": "Cloud Sync engine: real Supabase auth + brain sync (raw fetch, no dep)",
+      "aheadOfMainCommits": 1,
+      "prs": [
+        {
+          "number": 177,
+          "title": "base=main|Cloud Sync engine: real Supabase auth + brain sync (raw fetch, no dep)",
+          "state": "closed",
+          "merged": true
+        }
+      ],
+      "status": "merged"
+    },
+    {
+      "name": "claude/supabase-connect-config",
+      "lastCommitDate": "2026-07-03T13:26:25+00:00",
+      "lastCommitSubject": "Supabase: connect config + verified project setup steps",
+      "aheadOfMainCommits": 1,
+      "prs": [
+        {
+          "number": 176,
+          "title": "base=main|Supabase: connect config + verified project setup steps",
+          "state": "closed",
+          "merged": true
+        }
+      ],
+      "status": "merged"
+    },
+    {
+      "name": "claude/byo-sound-upload",
+      "lastCommitDate": "2026-07-03T13:10:32+00:00",
+      "lastCommitSubject": "Bring Your Own Sound: upload an existing audio file (roadmap 3.6)",
+      "aheadOfMainCommits": 1,
+      "prs": [
+        {
+          "number": 175,
+          "title": "base=main|Bring Your Own Sound: upload an existing audio file (roadmap 3.6)",
+          "state": "closed",
+          "merged": true
+        }
+      ],
+      "status": "merged"
+    },
+    {
+      "name": "claude/agent-header-button",
+      "lastCommitDate": "2026-07-03T13:00:24+00:00",
+      "lastCommitSubject": "\"Agent\" header button — your key/brain/install one tap away, anywhere",
+      "aheadOfMainCommits": 1,
+      "prs": [
+        {
+          "number": 174,
+          "title": "base=main|\"Agent\" header button — your key/brain/install one tap away, anywhere",
+          "state": "closed",
+          "merged": true
+        }
+      ],
+      "status": "merged"
+    },
+    {
+      "name": "claude/cloud-brain-supabase-seam",
+      "lastCommitDate": "2026-07-03T12:54:53+00:00",
+      "lastCommitSubject": "Cloud Brain config seam + Supabase setup checklist (goal part C scaffold)",
+      "aheadOfMainCommits": 1,
+      "prs": [
+        {
+          "number": 173,
+          "title": "base=main|Cloud Brain config seam + Supabase setup checklist (goal part C scaffold)",
+          "state": "closed",
+          "merged": true
+        }
+      ],
+      "status": "merged"
+    },
+    {
+      "name": "claude/your-agent-byok-key",
+      "lastCommitDate": "2026-07-03T12:41:33+00:00",
+      "lastCommitSubject": "Your Agent panel + up-front BYOK Claude key entry",
+      "aheadOfMainCommits": 1,
+      "prs": [
+        {
+          "number": 172,
+          "title": "base=main|Your Agent panel + up-front BYOK Claude key entry",
+          "state": "closed",
+          "merged": true
+        }
+      ],
+      "status": "merged"
+    },
+    {
+      "name": "claude/brain-pack-export",
+      "lastCommitDate": "2026-07-03T12:28:49+00:00",
+      "lastCommitSubject": "Your HERMES Brain: export/import your whole agent as one document",
+      "aheadOfMainCommits": 1,
+      "prs": [
+        {
+          "number": 171,
+          "title": "base=main|Your HERMES Brain: export/import your whole agent as one document",
+          "state": "closed",
+          "merged": true
+        }
+      ],
+      "status": "merged"
+    },
+    {
+      "name": "claude/badges",
+      "lastCommitDate": "2026-07-03T12:18:17+00:00",
+      "lastCommitSubject": "Badges: a collectible achievement strip (Becoming You gamification, slice 1)",
+      "aheadOfMainCommits": 1,
+      "prs": [
+        {
+          "number": 170,
+          "title": "base=main|Badges: a collectible achievement strip (Becoming You gamification, slice 1)",
+          "state": "closed",
+          "merged": true
+        }
+      ],
+      "status": "merged"
+    },
+    {
+      "name": "claude/hook-battle",
+      "lastCommitDate": "2026-07-03T12:09:15+00:00",
+      "lastCommitSubject": "Hook Battle: a bracket-style hook picker (mobile-mockup Phase B)",
+      "aheadOfMainCommits": 1,
+      "prs": [
+        {
+          "number": 169,
+          "title": "base=main|Hook Battle: a bracket-style hook picker (mobile-mockup Phase B)",
+          "state": "closed",
+          "merged": true
+        }
+      ],
+      "status": "merged"
+    },
+    {
+      "name": "claude/agent-board-tabs",
+      "lastCommitDate": "2026-07-03T12:01:26+00:00",
+      "lastCommitSubject": "Agent Board Proposes/Challenges/Judges tabs on phone (mobile-mockup Phase A step 4)",
+      "aheadOfMainCommits": 1,
+      "prs": [
+        {
+          "number": 168,
+          "title": "base=main|Agent Board Proposes/Challenges/Judges tabs on phone (mobile-mockup Phase A step 4)",
+          "state": "closed",
+          "merged": true
+        }
+      ],
+      "status": "merged"
+    },
+    {
+      "name": "claude/song-lab-accordion",
+      "lastCommitDate": "2026-07-03T11:53:11+00:00",
+      "lastCommitSubject": "Song Lab accordion on phone (mobile-mockup Phase A step 3)",
+      "aheadOfMainCommits": 1,
+      "prs": [
+        {
+          "number": 167,
+          "title": "base=main|Song Lab accordion on phone (mobile-mockup Phase A step 3)",
+          "state": "closed",
+          "merged": true
+        }
+      ],
+      "status": "merged"
+    },
+    {
+      "name": "claude/sticky-flow-rail",
+      "lastCommitDate": "2026-07-03T11:46:13+00:00",
+      "lastCommitSubject": "Sticky Studio Flow rail on phone (mobile-mockup Phase A step 2)",
+      "aheadOfMainCommits": 1,
+      "prs": [
+        {
+          "number": 166,
+          "title": "base=main|Sticky Studio Flow rail on phone (mobile-mockup Phase A step 2)",
+          "state": "closed",
+          "merged": true
+        }
+      ],
+      "status": "merged"
+    },
+    {
+      "name": "claude/sticky-top-app-bar",
+      "lastCommitDate": "2026-07-03T11:39:12+00:00",
+      "lastCommitSubject": "Sticky top app bar on phone (mobile-mockup Phase A step 1)",
+      "aheadOfMainCommits": 1,
+      "prs": [
+        {
+          "number": 165,
+          "title": "base=main|Sticky top app bar on phone (mobile-mockup Phase A step 1)",
+          "state": "closed",
+          "merged": true
+        }
+      ],
+      "status": "merged"
+    },
+    {
+      "name": "claude/bottom-nav-council-reach",
+      "lastCommitDate": "2026-07-03T11:32:23+00:00",
+      "lastCommitSubject": "Bottom nav: Council (and everything else) one tap away on phone",
+      "aheadOfMainCommits": 1,
+      "prs": [
+        {
+          "number": 164,
+          "title": "base=main|Bottom nav: Council (and everything else) one tap away on phone",
+          "state": "closed",
+          "merged": true
+        }
+      ],
+      "status": "merged"
+    },
+    {
+      "name": "claude/continuation-previous-session-cr0pa8",
+      "lastCommitDate": "2026-07-03T05:38:30-05:00",
+      "lastCommitSubject": "Guided tour of the Scribe lyric editor: coach-marks (8.8) (#162)",
+      "aheadOfMainCommits": 0,
+      "prs": [
+        {
+          "number": 116,
+          "title": "base=main|Crossroads Board — Stage 2 (the board UI)",
+          "state": "closed",
+          "merged": true
+        },
+        {
+          "number": 117,
+          "title": "base=main|Share-reproduction integrity — rhymeScheme at every boundary + honest Share button",
+          "state": "closed",
+          "merged": true
+        },
+        {
+          "number": 118,
+          "title": "base=main|Short-form builds a real rhymed couplet under every rhyme scheme",
+          "state": "closed",
+          "merged": true
+        },
+        {
+          "number": 119,
+          "title": "base=main|Quota-honest vault writes + same-title version cap",
+          "state": "closed",
+          "merged": true
+        },
+        {
+          "number": 120,
+          "title": "base=main|Determiner–noun number agreement at the slot + eval grammar metric",
+          "state": "closed",
+          "merged": true
+        },
+        {
+          "number": 121,
+          "title": "base=main|Audit fixes for #116–#119 — 8 findings + a deeper pre-existing crash",
+          "state": "closed",
+          "merged": true
+        },
+        {
+          "number": 122,
+          "title": "base=main|Final-chorus lift + repetition budget — completes the review improvements",
+          "state": "closed",
+          "merged": true
+        },
+        {
+          "number": 123,
+          "title": "base=main|Occasion Packs — holiday/life-moment lexicon + dedication (Song Gifts, phase 1)",
+          "state": "closed",
+          "merged": true
+        },
+        {
+          "number": 124,
+          "title": "base=main|Song Gifts — gift-framed share link, PNG card, and OG unfurl (phase 2)",
+          "state": "closed",
+          "merged": true
+        },
+        {
+          "number": 125,
+          "title": "base=main|Wire the PNG share card to a real button",
+          "state": "closed",
+          "merged": true
+        },
+        {
+          "number": 126,
+          "title": "base=main|Memory-vault head pages: brain/README.md + rewritten docs/index.md",
+          "state": "closed",
+          "merged": true
+        },
+        {
+          "number": 127,
+          "title": "base=main|The Council, PR1: your learned taste as a 4th voice in hook ranking",
+          "state": "closed",
+          "merged": true
+        },
+        {
+          "number": 128,
+          "title": "base=main|Bring Your Own Sound, PR1: Voice Notes — record & attach a take",
+          "state": "closed",
+          "merged": true
+        },
+        {
+          "number": 129,
+          "title": "base=main|Tiny feature: Surprise me — a varied starter-brief pool for Song Lab",
+          "state": "closed",
+          "merged": true
+        },
+        {
+          "number": 130,
+          "title": "base=main|Tiny feature: Copy lyrics — plain-text copy button",
+          "state": "closed",
+          "merged": true
+        },
+        {
+          "number": 131,
+          "title": "base=main|Tiny feature: Vault favorites — pin your best takes",
+          "state": "closed",
+          "merged": true
+        },
+        {
+          "number": 132,
+          "title": "base=main|Tiny feature: Click-a-word rhyme helper",
+          "state": "closed",
+          "merged": true
+        },
+        {
+          "number": 133,
+          "title": "base=main|Tiny feature: Word/line/runtime counter",
+          "state": "closed",
+          "merged": true
+        },
+        {
+          "number": 134,
+          "title": "base=main|Tiny feature: Duplicate this song — fork a vault entry",
+          "state": "closed",
+          "merged": true
+        },
+        {
+          "number": 135,
+          "title": "base=main|Tiny feature: Per-song vault notes",
+          "state": "closed",
+          "merged": true
+        },
+        {
+          "number": 136,
+          "title": "base=main|Tiny feature: Cmd/Ctrl+Enter to generate",
+          "state": "closed",
+          "merged": true
+        },
+        {
+          "number": 137,
+          "title": "base=main|Tiny feature: One-click Copy Suno prompt",
+          "state": "closed",
+          "merged": true
+        },
+        {
+          "number": 138,
+          "title": "base=main|Tiny feature: Escape-key close for Vault/Album drawers",
+          "state": "closed",
+          "merged": true
+        },
+        {
+          "number": 139,
+          "title": "base=main|Tiny feature: Markdown export, plus a new \"upload existing audio\" idea capture",
+          "state": "closed",
+          "merged": true
+        },
+        {
+          "number": 140,
+          "title": "base=main|Tiny feature: Undo a committed Lyric Lab step",
+          "state": "closed",
+          "merged": true
+        },
+        {
+          "number": 141,
+          "title": "base=main|Tiny feature: Reset to defaults on Song Lab",
+          "state": "closed",
+          "merged": true
+        },
+        {
+          "number": 142,
+          "title": "base=main|Tiny feature: Recently viewed strip in the Vault, plus a WIFI radio jukebox idea capture",
+          "state": "closed",
+          "merged": true
+        },
+        {
+          "number": 143,
+          "title": "base=main|Tiny feature: Vault search/filter box",
+          "state": "closed",
+          "merged": true
+        },
+        {
+          "number": 144,
+          "title": "base=main|Tiny feature: Inline vault-song rename",
+          "state": "closed",
+          "merged": true
+        },
+        {
+          "number": 145,
+          "title": "base=main|Tiny feature: Clear all avoid-words (#17)",
+          "state": "closed",
+          "merged": true
+        },
+        {
+          "number": 146,
+          "title": "base=main|Tiny feature: Copy JSON to clipboard (#18)",
+          "state": "closed",
+          "merged": true
+        },
+        {
+          "number": 147,
+          "title": "base=main|Tiny feature: / jumps to the Vault search box (#19)",
+          "state": "closed",
+          "merged": true
+        },
+        {
+          "number": 148,
+          "title": "base=main|Tiny feature: Vault sort toggle (#20)",
+          "state": "closed",
+          "merged": true
+        },
+        {
+          "number": 149,
+          "title": "base=main|Tiny feature: Copy all lyrics - bulk vault export (#21)",
+          "state": "closed",
+          "merged": true
+        },
+        {
+          "number": 150,
+          "title": "base=main|Tiny feature: Duplicate + rename in one motion (#22)",
+          "state": "closed",
+          "merged": true
+        },
+        {
+          "number": 151,
+          "title": "base=main|Tiny feature: \"N songs today\" stat in the Vault header (#23)",
+          "state": "closed",
+          "merged": true
+        },
+        {
+          "number": 152,
+          "title": "base=main|Tiny feature: Copy all as Markdown - bulk vault export (#24)",
+          "state": "closed",
+          "merged": true
+        },
+        {
+          "number": 153,
+          "title": "base=main|Tiny feature: Clear all vault notes (#25)",
+          "state": "closed",
+          "merged": true
+        },
+        {
+          "number": 154,
+          "title": "base=main|Studio Flow PR1: Review/Refine/Keep/Release rail (8.1)",
+          "state": "closed",
+          "merged": true
+        },
+        {
+          "number": 155,
+          "title": "base=main|Agent Board upgrade: live connection lines + terminal signal ticker (8.2)",
+          "state": "closed",
+          "merged": true
+        },
+        {
+          "number": 156,
+          "title": "base=main|Council-voice-registry refactor: the plug-in prerequisite (8.3)",
+          "state": "closed",
+          "merged": true
+        },
+        {
+          "number": 157,
+          "title": "base=main|Guest Judges: pluggable Council personas (8.4)",
+          "state": "closed",
+          "merged": true
+        },
+        {
+          "number": 159,
+          "title": "base=main|Agent Packs MVP: genre/scene Council voice bundles (8.5)",
+          "state": "closed",
+          "merged": true
+        },
+        {
+          "number": 160,
+          "title": "base=main|Word ideas: a similar-words popup while editing lyrics (8.6)",
+          "state": "closed",
+          "merged": true
+        },
+        {
+          "number": 161,
+          "title": "base=main|Live re-scoring on lyric edit: the panel ripples with an edit (8.7)",
+          "state": "closed",
+          "merged": true
+        },
+        {
+          "number": 162,
+          "title": "base=main|Guided tour of the Scribe lyric editor: coach-marks (8.8)",
+          "state": "closed",
+          "merged": true
+        }
+      ],
+      "status": "merged"
+    },
+    {
+      "name": "feat/security-watchdog",
+      "lastCommitDate": "2026-07-02T13:13:16+00:00",
+      "lastCommitSubject": "Regenerate status board after merge (31/41 shipped)",
+      "aheadOfMainCommits": 4,
+      "prs": [
+        {
+          "number": 115,
+          "title": "base=main|Watchdog — Claude-powered security/quality review (findings-only)",
+          "state": "closed",
+          "merged": true
+        }
+      ],
+      "status": "merged"
+    },
+    {
+      "name": "feat/pattern-packs",
+      "lastCommitDate": "2026-07-02T12:01:34+00:00",
+      "lastCommitSubject": "Pattern packs — lyric structure + rhyme-scheme variety (roadmap 5.6)",
+      "aheadOfMainCommits": 1,
+      "prs": [
+        {
+          "number": 114,
+          "title": "base=main|Pattern packs — lyric structure + rhyme-scheme variety",
+          "state": "closed",
+          "merged": true
+        }
+      ],
+      "status": "merged"
+    },
+    {
+      "name": "claude/kudbee-music-audit-gq6rqv",
+      "lastCommitDate": "2026-07-02T11:16:10+00:00",
+      "lastCommitSubject": "Scribe-style line editor + Claude Engine \"Test key\" verification (roadmap 5.5)",
+      "aheadOfMainCommits": 2,
+      "prs": [
+        {
+          "number": 113,
+          "title": "base=main|Claude Engine live in the panel — BYOK, Scribe line editor, key verification",
+          "state": "closed",
+          "merged": true
+        }
+      ],
+      "status": "merged"
+    },
+    {
+      "name": "chore/workers-builds-resolved",
+      "lastCommitDate": "2026-07-02T06:50:40+00:00",
+      "lastCommitSubject": "Workers Builds noise resolved — founder deleted the stray Worker",
+      "aheadOfMainCommits": 1,
+      "prs": [
+        {
+          "number": 112,
+          "title": "base=main|Workers Builds noise resolved — founder deleted the stray Worker",
+          "state": "closed",
+          "merged": true
+        }
+      ],
+      "status": "merged"
+    },
+    {
+      "name": "chore/workers-builds-tracked",
+      "lastCommitDate": "2026-07-02T05:19:24+00:00",
+      "lastCommitSubject": "Track the Workers Builds noise for deletion + the never-skip-silently rule",
+      "aheadOfMainCommits": 1,
+      "prs": [
+        {
+          "number": 111,
+          "title": "base=main|Track the Workers Builds noise for deletion + the never-skip-silently rule",
+          "state": "closed",
+          "merged": true
+        }
+      ],
+      "status": "merged"
+    },
+    {
+      "name": "feat/claude-actions-lane",
+      "lastCommitDate": "2026-07-02T05:12:06+00:00",
+      "lastCommitSubject": "Claude key via GitHub Actions secrets — manual claude-compare workflow",
+      "aheadOfMainCommits": 1,
+      "prs": [
+        {
+          "number": 110,
+          "title": "base=main|Claude key via GitHub Actions secrets — manual claude-compare workflow",
+          "state": "closed",
+          "merged": true
+        }
+      ],
+      "status": "merged"
+    },
+    {
+      "name": "feat/status-board",
+      "lastCommitDate": "2026-07-02T04:40:03+00:00",
+      "lastCommitSubject": "Status Board — spine-generated status tables, drift-tested (never-stale checklists)",
+      "aheadOfMainCommits": 1,
+      "prs": [
+        {
+          "number": 109,
+          "title": "base=main|Status Board — spine-generated status tables, drift-tested (never-stale checklists)",
+          "state": "closed",
+          "merged": true
+        }
+      ],
+      "status": "merged"
+    },
+    {
+      "name": "feat/brain-atlas",
+      "lastCommitDate": "2026-07-02T03:42:00+00:00",
+      "lastCommitSubject": "Deep Brain Atlas — 37 anatomy-named subregions, every one real code",
+      "aheadOfMainCommits": 1,
+      "prs": [
+        {
+          "number": 108,
+          "title": "base=main|Deep Brain Atlas — 37 anatomy-named subregions, every one real code",
+          "state": "closed",
+          "merged": true
+        }
+      ],
+      "status": "merged"
+    },
+    {
+      "name": "docs/claude-memory-spine",
+      "lastCommitDate": "2026-07-02T03:26:39+00:00",
+      "lastCommitSubject": "CLAUDE.md memory spine — saved conventions + routes to every memory layer",
+      "aheadOfMainCommits": 1,
+      "prs": [
+        {
+          "number": 107,
+          "title": "base=main|CLAUDE.md memory spine — saved conventions + routes to every memory layer",
+          "state": "closed",
+          "merged": true
+        }
+      ],
+      "status": "merged"
+    },
+    {
+      "name": "feat/mobile-adaptive",
+      "lastCommitDate": "2026-07-02T01:27:31+00:00",
+      "lastCommitSubject": "Adaptive UI: useDevice() drives the studio + landing — \"it adjusts\"",
+      "aheadOfMainCommits": 1,
+      "prs": [
+        {
+          "number": 106,
+          "title": "base=main|Adaptive UI: useDevice() drives the studio + landing — \"it adjusts\"",
+          "state": "closed",
+          "merged": true
+        }
+      ],
+      "status": "merged"
+    },
+    {
+      "name": "feat/og-unfurl-function",
+      "lastCommitDate": "2026-07-02T01:19:54+00:00",
+      "lastCommitSubject": "HERMES Live: per-song OG unfurl via Pages Functions — INERT until activated",
+      "aheadOfMainCommits": 1,
+      "prs": [
+        {
+          "number": 105,
+          "title": "base=main|HERMES Live: per-song OG unfurl via Pages Functions — INERT until activated",
+          "state": "closed",
+          "merged": true
+        }
+      ],
+      "status": "merged"
+    },
+    {
+      "name": "feat/mobile-foundation",
+      "lastCommitDate": "2026-07-02T01:17:30+00:00",
+      "lastCommitSubject": "Living state: HERMES Live trilogy (#101–#103) + mobile foundation shipped",
+      "aheadOfMainCommits": 2,
+      "prs": [
+        {
+          "number": 104,
+          "title": "base=main|Mobile foundation: device intelligence, PWA install, phone-testing workflow",
+          "state": "closed",
+          "merged": true
+        }
+      ],
+      "status": "merged"
+    },
+    {
+      "name": "feat/deterministic-share-links",
+      "lastCommitDate": "2026-07-02T00:09:45+00:00",
+      "lastCommitSubject": "HERMES Live: deterministic share permalinks (the viral loop)",
+      "aheadOfMainCommits": 1,
+      "prs": [
+        {
+          "number": 101,
+          "title": "base=main|HERMES Live: deterministic share permalinks (the viral loop)",
+          "state": "closed",
+          "merged": true
+        }
+      ],
+      "status": "merged"
+    },
+    {
+      "name": "media/crossroads-teaser",
+      "lastCommitDate": "2026-07-01T23:23:58+00:00",
+      "lastCommitSubject": "Crossroads Board launch teaser (Runway Gen-4, 10s) + source still",
+      "aheadOfMainCommits": 1,
+      "prs": [
+        {
+          "number": 100,
+          "title": "base=main|Crossroads Board launch teaser (Runway Gen-4, 10s) + source still",
+          "state": "closed",
+          "merged": true
+        }
+      ],
+      "status": "merged"
+    },
+    {
+      "name": "docs/security-secret-response",
+      "lastCommitDate": "2026-07-01T22:11:46+00:00",
+      "lastCommitSubject": "SECURITY.md: secret-leak incident response (rotate first, then scrub)",
+      "aheadOfMainCommits": 1,
+      "prs": [
+        {
+          "number": 99,
+          "title": "base=main|SECURITY.md: secret-leak incident response (rotate first, then scrub)",
+          "state": "closed",
+          "merged": true
+        }
+      ],
+      "status": "merged"
+    },
+    {
+      "name": "security/dev-door-prod-gate",
+      "lastCommitDate": "2026-07-01T22:01:32+00:00",
+      "lastCommitSubject": "Close the dev-door production backdoor: gate ?dev=1 to dev/local builds only",
+      "aheadOfMainCommits": 107,
+      "prs": [
+        {
+          "number": 98,
+          "title": "base=main|Close the dev-door production backdoor: gate ?dev=1 to dev/local builds only",
+          "state": "closed",
+          "merged": true
+        }
+      ],
+      "status": "merged"
+    },
+    {
+      "name": "feat/onboarding-identity-layer",
+      "lastCommitDate": "2026-07-01T21:26:09+00:00",
+      "lastCommitSubject": "Living-state sync: onboarding/identity layer + blank-first Song Lab",
+      "aheadOfMainCommits": 105,
+      "prs": [
+        {
+          "number": 97,
+          "title": "base=main|Onboarding / identity layer: welcome gate, local-first accounts, dev door, blank-first Song Lab",
+          "state": "closed",
+          "merged": true
+        }
+      ],
+      "status": "merged"
+    },
+    {
+      "name": "security/adversarial-input-hardening",
+      "lastCommitDate": "2026-07-01T21:22:35+00:00",
+      "lastCommitSubject": "Living-state sync + E2E doc notes for the hardening pass",
+      "aheadOfMainCommits": 104,
+      "prs": [
+        {
+          "number": 96,
+          "title": "base=main|Adversarial-input hardening: sanitize vault imports, clamp pipeline inputs, honest seed",
+          "state": "closed",
+          "merged": true
+        }
+      ],
+      "status": "merged"
+    },
+    {
+      "name": "claude/github-status-check-x1gofq",
+      "lastCommitDate": "2026-07-01T21:06:10+00:00",
+      "lastCommitSubject": "Add Runway Gen-4 adapter (studio/runway.mjs) — opt-in, key-gated, live-tested",
+      "aheadOfMainCommits": 102,
+      "prs": [
+        {
+          "number": 73,
+          "title": "base=main|Sync living state: record premium typography (#71) + Focal Compose layout (#72)",
+          "state": "closed",
+          "merged": true
+        },
+        {
+          "number": 74,
+          "title": "base=main|Image-coherence scoring + verb/noun agreement (the moat, deeper lyric craft)",
+          "state": "closed",
+          "merged": true
+        },
+        {
+          "number": 75,
+          "title": "base=main|Codify the Cloudflare Workers Builds check as known non-blocking",
+          "state": "closed",
+          "merged": true
+        },
+        {
+          "number": 76,
+          "title": "base=main|Add CODEOWNERS",
+          "state": "closed",
+          "merged": true
+        },
+        {
+          "number": 80,
+          "title": "base=main|Capture idea: thesaurus + syllable/rhythm-aware lyric generation",
+          "state": "closed",
+          "merged": true
+        },
+        {
+          "number": 81,
+          "title": "base=main|Enforce avoid-words during generation, not just after (the moat)",
+          "state": "closed",
+          "merged": true
+        },
+        {
+          "number": 82,
+          "title": "base=main|Auto-exclude on the 2nd cut + proactive cliché seeding (the moat)",
+          "state": "closed",
+          "merged": true
+        },
+        {
+          "number": 83,
+          "title": "base=main|Add Runway Gen-4 adapter (opt-in, key-gated, live-tested)",
+          "state": "closed",
+          "merged": true
+        }
+      ],
+      "status": "merged"
+    },
+    {
+      "name": "feat/claude-engine-eval-scaffold",
+      "lastCommitDate": "2026-07-01T20:47:10+00:00",
+      "lastCommitSubject": "Living-state sync: Claude Engine groundwork (roadmap 5.1 scaffold-shipped)",
+      "aheadOfMainCommits": 102,
+      "prs": [
+        {
+          "number": 95,
+          "title": "base=main|Claude Engine groundwork: opt-in real-AI lyric provider + eval comparison lane (roadmap 5.1)",
+          "state": "closed",
+          "merged": true
+        }
+      ],
+      "status": "merged"
+    },
+    {
+      "name": "feat/vault-backup-restore-ui",
+      "lastCommitDate": "2026-07-01T20:44:52+00:00",
+      "lastCommitSubject": "Living-state sync: vault backup/restore UI shipped",
+      "aheadOfMainCommits": 101,
+      "prs": [
+        {
+          "number": 94,
+          "title": "base=main|Surface vault backup status + guarded restore in the Vault drawer",
+          "state": "closed",
+          "merged": true
+        }
+      ],
+      "status": "merged"
+    },
+    {
+      "name": "chore/live-url-living-state-sync",
+      "lastCommitDate": "2026-07-01T20:41:49+00:00",
+      "lastCommitSubject": "Live URL in the front door + living-state sync for #84/#85/#86",
+      "aheadOfMainCommits": 99,
+      "prs": [
+        {
+          "number": 87,
+          "title": "base=main|Live URL in the front door + living-state sync for #84/#85/#86",
+          "state": "closed",
+          "merged": true
+        }
+      ],
+      "status": "merged"
+    },
+    {
+      "name": "feat/interactive-scrolling-landing-page",
+      "lastCommitDate": "2026-07-01T20:26:13+00:00",
+      "lastCommitSubject": "Interactive scroll-driven landing page: scrub the hero video, watch the brain think",
+      "aheadOfMainCommits": 96,
+      "prs": [
+        {
+          "number": 86,
+          "title": "base=main|Interactive scroll-driven landing page: scrub the hero video, watch the brain think",
+          "state": "closed",
+          "merged": true
+        }
+      ],
+      "status": "merged"
+    },
+    {
+      "name": "security/public-readiness-hardening",
+      "lastCommitDate": "2026-07-01T20:14:49+00:00",
+      "lastCommitSubject": "Security/public-readiness pass: least-privilege CI token + SECURITY.md",
+      "aheadOfMainCommits": 96,
+      "prs": [
+        {
+          "number": 84,
+          "title": "base=main|Security/public-readiness hardening: least-privilege CI token + SECURITY.md",
+          "state": "closed",
+          "merged": true
+        }
+      ],
+      "status": "merged"
+    },
+    {
+      "name": "fix/nft-chain-standard-mismatch",
+      "lastCommitDate": "2026-07-01T20:14:24+00:00",
+      "lastCommitSubject": "Align dNFT metadata with the stated chain: ERC-721 -> Metaplex Token Metadata",
+      "aheadOfMainCommits": 96,
+      "prs": [
+        {
+          "number": 85,
+          "title": "base=main|Align dNFT metadata with the stated chain: ERC-721 → Metaplex Token Metadata",
+          "state": "closed",
+          "merged": true
+        }
+      ],
+      "status": "merged"
+    },
+    {
+      "name": "feat/share-card-image",
+      "lastCommitDate": "2026-07-01T20:09:06-05:00",
+      "lastCommitSubject": "HERMES Live: downloadable PNG share card (canvas, deterministic)",
+      "aheadOfMainCommits": 1,
+      "prs": [
+        {
+          "number": 103,
+          "title": "base=main|HERMES Live: downloadable PNG share card (canvas, deterministic)",
+          "state": "closed",
+          "merged": true
+        }
+      ],
+      "status": "merged"
+    },
+    {
+      "name": "feat/landing-live-playground",
+      "lastCommitDate": "2026-07-01T20:06:23-05:00",
+      "lastCommitSubject": "HERMES Live playground: mount on the landing + playground styles",
+      "aheadOfMainCommits": 2,
+      "prs": [
+        {
+          "number": 102,
+          "title": "base=main|HERMES Live: inline \"type a line, watch it think\" playground on the landing",
+          "state": "closed",
+          "merged": true
+        }
+      ],
+      "status": "merged"
+    },
+    {
+      "name": "claude/focal-compose-layout",
+      "lastCommitDate": "2026-07-01T15:48:31+00:00",
+      "lastCommitSubject": "Focal Compose / Studio layout — one calm input, then the full deck",
+      "aheadOfMainCommits": 88,
+      "prs": [
+        {
+          "number": 72,
+          "title": "base=main|Focal Compose / Studio layout — one calm input, then the full deck",
+          "state": "closed",
+          "merged": true
+        }
+      ],
+      "status": "merged"
+    },
+    {
+      "name": "claude/premium-typography",
+      "lastCommitDate": "2026-07-01T09:34:38+00:00",
+      "lastCommitSubject": "Premium typography: self-hosted Space Grotesk (display) + Inter (body)",
+      "aheadOfMainCommits": 87,
+      "prs": [
+        {
+          "number": 71,
+          "title": "base=main|Premium typography: self-hosted Space Grotesk + Inter",
+          "state": "closed",
+          "merged": true
+        }
+      ],
+      "status": "merged"
+    },
+    {
+      "name": "claude/todo-sync-responsive",
+      "lastCommitDate": "2026-07-01T09:24:30+00:00",
+      "lastCommitSubject": "Sync living state: record responsive UI (#69) + lyric audit fixes (#66–#68)",
+      "aheadOfMainCommits": 86,
+      "prs": [
+        {
+          "number": 70,
+          "title": "base=main|Sync living state: record responsive UI (#69) + lyric audit fixes (#66–#68)",
+          "state": "closed",
+          "merged": true
+        }
+      ],
+      "status": "merged"
+    },
+    {
+      "name": "claude/mobile-responsive-ui",
+      "lastCommitDate": "2026-07-01T09:19:35+00:00",
+      "lastCommitSubject": "Make the Hit Factory web UI responsive on mobile + tablet",
+      "aheadOfMainCommits": 85,
+      "prs": [
+        {
+          "number": 69,
+          "title": "base=main|Make the Hit Factory web UI responsive on mobile + tablet",
+          "state": "closed",
+          "merged": true
+        }
+      ],
+      "status": "merged"
+    },
+    {
+      "name": "claude/lyric-irregular-verbs",
+      "lastCommitDate": "2026-07-01T08:45:15+00:00",
+      "lastCommitSubject": "Lyric fix: reject irregular past-tense verbs in noun slots (\"the built\")",
+      "aheadOfMainCommits": 84,
+      "prs": [
+        {
+          "number": 68,
+          "title": "base=main|Lyric fix: reject irregular past-tense verbs in noun slots (\"the built\")",
+          "state": "closed",
+          "merged": true
+        }
+      ],
+      "status": "merged"
+    },
+    {
+      "name": "claude/lyric-audit-fixes",
+      "lastCommitDate": "2026-07-01T08:38:02+00:00",
+      "lastCommitSubject": "Fix the two lyric bugs the audit found: audience-word + verb in noun slots",
+      "aheadOfMainCommits": 83,
+      "prs": [
+        {
+          "number": 67,
+          "title": "base=main|Fix the two lyric bugs the audit found: audience-word + verb in noun slots",
+          "state": "closed",
+          "merged": true
+        }
+      ],
+      "status": "merged"
+    },
+    {
+      "name": "claude/e2e-audit",
+      "lastCommitDate": "2026-07-01T08:33:04+00:00",
+      "lastCommitSubject": "Record end-to-end app audit result (PASS) + two combinator-polish findings",
+      "aheadOfMainCommits": 82,
+      "prs": [
+        {
+          "number": 66,
+          "title": "base=main|Record end-to-end app audit result (PASS) + two combinator-polish findings",
+          "state": "closed",
+          "merged": true
+        }
+      ],
+      "status": "merged"
+    },
+    {
+      "name": "claude/readme-hero",
+      "lastCommitDate": "2026-07-01T08:22:04+00:00",
+      "lastCommitSubject": "README hero + onboarding: brain-first, \"try it in 10 seconds\", surface semantic memory",
+      "aheadOfMainCommits": 81,
+      "prs": [
+        {
+          "number": 65,
+          "title": "base=main|README hero + onboarding: brain-first, \"try it in 10 seconds\", surface semantic memory",
+          "state": "closed",
+          "merged": true
+        }
+      ],
+      "status": "merged"
+    },
+    {
+      "name": "claude/vector-mmr-candidates",
+      "lastCommitDate": "2026-07-01T08:15:50+00:00",
+      "lastCommitSubject": "Vector search follow-up: mmrCandidates knob + hybrid/MMR usage example",
+      "aheadOfMainCommits": 80,
+      "prs": [
+        {
+          "number": 64,
+          "title": "base=main|Vector search follow-up: mmrCandidates knob + hybrid/MMR usage example",
+          "state": "closed",
+          "merged": true
+        }
+      ],
+      "status": "merged"
+    },
+    {
+      "name": "claude/in-app-trace",
+      "lastCommitDate": "2026-07-01T08:11:31+00:00",
+      "lastCommitSubject": "In-app trace explorer: \"🔍 Explain this song\" opens the live brain trace",
+      "aheadOfMainCommits": 79,
+      "prs": [
+        {
+          "number": 63,
+          "title": "base=main|In-app trace explorer: \"🔍 Explain this song\" opens the live brain trace",
+          "state": "closed",
+          "merged": true
+        }
+      ],
+      "status": "merged"
+    },
+    {
+      "name": "claude/vector-hybrid-mmr",
+      "lastCommitDate": "2026-07-01T08:05:57+00:00",
+      "lastCommitSubject": "Vector search: hybrid (vector + lexicon) + diversity (MMR) — opt-in, deterministic",
+      "aheadOfMainCommits": 78,
+      "prs": [
+        {
+          "number": 62,
+          "title": "base=main|Vector search: hybrid (vector + lexicon) + diversity (MMR) — opt-in, deterministic",
+          "state": "closed",
+          "merged": true
+        }
+      ],
+      "status": "merged"
+    },
+    {
+      "name": "claude/vector-recall-agents",
+      "lastCommitDate": "2026-07-01T07:38:23+00:00",
+      "lastCommitSubject": "Vector memory → the agent systems: per-facet recall (procedural / limbic / Council)",
+      "aheadOfMainCommits": 77,
+      "prs": [
+        {
+          "number": 61,
+          "title": "base=main|Vector memory → the agent systems: per-facet recall (procedural / limbic / Council)",
+          "state": "closed",
+          "merged": true
+        }
+      ],
+      "status": "merged"
+    },
+    {
+      "name": "claude/lyric-imagery",
+      "lastCommitDate": "2026-07-01T07:32:03+00:00",
+      "lastCommitSubject": "Lyric imagery coherence: backfill nouns match the theme (the moat)",
+      "aheadOfMainCommits": 76,
+      "prs": [
+        {
+          "number": 60,
+          "title": "base=main|Lyric imagery coherence: backfill nouns match the theme (the moat)",
+          "state": "closed",
+          "merged": true
+        }
+      ],
+      "status": "merged"
+    },
+    {
+      "name": "claude/founder-vision-index",
+      "lastCommitDate": "2026-07-01T07:24:56+00:00",
+      "lastCommitSubject": "TODO: consolidate all founder-raised ideas into one visible index",
+      "aheadOfMainCommits": 75,
+      "prs": [
+        {
+          "number": 59,
+          "title": "base=main|TODO: consolidate all founder-raised ideas into one visible index",
+          "state": "closed",
+          "merged": true
+        }
+      ],
+      "status": "merged"
+    },
+    {
+      "name": "claude/lyric-grammar",
+      "lastCommitDate": "2026-07-01T07:19:05+00:00",
+      "lastCommitSubject": "Fix lyric word-salad: no verbs/adjectives in noun slots (the moat)",
+      "aheadOfMainCommits": 74,
+      "prs": [
+        {
+          "number": 58,
+          "title": "base=main|Fix lyric word-salad: no verbs/adjectives in noun slots (the moat)",
+          "state": "closed",
+          "merged": true
+        }
+      ],
+      "status": "merged"
+    },
+    {
+      "name": "claude/review-fixes",
+      "lastCommitDate": "2026-07-01T06:58:08+00:00",
+      "lastCommitSubject": "Fix review findings: stale cognition on hook re-pick + Council robustness",
+      "aheadOfMainCommits": 73,
+      "prs": [
+        {
+          "number": 57,
+          "title": "base=main|Fix review findings: stale cognition on hook re-pick + Council robustness",
+          "state": "closed",
+          "merged": true
+        }
+      ],
+      "status": "merged"
+    },
+    {
+      "name": "claude/vault-durability",
+      "lastCommitDate": "2026-07-01T06:47:54+00:00",
+      "lastCommitSubject": "Vault durability — backup mirror + heal/restore (storage.ts)",
+      "aheadOfMainCommits": 72,
+      "prs": [
+        {
+          "number": 56,
+          "title": "base=main|Vault durability — backup mirror + heal/restore (storage.ts)",
+          "state": "closed",
+          "merged": true
+        }
+      ],
+      "status": "merged"
+    },
+    {
+      "name": "claude/personas-doc",
+      "lastCommitDate": "2026-07-01T06:43:56+00:00",
+      "lastCommitSubject": "Persona-map reference doc — docs/personas.md (generated)",
+      "aheadOfMainCommits": 71,
+      "prs": [
+        {
+          "number": 55,
+          "title": "base=main|Persona-map reference doc — docs/personas.md (generated)",
+          "state": "closed",
+          "merged": true
+        }
+      ],
+      "status": "merged"
+    },
+    {
+      "name": "claude/semantic-originality",
+      "lastCommitDate": "2026-07-01T06:40:12+00:00",
+      "lastCommitSubject": "Semantic originality — meaning-level novelty check (Traction T1)",
+      "aheadOfMainCommits": 70,
+      "prs": [
+        {
+          "number": 54,
+          "title": "base=main|Semantic originality — meaning-level novelty check (Traction T1)",
+          "state": "closed",
+          "merged": true
+        }
+      ],
+      "status": "merged"
+    },
+    {
+      "name": "claude/council-ranking",
+      "lastCommitDate": "2026-07-01T06:35:07+00:00",
+      "lastCommitSubject": "Council hook ranking + learn→vector recall (Traction T4)",
+      "aheadOfMainCommits": 69,
+      "prs": [
+        {
+          "number": 53,
+          "title": "base=main|Council hook ranking + learn→vector recall (Traction T4)",
+          "state": "closed",
+          "merged": true
+        }
+      ],
+      "status": "merged"
+    },
+    {
+      "name": "claude/cognition-loop",
+      "lastCommitDate": "2026-07-01T06:26:22+00:00",
+      "lastCommitSubject": "Close the cognition loop — cognition picks the hook (Traction T2)",
+      "aheadOfMainCommits": 68,
+      "prs": [
+        {
+          "number": 52,
+          "title": "base=main|Close the cognition loop — cognition picks the hook (Traction T2)",
+          "state": "closed",
+          "merged": true
+        }
+      ],
+      "status": "merged"
+    },
+    {
+      "name": "claude/architecture-docs",
+      "lastCommitDate": "2026-07-01T06:18:08+00:00",
+      "lastCommitSubject": "ARCHITECTURE.md + code-generated brain-wiring diagram (Traction T5)",
+      "aheadOfMainCommits": 67,
+      "prs": [
+        {
+          "number": 51,
+          "title": "base=main|ARCHITECTURE.md + code-generated brain-wiring diagram (Traction T5)",
+          "state": "closed",
+          "merged": true
+        }
+      ],
+      "status": "merged"
+    },
+    {
+      "name": "claude/trace-explorer",
+      "lastCommitDate": "2026-07-01T06:12:27+00:00",
+      "lastCommitSubject": "Interactive trace explorer + demo gallery (Traction T3)",
+      "aheadOfMainCommits": 66,
+      "prs": [
+        {
+          "number": 50,
+          "title": "base=main|Interactive trace explorer + demo gallery (Traction T3)",
+          "state": "closed",
+          "merged": true
+        }
+      ],
+      "status": "merged"
+    },
+    {
+      "name": "claude/vm-determinism",
+      "lastCommitDate": "2026-07-01T06:04:09+00:00",
+      "lastCommitSubject": "Vector-memory determinism hardening + Traction Sprint capture",
+      "aheadOfMainCommits": 65,
+      "prs": [
+        {
+          "number": 49,
+          "title": "base=main|Vector-memory determinism hardening + Traction Sprint capture",
+          "state": "closed",
+          "merged": true
+        }
+      ],
+      "status": "merged"
+    },
+    {
+      "name": "claude/pro-rack",
+      "lastCommitDate": "2026-07-01T05:51:17+00:00",
+      "lastCommitSubject": "Pro Studio Rack: HERMES as a professional, modular engine stack",
+      "aheadOfMainCommits": 64,
+      "prs": [
+        {
+          "number": 48,
+          "title": "base=main|Pro Studio Rack: HERMES as a professional, modular engine stack",
+          "state": "closed",
+          "merged": true
+        }
+      ],
+      "status": "merged"
+    },
+    {
+      "name": "claude/vector-memory",
+      "lastCommitDate": "2026-07-01T05:46:10+00:00",
+      "lastCommitSubject": "Vector memory + semantic search (opt-in local embeddings)",
+      "aheadOfMainCommits": 63,
+      "prs": [
+        {
+          "number": 47,
+          "title": "base=main|Vector memory + semantic search (opt-in local embeddings)",
+          "state": "closed",
+          "merged": true
+        }
+      ],
+      "status": "merged"
+    },
+    {
+      "name": "claude/artist-story",
+      "lastCommitDate": "2026-07-01T05:38:49+00:00",
+      "lastCommitSubject": "Create-your-own-artist v1 + Story Mode",
+      "aheadOfMainCommits": 62,
+      "prs": [
+        {
+          "number": 46,
+          "title": "base=main|Create-your-own-artist v1 + Story Mode",
+          "state": "closed",
+          "merged": true
+        }
+      ],
+      "status": "merged"
+    },
+    {
+      "name": "claude/brain-signature",
+      "lastCommitDate": "2026-07-01T05:32:17+00:00",
+      "lastCommitSubject": "Living-Brain dNFT signature: deterministic traits + ERC-721 metadata ($0, no chain)",
+      "aheadOfMainCommits": 61,
+      "prs": [
+        {
+          "number": 45,
+          "title": "base=main|Living-Brain dNFT signature: deterministic traits + ERC-721 metadata ($0, no chain)",
+          "state": "closed",
+          "merged": true
+        }
+      ],
+      "status": "merged"
+    },
+    {
+      "name": "claude/crossroads-stage1",
+      "lastCommitDate": "2026-07-01T05:28:30+00:00",
+      "lastCommitSubject": "Crossroads Board Stage 1: the local decision model",
+      "aheadOfMainCommits": 60,
+      "prs": [
+        {
+          "number": 44,
+          "title": "base=main|Crossroads Board Stage 1: the local decision model",
+          "state": "closed",
+          "merged": true
+        }
+      ],
+      "status": "merged"
+    },
+    {
+      "name": "claude/launch-kit",
+      "lastCommitDate": "2026-07-01T05:23:34+00:00",
+      "lastCommitSubject": "Launch kit: rewrite LAUNCH.md brain-first for the star launch",
+      "aheadOfMainCommits": 59,
+      "prs": [
+        {
+          "number": 43,
+          "title": "base=main|Launch kit: rewrite LAUNCH.md brain-first for the star launch",
+          "state": "closed",
+          "merged": true
+        }
+      ],
+      "status": "merged"
+    },
+    {
+      "name": "claude/boot-sequence",
+      "lastCommitDate": "2026-07-01T05:12:23+00:00",
+      "lastCommitSubject": "Brain-scan boot sequence + live per-agent drive (completes Phase 2)",
+      "aheadOfMainCommits": 58,
+      "prs": [
+        {
+          "number": 42,
+          "title": "base=main|Brain-scan boot sequence + live per-agent drive (completes Phase 2)",
+          "state": "closed",
+          "merged": true
+        }
+      ],
+      "status": "merged"
+    },
+    {
+      "name": "claude/council",
+      "lastCommitDate": "2026-07-01T04:19:20+00:00",
+      "lastCommitSubject": "The Council: agents as a deliberating board + .env secret guard",
+      "aheadOfMainCommits": 57,
+      "prs": [
+        {
+          "number": 41,
+          "title": "base=main|The Council: agents as a deliberating board + .env secret guard",
+          "state": "closed",
+          "merged": true
+        }
+      ],
+      "status": "merged"
+    },
+    {
+      "name": "claude/particle-brain",
+      "lastCommitDate": "2026-07-01T04:13:02+00:00",
+      "lastCommitSubject": "Particle Brain + artist heat-map: the scan runs hot where YOU are",
+      "aheadOfMainCommits": 56,
+      "prs": [
+        {
+          "number": 40,
+          "title": "base=main|Particle Brain + artist heat-map: the scan runs hot where YOU are",
+          "state": "closed",
+          "merged": true
+        }
+      ],
+      "status": "merged"
+    },
+    {
+      "name": "claude/cognition-model",
+      "lastCommitDate": "2026-07-01T03:58:12+00:00",
+      "lastCommitSubject": "Cognitive model: first thought -> second thought -> decision",
+      "aheadOfMainCommits": 55,
+      "prs": [
+        {
+          "number": 39,
+          "title": "base=main|Cognitive model: first thought → second thought → decision",
+          "state": "closed",
+          "merged": true
+        }
+      ],
+      "status": "merged"
+    },
+    {
+      "name": "claude/one-command-demo",
+      "lastCommitDate": "2026-07-01T03:48:56+00:00",
+      "lastCommitSubject": "One-command demo (npm run demo): the 10-second \"see it work\" moment",
+      "aheadOfMainCommits": 54,
+      "prs": [
+        {
+          "number": 38,
+          "title": "base=main|One-command demo (npm run demo): the 10-second \"see it work\" moment",
+          "state": "closed",
+          "merged": true
+        }
+      ],
+      "status": "merged"
+    },
+    {
+      "name": "claude/safety-filter",
+      "lastCommitDate": "2026-07-01T03:20:35+00:00",
+      "lastCommitSubject": "Output-safety filter + disclaimer: screen hooks against famous phrases",
+      "aheadOfMainCommits": 53,
+      "prs": [
+        {
+          "number": 37,
+          "title": "base=main|Output-safety filter + disclaimer: screen hooks against famous phrases",
+          "state": "closed",
+          "merged": true
+        }
+      ],
+      "status": "merged"
+    },
+    {
+      "name": "claude/eval-harness",
+      "lastCommitDate": "2026-07-01T03:11:09+00:00",
+      "lastCommitSubject": "Eval harness + golden songs: make lyric quality measurable",
+      "aheadOfMainCommits": 52,
+      "prs": [
+        {
+          "number": 36,
+          "title": "base=main|Eval harness + golden songs: make lyric quality measurable",
+          "state": "closed",
+          "merged": true
+        }
+      ],
+      "status": "merged"
+    },
+    {
+      "name": "claude/living-state-spine",
+      "lastCommitDate": "2026-07-01T03:04:16+00:00",
+      "lastCommitSubject": "Living-state spine: one source of truth so nothing goes stale",
+      "aheadOfMainCommits": 51,
+      "prs": [
+        {
+          "number": 35,
+          "title": "base=main|Living-state spine: one source of truth so nothing goes stale",
+          "state": "closed",
+          "merged": true
+        }
+      ],
+      "status": "merged"
+    },
+    {
+      "name": "claude/lyric-core-depth",
+      "lastCommitDate": "2026-07-01T02:21:41+00:00",
+      "lastCommitSubject": "Deterministic lyric-core depth: hierarchical, threaded, diverse, slant-dial",
+      "aheadOfMainCommits": 50,
+      "prs": [
+        {
+          "number": 34,
+          "title": "base=main|Deterministic lyric-core depth: hierarchical, threaded, diverse, slant-rhyme dial",
+          "state": "closed",
+          "merged": true
+        }
+      ],
+      "status": "merged"
+    },
+    {
+      "name": "claude/functional-deck",
+      "lastCommitDate": "2026-07-01T02:03:36+00:00",
+      "lastCommitSubject": "Functional song deck + pull video framing out of the web app",
+      "aheadOfMainCommits": 49,
+      "prs": [
+        {
+          "number": 33,
+          "title": "base=main|Functional song deck + pull video framing out of the web app",
+          "state": "closed",
+          "merged": true
+        }
+      ],
+      "status": "merged"
+    },
+    {
+      "name": "claude/demo-traces",
+      "lastCommitDate": "2026-07-01T01:52:47+00:00",
+      "lastCommitSubject": "Demo songs + generation traces: proof the brain thinks",
+      "aheadOfMainCommits": 48,
+      "prs": [
+        {
+          "number": 32,
+          "title": "base=main|Demo songs + generation traces: proof the brain thinks",
+          "state": "closed",
+          "merged": true
+        }
+      ],
+      "status": "merged"
+    },
+    {
+      "name": "claude/honest-framing",
+      "lastCommitDate": "2026-07-01T01:43:35+00:00",
+      "lastCommitSubject": "Honest framing: the brain is an inspired model, not biological fidelity",
+      "aheadOfMainCommits": 47,
+      "prs": [
+        {
+          "number": 31,
+          "title": "base=main|Honest framing: the brain is an inspired model, not biological fidelity",
+          "state": "closed",
+          "merged": true
+        }
+      ],
+      "status": "merged"
+    },
+    {
+      "name": "claude/becoming-you",
+      "lastCommitDate": "2026-07-01T01:28:13+00:00",
+      "lastCommitSubject": "Becoming You: watch the brain learn your voice (self-portrait readout)",
+      "aheadOfMainCommits": 46,
+      "prs": [
+        {
+          "number": 30,
+          "title": "base=main|Becoming You: watch the brain learn your voice (self-portrait readout)",
+          "state": "closed",
+          "merged": true
+        }
+      ],
+      "status": "merged"
+    },
+    {
+      "name": "claude/procedural-memory",
+      "lastCommitDate": "2026-07-01T01:18:01+00:00",
+      "lastCommitSubject": "Procedural memory: the artist's recurring craft moves",
+      "aheadOfMainCommits": 45,
+      "prs": [
+        {
+          "number": 29,
+          "title": "base=main|Procedural memory: the artist's recurring craft moves",
+          "state": "closed",
+          "merged": true
+        }
+      ],
+      "status": "merged"
+    },
+    {
+      "name": "claude/reward-circuit",
+      "lastCommitDate": "2026-07-01T01:13:41+00:00",
+      "lastCommitSubject": "Reward circuit: hook crave-ability (11th brain region)",
+      "aheadOfMainCommits": 44,
+      "prs": [
+        {
+          "number": 28,
+          "title": "base=main|Reward circuit: hook crave-ability (11th brain region)",
+          "state": "closed",
+          "merged": true
+        }
+      ],
+      "status": "merged"
+    },
+    {
+      "name": "claude/default-mode",
+      "lastCommitDate": "2026-07-01T01:08:35+00:00",
+      "lastCommitSubject": "Default-Mode Network: the creativity-at-rest region (10th brain region)",
+      "aheadOfMainCommits": 43,
+      "prs": [
+        {
+          "number": 27,
+          "title": "base=main|Default-Mode Network: the creativity-at-rest region (10th brain region)",
+          "state": "closed",
+          "merged": true
+        }
+      ],
+      "status": "merged"
+    },
+    {
+      "name": "claude/emotion-diction",
+      "lastCommitDate": "2026-07-01T01:02:26+00:00",
+      "lastCommitSubject": "Emotion → diction: the limbic layer colors word choice by mood",
+      "aheadOfMainCommits": 42,
+      "prs": [
+        {
+          "number": 26,
+          "title": "base=main|Emotion → diction: the limbic layer colors word choice by mood",
+          "state": "closed",
+          "merged": true
+        }
+      ],
+      "status": "merged"
+    },
+    {
+      "name": "claude/rhyme-engine",
+      "lastCommitDate": "2026-07-01T00:57:28+00:00",
+      "lastCommitSubject": "Rhyme + meter engine: verses actually rhyme + honest hook scoring",
+      "aheadOfMainCommits": 41,
+      "prs": [
+        {
+          "number": 25,
+          "title": "base=main|Rhyme + meter engine: verses actually rhyme + honest hook scoring",
+          "state": "closed",
+          "merged": true
+        }
+      ],
+      "status": "merged"
+    },
+    {
+      "name": "claude/lexicon",
+      "lastCommitDate": "2026-07-01T00:48:36+00:00",
+      "lastCommitSubject": "Local lexicon: the token-free vocabulary cortex (dictionary in the file system)",
+      "aheadOfMainCommits": 40,
+      "prs": [
+        {
+          "number": 24,
+          "title": "base=main|Local lexicon: the token-free vocabulary cortex (dictionary in the file system)",
+          "state": "closed",
+          "merged": true
+        }
+      ],
+      "status": "merged"
+    },
+    {
+      "name": "claude/limbic-layer",
+      "lastCommitDate": "2026-07-01T00:39:59+00:00",
+      "lastCommitSubject": "Limbic (emotion) layer: shape the feeling, not just score it — the brain's 9th region",
+      "aheadOfMainCommits": 39,
+      "prs": [
+        {
+          "number": 23,
+          "title": "base=main|Limbic (emotion) layer — shape the feeling, the brain's 9th region",
+          "state": "closed",
+          "merged": true
+        }
+      ],
+      "status": "merged"
+    },
+    {
+      "name": "claude/wrangler-pages",
+      "lastCommitDate": "2026-07-01T00:32:40+00:00",
+      "lastCommitSubject": "wrangler: use Cloudflare Pages format (pages_build_output_dir) — clean build logs",
+      "aheadOfMainCommits": 38,
+      "prs": [
+        {
+          "number": 22,
+          "title": "base=main|wrangler: Cloudflare Pages format (clean build logs)",
+          "state": "closed",
+          "merged": true
+        }
+      ],
+      "status": "merged"
+    },
+    {
+      "name": "claude/cloudflare-deploy",
+      "lastCommitDate": "2026-07-01T00:19:15+00:00",
+      "lastCommitSubject": "Support the Cloudflare Workers path: wrangler.jsonc (static assets → out/) + docs",
+      "aheadOfMainCommits": 38,
+      "prs": [
+        {
+          "number": 21,
+          "title": "base=main|Cloudflare Pages deploy (static export) + wifidj.xyz wiring docs",
+          "state": "closed",
+          "merged": true
+        }
+      ],
+      "status": "merged"
+    },
+    {
+      "name": "claude/resume-skill",
+      "lastCommitDate": "2026-07-01T00:06:13+00:00",
+      "lastCommitSubject": "Add /resume continuity skill + capture the emotional (limbic) layer idea",
+      "aheadOfMainCommits": 36,
+      "prs": [
+        {
+          "number": 20,
+          "title": "base=main|Add /resume continuity skill (+ capture the emotional/limbic layer)",
+          "state": "closed",
+          "merged": true
+        }
+      ],
+      "status": "merged"
+    },
+    {
+      "name": "claude/language-culture",
+      "lastCommitDate": "2026-07-01T00:03:35+00:00",
+      "lastCommitSubject": "Language & Culture area: where lived experience becomes word choice",
+      "aheadOfMainCommits": 35,
+      "prs": [
+        {
+          "number": 19,
+          "title": "base=main|Language & Culture area: where lived experience becomes word choice",
+          "state": "closed",
+          "merged": true
+        }
+      ],
+      "status": "merged"
+    },
+    {
+      "name": "claude/nervous-system",
+      "lastCommitDate": "2026-06-30T23:22:57+00:00",
+      "lastCommitSubject": "Nervous system + short-term/long-term memory — the living brain",
+      "aheadOfMainCommits": 34,
+      "prs": [
+        {
+          "number": 18,
+          "title": "base=main|Nervous system + short-term/long-term memory — the living brain",
+          "state": "closed",
+          "merged": true
+        }
+      ],
+      "status": "merged"
+    },
+    {
+      "name": "claude/brain-scan",
+      "lastCommitDate": "2026-06-30T23:03:11+00:00",
+      "lastCommitSubject": "Brain Scan: the brain made visible — regions light up, each one a knowledge file",
+      "aheadOfMainCommits": 33,
+      "prs": [
+        {
+          "number": 17,
+          "title": "base=main|Brain Scan: the brain made visible — regions light up, each one a knowledge file",
+          "state": "closed",
+          "merged": true
+        }
+      ],
+      "status": "merged"
+    },
+    {
+      "name": "claude/lyric-lab",
+      "lastCommitDate": "2026-06-30T22:38:20+00:00",
+      "lastCommitSubject": "Lyric Lab: the Writers-Room made visible (artist's hook → real song)",
+      "aheadOfMainCommits": 32,
+      "prs": [
+        {
+          "number": 16,
+          "title": "base=main|Lyric Lab: the Writers-Room made visible (artist's hook → real song)",
+          "state": "closed",
+          "merged": true
+        }
+      ],
+      "status": "merged"
+    },
+    {
+      "name": "claude/idea-inbox",
+      "lastCommitDate": "2026-06-30T22:24:26+00:00",
+      "lastCommitSubject": "Add IDEAS.md — the idea inbox (capture net so nothing the artist says is lost)",
+      "aheadOfMainCommits": 31,
+      "prs": [
+        {
+          "number": 15,
+          "title": "base=main|Add IDEAS.md — the idea inbox (capture net so nothing gets lost)",
+          "state": "closed",
+          "merged": true
+        }
+      ],
+      "status": "merged"
+    },
+    {
+      "name": "claude/persona-engine",
+      "lastCommitDate": "2026-06-30T22:20:47+00:00",
+      "lastCommitSubject": "Persona engine: anonymized lyrical craft-DNA (framework Part 1, original-only)",
+      "aheadOfMainCommits": 30,
+      "prs": [
+        {
+          "number": 14,
+          "title": "base=main|Persona engine: anonymized lyrical craft-DNA (framework Part 1, original-only)",
+          "state": "closed",
+          "merged": true
+        }
+      ],
+      "status": "merged"
+    },
+    {
+      "name": "claude/writers-room-brain",
+      "lastCommitDate": "2026-06-30T22:14:56+00:00",
+      "lastCommitSubject": "Writers-Room engine + belief system (the brain's proprietary edge)",
+      "aheadOfMainCommits": 29,
+      "prs": [
+        {
+          "number": 13,
+          "title": "base=main|Writers-Room engine + belief system (the brain's proprietary edge)",
+          "state": "closed",
+          "merged": true
+        }
+      ],
+      "status": "merged"
+    },
+    {
+      "name": "claude/phase1-proof-loop",
+      "lastCommitDate": "2026-06-30T21:56:07+00:00",
+      "lastCommitSubject": "Phase 1: flagship Cold Hard Gold example + one-click Suno handoff",
+      "aheadOfMainCommits": 28,
+      "prs": [
+        {
+          "number": 12,
+          "title": "base=main|Phase 1: flagship Cold Hard Gold example + one-click Suno handoff",
+          "state": "closed",
+          "merged": true
+        }
+      ],
+      "status": "merged"
+    },
+    {
+      "name": "claude/todo-list",
+      "lastCommitDate": "2026-06-30T16:03:32+00:00",
+      "lastCommitSubject": "Add TODO.md living backlog; sync README roadmap with shipped work",
+      "aheadOfMainCommits": 27,
+      "prs": [
+        {
+          "number": 11,
+          "title": "base=main|Add TODO.md living backlog + sync README roadmap",
+          "state": "closed",
+          "merged": true
+        }
+      ],
+      "status": "merged"
+    },
+    {
+      "name": "claude/testing-url",
+      "lastCommitDate": "2026-06-30T15:56:28+00:00",
+      "lastCommitSubject": "Add testing-URL paths: Vercel config + deploy guide + local tunnel helper",
+      "aheadOfMainCommits": 26,
+      "prs": [
+        {
+          "number": 10,
+          "title": "base=main|Testing URL: Vercel-ready config + deploy guide + local tunnel helper",
+          "state": "closed",
+          "merged": true
+        }
+      ],
+      "status": "merged"
+    },
+    {
+      "name": "claude/song-to-video",
+      "lastCommitDate": "2026-06-30T15:46:07+00:00",
+      "lastCommitSubject": "Song -> video: hermes from-song bridge (fuse both studios)",
+      "aheadOfMainCommits": 25,
+      "prs": [
+        {
+          "number": 9,
+          "title": "base=main|Song → video: hermes from-song bridge (fuse both studios)",
+          "state": "closed",
+          "merged": true
+        }
+      ],
+      "status": "merged"
+    },
+    {
+      "name": "claude/learn-from-edits",
+      "lastCommitDate": "2026-06-30T15:36:25+00:00",
+      "lastCommitSubject": "Hit Factory: learn-from-edits + close the 3 weaknesses",
+      "aheadOfMainCommits": 24,
+      "prs": [
+        {
+          "number": 8,
+          "title": "base=main|Hit Factory: learn-from-edits + close the 3 weaknesses",
+          "state": "closed",
+          "merged": true
+        }
+      ],
+      "status": "merged"
+    },
+    {
+      "name": "claude/exclusion-list-darker",
+      "lastCommitDate": "2026-06-30T15:23:52+00:00",
+      "lastCommitSubject": "Docs: overhaul README into a full HERMES showcase",
+      "aheadOfMainCommits": 27,
+      "prs": [
+        {
+          "number": 7,
+          "title": "base=main|Hit Factory: memory + learning brain + albums (recommendations, Suno export)",
+          "state": "closed",
+          "merged": true
+        }
+      ],
+      "status": "merged"
+    },
+    {
+      "name": "claude/music-video-options-fc1bod",
+      "lastCommitDate": "2026-06-30T09:36:12+00:00",
+      "lastCommitSubject": "Merge remote-tracking branch 'origin/main' into claude/music-video-options-fc1bod",
+      "aheadOfMainCommits": 28,
+      "prs": [
+        {
+          "number": 1,
+          "title": "base=main|HERMES — agent-driven music-video studio (+ flagship Dom Shady video)",
+          "state": "closed",
+          "merged": true
+        },
+        {
+          "number": 5,
+          "title": "base=main|Phase 2 start: audio mastering + music-creation agents",
+          "state": "closed",
+          "merged": true
+        }
+      ],
+      "status": "merged"
+    },
+    {
+      "name": "feat/hermes-hit-factory-v1",
+      "lastCommitDate": "2026-06-30T09:07:14+00:00",
+      "lastCommitSubject": "Hit Factory polish: regeneration variety, Fisher-Yates, a11y",
+      "aheadOfMainCommits": 24,
+      "prs": [
+        {
+          "number": 6,
+          "title": "base=main|HERMES Hit Factory V1 — multi-agent song-creation brain",
+          "state": "closed",
+          "merged": true
+        }
+      ],
+      "status": "merged"
+    }
+  ]
+}
