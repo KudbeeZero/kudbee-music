@@ -10,7 +10,7 @@ import { createClaudeLyricsProvider, ClaudeProviderError } from '@/lib/hermes/pr
 import { getClaudeKey, claudeEngineReady } from '@/lib/hermes/claudeKey';
 import { withChosenHook } from '@/lib/hermes/rescore';
 import { keywords } from '@/lib/hermes/text';
-import { listSongs, saveSong, getSong, deleteSong, duplicateSong, recordRecentlyViewed, priorSongsForOriginality, loadBannedWords, saveBannedWords, listAlbums, saveAlbum, deleteAlbum, loadTaste, recordTaste, type Taste } from '@/lib/hermes/storage';
+import { listSongs, saveSong, getSong, deleteSong, duplicateSong, renameSong, recordRecentlyViewed, priorSongsForOriginality, loadBannedWords, saveBannedWords, listAlbums, saveAlbum, deleteAlbum, loadTaste, recordTaste, type Taste } from '@/lib/hermes/storage';
 import { allAvoidWords, newLearnedExclusions } from '@/lib/hermes/memory';
 import { diffEdit, parseSections } from '@/lib/hermes/edits';
 import { demoSong } from '@/lib/hermes/exampleSong';
@@ -296,6 +296,13 @@ export default function HermesHitFactory() {
   function duplicateInVault(id: string) {
     duplicateSong(id);
     setVault(listSongs());
+  }
+
+  function renameInVault(id: string, title: string) {
+    const renamed = renameSong(id, title);
+    if (!renamed) return;
+    setVault(listSongs());
+    if (pkg?.id === id) setPkg(renamed);
   }
 
   function saveAvoid(raw: string) {
@@ -594,6 +601,7 @@ export default function HermesHitFactory() {
           onClose={() => setVaultOpen(false)}
           onDelete={removeFromVault}
           onDuplicate={duplicateInVault}
+          onRename={renameInVault}
           onImported={() => { setVault(listSongs()); setAlbums(listAlbums()); }}
         />
       )}
