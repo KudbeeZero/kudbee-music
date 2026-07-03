@@ -11,6 +11,7 @@ export const AGENT_DEFINITIONS: AgentDefinition[] = [
     hemisphere: 'left',
     inputRequirements: ['theme', 'mood', 'genre', 'audience'],
     outputSchema: 'brief + concept summary',
+    codename: 'Nexus',
   },
   {
     id: 'hooksmith',
@@ -20,6 +21,7 @@ export const AGENT_DEFINITIONS: AgentDefinition[] = [
     hemisphere: 'right',
     inputRequirements: ['theme', 'mood', 'voice'],
     outputSchema: 'hookOptions[] with angle, cadence, score',
+    codename: 'Synapse',
   },
   {
     id: 'lyric-chemist',
@@ -29,6 +31,7 @@ export const AGENT_DEFINITIONS: AgentDefinition[] = [
     hemisphere: 'right',
     inputRequirements: ['chosen hook', 'theme', 'structure'],
     outputSchema: 'sections[] + final lyrics',
+    codename: 'Vylo',
   },
   {
     id: 'beat-oracle',
@@ -38,6 +41,7 @@ export const AGENT_DEFINITIONS: AgentDefinition[] = [
     hemisphere: 'left',
     inputRequirements: ['genre', 'tempo range', 'mood'],
     outputSchema: 'production notes',
+    codename: 'Rhythmix',
   },
   {
     id: 'emotion-scanner',
@@ -47,6 +51,7 @@ export const AGENT_DEFINITIONS: AgentDefinition[] = [
     hemisphere: 'left',
     inputRequirements: ['lyrics', 'theme'],
     outputSchema: 'emotion arc + clarity score',
+    codename: 'Echo',
   },
   {
     id: 'originality-auditor',
@@ -56,6 +61,7 @@ export const AGENT_DEFINITIONS: AgentDefinition[] = [
     hemisphere: 'left',
     inputRequirements: ['lyrics', 'vault', 'banned words'],
     outputSchema: 'uniqueness report (0–100)',
+    codename: 'Sentinel',
   },
   {
     id: 'ar-judge',
@@ -65,6 +71,7 @@ export const AGENT_DEFINITIONS: AgentDefinition[] = [
     hemisphere: 'left',
     inputRequirements: ['full package'],
     outputSchema: 'banger score (0–100)',
+    codename: 'Harmony',
   },
   {
     id: 'visual-director',
@@ -74,6 +81,7 @@ export const AGENT_DEFINITIONS: AgentDefinition[] = [
     hemisphere: 'right',
     inputRequirements: ['concept', 'mood'],
     outputSchema: 'visual package',
+    codename: 'Lumi',
   },
   {
     id: 'viral-clip-scout',
@@ -83,6 +91,7 @@ export const AGENT_DEFINITIONS: AgentDefinition[] = [
     hemisphere: 'right',
     inputRequirements: ['sections', 'hook'],
     outputSchema: 'viral clips[]',
+    codename: 'Drifter',
   },
   {
     id: 'rights-release-guard',
@@ -92,6 +101,7 @@ export const AGENT_DEFINITIONS: AgentDefinition[] = [
     hemisphere: 'left',
     inputRequirements: ['inputs', 'uniqueness'],
     outputSchema: 'release checklist + warnings',
+    codename: 'Beacon',
   },
 ];
 

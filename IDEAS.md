@@ -224,6 +224,27 @@ A second-opinion review flagged real risks worth acting on (truth-first):
   disclaimer in the README + Uniqueness panel. _(#37)_
 
 ## 🌱 Fresh captures
+- ✅ **Agent Network codenames — from the "sneak peek" box-art** *(founder-supplied concept
+  image, 2026-07-03)* — a game-console-style splash for WIFI DJ / Kudbee Studios visualized
+  the whole brain metaphor already in this repo (HERMES Core, Crossroads Board, Shared
+  Learning, Agent Memory, community feed) plus something new: 7 named "Agent Network"
+  companions (Synapse, Vylo, Rhythmix, Lumi, Echo, Harmony, Drifter) with role flavor text
+  (Melodic Architect, Vocal Alchemist, Beat Engineer, Sound Designer, Mixing Sage, Harmony
+  Weaver, Genre Explorer). Confirmed via `AskUserQuestion` this should reskin the **real
+  10-agent pipeline** (`lib/hermes/agents.ts`), not the 6 lyric personas
+  (`brain/personas.json`) or the actual `Council.tsx` (which renders agents/guest
+  judges/agent packs, not personas). Research found agent `name` strings are baked verbatim
+  into committed example fixtures (`examples/*/song.json`, e.g. `"name": "Hooksmith"`) and
+  into generated `suggestedNextAction` text — renaming `name` outright would break the
+  determinism contract's byte-identical guarantee for existing fixtures. **Shipped instead as
+  a display-only `codename` field** (zero determinism-contract risk): Nexus (Conductor),
+  Synapse (Hooksmith), Vylo (Lyric Chemist), Rhythmix (Beat Oracle), Echo (Emotion Scanner),
+  Sentinel (Originality Auditor), Harmony (A&R Judge), Lumi (Visual Director), Drifter (Viral
+  Clip Scout), Beacon (Rights & Release Guard) — shown in `Council.tsx` alongside the
+  original functional name. Founder decided the art itself is concept/pitch only, not
+  production-ready — saved as reference at `assets/concept-art/` rather than wired into the
+  live hero/OG card. Feeds `docs/runway-plan.md` Phase 3 (agent avatars → living characters),
+  which was blocked on exactly this naming decision.
 - 🔨 **`/goal`: per-user Claude brain + real accounts + own memory layer + own launchable
   agent (Lightning)** *(founder directive, 2026-07-03, set as a session `/goal`)* — the
   founder's words: "the Claude API should be tied in and actually generate the lyrics for the

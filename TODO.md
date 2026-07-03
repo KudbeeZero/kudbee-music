@@ -64,7 +64,11 @@ chat. Detail for each is in [`brain/roadmap.json`](brain/roadmap.json) + [`IDEAS
    Solana wallet connect (for the Board + dNFT) still needs the same auth/DB decision.
 - [ ] **dNFT mint on-chain** (Solana/Metaplex) — the signature is $0-ready and the metadata now targets the
    real **Metaplex Token Metadata** standard _(#85, `docs/nft-standard.md`)_; minting is your call (devnet-first, never mainnet without your explicit approval).
-- [ ] **Agent images → avatars** — wire the Grok-generated images onto each agent (once you generate them).
+- [ ] **Agent images → avatars** — the **naming** is now settled: each of the 10 agents has an
+   Agent Network `codename` (Nexus/Synapse/Vylo/Rhythmix/Echo/Sentinel/Harmony/Lumi/Drifter/Beacon
+   — `lib/hermes/agents.ts`, shown in Council.tsx), decided from the founder's sneak-peek box-art
+   _(#185)_. Still needs: real per-codename still portraits (Grok/Gen-4-image), then wire them onto
+   each agent, then Runway Phase 3 can animate them (`docs/runway-plan.md`).
 - [ ] **Lightning AI spike** — one Studio running a HERMES agent behind **HTTPS/SSL** as an opt-in provider (you connect SSL).
 - [ ] **Discord server** (+ GitHub→Discord webhook) — channels/roles/listening parties; wire on your go-ahead.
 - [ ] **Cloud brain** — server-side vault/memory (Notion/Drive/Supabase creds) so it's not localStorage-only.

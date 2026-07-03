@@ -76,6 +76,12 @@ export interface AgentDefinition {
   inputRequirements: string[];
   /** human-readable description of what this agent emits */
   outputSchema: string;
+  /** Display-only stage name ("Agent Network" branding, e.g. Council.tsx) — cosmetic
+   *  alias layered over `name`/`id`. Never read by pipeline.ts, scoring, or any
+   *  generated SongPackage text, so it carries zero determinism-contract risk and
+   *  the committed example/golden fixtures (which embed `name`, e.g. "Hooksmith")
+   *  stay byte-identical. */
+  codename?: string;
 }
 
 /** The result of running one agent in the pipeline. */
