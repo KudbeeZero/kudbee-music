@@ -303,6 +303,22 @@ Board** governance / Solana / token / NFT layer integrates with this engine via 
 later (kept out of this repo's core so it stays free + local).
 
 ## ✅ Shipped (newest first)
+- [x] **✎ Inline vault-song rename (tiny-feature cadence, #16)** — no way to fix a
+      typo or retitle a song without a full regenerate (which bumps a new version)
+      or duplicating it. New `storage.ts` `renameSong(id, newTitle)`: an in-place
+      metadata edit — version untouched, the song simply moves into whatever
+      title-group the new name belongs to (no special-casing needed;
+      `pruneVersionHistory` already groups purely by title). A pencil (✎) button
+      on every `VaultDrawer` row toggles an inline input with Save/Cancel
+      (Enter/Escape). +4 tests. **Caught a real bug while testing this feature's
+      own flagship case**: pressing Escape to cancel a rename also triggered the
+      drawer's own Escape-to-close (shipped a few rounds ago in this same
+      cadence) — the keydown bubbled past the rename input to the window-level
+      listener. Fixed with `e.stopPropagation()` in the rename input's Escape
+      handler before it ships, not after. Playwright-verified live: renamed a
+      song, confirmed the version stayed v1 and the drawer stayed open, reloaded
+      to confirm persistence, then confirmed Escape-cancel leaves the title
+      unchanged AND the drawer open. Zero console errors. _(this PR)_
 - [x] **🔎 Vault search/filter box (tiny-feature cadence, #15)** — a growing vault
       had no way to jump straight to a title without scrolling. A "Search by
       title…" input in `VaultDrawer.tsx` filters the visible list by

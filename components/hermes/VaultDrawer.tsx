@@ -13,6 +13,7 @@ export default function VaultDrawer({
   onClose,
   onDelete,
   onDuplicate,
+  onRename,
   onImported,
 }: {
   songs: SongPackage[];
@@ -20,6 +21,7 @@ export default function VaultDrawer({
   onClose: () => void;
   onDelete: (id: string) => void;
   onDuplicate?: (id: string) => void;
+  onRename?: (id: string, title: string) => void;
   onImported?: () => void;
 }) {
   const fileRef = useRef<HTMLInputElement>(null);
@@ -28,6 +30,19 @@ export default function VaultDrawer({
   const [noteDrafts, setNoteDrafts] = useState<Record<string, string>>(() => loadSongNotes());
   const [recentIds] = useState<string[]>(() => loadRecentlyViewed());
   const [query, setQuery] = useState('');
+  const [renamingId, setRenamingId] = useState<string | null>(null);
+  const [renameDraft, setRenameDraft] = useState('');
+
+  function startRename(s: SongPackage, e: React.MouseEvent) {
+    e.stopPropagation();
+    setRenamingId(s.id);
+    setRenameDraft(s.title);
+  }
+
+  function commitRename() {
+    if (renamingId) onRename?.(renamingId, renameDraft);
+    setRenamingId(null);
+  }
 
   function toggleFav(id: string, e: React.MouseEvent) {
     e.stopPropagation();
@@ -155,17 +170,43 @@ export default function VaultDrawer({
           sortedSongs.map((s) => (
             <div key={s.id} className={styles.vaultItem} onClick={() => onOpen(s.id)}>
               <div className={styles.vaultTitle}>
-                <span>
-                  <button
-                    className={styles.copyBtn}
-                    style={{ marginLeft: 0, marginRight: 6, padding: '2px 6px' }}
-                    onClick={(e) => toggleFav(s.id, e)}
-                    title={favorites.has(s.id) ? 'Unpin from favorites' : 'Pin as a favorite'}
-                  >
-                    {favorites.has(s.id) ? '⭐' : '☆'}
-                  </button>
-                  {s.title}
-                </span>
+                {renamingId === s.id ? (
+                  <span style={{ display: 'flex', gap: 6, flex: 1, alignItems: 'center' }} onClick={(e) => e.stopPropagation()}>
+                    <input
+                      autoFocus
+                      className={styles.input}
+                      style={{ fontSize: 13, padding: '4px 8px' }}
+                      value={renameDraft}
+                      onChange={(e) => setRenameDraft(e.target.value)}
+                      onKeyDown={(e) => {
+                        // stopPropagation on Escape: the drawer itself also closes on
+                        // Escape (a separate tiny feature) — without this, cancelling a
+                        // rename would also close the whole Vault out from under it.
+                        if (e.key === 'Enter') commitRename();
+                        if (e.key === 'Escape') { e.stopPropagation(); setRenamingId(null); }
+                      }}
+                    />
+                    <button className={styles.copyBtn} style={{ marginLeft: 0 }} onClick={commitRename}>Save</button>
+                    <button className={styles.copyBtn} style={{ marginLeft: 0 }} onClick={() => setRenamingId(null)}>Cancel</button>
+                  </span>
+                ) : (
+                  <span>
+                    <button
+                      className={styles.copyBtn}
+                      style={{ marginLeft: 0, marginRight: 6, padding: '2px 6px' }}
+                      onClick={(e) => toggleFav(s.id, e)}
+                      title={favorites.has(s.id) ? 'Unpin from favorites' : 'Pin as a favorite'}
+                    >
+                      {favorites.has(s.id) ? '⭐' : '☆'}
+                    </button>
+                    {s.title}
+                    {onRename && (
+                      <button className={styles.copyBtn} style={{ marginLeft: 6, padding: '2px 6px' }} onClick={(e) => startRename(s, e)} title="Rename this song">
+                        ✎
+                      </button>
+                    )}
+                  </span>
+                )}
                 <span className={styles.ver}>v{s.version}</span>
               </div>
               <div className={styles.vaultMeta}>

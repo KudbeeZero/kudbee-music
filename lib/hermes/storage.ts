@@ -157,6 +157,25 @@ export function duplicateSong(id: string, opts: { id?: string; now?: string } = 
   return persisted ? clone : null;
 }
 
+const TITLE_MAX = 120;
+
+/** Rename a song in place — a metadata edit, not a new version. Version number is
+ *  left untouched; the song simply moves into whatever title-group the new name
+ *  belongs to (pruneVersionHistory groups purely by title, same as it always has —
+ *  no special-casing needed for the rare case a rename collides with another
+ *  title's version history). */
+export function renameSong(id: string, newTitle: string): SongPackage | null {
+  const all = readAll();
+  const idx = all.findIndex((s) => s.id === id);
+  if (idx === -1) return null;
+  const trimmed = newTitle.trim().slice(0, TITLE_MAX);
+  if (!trimmed) return null;
+  const renamed: SongPackage = { ...all[idx], title: trimmed };
+  const next = [...all.slice(0, idx), renamed, ...all.slice(idx + 1)];
+  const persisted = writeAll(pruneVersionHistory(next));
+  return persisted ? renamed : null;
+}
+
 /** Prior songs in the shape the originality checker expects. */
 export function priorSongsForOriginality(excludeId?: string) {
   return readAll()

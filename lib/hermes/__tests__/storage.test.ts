@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeEach } from 'vitest';
-import { saveSong, listSongs, getSong, deleteSong, duplicateSong, __clearVault, priorSongsForOriginality, loadFavorites, toggleFavorite, loadSongNotes, setSongNote, loadRecentlyViewed, recordRecentlyViewed } from '../storage';
+import { saveSong, listSongs, getSong, deleteSong, duplicateSong, renameSong, __clearVault, priorSongsForOriginality, loadFavorites, toggleFavorite, loadSongNotes, setSongNote, loadRecentlyViewed, recordRecentlyViewed } from '../storage';
 import { runPipeline } from '../pipeline';
 import type { SongInputs } from '../types';
 
@@ -163,5 +163,39 @@ describe('recently viewed — the last few songs opened (tiny-feature cadence, #
   it('caps at 5, dropping the oldest', () => {
     for (const id of ['a', 'b', 'c', 'd', 'e', 'f']) recordRecentlyViewed(id);
     expect(loadRecentlyViewed()).toEqual(['f', 'e', 'd', 'c', 'b']);
+  });
+});
+
+describe('renameSong — an in-place title edit (tiny-feature cadence, #16)', () => {
+  beforeEach(() => __clearVault());
+
+  it('renames a song without bumping its version', async () => {
+    const a = (await runPipeline(idea, { id: 'a', now: '2026-01-01T00:00:00Z' })).pkg;
+    saveSong(a);
+    const renamed = renameSong('a', 'A Brand New Title');
+    expect(renamed).not.toBeNull();
+    expect(renamed!.title).toBe('A Brand New Title');
+    expect(renamed!.version).toBe(1);
+    expect(getSong('a')?.title).toBe('A Brand New Title');
+    expect(listSongs().length).toBe(1);
+  });
+
+  it('trims whitespace and caps length', async () => {
+    const a = (await runPipeline(idea, { id: 'a', now: '2026-01-01T00:00:00Z' })).pkg;
+    saveSong(a);
+    const renamed = renameSong('a', `  ${'x'.repeat(200)}  `);
+    expect(renamed!.title.length).toBe(120);
+  });
+
+  it('rejects a blank title, leaving the song untouched', async () => {
+    const a = (await runPipeline(idea, { id: 'a', now: '2026-01-01T00:00:00Z' })).pkg;
+    saveSong(a);
+    const result = renameSong('a', '   ');
+    expect(result).toBeNull();
+    expect(getSong('a')?.title).toBe('Vault Test');
+  });
+
+  it('returns null for a song that does not exist', () => {
+    expect(renameSong('nope', 'New Title')).toBeNull();
   });
 });
