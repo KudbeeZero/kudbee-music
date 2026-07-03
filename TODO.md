@@ -303,6 +303,17 @@ Board** governance / Solana / token / NFT layer integrates with this engine via 
 later (kept out of this repo's core so it stays free + local).
 
 ## ✅ Shipped (newest first)
+- [x] **↩️ Undo a committed Lyric Lab step (tiny-feature cadence, #12)** — the
+      Lyric Lab's step rail + "← Back" already let you revisit a step and commit a
+      *different* answer (which just overwrites the log entry), but there was no
+      way to clear a step back to uncommitted without immediately picking a
+      replacement. `LyricLab.tsx`'s new `uncommit()` deletes the current step's log
+      entry; an "Undo" button sits in the "✓ Committed" box. Safe by construction:
+      taste-recording (`choiceSignals`) only runs once, in `finish()`, off the
+      final `log` state — an undo mid-session never double-records or corrupts it.
+      Playwright-verified live: committed step 1 (1/9 committed, box visible),
+      clicked Undo, watched it revert to 0/9 with the box gone, zero console
+      errors. _(this PR)_
 - [x] **📄 Markdown export (tiny-feature cadence, #11)** — the only downloadable
       formats were full JSON (backup/re-import) or a Suno-specific prompt; nothing
       readable for Notion, GitHub, or a plain lyric sheet. New

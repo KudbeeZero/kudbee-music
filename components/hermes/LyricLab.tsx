@@ -57,6 +57,17 @@ export default function LyricLab({
     setDraft('');
   }
 
+  // Clear this step's committed choice — the "← Back"/step-rail navigation already
+  // lets you revisit a step and commit a different answer (which just overwrites
+  // the log entry), but there was no way to un-commit back to a blank step.
+  function uncommit() {
+    setLog((prev) => {
+      const next = { ...prev };
+      delete next[step.id];
+      return next;
+    });
+  }
+
   function go(dir: 1 | -1) {
     const next = stepIdx + dir;
     if (next < 0 || next >= LYRIC_PROCESS.length) return;
@@ -213,6 +224,7 @@ export default function LyricLab({
               <div className={styles.committedBox}>
                 ✓ Committed: <strong>{committed}</strong>
                 {step.id === 'hook' && <div className={styles.hint}>This becomes the song's actual hook.</div>}
+                <button className={styles.ghostBtn} style={{ marginTop: 6 }} onClick={uncommit}>Undo</button>
               </div>
             )}
 

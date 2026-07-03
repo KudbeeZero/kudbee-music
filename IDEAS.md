@@ -267,8 +267,12 @@ A second-opinion review flagged real risks worth acting on (truth-first):
     `songMarkdown()`, a pure formatter (title/concept/brief/hook/lyrics/production
     as clean Markdown), a "Export Markdown" download button next to Export JSON.
     See TODO.md Shipped.
+  - ✅ **↩️ Undo a committed Lyric Lab step** — a new `uncommit()` clears a step's
+    log entry back to uncommitted; an "Undo" button in the committed box. Safe
+    because taste-recording only runs once, in `finish()`, off the final log
+    state. See TODO.md Shipped.
   Candidates queued for the next few rounds (pick one, ship it, move to the next):
-  an "undo last edit" for the Lyric Lab, a dark/light theme toggle.
+  a dark/light theme toggle, a "reset to defaults" button on the Song Lab form.
 - 🔨 **"Input their music" — upload an existing audio file, not just record live**
   *(founder question, 2026-07-03 — "I want to create something down the road
   where people can input their music... are you working on that?")* — a genuinely
