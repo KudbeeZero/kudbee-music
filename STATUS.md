@@ -2,7 +2,7 @@
 
 > **Generated from [`brain/roadmap.json`](brain/roadmap.json) — do not hand-edit.** Status lives ONLY in the spine; edit it there, then regenerate with `GEN_DOCS=1 npx vitest run status`. `statusBoard.test.ts` fails CI if this file drifts.
 
-**Scoreboard:** ✅ 69 shipped · 🔨 1 in build · 💤 9 queued — 79 tracked items
+**Scoreboard:** ✅ 70 shipped · 🔨 1 in build · 💤 8 queued — 79 tracked items
 (legend: ✅ shipped · 🔌 scaffold shipped, founder-gated · 🔨 in build · ⏭️ next · 💤 queued · 💭 idea · 🚧 blocked on founder)
 
 ## Tracks
@@ -47,7 +47,7 @@
 | ✅ | **Deep Brain Atlas — 37 anatomy-named subregions, each mapped to a real module** | `lib/hermes/brainMap.ts` | — |
 | ✅ | **Council build plan, PR1 — your learned taste as a 4th voice** | `lib/hermes/council.ts` | — |
 
-### Phase 3 — Make it yours (the living world) — `▰▰▰▰▰▰▰▱▱▱` 4/6
+### Phase 3 — Make it yours (the living world) — `▰▰▰▰▰▰▰▰▱▱` 5/6
 
 | | Item | Where it lives | PR |
 |---|------|----------------|----|
@@ -56,7 +56,7 @@
 | ✅ | **Pro Studio Rack — modular upgradeable engine 'boxes' (Pro Tools aesthetic)** | `components/hermes/Rack.tsx + lib/hermes/engines.ts` | #48 |
 | ✅ | **HERMES Studio workspace (Suno-Studio-style: section timeline + rack + meter bridge)** | `components/hermes/Studio.tsx` | — |
 | ✅ | **Bring Your Own Sound, PR1 — Voice Notes: record & attach a take** | `lib/hermes/audioVault.ts + components/hermes/VoiceNotes.tsx` | — |
-| 💤 | **Bring Your Own Sound — upload an existing audio file (not just live mic recording)** | `components/hermes/VoiceNotes.tsx + lib/hermes/audioVault.ts` | — |
+| ✅ | **Bring Your Own Sound — upload an existing audio file (not just live mic recording)** | `components/hermes/VoiceNotes.tsx + lib/hermes/audioVault.ts` | — |
 
 ### Phase 4 — Durability — `▰▰▰▰▰▱▱▱▱▱` 1/2
 

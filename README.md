@@ -315,16 +315,16 @@ flow, and the non-negotiables — plus the code-generated [brain-wiring diagram]
 - [x] **🏅 Badges** — a collectible achievement strip on your Artist card (Certified Banger, Sharp Ear, Gift Giver, Editor, Prolific, plus a badge per unlocked Story chapter) — every one computed from data that already exists, no new tracking
 - [x] **🧠 Your HERMES Brain** — export your whole agent (identity + vault + everything the brain learned about you) as one portable document; re-import on any device or after a reinstall to launch your agent as yourself (your Claude key is never included — re-enter it there)
 - [x] **🚀 Your Agent** — one panel tying it together: your identity, your lyric brain, install-to-phone (PWA), export-your-brain, and up-front **bring-your-own Claude key** entry so your very first song can generate with your own Claude brain (key lives only in your browser) — reachable one tap from the header, anywhere
+- [x] **🎵 Bring Your Own Sound** — record a take with your mic *or* upload an existing audio file (a beat, a reference, a vocal from elsewhere) and attach it to a song; stored locally, never fed into generation
 
 **Next** — generated from the spine [`brain/roadmap.json`](brain/roadmap.json); the human backlog is [`TODO.md`](TODO.md), the full board is [`STATUS.md`](STATUS.md).
 
 <!-- STATUS:BEGIN generated: edit brain/roadmap.json, then GEN_DOCS=1 npx vitest run status -->
-**📊 Status board:** ✅ 69 shipped · 🔨 1 in build · 💤 9 queued (79 tracked) — full tables in [`STATUS.md`](STATUS.md), source of truth [`brain/roadmap.json`](brain/roadmap.json).
+**📊 Status board:** ✅ 70 shipped · 🔨 1 in build · 💤 8 queued (79 tracked) — full tables in [`STATUS.md`](STATUS.md), source of truth [`brain/roadmap.json`](brain/roadmap.json).
 
 | | Up next | id |
 |---|---------|----|
 | 💤 | **Community-authored personas (craft-DNA, like scene packs)** | `3.2` |
-| 💤 | **Bring Your Own Sound** | `3.6` |
 | 💤 | **Optional durable cloud brain (Notion/Drive backing)** | `4.2` |
 | 🔌 | **claudeLyricsProvider behind ANTHROPIC_API_KEY (mock default)** | `5.1` |
 | 💤 | **Rhyme/BPM validation loop on generated output** | `5.2` |
