@@ -303,6 +303,16 @@ Board** governance / Solana / token / NFT layer integrates with this engine via 
 later (kept out of this repo's core so it stays free + local).
 
 ## ✅ Shipped (newest first)
+- [x] **📅 "N songs today" stat in the Vault header (tiny-feature cadence,
+      #23)** — the Vault header only ever showed a flat total count, no sense
+      of momentum session to session. A new `todayCount` in `VaultDrawer.tsx`
+      compares each song's `createdAt` against `new Date().toDateString()`
+      (a UI-level `Date()` use, not the generation path — same convention
+      `identity.ts`/`album.ts`'s `genId()` already established) and appends
+      "· N songs today" to the header, hidden when the count is 0. Playwright-
+      verified live: confirmed an empty vault's header reads plain "Vault · 0"
+      with no stat, generated 2 songs, and confirmed the header updated to
+      "Vault · 2 · 2 songs today". Zero console errors. _(this PR)_
 - [x] **🔀 Duplicate + rename in one motion (tiny-feature cadence, #22)** —
       duplicate (7.6) and rename (7.16) were two separate clicks: fork, then
       hunt for the new "(copy)"-titled row and open its rename box.
