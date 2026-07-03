@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeEach } from 'vitest';
-import { saveSong, listSongs, getSong, deleteSong, __clearVault, priorSongsForOriginality } from '../storage';
+import { saveSong, listSongs, getSong, deleteSong, __clearVault, priorSongsForOriginality, loadFavorites, toggleFavorite } from '../storage';
 import { runPipeline } from '../pipeline';
 import type { SongInputs } from '../types';
 
@@ -42,5 +42,32 @@ describe('vault storage', () => {
     saveSong(a);
     deleteSong('a');
     expect(listSongs().length).toBe(0);
+  });
+});
+
+describe('vault favorites — a song id pin (tiny-feature cadence, #3)', () => {
+  beforeEach(() => __clearVault());
+
+  it('starts empty', () => {
+    expect(loadFavorites().size).toBe(0);
+  });
+
+  it('toggles a song into favorites, then back out', () => {
+    const first = toggleFavorite('song-a');
+    expect(first.has('song-a')).toBe(true);
+    expect(loadFavorites().has('song-a')).toBe(true);
+
+    const second = toggleFavorite('song-a');
+    expect(second.has('song-a')).toBe(false);
+    expect(loadFavorites().has('song-a')).toBe(false);
+  });
+
+  it('tracks multiple favorites independently', () => {
+    toggleFavorite('a');
+    toggleFavorite('b');
+    const favs = loadFavorites();
+    expect(favs.has('a')).toBe(true);
+    expect(favs.has('b')).toBe(true);
+    expect(favs.size).toBe(2);
   });
 });

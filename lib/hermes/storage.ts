@@ -11,6 +11,7 @@ const ALBUM_KEY = 'hermes.albums.v1';
 const BANNED_KEY = 'hermes.bannedWords.v1';
 const TASTE_KEY = 'hermes.taste.v1';
 const ALIAS_KEY = 'hermes.artistAlias.v1';
+const FAVORITES_KEY = 'hermes.favorites.v1';
 
 /** Backup mirror suffix — every durable list is written to `<key>` AND `<key>.bak`. */
 const BAK = '.bak';
@@ -399,6 +400,24 @@ export function loadArtistAlias(): string {
 }
 export function saveArtistAlias(alias: string): void {
   try { kv().setItem(ALIAS_KEY, alias); } catch { /* ignore */ }
+}
+
+// ---- favorites (vault): a song id pin, no bearing on generation --------------------
+// Best-effort like taste/alias — cheap to reconstruct, not the irreplaceable catalog
+// saveSong's `persisted` flag protects.
+export function loadFavorites(): Set<string> {
+  try {
+    const raw = kv().getItem(FAVORITES_KEY);
+    if (raw) { const arr = JSON.parse(raw); if (Array.isArray(arr)) return new Set(arr.filter((x) => typeof x === 'string')); }
+  } catch { /* ignore */ }
+  return new Set();
+}
+
+export function toggleFavorite(id: string): Set<string> {
+  const favs = loadFavorites();
+  if (favs.has(id)) favs.delete(id); else favs.add(id);
+  try { kv().setItem(FAVORITES_KEY, JSON.stringify([...favs])); } catch { /* ignore */ }
+  return favs;
 }
 
 export function recordTaste(added: string[], removed: string[]): Taste {

@@ -303,6 +303,16 @@ Board** governance / Solana / token / NFT layer integrates with this engine via 
 later (kept out of this repo's core so it stays free + local).
 
 ## ✅ Shipped (newest first)
+- [x] **⭐ Vault favorites — pin your best takes (tiny-feature cadence, #3)** — the
+      Vault list had no way to mark a song as a keeper; a growing catalog buries the
+      songs you actually love under whatever generated most recently. New
+      `storage.ts` functions `loadFavorites()`/`toggleFavorite()` (a plain song-id
+      `Set`, its own localStorage key — best-effort like taste/alias, no bearing on
+      generation or `SongPackage`'s shape). `VaultDrawer.tsx` gets a ☆/⭐ toggle per
+      row and sorts favorites to the top (stable sort — un-favorited songs keep their
+      original newest-first order). +3 tests in `storage.test.ts`. Playwright-verified
+      live: favorited the second-listed song, watched it jump to the top with a solid
+      ⭐, toggled it back, zero console errors. _(this PR)_
 - [x] **📋 Copy lyrics — plain-text copy button (tiny-feature cadence, #2)** — the only
       ways to get lyrics out of a package were the full JSON export or copying one
       short-form clip caption at a time; there was no single "just give me the
