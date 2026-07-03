@@ -9,7 +9,7 @@ import {
   selectTopAgentsByContribution,
   emptyAgentLifecycleState,
 } from '@/lib/hermes/agentLifecycle';
-import { loadVault } from '@/lib/hermes/storage';
+import { listSongs } from '@/lib/hermes/storage';
 import styles from './hermes.module.css';
 
 interface AgentLifecycleDashboardProps {
@@ -27,9 +27,9 @@ export default function AgentLifecycleDashboard({
   > | null>(null);
 
   useEffect(() => {
-    const vault = loadVault();
-    if (vault && vault.songs) {
-      const newState = buildAgentLifecycleState(vault.songs);
+    const songs = listSongs();
+    if (songs && songs.length > 0) {
+      const newState = buildAgentLifecycleState(songs);
       setState(newState);
     }
   }, []);
