@@ -56,6 +56,51 @@ client secret must live server-side). To activate the buttons:
 Once configured, the gate renders the provider buttons automatically
 (`authProviders()` reads the flags).
 
+## Supabase setup — the founder's 5-minute checklist (chosen 2026-07-03)
+
+The founder picked **Supabase** for real accounts + server-side "saved" brains
+(one service gives both auth and a Postgres DB — see the `/goal` entry in
+`IDEAS.md`). Everything on the code side that's safe to build blind is already in:
+the config seam `lib/hermes/cloudBrain.ts` (`cloudConfig()` / `cloudEnabled()`,
+unit-tested) reads the two client-safe vars below and stays a graceful no-op until
+they're set. The live auth + sync wiring is intentionally **not** merged blind — it
+needs a real project to test the OAuth redirect + RLS against. Here's your part:
+
+1. **Create a free Supabase project** (supabase.com → New project). Copy two values
+   from Project Settings → API:
+   - the **Project URL** (`https://<ref>.supabase.co`)
+   - the **anon / public** key (the *publishable* one — **never** the `service_role`
+     secret key; that must never touch the client).
+2. **Enable Google sign-in** (Authentication → Providers → Google): create a Google
+   Cloud OAuth client, set the authorized redirect URI to the one Supabase shows on
+   that screen (`https://<ref>.supabase.co/auth/v1/callback`), and paste the Google
+   client ID + secret into Supabase. (Add `wifi-dj-meme.pages.dev` to the allowed
+   redirect URLs under Authentication → URL Configuration.)
+3. **Create the brain table** (SQL editor) — one row per user holds their exported
+   Brain Pack JSON, guarded by RLS so a user can only read/write their own row:
+   ```sql
+   create table public.brains (
+     user_id uuid primary key references auth.users(id) on delete cascade,
+     pack jsonb not null,
+     updated_at timestamptz not null default now()
+   );
+   alter table public.brains enable row level security;
+   create policy "own brain" on public.brains
+     for all using (auth.uid() = user_id) with check (auth.uid() = user_id);
+   ```
+4. **Hand me the two client-safe values** — I set them as build-time vars
+   (`NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY`) plus
+   `NEXT_PUBLIC_AUTH_GOOGLE=1`, then wire + test `beginOAuth()` (Supabase OAuth
+   redirect) and a sync layer that pushes/pulls the Brain Pack (`exportBrain`/
+   `importBrain`) to the `brains` table on sign-in and on save. The Brain Pack format
+   already exists (#171), so "saved server-side, restored on any device" becomes a
+   thin layer over it — not a rewrite.
+
+Why not just build it now: OAuth redirect flows and RLS policies can't be verified
+without a live project + registered redirect URI, and shipping unverified auth is the
+one place "looks done" is worse than "honestly not yet." The moment you finish steps
+1–3, step 4 is a small, testable PR.
+
 ## Deferred (Phase 4)
 
 Per-profile vault namespacing (and any cloud-synced vault) is deliberately **not**

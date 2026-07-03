@@ -245,13 +245,22 @@ A second-opinion review flagged real risks worth acting on (truth-first):
     export→wipe-localStorage→import round-trip restores identity + catalog + learned memory.
     This is the local, no-decision-needed version of "their own brain" and pairs with the
     already-shipped PWA install (their HERMES Music *mobile* agent).
-  - **(C) Real cross-device accounts (logged in, saved server-side)** — *blocked on the
-    founder*: a static $0 export can't do an OAuth token exchange or hold a server-side DB.
-    Same decision already flagged in the "Accounts / sign-in" TODO item and
-    `identity.ts`'s `beginOAuth()` (which throws rather than fake a sign-in) — needs a hosted-
-    auth provider pick (Supabase/Auth0/Clerk free tier) or Cloudflare Pages Functions, plus
-    registered OAuth apps. The local-first profile + Brain-Pack export is the honest bridge
-    until then.
+  - **(C) Real cross-device accounts (logged in, saved server-side)** — **founder chose
+    Supabase** (2026-07-03, via AskUserQuestion — one service gives both auth and a Postgres
+    DB for the saved brain). *Still needs the founder's project to go live* (can't be built
+    blind — OAuth redirect + RLS can't be tested without a real project + registered redirect
+    URI, and unverified auth is the one place "looks done" is worse than "honestly not yet").
+    ✅ **Safe scaffold shipped this session**: `lib/hermes/cloudBrain.ts` — the config seam
+    (`cloudConfig()`/`cloudEnabled()`, 5 unit tests) that reads `NEXT_PUBLIC_SUPABASE_URL` +
+    `NEXT_PUBLIC_SUPABASE_ANON_KEY` and stays a graceful no-op until they're set (same opt-in
+    discipline as `vectorMemory.ts`), plus a concrete **5-minute founder checklist** in
+    `docs/accounts.md` (create project → enable Google → the `brains` table + RLS SQL → hand
+    me the two client-safe values). The moment the founder finishes steps 1–3, the live
+    `beginOAuth()` (Supabase redirect) + a Brain-Pack sync layer (`exportBrain`/`importBrain`
+    → the `brains` row on sign-in/save) is a small, testable PR — "saved server-side, restored
+    on any device" becomes a thin layer over the #171 Brain Pack, not a rewrite. Security: the
+    anon key is publishable (RLS is the guard); the `service_role` secret must never touch the
+    client.
   - **(D) Lightning AI — "unlock your own agent / your own brain"** — *blocked on the founder*:
     needs a Lightning Studio running a HERMES agent behind HTTPS/SSL the founder connects
     (already tracked in TODO "Lightning AI spike"). The security laws forbid routing a key

@@ -302,6 +302,26 @@ Board** governance / Solana / token / NFT layer integrates with this engine via 
 later (kept out of this repo's core so it stays free + local).
 
 ## ✅ Shipped (newest first)
+- [x] **☁️ Cloud Brain config seam + Supabase setup checklist (goal part C scaffold)** —
+      the founder chose **Supabase** (via AskUserQuestion) for real accounts + server-side
+      "saved" brains. The live auth + sync wiring can't be built blind (OAuth redirect + RLS
+      need a real project + registered redirect URI to test; unverified auth is the one place
+      "looks done" is worse than honest), so this ships the **safe, testable** half: new
+      `lib/hermes/cloudBrain.ts` config seam — `cloudConfig()`/`cloudEnabled()` read
+      `NEXT_PUBLIC_SUPABASE_URL` + `NEXT_PUBLIC_SUPABASE_ANON_KEY`, validate them (real
+      Supabase HTTPS URL + non-trivial key; a half-set config reads as "not connected"), and
+      stay a graceful no-op until set — same opt-in/lazy discipline as `vectorMemory.ts`, no
+      new dependency, $0 core untouched. +5 unit tests (unconfigured→null, both-required,
+      trailing-slash strip, non-Supabase-URL reject, short-key reject). Plus a concrete
+      **founder 5-minute checklist** in `docs/accounts.md`: create the project, enable Google,
+      the `brains` table + RLS SQL, and the two client-safe values to hand back — after which
+      the live `beginOAuth()` + a Brain-Pack sync layer (push/pull `exportBrain`/`importBrain`
+      to the `brains` row) is a small testable follow-up, a thin layer over the #171 Brain
+      Pack rather than a rewrite. Security documented: the anon key is publishable (RLS is the
+      guard), the `service_role` secret must never touch the client. Full gate suite green (68
+      files / 577 tests, `tsc --noEmit` clean, static export builds). Goal parts (A) Claude +
+      (B) own memory-as-documents are live; (C) is now scaffolded + waiting on the founder's
+      Supabase project; (D) Lightning still waits on the founder's SSL endpoint. _(this PR)_
 - [x] **🚀 Your Agent panel + up-front BYOK Claude key entry** — second slice toward
       the founder's `/goal`, and a direct response to the founder's in-session request
       to "use my key... I should be able to enter it... test this out." New
