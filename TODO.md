@@ -303,6 +303,16 @@ Board** governance / Solana / token / NFT layer integrates with this engine via 
 later (kept out of this repo's core so it stays free + local).
 
 ## ✅ Shipped (newest first)
+- [x] **📄 Markdown export (tiny-feature cadence, #11)** — the only downloadable
+      formats were full JSON (backup/re-import) or a Suno-specific prompt; nothing
+      readable for Notion, GitHub, or a plain lyric sheet. New
+      `lib/hermes/markdownExport.ts`'s `songMarkdown(pkg)`: title as H1, concept,
+      creative brief, the chosen hook as a blockquote, every section as an H3 with
+      its lines, production notes as a bullet list. Pure + deterministic. A new
+      "⬇ Export Markdown" download button next to Export JSON. +5 tests.
+      Playwright-verified live: downloaded the file for the demo song, confirmed
+      the `.md` filename and every expected section header/content, zero console
+      errors. _(this PR)_
 - [x] **⎋ Escape-key close for Vault/Album drawers (tiny-feature cadence, #10)** —
       both overlays only closed via the "Close" button or clicking the scrim; a
       window-level Escape listener (same pattern as the Cmd/Ctrl+Enter shortcut)

@@ -263,9 +263,29 @@ A second-opinion review flagged real risks worth acting on (truth-first):
     listener closes each overlay (same pattern as Cmd/Ctrl+Enter). Deliberately
     NOT added to the Lyric Lab — its in-progress free-write draft box makes
     Escape-to-close a data-loss risk, not a delight. See TODO.md Shipped.
+  - ✅ **📄 Markdown export** — new `lib/hermes/markdownExport.ts`'s
+    `songMarkdown()`, a pure formatter (title/concept/brief/hook/lyrics/production
+    as clean Markdown), a "Export Markdown" download button next to Export JSON.
+    See TODO.md Shipped.
   Candidates queued for the next few rounds (pick one, ship it, move to the next):
-  an "undo last edit" for the Lyric Lab, a "copy as Markdown" export alongside the
-  existing JSON export, a dark/light theme toggle.
+  an "undo last edit" for the Lyric Lab, a dark/light theme toggle.
+- 🔨 **"Input their music" — upload an existing audio file, not just record live**
+  *(founder question, 2026-07-03 — "I want to create something down the road
+  where people can input their music... are you working on that?")* — a genuinely
+  distinct gap from what's shipped. Voice Notes (Bring Your Own Sound PR1, see
+  above) only covers *live mic recording* via `MediaRecorder`; there's no way yet
+  to bring in a file the artist already has — a beat they bought, a reference
+  track, a vocal recorded elsewhere on their phone. Not started. Natural shape:
+  reuse the exact same storage the mic path already proved out —
+  `lib/hermes/audioVault.ts`'s IndexedDB clip store (kind: 'voice' | 'riff' —
+  would just need `<input type="file" accept="audio/*">` as a second capture path
+  alongside `MediaRecorder` in `VoiceNotes.tsx`, feeding the same `saveClip()`).
+  $0/no-new-deps: the File API is a browser built-in. Same determinism note as the
+  rest of "Bring Your Own Sound" — an uploaded file is a source asset, never part
+  of the byte-identical generation contract. Queued as its own item, separate from
+  the tiny-feature cadence above (it's closer in size to Voice Notes PR1 than a
+  same-day tiny feature) — a priority call against the tiny-feature queue and the
+  humming/flow-matching PR3 work.
 - ✅ **"Make sure Claude.md files are getting updated, memory layer files... each file
   should have a chapter/head-type page with the contents of the entire folder"**
   *(founder directive, 2026-07-03)* — shipped: `brain/README.md` + rewritten `docs/index.md`,

@@ -309,12 +309,13 @@ flow, and the non-negotiables — plus the code-generated [brain-wiring diagram]
 **Next** — generated from the spine [`brain/roadmap.json`](brain/roadmap.json); the human backlog is [`TODO.md`](TODO.md), the full board is [`STATUS.md`](STATUS.md).
 
 <!-- STATUS:BEGIN generated: edit brain/roadmap.json, then GEN_DOCS=1 npx vitest run status -->
-**📊 Status board:** ✅ 45 shipped · 🔨 1 in build · 💤 9 queued (55 tracked) — full tables in [`STATUS.md`](STATUS.md), source of truth [`brain/roadmap.json`](brain/roadmap.json).
+**📊 Status board:** ✅ 46 shipped · 🔨 1 in build · 💤 10 queued (57 tracked) — full tables in [`STATUS.md`](STATUS.md), source of truth [`brain/roadmap.json`](brain/roadmap.json).
 
 | | Up next | id |
 |---|---------|----|
 | 💤 | **Community-authored personas (craft-DNA, like scene packs)** | `3.2` |
 | 💤 | **HERMES Studio workspace (Suno-Studio-style: section timeline + rack + meter bridge)** | `3.4` |
+| 💤 | **Bring Your Own Sound** | `3.6` |
 | 💤 | **Optional durable cloud brain (Notion/Drive backing)** | `4.2` |
 | 🔌 | **claudeLyricsProvider behind ANTHROPIC_API_KEY (mock default)** | `5.1` |
 | 💤 | **Rhyme/BPM validation loop on generated output** | `5.2` |
