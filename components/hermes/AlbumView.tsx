@@ -1,6 +1,6 @@
 'use client';
 
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import type { SongPackage } from '@/lib/hermes/types';
 import { buildAlbum, albumGaps, suggestSequence, type Album } from '@/lib/hermes/album';
 import { albumSunoExport } from '@/lib/hermes/suno';
@@ -24,6 +24,16 @@ export default function AlbumView({
   const [openId, setOpenId] = useState<string | null>(null);
   const [copied, setCopied] = useState<string | null>(null);
   const byId = useMemo(() => new Map(songs.map((s) => [s.id, s])), [songs]);
+
+  // Escape closes the drawer — same convention as the scrim click, just from the
+  // keyboard, matching the pattern established for every modal-style overlay.
+  useEffect(() => {
+    function onKeydown(e: KeyboardEvent) {
+      if (e.key === 'Escape') onClose();
+    }
+    window.addEventListener('keydown', onKeydown);
+    return () => window.removeEventListener('keydown', onKeydown);
+  }, [onClose]);
 
   function toggle(id: string) {
     setPicked((prev) => { const n = new Set(prev); n.has(id) ? n.delete(id) : n.add(id); return n; });
