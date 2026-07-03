@@ -448,7 +448,8 @@
   background: var(--bg-2);
 }
 
-.lifecycleCard.selected {
+.lifecycleCard.selected,
+.selected {
   border-color: var(--amber);
   box-shadow: var(--glow-amber);
 }
