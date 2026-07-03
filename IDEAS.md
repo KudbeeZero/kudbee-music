@@ -263,6 +263,33 @@ A second-opinion review flagged real risks worth acting on (truth-first):
   profile; extend the Brain Pack to optionally carry a "bring your key on the new device"
   reminder; a clearer "this is your agent" surface tying identity + brain + PWA-install into
   one "launch your HERMES agent" flow.
+  - **✅ "Your Agent" surface shipped this session** (`components/hermes/YourAgent.tsx`): the
+    "launch your own HERMES Music mobile agent" framing made real by tying the already-shipped
+    pieces into one panel — who you're signed in as, whether your own Claude brain is
+    generating (reads `claudeEngineReady()`), your memory stats (vault + badge counts), and the
+    two ways to take your agent with you: **Export my Brain** (the #171 Brain Pack) and
+    **📲 Install to your phone** (a real `beforeinstallprompt` PWA install button, with an
+    honest iOS "Share → Add to Home Screen" hint where that event doesn't fire, and an
+    "Installed" chip when already standalone). Crucially, the two founder-gated pieces are shown
+    as **honest locked-upgrade rows** — "☁️ Cross-device account sync" (needs a hosted account)
+    and "⚡ Lightning-powered agent" (needs a connected Lightning endpoint) — the same
+    "never fake it" seam the OAuth buttons and the Rack's Lightning slot already hold, so the
+    path is visible without pretending it's live. Additive (new panel in the Keep-stage
+    column), zero persistence risk. **Still genuinely blocked on the founder** (unchanged, and
+    now clearly surfaced in-app as "soon"): real cross-device account sync + Lightning both need
+    the founder's infra/decision; the local-first agent is the honest today-state.
+  - **✅ Up-front BYOK Claude key entry (founder request, same session)** — the founder wanted
+    to test with their own Anthropic key immediately and hit real friction: the key field lived
+    only in the Engine Rack, which appears in studio mode *after* generating a throwaway song.
+    Fixed by folding the exact Rack BYOK flow (`setClaudeKey`/`setClaudeEngineActive`/
+    `clearClaudeKey`/`testClaudeKey`) directly into the "Your Agent" panel AND rendering that
+    panel in **compose mode** — so on the very first screen you can paste your key, "🔌 Test key"
+    (one real call to api.anthropic.com), and your first generation uses your own Claude brain,
+    no throwaway song. Same security boundary throughout: the key lives only in that browser's
+    localStorage and the browser calls Anthropic directly — never a server of ours (Playwright-
+    verified with a FAKE key that it's stored only in localStorage and Forget clears it). This
+    is the concrete delivery of goal part (A), "Claude API tied in and actually generate the
+    lyrics for the individual user," made reachable up front.
 - 💭 **Two mobile mockup sets — a structural fix plan + a gamification pass** *(founder
   directive, 2026-07-03, three attachments: a PDF export of the current live app as ground
   truth, plus two mockup images)* — asked for an architecture agent + a design agent to turn

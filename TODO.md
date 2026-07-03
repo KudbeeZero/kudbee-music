@@ -302,6 +302,34 @@ Board** governance / Solana / token / NFT layer integrates with this engine via 
 later (kept out of this repo's core so it stays free + local).
 
 ## ✅ Shipped (newest first)
+- [x] **🚀 Your Agent panel + up-front BYOK Claude key entry** — second slice toward
+      the founder's `/goal`, and a direct response to the founder's in-session request
+      to "use my key... I should be able to enter it... test this out." New
+      `components/hermes/YourAgent.tsx` makes the "launch your own HERMES Music mobile
+      agent" framing real by tying the already-shipped pieces into one panel: who you're
+      signed in as, your lyric-brain status, your memory (vault + badge counts), **Export
+      my Brain** (the #171 Brain Pack), and **📲 Install to your phone** (a real
+      `beforeinstallprompt` PWA install button + an honest iOS "Add to Home Screen" hint +
+      an "Installed" chip when standalone). The two founder-gated pieces (cross-device
+      account sync · Lightning-powered agent) render as honest locked "soon" rows — the
+      same never-fake-it seam the OAuth buttons already hold. **Key friction fix**: the
+      BYOK Claude key field previously lived only in the Engine Rack, which appears in
+      studio mode *after* generating a throwaway song — so the founder couldn't "just
+      enter it right there." Folded the exact Rack BYOK flow (`setClaudeKey`/
+      `setClaudeEngineActive`/`clearClaudeKey`/`testClaudeKey`) into the Your Agent panel
+      AND rendered the panel in **compose mode**, so the key is enterable on the very first
+      screen and your first generation uses your own Claude brain. Same security boundary:
+      the key lives only in that browser's localStorage, the browser calls Anthropic
+      directly, never a server of ours. No new unit tests (pure presentation over
+      already-tested functions — `exportBrain`, `computeBadges`, `claudeKey.ts`,
+      `testClaudeKey`); correctness verified live instead. Playwright-verified the full
+      key flow with a **fake** key: it appears on the first screen, Unlock flips the engine
+      on with the green "Generating with your own Claude brain" status, the key is stored
+      **only** in localStorage, Test-key + Forget-key work, and Forget clears localStorage.
+      Zero console errors. Full gate suite green (67 files / 572 tests, `tsc --noEmit`
+      clean, static export builds). Goal part (A) — "Claude tied in, generate for the
+      individual user" — now reachable up front; (C) real accounts + (D) Lightning remain
+      honestly founder-blocked and surfaced in-app as "soon." _(this PR)_
 - [x] **🧠 Your HERMES Brain — export/import your whole agent as one document** —
       first slice toward the founder's `/goal` (per-user Claude brain + accounts + own
       memory layer + own launchable agent; full decomposition + the buildable-vs-blocked
