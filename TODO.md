@@ -303,6 +303,19 @@ Board** governance / Solana / token / NFT layer integrates with this engine via 
 later (kept out of this repo's core so it stays free + local).
 
 ## ✅ Shipped (newest first)
+- [x] **🔀 Duplicate + rename in one motion (tiny-feature cadence, #22)** —
+      duplicate (7.6) and rename (7.16) were two separate clicks: fork, then
+      hunt for the new "(copy)"-titled row and open its rename box.
+      `duplicateInVault()` in `HermesHitFactory.tsx` now returns the clone
+      (`storage.ts`'s `duplicateSong()` already returned it); a new
+      `duplicateAndRename()` in `VaultDrawer.tsx` immediately opens the rename
+      box on the fresh clone, pre-filled with its "(copy)" title — renaming
+      the fork, the near-universal next step, is one click instead of two.
+      Playwright-verified live: generated a song, duplicated it, confirmed the
+      vault count went from 1 to 2, confirmed a rename input auto-opened
+      pre-filled with "... (copy)", typed a new title, saved, and confirmed
+      the renamed title appeared in the vault. Zero console errors. _(this
+      PR)_
 - [x] **📋 Copy all lyrics — bulk vault export (tiny-feature cadence, #21)** —
       copying one song's lyrics at a time (7.2) doesn't help someone archiving
       the whole catalog at once. New `copyAllLyrics()` in `VaultDrawer.tsx`
