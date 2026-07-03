@@ -6,6 +6,7 @@ import type {
   HookOption, SongSection, ViralClip, ReleaseChecklistItem, RhymeSchemeId,
 } from './types';
 import { RHYME_SCHEME_IDS } from './types';
+import { isValidOccasionId } from './occasionPacks';
 import type { ProviderBundle } from './providers/providerTypes';
 import { mockProviders } from './providers/mockProviders';
 import { checkOriginality, fingerprintLyrics, type PriorSong } from './originality';
@@ -91,6 +92,10 @@ function normalizeInputs(raw: SongInputs): SongInputs {
     rhymeScheme: RHYME_SCHEME_IDS.includes(raw.rhymeScheme as RhymeSchemeId)
       ? raw.rhymeScheme
       : undefined,
+    // Same discipline: occasion is a free-form id from an untrusted caller, validated
+    // against the real Occasion Packs list — a hostile/unknown id just drops (no
+    // occasion vocabulary or dedication line), never trusted.
+    occasion: isValidOccasionId(raw.occasion) ? raw.occasion : undefined,
   };
 }
 

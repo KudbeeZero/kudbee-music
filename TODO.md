@@ -299,6 +299,29 @@ Board** governance / Solana / token / NFT layer integrates with this engine via 
 later (kept out of this repo's core so it stays free + local).
 
 ## ✅ Shipped (newest first)
+- [x] **Occasion Packs — holiday/life-moment lexicon + dedication (roadmap 5.8, Song Gifts
+      phase 1)** — the founder's holiday-song-pack idea, generalized to 8 life moments
+      (Christmas, Valentine's, Mother's/Father's Day, Birthday, Anniversary, Graduation, New
+      Year) and paired with the sell pitched alongside it: **Song Gifts** — a song written
+      FOR someone, delivered as the existing deterministic share link. This PR ships the
+      engine half. `brain/occasionPacks.json` + `lib/hermes/occasionPacks.ts`: each pack is a
+      mood/genre/structure/rhymeScheme preset PLUS genuinely new imagery vocabulary
+      (stocking, mistletoe, diploma, tassel…) that mood/genre/references text alone can't
+      express — so `occasion` is its own `SongInputs` field (unlike pattern packs, which just
+      recombine existing dials), validated at all three untrusted-input boundaries (pipeline
+      normalize, share decode, vault import) with the exact `rhymeScheme` discipline from the
+      review. The mock provider biases noun slots toward the pack's vocabulary and swaps the
+      Intro line for the pack's dedication frame ("Merry Christmas, {who}") when set.
+      SongLabForm gets an Occasion picker that relabels Audience to "Dedicated to (name)".
+      **Surfaced and fixed a real pre-existing bug along the way**: third-person pronouns
+      (she/he/they/our…) were in neither the keyword-extraction stopword list nor the
+      noun-slot exclusion list, so a natural dedication theme ("everything she gave") leaked
+      "she"/"our" into noun slots ("through the she") — caught by testing the feature's own
+      flagship use case (a Mother's Day dedication) before shipping, fixed at both layers.
+      +23 new tests across occasionPacks.test.ts and the pronoun regression in text.test.ts.
+      Demos regenerated (a legitimate noun-pool dedup fix shifted hometown-ghosts; golden eval
+      stays 6/6 PASS). Song Gifts phase 2 (a dedicated gifting flow + gift-framed share/OG
+      card) captured in IDEAS.md, queued next. _(this PR)_
 - [x] **Final-chorus lift + repetition budget (review improvements #2 + #3)** — the hook
       line repeated 9–15× per song with zero variation, every Hook section shared one array
       reference (latent aliasing), and nothing measured song-wide repetition. Now: the LAST

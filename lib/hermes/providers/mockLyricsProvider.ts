@@ -8,6 +8,7 @@ import type { SongInputs, HookOption, SongSection, RhymeSchemeId } from '../type
 import { makeRng, hashString, pick, keywords, titleCase, shuffle, tidyLine, singularizeIfPlural } from '../text';
 import { rhymeFamily, type RhymeTemp } from '../rhyme';
 import { deriveEmotion } from '../emotion';
+import { findOccasionPack } from '../occasionPacks';
 
 function seedOf(inputs: SongInputs, salt = '', seed = 0): number {
   return hashString(
@@ -74,6 +75,10 @@ const NON_NOUN = new Set([
   'keeps', 'sees', 'drops', 'makes', 'takes', 'gives', 'goes', 'does', 'says', 'gets',
   'runs', 'feels', 'knows', 'wants', 'needs', 'breaks', 'turns', 'holds', 'finds', 'loses',
   'falls', 'calls', 'tries', 'moves', 'comes', 'leaves', 'lives', 'stays', 'grinds', 'fights',
+  // pronouns — never a concrete noun ("through the she"); belt-and-suspenders with
+  // text.ts's STOP list (themeNouns already filters these upstream via keywords()).
+  'she', 'her', 'hers', 'herself', 'he', 'him', 'his', 'himself',
+  'they', 'them', 'their', 'theirs', 'themselves', 'us', 'our', 'ours',
   // adjectives / adverbs / abstractions that read wrong as a concrete noun
   'supposed', 'beautiful', 'lonely', 'really', 'very', 'just', 'always', 'never',
   'every', 'some', 'more', 'most', 'much', 'many', 'own', 'same', 'another', 'something',
@@ -170,15 +175,22 @@ export function themeImagery(inputs: SongInputs): string[] {
  */
 function imageryNouns(inputs: SongInputs, rng: () => number, banned: Set<string> = new Set()): string[] {
   const clusters = themeImagery(inputs);
-  const picked = clusters.flatMap((c) => NOUN_BANK[c] ?? []).filter((n) => !banned.has(n));
+  // Occasion Pack nouns (stocking, mistletoe, diploma…) join the TOP tier, same
+  // priority as the song's own highest-scoring imagery cluster — deliberate craft
+  // vocabulary beats the generic bank whenever an occasion is set.
+  const occasionNouns = findOccasionPack(inputs.occasion)?.nouns.filter((n) => !banned.has(n)) ?? [];
+  const picked = [...occasionNouns, ...clusters.flatMap((c) => NOUN_BANK[c] ?? [])].filter((n, i, arr) => !banned.has(n) && arr.indexOf(n) === i);
   const rest = ALL_NOUNS.filter((n) => !picked.includes(n) && !banned.has(n));
   return [...shuffle(picked, rng), ...shuffle(rest, rng)];
 }
 
-/** A guaranteed-full noun pool: on-theme words first, padded from the matching imagery bank. */
+/** A guaranteed-full noun pool: on-theme words first, then this song's Occasion Pack
+ *  vocabulary (if any — present regardless of how rich the theme text already is, not
+ *  just as padding), then backfilled from the matching imagery bank. */
 function nounPool(inputs: SongInputs, rng: () => number, banned: Set<string> = new Set()): string[] {
   const theme = themeNouns(inputs).filter((n) => !banned.has(n.toLowerCase()));
-  const pool = [...theme];
+  const occasion = (findOccasionPack(inputs.occasion)?.nouns ?? []).filter((n) => !banned.has(n) && !theme.includes(n));
+  const pool = [...theme, ...occasion];
   if (pool.length < 6) pool.push(...imageryNouns(inputs, rng, banned).filter((n) => !pool.includes(n)).slice(0, 6 - pool.length));
   return pool;
 }
@@ -455,8 +467,12 @@ export const mockLyricsProvider: LyricsProvider = {
         s.label === 'Hook' ? { ...s, lines: i === lastHook ? [...finalHookLines] : [...hookLines] } : s);
     };
 
+    // An Occasion Pack replaces the generic dedication with its own ("Merry
+    // Christmas, {who}" / "Happy birthday, {who}") — the one place occasion truly
+    // changes the WORDS, not just the imagery pool.
+    const introFrame = findOccasionPack(inputs.occasion)?.dedicationFrame ?? '{who}, this one\'s for you';
     const full: SongSection[] = [
-      { label: 'Intro', lines: [capitalize(fill('{who}, this one\'s for you', inputs, rng, '', 0, '', banned))] },
+      { label: 'Intro', lines: [capitalize(fill(introFrame, inputs, rng, '', 0, '', banned))] },
       { label: 'Hook', lines: hookLines },
       { label: 'Verse 1', lines: v1 },
       { label: 'Hook', lines: hookLines },
