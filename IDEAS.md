@@ -336,12 +336,15 @@ A second-opinion review flagged real risks worth acting on (truth-first):
   - ✅ **📅 "N songs today" stat in the Vault header** — a momentum stat next to
     the flat total count, hidden on days with nothing generated yet. See
     TODO.md Shipped.
+  - ✅ **📄 Copy all as Markdown — bulk vault export, richer format** — reuses
+    the same per-song `songMarkdown()` formatter Export Markdown already uses,
+    across the whole vault at once, `---`-separated. See TODO.md Shipped.
   Candidates queued for the next few rounds (pick one, ship it, move to the next):
-  a "copy all as Markdown" bulk export mirroring the new bulk-lyrics button
-  but using the richer per-song Markdown format (concept/brief/hook/
-  production, not just lyrics), a "clear all vault notes" one-click reset
-  mirroring 7.17's clear-all-avoid-words pattern, a "longest streak" stat
-  alongside "songs today" (consecutive days with at least one song saved).
+  a "clear all vault notes" one-click reset mirroring 7.17's
+  clear-all-avoid-words pattern, a "longest streak" stat alongside "songs
+  today" (consecutive days with at least one song saved), a per-song
+  "download as .txt" button for people who just want the lyrics as a plain
+  file (today it's Markdown/JSON download or clipboard-only for plain text).
 - 🔨 **"Input their music" — upload an existing audio file, not just record live**
   *(founder question, 2026-07-03 — "I want to create something down the road
   where people can input their music... are you working on that?")* — a genuinely
