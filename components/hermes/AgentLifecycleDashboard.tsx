@@ -22,26 +22,22 @@ export default function AgentLifecycleDashboard({
   onSelectAgent,
 }: AgentLifecycleDashboardProps) {
   const [state, setState] = useState<AgentLifecycleState>(emptyAgentLifecycleState);
-  const [detailedAgent, setDetailedAgent] = useState<ReturnType<
-    typeof selectAgentByIdWithCollaborators
-  > | null>(null);
 
   useEffect(() => {
-    const songs = listSongs();
-    if (songs && songs.length > 0) {
-      const newState = buildAgentLifecycleState(songs);
-      setState(newState);
+    try {
+      const songs = listSongs();
+      if (songs && songs.length > 0) {
+        const newState = buildAgentLifecycleState(songs);
+        setState(newState);
+      }
+    } catch (err) {
+      console.error('Failed to load agent lifecycle state:', err);
     }
   }, []);
 
-  useEffect(() => {
-    if (selectedAgentId) {
-      const agent = selectAgentByIdWithCollaborators(state, selectedAgentId);
-      setDetailedAgent(agent);
-    }
-  }, [selectedAgentId, state]);
-
   const topAgents = selectTopAgentsByContribution(state, 10);
+  const detailedAgent =
+    selectedAgentId ? selectAgentByIdWithCollaborators(state, selectedAgentId) : null;
   const collaborationEdges = selectCollaborationNetwork(state);
 
   return (
@@ -68,7 +64,9 @@ export default function AgentLifecycleDashboard({
         <section className={styles.panel}>
           <div className={styles.panelHead}>
             <span className={styles.panelTitle}>{detailedAgent.name} · Lifecycle Profile</span>
-            {detailedAgent.milestone && <span className={styles.tag}>{detailedAgent.milestone}</span>}
+            {detailedAgent.milestone && (
+              <span className={styles.tag}>{detailedAgent.milestone}</span>
+            )}
           </div>
 
           <div className={styles.agentDetailGrid}>
@@ -79,50 +77,20 @@ export default function AgentLifecycleDashboard({
                 <span className={styles.value}>{detailedAgent.role}</span>
               </div>
               <div className={styles.metaRow}>
-                <span className={styles.label}>Total Contributions</span>
-                <span className={styles.value}>{detailedAgent.totalContributions} songs</span>
-              </div>
-              <div className={styles.metaRow}>
-                <span className={styles.label}>Avg Quality Score</span>
-                <span className={styles.value}>
-                  {detailedAgent.averageQualityScore > 0
-                    ? `${Math.round(detailedAgent.averageQualityScore)}/100`
-                    : '—'}
-                </span>
-              </div>
-              <div className={styles.metaRow}>
-                <span className={styles.label}>Active Since</span>
-                <span className={styles.value}>
-                  {detailedAgent.firstContribution
-                    ? new Date(detailedAgent.firstContribution).toLocaleDateString()
-                    : '—'}
-                </span>
+                <span className={styles.label}>Contributions</span>
+                <span className={styles.value}>{detailedAgent.totalContributions}</span>
               </div>
             </div>
 
-            <div className={styles.metaSection}>
-              <h3>Collaborators ({detailedAgent.collaboratorDetails.length})</h3>
-              <div className={styles.collaboratorList}>
-                {detailedAgent.collaboratorDetails.map((collab) => (
-                  <div key={collab.agentId} className={styles.collaboratorChip}>
-                    <span>{collab.name}</span>
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            {Object.keys(detailedAgent.personaSpecialization).length > 0 && (
+            {detailedAgent.collaboratorDetails && detailedAgent.collaboratorDetails.length > 0 && (
               <div className={styles.metaSection}>
-                <h3>Persona Specialization</h3>
-                <div className={styles.personaList}>
-                  {Object.entries(detailedAgent.personaSpecialization)
-                    .sort(([, a], [, b]) => b - a)
-                    .map(([personaId, count]) => (
-                      <div key={personaId} className={styles.personaBar}>
-                        <span className={styles.personaLabel}>{personaId}</span>
-                        <span className={styles.personaCount}>{count}</span>
-                      </div>
-                    ))}
+                <h3>Collaborators ({detailedAgent.collaboratorDetails.length})</h3>
+                <div className={styles.collaboratorList}>
+                  {detailedAgent.collaboratorDetails.map((collab) => (
+                    <div key={collab.agentId} className={styles.collaboratorChip}>
+                      {collab.name}
+                    </div>
+                  ))}
                 </div>
               </div>
             )}
@@ -134,16 +102,16 @@ export default function AgentLifecycleDashboard({
         <section className={styles.panel}>
           <div className={styles.panelHead}>
             <span className={styles.panelTitle}>Collaboration Network</span>
-            <span className={styles.tag}>{collaborationEdges.length} edges</span>
+            <span className={styles.tag}>{collaborationEdges.length}</span>
           </div>
 
           <div className={styles.collaborationTable}>
             <div className={styles.tableHead}>
               <div className={styles.tableCell}>Agent A</div>
               <div className={styles.tableCell}>Agent B</div>
-              <div className={styles.tableCell}>Collaborations</div>
+              <div className={styles.tableCell}>Count</div>
             </div>
-            {collaborationEdges.slice(0, 15).map((edge, i) => (
+            {collaborationEdges.slice(0, 10).map((edge, i) => (
               <div key={i} className={styles.tableRow}>
                 <div className={styles.tableCell}>{edge.agentAId}</div>
                 <div className={styles.tableCell}>{edge.agentBId}</div>
