@@ -303,6 +303,16 @@ Board** governance / Solana / token / NFT layer integrates with this engine via 
 later (kept out of this repo's core so it stays free + local).
 
 ## ✅ Shipped (newest first)
+- [x] **↺ Reset to defaults on Song Lab (tiny-feature cadence, #13)** — after
+      trying Surprise Me / Load Example / a Pattern Pack, the only way back to a
+      blank form was reloading the page. `SongLabForm.tsx`'s new `resetForm()`
+      clears back to `DEFAULTS`; a "↺ Reset" button appears next to Surprise Me/
+      Load Example — but only once the form is actually dirty (`isDirty`,
+      comparing against `DEFAULTS`), so a fresh blank form never shows a button
+      with nothing to do. Playwright-verified live: confirmed Reset is hidden on a
+      blank form, loaded the example brief (Reset appeared), clicked it, watched
+      every field clear and the button disappear again, zero console errors.
+      _(this PR)_
 - [x] **↩️ Undo a committed Lyric Lab step (tiny-feature cadence, #12)** — the
       Lyric Lab's step rail + "← Back" already let you revisit a step and commit a
       *different* answer (which just overwrites the log entry), but there was no

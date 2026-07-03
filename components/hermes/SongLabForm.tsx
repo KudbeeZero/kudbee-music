@@ -175,6 +175,13 @@ export default function SongLabForm({
     setDoNotUseRaw('');
   }
 
+  // A quick way back to blank after trying Surprise Me / Load Example / a Pattern
+  // Pack, without reloading the page.
+  function resetForm() {
+    setV(DEFAULTS);
+    setDoNotUseRaw('');
+  }
+
   // Picks a different starter brief than whatever's showing now, so two clicks in a
   // row never look like a no-op. Pure UI convenience — never part of generation, so
   // Math.random() here doesn't touch the determinism contract.
@@ -213,6 +220,9 @@ export default function SongLabForm({
 
   // same readiness rule as the Lyric Lab: a brief needs a title, theme, and genre
   const briefReady = Boolean(v.title.trim() && v.theme.trim() && v.genre.trim());
+  // Only show Reset once there's actually something to reset — an untouched,
+  // blank form has nothing for it to do.
+  const isDirty = JSON.stringify(v) !== JSON.stringify(DEFAULTS) || doNotUseRaw !== '';
 
   // Cmd/Ctrl+Enter submits from anywhere in the form — same "chat app" convention
   // as Slack/Discord — without stealing plain Enter from the theme textarea.
@@ -232,6 +242,16 @@ export default function SongLabForm({
       <div className={styles.panelTitle} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 8 }}>
         <span>Song Lab</span>
         <span style={{ display: 'flex', gap: 6 }}>
+          {isDirty && (
+            <button
+              type="button"
+              className={styles.ghostBtn}
+              onClick={resetForm}
+              title="Clear the form back to blank"
+            >
+              ↺ Reset
+            </button>
+          )}
           <button
             type="button"
             className={styles.copyBtn}

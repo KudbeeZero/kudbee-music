@@ -271,8 +271,11 @@ A second-opinion review flagged real risks worth acting on (truth-first):
     log entry back to uncommitted; an "Undo" button in the committed box. Safe
     because taste-recording only runs once, in `finish()`, off the final log
     state. See TODO.md Shipped.
+  - ✅ **↺ Reset to defaults on Song Lab** — a "Reset" button clears the form back
+    to blank, shown only when the form is actually dirty. See TODO.md Shipped.
   Candidates queued for the next few rounds (pick one, ship it, move to the next):
-  a dark/light theme toggle, a "reset to defaults" button on the Song Lab form.
+  a dark/light theme toggle, a "recently viewed" strip in the Vault for the last
+  few songs opened.
 - 🔨 **"Input their music" — upload an existing audio file, not just record live**
   *(founder question, 2026-07-03 — "I want to create something down the road
   where people can input their music... are you working on that?")* — a genuinely
