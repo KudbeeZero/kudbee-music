@@ -302,6 +302,20 @@ Board** governance / Solana / token / NFT layer integrates with this engine via 
 later (kept out of this repo's core so it stays free + local).
 
 ## ✅ Shipped (newest first)
+- [x] **👤 Per-account memory layer — each profile gets its own saved vault (the `/goal`'s local path)** —
+      the founder's `/goal` wants "their account… information saved… their own memory layer," and
+      the local path (their explicit "documents locally right now" fallback) is fully buildable:
+      `lib/hermes/storage.ts` now namespaces every durable key by the active profile id
+      (`<key>::<profileId>`) so two people on one browser — or one person's two agents — don't
+      share songs, taste, favorites, or avoid-words. Done with **zero migration and zero risk to
+      existing data**: the first profile "adopts" the legacy un-namespaced keys and keeps using
+      them verbatim (tracked by `hermes.primaryProfile.v1`); namespacing only activates for a
+      genuinely different profile. The single choke point is `kv()`, so the diff is tiny and every
+      existing storage test passes **unchanged** (the proof no data moved), plus a new
+      `perAccountVault.test.ts` proving isolation + the untouched-primary guarantee across the
+      vault and the soft layers. Screenshot-verified the existing single-user catalog still
+      persists. Follow-ups (documented in `docs/accounts.md`): a multi-account switcher (re-login
+      to a saved local account) and optional Supabase cloud sync layered on top. $0, no new dep. _(this PR)_
 - [x] **🩺 `hermes cloud-check` — Supabase readiness diagnostic (unblocks "logged-in + cloud save")** —
       the auth + Brain-Pack sync wiring is deliberately NOT merged blind (docs/accounts.md law:
       it needs a real project to test RLS against), so the blocker is two founder dashboard
