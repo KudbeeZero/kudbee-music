@@ -22,6 +22,7 @@ import Council from './Council';
 import SongPackageView from './SongPackageView';
 import Studio from './Studio';
 import BottomNav from './BottomNav';
+import YourAgent from './YourAgent';
 import BangerScoreCard from './BangerScoreCard';
 import UniquenessReportView from './UniquenessReport';
 import VaultDrawer from './VaultDrawer';
@@ -505,6 +506,11 @@ export default function HermesHitFactory() {
             <div className={styles.composeDemo}>
               <button className={styles.ghostBtn} onClick={loadDemo}>▶ See a finished example — “Cold Hard Gold” (99/100)</button>
             </div>
+            {/* Bring-your-own-Claude-key up front — enter it here and your very first
+                song generates with your own Claude brain, no throwaway song first. */}
+            <div style={{ marginTop: 18, textAlign: 'left' }}>
+              <YourAgent songs={vault} taste={taste} becomingYou={becomingYou} />
+            </div>
           </div>
         </div>
       ) : (
@@ -658,6 +664,7 @@ export default function HermesHitFactory() {
           </div>
 
           <div id="stage-keep" className={`${styles.col} ${styles.flowFocus}`} style={{ gap: 16, padding: 0 }} data-active={pkg != null && (flowStage === 'keep' || flowStage === 'studio')}>
+            <YourAgent songs={vault} taste={taste} becomingYou={becomingYou} />
             <ArtistCard songs={vault} taste={taste} becomingYou={becomingYou} />
             <Rack />
             <RecommendationsPanel songs={vault} taste={taste} banned={banned} onAddExclusion={addExclusion} onApplyPack={applyPack} />
