@@ -5,8 +5,24 @@ import type { AgentId, AgentOutput, AgentStatus } from '@/lib/hermes/types';
 import { AGENT_DEFINITIONS } from '@/lib/hermes/agents';
 import { agentRegion } from '@/lib/hermes/brainMap';
 import { outgoingPathways, type Signal } from '@/lib/hermes/nervousSystem';
+import { useDevice } from './useDevice';
 import SignalTicker from './SignalTicker';
 import styles from './hermes.module.css';
+
+type Bucket = 'propose' | 'challenge' | 'judge';
+const JUDGE_IDS: AgentId[] = ['ar-judge', 'rights-release-guard'];
+/** Same hemisphere split Council.tsx's Proposes/Challenges already uses, plus a third
+ *  "Judges" bucket pulled out of Challenges for the two agents whose role is a verdict
+ *  (Commercial QC / Safety & readiness) rather than a critique. */
+function bucketOf(def: (typeof AGENT_DEFINITIONS)[number]): Bucket {
+  if (JUDGE_IDS.includes(def.id)) return 'judge';
+  return def.hemisphere === 'right' ? 'propose' : 'challenge';
+}
+const TABS: { id: Bucket; label: string }[] = [
+  { id: 'propose', label: '✦ Proposes' },
+  { id: 'challenge', label: '⚑ Challenges' },
+  { id: 'judge', label: '⚖ Judges' },
+];
 
 /** Do two agents' regions share a wired pathway (either direction)? Used to decide
  *  whether the two most-recently-fired agents earn a connector line — a real edge
@@ -24,6 +40,15 @@ export default function AgentBoard({ outputs, signalLog = [] }: { outputs: Recor
   const wrapRef = useRef<HTMLDivElement>(null);
   const cardRefs = useRef<Partial<Record<AgentId, HTMLDivElement>>>({});
   const [linePos, setLinePos] = useState<LinePos | null>(null);
+  // Mobile-mockup-plan Phase A step ④: Proposes/Challenges/Judges tabs, phone-only. All
+  // 10 cards stay mounted regardless of the active tab — only their VISUAL density
+  // changes (full card vs. a collapsed one-line chip) — because the connector-line SVG
+  // below measures cardRefs via getBoundingClientRect(), and the single most interesting
+  // connector case (a signal crossing hemispheres) is exactly the case that would span
+  // two different tabs. Unmounting non-active-tab cards would silently break that.
+  const device = useDevice();
+  const tabbed = device.ui.singleColumn;
+  const [activeTab, setActiveTab] = useState<Bucket>('propose');
 
   // The two most-recently-fired agents, if their regions share a real pathway —
   // a short-lived "a thought just moved from here to here" highlight.
@@ -57,6 +82,22 @@ export default function AgentBoard({ outputs, signalLog = [] }: { outputs: Recor
   return (
     <div className={styles.panel}>
       <div className={styles.panelTitle}>HERMES Agent Board · {AGENT_DEFINITIONS.length} agents cross-checking</div>
+      {tabbed && (
+        <div className={styles.flowRail} role="tablist" aria-label="Agent board group">
+          {TABS.map((t) => (
+            <button
+              key={t.id}
+              role="tab"
+              aria-selected={activeTab === t.id}
+              className={styles.flowTab}
+              data-active={activeTab === t.id}
+              onClick={() => setActiveTab(t.id)}
+            >
+              {t.label}
+            </button>
+          ))}
+        </div>
+      )}
       <div className={styles.agentGridWrap} ref={wrapRef}>
         {linePos && (
           <svg className={styles.agentConnSvg} aria-hidden="true">
@@ -68,6 +109,7 @@ export default function AgentBoard({ outputs, signalLog = [] }: { outputs: Recor
             const out = outputs[def.id];
             const status: AgentStatus = out?.status ?? 'idle';
             const wired = edge?.includes(def.id);
+            const collapsed = tabbed && bucketOf(def) !== activeTab;
             return (
               <div
                 key={def.id}
@@ -75,6 +117,7 @@ export default function AgentBoard({ outputs, signalLog = [] }: { outputs: Recor
                 className={styles.agentCard}
                 data-status={status}
                 data-wired={wired || undefined}
+                data-collapsed={collapsed || undefined}
               >
                 <div className={styles.agentTop}>
                   <div>
