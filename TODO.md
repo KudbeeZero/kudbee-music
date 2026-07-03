@@ -303,6 +303,14 @@ Board** governance / Solana / token / NFT layer integrates with this engine via 
 later (kept out of this repo's core so it stays free + local).
 
 ## ✅ Shipped (newest first)
+- [x] **📏 Word/line/runtime counter (tiny-feature cadence, #5)** — the Final Lyrics
+      label had no sense of how long the song actually is at a glance. A small
+      counter next to the label now reads "183 words · 23 lines · ~2:00 (est.)" —
+      word/line counts are exact, the runtime is an explicitly-labeled rough
+      estimate (2 bars/line at the production tempo, a common songwriting rule of
+      thumb, not a measurement — same honesty discipline as the humming-feature
+      scope call earlier this session). Playwright-verified live against the demo
+      song (183 words, 23 lines, ~2:00 at 92 BPM), zero console errors. _(this PR)_
 - [x] **🎤 Click-a-word rhyme helper (tiny-feature cadence, #4)** — the read-only
       lyrics view had no way to check a word's rhyme options without leaving the
       page. Every word in `SongPackageView`'s Final Lyrics block is now clickable
