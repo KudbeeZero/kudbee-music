@@ -302,6 +302,23 @@ Board** governance / Solana / token / NFT layer integrates with this engine via 
 later (kept out of this repo's core so it stays free + local).
 
 ## ✅ Shipped (newest first)
+- [x] **⚡ Lightning AI adapter — the "unlock your own agent on compute" path, CLI half** —
+      the founder's `/goal` Lightning piece, built the proven way (mirrors `studio/runway.mjs`
+      + `lib/hermes/cloudSync.ts`): `studio/lightning.mjs` + `hermes lightning` is a key-gated
+      CLI adapter that POSTs a prompt to a model you deployed on Lightning AI (a LitServe /
+      Lightning Studios HTTPS endpoint) and prints the generated lyrics — `--prompt`, `--ping`
+      (health check), `--field` (override the request body field), `--out`. The pure core
+      (`buildRequest`/`extractText`/`generate`) is unit-tested with an injected fetch
+      (`test/lightning.test.mjs`, 7 tests) so the request shape + response extraction are
+      proven **without a live key**; `extractText` probes the common LitServe / OpenAI-ish
+      response shapes. Key discipline: `LIGHTNING_ENDPOINT` + `LIGHTNING_API_KEY` live only in
+      gitignored `.env.local` (server/CLI-side, never `NEXT_PUBLIC_`, never the client bundle)
+      — the same boundary `RUNWAY_API_KEY` holds; the shipped visitor-facing path is a separate
+      BYO-slot (their own endpoint in their browser, like `claudeKey.ts`). `.env.example` +
+      `docs/lightning-plan.md` + `brain/roadmap.json` (`lightningAI` → adapter-built) synced.
+      **Only remaining blocker:** the founder stands up a Lightning endpoint, drops the two
+      values in `.env.local`, and runs `hermes lightning --ping` for the live end-to-end test.
+      $0 core untouched (opt-in, no new runtime dep). _(this PR)_
 - [x] **🔎 Code-review hardening pass — 10 verified fixes across the last session's merged work** —
       a high-effort `/code-review` over the session diff (Studio, Hook Battle, Brain Pack
       import, Cloud Sync, identity) surfaced 10 confirmed/plausible bugs; all fixed in one

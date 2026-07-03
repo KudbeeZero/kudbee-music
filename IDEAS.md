@@ -141,7 +141,12 @@ contribution loop are the seeds of this.
   compute-light. **Spike (when SSL is connected):** stand up one Lightning Studio running a
   single HERMES agent behind HTTPS, wire it as an opt-in provider behind the existing
   `LyricsProvider` seam (reversible), and compare vs Anthropic-API-direct + Modal/Replicate
-  before committing.
+  before committing. **Adapter half DONE (2026-07-03):** `studio/lightning.mjs` +
+  `hermes lightning` — a key-gated CLI that POSTs a prompt to a LitServe / Lightning Studios
+  endpoint and extracts the lyrics, unit-tested with an injected fetch (no live key needed),
+  reading `LIGHTNING_ENDPOINT` + `LIGHTNING_API_KEY` from gitignored `.env.local` only. Live
+  end-to-end run is now the *only* blocker: the founder stands up an endpoint, drops the two
+  values in `.env.local`, and runs `hermes lightning --ping`. See `docs/lightning-plan.md`.
 - 💭 **Durable cloud brain** — optional Notion / Google Drive backing so a cleared
   browser never loses the vault (fixes the localStorage weakness).
 - 💭 **Reference study (opt-in)** — Spotify to study a *described* sound (never names),
