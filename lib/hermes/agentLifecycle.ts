@@ -82,8 +82,6 @@ export function buildAgentLifecycleState(songs: SongPackage[]): AgentLifecycleSt
       ? song.agentOutputs.map((ao) => ao.id).filter(Boolean)
       : AGENT_DEFINITIONS.map((a) => a.id);
 
-    // Persona from inputs if available
-    const personaUsed = song.inputs?.personaId;
     const timestamp = song.createdAt || new Date().toISOString();
 
     for (const agentId of agentsInSong) {
@@ -91,7 +89,6 @@ export function buildAgentLifecycleState(songs: SongPackage[]): AgentLifecycleSt
         songId: song.id,
         agentId,
         role: 'contributor', // Will be more specific when we track per-agent roles
-        personaUsed,
         timestamp,
       };
       contributions.push(contribution);
@@ -103,12 +100,6 @@ export function buildAgentLifecycleState(songs: SongPackage[]): AgentLifecycleSt
           profiles[agentId].firstContribution = timestamp;
         }
         profiles[agentId].lastContribution = timestamp;
-
-        // Track persona specialization
-        if (personaUsed) {
-          profiles[agentId].personaSpecialization[personaUsed] =
-            (profiles[agentId].personaSpecialization[personaUsed] || 0) + 1;
-        }
       }
     }
 
