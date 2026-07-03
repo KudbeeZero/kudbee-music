@@ -130,10 +130,21 @@ steps. No writes, no account creation, publishable key only. When it prints "�
 the auth + Brain-Pack sync wiring PR can land and be tested against the live project
 (this is the "small, testable PR" gate — see the "Why not just build it now" note above).
 
-## Deferred (Phase 4)
+## Per-account memory layer (shipped — the local path)
 
-Per-profile vault namespacing (and any cloud-synced vault) is deliberately **not**
-in this layer. The vault (`lib/hermes/storage.ts`) is being hardened on another
-branch, and today every profile in a browser shares the one local vault — honest
-and simple. When accounts become real (OAuth above), the Phase-4 item is scoping
-vault keys per profile and offering optional cloud sync.
+**Each signed-in profile has its own saved vault + memory layer.** `lib/hermes/storage.ts`
+namespaces every durable key (`hermes.vault.v1`, `…albums…`, `…taste…`, `…bannedWords…`,
+`…artistAlias…`, `…favorites…`, `…songNotes…`, `…recentlyViewed…`, each with its `.bak`
+mirror) by the active profile id (`<key>::<profileId>`). This is done **without any
+migration**: the first profile to touch storage "adopts" the existing un-namespaced keys
+and keeps using them verbatim (tracked by `hermes.primaryProfile.v1`), so every existing
+user's catalog is untouched — namespacing only activates for a genuinely different profile.
+Isolation + the untouched-primary guarantee are unit-tested (`perAccountVault.test.ts`), and
+the whole existing storage suite passes unchanged, which is the proof that no existing data
+moved. The `hermes.scribeTourSeen.v1` UI hint stays browser-global (not per-account).
+
+This delivers the local half of the `/goal`'s "their account… information saved… their own
+memory layer." The remaining refinements are a **multi-account switcher** (re-select a saved
+local account after sign-out — today a returning guest gets a fresh identity) and **optional
+cloud sync** (the Supabase `brains` table above), which layers on top of this per-account
+layer rather than replacing it.

@@ -30,9 +30,61 @@ const memoryKV: KV = {
   setItem: (k, v) => void memory.set(k, v),
 };
 
-function kv(): KV {
+function rawKv(): KV {
   if (typeof window !== 'undefined' && window.localStorage) return window.localStorage;
   return memoryKV;
+}
+
+// ---- per-account memory layer (goal part C, local path) --------------------------
+// Each signed-in profile gets its OWN saved vault + memory layer, so two people on the
+// same browser (or one person with two agents) don't share songs. This is achieved by
+// namespacing storage.ts's keys with the active profile id — WITHOUT any migration:
+// the FIRST profile to touch storage "adopts" the existing un-namespaced keys and keeps
+// using them verbatim (so every existing user, and every test, is byte-for-byte
+// unaffected — scoping only ever activates for a genuinely different profile). The
+// profile record itself (identity.ts) and the BYOK Claude key (claudeKey.ts) live in
+// their own storage layers and are intentionally NOT scoped here.
+const PROFILE_KEY = 'hermes.profile.v1'; // identity.ts owns this; we only read the id
+const PRIMARY_PROFILE_KEY = 'hermes.primaryProfile.v1';
+const GUEST_SCOPE = 'guest';
+
+/** Keys that stay browser-global (a UI hint, not per-account memory). */
+function isGlobalKey(k: string): boolean {
+  const base = k.endsWith(BAK) ? k.slice(0, -BAK.length) : k;
+  return base === SCRIBE_TOUR_KEY;
+}
+
+function activeProfileId(store: KV): string {
+  try {
+    const raw = store.getItem(PROFILE_KEY);
+    if (raw) { const p = JSON.parse(raw); if (p && typeof p.id === 'string' && p.id) return p.id; }
+  } catch { /* ignore */ }
+  return GUEST_SCOPE;
+}
+
+/** The profile that owns the legacy (un-namespaced) keys — claimed once, by whoever is
+ *  present the first time storage is touched (the existing user). */
+function primaryProfileId(store: KV): string {
+  let primary: string | null = null;
+  try { primary = store.getItem(PRIMARY_PROFILE_KEY); } catch { /* ignore */ }
+  if (primary) return primary;
+  const active = activeProfileId(store);
+  try { store.setItem(PRIMARY_PROFILE_KEY, active); } catch { /* ignore */ }
+  return active;
+}
+
+function kv(): KV {
+  const store = rawKv();
+  const primary = primaryProfileId(store);
+  const active = activeProfileId(store);
+  // The primary profile (and the single-profile / no-profile case, where active === primary)
+  // reads and writes the exact legacy keys — no suffix, no migration, no behavior change.
+  if (active === primary) return store;
+  const scope = (k: string) => (isGlobalKey(k) ? k : `${k}::${active}`);
+  return {
+    getItem: (k) => store.getItem(scope(k)),
+    setItem: (k, v) => store.setItem(scope(k), v),
+  };
 }
 
 // ---- durable read/write with a backup mirror ------------------------------------
@@ -732,4 +784,12 @@ export function __clearVault(): void {
 /** Test-only: toggle simulated localStorage quota exhaustion (every write fails). */
 export function __simulateVaultQuota(on: boolean): void {
   simulateQuota = on;
+}
+
+/** test-only: set (or clear) the active profile id that namespaces the per-account keys.
+ *  In the browser this comes from identity.ts's profile record in the shared localStorage;
+ *  in node tests the two modules use separate in-memory stores, so this seeds it directly. */
+export function __setActiveProfileForTest(id: string | null): void {
+  if (id === null) { memory.delete(PROFILE_KEY); return; }
+  memory.set(PROFILE_KEY, JSON.stringify({ id }));
 }
