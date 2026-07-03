@@ -146,7 +146,7 @@
 | | Initiative | Status |
 |---|-----------|--------|
 | ✅ | **workersBuildsCheck** | resolved — founder deleted the stray Worker (2026-07-02) |
-| ✅ | **crossroadsBoard** | stage-2-shipped |
+| ✅ | **crossroadsBoard** | stage-3-shipping |
 | 🚧 | **lightningAI** | adapter-built; live-test blocked-on-founder-endpoint |
 | ✅ | **livingBrainNft** | near-term-shipped (#45); chain mint blocked-on-founder |
 | 🚧 | **discordServer** | blocked-on-founder |

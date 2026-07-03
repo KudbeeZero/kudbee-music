@@ -10,6 +10,7 @@ export interface CrossroadOption {
   label: string;
   rationale: string;   // why this path — the honest case for it
   votes: number;       // total weight (1 = one voter; a token layer can weight later)
+  tasteSignal?: { liked?: string[]; disliked?: string[] }; // stage 3: this vote shapes your taste
 }
 
 export interface Crossing {

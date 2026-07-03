@@ -103,8 +103,10 @@ chat. Detail for each is in [`brain/roadmap.json`](brain/roadmap.json) + [`IDEAS
    - ~~Surfaced two combinator-polish issues~~ **both fixed _(#67)_**: (a) the audience word no longer
      leaks into `{noun}` slots (`themeNouns` excludes audience tokens); (b) the combinator's own action
      verbs (`carry`/`grind`/…) are rejected by `nounable` (`VERB_SET` derived from `VERBS`). Regression-tested.
-- [~] **Crossroads Stages 2–3** — Stage 2 shipped _(#116)_: a `/crossroads` board UI. Stage 3
-   (decisions feed the taste model) is still queued.
+- [~] **Crossroads Stages 2–4** — Stage 2 shipped _(#116)_: a `/crossroads` board UI. Stage 3
+   (decisions feed the taste model) SHIPPING (this PR): each crossing option has tasteSignal metadata;
+   voting calls recordTaste() so your vote updates your learned taste and the next song reflects it.
+   Stage 4 (community sync via API) still queued.
 - [x] **PNG share card has no UI trigger** — fixed _(this PR)_: a "🖼 Download card" button
    now sits in `SongPackageView` between Share and Explain, wired straight to the already-
    tested `downloadShareCard()`. Verified live: triggers a real ~700KB PNG download, gift

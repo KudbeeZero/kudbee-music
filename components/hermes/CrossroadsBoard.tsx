@@ -9,10 +9,10 @@
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { loadSeed, applyMyVotes, tally, leader, type Crossing } from '@/lib/hermes/crossroadsBoard';
-import { getMyVotes, castVote, type CrossroadsVotes } from '@/lib/hermes/crossroadsStorage';
+import { getMyVotes, castVote, castVoteAndRecordTaste, type CrossroadsVotes } from '@/lib/hermes/crossroadsStorage';
 import styles from './hermes.module.css';
 
-function CrossingCard({ crossing, myVote, onVote }: { crossing: Crossing; myVote?: string; onVote: (optionId: string) => void }) {
+function CrossingCard({ crossing, myVote, onVote }: { crossing: Crossing; myVote?: string; onVote: (optionId: string, tasteSignal?: { liked?: string[]; disliked?: string[] }) => void }) {
   const ranked = tally(crossing);
   const top = leader(crossing);
   const totalVotes = crossing.options.reduce((sum, o) => sum + o.votes, 0);
@@ -39,12 +39,13 @@ function CrossingCard({ crossing, myVote, onVote }: { crossing: Crossing; myVote
             data-outcome={isOutcome}
             aria-pressed={isMine}
             disabled={decided}
-            onClick={() => !decided && onVote(o.id)}
+            onClick={() => !decided && onVote(o.id, o.tasteSignal)}
           >
             <div className={styles.optionTop}>
               <span className={styles.optionLabel}>
                 {o.label}
                 {isMine && <span className={styles.mineBadge}> · your vote</span>}
+                {o.tasteSignal && !isMine && <span className={styles.mineBadge} style={{ opacity: 0.6 }}> · shapes taste</span>}
               </span>
               <span className={styles.optionVotes}>{o.votes} vote{o.votes === 1 ? '' : 's'} ({pct}%)</span>
             </div>
@@ -70,8 +71,8 @@ export default function CrossroadsBoard() {
     setMyVotes(getMyVotes());
   }, []);
 
-  const handleVote = (crossingId: string, optionId: string) => {
-    setMyVotes(castVote(crossingId, optionId));
+  const handleVote = (crossingId: string, optionId: string, tasteSignal?: { liked?: string[]; disliked?: string[] }) => {
+    setMyVotes(castVoteAndRecordTaste(crossingId, optionId, tasteSignal));
   };
 
   const crossings = seed ? applyMyVotes(seed, myVotes) : [];
@@ -90,9 +91,10 @@ export default function CrossroadsBoard() {
 
       <div className={styles.hint} style={{ marginBottom: 16, lineHeight: 1.5 }}>
         The community + agents meet here to steer creative and ecosystem direction — the
-        brain&apos;s &quot;decision&quot; region made social. Stage 1 shipped the model; this is Stage 2,
-        the board itself. Your vote is recorded only in this browser (no account, no server) —
-        community-wide sync across every visitor&apos;s vote is a later stage, not built yet.
+        brain&apos;s &quot;decision&quot; region made social. <strong>Your votes shape your taste</strong>: each choice
+        updates what the brain learns about you, so the next song reflects your crossroads decision.
+        Your vote is recorded only in this browser (no account, no server) — community-wide sync
+        is a later stage, not built yet.
       </div>
 
       {seed === null && <div className={styles.emptyState}>Loading the board…</div>}
@@ -100,7 +102,7 @@ export default function CrossroadsBoard() {
         <div className={styles.emptyState}>No open crossings right now — check back soon.</div>
       )}
       {crossings.map((c) => (
-        <CrossingCard key={c.id} crossing={c} myVote={myVotes[c.id]} onVote={(optionId) => handleVote(c.id, optionId)} />
+        <CrossingCard key={c.id} crossing={c} myVote={myVotes[c.id]} onVote={(optionId, tasteSignal) => handleVote(c.id, optionId, tasteSignal)} />
       ))}
     </div>
   );

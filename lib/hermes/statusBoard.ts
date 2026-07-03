@@ -29,7 +29,7 @@ const EMOJI: Record<string, string> = {
 export function statusEmoji(status: string): string {
   if (EMOJI[status]) return EMOJI[status];
   const s = status.toLowerCase();
-  if (s.includes('shipped') || s.includes('resolved')) return '✅';
+  if (s.includes('shipped') || s.includes('shipping') || s.includes('resolved')) return '✅';
   if (s.includes('blocked')) return '🚧';
   if (s.includes('pending') || s.includes('paused')) return '💤';
   if (s.includes('later')) return '💭';
