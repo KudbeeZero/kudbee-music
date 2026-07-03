@@ -72,7 +72,7 @@ export default function SongPackageView({ pkg, onSaveEdit, onChooseHook, onRegen
         <span>Song Package · “{pkg.title}” · v{pkg.version}</span>
         <span style={{ display: 'flex', gap: 6 }}>
           {shareable && (
-            <button className={styles.copyBtn} style={{ marginLeft: 0 }} onClick={shareSong} title="Copy a link that reproduces this exact song — anyone who opens it watches the brain generate the identical package ($0, no key)">{shared ? 'link copied ✓' : '🔗 Share'}</button>
+            <button className={styles.copyBtn} style={{ marginLeft: 0 }} onClick={shareSong} title="Copy a link that regenerates this song from the same brief + seed — anyone who opens it watches the brain think ($0, no key). Personal avoid-words don't travel with the link, so a heavily customized brain may render small differences.">{shared ? 'link copied ✓' : '🔗 Share'}</button>
           )}
           <button className={styles.copyBtn} style={{ marginLeft: 0 }} onClick={explainSong} title="Open the interactive brain trace for this song — heat-map, what each region did, and a copy-paste Suno prompt">🔍 Explain this song</button>
           <button className={styles.copyBtn} style={{ marginLeft: 0 }} onClick={exportSong} title="Download this song package as JSON (backup / re-import into your vault)">⬇ Export JSON</button>

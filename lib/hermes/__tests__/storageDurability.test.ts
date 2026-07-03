@@ -1,6 +1,6 @@
 import { describe, it, expect, beforeEach } from 'vitest';
 import {
-  saveSong, listSongs, __clearVault, __corruptLiveVault, __simulateVaultQuota,
+  saveSong, listSongs, importVault, __clearVault, __corruptLiveVault, __simulateVaultQuota,
   vaultBackupStatus, restoreFromBackup,
 } from '../storage';
 import { runPipeline } from '../pipeline';
@@ -85,5 +85,24 @@ describe('vault durability — quota honesty + version-history cap (review weakn
       saveSong({ ...pkg, title: `Song ${i}` });
     }
     expect(listSongs()).toHaveLength(7);
+  });
+
+  it('importVault reports 0 songs when the write does not land (audit fix)', async () => {
+    const pkg = await make('imp-q', '2026-01-01T00:00:00Z');
+    const payload = JSON.stringify({ songs: [pkg], albums: [] });
+    __simulateVaultQuota(true);
+    expect(importVault(payload).songs).toBe(0);
+    __simulateVaultQuota(false);
+    expect(listSongs()).toHaveLength(0); // and it truly didn't land
+    expect(importVault(payload).songs).toBe(1); // healthy import reports honestly too
+  });
+
+  it('importVault holds imports to the same 5-version cap as saveSong (audit fix)', async () => {
+    const base = await make('cap-0', '2026-01-01T00:00:00Z');
+    const songs = Array.from({ length: 8 }, (_, i) => ({ ...base, id: `cap-${i}`, version: i + 1 }));
+    importVault(JSON.stringify({ songs, albums: [] }), 'replace');
+    const all = listSongs();
+    expect(all).toHaveLength(5);
+    expect(Math.min(...all.map((s) => s.version))).toBe(4); // newest five kept (4..8)
   });
 });

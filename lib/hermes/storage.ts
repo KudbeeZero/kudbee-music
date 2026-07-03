@@ -140,6 +140,10 @@ export function priorSongsForOriginality(excludeId?: string) {
 function readAlbums(): Album[] {
   return readDurable<Album>(ALBUM_KEY);
 }
+// Deliberate scope note: quota failure is REPORTED only for song writes (saveSong's
+// `persisted`, importVault's counts) — songs are the irreplaceable catalog. Albums,
+// taste, banned words, and crossroads votes stay best-effort silent: all are cheap to
+// reconstruct, and a banner for every soft write would train users to ignore it.
 function writeAlbums(list: Album[]): void {
   writeDurable(ALBUM_KEY, list);
 }
@@ -336,19 +340,24 @@ export function importVault(json: string, mode: 'merge' | 'replace' = 'merge'): 
   }
 
   if (mode === 'replace') {
-    writeAll(songs); writeAlbums(albums);
-    return { songs: songs.length, albums: albums.length };
+    // honest counts: report 0 if the write didn't land (full storage), and hold
+    // imports to the same version cap saveSong enforces (audit fix — a large or
+    // hostile backup used to bypass both).
+    const ok = writeAll(pruneVersionHistory(songs));
+    writeAlbums(albums);
+    return { songs: ok ? songs.length : 0, albums: albums.length };
   }
   const existingSongs = readAll();
   const sIds = new Set(existingSongs.map((s) => s.id));
   const newSongs = songs.filter((s) => !sIds.has(s.id));
-  writeAll([...existingSongs, ...newSongs]);
+  const ok = writeAll(pruneVersionHistory([...existingSongs, ...newSongs]));
   const existingAlbums = readAlbums();
   const aIds = new Set(existingAlbums.map((a) => a.id));
   const newAlbums = albums.filter((a) => !aIds.has(a.id));
   writeAlbums([...existingAlbums, ...newAlbums]);
-  // honest counts: what was actually ACCEPTED and stored, not what the file claimed
-  return { songs: newSongs.length, albums: newAlbums.length };
+  // honest counts: what was actually ACCEPTED and STORED, not what the file claimed —
+  // a swallowed quota failure reports 0, same contract as saveSong's `persisted`.
+  return { songs: ok ? newSongs.length : 0, albums: newAlbums.length };
 }
 
 // ---- durability: backup status + explicit restore --------------------------------
