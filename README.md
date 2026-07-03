@@ -314,7 +314,7 @@ flow, and the non-negotiables — plus the code-generated [brain-wiring diagram]
 - [x] **⚔️ Hook Battle** — a single-elimination bracket over the same council-ranked hooks, an alternative to the flat hook-options list; picking a winner wires into the real re-scoring pipeline
 - [x] **🏅 Badges** — a collectible achievement strip on your Artist card (Certified Banger, Sharp Ear, Gift Giver, Editor, Prolific, plus a badge per unlocked Story chapter) — every one computed from data that already exists, no new tracking
 - [x] **🧠 Your HERMES Brain** — export your whole agent (identity + vault + everything the brain learned about you) as one portable document; re-import on any device or after a reinstall to launch your agent as yourself (your Claude key is never included — re-enter it there)
-- [x] **🚀 Your Agent** — one panel tying it together: your identity, your lyric brain, install-to-phone (PWA), export-your-brain, and up-front **bring-your-own Claude key** entry so your very first song can generate with your own Claude brain (key lives only in your browser)
+- [x] **🚀 Your Agent** — one panel tying it together: your identity, your lyric brain, install-to-phone (PWA), export-your-brain, and up-front **bring-your-own Claude key** entry so your very first song can generate with your own Claude brain (key lives only in your browser) — reachable one tap from the header, anywhere
 
 **Next** — generated from the spine [`brain/roadmap.json`](brain/roadmap.json); the human backlog is [`TODO.md`](TODO.md), the full board is [`STATUS.md`](STATUS.md).
 

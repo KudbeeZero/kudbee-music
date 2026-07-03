@@ -461,6 +461,16 @@ export default function HermesHitFactory() {
         {profile && (
           <>
             <span className={styles.modeBadge}>● V1 · local mock — no API key</span>
+            <button
+              className={styles.ghostBtn}
+              onClick={() => {
+                if (mode === 'studio') focusFlowStage('keep');
+                document.getElementById('your-agent')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+              }}
+              title="Your Agent — your Claude key, your brain, install to your phone"
+            >
+              🚀 Agent
+            </button>
             {mode === 'studio' && <button className={styles.ghostBtn} onClick={newSong}>✨ New</button>}
             <button className={styles.ghostBtn} onClick={() => setLabOpen(true)}>✍️ Lyric Lab</button>
             <Link href="/crossroads" className={styles.ghostBtn}>🧭 Crossroads</Link>
@@ -509,7 +519,7 @@ export default function HermesHitFactory() {
             {/* Bring-your-own-Claude-key up front — enter it here and your very first
                 song generates with your own Claude brain, no throwaway song first. */}
             <div style={{ marginTop: 18, textAlign: 'left' }}>
-              <YourAgent songs={vault} taste={taste} becomingYou={becomingYou} />
+              <YourAgent songs={vault} taste={taste} becomingYou={becomingYou} id="your-agent" />
             </div>
           </div>
         </div>
@@ -664,7 +674,7 @@ export default function HermesHitFactory() {
           </div>
 
           <div id="stage-keep" className={`${styles.col} ${styles.flowFocus}`} style={{ gap: 16, padding: 0 }} data-active={pkg != null && (flowStage === 'keep' || flowStage === 'studio')}>
-            <YourAgent songs={vault} taste={taste} becomingYou={becomingYou} />
+            <YourAgent songs={vault} taste={taste} becomingYou={becomingYou} id="your-agent" />
             <ArtistCard songs={vault} taste={taste} becomingYou={becomingYou} />
             <Rack />
             <RecommendationsPanel songs={vault} taste={taste} banned={banned} onAddExclusion={addExclusion} onApplyPack={applyPack} />
