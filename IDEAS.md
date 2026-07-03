@@ -219,6 +219,23 @@ A second-opinion review flagged real risks worth acting on (truth-first):
   disclaimer in the README + Uniqueness panel. _(#37)_
 
 ## 🌱 Fresh captures
+- 💭 **"Holiday song packs... what would be another feature that could sell something like
+  this?"** *(founder idea + prompt, 2026-07-03)* — captured with a design sketch:
+  **Occasion Packs** (the founder's idea, generalized): `brain/occasionPacks.json` — Christmas,
+  New Year, Valentine's, Mother's/Father's Day, birthdays, graduation, wedding — each pack =
+  an imagery/lexicon overlay + mood/genre/structure preset + hook guidance, riding the exact
+  infrastructure pattern packs (#114) and expansion packs already proved. Seasonal marketing
+  moments built in ("make Mom a song in 10 seconds").
+  **The sell wrapped around it — "Song Gifts" (proposed)**: type a name + occasion + one
+  memory → HERMES writes a song FOR that person (name threaded into the hook/dedication),
+  delivered as the existing deterministic share link + PNG share card + OG unfurl — a
+  permanent, reproducible gift URL. Gifting is a proven paid behavior (the greeting-card
+  market), every gift recruits the recipient, and the deterministic-permalink angle is a
+  moat no other tool has (the gift can't rot; later it's mintable — ties straight into the
+  Living-Brain dNFT lane).
+  **Cheap viral follow-up — "HERMES Wrapped" (proposed)**: a Spotify-Wrapped-style shareable
+  artist card from the vault (brainSignature already computes hemisphere/temperature/
+  signature-words/becoming-you) — zero new engine work, pure share-card rendering.
 - ✏️ **"Check the code... three things to improve on and three weaknesses... come up with a way
   to fix those"** *(founder directive, first Fable 5 session)* — ran a layered review: Fable 5
   first pass (two broad review agents + hands-on inspection), then wrote verification
