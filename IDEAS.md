@@ -219,6 +219,29 @@ A second-opinion review flagged real risks worth acting on (truth-first):
   disclaimer in the README + Uniqueness panel. _(#37)_
 
 ## 🌱 Fresh captures
+- 💭 **Two mobile mockup sets — a structural fix plan + a gamification pass** *(founder
+  directive, 2026-07-03, three attachments: a PDF export of the current live app as ground
+  truth, plus two mockup images)* — asked for an architecture agent + a design agent to turn
+  these into an implementation plan (running as of this capture; outcome to follow in TODO.md
+  once synthesized). Two distinct mockups, deliberately not conflated:
+  1. **"Mobile Layout Fix Plan"** — a grounded, non-gamified mobile restructuring: sticky top
+     app bar, sticky Review/Refine/Keep/Release stepper, an accordion-collapsed Song Lab
+     (~15 fields down to key fields + a prominent "Surprise me"), a sticky bottom action bar,
+     the Agent Board as tabs (Proposes/Challenges/Judges) instead of one dense grid, Brain
+     Recommendations as a swipeable one-card carousel, the Song Package as tabs, a bottom nav
+     (Lab/Agents/Brain/Package), plus concrete spacing/typography specs. Mostly CSS/structural
+     work on already-shipped components — the lower-risk, more buildable half.
+  2. **"HERMES Hit Factory Mobile Upgrade Series"** — a gamification pass: a dashboard with
+     XP/energy/streak meters, a quest/chapter "journey" view, the Agent Board as character
+     avatars around a "YOU — THE ARTIST" hub, a stepped Song Lab flow, a bracket-style "Hook
+     Battle" for picking the lead hook, achievement badges, a collectible-rewards grid, a
+     leaderboard + community challenge, and a full-screen confetti "BANGER CONFIRMED" moment.
+     Overlaps a lot with the already-queued **"'Becoming You' gamified onboarding — badges +
+     the Mogul story arc"** idea above (`lib/hermes/story.ts` chapters already exist) — the two
+     agents are checking how much of this is new UI over already-computed data vs. genuinely
+     new tracking, and flagging anything that would need a new npm dependency (confetti/carousel/
+     gauge libraries) against the $0-core no-new-deps rule.
+  Not started — plan pending from the two agents.
 - 💭 **Suno-inspired global nav + Council "wired everywhere" + dream-big Studio + wallet/fiat
   sign-up** *(founder idea, 2026-07-03, five Suno reference screenshots — continuing a
   session that ran out of Fable 5 credits mid-conversation; no code was left in progress,
