@@ -434,7 +434,7 @@
   margin-top: 12px;
 }
 
-.agentCard {
+.lifecycleCard {
   background: var(--bg-1);
   border: 1px solid var(--line);
   border-radius: 12px;
@@ -443,12 +443,12 @@
   transition: all 0.2s ease;
 }
 
-.agentCard:hover {
+.lifecycleCard:hover {
   border-color: var(--amber);
   background: var(--bg-2);
 }
 
-.agentCard.selected {
+.lifecycleCard.selected {
   border-color: var(--amber);
   box-shadow: var(--glow-amber);
 }
@@ -544,7 +544,7 @@
   font-size: 13px;
 }
 
-.label {
+.metaLabel {
   color: var(--ink-dim);
 }
 
@@ -643,7 +643,7 @@
   margin-bottom: 12px;
 }
 
-.panelTitle {
+.dashboardPanelTitle {
   font-weight: 700;
   font-size: 14px;
   letter-spacing: 0.04em;

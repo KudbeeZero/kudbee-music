@@ -41,6 +41,10 @@ export interface AgentLifecycleState {
   lastUpdated: string;
 }
 
+// Static empty-state placeholder, not a generation call in the determinism-contract
+// sense (nothing derives a SongPackage from this timestamp) — module-level constant
+// evaluated once at import, not re-evaluated per call like buildAgentLifecycleState's
+// opts.now-driven timestamp below.
 export const emptyAgentLifecycleState: AgentLifecycleState = {
   profiles: {},
   contributions: [],
@@ -65,8 +69,14 @@ function initializeProfiles(): Record<string, AgentProfile> {
   return profiles;
 }
 
-// Build agent lifecycle state from a set of songs
-export function buildAgentLifecycleState(songs: SongPackage[]): AgentLifecycleState {
+// Build agent lifecycle state from a set of songs.
+// `opts.now` mirrors the opts.now/opts.id injection pattern used by lib/hermes/pipeline.ts's
+// RunOptions — same songs + same opts.now ⇒ byte-identical state (Iron Law #1).
+export function buildAgentLifecycleState(
+  songs: SongPackage[],
+  opts?: { now?: string },
+): AgentLifecycleState {
+  const now = opts?.now ?? new Date().toISOString();
   const profiles = initializeProfiles();
   const contributions: AgentContribution[] = [];
   const collaborationGraph: Record<string, CollaborationEdge[]> = {};
@@ -77,12 +87,14 @@ export function buildAgentLifecycleState(songs: SongPackage[]): AgentLifecycleSt
 
   // Scan through all songs and extract agent contributions
   for (const song of songs) {
-    // Extract agents from agentOutputs if available, otherwise use all agents
-    const agentsInSong = song.agentOutputs
+    // Extract agents from agentOutputs if available (and non-empty — storage.ts
+    // sets agentOutputs: [] for imported/legacy songs specifically expecting this
+    // to fall back), otherwise use all agents.
+    const agentsInSong = song.agentOutputs && song.agentOutputs.length > 0
       ? song.agentOutputs.map((ao) => ao.id).filter(Boolean)
       : AGENT_DEFINITIONS.map((a) => a.id);
 
-    const timestamp = song.createdAt || new Date().toISOString();
+    const timestamp = song.createdAt || now;
 
     for (const agentId of agentsInSong) {
       const contribution: AgentContribution = {
@@ -140,26 +152,42 @@ export function buildAgentLifecycleState(songs: SongPackage[]): AgentLifecycleSt
     profiles,
     contributions,
     collaborationGraph,
-    lastUpdated: new Date().toISOString(),
+    lastUpdated: now,
   };
 }
 
+// Records the edge under BOTH agent ids (mirrored, not just agentAId → agentBId) so
+// that every agent's own collaborationGraph[agent.id] entry is complete — profiles[].
+// collaborators is derived solely from that per-agent slice, so a one-directional write
+// left agents late in AGENT_DEFINITIONS order with an empty collaborators list even
+// though they'd collaborated on every song. selectCollaborationNetwork de-dupes the
+// resulting mirrored pair back down to one row per pair.
 function recordCollaboration(
   graph: Record<string, CollaborationEdge[]>,
   agentAId: string,
   agentBId: string,
   timestamp: string,
 ) {
-  if (!graph[agentAId]) graph[agentAId] = [];
-  let edge = graph[agentAId].find((e) => e.agentBId === agentBId);
+  upsertCollaborationEdge(graph, agentAId, agentBId, timestamp);
+  upsertCollaborationEdge(graph, agentBId, agentAId, timestamp);
+}
+
+function upsertCollaborationEdge(
+  graph: Record<string, CollaborationEdge[]>,
+  fromId: string,
+  toId: string,
+  timestamp: string,
+) {
+  if (!graph[fromId]) graph[fromId] = [];
+  let edge = graph[fromId].find((e) => e.agentBId === toId);
   if (!edge) {
     edge = {
-      agentAId,
-      agentBId,
+      agentAId: fromId,
+      agentBId: toId,
       collaborationCount: 0,
       lastCollaborated: timestamp,
     };
-    graph[agentAId].push(edge);
+    graph[fromId].push(edge);
   }
   edge.collaborationCount++;
   edge.lastCollaborated = timestamp;
@@ -197,9 +225,15 @@ export function selectCollaborationNetwork(
   state: AgentLifecycleState,
 ): Array<{ agentAId: string; agentBId: string; strength: number }> {
   const edges: Array<{ agentAId: string; agentBId: string; strength: number }> = [];
+  // collaborationGraph now stores each pair's edge under both agent ids (see
+  // recordCollaboration), so de-dupe back down to one row per pair here.
+  const seenPairs = new Set<string>();
 
   for (const [agentAId, collaborations] of Object.entries(state.collaborationGraph)) {
     for (const edge of collaborations) {
+      const pairKey = [agentAId, edge.agentBId].sort().join('::');
+      if (seenPairs.has(pairKey)) continue;
+      seenPairs.add(pairKey);
       edges.push({
         agentAId,
         agentBId: edge.agentBId,
@@ -223,7 +257,7 @@ export function selectAgentContributionTimeline(
 export function selectAgentStats(state: AgentLifecycleState) {
   return {
     totalAgents: Object.keys(state.profiles).length,
-    totalSongs: state.contributions.length > 0 ? Math.max(...state.contributions.map(c => c.songId ? 1 : 0)) : 0,
+    totalSongs: new Set(state.contributions.map((c) => c.songId)).size,
     averageCollaborationsPerAgent: Object.values(state.profiles).reduce((sum, p) => sum + p.collaborators.length, 0) / Object.keys(state.profiles).length,
   };
 }
