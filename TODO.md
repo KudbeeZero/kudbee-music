@@ -303,6 +303,34 @@ Board** governance / Solana / token / NFT layer integrates with this engine via 
 later (kept out of this repo's core so it stays free + local).
 
 ## ✅ Shipped (newest first)
+- [x] **🎛️ Agent Packs MVP — genre/scene Council voice bundles (medium-feature
+      arc, item 8.5)** — the second consumer of the 8.3 voice registry, seated
+      alongside Guest Judges via the same mechanism. Deliberately scoped down
+      from the original "new agent + new Council voice" framing in IDEAS.md:
+      adding a genuinely new pipeline agent would mean extending the closed
+      `AgentId` union threaded through the deterministic core
+      (`types.ts`/`agents.ts`/`pipeline.ts`/`brainMap.ts`'s `REGIONS`) — too
+      large and risky a change for an MVP, and not needed to deliver the real
+      value. Shipped instead: three genre/scene-flavored Council voices, same
+      pure/deterministic/lexicon-grounded discipline as Guest Judges — **Boom-Bap
+      Traditionalist** (rewards street/time imagery + an ~8-word length),
+      **Pop Radio** (rewards intra-hook word repetition + brevity), **Poetry
+      Slam** (rewards lexicon-hit density + imagery-tag diversity — the only
+      judge in the roster that rewards richness over brevity). `Council.tsx`
+      renders a second chip row beneath Guest Judges; both sets combine freely
+      (`SEATABLE = [...GUEST_JUDGES, ...AGENT_PACKS]`), sharing one
+      weight-summary line. +9 new tests prove each pack's distinct bias and
+      that combining packs with Guest Judges keeps scores in range. Playwright-
+      verified live: all three chips render, toggle correctly, combine with a
+      Guest Judge in the weight summary, and clear correctly when un-seated.
+      **Root-caused a test false-positive along the way** — a static hint
+      line's own copy ("seated the same way") happened to contain the word
+      "seated," making a naive substring check always match; confirmed via the
+      actual dynamic weight-summary text, which correctly went from "+ Pop
+      Radio, Your Mom seated" to "+ Your Mom seated" to gone entirely as each
+      guest was un-seated — the shipped code was correct throughout, only the
+      test assertion needed fixing. Full gate suite green (65 files / 549
+      tests, up from 540). _(this PR)_
 - [x] **🎭 Guest Judges — pluggable Council personas (medium-feature arc, item
       8.4)** — the first real consumer of the 8.3 voice-registry refactor.
       New `lib/hermes/guestJudges.ts` ships three deterministic, pure

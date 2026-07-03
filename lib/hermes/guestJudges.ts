@@ -7,12 +7,13 @@ import type { CouncilVoice, CouncilVoiceContext } from './council';
 import { tokenize } from './text';
 import { wordInfo } from './lexicon';
 
-function clamp0to100(n: number): number {
+/** Shared by any persona/pack voice scoring a 0..100 result. */
+export function clamp0to100(n: number): number {
   return Math.max(0, Math.min(100, Math.round(n)));
 }
 
 /** How close a word count is to a target, falling off linearly outside it. */
-function lengthFit(n: number, target: number, falloffPerWord: number): number {
+export function lengthFit(n: number, target: number, falloffPerWord: number): number {
   if (n === 0) return 0;
   return Math.max(0, 100 - Math.abs(n - target) * falloffPerWord);
 }
