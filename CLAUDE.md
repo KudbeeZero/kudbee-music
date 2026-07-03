@@ -120,6 +120,14 @@ node scripts/mobile-matrix.mjs   # anything touching layout (build the export fi
 
 ## Memory layers — where the brain keeps things
 
+**Start with the folder head pages** — [`brain/README.md`](brain/README.md) indexes
+every file in the vault (what it is, who reads it, status); [`docs/index.md`](docs/index.md)
+does the same for every doc. Both are guard-tested (`memoryIndexes.test.ts`) so they
+can't silently rot, and every file inside carries its own one-line `"note"`
+(JSON) or opening paragraph (Markdown) saying the same thing — so landing directly
+on a file or starting from its folder's index both orient you immediately. This
+table is the top-level index across *all* memory tiers, folder pages included.
+
 | Layer | Route |
 | --- | --- |
 | Status board (generated, never hand-edited) | `STATUS.md` ← `brain/roadmap.json` via `lib/hermes/statusBoard.ts` |
@@ -146,3 +154,10 @@ node scripts/mobile-matrix.mjs   # anything touching layout (build the export fi
 This file is load-bearing: `lib/hermes/__tests__/claudeMd.test.ts` fails if the routes
 above rot. When you add a memory layer, a rule, or a convention — update this file in the
 same PR, and extend the guard test if it's a new route.
+
+**Adding a file to `brain/` or `docs/`?** Give it a one-line `"note"` (JSON, top-level
+key) or opening paragraph (Markdown) saying what it is and who reads it, add a row to
+that folder's head page (`brain/README.md` / `docs/index.md`), and add it here if it's
+a new memory *layer* (not every doc needs a CLAUDE.md row — the folder head page is the
+right level of detail for most). `memoryIndexes.test.ts` enforces the folder-page half
+of this; nothing currently enforces the in-file note, so hold the line by hand.

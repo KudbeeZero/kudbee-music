@@ -303,6 +303,18 @@ Board** governance / Solana / token / NFT layer integrates with this engine via 
 later (kept out of this repo's core so it stays free + local).
 
 ## ✅ Shipped (newest first)
+- [x] **Memory-vault head pages (`brain/README.md` + `docs/index.md`)** — founder directive:
+      every memory-layer folder needs a "chapter index" page, and every file its own
+      organizing note. `brain/README.md` now indexes all 12 files in `brain/` (what it is,
+      who reads it, status) grouped into song-brain memory / design manifesto / video-studio
+      artifacts. `docs/index.md` was stale (listed 4 of ~20 docs, video-studio only, no
+      song-brain docs at all) — rewritten to route to everything, split Hit Factory vs Video
+      Studio vs reference. The three `brain/*.json` files missing a top-level `"note"` field
+      (`beliefs.json`, `brain.json`, `roadmap.json`) got one, matching the pattern
+      `crossroads.json`/`memory.json`/`personas.json` already used. New guard test
+      (`memoryIndexes.test.ts`) fails CI if either index falls out of sync with its folder's
+      real contents — same discipline `claudeMd.test.ts` already holds CLAUDE.md to.
+      CLAUDE.md's memory-layers table now points to both head pages first. _(this PR)_
 - [x] **PNG share card — wired the download button (roadmap 5.9 follow-up)** — the Song
       Gifts phase-2 PR made `shareCard.ts`'s `renderShareCard`/`downloadShareCard` gift-aware
       but surfaced that neither was ever called from any component — a visitor had no way to

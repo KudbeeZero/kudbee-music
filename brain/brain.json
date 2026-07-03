@@ -1,4 +1,5 @@
 {
+  "note": "The two-hemisphere manifesto — machine-readable companion to brain/hemispheres.md. Reference/design doc, not imported by runtime code (the executable version of this model lives in lib/hermes/brainMap.ts). See brain/README.md for the full brain/ folder index.",
   "model": "two-hemisphere brain",
   "premise": "Lateralization as a bias, not a switch. Both hemispheres always run; the dominance dial only shifts which one leads. The right hemisphere generates (divergent, high-variance); the left measures and verifies (convergent, deterministic). The corpus callosum is the set of shared artifacts they pass between them.",
   "hemispheres": {
