@@ -303,6 +303,16 @@ Board** governance / Solana / token / NFT layer integrates with this engine via 
 later (kept out of this repo's core so it stays free + local).
 
 ## ✅ Shipped (newest first)
+- [x] **🔎 Vault search/filter box (tiny-feature cadence, #15)** — a growing vault
+      had no way to jump straight to a title without scrolling. A "Search by
+      title…" input in `VaultDrawer.tsx` filters the visible list by
+      case-insensitive substring match; shown only once the vault has more than 5
+      songs (a small vault has nothing worth filtering). An honest "No songs
+      match '{query}'" empty state distinguishes "nothing in the vault at all"
+      from "nothing matches your search." Playwright-verified live: filled the
+      vault to 6 songs (search box appeared), filtered by "gold" and got both
+      matching titles, typed a non-matching query and saw the correct empty
+      state, cleared it and got all 6 back, zero console errors. _(this PR)_
 - [x] **🕐 Recently viewed strip in the Vault (tiny-feature cadence, #14)** — no
       quick way back to a song you had open a minute ago without scrolling/
       hunting the full list. New `storage.ts` `loadRecentlyViewed()`/

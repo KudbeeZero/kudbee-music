@@ -2,7 +2,7 @@
 
 > **Generated from [`brain/roadmap.json`](brain/roadmap.json) — do not hand-edit.** Status lives ONLY in the spine; edit it there, then regenerate with `GEN_DOCS=1 npx vitest run status`. `statusBoard.test.ts` fails CI if this file drifts.
 
-**Scoreboard:** ✅ 49 shipped · 🔨 1 in build · 💤 10 queued — 60 tracked items
+**Scoreboard:** ✅ 50 shipped · 🔨 1 in build · 💤 10 queued — 61 tracked items
 (legend: ✅ shipped · 🔌 scaffold shipped, founder-gated · 🔨 in build · ⏭️ next · 💤 queued · 💭 idea · 🚧 blocked on founder)
 
 ## Tracks
@@ -85,7 +85,7 @@
 |---|------|----------------|----|
 | 💤 | **Influence Studio — thematic cartography + lexical fingerprinting** | `lib/hermes/influence.ts` | — |
 
-### Phase 7 — Tiny features — the standing cadence — `▰▰▰▰▰▰▰▰▰▰` 14/14
+### Phase 7 — Tiny features — the standing cadence — `▰▰▰▰▰▰▰▰▰▰` 15/15
 
 | | Item | Where it lives | PR |
 |---|------|----------------|----|
@@ -103,6 +103,7 @@
 | ✅ | **↩️ Undo a committed Lyric Lab step** | `components/hermes/LyricLab.tsx` | — |
 | ✅ | **↺ Reset to defaults on Song Lab** | `components/hermes/SongLabForm.tsx` | — |
 | ✅ | **🕐 Recently viewed strip in the Vault** | `lib/hermes/storage.ts + components/hermes/VaultDrawer.tsx` | — |
+| ✅ | **🔎 Vault search/filter box** | `components/hermes/VaultDrawer.tsx` | — |
 
 ### Video studio — `▰▰▰▰▰▱▱▱▱▱` 4/8
 
