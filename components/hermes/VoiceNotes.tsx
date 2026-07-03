@@ -5,10 +5,11 @@ import type { AudioClipMeta } from '@/lib/hermes/audioVault';
 import { saveClip, listClips, loadClipBlob, deleteClip } from '@/lib/hermes/audioVault';
 import styles from './hermes.module.css';
 
-// Voice Notes — record a quick take with the mic and attach it to this song. Pure
-// attachment: it never feeds the generation pipeline (see audioVault.ts's note on
-// why that's fine for the determinism contract). PR1 of the "bring your own sound"
-// build — instrument riff clips reuse this same component in a later PR.
+// Voice Notes + Bring Your Own Sound — record a quick take with the mic OR upload an
+// existing audio file (an instrumental, a riff, a reference) and attach it to this song.
+// Pure attachment: neither ever feeds the generation pipeline (see audioVault.ts's note
+// on why that's fine for the determinism contract). Recording saves a 'voice' clip;
+// upload saves a 'riff' clip — both share the same store, cap, and player. (roadmap 3.6)
 export default function VoiceNotes({ songId }: { songId: string }) {
   const [clips, setClips] = useState<AudioClipMeta[]>([]);
   const [recording, setRecording] = useState(false);
@@ -20,6 +21,7 @@ export default function VoiceNotes({ songId }: { songId: string }) {
   const startedAtRef = useRef(0);
   const tickRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const audioRef = useRef<HTMLAudioElement | null>(null);
+  const uploadRef = useRef<HTMLInputElement | null>(null);
 
   useEffect(() => {
     let cancelled = false;
@@ -82,6 +84,35 @@ export default function VoiceNotes({ songId }: { songId: string }) {
     else if (result.clip) setClips((prev) => [...prev, result.clip!]);
   }
 
+  // Read an audio file's duration off a throwaway <audio> element's metadata — some
+  // container formats report Infinity/NaN, so fall back to 0 (the label still shows).
+  function readDuration(file: Blob): Promise<number> {
+    return new Promise((resolve) => {
+      if (typeof document === 'undefined') { resolve(0); return; }
+      const url = URL.createObjectURL(file);
+      const audio = document.createElement('audio');
+      audio.preload = 'metadata';
+      audio.onloadedmetadata = () => { URL.revokeObjectURL(url); const d = audio.duration; resolve(Number.isFinite(d) ? Math.round(d * 1000) : 0); };
+      audio.onerror = () => { URL.revokeObjectURL(url); resolve(0); };
+      audio.src = url;
+    });
+  }
+
+  async function onUpload(e: React.ChangeEvent<HTMLInputElement>) {
+    setError(null);
+    const file = e.target.files?.[0];
+    e.target.value = ''; // allow re-picking the same file
+    if (!file) return;
+    if (!file.type.startsWith('audio/')) { setError('Please choose an audio file.'); return; }
+    const durationMs = await readDuration(file);
+    const label = file.name.replace(/\.[^.]+$/, '').slice(0, 60) || 'Uploaded sound';
+    const result = await saveClip(songId, 'riff', label, file, durationMs);
+    if (result.error === 'too-many') setError('This song already has 6 sounds — delete one to add another.');
+    else if (result.error === 'too-large') setError('That file is too large to store — try a shorter clip.');
+    else if (result.error) setError('Couldn’t save that sound.');
+    else if (result.clip) setClips((prev) => [...prev, result.clip!]);
+  }
+
   async function remove(id: string) {
     await deleteClip(id);
     setClips((prev) => prev.filter((c) => c.id !== id));
@@ -123,7 +154,19 @@ export default function VoiceNotes({ songId }: { songId: string }) {
             ⏹ Stop ({fmt(elapsedMs)})
           </button>
         )}
-        {clips.length >= 6 && !recording && <span className={styles.hint}>6/6 — delete one to record another</span>}
+        {!recording && (
+          <button
+            className={styles.copyBtn}
+            style={{ marginLeft: 0 }}
+            onClick={() => uploadRef.current?.click()}
+            disabled={clips.length >= 6}
+            title="Upload an existing audio file (an instrumental, a riff, a reference) — attached to this song, never fed into generation."
+          >
+            ⬆️ Upload a sound
+          </button>
+        )}
+        <input ref={uploadRef} type="file" accept="audio/*" onChange={onUpload} style={{ display: 'none' }} />
+        {clips.length >= 6 && !recording && <span className={styles.hint}>6/6 — delete one to add another</span>}
       </div>
       {error && <div className={styles.hint} style={{ color: 'var(--bad)', marginTop: 4 }}>{error}</div>}
       {clips.length > 0 && (
@@ -134,7 +177,7 @@ export default function VoiceNotes({ songId }: { songId: string }) {
                 {playingId === c.id ? '▶ playing…' : '▶ play'}
               </button>
               <span className={styles.hint} style={{ flex: 1, minWidth: 0, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
-                {c.label} · {fmt(c.durationMs)}
+                {c.kind === 'riff' ? '🎵' : '🎙️'} {c.label}{c.durationMs > 0 ? ` · ${fmt(c.durationMs)}` : ''}
               </span>
               <button className={styles.copyBtn} style={{ marginLeft: 0 }} onClick={() => remove(c.id)} title="Delete this take">✕</button>
             </div>

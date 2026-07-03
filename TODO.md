@@ -302,6 +302,25 @@ Board** governance / Solana / token / NFT layer integrates with this engine via 
 later (kept out of this repo's core so it stays free + local).
 
 ## ✅ Shipped (newest first)
+- [x] **🎵 Bring Your Own Sound — upload an existing audio file (roadmap 3.6)** — the
+      founder's queued idea ("people can input their music"), and exactly the shape the
+      roadmap note predicted. `VoiceNotes.tsx` only did live mic recording; added an
+      "⬆️ Upload a sound" button (`<input type="file" accept="audio/*">`) beside
+      "🎙️ Record a take" that saves the file through the **same** `audioVault.ts`
+      `saveClip()` the mic path already proved out — stored as a `'riff'` clip (an
+      already-supported, already-unit-tested kind), sharing the 6-clip cap, size cap,
+      IndexedDB store, and player. Duration is read off a throwaway `<audio>` element's
+      `loadedmetadata` (falls back to 0 for container formats that report Infinity/NaN);
+      the label comes from the filename; clip rows now show 🎵 (uploaded) vs 🎙️ (recorded)
+      so the two are distinguishable. $0 / no new deps (the File API is a browser
+      built-in), zero effect on generation — pure attachment, same determinism-safe note
+      as the mic path. No new unit tests needed (the `'riff'` save path is already covered
+      in `audioVault.test.ts`; the new logic is UI-level). Playwright-verified end to end:
+      generated a real WAV, uploaded it via the file input, confirmed it appears as a 🎵
+      clip labelled by filename with a working play button, zero console errors. Section
+      header updated to "🎙️ Your sound — record a take or upload an audio file." Full gate
+      suite green (68 files / 577 tests, `tsc --noEmit` clean, static export builds); spine
+      3.6 flipped to shipped + status board regenerated. _(this PR)_
 - [x] **🚀 "Agent" header button — your key/brain/install one tap away, anywhere** —
       small goal-aligned follow-up: the "Your Agent" panel (with the up-front BYOK Claude
       key entry from #172) was reachable only in compose mode + the Keep-stage column, so

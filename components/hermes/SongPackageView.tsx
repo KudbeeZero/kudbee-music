@@ -343,7 +343,7 @@ export default function SongPackageView({ pkg, onSaveEdit, onChooseHook, onRegen
         )}
       </div>
 
-      <Section label="🎙️ Voice notes — record your own take on this song">
+      <Section label="🎙️ Your sound — record a take or upload an audio file for this song">
         <VoiceNotes songId={pkg.id} />
       </Section>
 
