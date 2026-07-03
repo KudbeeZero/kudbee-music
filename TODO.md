@@ -303,6 +303,18 @@ Board** governance / Solana / token / NFT layer integrates with this engine via 
 later (kept out of this repo's core so it stays free + local).
 
 ## ✅ Shipped (newest first)
+- [x] **/ jumps to the Vault search box (tiny-feature cadence, #19)** — the Vault
+      search box (7.15) had no keyboard shortcut, the same GitHub/Slack
+      convention Cmd/Ctrl+Enter already brought to Song Lab (7.8). A
+      window-level keydown listener in `VaultDrawer.tsx` focuses the search
+      input on `/`, but only when focus isn't already inside an input/textarea
+      (a rename box or a note field) — so typing a literal `/` anywhere else is
+      never hijacked. Placeholder updated to "Search by title… (press / to
+      focus)" as the visible hint. Playwright-verified live: generated 6 songs
+      to push the vault past the 5-song search threshold, confirmed pressing
+      `/` from a neutral focus state jumps into the search box, and confirmed
+      typing `/` inside a real note input still inserts the character instead
+      of being swallowed. Zero console errors. _(this PR)_
 - [x] **📋 Copy JSON to clipboard (tiny-feature cadence, #18)** — `⬇ Export JSON`
       only ever downloaded a file; pasting a package straight into a chat, an
       issue, or another tool meant downloading then re-opening it. New

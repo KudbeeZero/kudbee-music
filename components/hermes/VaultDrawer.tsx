@@ -25,6 +25,7 @@ export default function VaultDrawer({
   onImported?: () => void;
 }) {
   const fileRef = useRef<HTMLInputElement>(null);
+  const searchRef = useRef<HTMLInputElement>(null);
   const [restoreNote, setRestoreNote] = useState<string | null>(null);
   const [favorites, setFavorites] = useState<Set<string>>(() => loadFavorites());
   const [noteDrafts, setNoteDrafts] = useState<Record<string, string>>(() => loadSongNotes());
@@ -62,6 +63,22 @@ export default function VaultDrawer({
     window.addEventListener('keydown', onKeydown);
     return () => window.removeEventListener('keydown', onKeydown);
   }, [onClose]);
+
+  // "/" jumps straight to the search box (GitHub/Slack convention) — only when
+  // it's not already being typed somewhere else (an input/textarea/rename box),
+  // so a normal "/" character never gets swallowed mid-note or mid-rename.
+  useEffect(() => {
+    function onKeydown(e: KeyboardEvent) {
+      if (e.key !== '/') return;
+      const tag = (e.target as HTMLElement)?.tagName;
+      if (tag === 'INPUT' || tag === 'TEXTAREA') return;
+      if (!searchRef.current) return;
+      e.preventDefault();
+      searchRef.current.focus();
+    }
+    window.addEventListener('keydown', onKeydown);
+    return () => window.removeEventListener('keydown', onKeydown);
+  }, []);
 
   // Favorites float to the top; a stable sort keeps each group's original
   // (newest-first) order otherwise, so favoriting never reshuffles the rest.
@@ -140,11 +157,12 @@ export default function VaultDrawer({
 
         {songs.length > 5 && (
           <input
+            ref={searchRef}
             className={styles.input}
             style={{ marginBottom: 14 }}
             value={query}
             onChange={(e) => setQuery(e.target.value)}
-            placeholder="Search by title…"
+            placeholder="Search by title… (press / to focus)"
             aria-label="Search the vault by title"
           />
         )}
