@@ -303,6 +303,15 @@ Board** governance / Solana / token / NFT layer integrates with this engine via 
 later (kept out of this repo's core so it stays free + local).
 
 ## ✅ Shipped (newest first)
+- [x] **⎋ Escape-key close for Vault/Album drawers (tiny-feature cadence, #10)** —
+      both overlays only closed via the "Close" button or clicking the scrim; a
+      window-level Escape listener (same pattern as the Cmd/Ctrl+Enter shortcut)
+      now closes each from the keyboard. Deliberately did **not** add this to the
+      Lyric Lab — it has an in-progress free-write draft box, and Escape-to-close
+      there risks silently discarding unsaved lyric input; that's a regression, not
+      a delight. Playwright-verified live: Vault and Album both close on Escape;
+      confirmed the Lyric Lab correctly stays open on Escape (the deliberate
+      exclusion), zero console errors. _(this PR)_
 - [x] **🎵 One-click Copy Suno prompt (tiny-feature cadence, #9)** — the Suno-ready
       prompt (style of music + tagged lyrics) was only reachable by opening
       "Explain this song" and finding it inside the full trace explorer.

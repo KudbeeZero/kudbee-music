@@ -1,6 +1,6 @@
 'use client';
 
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import type { SongPackage } from '@/lib/hermes/types';
 import { exportVault, importVault, vaultBackupStatus, restoreFromBackup, loadFavorites, toggleFavorite, loadSongNotes, setSongNote } from '@/lib/hermes/storage';
 import styles from './hermes.module.css';
@@ -35,6 +35,16 @@ export default function VaultDrawer({
   function commitNote(id: string, text: string) {
     setNoteDrafts(setSongNote(id, text));
   }
+
+  // Escape closes the drawer — same convention as the scrim click, just from the
+  // keyboard, matching the pattern established for every modal-style overlay.
+  useEffect(() => {
+    function onKeydown(e: KeyboardEvent) {
+      if (e.key === 'Escape') onClose();
+    }
+    window.addEventListener('keydown', onKeydown);
+    return () => window.removeEventListener('keydown', onKeydown);
+  }, [onClose]);
 
   // Favorites float to the top; a stable sort keeps each group's original
   // (newest-first) order otherwise, so favoriting never reshuffles the rest.
