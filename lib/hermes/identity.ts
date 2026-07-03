@@ -87,6 +87,16 @@ export function signInDev(): Profile {
   return persist({ id: newId(), name: 'Developer', kind: 'dev', createdAt: new Date().toISOString() });
 }
 
+/**
+ * Restore an identity from a Brain Pack import (see storage.ts importBrain). The raw
+ * value comes from a downloaded document, so it's validated like any hostile payload —
+ * a bad/absent profile is ignored (returns null) rather than throwing. On success the
+ * profile is persisted so the visitor is "signed in as themselves" on the new device.
+ */
+export function restoreProfile(raw: unknown): Profile | null {
+  return isProfile(raw) ? persist(raw) : null;
+}
+
 /** Forget the profile. Deliberately does NOT touch the vault — songs, albums,
  *  taste, and avoid-words stay in this browser. */
 export function signOut(): void {

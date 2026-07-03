@@ -410,6 +410,146 @@ export function importVault(json: string, mode: 'merge' | 'replace' = 'merge'): 
   return { songs: ok ? newSongs.length : 0, albums: newAlbums.length };
 }
 
+// ---- whole-brain export / import ("your agent as one document") -------------------
+// exportVault above carries only songs + albums. A visitor's *agent* is more than its
+// catalog: it's the identity + everything the brain learned about them — taste, learned
+// exclusions, artist name, notes, favorites. This bundles ALL of it into one portable
+// document so someone can "launch their agent" on another device / after a PWA reinstall
+// and be themselves again. Founder directive, 2026-07-03 ("their own memory layer... their
+// own brain with documents locally"). $0/local — no server, no account of ours.
+//
+// SECURITY: the BYOK Claude API key is DELIBERATELY excluded. A downloadable document
+// with an API key in it is a leak waiting to happen; the visitor re-enters their key on
+// the new device (it lives only in that browser — see claudeKey.ts). Same boundary the
+// rest of the codebase holds.
+export interface BrainPack {
+  kind: 'hermes-brain';
+  version: 1;
+  exportedAt: string;
+  /** The identity profile — opaque here (identity.ts validates it on restore). */
+  profile: unknown;
+  vault: { songs: SongPackage[]; albums: Album[] };
+  taste: Taste;
+  bannedWords: string[];
+  alias: string;
+  songNotes: Record<string, string>;
+  favorites: string[];
+}
+
+/** Bundle the whole portable agent. `profile` is passed in by the caller (currentProfile())
+ *  so storage.ts stays free of an identity.ts import; `now` is injectable for tests. */
+export function exportBrain(profile: unknown, now = new Date().toISOString()): string {
+  const pack: BrainPack = {
+    kind: 'hermes-brain',
+    version: 1,
+    exportedAt: now,
+    profile: profile ?? null,
+    vault: { songs: readAll(), albums: readAlbums() },
+    taste: loadTaste(),
+    bannedWords: loadBannedWords([]),
+    alias: loadArtistAlias(),
+    songNotes: loadSongNotes(),
+    favorites: [...loadFavorites()],
+  };
+  return JSON.stringify(pack, null, 2);
+}
+
+export interface BrainImportResult {
+  ok: boolean;
+  songs: number;
+  albums: number;
+  taste: boolean;
+  bannedWords: number;
+  alias: boolean;
+  notes: number;
+  favorites: number;
+  /** The raw profile object from the pack (or null) — the caller restores it via identity.ts. */
+  profile: unknown;
+}
+
+const EMPTY_IMPORT: BrainImportResult = {
+  ok: false, songs: 0, albums: 0, taste: false, bannedWords: 0, alias: false, notes: 0, favorites: 0, profile: null,
+};
+
+/**
+ * Restore a whole brain. Every field is sanitized at the boundary (same hostile-payload
+ * discipline as importVault) and each layer degrades independently — a corrupt taste
+ * block never blocks the songs from landing. `merge` unions/sums the soft-state layers
+ * and id-dedups the vault; `replace` overwrites each layer wholesale.
+ */
+export function importBrain(json: string, mode: 'merge' | 'replace' = 'merge'): BrainImportResult {
+  let data: unknown;
+  try { data = JSON.parse(json, stripDangerous); } catch { return { ...EMPTY_IMPORT }; }
+  if (!isObj(data) || data.kind !== 'hermes-brain') return { ...EMPTY_IMPORT };
+  const result: BrainImportResult = { ...EMPTY_IMPORT, ok: true };
+
+  // vault (songs + albums) — reuse importVault's exact sanitize/dedup/cap by handing it
+  // the nested vault block in the shape it already understands.
+  const vault = isObj(data.vault) ? data.vault : {};
+  const vaultRes = importVault(JSON.stringify({ songs: vault.songs, albums: vault.albums }), mode);
+  result.songs = vaultRes.songs;
+  result.albums = vaultRes.albums;
+
+  // taste — validate shape, then sum (merge) or overwrite (replace).
+  if (isObj(data.taste)) {
+    const incoming = sanitizeTaste(data.taste);
+    const next = mode === 'replace' ? incoming : mergeTaste(loadTaste(), incoming);
+    try { kv().setItem(TASTE_KEY, JSON.stringify(next)); result.taste = true; } catch { /* ignore */ }
+  }
+
+  // banned words — union (merge) or overwrite (replace).
+  if (Array.isArray(data.bannedWords)) {
+    const incoming = data.bannedWords.filter((w): w is string => typeof w === 'string').map((w) => w.trim()).filter(Boolean);
+    const next = mode === 'replace' ? incoming : [...new Set([...loadBannedWords([]), ...incoming])];
+    saveBannedWords(next);
+    result.bannedWords = next.length;
+  }
+
+  // alias — replace overwrites; merge keeps an existing name, else takes the imported one.
+  if (typeof data.alias === 'string') {
+    const existing = loadArtistAlias();
+    const next = mode === 'replace' ? data.alias : (existing || data.alias);
+    saveArtistAlias(next);
+    result.alias = !!next;
+  }
+
+  // song notes — replace overwrites the map; merge fills only ids that have no note yet.
+  if (isObj(data.songNotes)) {
+    const incoming: Record<string, string> = {};
+    for (const [k, v] of Object.entries(data.songNotes)) if (typeof v === 'string') incoming[k] = v.slice(0, SONG_NOTE_MAX);
+    const next = mode === 'replace' ? incoming : { ...incoming, ...loadSongNotes() };
+    try { kv().setItem(SONG_NOTES_KEY, JSON.stringify(next)); result.notes = Object.keys(next).length; } catch { /* ignore */ }
+  }
+
+  // favorites — union (merge) or overwrite (replace).
+  if (Array.isArray(data.favorites)) {
+    const incoming = data.favorites.filter((x): x is string => typeof x === 'string');
+    const next = mode === 'replace' ? incoming : [...new Set([...loadFavorites(), ...incoming])];
+    try { kv().setItem(FAVORITES_KEY, JSON.stringify(next)); result.favorites = next.length; } catch { /* ignore */ }
+  }
+
+  result.profile = data.profile ?? null;
+  return result;
+}
+
+function sanitizeTaste(raw: Record<string, unknown>): Taste {
+  const rec = (v: unknown): Record<string, number> => {
+    const out: Record<string, number> = {};
+    if (isObj(v)) for (const [k, n] of Object.entries(v)) if (typeof n === 'number' && Number.isFinite(n)) out[k] = n;
+    return out;
+  };
+  return { liked: rec(raw.liked), disliked: rec(raw.disliked), edits: num(raw.edits) };
+}
+
+function mergeTaste(a: Taste, b: Taste): Taste {
+  const sum = (x: Record<string, number>, y: Record<string, number>): Record<string, number> => {
+    const out: Record<string, number> = { ...x };
+    for (const [k, n] of Object.entries(y)) out[k] = (out[k] ?? 0) + n;
+    return out;
+  };
+  return { liked: sum(a.liked, b.liked), disliked: sum(a.disliked, b.disliked), edits: a.edits + b.edits };
+}
+
 // ---- durability: backup status + explicit restore --------------------------------
 /** Whether the live vault appears healthy vs. what the backup mirror holds. */
 export function vaultBackupStatus(): { liveSongs: number; backupSongs: number; liveHealthy: boolean } {

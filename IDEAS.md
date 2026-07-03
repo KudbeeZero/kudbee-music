@@ -219,6 +219,50 @@ A second-opinion review flagged real risks worth acting on (truth-first):
   disclaimer in the README + Uniqueness panel. _(#37)_
 
 ## 🌱 Fresh captures
+- 🔨 **`/goal`: per-user Claude brain + real accounts + own memory layer + own launchable
+  agent (Lightning)** *(founder directive, 2026-07-03, set as a session `/goal`)* — the
+  founder's words: "the Claude API should be tied in and actually generate the lyrics for the
+  individual the user and their account they should be logged in and this information should be
+  saved then they should have their own memory layer. I actually would like to set up the
+  lightning AI and try to get that working... if somebody unlocks their own agent. It would
+  allow them to have their own brain. I don't know maybe we can do that with documents locally
+  right now and using HERMES like the user can launch their own HERMES Music mobile agent."
+  Decomposed honestly into buildable-now ($0/local, no founder decision) vs. genuinely blocked
+  (needs the founder's infra/keys — never faked, per the iron laws):
+  - **(A) Claude generates the user's real lyrics** — *largely already shipped*: the BYOK
+    Claude Engine (`lib/hermes/claudeKey.ts` + `providers/claudeLyricsProvider.ts` + `Rack.tsx`)
+    already does real client-side generation from the visitor's own Anthropic key, no server.
+    Remaining $0 slice: make it the persistent per-profile default so a signed-in user's brain
+    always uses their key. Not yet built.
+  - **(B) Their own memory layer / their own brain as documents / launch their own agent** —
+    the founder's own $0 escape hatch ("maybe we can do that with documents locally"). ✅
+    **First slice shipped this session**: `storage.ts` `exportBrain()`/`importBrain()` +
+    `identity.ts` `restoreProfile()` — the WHOLE portable agent as one `hermes-brain` document
+    (identity + vault + taste + learned exclusions + alias + notes + favorites), export/import
+    from the Vault drawer. Take it to another device or reinstall the PWA and "launch your
+    agent as yourself." The BYOK Claude key is deliberately excluded (a downloadable doc with a
+    secret in it is a leak — re-enter it on the new device). Playwright-verified the full
+    export→wipe-localStorage→import round-trip restores identity + catalog + learned memory.
+    This is the local, no-decision-needed version of "their own brain" and pairs with the
+    already-shipped PWA install (their HERMES Music *mobile* agent).
+  - **(C) Real cross-device accounts (logged in, saved server-side)** — *blocked on the
+    founder*: a static $0 export can't do an OAuth token exchange or hold a server-side DB.
+    Same decision already flagged in the "Accounts / sign-in" TODO item and
+    `identity.ts`'s `beginOAuth()` (which throws rather than fake a sign-in) — needs a hosted-
+    auth provider pick (Supabase/Auth0/Clerk free tier) or Cloudflare Pages Functions, plus
+    registered OAuth apps. The local-first profile + Brain-Pack export is the honest bridge
+    until then.
+  - **(D) Lightning AI — "unlock your own agent / your own brain"** — *blocked on the founder*:
+    needs a Lightning Studio running a HERMES agent behind HTTPS/SSL the founder connects
+    (already tracked in TODO "Lightning AI spike"). The security laws forbid routing a key
+    through our infra or shipping unattended code-write-and-push, so this stays a founder-paced,
+    opt-in provider behind the same adapter seam the Claude/Runway engines use. Not fakeable
+    locally — but (B)'s exportable Brain Pack is the "documents locally" stand-in the founder
+    themselves proposed for now.
+  Next $0 slices toward the goal (loop will work these): (A) persist the Claude Engine per
+  profile; extend the Brain Pack to optionally carry a "bring your key on the new device"
+  reminder; a clearer "this is your agent" surface tying identity + brain + PWA-install into
+  one "launch your HERMES agent" flow.
 - 💭 **Two mobile mockup sets — a structural fix plan + a gamification pass** *(founder
   directive, 2026-07-03, three attachments: a PDF export of the current live app as ground
   truth, plus two mockup images)* — asked for an architecture agent + a design agent to turn

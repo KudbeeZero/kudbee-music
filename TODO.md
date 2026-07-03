@@ -302,6 +302,38 @@ Board** governance / Solana / token / NFT layer integrates with this engine via 
 later (kept out of this repo's core so it stays free + local).
 
 ## ✅ Shipped (newest first)
+- [x] **🧠 Your HERMES Brain — export/import your whole agent as one document** —
+      first slice toward the founder's `/goal` (per-user Claude brain + accounts + own
+      memory layer + own launchable agent; full decomposition + the buildable-vs-blocked
+      split in `IDEAS.md`). Built the founder's own $0 escape hatch ("maybe we can do
+      that with documents locally right now... the user can launch their own HERMES
+      Music mobile agent"). `exportVault` only ever carried songs + albums; a visitor's
+      *agent* is more — their identity plus everything the brain learned about them. New
+      `storage.ts` `exportBrain()`/`importBrain()` bundle the WHOLE portable agent into
+      one `hermes-brain` document: profile + vault (songs + albums) + taste + learned
+      avoid-words + artist alias + song notes + favorites. `importBrain` sanitizes every
+      layer at the boundary (same hostile-payload discipline as `importVault` — reuses it
+      for songs/albums) and each layer degrades independently (a corrupt taste block never
+      blocks the songs); `merge` sums/unions the soft-state layers, `replace` overwrites.
+      New `identity.ts` `restoreProfile()` validates + persists an imported profile so the
+      visitor is "signed in as themselves" on the new device (kept in identity.ts to avoid
+      a storage→identity circular import — `exportBrain` takes the profile as a param,
+      `importBrain` hands it back). **Security: the BYOK Claude API key is deliberately
+      excluded** — a downloadable document with a secret in it is a leak; the visitor
+      re-enters their key on the new device (same boundary `claudeKey.ts` already holds).
+      Wired into the Vault drawer as a "🧠 Your HERMES Brain" panel with Export/Import
+      buttons + an honest "your Claude key is never included" note. +7 new tests
+      (`brainPack.test.ts`): full round-trip, self-describing envelope, key-exclusion,
+      merge-sums-not-clobbers, non-brain-rejection, hostile-layer sanitization,
+      timestamp-injected determinism. **Root-caused nothing new this time** — the
+      `@/`-alias vitest fix from the badges PR already lets `brainPack.test.ts` import the
+      real `demoSong()` fixture. Playwright-verified the flagship flow live: made a song,
+      exported the brain (confirmed the file is `kind: hermes-brain`, carries the song, and
+      contains no `sk-ant-` key), **wiped localStorage entirely to simulate a fresh
+      device**, confirmed the vault went empty, imported the brain file back, and confirmed
+      the restore confirmation appeared and the song + identity came back. Zero console
+      errors. Full gate suite green (67 files / 572 tests, up from 565 — `tsc --noEmit`
+      clean, static export builds). _(this PR)_
 - [x] **🏅 Badges — the collectible achievement strip** — autonomous-loop medium PR,
       eighth of the session. The first well-scoped slice of the queued
       "'Becoming You' gamified onboarding — badges + the Mogul story arc" idea
