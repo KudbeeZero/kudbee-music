@@ -533,7 +533,7 @@ export default function HermesHitFactory() {
         <div className={styles.col} ref={stageRef}>
           <BrainScan outputs={outputs} running={running} workingMemory={wmSize} heat={heat} />
           <AgentBoard outputs={outputs} />
-          {pkg && <Council outputs={outputs} pkg={pkg} />}
+          {pkg && <Council outputs={outputs} pkg={pkg} taste={taste} />}
           {pkg ? (
             <SongPackageView pkg={pkg} onSaveEdit={saveLyricEdit} onChooseHook={chooseHook}
               onRegenerateFromCritiques={(keys) => run(pkg.inputs, { cognitionFeedback: keys })} />

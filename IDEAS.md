@@ -241,6 +241,33 @@ A second-opinion review flagged real risks worth acting on (truth-first):
      the BRAIN's reasoning instead of a human's clicks. Worth naming and leaning into that
      framing rather than treating "interactive help" as unbuilt from scratch.
   Not built yet — needs a priority call against the Council build plan below.
+- 🔨 **The Council build plan** *(founder directive, 2026-07-03 — "deploy a research agent...
+  what could we do with the existing routes and information that we have to make this council
+  even better")* — a research agent audited `council.ts`/`Council.tsx` against the rest of the
+  brain and found the board's ranking was **display-only**: it never fed back into anything —
+  not the pipeline's actual hook choice (`selectHookByCognition` in `cognition.ts` can disagree
+  with the Council's own ranking), not the artist's learned taste, not the vault, not generation
+  itself. Five build steps, prioritized by how much real signal each unlocks per unit of work:
+  1. ✅ **PR1 — taste as a 4th voice.** `voiceFit()` scores a hook against the artist's learned
+     `Taste` (liked/disliked word tallies, same idiom as `becomingYou.ts`'s `voiceMirror`);
+     `rankHooksByCouncil()` takes it as an optional 4th voice, active only once the artist has
+     real edit history. Shipped — see TODO.md Shipped.
+  2. 💭 **PR2 — Council verdicts become real Crossroads crossings.** Reuse
+     `openCrossing/vote/tally/leader/decide` from `crossroads.ts` to represent a hook decision
+     as an actual governance crossing instead of a component-local ranking — ties the board's
+     "vote" to the same mechanism the community-steering Crossroads page already uses.
+  3. 💭 **PR3 — Council judges across takes.** Rank the vault's up-to-5 stored versions per
+     song title with the same 3/4-voice scoring, so "which take is actually best" is answered
+     by the board, not just chronologically.
+  4. 💭 **PR4 — the first vote that steers generation.** A `hookFinale: 'repeat' | 'evolve'`
+     `SongInputs` field driven by the artist's local Crossroads vote on a
+     `hook-repeat-vs-evolve` crossing — the first time a Council/Crossroads decision changes
+     what the pipeline actually generates, not just how it's displayed. Needs the full
+     untrusted-input boundary treatment (`pipeline.ts`/`shareLink.ts`/`storage.ts`) since it's
+     a new `SongInputs` field.
+  5. 💭 **PR5 — live deliberation in the Lyric Lab.** Reuse `deliberate()` in the hook-typing
+     step so the board's challenges run before a hand-typed hook is committed, not just after.
+  PR1 shipped; PR2–PR5 queued, one PR at a time per the green-loop.
   `brain/occasionPacks.json` + `lib/hermes/occasionPacks.ts` — Christmas, Valentine's,
   Mother's/Father's Day, Birthday, Anniversary, Graduation, New Year, each a mood/genre/
   structure/rhymeScheme preset PLUS real new imagery vocabulary (stocking, mistletoe,
