@@ -241,7 +241,35 @@ A second-opinion review flagged real risks worth acting on (truth-first):
      agents are checking how much of this is new UI over already-computed data vs. genuinely
      new tracking, and flagging anything that would need a new npm dependency (confetti/carousel/
      gauge libraries) against the $0-core no-new-deps rule.
-  Not started — plan pending from the two agents.
+  **Plan delivered** (architecture agent + design agent, both read the mockups and the real
+  code, no edits made): **Phase A (Mockup B, build now)** — 6 same-day PRs in the mockup's own
+  order: ① sticky top app bar, ② sticky bottom Studio Flow rail (finishes wiring
+  `lib/hermes/device.ts`'s already-computed-but-unused `stickyPrimaryAction`/`bottomSheets`
+  flags — this isn't a new mobile system, it's finishing one that's half-wired), ③ collapse
+  Song Lab into an accordion (reuses the existing `showAvoid` disclosure pattern), ④ Agent
+  Board as Proposes/Challenges/Judges tabs (reuses `Council.tsx`'s hemisphere split — flagged
+  risk: `AgentBoard.tsx`'s live connector-line SVG assumes both wired cards are visible at
+  once, needs an explicit fallback so 8.2's "it's literally them thinking" doesn't silently
+  break), ⑤ a bottom nav (Lab/Agents/Brain/Package, scrolling to anchors that already exist),
+  ⑥ a spacing/typography audit (mostly already shipped, closing small gaps). **Phase B
+  (Mockup A, mixed verdict)** — the design agent's real opinion: decline the neon-trophy-
+  confetti visual language outright (a genuine identity clash with the shipped "brain, not a
+  game" aesthetic — see `BangerScoreCard.tsx`'s own "not a market or A&R prediction" copy) but
+  build the retention *mechanics* underneath it, because nearly all of them already have a
+  home: Hook Battle is a reskin of `rankHooksByCouncil()` (zero new logic — build first),
+  XP/levels reads `becomingYou.youPercent` + `pkg.score`'s 7 subcategories (new presentation
+  only), streaks extend `heat.ts`, quests/chapters extend `story.ts` (a new `hermes.quests.v1`
+  key for session-scoped counters, same `.bak`-mirror shape as every other store), confetti is
+  a hand-rolled canvas particle burst same house pattern as `BrainScan.tsx` (no library — the
+  $0-core no-new-deps rule holds). This is explicitly the SAME arc as the already-queued
+  "'Becoming You' gamified onboarding — badges + the Mogul story arc" idea above — treat as one
+  arc, not two. **Parked, not built**: a real leaderboard/community-challenge — needs
+  cross-visitor data aggregation the static $0 core structurally can't provide, same blocker
+  already logged twice (Live Multiplayer Council, the WIFI-radio jukebox). Cross-cutting risk
+  flagged by both agents: `FLOW_ANCHOR`'s five DOM ids (`stage-review`/`song-lyrics`/
+  `stage-keep`/`song-toolbar`/`stage-studio`) are literal scroll targets — any restructuring PR
+  must keep them wired or update the map in the same PR. Founder to pick a starting PR; full
+  reasoning in the two agents' reports (not persisted verbatim — available on request).
 - 💭 **Suno-inspired global nav + Council "wired everywhere" + dream-big Studio + wallet/fiat
   sign-up** *(founder idea, 2026-07-03, five Suno reference screenshots — continuing a
   session that ran out of Fable 5 credits mid-conversation; no code was left in progress,
