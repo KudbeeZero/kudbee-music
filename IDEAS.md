@@ -248,9 +248,16 @@ A second-opinion review flagged real risks worth acting on (truth-first):
   compact while pinned; deliberately not the full "logo | hamburger menu" redesign the
   mockup shows — that needs Crossroads/Albums/New/Sign-out collapsed into a real menu,
   scoped as a follow-up, not blocking this PR's real value (Crossroads/Albums/Sign-out
-  stay reachable without scrolling back up). ② sticky bottom Studio Flow rail (finishes wiring
-  `lib/hermes/device.ts`'s already-computed-but-unused `stickyPrimaryAction`/`bottomSheets`
-  flags — this isn't a new mobile system, it's finishing one that's half-wired), ③ collapse
+  stay reachable without scrolling back up). ② ✅ **shipped this session** — the Studio Flow
+  rail (Review/Refine/Keep/Release/Studio) is now sticky too, flush under the sticky top app
+  bar (a `ResizeObserver`-measured header height feeds the rail's inline `top` offset, so it
+  doesn't drift if the header's wrap height changes) — matches the mockup's "Progress Steps
+  (sticky)" step, distinct from the bottom nav (this shows/switches which *stage* you're in;
+  the bottom nav jumps between different *panels*). Correction to the original plan text:
+  ended up reusing `device.ui.singleColumn` (the same flag the header and bottom nav use),
+  not `stickyPrimaryAction`/`bottomSheets` — those two remain genuinely unused, a real
+  follow-up if a future PR wants a sticky primary CTA above the keyboard or bottom-sheet-style
+  drawers. ③ collapse
   Song Lab into an accordion (reuses the existing `showAvoid` disclosure pattern), ④ Agent
   Board as Proposes/Challenges/Judges tabs (reuses `Council.tsx`'s hemisphere split — flagged
   risk: `AgentBoard.tsx`'s live connector-line SVG assumes both wired cards are visible at
@@ -259,7 +266,7 @@ A second-opinion review flagged real risks worth acting on (truth-first):
   Package/Vault, scrolling to anchors that already existed via the Studio Flow rail's own
   `focusFlowStage`/`FLOW_ANCHOR` mechanism — also closes the Suno-idea "Council globally
   wired" ask above in the same PR), ⑥ a spacing/typography audit (mostly already shipped,
-  closing small gaps). Still open: ②③④. **Phase B
+  closing small gaps). Still open: ③④. **Phase B
   (Mockup A, mixed verdict)** — the design agent's real opinion: decline the neon-trophy-
   confetti visual language outright (a genuine identity clash with the shipped "brain, not a
   game" aesthetic — see `BangerScoreCard.tsx`'s own "not a market or A&R prediction" copy) but
