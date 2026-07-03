@@ -302,6 +302,24 @@ Board** governance / Solana / token / NFT layer integrates with this engine via 
 later (kept out of this repo's core so it stays free + local).
 
 ## ✅ Shipped (newest first)
+- [x] **📌 Sticky top app bar on phone** — autonomous-loop medium PR, third of the
+      session, Phase A step ① of the mobile-mockup implementation plan (`IDEAS.md`).
+      The header (brand, mode badge, Lyric Lab/Crossroads/Albums/Vault/Sign-out) used
+      to scroll away on a long single-column page — on a phone, once you'd scrolled
+      into the Council or the song package, getting back to Crossroads or Sign-out
+      meant scrolling all the way to the top. Now `position: sticky` (phone-only,
+      `device.ui.singleColumn`, same gate the bottom nav uses), with the decorative
+      subtitle ("Lyrical Combinator Brain · 10 agents") and the mode badge hidden
+      while pinned so the sticky bar stays compact instead of permanently occupying a
+      full two-row header's height. Deliberately not the mockup's full "logo | menu
+      icon" redesign — collapsing Crossroads/Albums/New/Sign-out into a real hamburger
+      menu is real, separate work; scoped out rather than rushed. Playwright-verified
+      live at 390×844: loaded the demo song, scrolled 1600px into the page, confirmed
+      the header's `getBoundingClientRect().top` stayed pinned at `0` and the
+      Crossroads link stayed visible/reachable throughout; confirmed the header is
+      plain `position: static` (no behavior change) at a 1440px desktop viewport. Zero
+      console errors. Full gate suite green (65 files / 556 tests, `tsc --noEmit`
+      clean, static export builds). _(this PR)_
 - [x] **📱 Bottom nav — Council (and everything else) one tap away on phone** —
       autonomous-loop medium PR, second of the session. Two backlog items closed at
       once: the Suno-reference "persistent bottom nav bar" idea, and "the Council

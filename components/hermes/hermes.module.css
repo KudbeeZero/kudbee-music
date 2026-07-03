@@ -354,6 +354,21 @@
 .shell[data-anim='lite'] .panel,
 .shell[data-anim='off'] .panel { backdrop-filter: none; background: var(--panel-solid); }
 
+/* ---- sticky top app bar (phone-only, device.ui.singleColumn) ----
+   Mobile-mockup-plan Phase A step ① (IDEAS.md). Keeps Crossroads/Albums/Sign-out and
+   brand orientation reachable without scrolling back to the top on a long single-column
+   page; hides the decorative subtitle/mode-badge lines so the pinned bar stays compact
+   rather than permanently occupying a full two-row header's height. Deliberately not the
+   full "logo | menu icon" redesign from the mockup — that needs a real hamburger menu to
+   collapse Crossroads/Albums/New/Sign-out into, which is its own follow-up PR. */
+.shell[data-sticky-header] .header {
+  position: sticky; top: 0; z-index: 45;
+  background: var(--panel-solid); border-bottom: 1px solid var(--line-strong);
+  padding-top: 10px; padding-bottom: 10px; margin-bottom: 8px;
+}
+.shell[data-sticky-header] .subtitle,
+.shell[data-sticky-header] .modeBadge { display: none; }
+
 /* ---- bottom nav (phone-only, device.ui.singleColumn) ---- */
 .shell[data-bottomnav] { padding-bottom: 78px; }
 .bottomNav {
