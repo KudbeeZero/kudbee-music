@@ -303,6 +303,27 @@ Board** governance / Solana / token / NFT layer integrates with this engine via 
 later (kept out of this repo's core so it stays free + local).
 
 ## ✅ Shipped (newest first)
+- [x] **🎭 Guest Judges — pluggable Council personas (medium-feature arc, item
+      8.4)** — the first real consumer of the 8.3 voice-registry refactor.
+      New `lib/hermes/guestJudges.ts` ships three deterministic, pure
+      personas built entirely on real lexicon/craft data — never invented
+      randomness, never a network call: **The A&R Exec** (rewards a tight
+      4-8 word radio-hook length, blended with the existing crave/craft
+      score), **The TikTok Algorithm** (rewards brevity plus motion/street/body
+      imagery pulled from `lexicon.ts`), **Your Mom** (rewards positive-affect,
+      family/hope/light-imagery language via `lexicon.ts`'s `wordInfo()`).
+      Toggleable chips in `Council.tsx` seat 0+ guests for the current session
+      only — a deliberate per-session choice, not a persisted setting — and
+      the ranking's weight-summary line names whichever guests are seated so
+      the score's composition always stays transparent, never a mystery
+      number. +8 new tests prove each persona's distinct bias (Your Mom flips
+      a warm hook above a dark one; TikTok flips a short hook above a long
+      one) and that every score stays in `[0,100]` and deterministic.
+      Playwright-verified live: all three chips render with the right labels,
+      `aria-pressed` toggles correctly on click, the weight summary correctly
+      names a seated guest ("+ Your Mom seated") and reverts cleanly when
+      un-seated. Zero console errors. Full gate suite green (64 files / 540
+      tests, up from 532). _(this PR)_
 - [x] **🔌 Council-voice-registry refactor — the plug-in prerequisite
       (medium-feature arc, item 8.3)** — founder: "if we were to connect
       another panel or another council into this... come up with three ideas

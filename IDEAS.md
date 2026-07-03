@@ -402,9 +402,39 @@ A second-opinion review flagged real risks worth acting on (truth-first):
     `{id, label, weight, score(ctx)}` plug-in capped at 50% combined share of
     the final score. Byte-identical to the pre-existing computation when no
     guest voices are supplied (+6 tests prove it, all 15 pre-existing tests
-    pass unchanged). No UI wired to it yet — that's Guest Judges next.
-  - 💤 Guest Judges + Agent Packs MVP queued as the next PRs in this arc
-    (`brain/roadmap.json` phase 8).
+    pass unchanged).
+  - ✅ **8.4 — Guest Judges shipped.** Three deterministic personas (The A&R
+    Exec, The TikTok Algorithm, Your Mom) built on real `lexicon.ts` data,
+    toggleable as chips in `Council.tsx`, seated per-session only. See TODO.md
+    Shipped.
+  - 💤 Agent Packs MVP queued as the next PR in this arc (`brain/roadmap.json`
+    phase 8).
+- 🔨 **"Becoming You" gamified onboarding — badges + the Mogul story arc**
+  *(founder idea, 2026-07-03 — "people earn badges like you want to become
+  the next Mogul... create the next hit, the greatest number one on the
+  Billboard charts... we can almost create a story out of it")* — this isn't
+  a from-scratch ask: `lib/hermes/story.ts` already has exactly this shape,
+  just not surfaced as a real onboarding experience. `CHAPTERS` is a real
+  progression system today — First Spark → Finding Your Voice → First Banger
+  → The Album — each with an explicit unlock condition (`unlockedChapters()`,
+  `currentChapter()`, `nextUnlock()`) driven by song count, best banger score,
+  and `becomingYou` percentage; `deriveArtist()` (`artist.ts`) already reads
+  the current chapter into the artist bio shown on `ArtistCard`. The founder's
+  ask is the natural extension: (1) more chapters carrying the arc further —
+  a "Certified Banger" tier, a "Chart Contender" tier tied to a Billboard-style
+  framing, maybe a "Mogul" capstone; (2) a real **badge** system — discrete,
+  named achievements (first 90+ banger, first Council-flipped ranking via a
+  Guest Judge, first shared gift, first Story-Mode chapter unlock) rendered
+  as a collectible strip, not just the single current-chapter line it is
+  today; (3) an onboarding surface that actually walks a new visitor through
+  it instead of it living quietly inside `ArtistCard`. Founder separately
+  noted Runway API access is already configured (~1000 credits — see the
+  "Runway Gen-4 world/video" entry below) as a possible resource, e.g. a
+  short cinematic moment rendered on a badge unlock. Needs real design before
+  building (this is bigger than a tiny/medium feature) — start by mapping
+  every badge-worthy moment already computable from existing data (banger
+  score, uniqueness, vault size, Council flips, share/gift sends) before
+  inventing new tracking.
 - 🔨 **Agent personality plug-ins** *(founder idea, 2026-07-03 — "some sort of
   personality feature... some sort of plug-in people could select for each
   agent")* — related to but distinct from the Council-voice-registry above:
