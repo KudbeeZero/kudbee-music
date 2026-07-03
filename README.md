@@ -311,6 +311,7 @@ flow, and the non-negotiables — plus the code-generated [brain-wiring diagram]
 - [x] **Sticky Studio Flow rail on phone** — Review/Refine/Keep/Release/Studio stays visible flush under the app bar, no matter how far you've scrolled
 - [x] **Song Lab accordion on phone** — the 4 key fields + Surprise Me lead; the other ~10 fields collapse into three named sections instead of one long wall of inputs
 - [x] **Agent Board tabs on phone** — Proposes/Challenges/Judges, without breaking the live "it's literally them thinking" connector line (all 10 cards stay mounted; only their visual density changes)
+- [x] **⚔️ Hook Battle** — a single-elimination bracket over the same council-ranked hooks, an alternative to the flat hook-options list; picking a winner wires into the real re-scoring pipeline
 
 **Next** — generated from the spine [`brain/roadmap.json`](brain/roadmap.json); the human backlog is [`TODO.md`](TODO.md), the full board is [`STATUS.md`](STATUS.md).
 
