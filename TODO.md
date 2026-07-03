@@ -303,6 +303,30 @@ Board** governance / Solana / token / NFT layer integrates with this engine via 
 later (kept out of this repo's core so it stays free + local).
 
 ## ✅ Shipped (newest first)
+- [x] **🔌 Council-voice-registry refactor — the plug-in prerequisite
+      (medium-feature arc, item 8.3)** — founder: "if we were to connect
+      another panel or another council into this... come up with three ideas
+      that would make this take #1 on the App Store." Audited the code first:
+      `AgentId` (`types.ts`) is a closed 10-agent union and `COUNCIL_WEIGHTS`
+      (`council.ts`) was a hardcoded 3–4-voice object — there was no real
+      extension point despite the app's own "rack" metaphor. `rankHooksByCouncil()`
+      now takes an optional 5th `guestVoices: CouncilVoice[]` parameter — each a
+      `{id, label, weight, score(ctx)}` plug-in that claims a capped share (at
+      most 50%) of the final `councilScore`, split proportionally among however
+      many guests are attached, so the built-in board never loses the majority
+      verdict. With no guest voices supplied, the computation collapses back to
+      the exact original expression — **byte-identical to before this existed**,
+      proven by +6 new tests plus all 15 pre-existing Council tests passing
+      unchanged (532 total tests across the suite, up from 526). No UI changed
+      in this PR — `Council.tsx` doesn't consume the new parameter yet, so there
+      was nothing new to Playwright-verify visually; the unit tests are the
+      proof of correctness here. This is the prerequisite for **Guest Judges**
+      (selectable persona voices) and **Agent Packs**, both queued next.
+      **Live Multiplayer Council stays parked as genuinely blocked** — it needs
+      real-time cross-device vote aggregation, which needs a backend the $0
+      static-export core doesn't have (same blocker as the WIFI-radio jukebox
+      idea's unbuilt crossroadsBoard stage 4). Not building a fake local
+      approximation. _(this PR)_
 - [x] **🖥️ Agent Board upgrade — live connection lines + terminal signal ticker
       (medium-feature arc, item 8.2)** — founder: "it's literally them
       thinking." The Agent Board was a static snapshot grid even though
