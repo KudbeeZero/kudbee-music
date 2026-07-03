@@ -166,7 +166,7 @@ interface AgentRosterCardProps {
 function AgentRosterCard({ agent, isSelected, onClick }: AgentRosterCardProps) {
   return (
     <article
-      className={`${styles.agentCard} ${isSelected ? styles.selected : ''}`}
+      className={`${styles.lifecycleCard} ${isSelected ? styles.selected : ''}`}
       onClick={onClick}
       role="button"
       tabIndex={0}
