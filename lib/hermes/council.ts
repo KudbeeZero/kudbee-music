@@ -45,6 +45,35 @@ export function voiceFit(hookText: string, taste: Taste): number {
   return Math.round(Math.max(0, Math.min(100, 50 + (score / words.length) * 50)));
 }
 
+/** Everything a pluggable guest voice needs to score one hook candidate — the
+ *  same signals the built-in challenge/reward/confidence/taste voices already
+ *  see, handed to a guest voice instead of being inlined into its own formula. */
+export interface CouncilVoiceContext {
+  hook: HookOption;
+  inputs: SongInputs;
+  sections: SongSection[];
+  deliberation: Deliberation;
+  passed: number;   // 0..3 challenges survived
+  craft: number;    // 0..100 crave-ability
+  taste?: Taste;
+}
+
+/** A pluggable Council voice — "connect another panel/council" made real. `weight`
+ *  is relative among other guest voices (see rankHooksByCouncil's blending below);
+ *  `score` must return 0..100. This is the extension point the Guest Judges and
+ *  Agent Packs features build on. */
+export interface CouncilVoice {
+  id: string;
+  label: string;
+  weight: number;
+  score: (ctx: CouncilVoiceContext) => number;
+}
+
+/** The maximum combined share of the final councilScore guest voices can claim —
+ *  the built-in board (challenge/reward/confidence/taste) always keeps at least
+ *  half the verdict, no matter how many guests are seated. */
+const MAX_GUEST_SHARE = 50;
+
 /**
  * Rank hook candidates the way the Council would: deliberate each, score its crave, and
  * integrate with the hook's own confidence. Deterministic — ties break by challenges
@@ -55,26 +84,41 @@ export function voiceFit(hookText: string, taste: Taste): number {
  * anything yet, `taste.edits === 0`), the ranking is byte-identical to before this
  * voice existed — a passed-in Taste with real edit history is what activates the
  * 4th voice and re-normalizes the weights.
+ *
+ * `guestVoices` is optional and additive the same way: with none supplied, the
+ * final rounding collapses back to exactly the built-in-only computation (byte-
+ * identical to before guest voices existed). With guests supplied, they claim a
+ * capped share of the final score (see MAX_GUEST_SHARE) split proportionally by
+ * their own weights — the built-in board's verdict always still counts for most
+ * of the score.
  */
 export function rankHooksByCouncil(
   hooks: HookOption[],
   inputs: SongInputs,
   sections: SongSection[] = [],
   taste?: Taste,
+  guestVoices: CouncilVoice[] = [],
 ): CouncilRanking[] {
   const useVoice = !!taste && taste.edits > 0;
   const w = useVoice ? COUNCIL_WEIGHTS_WITH_VOICE : COUNCIL_WEIGHTS;
+  const guestWeightSum = guestVoices.reduce((sum, v) => sum + v.weight, 0);
+  const guestShare = guestWeightSum > 0 ? Math.min(MAX_GUEST_SHARE, guestWeightSum) : 0;
+  const builtInShare = 100 - guestShare;
   const scored = hooks.map((hook, i) => {
     const deliberation = deliberate(hook.text, inputs);
     const passed = deliberation.secondThought.filter((c) => c.passes).length;
     const craft = craveScore(hook, sections).score;
     const voice = useVoice ? voiceFit(hook.text, taste!) : undefined;
-    const councilScore = Math.round(
+    const builtInScore =
       (passed / 3) * w.challenge +
       (craft / 100) * w.reward +
       (Math.min(100, Math.max(0, hook.score)) / 100) * w.confidence +
-      (useVoice ? (voice! / 100) * (w as typeof COUNCIL_WEIGHTS_WITH_VOICE).voice : 0),
-    );
+      (useVoice ? (voice! / 100) * (w as typeof COUNCIL_WEIGHTS_WITH_VOICE).voice : 0);
+    const ctx: CouncilVoiceContext = { hook, inputs, sections, deliberation, passed, craft, taste };
+    const guestScore = guestWeightSum > 0
+      ? guestVoices.reduce((sum, v) => sum + (v.score(ctx) / 100) * (v.weight / guestWeightSum) * guestShare, 0)
+      : 0;
+    const councilScore = Math.round((builtInScore / 100) * builtInShare + guestScore);
     return { hook, deliberation, craft, passed, voice, councilScore, i };
   });
   scored.sort((a, b) =>

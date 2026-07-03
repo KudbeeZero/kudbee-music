@@ -396,9 +396,15 @@ A second-opinion review flagged real risks worth acting on (truth-first):
   backend the $0 static-export core doesn't have — same blocker already
   documented for the WIFI-radio jukebox idea (`crossroadsBoard`'s unbuilt
   stage-4 opt-in backend). Not faking a local approximation; parked here until
-  that backend exists. Registry refactor + Guest Judges + Agent Packs MVP
-  queued as the next PRs in the medium-feature arc (`brain/roadmap.json`
-  phase 8).
+  that backend exists.
+  - ✅ **8.3 — Council-voice-registry refactor shipped.** `rankHooksByCouncil()`
+    now takes an optional `guestVoices: CouncilVoice[]` parameter, each voice a
+    `{id, label, weight, score(ctx)}` plug-in capped at 50% combined share of
+    the final score. Byte-identical to the pre-existing computation when no
+    guest voices are supplied (+6 tests prove it, all 15 pre-existing tests
+    pass unchanged). No UI wired to it yet — that's Guest Judges next.
+  - 💤 Guest Judges + Agent Packs MVP queued as the next PRs in this arc
+    (`brain/roadmap.json` phase 8).
 - 🔨 **Agent personality plug-ins** *(founder idea, 2026-07-03 — "some sort of
   personality feature... some sort of plug-in people could select for each
   agent")* — related to but distinct from the Council-voice-registry above:
