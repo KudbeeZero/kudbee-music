@@ -12,6 +12,7 @@ const BANNED_KEY = 'hermes.bannedWords.v1';
 const TASTE_KEY = 'hermes.taste.v1';
 const ALIAS_KEY = 'hermes.artistAlias.v1';
 const FAVORITES_KEY = 'hermes.favorites.v1';
+const SONG_NOTES_KEY = 'hermes.songNotes.v1';
 
 /** Backup mirror suffix — every durable list is written to `<key>` AND `<key>.bak`. */
 const BAK = '.bak';
@@ -442,6 +443,35 @@ export function toggleFavorite(id: string): Set<string> {
   if (favs.has(id)) favs.delete(id); else favs.add(id);
   try { kv().setItem(FAVORITES_KEY, JSON.stringify([...favs])); } catch { /* ignore */ }
   return favs;
+}
+
+// ---- song notes (vault): a free-text sticky note per song id ----------------------
+// A quick "needs a bridge rewrite" / "send to Marcus" reminder — best-effort like
+// favorites/taste, no bearing on generation. Capped so a stray paste can't quietly
+// bloat the vault's localStorage budget.
+const SONG_NOTE_MAX = 280;
+
+export function loadSongNotes(): Record<string, string> {
+  try {
+    const raw = kv().getItem(SONG_NOTES_KEY);
+    if (raw) {
+      const obj = JSON.parse(raw);
+      if (obj && typeof obj === 'object' && !Array.isArray(obj)) {
+        const out: Record<string, string> = {};
+        for (const [k, v] of Object.entries(obj)) if (typeof v === 'string') out[k] = v;
+        return out;
+      }
+    }
+  } catch { /* ignore */ }
+  return {};
+}
+
+export function setSongNote(id: string, note: string): Record<string, string> {
+  const notes = loadSongNotes();
+  const trimmed = note.trim().slice(0, SONG_NOTE_MAX);
+  if (trimmed) notes[id] = trimmed; else delete notes[id];
+  try { kv().setItem(SONG_NOTES_KEY, JSON.stringify(notes)); } catch { /* ignore */ }
+  return notes;
 }
 
 export function recordTaste(added: string[], removed: string[]): Taste {

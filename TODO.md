@@ -303,6 +303,16 @@ Board** governance / Solana / token / NFT layer integrates with this engine via 
 later (kept out of this repo's core so it stays free + local).
 
 ## ✅ Shipped (newest first)
+- [x] **📝 Per-song vault notes (tiny-feature cadence, #7)** — a quick sticky note
+      per stored song ("needs a bridge rewrite", "send to Marcus") — no way to leave
+      yourself a reminder on a specific take before. New `storage.ts`
+      `loadSongNotes()`/`setSongNote(id, text)`: a plain `Record<songId, string>` in
+      its own localStorage key, best-effort like favorites/taste, capped at 280
+      chars so a stray paste can't bloat the vault, blank text clears the entry.
+      An inline text input per `VaultDrawer` row, saved on blur. +5 tests.
+      Playwright-verified live: typed a note, blurred, reloaded the page, note was
+      still there; confirmed clicking into the input doesn't trigger the row's
+      "open this song" click handler, zero console errors. _(this PR)_
 - [x] **📑 Duplicate this song — fork a vault entry (tiny-feature cadence, #6)** —
       no way to branch a version to try a wild edit without risking the one you
       already liked; `saveSong`'s version history only bumps in-place on a matching

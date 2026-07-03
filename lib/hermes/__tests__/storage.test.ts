@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeEach } from 'vitest';
-import { saveSong, listSongs, getSong, deleteSong, duplicateSong, __clearVault, priorSongsForOriginality, loadFavorites, toggleFavorite } from '../storage';
+import { saveSong, listSongs, getSong, deleteSong, duplicateSong, __clearVault, priorSongsForOriginality, loadFavorites, toggleFavorite, loadSongNotes, setSongNote } from '../storage';
 import { runPipeline } from '../pipeline';
 import type { SongInputs } from '../types';
 
@@ -101,5 +101,41 @@ describe('duplicateSong — fork a stored song (tiny-feature cadence, #6)', () =
 
   it('returns null for a song that does not exist', () => {
     expect(duplicateSong('nope')).toBeNull();
+  });
+});
+
+describe('song notes — a free-text sticky note per song id (tiny-feature cadence, #7)', () => {
+  beforeEach(() => __clearVault());
+
+  it('starts empty', () => {
+    expect(loadSongNotes()).toEqual({});
+  });
+
+  it('sets and reads back a note', () => {
+    const notes = setSongNote('song-a', 'needs a bridge rewrite');
+    expect(notes['song-a']).toBe('needs a bridge rewrite');
+    expect(loadSongNotes()['song-a']).toBe('needs a bridge rewrite');
+  });
+
+  it('trims whitespace and clears the note when set to blank', () => {
+    setSongNote('song-a', '  send to Marcus  ');
+    expect(loadSongNotes()['song-a']).toBe('send to Marcus');
+    const cleared = setSongNote('song-a', '   ');
+    expect(cleared['song-a']).toBeUndefined();
+    expect(loadSongNotes()['song-a']).toBeUndefined();
+  });
+
+  it('caps note length so a stray paste cannot bloat the vault', () => {
+    const huge = 'x'.repeat(1000);
+    const notes = setSongNote('song-a', huge);
+    expect(notes['song-a'].length).toBe(280);
+  });
+
+  it('tracks notes for multiple songs independently', () => {
+    setSongNote('a', 'note A');
+    setSongNote('b', 'note B');
+    const notes = loadSongNotes();
+    expect(notes.a).toBe('note A');
+    expect(notes.b).toBe('note B');
   });
 });
