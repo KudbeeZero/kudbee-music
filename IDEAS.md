@@ -309,9 +309,16 @@ A second-opinion review flagged real risks worth acting on (truth-first):
     interaction bug with the earlier Escape-to-close-drawer feature — cancelling
     a rename was also closing the whole drawer until `stopPropagation()` was
     added. See TODO.md Shipped.
+  - ✅ **🗑 Clear all avoid-words** — a one-click reset for the learned avoid-words
+    list, gated by the same `window.confirm()` pattern as "Restore from backup"
+    (the only other destructive-action confirm in the app), shown only when the
+    list is non-empty. See TODO.md Shipped.
   Candidates queued for the next few rounds (pick one, ship it, move to the next):
-  a "clear all avoid-words" one-click reset, a per-song "copy JSON to clipboard"
-  (today JSON only downloads, no clipboard option like Markdown/Suno have).
+  a per-song "copy JSON to clipboard" (today JSON only downloads, no clipboard
+  option like Markdown/Suno have), a keyboard shortcut to jump straight to the
+  Vault search box (e.g. "/" like GitHub/Slack), a per-song "share link" copy
+  button next to Copy Suno prompt (share-link generation already exists via
+  Song Gifts — just needs a one-click surface on the main SongPackageView).
 - 🔨 **"Input their music" — upload an existing audio file, not just record live**
   *(founder question, 2026-07-03 — "I want to create something down the road
   where people can input their music... are you working on that?")* — a genuinely

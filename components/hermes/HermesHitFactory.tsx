@@ -311,6 +311,16 @@ export default function HermesHitFactory() {
     saveBannedWords(words);
   }
 
+  // A learned list can grow large over many songs — confirm before wiping it,
+  // same caution as "Restore from backup" elsewhere in the app.
+  function clearAvoidWords() {
+    if (!banned.length) return;
+    const ok = window.confirm(`Clear all ${banned.length} avoid-words? This can't be undone.`);
+    if (!ok) return;
+    setBanned([]);
+    saveBannedWords([]);
+  }
+
   // recommendation action: remember a new exclusion the brain suggested
   function addExclusion(word: string) {
     const next = Array.from(new Set([...banned, word.toLowerCase()]));
@@ -534,6 +544,11 @@ export default function HermesHitFactory() {
                 {learnedToRemember.length > 0 && (
                   <button className={styles.copyBtn} style={{ marginLeft: 0, marginTop: 7 }} onClick={copyLearnedExclusions}>
                     📋 copy {learnedToRemember.length} new word{learnedToRemember.length > 1 ? 's' : ''} to remember permanently
+                  </button>
+                )}
+                {banned.length > 0 && (
+                  <button className={styles.copyBtn} style={{ marginLeft: 0, marginTop: 7 }} onClick={clearAvoidWords}>
+                    🗑 clear all
                   </button>
                 )}
               </>
