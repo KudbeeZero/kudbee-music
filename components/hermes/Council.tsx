@@ -43,7 +43,10 @@ export default function Council({ outputs, pkg, taste }: { outputs: Record<strin
       <div style={{ marginTop: 6, display: 'flex', flexDirection: 'column', gap: 6 }}>
         {defs.map((def) => (
           <div key={def.id} className={styles.flag} style={{ borderLeft: `2px solid ${tint}` }}>
-            <div className={styles.flagKind}>{def.name}</div>
+            <div className={styles.flagKind}>
+              {def.codename ?? def.name}
+              {def.codename && <span className={styles.hint} style={{ marginLeft: 6, fontWeight: 400 }}>{def.name}</span>}
+            </div>
             <div className={styles.hint}>{outputs[def.id]?.finding ?? def.role}</div>
           </div>
         ))}

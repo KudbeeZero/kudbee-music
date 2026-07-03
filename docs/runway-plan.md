@@ -39,12 +39,20 @@ one). Then animate the chosen still into a looping ambient scene for the
 in-app Council/brain-scan view.
 
 **Phase 3 — Agent avatars → living characters (spend: ~4-8 clips, ~200-400 credits)**
-Blocked on the agent avatar images existing first (`TODO.md`'s "Agent images →
-avatars" item — the founder's Grok-generated images aren't wired in yet). Once
-each agent has a still portrait, animate the highest-visibility ones first
-(Hooksmith, AR-Judge — the ones users see most in the trace explorer) rather
-than all 10 agents at once. Reuse `--seed` for reproducible re-runs if a prompt
-needs tuning before committing more credits.
+The **who** is now decided: the founder's "sneak peek" box-art
+(`assets/concept-art/wifi-dj-agent-network-sneak-peek.png`) introduced companion
+identities for the Agent Network, now wired as the `codename` field on each
+`AGENT_DEFINITIONS` entry (`lib/hermes/agents.ts`, cosmetic-only — see
+`docs/hit-factory.md`'s codename table): Nexus (Conductor), Synapse (Hooksmith),
+Vylo (Lyric Chemist), Rhythmix (Beat Oracle), Echo (Emotion Scanner), Sentinel
+(Originality Auditor), Harmony (A&R Judge), Lumi (Visual Director), Drifter
+(Viral Clip Scout), Beacon (Rights & Release Guard). Still **blocked** on the
+actual still portraits existing (`TODO.md`'s "Agent images → avatars" item —
+per-codename Grok/Gen-4-image stills aren't generated yet). Once each has a
+still, animate the highest-visibility ones first (Synapse/Hooksmith,
+Harmony/A&R Judge — the ones users see most in the trace explorer) rather than
+all 10 at once. Reuse `--seed` for reproducible re-runs if a prompt needs tuning
+before committing more credits.
 
 **Phase 4 — Real video-studio clips (spend: remainder, opportunistic)**
 The original CLI video studio (`bin/hermes build`) already composites hero

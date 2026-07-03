@@ -27,18 +27,25 @@ drop it at `song/track.mp3`, and `hermes build`. If the audio isn't placed yet, 
 build prints exactly what to do instead of failing.
 
 ## The 10 agents (right brain proposes, left brain disposes)
-| Agent | Hemisphere | Output |
-|-------|-----------|--------|
-| HERMES Conductor | left | creative brief + concept |
-| Hooksmith | right | 3–5 hook options |
-| Lyric Chemist | right | sections + final lyrics |
-| Beat Oracle | left | production notes |
-| Emotion Scanner | left | emotional-arc clarity |
-| Originality Auditor | left | uniqueness report (0–100) |
-| A&R Judge | left | banger score (0–100) |
-| Visual Director | right | album cover + 16:9 video prompts |
-| Viral Clip Scout | right | short-form clip moments |
-| Rights & Release Guard | left | release checklist + warnings |
+Each agent also carries a display-only **Agent Network** codename (`codename` on
+`AgentDefinition`, shown in `components/hermes/Council.tsx`) — cosmetic branding
+only, never read by the pipeline or embedded in generated output, so the
+functional `name` below (which committed example fixtures embed verbatim, e.g.
+`"Hand the brief to Hooksmith."`) never changes. See `assets/concept-art/` for
+the sneak-peek art that introduced these identities.
+
+| Agent | Codename | Hemisphere | Output |
+|-------|----------|-----------|--------|
+| HERMES Conductor | Nexus | left | creative brief + concept |
+| Hooksmith | Synapse | right | 3–5 hook options |
+| Lyric Chemist | Vylo | right | sections + final lyrics |
+| Beat Oracle | Rhythmix | left | production notes |
+| Emotion Scanner | Echo | left | emotional-arc clarity |
+| Originality Auditor | Sentinel | left | uniqueness report (0–100) |
+| A&R Judge | Harmony | left | banger score (0–100) |
+| Visual Director | Lumi | right | album cover + 16:9 video prompts |
+| Viral Clip Scout | Drifter | right | short-form clip moments |
+| Rights & Release Guard | Beacon | left | release checklist + warnings |
 
 ## Architecture
 - `lib/hermes/types.ts` — typed contracts (agents, song package, scores, reports).
