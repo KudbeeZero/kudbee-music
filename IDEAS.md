@@ -256,10 +256,12 @@ A second-opinion review flagged real risks worth acting on (truth-first):
   - ✅ **⌨️ Cmd/Ctrl+Enter to generate** — a window-level keydown listener in
     `SongLabForm.tsx` submits from anywhere in the form, respecting the same
     `briefReady` guard the button uses. See TODO.md Shipped.
+  - ✅ **🎵 One-click Copy Suno prompt** — a direct "Copy Suno prompt" button in
+    `SongPackageView`, reusing `suno.ts`'s existing `sunoTrack()` — previously only
+    reachable inside "Explain this song". See TODO.md Shipped.
   Candidates queued for the next few rounds (pick one, ship it, move to the next):
-  an "undo last edit" for the Lyric Lab, a "copy Suno prompt" one-click button
-  (today it's tucked inside "Explain this song"), an Escape-key close for the
-  Vault/Album drawers.
+  an "undo last edit" for the Lyric Lab, an Escape-key close for the Vault/Album
+  drawers, a "copy as Markdown" export alongside the existing JSON export.
 - ✅ **"Make sure Claude.md files are getting updated, memory layer files... each file
   should have a chapter/head-type page with the contents of the entire folder"**
   *(founder directive, 2026-07-03)* — shipped: `brain/README.md` + rewritten `docs/index.md`,
