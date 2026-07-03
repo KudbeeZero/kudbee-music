@@ -326,12 +326,16 @@ A second-opinion review flagged real risks worth acting on (truth-first):
     sort rather than replacing it. Dropped a stale queued candidate in the
     same round: "share link" copy button turned out to already be shipped
     (`SongPackageView.tsx`'s 🔗 Share button). See TODO.md Shipped.
+  - ✅ **📋 Copy all lyrics — bulk vault export** — one clipboard copy of every
+    song's title + lyrics, `---`-separated, for archiving the whole catalog at
+    once instead of one song's "Copy lyrics" at a time. See TODO.md Shipped.
   Candidates queued for the next few rounds (pick one, ship it, move to the next):
-  a "copy all lyrics as plain text across the whole vault" bulk export for
-  someone archiving many songs at once, a "duplicate as new artist alias"
-  quick-fork that also opens the rename box in one motion (today duplicate
-  and rename are two separate clicks), a small "songs generated today" stat
-  in the Vault header for a sense of momentum.
+  a "duplicate as new artist alias" quick-fork that also opens the rename box
+  in one motion (today duplicate and rename are two separate clicks), a small
+  "songs generated today" stat in the Vault header for a sense of momentum, a
+  "copy all as Markdown" bulk export mirroring the new bulk-lyrics button but
+  using the richer per-song Markdown format (concept/brief/hook/production,
+  not just lyrics).
 - 🔨 **"Input their music" — upload an existing audio file, not just record live**
   *(founder question, 2026-07-03 — "I want to create something down the road
   where people can input their music... are you working on that?")* — a genuinely

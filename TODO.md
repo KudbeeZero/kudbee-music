@@ -303,6 +303,18 @@ Board** governance / Solana / token / NFT layer integrates with this engine via 
 later (kept out of this repo's core so it stays free + local).
 
 ## ✅ Shipped (newest first)
+- [x] **📋 Copy all lyrics — bulk vault export (tiny-feature cadence, #21)** —
+      copying one song's lyrics at a time (7.2) doesn't help someone archiving
+      the whole catalog at once. New `copyAllLyrics()` in `VaultDrawer.tsx`
+      concatenates every song's title + `[Section]`-labeled lyrics (same
+      format each song's own "Copy lyrics" button uses) into one clipboard
+      copy, separated by `---`. A "📋 Copy all lyrics" button in the top
+      control row, shown whenever the vault isn't empty. Playwright-verified
+      live: generated 2 songs, clicked the button, read the clipboard back and
+      confirmed it contained both songs' titles, section headers, and the
+      `---` separator (2 song blocks), confirmed the button label flips to
+      "all lyrics copied ✓" and reverts after the timeout. Zero console
+      errors. _(this PR)_
 - [x] **🔽 Vault sort toggle (tiny-feature cadence, #20)** — the vault only ever
       showed newest-first, no way to flip it. A new "Sort the vault" `<select>`
       in `VaultDrawer.tsx` (Newest first / Oldest first / Title A–Z) reorders
