@@ -93,6 +93,21 @@ describe('pattern packs — structure grammar', () => {
     expect(verse[0].toLowerCase()).not.toBe(verse[1].toLowerCase());
   });
 
+  it('the final chorus evolves one line; earlier choruses repeat verbatim (improvement #2)', async () => {
+    const { pkg } = await runPipeline({ ...base, structure: 'full-song' }, { id: 'lift', now: '2026-01-01T00:00:00Z', seed: 3 });
+    const hooks = pkg.sections.filter((s) => s.label === 'Hook');
+    expect(hooks.length).toBeGreaterThanOrEqual(3);
+    const first = hooks[0].lines;
+    const last = hooks[hooks.length - 1].lines;
+    // every non-final chorus is the same verbatim block (the singable anchor)...
+    for (const h of hooks.slice(0, -1)) expect(h.lines).toEqual(first);
+    // ...the final one differs (one evolved line), while keeping the hook line as anchor
+    expect(last).not.toEqual(first);
+    expect(last.filter((l) => l === pkg.chosenHook!.text).length).toBeGreaterThanOrEqual(3);
+    // and no two Hook sections share an array reference (aliasing hazard, audit)
+    expect(hooks[0].lines).not.toBe(hooks[1].lines);
+  });
+
   it('short-form stays deterministic and does not disturb other structures', async () => {
     const a = await runPipeline({ ...base, structure: 'short-form', rhymeScheme: 'ABAB' }, { id: 's', now: '2026-01-01T00:00:00Z', seed: 6 });
     const b = await runPipeline({ ...base, structure: 'short-form', rhymeScheme: 'ABAB' }, { id: 's', now: '2026-01-01T00:00:00Z', seed: 6 });

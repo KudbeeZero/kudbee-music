@@ -5,7 +5,7 @@
 // guard: if a change makes the songs worse, the numbers say so. $0, deterministic.
 import type { SongPackage } from './types';
 import { rhymeDensity } from './rhyme';
-import { selfSimilarity, keywords, determinerAgreementViolations } from './text';
+import { selfSimilarity, keywords, determinerAgreementViolations, maxContentWordShare } from './text';
 import { imageryCoherence } from './providers/mockLyricsProvider';
 
 export interface EvalMetric {
@@ -43,6 +43,10 @@ export function evaluateSong(pkg: SongPackage): EvalReport {
   const allLines = pkg.sections.flatMap((s) => s.lines);
   const agreementViolations = determinerAgreementViolations(allLines.join('\n'));
   const agreement = allLines.length ? 1 - agreementViolations.length / allLines.length : 1;
+  // repetition budget: 1 - (share of the single most-repeated content word). Chorus
+  // repetition is intentional craft, so the threshold only guards against it getting
+  // WORSE song-wide (the hook line repeating 9-15x was invisible before this).
+  const repetition = 1 - maxContentWordShare(allLines.join('\n'));
 
   const metric = (name: string, value: number, threshold: number, detail: string): EvalMetric =>
     ({ name, value: +value.toFixed(2), threshold, pass: value >= threshold, detail });
@@ -56,6 +60,7 @@ export function evaluateSong(pkg: SongPackage): EvalReport {
     metric('determiner agreement', agreement, 1, agreementViolations.length
       ? `ungrammatical: ${agreementViolations.join(', ')}`
       : 'no singular-determiner + plural-noun clashes ("this winters")'),
+    metric('repetition budget', repetition, 0.8, 'inverse share of the most-repeated content word (calibrated: golden set sits 0.83–0.90)'),
   ];
 
   return {

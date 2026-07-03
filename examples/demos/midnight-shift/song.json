@@ -119,13 +119,13 @@
       "label": "Hook",
       "lines": [
         "For everyone, I grind through the nobody",
+        "And everyone know I hold on for it",
         "For everyone, I grind through the nobody",
-        "All this ember, I earned it slow",
         "For everyone, I grind through the nobody"
       ]
     }
   ],
-  "finalLyrics": "[Intro]\nEveryone, this one's for you\n\n[Hook]\nFor everyone, I grind through the nobody\nFor everyone, I grind through the nobody\nAll this ember, I earned it slow\nFor everyone, I grind through the nobody\n\n[Verse 1]\nAll I had was graveyard and the day\nThey handed me iron instead of the way\nGrew up on shift, chasing the name\nNothing in my hands but future and the frame\n\n[Hook]\nFor everyone, I grind through the nobody\nFor everyone, I grind through the nobody\nAll this ember, I earned it slow\nFor everyone, I grind through the nobody\n\n[Verse 2]\nTook that shift and turned it to a frame\nEverything changed, traded nobody for the name\nPut the future down, reaching for the glow\nNow I survive the graveyard into the flow\n\n[Bridge]\nMade my peace with future and the day\nLooking back, the future was always the way\n\n[Hook]\nFor everyone, I grind through the nobody\nFor everyone, I grind through the nobody\nAll this ember, I earned it slow\nFor everyone, I grind through the nobody\n\n[Hook]\nFor everyone, I grind through the nobody\nFor everyone, I grind through the nobody\nAll this ember, I earned it slow\nFor everyone, I grind through the nobody",
+  "finalLyrics": "[Intro]\nEveryone, this one's for you\n\n[Hook]\nFor everyone, I grind through the nobody\nFor everyone, I grind through the nobody\nAll this ember, I earned it slow\nFor everyone, I grind through the nobody\n\n[Verse 1]\nAll I had was graveyard and the day\nThey handed me iron instead of the way\nGrew up on shift, chasing the name\nNothing in my hands but future and the frame\n\n[Hook]\nFor everyone, I grind through the nobody\nFor everyone, I grind through the nobody\nAll this ember, I earned it slow\nFor everyone, I grind through the nobody\n\n[Verse 2]\nTook that shift and turned it to a frame\nEverything changed, traded nobody for the name\nPut the future down, reaching for the glow\nNow I survive the graveyard into the flow\n\n[Bridge]\nMade my peace with future and the day\nLooking back, the future was always the way\n\n[Hook]\nFor everyone, I grind through the nobody\nFor everyone, I grind through the nobody\nAll this ember, I earned it slow\nFor everyone, I grind through the nobody\n\n[Hook]\nFor everyone, I grind through the nobody\nAnd everyone know I hold on for it\nFor everyone, I grind through the nobody\nFor everyone, I grind through the nobody",
   "production": {
     "tempoBpm": 82,
     "drums": "boom-bap with dusty snares",
@@ -229,8 +229,8 @@
       "b38e4ab1",
       "d3f64919",
       "d3f64919",
+      "bd82375d",
       "d3f64919",
-      "b38e4ab1",
       "d3f64919"
     ],
     "bannedWordsHit": [],
@@ -425,8 +425,8 @@
             "label": "Hook",
             "lines": [
               "For everyone, I grind through the nobody",
+              "And everyone know I hold on for it",
               "For everyone, I grind through the nobody",
-              "All this ember, I earned it slow",
               "For everyone, I grind through the nobody"
             ]
           }
@@ -561,8 +561,8 @@
             "b38e4ab1",
             "d3f64919",
             "d3f64919",
+            "bd82375d",
             "d3f64919",
-            "b38e4ab1",
             "d3f64919"
           ],
           "bannedWordsHit": [],

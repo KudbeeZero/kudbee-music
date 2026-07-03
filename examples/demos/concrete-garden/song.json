@@ -110,13 +110,13 @@
       "label": "Hook",
       "lines": [
         "Tell block I made it out the valley",
+        "And block know I build for it",
         "Tell block I made it out the valley",
-        "All this place, I earned it slow",
         "Tell block I made it out the valley"
       ]
     }
   ],
-  "finalLyrics": "[Intro]\nBlock, this one's for you\n\n[Hook]\nTell block I made it out the valley\nTell block I made it out the valley\nAll this place, I earned it slow\nTell block I made it out the valley\n\n[Verse 1]\nIt started with the place and the glow\nNothing in my hands but scar and the flow\nGrew up on mountain, chasing the flight\nThey handed me gravel instead of the sight\n\n[Hook]\nTell block I made it out the valley\nTell block I made it out the valley\nAll this place, I earned it slow\nTell block I made it out the valley\n\n[Verse 2]\nTook that mountain and turned it to a brain\nStakes got higher, candle became the train\nPut the debt down, reaching for the name\nEverything changed, traded place for the game\n\n[Bridge]\nWouldn't trade the debt for a flight\nMade my peace with gravel and the sight\n\n[Hook]\nTell block I made it out the valley\nTell block I made it out the valley\nAll this place, I earned it slow\nTell block I made it out the valley",
+  "finalLyrics": "[Intro]\nBlock, this one's for you\n\n[Hook]\nTell block I made it out the valley\nTell block I made it out the valley\nAll this place, I earned it slow\nTell block I made it out the valley\n\n[Verse 1]\nIt started with the place and the glow\nNothing in my hands but scar and the flow\nGrew up on mountain, chasing the flight\nThey handed me gravel instead of the sight\n\n[Hook]\nTell block I made it out the valley\nTell block I made it out the valley\nAll this place, I earned it slow\nTell block I made it out the valley\n\n[Verse 2]\nTook that mountain and turned it to a brain\nStakes got higher, candle became the train\nPut the debt down, reaching for the name\nEverything changed, traded place for the game\n\n[Bridge]\nWouldn't trade the debt for a flight\nMade my peace with gravel and the sight\n\n[Hook]\nTell block I made it out the valley\nAnd block know I build for it\nTell block I made it out the valley\nTell block I made it out the valley",
   "production": {
     "tempoBpm": 92,
     "drums": "minimal knock, heavy kick",
@@ -216,8 +216,8 @@
       "e1f9d253",
       "a87c3e90",
       "97011738",
+      "f085e503",
       "97011738",
-      "9eeca1d9",
       "97011738"
     ],
     "bannedWordsHit": [],
@@ -403,8 +403,8 @@
             "label": "Hook",
             "lines": [
               "Tell block I made it out the valley",
+              "And block know I build for it",
               "Tell block I made it out the valley",
-              "All this place, I earned it slow",
               "Tell block I made it out the valley"
             ]
           }
@@ -531,8 +531,8 @@
             "e1f9d253",
             "a87c3e90",
             "97011738",
+            "f085e503",
             "97011738",
-            "9eeca1d9",
             "97011738"
           ],
           "bannedWordsHit": [],

@@ -132,6 +132,18 @@ export function titleCase(s: string): string {
   return s.replace(/\b\w/g, (c) => c.toUpperCase());
 }
 
+/** The share of all content words taken by the single most-repeated one (0–1).
+ *  The eval harness's repetition budget: a song where one word dominates every
+ *  section reads as thin, and nothing measured it before (the hook line alone
+ *  repeats by design — this watches whether repetition gets WORSE, song-wide). */
+export function maxContentWordShare(text: string): number {
+  const words = tokenize(text).filter((w) => w.length >= 4 && !STOP.has(w));
+  if (!words.length) return 0;
+  const counts = new Map<string, number>();
+  for (const w of words) counts.set(w, (counts.get(w) ?? 0) + 1);
+  return Math.max(...counts.values()) / words.length;
+}
+
 /** Pull meaningful keywords from a free-text field (drops stopwords). */
 const STOP = new Set([
   'the', 'a', 'an', 'and', 'or', 'but', 'for', 'to', 'of', 'in', 'on', 'my',
