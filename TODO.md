@@ -303,6 +303,19 @@ Board** governance / Solana / token / NFT layer integrates with this engine via 
 later (kept out of this repo's core so it stays free + local).
 
 ## ✅ Shipped (newest first)
+- [x] **🔽 Vault sort toggle (tiny-feature cadence, #20)** — the vault only ever
+      showed newest-first, no way to flip it. A new "Sort the vault" `<select>`
+      in `VaultDrawer.tsx` (Newest first / Oldest first / Title A–Z) reorders
+      the base list before the existing favorites-first stable sort runs on
+      top — favorites still always float to the top no matter the sort mode.
+      Shown once there's more than 1 song. While auditing the next queued
+      candidate ("share link" copy button), found it was already shipped —
+      `SongPackageView.tsx`'s `shareSong()`/🔗 Share button already covers
+      that — dropped rather than duplicated. Playwright-verified live:
+      generated 3 songs, confirmed newest-first order, confirmed oldest-first
+      is the exact reverse, confirmed title A-Z is alphabetically correct, and
+      confirmed switching back to newest restores the original order. Zero
+      console errors. _(this PR)_
 - [x] **/ jumps to the Vault search box (tiny-feature cadence, #19)** — the Vault
       search box (7.15) had no keyboard shortcut, the same GitHub/Slack
       convention Cmd/Ctrl+Enter already brought to Song Lab (7.8). A
