@@ -250,8 +250,11 @@ A second-opinion review flagged real risks worth acting on (truth-first):
   Board as Proposes/Challenges/Judges tabs (reuses `Council.tsx`'s hemisphere split — flagged
   risk: `AgentBoard.tsx`'s live connector-line SVG assumes both wired cards are visible at
   once, needs an explicit fallback so 8.2's "it's literally them thinking" doesn't silently
-  break), ⑤ a bottom nav (Lab/Agents/Brain/Package, scrolling to anchors that already exist),
-  ⑥ a spacing/typography audit (mostly already shipped, closing small gaps). **Phase B
+  break), ⑤ ✅ **shipped this session** — a bottom nav (`BottomNav.tsx`: Lab/Council/Studio/
+  Package/Vault, scrolling to anchors that already existed via the Studio Flow rail's own
+  `focusFlowStage`/`FLOW_ANCHOR` mechanism — also closes the Suno-idea "Council globally
+  wired" ask above in the same PR), ⑥ a spacing/typography audit (mostly already shipped,
+  closing small gaps). Still open: ①②③④. **Phase B
   (Mockup A, mixed verdict)** — the design agent's real opinion: decline the neon-trophy-
   confetti visual language outright (a genuine identity clash with the shipped "brain, not a
   game" aesthetic — see `BangerScoreCard.tsx`'s own "not a market or A&R prediction" copy) but
@@ -277,17 +280,21 @@ A second-opinion review flagged real risks worth acting on (truth-first):
   capture, not a resume)* — four related asks from the reference images:
   1. **A persistent bottom nav bar** (mobile) that switches between top-level areas the way
      Suno's app does (Home / Explore / Create / Library / Profile icons pinned to the bottom
-     of every screen). HERMES has no equivalent today — checked `app/`: routes are `/`
-     (landing), `/hermes` (Song Lab + studio flow), `/crossroads`, `/hit-factory`, each its
-     own page with no shared chrome/nav between them. A bottom tab bar would be the first
-     real cross-page navigation shell.
+     of every screen). ✅ **shipped this session**: `components/hermes/BottomNav.tsx` —
+     Lab/Council/Studio/Package/Vault, phone-only (`device.ui.singleColumn`, the first real
+     consumer of that computed-but-previously-unused device flag), Lab/Vault always active,
+     the other three disabled until a song exists. Not a cross-*route* nav (that would need
+     the separate `/`, `/crossroads`, `/hit-factory` pages to share state they don't have) —
+     scoped to a within-`/hermes` quick-jump, which is what both the Suno reference and the
+     mobile-mockup-plan artifact's Phase A step ⑤ actually called for.
   2. **The Council "globally wired"** — the founder read Suno Studio's single integrated
      workspace (audio, lyrics, styles, timeline, cover art all visible + linked together at
      once, screenshot 1) as a model for how the Council should feel: reachable from
-     anywhere, not buried inside the Studio Flow rail (8.1) as one panel among many. Natural
-     shape: the Council becomes one of the bottom-nav destinations (or a persistent
-     mini-widget) so its live ranking is visible/reachable regardless of what else is on
-     screen, not just seated inside `HermesHitFactory.tsx`'s studio mode.
+     anywhere, not buried inside the Studio Flow rail (8.1) as one panel among many. ✅
+     **shipped this session, same PR as piece 1**: Council is now a bottom-nav destination
+     (`focusFlowStage('review')`, the exact mechanism the Studio Flow rail's own Review tab
+     already used) — one tap from anywhere on a phone, not conditional on which flow stage
+     you happened to be in.
   3. **"Studio" — dream big** (screenshot 3, Suno's own Studio upsell modal: "Your complete
      creative workspace") — ✅ **shipped this session**: `components/hermes/Studio.tsx`, a
      read-only arrangement timeline (the song's real sections as clips, sized off the
@@ -311,11 +318,10 @@ A second-opinion review flagged real risks worth acting on (truth-first):
      exchange-rate API directly, same shape as `lib/hermes/claudeKey.ts` — no founder server,
      no founder key) could keep a *display-only* conversion inside the $0 rules; real wallet
      auth + real account auth both still need the founder's hosted-auth decision first.
-  Piece 3 shipped this session (see above). Pieces 1-2 (bottom nav, Council globally
-  reachable) are $0/local and buildable now without a founder decision. Piece 4 splits into
-  a buildable-now UI (the sign-up modal itself, wallet-or-account choice, BYOK-style display
-  conversion) and a founder-blocked piece (real wallet connect + real account auth), same
-  shape as the existing "Accounts / sign-in" item. Not started.
+  Pieces 1-3 shipped this session (see above). Piece 4 splits into a buildable-now UI (the
+  sign-up modal itself, wallet-or-account choice, BYOK-style display conversion) and a
+  founder-blocked piece (real wallet connect + real account auth), same shape as the existing
+  "Accounts / sign-in" item. Not started.
 - 💭 **"WIFI radio will have like a jukebox songs. People can submit songs. We have
   contest stuff — bring more value"** *(founder idea, 2026-07-03)* — this already
   had a home: `brain/roadmap.json`'s `ecosystem.wifiDjRadio` ("A live radio
