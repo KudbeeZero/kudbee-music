@@ -299,10 +299,13 @@ A second-opinion review flagged real risks worth acting on (truth-first):
   - ✅ **🕐 Recently viewed strip in the Vault** — `loadRecentlyViewed()`/
     `recordRecentlyViewed()` (newest-first, capped at 5), recorded on every
     vault-open, a chip strip above the main Vault list. See TODO.md Shipped.
+  - ✅ **🔎 Vault search/filter box** — a "Search by title…" input filters the
+    visible list (case-insensitive substring match), shown only past 5 songs; an
+    honest "No songs match" empty state distinct from "vault is empty." See
+    TODO.md Shipped.
   Candidates queued for the next few rounds (pick one, ship it, move to the next):
-  a vault search/filter box (type to filter by title once the list grows past a
-  screenful), an inline rename for a vault song's title (separate from bumping a
-  new version).
+  an inline rename for a vault song's title (separate from bumping a new
+  version), a "clear all avoid-words" one-click reset.
 - 🔨 **"Input their music" — upload an existing audio file, not just record live**
   *(founder question, 2026-07-03 — "I want to create something down the road
   where people can input their music... are you working on that?")* — a genuinely

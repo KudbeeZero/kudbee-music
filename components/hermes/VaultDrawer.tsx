@@ -27,6 +27,7 @@ export default function VaultDrawer({
   const [favorites, setFavorites] = useState<Set<string>>(() => loadFavorites());
   const [noteDrafts, setNoteDrafts] = useState<Record<string, string>>(() => loadSongNotes());
   const [recentIds] = useState<string[]>(() => loadRecentlyViewed());
+  const [query, setQuery] = useState('');
 
   function toggleFav(id: string, e: React.MouseEvent) {
     e.stopPropagation();
@@ -49,7 +50,9 @@ export default function VaultDrawer({
 
   // Favorites float to the top; a stable sort keeps each group's original
   // (newest-first) order otherwise, so favoriting never reshuffles the rest.
-  const sortedSongs = [...songs].sort((a, b) => Number(favorites.has(b.id)) - Number(favorites.has(a.id)));
+  const sortedSongs = [...songs]
+    .filter((s) => s.title.toLowerCase().includes(query.trim().toLowerCase()))
+    .sort((a, b) => Number(favorites.has(b.id)) - Number(favorites.has(a.id)));
   const byId = new Map(songs.map((s) => [s.id, s]));
   // Filter out ids for songs that were since deleted — a stale recent-id is just
   // dropped, never shown as a broken chip.
@@ -120,6 +123,17 @@ export default function VaultDrawer({
           <div className={styles.hint} style={{ marginBottom: 14 }} role="status">{restoreNote}</div>
         )}
 
+        {songs.length > 5 && (
+          <input
+            className={styles.input}
+            style={{ marginBottom: 14 }}
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
+            placeholder="Search by title…"
+            aria-label="Search the vault by title"
+          />
+        )}
+
         {recentSongs.length > 0 && (
           <div style={{ marginBottom: 14 }}>
             <div className={styles.hint} style={{ marginBottom: 6 }}>🕐 Recently viewed</div>
@@ -135,6 +149,8 @@ export default function VaultDrawer({
 
         {songs.length === 0 ? (
           <div className={styles.emptyState}>No saved songs yet.<br />Generate a package and it lands here.</div>
+        ) : sortedSongs.length === 0 ? (
+          <div className={styles.emptyState}>No songs match "{query}".</div>
         ) : (
           sortedSongs.map((s) => (
             <div key={s.id} className={styles.vaultItem} onClick={() => onOpen(s.id)}>
