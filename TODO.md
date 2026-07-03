@@ -106,12 +106,10 @@ chat. Detail for each is in [`brain/roadmap.json`](brain/roadmap.json) + [`IDEAS
      verbs (`carry`/`grind`/…) are rejected by `nounable` (`VERB_SET` derived from `VERBS`). Regression-tested.
 - [~] **Crossroads Stages 2–3** — Stage 2 shipped _(#116)_: a `/crossroads` board UI. Stage 3
    (decisions feed the taste model) is still queued.
-- [ ] **PNG share card has no UI trigger** — surfaced while shipping Song Gifts phase 2
-   (roadmap 5.9): `shareCard.ts`'s `renderShareCard`/`downloadShareCard` are tested and
-   correct, but nothing in `components/` or `app/` calls them — a visitor cannot download
-   the card at all today. Fix: wire a "⬇ Download card" button into `SongPackageView`
-   (next to Share/Explain/Export), or if this was deliberately deferred, say so explicitly
-   in `brain/roadmap.json` instead of the item silently reading as shipped.
+- [x] **PNG share card has no UI trigger** — fixed _(this PR)_: a "🖼 Download card" button
+   now sits in `SongPackageView` between Share and Explain, wired straight to the already-
+   tested `downloadShareCard()`. Verified live: triggers a real ~700KB PNG download, gift
+   framing included when the package qualifies, zero console errors.
 - [~] **2026-07-02 code-review findings (Fable 5 review → Sonnet verification)** — weakness #1
    (share-reproduction integrity) fixed _(this PR)_. Still open, in fix order:
    - [x] **Weakness #2 — quota-honest vault writes** — fixed _(this PR)_: `saveSong` now
@@ -305,6 +303,13 @@ Board** governance / Solana / token / NFT layer integrates with this engine via 
 later (kept out of this repo's core so it stays free + local).
 
 ## ✅ Shipped (newest first)
+- [x] **PNG share card — wired the download button (roadmap 5.9 follow-up)** — the Song
+      Gifts phase-2 PR made `shareCard.ts`'s `renderShareCard`/`downloadShareCard` gift-aware
+      but surfaced that neither was ever called from any component — a visitor had no way to
+      download the card at all. Fixed: a "🖼 Download card" button in `SongPackageView`,
+      between Share and Explain, with busy/error states (`cardState`). Verified live with
+      Playwright: triggers a real PNG download (~700KB), correct filename, gift framing shows
+      when the package qualifies (occasion + dedicated name), zero console errors. _(this PR)_
 - [x] **Song Gifts — gift-framed share link, PNG card, and OG unfurl (roadmap 5.9, Song
       Gifts phase 2)** — completes the pitch from 5.8. Every existing share surface becomes
       gift-aware whenever a package carries an Occasion Pack + a dedicated audience name —
