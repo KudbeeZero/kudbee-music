@@ -2,7 +2,7 @@
 
 > **Generated from [`brain/roadmap.json`](brain/roadmap.json) — do not hand-edit.** Status lives ONLY in the spine; edit it there, then regenerate with `GEN_DOCS=1 npx vitest run status`. `statusBoard.test.ts` fails CI if this file drifts.
 
-**Scoreboard:** ✅ 67 shipped · 🔨 1 in build · 💤 10 queued — 78 tracked items
+**Scoreboard:** ✅ 68 shipped · 🔨 1 in build · 💤 10 queued — 79 tracked items
 (legend: ✅ shipped · 🔌 scaffold shipped, founder-gated · 🔨 in build · ⏭️ next · 💤 queued · 💭 idea · 🚧 blocked on founder)
 
 ## Tracks
@@ -115,7 +115,7 @@
 | ✅ | **📄 Copy all as Markdown — bulk vault export, richer format** | `components/hermes/VaultDrawer.tsx` | — |
 | ✅ | **🗑 Clear all vault notes** | `lib/hermes/storage.ts + components/hermes/VaultDrawer.tsx` | — |
 
-### Phase 8 — Medium features — the planned arc — `▰▰▰▰▰▰▰▰▰▰` 7/7
+### Phase 8 — Medium features — the planned arc — `▰▰▰▰▰▰▰▰▰▰` 8/8
 
 | | Item | Where it lives | PR |
 |---|------|----------------|----|
@@ -126,6 +126,7 @@
 | ✅ | **🎛️ Agent Packs MVP — genre/scene Council voice bundles** | `lib/hermes/agentPacks.ts + components/hermes/Council.tsx` | — |
 | ✅ | **📖 Word ideas — a similar-words popup while editing lyrics** | `lib/hermes/lexicon.ts + components/hermes/ScribeEditor.tsx` | — |
 | ✅ | **🔄 Live re-scoring on lyric edit — the panel ripples with an edit** | `components/hermes/HermesHitFactory.tsx + lib/hermes/pipeline.ts` | — |
+| ✅ | **🧭 Guided tour of the Scribe lyric editor (coach-marks)** | `components/hermes/GuidedTour.tsx + ScribeEditor.tsx + lib/hermes/storage.ts` | — |
 
 ### Video studio — `▰▰▰▰▰▱▱▱▱▱` 4/8
 

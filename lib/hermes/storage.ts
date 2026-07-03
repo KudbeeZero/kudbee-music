@@ -14,6 +14,7 @@ const ALIAS_KEY = 'hermes.artistAlias.v1';
 const FAVORITES_KEY = 'hermes.favorites.v1';
 const SONG_NOTES_KEY = 'hermes.songNotes.v1';
 const RECENT_KEY = 'hermes.recentlyViewed.v1';
+const SCRIBE_TOUR_KEY = 'hermes.scribeTourSeen.v1';
 
 /** Backup mirror suffix — every durable list is written to `<key>` AND `<key>.bak`. */
 const BAK = '.bak';
@@ -463,6 +464,16 @@ export function toggleFavorite(id: string): Set<string> {
   if (favs.has(id)) favs.delete(id); else favs.add(id);
   try { kv().setItem(FAVORITES_KEY, JSON.stringify([...favs])); } catch { /* ignore */ }
   return favs;
+}
+
+// ---- Scribe editor guided tour: a one-time "seen it" flag -------------------------
+/** Has this browser already dismissed/finished the Scribe editor's guided tour? */
+export function hasSeenScribeTour(): boolean {
+  try { return kv().getItem(SCRIBE_TOUR_KEY) === '1'; } catch { return false; }
+}
+
+export function markScribeTourSeen(): void {
+  try { kv().setItem(SCRIBE_TOUR_KEY, '1'); } catch { /* ignore */ }
 }
 
 // ---- song notes (vault): a free-text sticky note per song id ----------------------

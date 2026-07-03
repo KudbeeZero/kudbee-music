@@ -168,6 +168,19 @@
 .flagKind { font-size: 9.5px; text-transform: uppercase; letter-spacing: 0.1em; color: var(--warn); }
 .flagLine { color: var(--ink-faint); font-style: italic; }
 .chip { display: inline-block; font-size: 10.5px; padding: 3px 8px; border-radius: 999px; border: 1px solid rgba(255, 93, 108, 0.4); color: var(--bad); margin: 3px 3px 0 0; }
+
+/* ---------- guided tour (coach-marks) ---------- */
+.tourSpotlight {
+  position: fixed; border-radius: 10px; pointer-events: none; z-index: 1000;
+  box-shadow: 0 0 0 9999px rgba(4, 6, 10, 0.72), 0 0 0 2px var(--amber);
+  transition: top 0.28s ease, left 0.28s ease, width 0.28s ease, height 0.28s ease;
+}
+.tourCard {
+  position: fixed; z-index: 1001; width: 280px; padding: 14px; border-radius: 12px;
+  background: var(--panel-solid, var(--panel)); border: 1px solid var(--amber);
+  box-shadow: var(--glow-amber, 0 4px 24px rgba(0,0,0,0.4));
+  transition: top 0.28s ease, left 0.28s ease;
+}
 .clean { color: var(--good); font-size: 12.5px; }
 
 /* ---------- song package ---------- */

@@ -303,6 +303,30 @@ Board** governance / Solana / token / NFT layer integrates with this engine via 
 later (kept out of this repo's core so it stays free + local).
 
 ## ✅ Shipped (newest first)
+- [x] **🧭 Guided tour of the Scribe lyric editor — coach-marks (medium-feature
+      arc, item 8.8)** — founder asked to research how Scribe
+      (scribehow.com — auto-converts a real workflow into an annotated
+      step-by-step guide) works and bring that into the lyrical area;
+      clarified via a follow-up question that this meant a guided onboarding
+      tour of the editor itself, not a songwriting-replay feature. New
+      generic `GuidedTour.tsx` — a small, dependency-free coach-mark overlay
+      driven by a static `{selector, title, body}[]` config, spotlighting one
+      real DOM element at a time (a box-shadow cutout technique, no separate
+      scrim div needed) with Next/Skip/Done navigation. Five steps teach
+      `ScribeEditor`'s actual affordances: editing a line directly, the
+      double-click word-ideas popup (8.6), the AI-rewrite sparkle, add-line,
+      delete-line — anchored via `data-tour` attributes on the first
+      rendered line only. Shown automatically the first time a browser opens
+      the editor (new `storage.ts` `hasSeenScribeTour()`/`markScribeTourSeen()`,
+      a plain one-time flag, not `.bak`-mirrored since losing it just means
+      seeing the tour again, not losing real data); replayable anytime via a
+      "? Show me around" button next to Save/Cancel. +2 new storage tests.
+      Playwright-verified live end to end: the tour auto-shows on first visit
+      with the spotlight correctly ringing the first line's input, all 5
+      steps advance via Next, Done closes it and marks it seen, a reload +
+      re-open does *not* auto-show it again, and the manual replay button +
+      Skip both work correctly. Full gate suite green (65 files / 556 tests,
+      up from 554). _(this PR)_
 - [x] **🔄 Live re-scoring on lyric edit — the panel ripples with an edit
       (medium-feature arc, item 8.7)** — founder: "that needs to be recognized
       throughout the rest of the globally. The rest of the panel has to be
