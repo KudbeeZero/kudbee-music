@@ -586,10 +586,31 @@ A second-opinion review flagged real risks worth acting on (truth-first):
   noted Runway API access is already configured (~1000 credits — see the
   "Runway Gen-4 world/video" entry below) as a possible resource, e.g. a
   short cinematic moment rendered on a badge unlock. Needs real design before
-  building (this is bigger than a tiny/medium feature) — start by mapping
-  every badge-worthy moment already computable from existing data (banger
-  score, uniqueness, vault size, Council flips, share/gift sends) before
-  inventing new tracking.
+  building the full arc (more chapters, a real onboarding surface, Runway
+  moments) — but item (2), a real **badge system**, is a well-scoped medium
+  slice on its own, and its own first step ("map every badge-worthy moment
+  already computable from existing data before inventing new tracking") is
+  now ✅ **done, this session**: new `lib/hermes/badges.ts` `computeBadges()`
+  — a pure, unit-tested function (9 tests) awarding discrete badges purely
+  from data that already exists, zero new tracking: one badge per unlocked
+  Story chapter beyond the trivial "First Spark" (reuses `unlockedChapters()`
+  as-is), 🌟 Certified Banger (any vault song scoring 90+), 🎯 Sharp Ear (any
+  song at 100/100 uniqueness), 🎁 Gift Giver (used an Occasion Pack), ✂️
+  Editor (`taste.edits > 0`), 🗃️ Prolific (10+ vault songs). Rendered as the
+  actual "collectible strip" the founder's ask called for, replacing
+  `ArtistCard`'s single current-chapter line: a "🏅 Badges (N)" chip row.
+  Playwright-verified live on the demo song ("Cold Hard Gold," 99/100,
+  100/100 unique): correctly earned exactly 3 badges (First Banger chapter,
+  Certified Banger, Sharp Ear), zero console errors. **Deferred, still
+  genuinely uncomputable from existing per-song data**: a "first Council-
+  flipped ranking via a Guest Judge" badge — seating a Guest Judge and
+  seeing it change the top hook is a live Council-panel interaction, not
+  something persisted onto the saved `SongPackage`, so it can't be
+  retroactively detected from vault data the way the other badges are; would
+  need new tracking (e.g. a flag recorded at save time), which is exactly
+  the "don't invent new tracking yet" line this pass was scoped to respect.
+  Still open from the fuller vision: more chapters, the onboarding-surface
+  walkthrough, Runway moments — all bigger, separately-scoped work.
 - 🔨 **Agent personality plug-ins** *(founder idea, 2026-07-03 — "some sort of
   personality feature... some sort of plug-in people could select for each
   agent")* — related to but distinct from the Council-voice-registry above:

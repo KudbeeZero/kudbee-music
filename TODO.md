@@ -302,6 +302,37 @@ Board** governance / Solana / token / NFT layer integrates with this engine via 
 later (kept out of this repo's core so it stays free + local).
 
 ## ✅ Shipped (newest first)
+- [x] **🏅 Badges — the collectible achievement strip** — autonomous-loop medium PR,
+      eighth of the session. The first well-scoped slice of the queued
+      "'Becoming You' gamified onboarding — badges + the Mogul story arc" idea
+      (`IDEAS.md`) — read that entry first as instructed before picking this piece, to
+      stay consistent with what was already speced there. Its own recommended first
+      step ("map every badge-worthy moment already computable from existing data
+      before inventing new tracking") is exactly what got built: new
+      `lib/hermes/badges.ts` `computeBadges()`, a pure function awarding discrete
+      badges from data that already exists — zero new tracking. One badge per
+      unlocked Story chapter beyond the trivial "First Spark" (reuses
+      `unlockedChapters()` as-is), 🌟 Certified Banger (a vault song scoring 90+), 🎯
+      Sharp Ear (a song at 100/100 uniqueness), 🎁 Gift Giver (used an Occasion Pack),
+      ✂️ Editor (`taste.edits > 0`), 🗃️ Prolific (10+ vault songs). Wired into
+      `ArtistCard.tsx` as a real "🏅 Badges (N)" collectible chip strip — the founder's
+      own framing ("rendered as a collectible strip, not just the single current-
+      chapter line it is today"). +9 new unit tests in `badges.test.ts`, using
+      `demoSong()` (the real Cold Hard Gold fixture) with overridden score/uniqueness/
+      inputs fields to hit each threshold precisely. **Root-caused a real gap along
+      the way**: `demoSong()`'s own import (`exampleSong.ts` → `@/examples/...`) had
+      never been pulled into a test before, and plain `vitest` doesn't read
+      `tsconfig.json`'s path aliases the way Next.js does — fixed `vitest.config.ts`
+      with the matching `resolve.alias` (mirrors `"@/*": ["./*"]` exactly) rather than
+      avoiding the real fixture in the test, so any future test can safely use
+      `@/`-aliased imports too. Playwright-verified live on the demo song: correctly
+      earned exactly 3 real badges (First Banger chapter, Certified Banger, Sharp
+      Ear), zero console errors. Full gate suite green (66 files / 565 tests, up from
+      556 — `tsc --noEmit` clean, static export builds). Deferred (documented in
+      IDEAS.md, not silently dropped): a "Council flip via a Guest Judge" badge — that
+      moment isn't persisted onto the saved `SongPackage`, so it's genuinely
+      uncomputable from existing vault data without inventing new tracking, which this
+      pass was scoped to avoid. _(this PR)_
 - [x] **⚔️ Hook Battle** — autonomous-loop medium PR, seventh of the session, the first
       Phase B piece of the mobile-mockup implementation plan (`IDEAS.md`) — skipped
       Phase A step ⑥ (a spacing/typography audit, judged low-value on its own: "mostly
