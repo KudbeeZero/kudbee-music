@@ -484,11 +484,14 @@ export function importBrain(json: string, mode: 'merge' | 'replace' = 'merge'): 
   const result: BrainImportResult = { ...EMPTY_IMPORT, ok: true };
 
   // vault (songs + albums) — reuse importVault's exact sanitize/dedup/cap by handing it
-  // the nested vault block in the shape it already understands.
-  const vault = isObj(data.vault) ? data.vault : {};
-  const vaultRes = importVault(JSON.stringify({ songs: vault.songs, albums: vault.albums }), mode);
-  result.songs = vaultRes.songs;
-  result.albums = vaultRes.albums;
+  // the nested vault block in the shape it already understands. Only touch the vault when
+  // the pack actually carries one: a `replace` of an absent/corrupt vault block would
+  // otherwise wipe the whole catalog (the soft layers below already guard themselves).
+  if (isObj(data.vault)) {
+    const vaultRes = importVault(JSON.stringify({ songs: data.vault.songs, albums: data.vault.albums }), mode);
+    result.songs = vaultRes.songs;
+    result.albums = vaultRes.albums;
+  }
 
   // taste — validate shape, then sum (merge) or overwrite (replace).
   if (isObj(data.taste)) {
@@ -497,12 +500,14 @@ export function importBrain(json: string, mode: 'merge' | 'replace' = 'merge'): 
     try { kv().setItem(TASTE_KEY, JSON.stringify(next)); result.taste = true; } catch { /* ignore */ }
   }
 
-  // banned words — union (merge) or overwrite (replace).
+  // banned words — union (merge) or overwrite (replace). Counts follow importVault's
+  // convention: replace reports what's now stored, merge reports the newly-added delta.
   if (Array.isArray(data.bannedWords)) {
     const incoming = data.bannedWords.filter((w): w is string => typeof w === 'string').map((w) => w.trim()).filter(Boolean);
-    const next = mode === 'replace' ? incoming : [...new Set([...loadBannedWords([]), ...incoming])];
+    const before = loadBannedWords([]);
+    const next = mode === 'replace' ? [...new Set(incoming)] : [...new Set([...before, ...incoming])];
     saveBannedWords(next);
-    result.bannedWords = next.length;
+    result.bannedWords = mode === 'replace' ? next.length : next.length - before.length;
   }
 
   // alias — replace overwrites; merge keeps an existing name, else takes the imported one.
@@ -517,15 +522,23 @@ export function importBrain(json: string, mode: 'merge' | 'replace' = 'merge'): 
   if (isObj(data.songNotes)) {
     const incoming: Record<string, string> = {};
     for (const [k, v] of Object.entries(data.songNotes)) if (typeof v === 'string') incoming[k] = v.slice(0, SONG_NOTE_MAX);
-    const next = mode === 'replace' ? incoming : { ...incoming, ...loadSongNotes() };
-    try { kv().setItem(SONG_NOTES_KEY, JSON.stringify(next)); result.notes = Object.keys(next).length; } catch { /* ignore */ }
+    const before = loadSongNotes();
+    const next = mode === 'replace' ? incoming : { ...incoming, ...before };
+    try {
+      kv().setItem(SONG_NOTES_KEY, JSON.stringify(next));
+      result.notes = mode === 'replace' ? Object.keys(next).length : Object.keys(next).length - Object.keys(before).length;
+    } catch { /* ignore */ }
   }
 
   // favorites — union (merge) or overwrite (replace).
   if (Array.isArray(data.favorites)) {
     const incoming = data.favorites.filter((x): x is string => typeof x === 'string');
-    const next = mode === 'replace' ? incoming : [...new Set([...loadFavorites(), ...incoming])];
-    try { kv().setItem(FAVORITES_KEY, JSON.stringify(next)); result.favorites = next.length; } catch { /* ignore */ }
+    const before = loadFavorites();
+    const next = mode === 'replace' ? [...new Set(incoming)] : [...new Set([...before, ...incoming])];
+    try {
+      kv().setItem(FAVORITES_KEY, JSON.stringify(next));
+      result.favorites = mode === 'replace' ? next.length : next.length - before.size;
+    } catch { /* ignore */ }
   }
 
   result.profile = data.profile ?? null;
@@ -547,7 +560,7 @@ function mergeTaste(a: Taste, b: Taste): Taste {
     for (const [k, n] of Object.entries(y)) out[k] = (out[k] ?? 0) + n;
     return out;
   };
-  return { liked: sum(a.liked, b.liked), disliked: sum(a.disliked, b.disliked), edits: a.edits + b.edits };
+  return { liked: sum(a.liked, b.liked), disliked: sum(a.disliked, b.disliked), edits: num(a.edits) + num(b.edits) };
 }
 
 // ---- durability: backup status + explicit restore --------------------------------
@@ -576,7 +589,7 @@ export interface Taste { liked: Record<string, number>; disliked: Record<string,
 export function loadTaste(): Taste {
   try {
     const raw = kv().getItem(TASTE_KEY);
-    if (raw) { const t = JSON.parse(raw); if (t && t.liked && t.disliked) return t as Taste; }
+    if (raw) { const t = JSON.parse(raw); if (t && t.liked && t.disliked) return { liked: t.liked, disliked: t.disliked, edits: num(t.edits) }; }
   } catch { /* ignore */ }
   return { liked: {}, disliked: {}, edits: 0 };
 }

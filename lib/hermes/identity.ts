@@ -94,7 +94,17 @@ export function signInDev(): Profile {
  * profile is persisted so the visitor is "signed in as themselves" on the new device.
  */
 export function restoreProfile(raw: unknown): Profile | null {
-  return isProfile(raw) ? persist(raw) : null;
+  if (!isProfile(raw)) return null;
+  // Rebuild from known fields only — never persist extra attacker-controlled keys, and
+  // keep `provider` only when it's a real one (isProfile doesn't validate it).
+  const clean: Profile = {
+    id: raw.id,
+    name: raw.name.slice(0, 80),
+    kind: raw.kind,
+    createdAt: raw.createdAt,
+  };
+  if (raw.kind === 'oauth' && (raw.provider === 'google' || raw.provider === 'github')) clean.provider = raw.provider;
+  return persist(clean);
 }
 
 /** Forget the profile. Deliberately does NOT touch the vault — songs, albums,

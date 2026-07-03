@@ -91,6 +91,26 @@ describe('cloudSync — auth', () => {
     if (res.ok) expect(res.data.accessToken).toBe('acc2.jwt');
   });
 
+  it('refresh keeps the session alive when GoTrue omits the user object (reuses prior identity)', async () => {
+    // A valid refresh grant that returns fresh tokens but no `user` must NOT force a logout.
+    const deps = mockDeps([{ body: { access_token: 'acc3.jwt', refresh_token: 'ref3.jwt', expires_in: 3600 } }]);
+    const prior: CloudSession = { accessToken: 'old', refreshToken: 'ref.jwt', userId: 'user-123', email: 'a@b.com', expiresAt: 0 };
+    const res = await refresh(prior, deps);
+    expect(res.ok).toBe(true);
+    if (res.ok) {
+      expect(res.data.accessToken).toBe('acc3.jwt');
+      expect(res.data.userId).toBe('user-123'); // carried over from the prior session
+      expect(res.data.email).toBe('a@b.com');
+    }
+  });
+
+  it('loadSession rejects a partial blob that would yield a NaN expiry', () => {
+    const deps = mockDeps([]);
+    // missing expiresAt (and refreshToken) — accepting it would make needsRefresh false forever
+    deps.storage.set('hermes.cloudSession.v1', JSON.stringify({ accessToken: 'a', userId: 'u' }));
+    expect(loadSession(deps)).toBeNull();
+  });
+
   it('signOut clears the local session and best-effort revokes server-side', async () => {
     const deps = mockDeps([{ body: SESSION_BODY }, { body: {} }]);
     await signIn('a@b.com', 'pw', deps);
@@ -134,5 +154,12 @@ describe('cloudSync — brain sync', () => {
     const noRow = mockDeps([{ body: [] }]);
     const empty = await pullBrain(session, noRow);
     expect(empty).toEqual({ ok: true, data: null });
+  });
+
+  it('pullBrain surfaces an unexpected non-array body as an error, not "no brain"', async () => {
+    // A 200 with a non-array body must not read as empty — that would let a push clobber a live row.
+    const deps = mockDeps([{ body: { message: 'oops' } }]);
+    const res = await pullBrain(session, deps);
+    expect(res.ok).toBe(false);
   });
 });

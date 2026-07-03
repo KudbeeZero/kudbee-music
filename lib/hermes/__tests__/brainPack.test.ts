@@ -71,6 +71,27 @@ describe('exportBrain / importBrain', () => {
     expect([...loadFavorites()]).toContain(song.id);
   });
 
+  it('replace-mode import without a vault block leaves the existing catalog intact', () => {
+    const song = seed();
+    // a pack that carries soft layers but NO vault key — replace must not wipe the songs
+    const pack = JSON.stringify({ kind: 'hermes-brain', version: 1, bannedWords: ['x'] });
+    const res = importBrain(pack, 'replace');
+    expect(res.ok).toBe(true);
+    expect(res.songs).toBe(0); // nothing came in
+    expect(listSongs().find((s) => s.id === song.id)).toBeDefined(); // …and nothing was destroyed
+  });
+
+  it('merge counts report only newly-added items, not the running total', () => {
+    seed(); // 2 banned words, 1 favorite, 1 song note already local
+    const pack = exportBrain(null); // captures exactly those
+    // re-importing the same pack adds nothing new → every delta is 0 (old bug reported the total)
+    const res = importBrain(pack, 'merge');
+    expect(res.songs).toBe(0);
+    expect(res.bannedWords).toBe(0);
+    expect(res.favorites).toBe(0);
+    expect(res.notes).toBe(0);
+  });
+
   it('rejects a non-brain document without throwing', () => {
     expect(importBrain('not json').ok).toBe(false);
     expect(importBrain(JSON.stringify({ kind: 'hermes-vault', songs: [] })).ok).toBe(false);

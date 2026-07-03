@@ -257,7 +257,7 @@ export default function SongPackageView({ pkg, onSaveEdit, onChooseHook, onRegen
           </button>
         )}
         {battleMode && onChooseHook && pkg.hookOptions.length >= 2 ? (
-          <HookBattle hooks={pkg.hookOptions} inputs={pkg.inputs} sections={pkg.sections} onWinner={onChooseHook} />
+          <HookBattle key={pkg.id} hooks={pkg.hookOptions} inputs={pkg.inputs} sections={pkg.sections} onWinner={onChooseHook} />
         ) : (
           pkg.hookOptions.map((h, i) => {
             const chosen = pkg.chosenHook?.text === h.text;

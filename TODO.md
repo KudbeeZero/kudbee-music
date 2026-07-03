@@ -302,6 +302,29 @@ Board** governance / Solana / token / NFT layer integrates with this engine via 
 later (kept out of this repo's core so it stays free + local).
 
 ## ✅ Shipped (newest first)
+- [x] **🔎 Code-review hardening pass — 10 verified fixes across the last session's merged work** —
+      a high-effort `/code-review` over the session diff (Studio, Hook Battle, Brain Pack
+      import, Cloud Sync, identity) surfaced 10 confirmed/plausible bugs; all fixed in one
+      PR. Highlights: **Hook Battle kept its bracket state across song switches** (no
+      `key={pkg.id}`, so Song X's winner showed for Song Y) — added a stable key, and while
+      there refactored the decided-pair tracking to key on **pair index** instead of hook
+      **text** (two hooks with identical text used to stick the bracket, and it collapsed the
+      final-round special case). **Studio's selected clip index** wasn't reset on song change
+      (stale/blank section panel) — same `key={pkg?.id}` fix. **`importBrain` replace-mode
+      wiped the whole vault** when a pack carried no `vault` block — now only touches the
+      vault when one is present. **`loadTaste` returned a legacy blob without coercing
+      `edits`**, so `mergeTaste`/`recordTaste` produced `NaN` and permanently unearned the
+      Editor badge — coerced at load + summed defensively. **Import counts** now report the
+      newly-added delta (matching `importVault`) instead of the running total, so restore
+      toasts are honest. **Cloud Sync**: `loadSession` now rejects a partial blob that would
+      yield a `NaN` expiry (token would never refresh); `refresh` reuses the prior identity
+      when GoTrue omits the `user` object (no false logout); `pullBrain` surfaces a non-array
+      body as an error instead of "no brain" (which could let a push clobber a live row).
+      **`restoreProfile`** rebuilds from known fields only (drops attacker-controlled keys /
+      bogus provider). **`VoiceNotes.readDuration`** got a 5s timeout so a stalling decode
+      can't hang the upload silently. Regression tests added (brainPack + cloudSync);
+      Playwright-verified the Hook Battle bracket drives to a winner with zero console
+      errors. Full gate suite green. _(this PR)_
 - [x] **🎵 Bring Your Own Sound — upload an existing audio file (roadmap 3.6)** — the
       founder's queued idea ("people can input their music"), and exactly the shape the
       roadmap note predicted. `VoiceNotes.tsx` only did live mic recording; added an
