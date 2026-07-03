@@ -214,6 +214,19 @@ export default function SongLabForm({
   // same readiness rule as the Lyric Lab: a brief needs a title, theme, and genre
   const briefReady = Boolean(v.title.trim() && v.theme.trim() && v.genre.trim());
 
+  // Cmd/Ctrl+Enter submits from anywhere in the form — same "chat app" convention
+  // as Slack/Discord — without stealing plain Enter from the theme textarea.
+  useEffect(() => {
+    function onKeydown(e: KeyboardEvent) {
+      if ((e.metaKey || e.ctrlKey) && e.key === 'Enter' && briefReady && !running) {
+        e.preventDefault();
+        submit();
+      }
+    }
+    window.addEventListener('keydown', onKeydown);
+    return () => window.removeEventListener('keydown', onKeydown);
+  }, [briefReady, running, submit]);
+
   return (
     <div className={styles.panel}>
       <div className={styles.panelTitle} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 8 }}>
@@ -329,6 +342,7 @@ export default function SongLabForm({
         {running ? 'HERMES is working…' : 'Generate Song Package ▸'}
       </button>
       {!briefReady && <p className={styles.hint} style={{ marginTop: 6 }}>Add a title, theme, and genre to start.</p>}
+      {briefReady && !running && <p className={styles.hint} style={{ marginTop: 6 }}>Tip: ⌘/Ctrl + Enter generates from anywhere in the form.</p>}
       <p className={styles.hint} style={{ marginTop: 8 }}>
         V1 uses local mock generation — original combinator output, no API key, no copyrighted material.
       </p>

@@ -303,6 +303,17 @@ Board** governance / Solana / token / NFT layer integrates with this engine via 
 later (kept out of this repo's core so it stays free + local).
 
 ## ✅ Shipped (newest first)
+- [x] **⌨️ Cmd/Ctrl+Enter to generate (tiny-feature cadence, #8)** — submitting Song
+      Lab required reaching for the mouse every time, even from mid-typing. A
+      window-level keydown listener in `SongLabForm.tsx` now submits on Cmd/Ctrl+Enter
+      from anywhere in the form (same "chat app" convention as Slack/Discord),
+      respecting the same `briefReady` guard the button already uses so an
+      incomplete brief can't be submitted. A discoverability hint appears once the
+      brief is ready. Playwright-verified live: confirmed the shortcut does nothing
+      on an empty brief, filled a brief via Surprise Me, focused the theme
+      textarea (where plain Enter would insert a newline), pressed Ctrl+Enter, and
+      watched a full generation run — Brain Scan + all 10 agents completed, zero
+      console errors. _(this PR)_
 - [x] **📝 Per-song vault notes (tiny-feature cadence, #7)** — a quick sticky note
       per stored song ("needs a bridge rewrite", "send to Marcus") — no way to leave
       yourself a reminder on a specific take before. New `storage.ts`
