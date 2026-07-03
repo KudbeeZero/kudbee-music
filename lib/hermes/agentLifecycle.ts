@@ -79,7 +79,7 @@ export function buildAgentLifecycleState(songs: SongPackage[]): AgentLifecycleSt
   for (const song of songs) {
     // Extract agents from agentOutputs if available, otherwise use all agents
     const agentsInSong = song.agentOutputs
-      ? song.agentOutputs.map((ao) => ao.agentId).filter(Boolean)
+      ? song.agentOutputs.map((ao) => ao.id).filter(Boolean)
       : AGENT_DEFINITIONS.map((a) => a.id);
 
     // Persona from inputs if available
