@@ -30,6 +30,16 @@ export default function SongPackageView({ pkg, onSaveEdit, onChooseHook, onRegen
   const [rhymeWord, setRhymeWord] = useState<string | null>(null);
   const rhymeSuggestions = rhymeWord ? rhymesWith(rhymeWord, { max: 10 }) : [];
 
+  // A rough length estimate, not a claim of precision — 2 bars/line in 4/4 time at
+  // the production tempo is a common songwriting rule of thumb, not a measurement.
+  const lineCount = pkg.sections.reduce((n, s) => n + s.lines.length, 0);
+  const wordCount = pkg.sections.reduce(
+    (n, s) => n + s.lines.reduce((m, l) => m + (l.trim() ? l.trim().split(/\s+/).length : 0), 0),
+    0,
+  );
+  const estSeconds = Math.round(lineCount * 2 * (240 / pkg.production.tempoBpm));
+  const estRuntime = `${Math.floor(estSeconds / 60)}:${String(estSeconds % 60).padStart(2, '0')}`;
+
   function saveText(text: string) {
     onSaveEdit?.(text);
     setEditing(false);
@@ -212,6 +222,9 @@ export default function SongPackageView({ pkg, onSaveEdit, onChooseHook, onRegen
       <div className={styles.pkgSection}>
         <div className={styles.pkgLabel}>
           Final lyrics
+          <span className={styles.hint} style={{ marginLeft: 8, textTransform: 'none', letterSpacing: 'normal', fontWeight: 400 }}>
+            {wordCount} words · {lineCount} lines · ~{estRuntime} <span title="Rough estimate: 2 bars/line at the production tempo, not a measurement">(est.)</span>
+          </span>
           {onSaveEdit && !editing && (
             <button className={styles.copyBtn} onClick={() => { setDraft(rawLyrics); setRawMode(false); setEditing(true); }}>edit</button>
           )}
