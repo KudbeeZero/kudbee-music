@@ -10,6 +10,7 @@ import { encodeShare, shareUrl, giftMessage } from '@/lib/hermes/shareLink';
 import { findOccasionPack } from '@/lib/hermes/occasionPacks';
 import { downloadShareCard } from '@/lib/hermes/shareCard';
 import ScribeEditor from './ScribeEditor';
+import VoiceNotes from './VoiceNotes';
 import styles from './hermes.module.css';
 
 export default function SongPackageView({ pkg, onSaveEdit, onChooseHook, onRegenerateFromCritiques }: {
@@ -191,6 +192,10 @@ export default function SongPackageView({ pkg, onSaveEdit, onChooseHook, onRegen
           </div>
         )}
       </div>
+
+      <Section label="🎙️ Voice notes — record your own take on this song">
+        <VoiceNotes songId={pkg.id} />
+      </Section>
 
       <Section label="Production notes">
         <div className={styles.kv}>

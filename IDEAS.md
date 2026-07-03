@@ -241,6 +241,40 @@ A second-opinion review flagged real risks worth acting on (truth-first):
      the BRAIN's reasoning instead of a human's clicks. Worth naming and leaning into that
      framing rather than treating "interactive help" as unbuilt from scratch.
   Not built yet — needs a priority call against the Council build plan below.
+- 🔨 **"Bring Your Own Sound" — record voice/instrument clips, hum a melody to shape
+  the flow"** *(founder idea, 2026-07-03 — "people should be able to record their voice
+  and add voice clips or record an instrument... maybe you can hum a melody and it'll
+  help with the flow of the song... updating our brain mechanism")* — every input to
+  the brain today is text; this gives it a real new sense. Checked against the iron
+  laws before building: `MediaRecorder`/`AudioContext` are browser built-ins (zero new
+  deps); the raw recording is a source asset like a photo (never part of the
+  byte-identical determinism contract) but the *extraction* from a hum into a
+  structured flow target must stay deterministic, exactly like every other dial.
+  Explicit scope call (asked the founder, confirmed): **rhythm/syllable-matching**,
+  not full pitch/melody transcription — hum→MIDI is a hard, easy-to-get-wrong DSP
+  problem (octave errors, vibrato) not worth promising; syllable-count + coarse stress
+  matching is honest, buildable at $0, and still a genuinely new brain sense nobody
+  else in this space has. Four phased steps:
+  1. ✅ **PR1 — Voice Notes: record & attach, no generation impact.** Shipped — see
+     TODO.md Shipped. `lib/hermes/audioVault.ts` (IndexedDB, in-memory fallback) +
+     `components/hermes/VoiceNotes.tsx`, wired into `SongPackageView`.
+  2. 💭 **PR2 — Instrument riff clips.** Same component (already built generic over
+     `kind: 'voice' | 'riff'`), a second recording slot/label, multiple clips per song.
+     Mostly UI — the hard part (recording + IndexedDB) is already proven by PR1.
+  3. 💭 **PR3 — Hum-to-flow: the actual brain wiring.** New `lib/hermes/melody.ts`:
+     energy-envelope onset/peak-picking to segment a hum into syllable-like pulses
+     (well-trodden DSP, no ML), collapsed once at capture time into a deterministic
+     `flowContour` (`syllablesPerLine: number[]` + a coarse stress pattern). New
+     `SongInputs.flowContour?` field, validated at all 3 untrusted-input boundaries
+     (`pipeline.ts`/`shareLink.ts`/`storage.ts`) exactly like `rhymeScheme`/`occasion`.
+     Needs a syllable counter first — doesn't exist in the codebase today (checked:
+     `cadence` on a `HookOption` is just a descriptive label, nothing computed) — a
+     small heuristic vowel-cluster counter is plenty for a "flow fit" target, not a
+     strict grammar. `providers/mockLyricsProvider.ts`'s `fill()` snaps generated
+     lines toward the target syllable count.
+  4. 💭 **PR4 (stretch, optional) — pitch-contour visualization.** A cosmetic
+     waveform/pitch strip next to the lyric. No coupling to generation. Cut if PR3
+     alone sells the story.
 - 🔨 **The Council build plan** *(founder directive, 2026-07-03 — "deploy a research agent...
   what could we do with the existing routes and information that we have to make this council
   even better")* — a research agent audited `council.ts`/`Council.tsx` against the rest of the
