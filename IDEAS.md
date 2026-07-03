@@ -465,6 +465,14 @@ A second-opinion review flagged real risks worth acting on (truth-first):
   `HermesHitFactory.tsx` to confirm the exact gap, then a deterministic,
   no-network re-score-on-edit path so editing a lyric visibly ripples through
   the whole panel, not just the text box. Two separate PRs queued.
+  - ✅ **8.6 — Word ideas popup shipped.** New `lexicon.ts` `similarWords()` +
+    a double-click popup in `ScribeEditor.tsx`. Honestly framed as
+    "similar in feel" (imagery + affect), not a claimed thesaurus — the
+    lexicon has no synonym data. See TODO.md Shipped.
+  - 💤 **8.7 — live re-scoring on edit** queued next: investigate
+    `saveLyricEdit` in `HermesHitFactory.tsx` to confirm whether Banger
+    Score/Uniqueness/Council actually go stale after a saved edit, then wire
+    a deterministic re-score path if so.
 - 🔨 **"Input their music" — upload an existing audio file, not just record live**
   *(founder question, 2026-07-03 — "I want to create something down the road
   where people can input their music... are you working on that?")* — a genuinely

@@ -303,6 +303,28 @@ Board** governance / Solana / token / NFT layer integrates with this engine via 
 later (kept out of this repo's core so it stays free + local).
 
 ## ✅ Shipped (newest first)
+- [x] **📖 Word ideas — a similar-words popup while editing lyrics (medium-feature
+      arc, item 8.6)** — founder: "polishing off the lyric area and editing...
+      an inline dictionary/thesaurus... really easy edit ability." New
+      `lexicon.ts` `similarWords(word)`: words sharing the target's imagery
+      category, ranked by closeness of affect — honestly framed as "similar in
+      feel" rather than a strict thesaurus, since the lexicon carries no
+      synonym data (same reference-only spirit as the existing `rhymesWith()`).
+      Wired into `ScribeEditor.tsx` (the line-by-line lyric editor):
+      double-click any word in a line to open a popup of similar words; click
+      one to replace the double-clicked word in place using the input's own
+      `selectionStart`/`selectionEnd`. +5 new lexicon tests (imagery match,
+      empty for a word not in the lexicon, deterministic, max cap, case-
+      insensitive). Playwright-verified live end to end: double-clicking
+      "hold" in a real generated song's line surfaced 10 real similar words
+      (sight, brain, mind, feel, tight, frame, mark, sound, heart, steel — all
+      sharing the "body" imagery tag), clicking one ("sight") correctly
+      replaced the word in the line and dismissed the popup. Scoped to
+      `ScribeEditor`'s line inputs only, per the founder's "while editing"
+      framing — the read-only view already has its own click-a-word rhyme
+      tool. A follow-up (8.7) is queued to make edits ripple through the rest
+      of the panel (scores/uniqueness), which today only updates on save.
+      Full gate suite green (65 files / 554 tests, up from 549). _(this PR)_
 - [x] **🎛️ Agent Packs MVP — genre/scene Council voice bundles (medium-feature
       arc, item 8.5)** — the second consumer of the 8.3 voice registry, seated
       alongside Guest Judges via the same mechanism. Deliberately scoped down

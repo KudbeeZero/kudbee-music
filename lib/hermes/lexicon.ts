@@ -85,6 +85,22 @@ export function wordInfo(word: string): LexEntry | undefined {
   return BY_WORD.get(word.toLowerCase());
 }
 
+/**
+ * Words that share this word's imagery category, ranked by how close their affect
+ * is to the word's own — an honest "similar in feel" suggestion for the editor's
+ * word-ideas popup. Not a true thesaurus (the lexicon carries no synonym data),
+ * same reference-only spirit as rhymesWith(): never invented, always real data,
+ * never a network call. Unknown words return an empty list rather than guessing.
+ */
+export function similarWords(word: string, max = 10): LexEntry[] {
+  const info = wordInfo(word);
+  if (!info) return [];
+  const out = LEXICON
+    .filter((e) => e.i === info.i && e.w !== info.w)
+    .sort((a, b) => Math.abs(a.a - info.a) - Math.abs(b.a - info.a));
+  return out.slice(0, max);
+}
+
 /** The imagery categories present in the lexicon. */
 export function imageryTags(): string[] {
   return Array.from(new Set(LEXICON.map((e) => e.i))).sort();
