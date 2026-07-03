@@ -303,6 +303,16 @@ Board** governance / Solana / token / NFT layer integrates with this engine via 
 later (kept out of this repo's core so it stays free + local).
 
 ## ✅ Shipped (newest first)
+- [x] **📑 Duplicate this song — fork a vault entry (tiny-feature cadence, #6)** —
+      no way to branch a version to try a wild edit without risking the one you
+      already liked; `saveSong`'s version history only bumps in-place on a matching
+      title. New `storage.ts` `duplicateSong(id)`: clones into a fully independent
+      entry — new id, version 1, title suffixed "(copy)" (bumped to "(copy 2)",
+      "(copy 3)"... if that title's taken, so repeated duplication never collides).
+      A "duplicate" button next to delete on every `VaultDrawer` row. +3 tests.
+      Playwright-verified live: duplicated "Cold Hard Gold" twice, got "(copy)" then
+      "(copy 2)" as fully separate v1 entries, original untouched, zero console
+      errors. _(this PR)_
 - [x] **📏 Word/line/runtime counter (tiny-feature cadence, #5)** — the Final Lyrics
       label had no sense of how long the song actually is at a glance. A small
       counter next to the label now reads "183 words · 23 lines · ~2:00 (est.)" —

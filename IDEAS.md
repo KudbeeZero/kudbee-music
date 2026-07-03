@@ -246,10 +246,13 @@ A second-opinion review flagged real risks worth acting on (truth-first):
   - ✅ **📏 Word/line/runtime counter** — "183 words · 23 lines · ~2:00 (est.)" next
     to the Final Lyrics label; word/line counts exact, runtime an explicitly-labeled
     rough estimate. See TODO.md Shipped.
+  - ✅ **📑 Duplicate this song** — new `storage.ts` `duplicateSong(id)` forks a vault
+    entry into an independent "(copy)"-titled version-1 entry (suffix bumps to avoid
+    collisions on repeat), a "duplicate" button on every `VaultDrawer` row. See
+    TODO.md Shipped.
   Candidates queued for the next few rounds (pick one, ship it, move to the next):
-  a "duplicate this song" vault action to branch a version without overwriting it,
   a per-song note/tag field in the vault, a keyboard shortcut (Cmd/Ctrl+Enter) to
-  submit the Song Lab form.
+  submit the Song Lab form, an "undo last edit" for the Lyric Lab.
 - ✅ **"Make sure Claude.md files are getting updated, memory layer files... each file
   should have a chapter/head-type page with the contents of the entire folder"**
   *(founder directive, 2026-07-03)* — shipped: `brain/README.md` + rewritten `docs/index.md`,

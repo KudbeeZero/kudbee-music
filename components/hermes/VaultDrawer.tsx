@@ -12,12 +12,14 @@ export default function VaultDrawer({
   onOpen,
   onClose,
   onDelete,
+  onDuplicate,
   onImported,
 }: {
   songs: SongPackage[];
   onOpen: (id: string) => void;
   onClose: () => void;
   onDelete: (id: string) => void;
+  onDuplicate?: (id: string) => void;
   onImported?: () => void;
 }) {
   const fileRef = useRef<HTMLInputElement>(null);
@@ -120,13 +122,25 @@ export default function VaultDrawer({
               <div className={styles.vaultMeta}>
                 {new Date(s.createdAt).toLocaleString()} · score {s.score.total} · unique {s.uniqueness.score}
               </div>
-              <button
-                className={styles.copyBtn}
-                style={{ marginLeft: 0, marginTop: 6 }}
-                onClick={(e) => { e.stopPropagation(); onDelete(s.id); }}
-              >
-                delete
-              </button>
+              <div style={{ display: 'flex', gap: 8, marginTop: 6 }}>
+                {onDuplicate && (
+                  <button
+                    className={styles.copyBtn}
+                    style={{ marginLeft: 0 }}
+                    onClick={(e) => { e.stopPropagation(); onDuplicate(s.id); }}
+                    title="Fork this song into a new, independently-versioned copy — the original is untouched"
+                  >
+                    duplicate
+                  </button>
+                )}
+                <button
+                  className={styles.copyBtn}
+                  style={{ marginLeft: 0 }}
+                  onClick={(e) => { e.stopPropagation(); onDelete(s.id); }}
+                >
+                  delete
+                </button>
+              </div>
             </div>
           ))
         )}

@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeEach } from 'vitest';
-import { saveSong, listSongs, getSong, deleteSong, __clearVault, priorSongsForOriginality, loadFavorites, toggleFavorite } from '../storage';
+import { saveSong, listSongs, getSong, deleteSong, duplicateSong, __clearVault, priorSongsForOriginality, loadFavorites, toggleFavorite } from '../storage';
 import { runPipeline } from '../pipeline';
 import type { SongInputs } from '../types';
 
@@ -69,5 +69,37 @@ describe('vault favorites — a song id pin (tiny-feature cadence, #3)', () => {
     expect(favs.has('a')).toBe(true);
     expect(favs.has('b')).toBe(true);
     expect(favs.size).toBe(2);
+  });
+});
+
+describe('duplicateSong — fork a stored song (tiny-feature cadence, #6)', () => {
+  beforeEach(() => __clearVault());
+
+  it('clones a song with a new id, "(copy)" title, and version 1', async () => {
+    const a = (await runPipeline(idea, { id: 'a', now: '2026-01-01T00:00:00Z' })).pkg;
+    saveSong(a);
+    const clone = duplicateSong('a', { id: 'clone-1', now: '2026-01-02T00:00:00Z' });
+    expect(clone).not.toBeNull();
+    expect(clone!.id).toBe('clone-1');
+    expect(clone!.title).toBe('Vault Test (copy)');
+    expect(clone!.version).toBe(1);
+    expect(listSongs().length).toBe(2);
+    // the original is untouched
+    expect(getSong('a')?.title).toBe('Vault Test');
+    expect(getSong('a')?.version).toBe(1);
+  });
+
+  it('bumps the suffix on repeated duplication so copies never collide', async () => {
+    const a = (await runPipeline(idea, { id: 'a', now: '2026-01-01T00:00:00Z' })).pkg;
+    saveSong(a);
+    const first = duplicateSong('a', { id: 'clone-1' });
+    const second = duplicateSong('a', { id: 'clone-2' });
+    expect(first!.title).toBe('Vault Test (copy)');
+    expect(second!.title).toBe('Vault Test (copy 2)');
+    expect(listSongs().length).toBe(3);
+  });
+
+  it('returns null for a song that does not exist', () => {
+    expect(duplicateSong('nope')).toBeNull();
   });
 });

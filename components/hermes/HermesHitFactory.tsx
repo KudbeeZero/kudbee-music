@@ -10,7 +10,7 @@ import { createClaudeLyricsProvider, ClaudeProviderError } from '@/lib/hermes/pr
 import { getClaudeKey, claudeEngineReady } from '@/lib/hermes/claudeKey';
 import { withChosenHook } from '@/lib/hermes/rescore';
 import { keywords } from '@/lib/hermes/text';
-import { listSongs, saveSong, getSong, deleteSong, priorSongsForOriginality, loadBannedWords, saveBannedWords, listAlbums, saveAlbum, deleteAlbum, loadTaste, recordTaste, type Taste } from '@/lib/hermes/storage';
+import { listSongs, saveSong, getSong, deleteSong, duplicateSong, priorSongsForOriginality, loadBannedWords, saveBannedWords, listAlbums, saveAlbum, deleteAlbum, loadTaste, recordTaste, type Taste } from '@/lib/hermes/storage';
 import { allAvoidWords, newLearnedExclusions } from '@/lib/hermes/memory';
 import { diffEdit, parseSections } from '@/lib/hermes/edits';
 import { demoSong } from '@/lib/hermes/exampleSong';
@@ -287,6 +287,14 @@ export default function HermesHitFactory() {
     deleteSong(id);
     setVault(listSongs());
     if (pkg?.id === id) setPkg(null);
+  }
+
+  // Fork a stored song into its own independent entry — "(copy)" title, version 1,
+  // no bearing on the original. Lets an artist branch a version to try a wild edit
+  // without risking the one they already like.
+  function duplicateInVault(id: string) {
+    duplicateSong(id);
+    setVault(listSongs());
   }
 
   function saveAvoid(raw: string) {
@@ -584,6 +592,7 @@ export default function HermesHitFactory() {
           onOpen={openFromVault}
           onClose={() => setVaultOpen(false)}
           onDelete={removeFromVault}
+          onDuplicate={duplicateInVault}
           onImported={() => { setVault(listSongs()); setAlbums(listAlbums()); }}
         />
       )}
