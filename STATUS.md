@@ -2,7 +2,7 @@
 
 > **Generated from [`brain/roadmap.json`](brain/roadmap.json) — do not hand-edit.** Status lives ONLY in the spine; edit it there, then regenerate with `GEN_DOCS=1 npx vitest run status`. `statusBoard.test.ts` fails CI if this file drifts.
 
-**Scoreboard:** ✅ 59 shipped · 🔨 1 in build · 💤 10 queued — 70 tracked items
+**Scoreboard:** ✅ 60 shipped · 🔨 1 in build · 💤 10 queued — 71 tracked items
 (legend: ✅ shipped · 🔌 scaffold shipped, founder-gated · 🔨 in build · ⏭️ next · 💤 queued · 💭 idea · 🚧 blocked on founder)
 
 ## Tracks
@@ -85,7 +85,7 @@
 |---|------|----------------|----|
 | 💤 | **Influence Studio — thematic cartography + lexical fingerprinting** | `lib/hermes/influence.ts` | — |
 
-### Phase 7 — Tiny features — the standing cadence — `▰▰▰▰▰▰▰▰▰▰` 24/24
+### Phase 7 — Tiny features — the standing cadence — `▰▰▰▰▰▰▰▰▰▰` 25/25
 
 | | Item | Where it lives | PR |
 |---|------|----------------|----|
@@ -113,6 +113,7 @@
 | ✅ | **🔀 Duplicate + rename in one motion** | `lib/hermes/storage.ts + components/hermes/VaultDrawer.tsx + components/hermes/HermesHitFactory.tsx` | — |
 | ✅ | **📅 'N songs today' stat in the Vault header** | `components/hermes/VaultDrawer.tsx` | — |
 | ✅ | **📄 Copy all as Markdown — bulk vault export, richer format** | `components/hermes/VaultDrawer.tsx` | — |
+| ✅ | **🗑 Clear all vault notes** | `lib/hermes/storage.ts + components/hermes/VaultDrawer.tsx` | — |
 
 ### Video studio — `▰▰▰▰▰▱▱▱▱▱` 4/8
 

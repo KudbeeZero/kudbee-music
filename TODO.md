@@ -303,6 +303,19 @@ Board** governance / Solana / token / NFT layer integrates with this engine via 
 later (kept out of this repo's core so it stays free + local).
 
 ## ✅ Shipped (newest first)
+- [x] **🗑 Clear all vault notes (tiny-feature cadence, #25)** — per-song notes
+      (7.7) only ever cleared one at a time by blanking each field, mirroring
+      the gap `clearAvoidWords()` (7.17) closed for the avoid-words list. New
+      `storage.ts` `clearAllSongNotes()` wipes the whole notes map at once; a
+      confirm-gated "🗑 clear all notes" button in `VaultDrawer.tsx`, shown
+      only when at least one note exists. +1 storage test (24 total in
+      `storage.test.ts`). Playwright-verified live: generated 2 songs,
+      confirmed the button stays hidden with no notes, left a note on both
+      rows, confirmed the button appeared, confirmed the `confirm()` dialog
+      text read "Clear all 2 notes? This can't be undone.", accepted it and
+      confirmed both note inputs emptied and the button hid again, reloaded
+      and confirmed the cleared state persisted. Zero console errors. _(this
+      PR)_
 - [x] **📄 Copy all as Markdown — bulk vault export, richer format
       (tiny-feature cadence, #24)** — Copy all lyrics (7.21) only carries
       lyrics; someone archiving the whole vault might want the richer

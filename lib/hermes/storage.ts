@@ -494,6 +494,13 @@ export function setSongNote(id: string, note: string): Record<string, string> {
   return notes;
 }
 
+/** Wipe every vault note at once — same one-click-reset convenience as
+ *  clearAvoidWords(); the caller is expected to confirm() before calling this. */
+export function clearAllSongNotes(): Record<string, string> {
+  try { kv().setItem(SONG_NOTES_KEY, JSON.stringify({})); } catch { /* ignore */ }
+  return {};
+}
+
 // ---- recently viewed (vault): the last few songs opened, newest first -------------
 // Best-effort like favorites/notes — a UI convenience, no bearing on generation.
 const RECENT_MAX = 5;
