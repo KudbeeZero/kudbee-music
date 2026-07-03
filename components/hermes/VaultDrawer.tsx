@@ -2,7 +2,7 @@
 
 import { useRef, useState } from 'react';
 import type { SongPackage } from '@/lib/hermes/types';
-import { exportVault, importVault, vaultBackupStatus, restoreFromBackup, loadFavorites, toggleFavorite } from '@/lib/hermes/storage';
+import { exportVault, importVault, vaultBackupStatus, restoreFromBackup, loadFavorites, toggleFavorite, loadSongNotes, setSongNote } from '@/lib/hermes/storage';
 import styles from './hermes.module.css';
 
 const count = (n: number, word: string) => `${n} ${word}${n === 1 ? '' : 's'}`;
@@ -25,10 +25,15 @@ export default function VaultDrawer({
   const fileRef = useRef<HTMLInputElement>(null);
   const [restoreNote, setRestoreNote] = useState<string | null>(null);
   const [favorites, setFavorites] = useState<Set<string>>(() => loadFavorites());
+  const [noteDrafts, setNoteDrafts] = useState<Record<string, string>>(() => loadSongNotes());
 
   function toggleFav(id: string, e: React.MouseEvent) {
     e.stopPropagation();
     setFavorites(new Set(toggleFavorite(id)));
+  }
+
+  function commitNote(id: string, text: string) {
+    setNoteDrafts(setSongNote(id, text));
   }
 
   // Favorites float to the top; a stable sort keeps each group's original
@@ -122,6 +127,15 @@ export default function VaultDrawer({
               <div className={styles.vaultMeta}>
                 {new Date(s.createdAt).toLocaleString()} · score {s.score.total} · unique {s.uniqueness.score}
               </div>
+              <input
+                className={styles.input}
+                style={{ marginTop: 6, fontSize: 12.5, padding: '5px 8px' }}
+                value={noteDrafts[s.id] ?? ''}
+                placeholder="add a note — e.g. needs a bridge rewrite"
+                onClick={(e) => e.stopPropagation()}
+                onChange={(e) => setNoteDrafts((prev) => ({ ...prev, [s.id]: e.target.value }))}
+                onBlur={(e) => commitNote(s.id, e.target.value)}
+              />
               <div style={{ display: 'flex', gap: 8, marginTop: 6 }}>
                 {onDuplicate && (
                   <button
