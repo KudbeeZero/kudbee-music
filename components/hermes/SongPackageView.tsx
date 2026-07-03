@@ -29,6 +29,7 @@ export default function SongPackageView({ pkg, onSaveEdit, onChooseHook, onRegen
   const [cardState, setCardState] = useState<'idle' | 'busy' | 'error'>('idle');
   const [copiedLyrics, setCopiedLyrics] = useState(false);
   const [copiedSuno, setCopiedSuno] = useState(false);
+  const [copiedJson, setCopiedJson] = useState(false);
   const [rhymeWord, setRhymeWord] = useState<string | null>(null);
   const rhymeSuggestions = rhymeWord ? rhymesWith(rhymeWord, { max: 10 }) : [];
 
@@ -112,6 +113,16 @@ export default function SongPackageView({ pkg, onSaveEdit, onChooseHook, onRegen
     const a = document.createElement('a');
     a.href = url; a.download = `${pkg.title.toLowerCase().replace(/[^a-z0-9]+/g, '-') || 'song'}.json`; a.click();
     URL.revokeObjectURL(url);
+  }
+
+  // The JSON export only ever downloaded a file — pasting a package straight into
+  // a chat, an issue, or another tool meant downloading then re-opening it. A
+  // clipboard copy, same one-click convenience Markdown/Suno already have.
+  function copyJson() {
+    navigator.clipboard?.writeText(JSON.stringify(pkg, null, 2)).then(() => {
+      setCopiedJson(true);
+      setTimeout(() => setCopiedJson(false), 1600);
+    }).catch(() => {});
   }
 
   // A clean Markdown export — for Notion, GitHub, a lyric sheet, anywhere the
@@ -209,6 +220,9 @@ export default function SongPackageView({ pkg, onSaveEdit, onChooseHook, onRegen
           </button>
           <button className={styles.copyBtn} style={{ marginLeft: 0 }} onClick={exportMarkdown} title="Download a clean Markdown version — title, concept, hook, lyrics, production notes. For Notion, GitHub, or a lyric sheet.">⬇ Export Markdown</button>
           <button className={styles.copyBtn} style={{ marginLeft: 0 }} onClick={exportSong} title="Download this song package as JSON (backup / re-import into your vault)">⬇ Export JSON</button>
+          <button className={styles.copyBtn} style={{ marginLeft: 0 }} onClick={copyJson} title="Copy this song package as JSON straight to the clipboard — no download, ready to paste into a chat or another tool">
+            {copiedJson ? 'JSON copied ✓' : '📋 Copy JSON'}
+          </button>
         </span>
       </div>
 

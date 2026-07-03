@@ -303,6 +303,18 @@ Board** governance / Solana / token / NFT layer integrates with this engine via 
 later (kept out of this repo's core so it stays free + local).
 
 ## ✅ Shipped (newest first)
+- [x] **📋 Copy JSON to clipboard (tiny-feature cadence, #18)** — `⬇ Export JSON`
+      only ever downloaded a file; pasting a package straight into a chat, an
+      issue, or another tool meant downloading then re-opening it. New
+      `copyJson()` in `SongPackageView.tsx`, mirroring the existing Copy
+      lyrics/Copy Suno prompt pattern exactly (`navigator.clipboard.writeText`,
+      a 1.6s "JSON copied ✓" confirmation). A "📋 Copy JSON" button sits next to
+      the existing Export JSON download button — the download stays for
+      backup/re-import, the copy is for a quick paste elsewhere. Playwright-
+      verified live: generated a song, clicked Copy JSON, read the clipboard
+      back and confirmed it parsed as valid JSON matching the on-screen title,
+      confirmed the button label flips to "JSON copied ✓" and reverts after the
+      timeout. Zero console errors. _(this PR)_
 - [x] **🗑 Clear all avoid-words (tiny-feature cadence, #17)** — a learned
       avoid-words list only ever grew, one word removed at a time — no fast way
       to wipe it after retiring an old artist alias or starting fresh. New
