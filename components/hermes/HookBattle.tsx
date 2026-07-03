@@ -23,26 +23,31 @@ export default function HookBattle({ hooks, inputs, sections, onWinner }: {
     .map((r) => r.hook);
 
   const [round, setRound] = useState<HookOption[]>(seeds);
-  const [next, setNext] = useState<HookOption[]>([]);
+  // Decisions are keyed by pair index → winning side (0|1), never by hook text — two
+  // hooks with identical text used to collide and stick the bracket.
+  const [picks, setPicks] = useState<Record<number, 0 | 1>>({});
 
   if (seeds.length < 2) return null;
   const winner = round.length === 1 ? round[0] : null;
+  const pairCount = Math.floor(round.length / 2);
 
-  function pick(h: HookOption) {
-    if (round.length === 2) {
-      onWinner(h);
-      setRound([h]);
-      return;
+  function pick(pairIndex: number, side: 0 | 1) {
+    if (picks[pairIndex] !== undefined) return; // this pair is already decided
+    const nextPicks = { ...picks, [pairIndex]: side };
+    if (Object.keys(nextPicks).length === pairCount) {
+      const winners: HookOption[] = [];
+      for (let i = 0; i < pairCount; i++) winners.push(round[i * 2 + nextPicks[i]]);
+      if (winners.length === 1) onWinner(winners[0]);
+      setRound(winners);
+      setPicks({});
+    } else {
+      setPicks(nextPicks);
     }
-    if (next.some((n) => n.text === h.text)) return; // already decided this pair
-    const merged = [...next, h];
-    if (merged.length === round.length / 2) { setRound(merged); setNext([]); }
-    else setNext(merged);
   }
 
   function reset() {
     setRound(seeds);
-    setNext([]);
+    setPicks({});
   }
 
   if (winner) {
@@ -64,19 +69,20 @@ export default function HookBattle({ hooks, inputs, sections, onWinner }: {
         {round.length === 2 ? '⚔️ Final round' : `⚔️ Round of ${round.length}`} — tap the stronger hook.
       </p>
       {pairs.map(([a, b], i) => {
-        const decided = next.find((h) => h.text === a.text || h.text === b.text);
+        const decidedSide = picks[i];
+        const decided = decidedSide !== undefined;
         return (
           <div key={i} style={{ display: 'flex', alignItems: 'stretch', gap: 8, marginBottom: 8 }}>
-            {[a, b].map((h) => {
-              const won = decided?.text === h.text;
-              const lost = !!decided && !won;
+            {[a, b].map((h, side) => {
+              const won = decided && decidedSide === side;
+              const lost = decided && decidedSide !== side;
               return (
                 <button
-                  key={h.text}
+                  key={side}
                   type="button"
                   className={styles.hookCard}
-                  disabled={!!decided}
-                  onClick={() => pick(h)}
+                  disabled={decided}
+                  onClick={() => pick(i, side as 0 | 1)}
                   style={{
                     flex: 1, textAlign: 'left', cursor: decided ? 'default' : 'pointer',
                     opacity: lost ? 0.4 : 1, borderColor: won ? 'var(--amber)' : undefined,

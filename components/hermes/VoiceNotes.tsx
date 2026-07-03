@@ -92,8 +92,13 @@ export default function VoiceNotes({ songId }: { songId: string }) {
       const url = URL.createObjectURL(file);
       const audio = document.createElement('audio');
       audio.preload = 'metadata';
-      audio.onloadedmetadata = () => { URL.revokeObjectURL(url); const d = audio.duration; resolve(Number.isFinite(d) ? Math.round(d * 1000) : 0); };
-      audio.onerror = () => { URL.revokeObjectURL(url); resolve(0); };
+      let settled = false;
+      // A file that fires neither loadedmetadata nor error (a stalling decode) must not hang
+      // the upload forever — fall back to 0 after a short wait, revoking the URL exactly once.
+      const finish = (ms: number) => { if (settled) return; settled = true; clearTimeout(timer); URL.revokeObjectURL(url); resolve(ms); };
+      const timer = setTimeout(() => finish(0), 5000);
+      audio.onloadedmetadata = () => { const d = audio.duration; finish(Number.isFinite(d) ? Math.round(d * 1000) : 0); };
+      audio.onerror = () => finish(0);
       audio.src = url;
     });
   }

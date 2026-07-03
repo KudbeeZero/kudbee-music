@@ -71,18 +71,23 @@ function authHeaders(cfg: CloudConfig, accessToken?: string): Record<string, str
   };
 }
 
-/** Parse a GoTrue token response into our session shape. Returns null on a malformed body. */
-function toSession(body: unknown, now: number): CloudSession | null {
+/** Parse a GoTrue token response into our session shape. Returns null on a malformed body.
+ *  `prev` supplies fallback identity for a refresh grant: GoTrue may return fresh tokens
+ *  without re-sending the `user` object (or without rotating the refresh token), and that
+ *  is a valid refresh — reusing the known userId/email/refreshToken avoids a false logout. */
+function toSession(body: unknown, now: number, prev?: CloudSession): CloudSession | null {
   if (!body || typeof body !== 'object') return null;
   const b = body as Record<string, unknown>;
   const user = (b.user ?? {}) as Record<string, unknown>;
-  if (typeof b.access_token !== 'string' || typeof b.refresh_token !== 'string' || typeof user.id !== 'string') return null;
+  const userId = typeof user.id === 'string' ? user.id : prev?.userId;
+  const refreshToken = typeof b.refresh_token === 'string' ? b.refresh_token : prev?.refreshToken;
+  if (typeof b.access_token !== 'string' || !refreshToken || !userId) return null;
   const expiresIn = typeof b.expires_in === 'number' ? b.expires_in : 3600;
   return {
     accessToken: b.access_token,
-    refreshToken: b.refresh_token,
-    userId: user.id,
-    email: typeof user.email === 'string' ? user.email : '',
+    refreshToken,
+    userId,
+    email: typeof user.email === 'string' ? user.email : (prev?.email ?? ''),
     expiresAt: Math.floor(now / 1000) + expiresIn,
   };
 }
@@ -148,7 +153,10 @@ export function loadSession(deps: CloudDeps = defaultDeps()): CloudSession | nul
     const raw = deps.storage.get(SESSION_KEY);
     if (!raw) return null;
     const s = JSON.parse(raw);
-    if (s && typeof s.accessToken === 'string' && typeof s.userId === 'string') return s as CloudSession;
+    if (
+      s && typeof s.accessToken === 'string' && typeof s.refreshToken === 'string' &&
+      typeof s.userId === 'string' && typeof s.expiresAt === 'number' && Number.isFinite(s.expiresAt)
+    ) return s as CloudSession;
   } catch { /* ignore */ }
   return null;
 }
@@ -172,7 +180,7 @@ export async function refresh(session: CloudSession, deps: CloudDeps = defaultDe
     body: JSON.stringify({ refresh_token: session.refreshToken }),
   });
   if (!res.ok) return { ok: false, error: await readError(res) };
-  const next = toSession(await res.json().catch(() => null), deps.now());
+  const next = toSession(await res.json().catch(() => null), deps.now(), session);
   if (!next) return { ok: false, error: 'malformed refresh response' };
   persistSession(next, deps);
   return { ok: true, data: next };
@@ -208,7 +216,10 @@ export async function pullBrain(session: CloudSession, deps: CloudDeps = default
   });
   if (!res.ok) return { ok: false, error: await readError(res) };
   const rows = await res.json().catch(() => null);
-  if (!Array.isArray(rows) || rows.length === 0) return { ok: true, data: null };
+  // A real "no brain yet" is an empty array; anything non-array is an unexpected body we
+  // must NOT read as "empty" — that would let a caller push and overwrite a live row.
+  if (!Array.isArray(rows)) return { ok: false, error: 'unexpected brain response' };
+  if (rows.length === 0) return { ok: true, data: null };
   const pack = (rows[0] as Record<string, unknown>).pack;
   return { ok: true, data: pack == null ? null : JSON.stringify(pack) };
 }

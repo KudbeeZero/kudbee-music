@@ -686,7 +686,7 @@ export default function HermesHitFactory() {
           <div className={styles.flowFocus} data-active={flowStage === 'studio'}>
             <BrainScan outputs={outputs} running={running} workingMemory={wmSize} heat={heat} />
           </div>
-          <Studio pkg={pkg} outputs={outputs} id="stage-studio" active={flowStage === 'studio'} />
+          <Studio key={pkg?.id ?? 'no-song'} pkg={pkg} outputs={outputs} id="stage-studio" active={flowStage === 'studio'} />
           <AgentBoard outputs={outputs} signalLog={signalLog} />
           {pkg && (
             <div id="stage-review" className={styles.flowFocus} data-active={flowStage === 'review'}>
