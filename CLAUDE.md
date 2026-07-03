@@ -115,7 +115,7 @@ node scripts/mobile-matrix.mjs   # anything touching layout (build the export fi
 ## Status board
 
 <!-- STATUS:BEGIN generated: edit brain/roadmap.json, then GEN_DOCS=1 npx vitest run status -->
-**📊 Status board:** ✅ 31 shipped · 🔨 1 in build · 💤 9 queued (41 tracked) — full tables in [`STATUS.md`](STATUS.md), source of truth [`brain/roadmap.json`](brain/roadmap.json).
+**📊 Status board:** ✅ 32 shipped · 🔨 1 in build · 💤 9 queued (42 tracked) — full tables in [`STATUS.md`](STATUS.md), source of truth [`brain/roadmap.json`](brain/roadmap.json).
 <!-- STATUS:END -->
 
 ## Memory layers — where the brain keeps things
@@ -131,6 +131,7 @@ node scripts/mobile-matrix.mjs   # anything touching layout (build the export fi
 | Community steering | `brain/crossroads.json` → `lib/hermes/crossroads.ts` |
 | Vocabulary cortex | `brain/lexicon/core.json` → `lib/hermes/lexicon.ts` |
 | Pattern packs (form + rhyme-scheme presets) | `brain/patternPacks.json` → `lib/hermes/patternPacks.ts` — see `docs/pattern-packs.md` |
+| Occasion packs (holiday/life-moment lexicon + dedication) | `brain/occasionPacks.json` → `lib/hermes/occasionPacks.ts` |
 | Living-state spine (machine-readable) | `brain/roadmap.json` |
 | Vector memory (generated, gitignored) | `brain/vector-memory.json` → `lib/hermes/vectorMemory.ts` / `vectorRecall.ts` (node-only) |
 | Working list / idea inbox / build log | `TODO.md` · `IDEAS.md` · `BUILD_LOG.md` |

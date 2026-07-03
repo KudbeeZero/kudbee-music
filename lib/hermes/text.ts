@@ -148,6 +148,12 @@ export function maxContentWordShare(text: string): number {
 const STOP = new Set([
   'the', 'a', 'an', 'and', 'or', 'but', 'for', 'to', 'of', 'in', 'on', 'my',
   'me', 'i', 'we', 'you', 'it', 'with', 'not', 'is', 'be', 'so', 'that', 'this',
+  // Third-person pronouns — never a meaningful keyword, and disastrous as a noun-slot
+  // filler ("through the she"). Found via an Occasion Pack theme naturally written as
+  // "everything SHE gave" (a Mother's/Father's Day dedication); themeNouns() needs
+  // these gone before nounable() ever sees them, since they'd pass its checks.
+  'she', 'her', 'hers', 'herself', 'he', 'him', 'his', 'himself',
+  'they', 'them', 'their', 'theirs', 'themselves', 'us', 'our', 'ours',
 ]);
 export function keywords(text: string, max = 8): string[] {
   const seen = new Set<string>();

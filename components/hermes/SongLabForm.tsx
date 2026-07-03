@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react';
 import type { SongInputs, SongStructure, RhymeSchemeId } from '@/lib/hermes/types';
 import { PATTERN_PACKS, findPatternPack } from '@/lib/hermes/patternPacks';
+import { OCCASION_PACKS, findOccasionPack } from '@/lib/hermes/occasionPacks';
 import styles from './hermes.module.css';
 
 const STRUCTURES: { value: SongStructure; label: string }[] = [
@@ -100,6 +101,24 @@ export default function SongLabForm({
     if (pack) setV((p) => ({ ...p, structure: pack.structure, rhymeScheme: pack.rhymeScheme }));
   }
 
+  // An Occasion Pack sets the mood/genre/references/structure/rhyme dials AND the
+  // occasion field itself (unlike a Pattern Pack, occasion carries real new
+  // vocabulary the mock provider consults — see occasionPacks.ts). Audience/title/
+  // theme stay the visitor's own — the recipient's name and story are never preset.
+  function applyOccasionPack(id: string) {
+    const pack = findOccasionPack(id);
+    if (!pack) return;
+    setV((p) => ({
+      ...p,
+      occasion: pack.id,
+      mood: pack.moodPreset,
+      genre: pack.genrePreset,
+      references: pack.referencesPreset,
+      structure: pack.structure,
+      rhymeScheme: pack.rhymeScheme,
+    }));
+  }
+
   // same readiness rule as the Lyric Lab: a brief needs a title, theme, and genre
   const briefReady = Boolean(v.title.trim() && v.theme.trim() && v.genre.trim());
 
@@ -138,12 +157,29 @@ export default function SongLabForm({
         </Field>
       </div>
 
+      <Field label="Occasion — write it for someone, for a moment" htmlFor="hf-occasion">
+        <select
+          id="hf-occasion"
+          className={styles.select}
+          value={v.occasion ?? ''}
+          onChange={(e) => { if (e.target.value) applyOccasionPack(e.target.value); else set('occasion', undefined); }}
+        >
+          <option value="">No occasion — a regular song</option>
+          {OCCASION_PACKS.map((p) => <option key={p.id} value={p.id}>{p.emoji} {p.label}</option>)}
+        </select>
+        {v.occasion && (
+          <p className={styles.hint} style={{ marginTop: 5 }}>
+            {findOccasionPack(v.occasion)?.blurb} Mood, genre, form, and rhyme are set — Audience below becomes who it&rsquo;s dedicated to.
+          </p>
+        )}
+      </Field>
+
       <div className={styles.row2}>
         <Field label="Voice / persona" htmlFor="hf-voice">
           <input id="hf-voice" className={styles.input} value={v.voice} onChange={(e) => set('voice', e.target.value)} />
         </Field>
-        <Field label="Audience" htmlFor="hf-audience">
-          <input id="hf-audience" className={styles.input} value={v.audience} onChange={(e) => set('audience', e.target.value)} />
+        <Field label={v.occasion ? 'Dedicated to (name)' : 'Audience'} htmlFor="hf-audience">
+          <input id="hf-audience" className={styles.input} value={v.audience} onChange={(e) => set('audience', e.target.value)} placeholder={v.occasion ? 'e.g. Mom' : ''} />
         </Field>
       </div>
 

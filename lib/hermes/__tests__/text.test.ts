@@ -1,7 +1,30 @@
 import { describe, it, expect } from 'vitest';
-import { shuffle, makeRng, singularizeIfPlural, determinerAgreementViolations } from '../text';
+import { shuffle, makeRng, singularizeIfPlural, determinerAgreementViolations, keywords } from '../text';
 import { runPipeline } from '../pipeline';
 import type { SongInputs } from '../types';
+
+describe('keywords() drops third-person pronouns (Occasion Packs regression)', () => {
+  it('never surfaces she/he/they/our/etc. as a keyword', () => {
+    const kw = keywords('everything she gave our family, he never said much but his hands did');
+    for (const pronoun of ['she', 'her', 'he', 'him', 'his', 'they', 'them', 'our', 'us']) {
+      expect(kw).not.toContain(pronoun);
+    }
+    expect(kw).toEqual(expect.arrayContaining(['gave', 'family', 'never', 'said', 'hands']));
+  });
+
+  it('end-to-end: a pronoun-heavy dedication theme never leaks a pronoun into a noun slot', async () => {
+    const inputs: SongInputs = {
+      title: 'For Mom', theme: 'everything she gave our family over the years', mood: 'warm',
+      genre: 'pop', tempoMin: 100, tempoMax: 120, voice: '', audience: 'Mom',
+      doNotUse: [], references: '', structure: 'full-song',
+    };
+    const { pkg } = await runPipeline(inputs, { id: 'pronoun', now: '2026-01-01T00:00:00Z', seed: 3 });
+    const text = pkg.finalLyrics.toLowerCase();
+    for (const pronoun of ['she', 'her', 'he', 'him', 'his', 'they', 'them', 'our', 'us']) {
+      expect(text).not.toMatch(new RegExp(`\\b(the|a|an|this|that)\\s+${pronoun}\\b`));
+    }
+  });
+});
 
 describe('shuffle (seeded Fisher–Yates)', () => {
   it('is a permutation, deterministic per rng, and non-mutating', () => {

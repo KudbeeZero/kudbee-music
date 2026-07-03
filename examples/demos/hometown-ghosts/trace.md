@@ -30,8 +30,8 @@
 | **Default-Mode Network** | Considered 3 divergent angles, incl. “Tell "coming" through a place you can never go back to”. |
 | &nbsp;&nbsp;↳ mPFC drift | Wandered 3 divergent angles before focusing. |
 | &nbsp;&nbsp;↳ Thermal signature | Colors the live scan by the kind of artist you are. |
-| **Generative (right hemisphere)** | Wrote the hook from 5 candidates → “For people, I hold on through the leave”. |
-| &nbsp;&nbsp;↳ Hook furnace | Forged 5 candidates → “For people, I hold on through the leave”. |
+| **Generative (right hemisphere)** | Wrote the hook from 5 candidates → “Tell people I made it out the town”. |
+| &nbsp;&nbsp;↳ Hook furnace | Forged 5 candidates → “Tell people I made it out the town”. |
 | &nbsp;&nbsp;↳ Persona overlay | 6 anonymized craft-DNA archetypes on tap. |
 | &nbsp;&nbsp;↳ Voice mirror | Compares each song to your learned voice (in the studio, from your vault). |
 | &nbsp;&nbsp;↳ Imagery studio | Cover prompt drafted: “Album cover, square 1:1. Cinematic, nostalgi…”. |
@@ -41,7 +41,7 @@
 | &nbsp;&nbsp;↳ Safety screen | 0 famous-phrase flags on the lead hook. |
 | &nbsp;&nbsp;↳ Hook council | Ranked 5 hooks across challenge · crave · confidence. |
 | &nbsp;&nbsp;↳ Semantic auditor _(CLI lane)_ | Meaning-level paraphrase check — runs in the CLI eval lane. |
-| **Reward circuit** | Crave-ability 77/100 (returns 1, mutation 0.5, brevity 0.75, singability 0.77) — Compulsive — you'll want it again. |
+| **Reward circuit** | Crave-ability 77/100 (returns 1, mutation 0.5, brevity 0.75, singability 0.8) — Compulsive — you'll want it again. |
 | &nbsp;&nbsp;↳ VTA spark | Crave-ability 77/100 — Compulsive — you'll want it again. |
 | &nbsp;&nbsp;↳ OFC valuation | Turns your profile into reward-guided next moves (studio). |
 | **Decision (corpus callosum)** | A&R verdict: Certified banger — ship it. (93/100). The artist gets the final choice. |
@@ -61,7 +61,7 @@
 
 ## 🎯 The result
 
-- **Lead hook:** “For people, I hold on through the leave” _(chosen from 5 candidates)_
+- **Lead hook:** “Tell people I made it out the town” _(chosen from 5 candidates)_
 - **Rhyme:** scheme AABB, 100% density
 - **Crave-ability:** 77/100
 - **Originality:** 100/100

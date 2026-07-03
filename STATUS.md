@@ -2,7 +2,7 @@
 
 > **Generated from [`brain/roadmap.json`](brain/roadmap.json) — do not hand-edit.** Status lives ONLY in the spine; edit it there, then regenerate with `GEN_DOCS=1 npx vitest run status`. `statusBoard.test.ts` fails CI if this file drifts.
 
-**Scoreboard:** ✅ 31 shipped · 🔨 1 in build · 💤 9 queued — 41 tracked items
+**Scoreboard:** ✅ 32 shipped · 🔨 1 in build · 💤 9 queued — 42 tracked items
 (legend: ✅ shipped · 🔌 scaffold shipped, founder-gated · 🔨 in build · ⏭️ next · 💤 queued · 💭 idea · 🚧 blocked on founder)
 
 ## Tracks
@@ -62,7 +62,7 @@
 | ✅ | **Vault durability — export-on-change + file/cloud backup** | `lib/hermes/storage.ts` | #56 |
 | 💤 | **Optional durable cloud brain (Notion/Drive backing)** | `lib/hermes/storage.ts` | — |
 
-### Phase 5 — Real intelligence (opt-in) — `▰▰▰▰▰▰▰▱▱▱` 5/7
+### Phase 5 — Real intelligence (opt-in) — `▰▰▰▰▰▰▰▰▱▱` 6/8
 
 | | Item | Where it lives | PR |
 |---|------|----------------|----|
@@ -73,6 +73,7 @@
 | ✅ | **Scribe line editor + Rack 'Test key' verification** | `components/hermes/ScribeEditor.tsx` | — |
 | ✅ | **Pattern packs — rhyme-scheme + form variety ($0/local)** | `lib/hermes/patternPacks.ts` | — |
 | ✅ | **Watchdog — Claude-powered security/quality review, scheduled + findings-only** | `scripts/watchdog.mjs` | — |
+| ✅ | **Occasion Packs — holiday/life-moment lexicon + dedication (Song Gifts, phase 1)** | `lib/hermes/occasionPacks.ts` | — |
 
 ### Phase 6 — Influence Studio (WIFI DJ framework Part 1) — `▱▱▱▱▱▱▱▱▱▱` 0/1
 

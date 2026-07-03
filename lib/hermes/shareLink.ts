@@ -7,6 +7,7 @@
 // hardening) and can never throw or pollute the prototype.
 import type { SongInputs, SongStructure, RhymeSchemeId } from './types';
 import { RHYME_SCHEME_IDS } from './types';
+import { isValidOccasionId } from './occasionPacks';
 
 /** Bumped if the token layout changes; decodeShare rejects unknown versions. */
 const SHARE_VERSION = 1;
@@ -61,6 +62,9 @@ function sanitizeInputs(raw: unknown): SongInputs {
     // same as structure/rhymeTemp — a hostile value is dropped, never passed on.
     ...(RHYME_SCHEME_IDS.includes(r.rhymeScheme as RhymeSchemeId)
       ? { rhymeScheme: r.rhymeScheme as RhymeSchemeId } : {}),
+    // Same whitelist discipline — a shared "Song Gift" must carry its Occasion Pack
+    // through the link so the recipient sees the same dedication + imagery.
+    ...(isValidOccasionId(r.occasion) ? { occasion: r.occasion } : {}),
   };
 }
 

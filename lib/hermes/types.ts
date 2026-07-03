@@ -58,6 +58,12 @@ export interface SongInputs {
   culture?: string;    // where you're from / what shaped you — your OWN background, as craft
   rhymeTemp?: 'tight' | 'balanced' | 'loose';  // rhyme strictness dial (perfect ↔ slant); default balanced
   rhymeScheme?: RhymeSchemeId;  // verse rhyme-pattern dial (AABB/ABAB/ABBA/AAAA/XAXA); default AABB
+  /** Occasion Pack id (brain/occasionPacks.json) — genuinely NEW vocabulary (stocking,
+   *  sleigh, mistletoe…) that mood/genre/references text alone can't express, unlike
+   *  pattern packs which just recombine existing dials. Validated against
+   *  occasionPacks.ts's OCCASION_PACKS at every untrusted-input boundary (pipeline
+   *  normalize, share decode, vault import) — same discipline as rhymeScheme. */
+  occasion?: string;
 }
 
 /** Static metadata describing an agent (its job), independent of any run. */

@@ -3,6 +3,7 @@
 // never throws. Keeps a small version history per title.
 import type { SongPackage, RhymeSchemeId } from './types';
 import { RHYME_SCHEME_IDS } from './types';
+import { isValidOccasionId } from './occasionPacks';
 import type { Album } from './album';
 
 const KEY = 'hermes.vault.v1';
@@ -209,6 +210,8 @@ function sanitizeInputs(raw: unknown): SongPackage['inputs'] {
     // its real scheme — dropping it made 🔍 Explain regenerate as AABB after import.
     ...(RHYME_SCHEME_IDS.includes(r.rhymeScheme as RhymeSchemeId)
       ? { rhymeScheme: r.rhymeScheme as RhymeSchemeId } : {}),
+    // Same whitelist discipline — an imported Song Gift keeps its Occasion Pack.
+    ...(isValidOccasionId(r.occasion) ? { occasion: r.occasion } : {}),
   };
 }
 
