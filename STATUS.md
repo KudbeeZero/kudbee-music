@@ -47,7 +47,7 @@
 | ✅ | **Particle Brain + artist heat-map (living Brain Scan)** | `components/hermes/BrainScan.tsx + lib/hermes/heat.ts` | #40 |
 | ✅ | **Deep Brain Atlas — 37 anatomy-named subregions, each mapped to a real module** | `lib/hermes/brainMap.ts` | — |
 | ✅ | **Council build plan, PR1 — your learned taste as a 4th voice** | `lib/hermes/council.ts` | — |
-| ✅ | **Agent Network codenames — Council companion identities** | `lib/hermes/agents.ts + components/hermes/Council.tsx` | — |
+| ✅ | **Agent Network codenames — Council companion identities** | `lib/hermes/agents.ts + components/hermes/Council.tsx` | #185 |
 
 ### Phase 3 — Make it yours (the living world) — `▰▰▰▰▰▰▰▰▱▱` 5/6
 
