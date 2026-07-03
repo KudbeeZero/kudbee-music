@@ -20,7 +20,7 @@ export default function VaultDrawer({
   onOpen: (id: string) => void;
   onClose: () => void;
   onDelete: (id: string) => void;
-  onDuplicate?: (id: string) => void;
+  onDuplicate?: (id: string) => SongPackage | null | undefined;
   onRename?: (id: string, title: string) => void;
   onImported?: () => void;
 }) {
@@ -40,6 +40,19 @@ export default function VaultDrawer({
     e.stopPropagation();
     setRenamingId(s.id);
     setRenameDraft(s.title);
+  }
+
+  // Duplicate + rename used to be two separate clicks — fork it, scroll to find
+  // the new "(copy)"-titled row, then open its rename box. One click now forks
+  // AND opens the rename box on the new entry (pre-filled with its "(copy)"
+  // title), since renaming the fork is almost always the very next thing done.
+  function duplicateAndRename(s: SongPackage, e: React.MouseEvent) {
+    e.stopPropagation();
+    const clone = onDuplicate?.(s.id);
+    if (clone) {
+      setRenamingId(clone.id);
+      setRenameDraft(clone.title);
+    }
   }
 
   function commitRename() {
@@ -287,8 +300,8 @@ export default function VaultDrawer({
                   <button
                     className={styles.copyBtn}
                     style={{ marginLeft: 0 }}
-                    onClick={(e) => { e.stopPropagation(); onDuplicate(s.id); }}
-                    title="Fork this song into a new, independently-versioned copy — the original is untouched"
+                    onClick={(e) => duplicateAndRename(s, e)}
+                    title="Fork this song into a new, independently-versioned copy, then open a rename box for it right away — the original is untouched"
                   >
                     duplicate
                   </button>

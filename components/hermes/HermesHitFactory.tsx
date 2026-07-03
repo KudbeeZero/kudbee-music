@@ -294,8 +294,9 @@ export default function HermesHitFactory() {
   // no bearing on the original. Lets an artist branch a version to try a wild edit
   // without risking the one they already like.
   function duplicateInVault(id: string) {
-    duplicateSong(id);
+    const clone = duplicateSong(id);
     setVault(listSongs());
+    return clone;
   }
 
   function renameInVault(id: string, title: string) {
