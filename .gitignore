@@ -29,12 +29,12 @@ ENV/
 env/
 
 # IDEs and IDE servers
-.vscode/
-.vscode-server/
-.cursor-server/
-.windsurf-server/
-.lightning_studio/
-.idea/
+.vscode
+.vscode-server
+.cursor-server
+.windsurf-server
+.lightning_studio
+.idea
 *.swp
 *.swo
 *~
