@@ -285,7 +285,7 @@ vector memory, and document the architecture — lifts output quality, dev appea
 - [ ] **Artist/project vault** server-side (today the vault is localStorage only).
 - [ ] **Release calendar** + per-track release-readiness tracking.
 - [ ] **More scene packs** (community-extensible — the easiest contribution).
-- [ ] **More expansion packs** (Suno style presets — the song-side equivalent).
+- [ ] **More expansion packs** (Suno style presets — the song-side equivalent; `pop-anthem` shipped 2026-07-04).
 - [ ] **Team / agent marketplace** — share agent rosters and packs.
 - [ ] **Stripe credits** for any future hosted/paid lane (kept optional).
 - [ ] **Social-preview + demo reel refresh** when the next flagship video lands.

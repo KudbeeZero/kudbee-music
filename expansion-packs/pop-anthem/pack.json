@@ -1,0 +1,15 @@
+{
+  "name": "pop-anthem",
+  "title": "Pop Anthem",
+  "description": "Euphoric festival-pop lift — soaring synths, a huge stadium chorus, and the sound of ten thousand hands in the air.",
+  "matches": ["pop", "anthem", "uplifting", "euphoric", "festival", "empowering", "celebration", "stadium", "hopeful"],
+  "style": "festival stadium pop, soaring layered synths, four-on-the-floor kick, big gang-vocal chorus, euphoric and uplifting, ~124 BPM, bright confident female or male vocal, light autotune polish",
+  "production": {
+    "tempoBpm": 124,
+    "drums": "four-on-the-floor kick, clap-heavy snare, rising snare-roll builds",
+    "bass": "punchy synth bass, sidechained to the kick",
+    "instrumentation": ["soaring supersaw synth lead", "pluck arpeggio", "gang-vocal stacks"],
+    "mixVibe": "bright, wide, huge and radio-loud"
+  },
+  "hookGuidance": "big, singable, built for a crowd to shout back word for word"
+}

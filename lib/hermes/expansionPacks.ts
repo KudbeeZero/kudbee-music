@@ -5,6 +5,7 @@
 import drillDark from '../../expansion-packs/drill-dark/pack.json';
 import soulSample from '../../expansion-packs/soul-sample/pack.json';
 import trapBallad from '../../expansion-packs/trap-ballad/pack.json';
+import popAnthem from '../../expansion-packs/pop-anthem/pack.json';
 
 export interface ExpansionPack {
   name: string;
@@ -26,6 +27,7 @@ export const EXPANSION_PACKS: ExpansionPack[] = [
   drillDark as ExpansionPack,
   soulSample as ExpansionPack,
   trapBallad as ExpansionPack,
+  popAnthem as ExpansionPack,
 ];
 
 export function getExpansionPack(name: string): ExpansionPack | undefined {
