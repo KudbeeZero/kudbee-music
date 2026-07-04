@@ -233,6 +233,16 @@ A second-opinion review flagged real risks worth acting on (truth-first):
   disclaimer in the README + Uniqueness panel. _(#37)_
 
 ## 🌱 Fresh captures
+- 📊 **Claude Code session-cost characteristics (educational, 2026-07-04)** — a usage
+  breakdown of the agent sessions building HERMES, captured so we tune how we work, not the
+  product. Observed: **100%** of usage came from *subagent-heavy* sessions (each subagent
+  runs its own requests, so spawning them is the main cost lever); **36%** of usage happened
+  at **>150k context** (long sessions stay expensive even when cached); **14%** came from
+  `general-purpose` subagents specifically; the `/batch` skill was ~2%. Takeaways for future
+  work in this repo: (1) be deliberate about spawning subagents and give simpler ones a
+  **cheaper model** + tighter prompts; (2) `/compact` mid-task and `/clear` when switching
+  tasks to keep context (and cost) down; (3) prefer scoped, single-purpose subagents over
+  broad `general-purpose` ones. Not a product feature — a workflow note; no code impact.
 - ✅ **Agent Network codenames — from the "sneak peek" box-art** *(founder-supplied concept
   image, 2026-07-03)* — a game-console-style splash for WIFI DJ / Kudbee Studios visualized
   the whole brain metaphor already in this repo (HERMES Core, Crossroads Board, Shared
