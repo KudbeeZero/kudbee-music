@@ -194,6 +194,18 @@ shipped it. This file is the human-readable view; keep the two in sync._
     draft PR pending founder direction rather than merged as "done." See
     `brain/roadmap.json` 8.11 for the full round-by-round history.
   - Every subsequent phase still ships as its own PR, same review-loop discipline.
+  - **De-gray sweep (header nav, dropdowns, BottomNav) — shipped.** Per founder
+    directive to hand off gap-driven UI work to agents rather than do it directly,
+    built a persistent `hermes-ui` subagent charter
+    ([`.claude/agents/hermes-ui.md`](.claude/agents/hermes-ui.md)) backed by a new
+    memory layer ([`brain/uiDesignLanguage.json`](brain/uiDesignLanguage.json)) —
+    hard rules + a gaps backlog it reads before every change and an
+    agent-learnings log it appends to after. First dispatch shipped all 3 queued
+    gaps: header nav split into primary (gradient pill)/utility (tinted panel)
+    tiers, the 6 real `<select>` dropdowns got a glow+chevron treatment, and
+    `BottomNav.tsx` got a real active-state. See `brain/roadmap.json` 8.12. New
+    gap logged for later: a custom listbox component (native `<select>` popups
+    can't be restyled past the trigger).
 
 ## 🧠 Brain buildout queue (autonomous /loop — research-informed)
 1. [x] **Local lexicon** (vocabulary cortex) — token-free word store. _(shipped)_

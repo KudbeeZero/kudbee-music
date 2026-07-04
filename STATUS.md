@@ -2,7 +2,7 @@
 
 > **Generated from [`brain/roadmap.json`](brain/roadmap.json) — do not hand-edit.** Status lives ONLY in the spine; edit it there, then regenerate with `GEN_DOCS=1 npx vitest run status`. `statusBoard.test.ts` fails CI if this file drifts.
 
-**Scoreboard:** ✅ 73 shipped · 🔨 4 in build · 💤 8 queued — 85 tracked items
+**Scoreboard:** ✅ 74 shipped · 🔨 4 in build · 💤 8 queued — 86 tracked items
 (legend: ✅ shipped · 🔌 scaffold shipped, founder-gated · 🔨 in build · ⏭️ next · 💤 queued · 💭 idea · 🚧 blocked on founder)
 
 ## Tracks
@@ -118,7 +118,7 @@
 | ✅ | **📄 Copy all as Markdown — bulk vault export, richer format** | `components/hermes/VaultDrawer.tsx` | — |
 | ✅ | **🗑 Clear all vault notes** | `lib/hermes/storage.ts + components/hermes/VaultDrawer.tsx` | — |
 
-### Phase 8 — Medium features — the planned arc — `▰▰▰▰▰▰▰▱▱▱` 8/11
+### Phase 8 — Medium features — the planned arc — `▰▰▰▰▰▰▰▰▱▱` 9/12
 
 | | Item | Where it lives | PR |
 |---|------|----------------|----|
@@ -133,6 +133,7 @@
 | 🔨 | **🕸️ Agent Lifecycle library — data layer only, no UI wired up yet** | `lib/hermes/agentLifecycle.ts` | — |
 | 🔨 | **🎨 WIFI DJ visual redesign — directory + phased plan** | `docs/wifi-dj-redesign.md` | — |
 | 🔨 | **🎨 Council redesign — Phase 1 attempt (5/5 rounds used, escalating)** | `components/hermes/Council.tsx + hermes.module.css` | — |
+| ✅ | **🕸️ Self-expanding UI-agent infrastructure + first de-gray sweep** | `.claude/agents/hermes-ui.md + brain/uiDesignLanguage.json` | — |
 
 ### Video studio — `▰▰▰▰▰▱▱▱▱▱` 4/8
 

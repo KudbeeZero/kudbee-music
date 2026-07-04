@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useRef, useState } from 'react';
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 import type { SongInputs, SongPackage, AgentOutput, HookOption, CritiqueKey } from '@/lib/hermes/types';
 import { AGENT_DEFINITIONS } from '@/lib/hermes/agents';
 import { runPipeline, buildClips } from '@/lib/hermes/pipeline';
@@ -56,6 +57,9 @@ export default function HermesHitFactory() {
   // CAPABILITY-driven rules (touch, form factor, animation budget) instead of only
   // viewport width — a landscape phone at 852px still gets 44px touch targets.
   const device = useDevice();
+  // Header nav active-state — Crossroads is a real route, so its current-view indicator
+  // is just a pathname check (no client-side routing state to track).
+  const pathname = usePathname();
   // identity gate — null until hydrated (client-only, avoids SSR mismatch)
   const [profile, setProfile] = useState<Profile | null>(null);
   const [identityReady, setIdentityReady] = useState(false);
@@ -462,7 +466,7 @@ export default function HermesHitFactory() {
           <>
             <span className={styles.modeBadge}>● V1 · local mock — no API key</span>
             <button
-              className={styles.ghostBtn}
+              className={styles.navUtility}
               onClick={() => {
                 if (mode === 'studio') focusFlowStage('keep');
                 document.getElementById('your-agent')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
@@ -471,17 +475,18 @@ export default function HermesHitFactory() {
             >
               🚀 Agent
             </button>
-            {mode === 'studio' && <button className={styles.ghostBtn} onClick={newSong}>✨ New</button>}
-            <button className={styles.ghostBtn} onClick={() => setLabOpen(true)}>✍️ Lyric Lab</button>
-            <Link href="/crossroads" className={styles.ghostBtn}>🧭 Crossroads</Link>
-            <button className={styles.ghostBtn} onClick={() => setAlbumOpen(true)}>Albums ({albums.length})</button>
-            <button className={styles.ghostBtn} onClick={() => setVaultOpen(true)}>Vault ({vault.length})</button>
+            {mode === 'studio' && <button className={styles.navPrimary} onClick={newSong}>✨ New</button>}
+            <button className={styles.navPrimary} onClick={() => setLabOpen(true)}>✍️ Lyric Lab</button>
+            <Link href="/crossroads" className={styles.navPrimary} data-active={pathname === '/crossroads' || undefined}>🧭 Crossroads</Link>
+            <button className={styles.navUtility} onClick={() => setAlbumOpen(true)}>Albums ({albums.length})</button>
+            <button className={styles.navUtility} onClick={() => setVaultOpen(true)}>Vault ({vault.length})</button>
             <span className={authStyles.profileChip} title={`Signed in as ${profile.name} (${profile.kind}) — local to this browser`}>
               {profile.name}
               {profile.kind === 'dev' && <span className={authStyles.devBadge}>dev</span>}
             </span>
             <button
-              className={styles.ghostBtn}
+              className={styles.navUtility}
+              data-tone="danger"
               onClick={handleSignOut}
               title="Sign out — your vault stays on this device"
             >
@@ -774,6 +779,13 @@ export default function HermesHitFactory() {
       <BottomNav
         visible={device.ui.singleColumn}
         hasPkg={pkg != null}
+        active={
+          vaultOpen ? 'vault'
+          : mode === 'compose' ? 'lab'
+          : flowStage === 'studio' ? 'studio'
+          : flowStage === 'release' ? 'package'
+          : 'council'
+        }
         onLab={scrollToLab}
         onCouncil={() => focusFlowStage('review')}
         onStudio={() => focusFlowStage('studio')}

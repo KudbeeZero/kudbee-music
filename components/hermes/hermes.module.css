@@ -23,6 +23,49 @@
 }
 .ghostBtn:hover { border-color: var(--amber); }
 
+/* ---------- header nav hierarchy (2026-07-04) ----------
+   Every header action used to share .ghostBtn — one flat outline style for both primary
+   navigation and secondary utility actions, the founder's "look at all these different
+   buttons" complaint (there was really only one, undifferentiated). Two new tiers, both
+   filled+glow per the no-grey rule, distinguished by intensity/hue rather than opacity:
+   .navPrimary = a real neon pill (Lyric Lab, New, Crossroads — where you're going).
+   .navUtility = a calmer tinted panel, single hue, still a real border+glow, never a flat
+   outline (Agent, Albums, Vault, Sign out — things you do along the way). Scoped to the
+   header only; .ghostBtn itself is untouched (used by ~15 other modal/utility buttons). */
+.navPrimary {
+  display: inline-flex; align-items: center; gap: 6px; text-decoration: none;
+  border: none; cursor: pointer; padding: 9px 16px; border-radius: 999px;
+  font-weight: 700; font-size: 13px; color: #0a0d12;
+  background: linear-gradient(135deg, var(--cyan), var(--violet));
+  box-shadow: 0 0 16px -4px rgba(139, 92, 255, 0.75), 0 0 12px -6px rgba(54, 224, 212, 0.55);
+  transition: box-shadow 0.15s ease, transform 0.15s ease, background 0.15s ease;
+}
+.navPrimary:hover { transform: translateY(-1px); box-shadow: 0 0 20px -3px rgba(139, 92, 255, 0.9), 0 0 16px -4px rgba(54, 224, 212, 0.75); }
+.navPrimary[data-active="true"] {
+  background: linear-gradient(135deg, var(--magenta), var(--violet));
+  box-shadow: 0 0 22px -3px rgba(210, 75, 255, 0.95), inset 0 0 0 1px rgba(255, 255, 255, 0.1);
+}
+.navUtility {
+  display: inline-flex; align-items: center; gap: 6px; text-decoration: none;
+  cursor: pointer; padding: 8px 13px; border-radius: 10px;
+  font-weight: 600; font-size: 12.5px; color: var(--ink);
+  border: 1px solid rgba(54, 224, 212, 0.5);
+  background: linear-gradient(135deg, rgba(54, 224, 212, 0.4), var(--bg-1) 75%);
+  box-shadow: 0 0 14px -7px rgba(54, 224, 212, 0.75);
+  transition: border-color 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
+}
+.navUtility:hover { border-color: rgba(54, 224, 212, 0.75); box-shadow: 0 0 18px -5px rgba(54, 224, 212, 0.9); }
+.navUtility[data-tone="danger"] {
+  border-color: rgba(255, 93, 108, 0.55);
+  background: linear-gradient(135deg, rgba(255, 93, 108, 0.4), var(--bg-1) 75%);
+  box-shadow: 0 0 14px -7px rgba(255, 93, 108, 0.8);
+}
+.navUtility[data-tone="danger"]:hover { border-color: rgba(255, 93, 108, 0.8); box-shadow: 0 0 18px -5px rgba(255, 93, 108, 0.95); }
+@media (max-width: 640px) {
+  .navPrimary { padding: 8px 13px; font-size: 12.5px; }
+  .navUtility { padding: 7px 11px; font-size: 12px; }
+}
+
 /* ---------- layout grid ---------- */
 .deck { display: grid; grid-template-columns: 340px 1fr 300px; gap: 16px; align-items: start; }
 @media (max-width: 1180px) { .deck { grid-template-columns: 1fr; } }
@@ -58,8 +101,35 @@
   background: var(--bg-1); border: 1px solid var(--line-strong); color: var(--ink);
   border-radius: 9px; padding: 9px 11px; font-size: 13.5px; width: 100%; outline: none;
 }
-.input:focus, .textarea:focus, .select:focus { border-color: var(--amber); box-shadow: 0 0 0 3px rgba(255, 177, 78, 0.12); }
+.input:focus, .textarea:focus { border-color: var(--amber); box-shadow: 0 0 0 3px rgba(255, 177, 78, 0.12); }
 .textarea { resize: vertical; min-height: 58px; }
+
+/* ---------- shared dropdown treatment (2026-07-04, Filter Dropdown / Key Display
+   mockup language) ----------
+   Plain browser <select>s (~6, all already sharing .select — pattern pack, structure,
+   rhyme, rhyme scheme, occasion, plus VaultDrawer's sort) inherited the same flat
+   var(--line-strong) outline as every other input. The mockup's own dropdown chips
+   (#19 Filter Dropdown, #21 Key Display) aren't full bright-gradient buttons — they're
+   a dark fill with a vivid glowing cyan border + custom chevron, so that's the honest
+   target here rather than forcing a two-stop gradient onto a form control (a native
+   OS-rendered popup listbox can't be fully restyled anyway — the trigger is what's
+   styleable; a real custom listbox component is a bigger follow-up, tracked in
+   brain/uiDesignLanguage.json rather than attempted here). */
+.select {
+  appearance: none; -webkit-appearance: none; cursor: pointer;
+  border-color: rgba(54, 224, 212, 0.55);
+  box-shadow: 0 0 16px -6px rgba(54, 224, 212, 0.75), inset 0 0 0 1px rgba(255, 255, 255, 0.03);
+  padding-right: 32px;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='10' height='6'><path d='M0 0l5 6 5-6z' fill='%2336e0d4'/></svg>");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+.select:hover { border-color: rgba(54, 224, 212, 0.85); box-shadow: 0 0 20px -4px rgba(54, 224, 212, 0.9); }
+.select:focus {
+  border-color: var(--amber);
+  box-shadow: 0 0 0 3px rgba(255, 177, 78, 0.15), 0 0 18px -5px rgba(54, 224, 212, 0.85);
+}
 .row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 9px; }
 .hint { font-size: 11px; color: var(--ink-faint); }
 .runBtn {
@@ -560,13 +630,28 @@
 }
 .bottomNavItem {
   flex: 1; display: flex; flex-direction: column; align-items: center; gap: 2px;
-  background: none; border: none; color: var(--ink-dim); font-size: 10px;
+  background: none; border: 1px solid transparent; color: var(--ink-dim); font-size: 10px;
   padding: 6px 2px; min-height: 44px; border-radius: 10px; cursor: pointer;
+  transition: background 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease, color 0.15s ease;
 }
-.bottomNavItem span:first-child { font-size: 18px; }
+/* Inactive icons get a faint on-brand glow instead of sitting fully plain/grey — still a
+   clear rung below the active pill's full fill+glow. */
+.bottomNavItem span:first-child { font-size: 18px; filter: drop-shadow(0 0 3px rgba(139, 92, 255, 0.4)); }
 .bottomNavItem:disabled { opacity: 0.35; cursor: default; }
+.bottomNavItem:disabled span:first-child { filter: none; }
 .bottomNavItem:not(:disabled):hover,
-.bottomNavItem:not(:disabled):active { color: var(--ink); background: var(--bg-1); }
+.bottomNavItem:not(:disabled):active {
+  color: var(--ink); background: rgba(139, 92, 255, 0.14); border-color: rgba(139, 92, 255, 0.3);
+}
+/* Active/current-view item — same near-solid magenta/violet fill+glow language as the
+   Council's picked-rank badge, so the dock's "you are here" reads as unmistakably as the
+   rest of the redesign rather than a plain text-color change. */
+.bottomNavItem[data-active="true"] {
+  color: #fff; border-color: rgba(210, 75, 255, 0.65);
+  background: linear-gradient(135deg, rgba(210, 75, 255, 0.85), rgba(139, 92, 255, 0.65));
+  box-shadow: 0 0 18px -4px rgba(210, 75, 255, 0.9), inset 0 0 0 1px rgba(255, 255, 255, 0.08);
+}
+.bottomNavItem[data-active="true"] span:first-child { filter: drop-shadow(0 0 6px rgba(255, 255, 255, 0.65)); }
 
 /* ---- Crossroads Board (Stage 2) --------------------------------------------- */
 .crossingCard { border: 1px solid var(--line); border-radius: 12px; padding: 14px 16px; margin-bottom: 14px; background: var(--bg-1); }

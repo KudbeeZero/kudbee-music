@@ -270,6 +270,26 @@ A second-opinion review flagged real risks worth acting on (truth-first):
     draft PR, not merged as "done," pending founder direction on whether to
     accept as an interim improvement, redirect the palette balance, or take it
     a different way entirely.
+  - **Self-expanding UI-agent infrastructure + first de-gray sweep — shipped.**
+    Founder: "I don't want you actually doing work you're handing any work
+    off... if you see something that needs to be done and there's not an agent
+    created for it then you create that gap and the knowledge that you create,
+    it's logged in the memory layer." Built a persistent `hermes-ui` subagent
+    charter (`.claude/agents/hermes-ui.md`) backed by a new memory layer
+    (`brain/uiDesignLanguage.json` — hard rules + a gaps backlog it reads
+    before every change, an agent-learnings log it appends after) instead of
+    doing the "no grey ingredients" work directly. First dispatch shipped all
+    3 queued gaps: header nav split into a primary gradient-pill tier and a
+    calmer single-hue utility tier (replacing one undifferentiated flat
+    button); the 6 real `<select>` dropdowns (corrected down from an earlier
+    "~15" guess) got a dark-fill/glowing-border/custom-chevron treatment
+    matched to the mockup's actual dropdown tiles rather than a forced
+    gradient; `BottomNav.tsx` got a real active-state matching the Council's
+    picked-rank-badge glow. Logged a new gap (a custom listbox component —
+    native `<select>` popups can't be restyled past the trigger) and a design
+    refinement (not every element should be a bright gradient; some are
+    deliberately a calmer single-hue glow) straight into the memory layer for
+    the next dispatch to read. See `brain/roadmap.json` 8.12.
 - ✅ **Agent Network codenames — from the "sneak peek" box-art** *(founder-supplied concept
   image, 2026-07-03)* — a game-console-style splash for WIFI DJ / Kudbee Studios visualized
   the whole brain metaphor already in this repo (HERMES Core, Crossroads Board, Shared
