@@ -1,11 +1,15 @@
 #!/usr/bin/env python3
 """Real-time HERMES monitoring dashboard."""
 
-from flask import Flask, render_template, jsonify
+from flask import Flask, render_template, jsonify, request
 from datetime import datetime
 import os
 import json
 import subprocess
+import requests
+import logging
+
+logger = logging.getLogger(__name__)
 
 app = Flask(__name__, template_folder="templates")
 
@@ -75,6 +79,66 @@ def metrics():
         "research": get_research_metrics(),
         "timestamp": datetime.now().isoformat()
     })
+
+# ============================================================================
+# Lyric Generation Integration
+# ============================================================================
+@app.route("/api/generate", methods=["POST"])
+def generate_lyrics():
+    """
+    Proxy endpoint that forwards generation requests to the inference server.
+    Falls back gracefully if server is not available.
+    """
+    try:
+        data = request.get_json()
+        inference_server = os.getenv("INFERENCE_SERVER", "http://localhost:8000")
+
+        # Try to reach the inference server
+        try:
+            response = requests.post(
+                f"{inference_server}/api/generate",
+                json=data,
+                timeout=15
+            )
+            return response.json(), response.status_code
+        except requests.exceptions.ConnectionError:
+            logger.warning(f"Inference server not available at {inference_server}")
+            return jsonify({
+                "error": "Inference server not available",
+                "message": "The lyric generation server is not running. Start it with: python server.py",
+                "inference_server": inference_server
+            }), 503
+        except Exception as e:
+            logger.error(f"Error communicating with inference server: {str(e)}")
+            return jsonify({
+                "error": "Communication error",
+                "message": str(e)
+            }), 500
+
+    except Exception as e:
+        logger.error(f"Error in generate_lyrics proxy: {str(e)}")
+        return jsonify({
+            "error": "Invalid request",
+            "message": str(e)
+        }), 400
+
+@app.route("/api/generation-status", methods=["GET"])
+def generation_status():
+    """Check if inference server is running."""
+    try:
+        inference_server = os.getenv("INFERENCE_SERVER", "http://localhost:8000")
+        response = requests.get(f"{inference_server}/health", timeout=2)
+        return jsonify({
+            "inference_server_available": True,
+            "server_url": inference_server,
+            "status": response.json()
+        }), 200
+    except:
+        return jsonify({
+            "inference_server_available": False,
+            "server_url": os.getenv("INFERENCE_SERVER", "http://localhost:8000"),
+            "message": "Inference server is not running"
+        }), 503
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5000, debug=False)
