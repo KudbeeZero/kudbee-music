@@ -1,0 +1,58 @@
+{
+  "note": "The WIFI DJ visual-language memory — the accumulated design rules for the Hit Factory's web UI (components/hermes/*), read by the hermes-ui agent (.claude/agents/hermes-ui.md) before every styling change and appended to after. Reference/design doc, not imported by runtime code — the executable styles live in components/hermes/hermes.module.css + app/globals.css. Distinct from hermes-art (which owns the video-studio canvas compositor, a different surface entirely).",
+  "updated": "2026-07-03",
+  "sourceMockups": [
+    "assets/concept-art/wifi-dj-production-ui-kit-desktop-mobile.png",
+    "assets/concept-art/wifi-dj-lyrics-editor.png"
+  ],
+  "hardRules": [
+    {
+      "rule": "Never ship a flat, gray, or outline-only interactive element.",
+      "why": "Founder's explicit, repeated complaint: \"I don't like the grey ingredients.\" Every button/chip/dropdown/badge must read as vivid neon — filled with a real gradient, glowing (box-shadow bloom), never a plain 1px border on a dark/gray fill.",
+      "learnedFrom": "Council redesign round 1 (6/10) and round 2 (8/10) reviews both flagged outline-only chips and flat cards as the #1 gap versus the mockup."
+    },
+    {
+      "rule": "A gradient must use near-solid/full-opacity stops (match --runBtn's amber gradient or the Council's picked-rank-badge treatment), never both stops under ~0.3 alpha.",
+      "why": "Two low-opacity color stops stacked on a dark background optically average into a neutral gray/brown smear — technically a gradient, but doesn't read as two hues. This is probably the single most common way a 'fix' silently fails to fix the grey complaint.",
+      "learnedFrom": "Council redesign round 4 (8/10): a cyan→amber gradient at 0.14-0.24 alpha was \"present in the CSS but doesn't land visually\" per independent review. Round 5 fixed it by raising to near-solid stops (var(--cyan), var(--amber) directly, or 0.85+/0.55+ alpha) with dark (#0a0d12) text for contrast, matching how .runBtn already does it."
+    },
+    {
+      "rule": "Every interactive element gets an ambient glow (tinted box-shadow with real blur/spread), not just a colored border.",
+      "why": "The mockup's whole identity is bloom/glow, not flat panels. A thin colored border reads as generic dark-mode, not neon.",
+      "learnedFrom": "Council round 1→2: box-shadow bloom (0 0 Npx -Mpx rgba(tint)) was the single highest-impact fix."
+    },
+    {
+      "rule": "Only use the locked palette tokens (--cyan, --magenta, --violet, --amber, --good, --warn, --bad in app/globals.css) at different opacities/gradient combinations. Never introduce a new hex value or a 4th/5th hue.",
+      "why": "Keeps the whole app's palette coherent and never requires touching globals.css (which every other component also depends on).",
+      "learnedFrom": "Council round 5 review flagged a perceived \"green\" creeping in — traced to --cyan (#36e0d4, a cyan-teal) being used more heavily than magenta/amber in that pass, not a new color. Lesson: when in doubt, deliberately balance panel real-estate across all 3-4 tokens rather than leaning on one."
+    },
+    {
+      "rule": "Grep hermes.module.css for a class name before adding it. Never touch --cyan/--magenta/--violet/--amber's hex values in globals.css.",
+      "why": "A past incident (roadmap 8.9) silently reskinned 17+ live components via a colliding class name. hermes.module.css has ~150 existing classes; a palette-token change would ripple across the whole app instantly, untested.",
+      "learnedFrom": "pr-doctor's standing rule (.claude/agents/pr-doctor.md), reused here."
+    },
+    {
+      "rule": "Never touch lib/hermes/* generation logic, data shapes, or example fixtures for a styling change. This is a CSS/markup-only layer over existing data.",
+      "why": "Determinism contract (CLAUDE.md iron law #1) — example/golden fixtures embed agent `name` strings verbatim; a rename or logic touch breaks byte-identical regression.",
+      "learnedFrom": "Agent Network codenames PR (#185) — confirmed agent name strings are baked into examples/*/song.json."
+    },
+    {
+      "rule": "Every visual change gets screenshot-verified at both desktop (1280px) and phone (375-390px) widths before being called done — mobile-first, per the app's own convention.",
+      "why": "A card/chip/glow tuned only for desktop density can bleed/mud together once things stack into one narrow column.",
+      "learnedFrom": "Council mobile-specialist pass: desktop's 28px glow blur read as muddy at 375px until reduced under a max-width:640px override."
+    }
+  ],
+  "knownGapsBacklog": [
+    { "id": "nav-tabs", "title": "Header nav is flat .ghostBtn buttons, no active-state or hierarchy", "home": "components/hermes/HermesHitFactory.tsx header + hermes.module.css .ghostBtn/.headerSpacer", "status": "queued" },
+    { "id": "audio-level-meter", "title": "VoiceNotes.tsx recording shows only an elapsed-time counter, no live input-level feedback", "home": "components/hermes/VoiceNotes.tsx", "status": "queued", "note": "$0 fix available: native Web Audio AnalyserNode, no new deps." },
+    { "id": "waveform-preview", "title": "Saved voice/riff clips show no waveform, just a play button + label + duration", "home": "components/hermes/VoiceNotes.tsx", "status": "queued" },
+    { "id": "shared-primitives", "title": "~15 plain <select> dropdowns across the app (pattern pack, rhyme scheme, structure, occasion, voice/persona, tempo) with zero shared visual language", "home": "docs/wifi-dj-redesign.md Phase 2", "status": "queued" },
+    { "id": "bottomnav-reskin", "title": "BottomNav.tsx (mobile dock) is structurally the closest 1:1 mockup match but visually untouched by the new glow language", "home": "components/hermes/BottomNav.tsx", "status": "queued" }
+  ],
+  "agentLearningsLog": [
+    {
+      "entry": "Council redesign (2026-07-03): 5 review rounds, 6→8→8→8→8/10. Never cleared 9/10. See brain/roadmap.json 8.11 for full history. Biggest lesson carried forward: opacity/intensity matters as much as hue choice — a technically-correct gradient at the wrong alpha reads as no gradient at all.",
+      "date": "2026-07-03"
+    }
+  ]
+}

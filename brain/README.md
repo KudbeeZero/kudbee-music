@@ -32,6 +32,7 @@ entry point — starting here or opening the file directly — orients you immed
 |---|---|---|
 | [`brain.json`](brain.json) | The two-hemisphere manifesto, machine-readable — companion to `hemispheres.md`. The *executable* version of this model lives in `lib/hermes/brainMap.ts`. | Reference |
 | [`hemispheres.md`](hemispheres.md) | The two-hemisphere manifesto, prose — the metaphor doc. | Reference |
+| [`uiDesignLanguage.json`](uiDesignLanguage.json) | The WIFI DJ visual-language memory for the Hit Factory's web UI — hard rules learned from the Council redesign (no flat/gray fills, near-solid gradient stops, ambient glow, locked-palette-only), plus a running gaps backlog and an agent-learnings log. Read/updated by the `hermes-ui` agent (`.claude/agents/hermes-ui.md`) before/after every styling change. | Live |
 
 ## Video-studio artifacts (the flagship demo, separate track)
 
