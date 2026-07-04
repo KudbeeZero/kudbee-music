@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HERMES Monitor Dashboard</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg: #0f0f23;
+            --bg-card: #1a1a2e;
+            --accent: #00d4ff;
+            --accent-alt: #ff006e;
+            --success: #00ff88;
+            --warning: #ffaa00;
+            --text: #e0e0e0;
+            --text-dim: #888;
+        }
+
+        body {
+            background: linear-gradient(135deg, var(--bg) 0%, #1a0a2e 100%);
+            color: var(--text);
+            font-family: 'Courier New', monospace;
+            padding: 20px;
+            min-height: 100vh;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+            border-bottom: 2px solid var(--accent);
+            padding-bottom: 20px;
+        }
+
+        h1 {
+            font-size: 2.5em;
+            background: linear-gradient(135deg, var(--accent), var(--accent-alt));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 5px;
+        }
+
+        .tagline {
+            color: var(--text-dim);
+            font-size: 0.9em;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .card {
+            background: var(--bg-card);
+            border: 1px solid var(--accent);
+            border-radius: 8px;
+            padding: 20px;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+        }
+
+        .card:hover {
+            border-color: var(--accent-alt);
+            box-shadow: 0 0 20px rgba(0, 212, 255, 0.2);
+        }
+
+        .card h2 {
+            color: var(--accent);
+            margin-bottom: 15px;
+            font-size: 1.2em;
+            border-bottom: 1px solid var(--accent);
+            padding-bottom: 10px;
+        }
+
+        .metric {
+            display: flex;
+            justify-content: space-between;
+            margin: 12px 0;
+            padding: 8px 0;
+            border-bottom: 1px solid rgba(0, 212, 255, 0.1);
+        }
+
+        .metric:last-child {
+            border-bottom: none;
+        }
+
+        .metric-label {
+            color: var(--text-dim);
+            font-size: 0.95em;
+        }
+
+        .metric-value {
+            color: var(--success);
+            font-weight: bold;
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.85em;
+            font-weight: bold;
+            background: rgba(0, 255, 136, 0.1);
+            color: var(--success);
+            border: 1px solid var(--success);
+        }
+
+        .status-badge.warning {
+            background: rgba(255, 170, 0, 0.1);
+            color: var(--warning);
+            border-color: var(--warning);
+        }
+
+        .status-badge.offline {
+            background: rgba(255, 0, 110, 0.1);
+            color: var(--accent-alt);
+            border-color: var(--accent-alt);
+        }
+
+        .loading {
+            animation: pulse 1.5s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 0.6; }
+            50% { opacity: 1; }
+        }
+
+        .timestamp {
+            text-align: center;
+            color: var(--text-dim);
+            font-size: 0.85em;
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 1px solid rgba(0, 212, 255, 0.1);
+        }
+
+        .refresh-btn {
+            background: linear-gradient(135deg, var(--accent), var(--accent-alt));
+            border: none;
+            color: var(--bg);
+            padding: 10px 20px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: bold;
+            margin: 0 auto;
+            display: block;
+            margin-top: 20px;
+        }
+
+        .refresh-btn:hover {
+            opacity: 0.8;
+        }
+
+        .error {
+            color: var(--accent-alt);
+            background: rgba(255, 0, 110, 0.1);
+            padding: 10px;
+            border-radius: 4px;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>🧠 HERMES Monitor</h1>
+        <p class="tagline">Real-time lyric diffusion system dashboard</p>
+    </header>
+
+    <div class="container">
+        <div class="grid">
+            <!-- Git Status -->
+            <div class="card">
+                <h2>📦 Git Status</h2>
+                <div class="metric">
+                    <span class="metric-label">kudbee-music</span>
+                    <span class="metric-value" id="music-refs">–</span>
+                </div>
+                <div class="metric">
+                    <span class="metric-label">kudbee-engine (migrated)</span>
+                    <span class="metric-value" id="engine-branches">–</span>
+                </div>
+                <div class="metric">
+                    <span class="metric-label">Status</span>
+                    <span class="status-badge" id="git-status">Connecting...</span>
+                </div>
+            </div>
+
+            <!-- System Health -->
+            <div class="card">
+                <h2>⚙️ System Health</h2>
+                <div class="metric">
+                    <span class="metric-label">GPU</span>
+                    <span class="metric-value" id="gpu-status">–</span>
+                </div>
+                <div class="metric">
+                    <span class="metric-label">Training Status</span>
+                    <span class="metric-value" id="training-status">–</span>
+                </div>
+                <div class="metric">
+                    <span class="metric-label">Active Agents</span>
+                    <span class="metric-value" id="agents-count">–</span>
+                </div>
+            </div>
+
+            <!-- Research Phase -->
+            <div class="card">
+                <h2>🔬 Research Phase</h2>
+                <div class="metric">
+                    <span class="metric-label">Research Teams</span>
+                    <span class="metric-value" id="research-teams">–</span>
+                </div>
+                <div class="metric">
+                    <span class="metric-label">Findings Collected</span>
+                    <span class="metric-value" id="findings">–</span>
+                </div>
+                <div class="metric">
+                    <span class="metric-label">Training Examples</span>
+                    <span class="metric-value" id="training-examples">–</span>
+                </div>
+                <div class="metric">
+                    <span class="metric-label">Migration Status</span>
+                    <span class="status-badge" id="migration-status">Complete</span>
+                </div>
+            </div>
+        </div>
+
+        <button class="refresh-btn" onclick="fetchMetrics()">🔄 Refresh</button>
+
+        <div class="timestamp" id="last-update">Last updated: Never</div>
+    </div>
+
+    <script>
+        async function fetchMetrics() {
+            try {
+                const response = await fetch('/api/metrics');
+                const data = await response.json();
+
+                // Git metrics
+                document.getElementById('music-refs').textContent = data.git.kudbee_music_refs || '–';
+                document.getElementById('engine-branches').textContent = data.git.kudbee_engine_branches || '–';
+                const gitStatusEl = document.getElementById('git-status');
+                gitStatusEl.textContent = data.git.status || '⚠️ Offline';
+                gitStatusEl.className = 'status-badge ' + (data.git.status?.includes('✅') ? '' : 'offline');
+
+                // System metrics
+                document.getElementById('gpu-status').textContent = data.system.gpu || '–';
+                document.getElementById('training-status').textContent = data.system.training_status || '–';
+                document.getElementById('agents-count').textContent = data.system.active_agents || '–';
+
+                // Research metrics
+                document.getElementById('research-teams').textContent = data.research.research_teams || '–';
+                document.getElementById('findings').textContent = data.research.findings_collected || '–';
+                document.getElementById('training-examples').textContent = data.research.training_examples || '–';
+
+                // Timestamp
+                const now = new Date(data.timestamp).toLocaleTimeString();
+                document.getElementById('last-update').textContent = `Last updated: ${now}`;
+            } catch (error) {
+                console.error('Error fetching metrics:', error);
+                document.getElementById('last-update').innerHTML = `<div class="error">⚠️ Connection error</div>`;
+            }
+        }
+
+        // Fetch on load and every 5 seconds
+        fetchMetrics();
+        setInterval(fetchMetrics, 5000);
+    </script>
+</body>
+</html>
