@@ -176,8 +176,8 @@ check is explicitly a *local* guard (vs your vault + clichés, not the internet)
 ## Expansion packs
 The Hit Factory analog of the video studio's scene packs:
 `expansion-packs/<name>/pack.json` is a production/style preset with a
-ready-to-paste **Suno style string**. Three ship (`drill-dark`, `soul-sample`,
-`trap-ballad`); the recommender suggests the one that fits your profile, and
+ready-to-paste **Suno style string**. Four ship (`drill-dark`, `soul-sample`,
+`trap-ballad`, `pop-anthem`); the recommender suggests the one that fits your profile, and
 "→ send to Song Lab" prefills a new track from it. Add one by dropping a new
 `pack.json` and importing it in `lib/hermes/expansionPacks.ts`.
 

@@ -3,9 +3,35 @@
 **What this is / who reads it:** the plan for HERMES's opt-in "unlock your own agent
 on dedicated compute" tier (the founder's `/goal`, 2026-07-03). Read it before wiring
 or spending on Lightning. The adapter half (`studio/lightning.mjs`, `hermes lightning`)
-is **built and unit-tested**; the live end-to-end run is blocked only on the founder
-standing up an endpoint. Mirrors [`runway-plan.md`](runway-plan.md) — a paid provider
-kept out of the free `$0` core, driven from the CLI, key in gitignored `.env.local`.
+is **built and unit-tested**, and as of 2026-07-04 it's **live-tested end-to-end**
+against the founder's own Lightning Studio — see "Live-test results" below. The one
+thing still open is the visitor-facing BYOK slot (see "The two-tier key model").
+Mirrors [`runway-plan.md`](runway-plan.md) — a paid provider kept out of the free `$0`
+core, driven from the CLI, key in gitignored `.env.local`.
+
+## Live-test results (2026-07-04)
+
+The founder stood up one Lightning Studio (an NVIDIA RTX PRO 6000 Blackwell GPU running
+Qwen2.5-14B-Instruct behind a LitServe HTTPS endpoint), put the URL + token in their
+gitignored `.env.local`, and ran the adapter for real: `node studio/lightning.mjs --ping`
+succeeded, and a real `--prompt` call round-tripped and returned actual generated lyrics.
+The adapter contract (`buildRequest` / `extractText` / `generate`) is now proven live, not
+just against a mocked `fetch`.
+
+The same session surfaced a real limitation: prompting an LLM to hold a rhyme scheme
+(AABB) isn't reliable. A first, generic prompt produced a couplet that didn't rhyme at
+all; a second, explicit prompt (demanding AABB, bracketed section tags, and a banned-
+cliche-word list) fixed the first couplet but the second still broke. This is the exact
+gap HERMES's own local engine avoids by guaranteeing rhyme by construction
+(`lib/hermes/rhyme.ts`'s rhyme-family lookups) instead of asking an LLM nicely — it's why
+Lightning stays an opt-in provider behind the existing seam rather than a rhyme-scheme
+authority. (It also motivated a LoRA fine-tuning smoke test on the founder's own,
+separate Lightning-Studio project — not part of this repo, and not referenced further
+here beyond this note.)
+
+The real remaining step is unchanged from before: the visitor-facing BYOK Lightning slot
+in the Engine Rack (see "The two-tier key model" below) — nothing user-facing ships until
+that's built.
 
 ## What's built (and tested) now
 

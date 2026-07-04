@@ -71,7 +71,13 @@ chat. Detail for each is in [`brain/roadmap.json`](brain/roadmap.json) + [`IDEAS
    key), rendered in Council.tsx next to each name. Still open, founder-paced: real per-codename
    still **portraits** (Grok/Gen-4-image) to replace the glyphs, then Runway Phase 3 can animate
    them (`docs/runway-plan.md`).
-- [ ] **Lightning AI spike** — one Studio running a HERMES agent behind **HTTPS/SSL** as an opt-in provider (you connect SSL).
+- [x] **Lightning AI spike** — one Studio running a HERMES agent behind **HTTPS/SSL** as an opt-in
+   provider (you connect SSL); live-tested end-to-end 2026-07-04 — `--ping` and a real `--prompt`
+   both round-tripped against the founder's own Qwen2.5-14B Lightning Studio. See
+   `docs/lightning-plan.md`.
+- [ ] **Lightning visitor BYOK slot** — the visitor-facing bring-your-own-endpoint/key slot in
+   the Engine Rack, mirroring `lib/hermes/claudeKey.ts`; the CLI-side adapter is now live-tested,
+   this client slot is the real remaining piece (`docs/lightning-plan.md`).
 - [ ] **Discord server** (+ GitHub→Discord webhook) — channels/roles/listening parties; wire on your go-ahead.
 - [ ] **Cloud brain** — server-side vault/memory (Notion/Drive/Supabase creds) so it's not localStorage-only.
 
@@ -176,22 +182,23 @@ shipped it. This file is the human-readable view; keep the two in sync._
   [`docs/wifi-dj-redesign.md`](docs/wifi-dj-redesign.md) — read that first. Decided
   **mobile-first** build order (matches the existing `useDevice`/capability-flag
   responsive system).
-  - **Phase 1 (Council redesign + new logo treatment) — attempted, escalating to
-    founder.** 5 build→screenshot→independent-review rounds against the mockup
-    (6 → 8 → 8 → 8 → 8/10, including dedicated desktop- and mobile-specialist
-    polish passes between rounds 2-3) never cleared the 9/10 bar. Per the
-    founder's own instruction ("after the fifth attempt stop and ask me for
-    help"), stopped rather than keep iterating blind. Precise remaining gaps
-    from the final review: a green/teal hue reads as present in the Challenges
-    bench + default chips/badges alongside the mockup's cyan/magenta/amber trio
-    (this is the existing `--cyan` token, used everywhere else in the app too —
-    flagging as reviewer feedback to weigh, not a confirmed defect); amber only
-    has one foothold (Agent Pack chips) versus appearing throughout the mockup;
-    the two hemisphere hues sit on two different card *types* rather than
+  - **Phase 1 (Council redesign + new logo treatment) — shipped as an interim
+    step (founder's call, 2026-07-04).** 5 build→screenshot→independent-review
+    rounds against the mockup (6 → 8 → 8 → 8 → 8/10, including dedicated
+    desktop- and mobile-specialist polish passes between rounds 2-3) never
+    cleared the 9/10 bar. Per the founder's own instruction ("after the fifth
+    attempt stop and ask me for help"), stopped and escalated rather than keep
+    iterating blind — founder's answer: "ship 8/10 as interim." Precise
+    remaining gaps from the final review, still open as future polish: a
+    green/teal hue reads as present in the Challenges bench + default
+    chips/badges alongside the mockup's cyan/magenta/amber trio (this is the
+    existing `--cyan` token, used everywhere else in the app too — flagging as
+    reviewer feedback to weigh, not a confirmed defect); amber only has one
+    foothold (Agent Pack chips) versus appearing throughout the mockup; the
+    two hemisphere hues sit on two different card *types* rather than
     blending within one card face the way the mockup's Council Card does.
-    Fully gated and working on `claude/github-pr-review-z0zjwi`
-    (screenshots: `assets/concept-art/council-redesign-attempts/`) — held as a
-    draft PR pending founder direction rather than merged as "done." See
+    Fully gated and merged via `claude/github-pr-review-z0zjwi` → PR #187
+    (screenshots: `assets/concept-art/council-redesign-attempts/`). See
     `brain/roadmap.json` 8.11 for the full round-by-round history.
   - Every subsequent phase still ships as its own PR, same review-loop discipline.
   - **De-gray sweep (header nav, dropdowns, BottomNav) — shipped.** Per founder
@@ -294,11 +301,12 @@ vector memory, and document the architecture — lifts output quality, dev appea
    wire the webhook on founder's go-ahead; optional Telegram announce mirror later.
 - [x] **`LAUNCH.md` kit** — star-launch checklist + draft Twitter/X thread + demo-recording
    script shipped _(#43)_; the pre-flight boxes inside it are the founder's launch-day gate.
-- [ ] **Lightning AI spike** — per-agent compute for the opt-in "advance your model" tier
+- [x] **Lightning AI spike** — per-agent compute for the opt-in "advance your model" tier
    (user signs up → their own agent). Best used as the **optional GPU lane**, not the
    backbone; base stays $0/local/serverless. Prereq: accounts + persistent vault (Phase 4).
-   **Spike when SSL is connected:** one Lightning Studio running a single HERMES agent
-   behind HTTPS, wired as an opt-in provider; compare vs Anthropic-API-direct + Modal/Replicate.
+   Live-tested 2026-07-04: one Lightning Studio (Qwen2.5-14B behind HTTPS) wired as an
+   opt-in provider; `--ping` + a real `--prompt` round-tripped against the founder's own
+   endpoint. See `docs/lightning-plan.md`.
 - [ ] **Per-track Suno structure hints** — `[Intro]`/`[Bridge]` pacing, stems, BPM/key
    tags in the Suno export (folds into Phase 5).
 - [ ] **Docs site on GitHub Pages** — Astro Starlight.
@@ -323,7 +331,7 @@ vector memory, and document the architecture — lifts output quality, dev appea
 - [ ] **Artist/project vault** server-side (today the vault is localStorage only).
 - [ ] **Release calendar** + per-track release-readiness tracking.
 - [ ] **More scene packs** (community-extensible — the easiest contribution).
-- [ ] **More expansion packs** (Suno style presets — the song-side equivalent).
+- [ ] **More expansion packs** (Suno style presets — the song-side equivalent; `pop-anthem` shipped 2026-07-04).
 - [ ] **Team / agent marketplace** — share agent rosters and packs.
 - [ ] **Stripe credits** for any future hosted/paid lane (kept optional).
 - [ ] **Social-preview + demo reel refresh** when the next flagship video lands.

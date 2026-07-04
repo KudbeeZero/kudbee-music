@@ -144,9 +144,18 @@ contribution loop are the seeds of this.
   before committing. **Adapter half DONE (2026-07-03):** `studio/lightning.mjs` +
   `hermes lightning` — a key-gated CLI that POSTs a prompt to a LitServe / Lightning Studios
   endpoint and extracts the lyrics, unit-tested with an injected fetch (no live key needed),
-  reading `LIGHTNING_ENDPOINT` + `LIGHTNING_API_KEY` from gitignored `.env.local` only. Live
-  end-to-end run is now the *only* blocker: the founder stands up an endpoint, drops the two
-  values in `.env.local`, and runs `hermes lightning --ping`. See `docs/lightning-plan.md`.
+  reading `LIGHTNING_ENDPOINT` + `LIGHTNING_API_KEY` from gitignored `.env.local` only.
+  **Live end-to-end run DONE (2026-07-04):** the founder stood up one Lightning Studio
+  (Qwen2.5-14B-Instruct behind a LitServe HTTPS endpoint), dropped the two values in
+  `.env.local`, and both `node studio/lightning.mjs --ping` and a real `--prompt` call
+  round-tripped, returning actual generated lyrics — the adapter contract is proven live.
+  Also surfaced: prompting an LLM to hold a rhyme scheme (AABB) isn't reliable (a generic
+  prompt broke both couplets; an explicit AABB + tag + banned-word prompt fixed only the
+  first), the exact gap HERMES's own engine avoids by guaranteeing rhyme by construction
+  (`lib/hermes/rhyme.ts`) — which is why a LoRA fine-tuning smoke test was started on the
+  founder's own, separate Lightning-Studio project (not this repo). The real remaining
+  piece is the visitor-facing BYOK Lightning slot in the Engine Rack, mirroring
+  `lib/hermes/claudeKey.ts`. See `docs/lightning-plan.md`.
 - 💭 **Durable cloud brain** — optional Notion / Google Drive backing so a cleared
   browser never loses the vault (fixes the localStorage weakness).
 - 💭 **Reference study (opt-in)** — Spotify to study a *described* sound (never names),
@@ -244,7 +253,8 @@ A second-opinion review flagged real risks worth acting on (truth-first):
   rule), and the Lyrics Editor's violet accent vs. the Studio Kit's cyan/magenta
   (treating as same token set, different section accent, until told otherwise).
   Phase 1 (Council redesign + new logo) is in progress now.
-  - **Phase 1 outcome — escalating to founder after 5 attempts.** Two independent
+  - **Phase 1 outcome — shipped as an interim step (founder's call, 2026-07-04).**
+    Two independent
     design agents proposed the redesign (converged closely on a glowing avatar-
     ringed card language, filled+glowing seat chips, a diamond-mark "WiFi DJ"
     logo lockup in the panel header, a violet-tinted verdict card) — implemented,
@@ -266,10 +276,12 @@ A second-opinion review flagged real risks worth acting on (truth-first):
     hemisphere hues within one card face, while this implementation splits them
     across two different card *types* (one bench per hue) instead. Fully gated
     (tsc/tests/build/mobile-matrix/eval green) on `claude/github-pr-review-z0zjwi`,
-    screenshots at `assets/concept-art/council-redesign-attempts/` — held as a
-    draft PR, not merged as "done," pending founder direction on whether to
-    accept as an interim improvement, redirect the palette balance, or take it
-    a different way entirely.
+    screenshots at `assets/concept-art/council-redesign-attempts/`. Founder's
+    call after escalation: "ship 8/10 as interim" — merged as a real, tested
+    improvement over the starting point (round 1 was 6/10), not a claim of
+    hitting the 9/10 bar. Further palette-balance polish stays open as future
+    work (a candidate for a later `hermes-ui` dispatch) rather than blocking
+    the rest of the redesign.
   - **Self-expanding UI-agent infrastructure + first de-gray sweep — shipped.**
     Founder: "I don't want you actually doing work you're handing any work
     off... if you see something that needs to be done and there's not an agent
@@ -290,6 +302,16 @@ A second-opinion review flagged real risks worth acting on (truth-first):
     refinement (not every element should be a bright gradient; some are
     deliberately a calmer single-hue glow) straight into the memory layer for
     the next dispatch to read. See `brain/roadmap.json` 8.12.
+- 📊 **Claude Code session-cost characteristics (educational, 2026-07-04)** — a usage
+  breakdown of the agent sessions building HERMES, captured so we tune how we work, not the
+  product. Observed: **100%** of usage came from *subagent-heavy* sessions (each subagent
+  runs its own requests, so spawning them is the main cost lever); **36%** of usage happened
+  at **>150k context** (long sessions stay expensive even when cached); **14%** came from
+  `general-purpose` subagents specifically; the `/batch` skill was ~2%. Takeaways for future
+  work in this repo: (1) be deliberate about spawning subagents and give simpler ones a
+  **cheaper model** + tighter prompts; (2) `/compact` mid-task and `/clear` when switching
+  tasks to keep context (and cost) down; (3) prefer scoped, single-purpose subagents over
+  broad `general-purpose` ones. Not a product feature — a workflow note; no code impact.
 - ✅ **Agent Network codenames — from the "sneak peek" box-art** *(founder-supplied concept
   image, 2026-07-03)* — a game-console-style splash for WIFI DJ / Kudbee Studios visualized
   the whole brain metaphor already in this repo (HERMES Core, Crossroads Board, Shared
@@ -371,13 +393,15 @@ A second-opinion review flagged real risks worth acting on (truth-first):
     config seam. 11 tests cover every request shape against a mocked fetch. Remaining before
     UI-wiring + live test: the two founder dashboard steps (create the `brains` table; turn off
     email-confirmation or enable Google).
-  - **(D) Lightning AI — "unlock your own agent / your own brain"** — *blocked on the founder*:
-    needs a Lightning Studio running a HERMES agent behind HTTPS/SSL the founder connects
-    (already tracked in TODO "Lightning AI spike"). The security laws forbid routing a key
-    through our infra or shipping unattended code-write-and-push, so this stays a founder-paced,
-    opt-in provider behind the same adapter seam the Claude/Runway engines use. Not fakeable
-    locally — but (B)'s exportable Brain Pack is the "documents locally" stand-in the founder
-    themselves proposed for now.
+  - **(D) Lightning AI — "unlock your own agent / your own brain"** — *live-tested
+    2026-07-04*: the founder stood up a Lightning Studio (Qwen2.5-14B-Instruct behind a
+    LitServe HTTPS endpoint) and both `--ping` and a real `--prompt` call round-tripped
+    end-to-end (already tracked in TODO "Lightning AI spike"). The security laws still
+    forbid routing a key through our infra or shipping unattended code-write-and-push, so
+    this stays a founder-paced, opt-in provider behind the same adapter seam the
+    Claude/Runway engines use — the remaining piece is the visitor-facing BYOK slot, not
+    the founder's own endpoint. Not fakeable locally — but (B)'s exportable Brain Pack is
+    the "documents locally" stand-in the founder themselves proposed for now.
   Next $0 slices toward the goal (loop will work these): (A) persist the Claude Engine per
   profile; extend the Brain Pack to optionally carry a "bring your key on the new device"
   reminder; a clearer "this is your agent" surface tying identity + brain + PWA-install into

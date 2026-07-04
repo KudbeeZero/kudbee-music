@@ -17,3 +17,6 @@ next-env.d.ts
 # vector memory store (generated at runtime when @xenova/transformers is enabled)
 brain/vector-memory.json
 .mcp.json
+
+# ephemeral git worktrees created by isolated background agents (Agent tool, isolation: "worktree")
+.claude/worktrees/
