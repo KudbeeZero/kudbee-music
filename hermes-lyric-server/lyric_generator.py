@@ -239,9 +239,9 @@ class LyricGenerator:
             clean_up_tokenization_spaces=True
         )
 
-        # Extract only the new generated content (not the prompt)
-        if formatted_prompt in generated_text:
-            generated_text = generated_text[len(formatted_prompt):].strip()
+        # Strip [INST]...[/INST] wrapper if present (Mistral instruction format)
+        if "[/INST]" in generated_text:
+            generated_text = generated_text.split("[/INST]", 1)[-1].strip()
 
         # Count actual tokens generated
         num_tokens_generated = outputs[0].shape[0] - inputs["input_ids"].shape[1]
