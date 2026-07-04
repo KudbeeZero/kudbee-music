@@ -1,0 +1,133 @@
+# Git and version control
+.git
+.gitignore
+.gitattributes
+
+# Python cache and builds
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# Virtual environments
+venv/
+ENV/
+env/
+.venv/
+
+# IDEs and editors
+.vscode/
+.vscode-server/
+.cursor-server/
+.windsurf-server/
+.idea/
+.sublime-text/
+*.swp
+*.swo
+*~
+.DS_Store
+Thumbs.db
+
+# Jupyter/IPython
+.ipynb_checkpoints/
+*.ipynb_checkpoints
+
+# Testing and coverage
+.pytest_cache/
+.coverage
+htmlcov/
+.tox/
+
+# Documentation builds
+docs/_build/
+
+# Environment files
+.env
+.env.local
+.env.*.local
+.env.*.example
+
+# Docker files (don't need to copy Dockerfile into container)
+Dockerfile
+.dockerignore
+docker-compose*.yml
+
+# CI/CD
+.github/
+.gitlab-ci.yml
+.circleci/
+
+# Temporary and log files
+*.log
+*.log.*
+*.pid
+*.pid.*
+*.tmp
+*.temp
+.cache/
+
+# OS-specific
+.DS_Store
+.AppleDouble
+.LSOverride
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# Large files to exclude
+*.tar
+*.tar.gz
+*.zip
+*.rar
+*.7z
+*.iso
+*.dmg
+*.exe
+
+# ML model files (can be large, fetch from HuggingFace at runtime)
+*.bin
+*.safetensors
+*.pb
+*.ckpt
+*.pth
+*.pt
+
+# Training artifacts (only if committing to repo, which we don't)
+outputs/
+checkpoints/
+models/trained/
+
+# Node modules (if any frontend components)
+node_modules/
+
+# AWS/Cloud credentials
+*.pem
+*.key
+*.pub
+.aws/
+.gcp/
+
+# IDE symlinks from Lightning/Claude
+.lightning_studio/
+
+# Project-specific
+.claude/
+.claude.json*
+.claude.json.tmp*

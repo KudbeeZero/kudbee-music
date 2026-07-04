@@ -1,0 +1,182 @@
+version: "3.9"
+
+# Docker Compose configuration for kudbee-music/hermes-lyric-server
+# Orchestrates dashboard, training, and development services
+#
+# Usage:
+#   Development (all services):
+#     docker-compose up
+#   Dashboard only:
+#     docker-compose up dashboard
+#   Training environment:
+#     docker-compose up training
+#   Detached mode:
+#     docker-compose up -d
+#
+# Access:
+#   Dashboard: http://localhost:5000
+#   Jupyter:   http://localhost:8888 (token in logs)
+
+services:
+  # =========================================================================
+  # Dashboard Service - Flask monitoring server
+  # =========================================================================
+  dashboard:
+    build:
+      context: ../..
+      dockerfile: hermes-lyric-server/docker/Dockerfile
+      target: dashboard
+    container_name: hermes-dashboard
+    image: kudbee/hermes-dashboard:latest
+    ports:
+      - "${DASHBOARD_PORT:-5000}:5000"
+    volumes:
+      # Live code editing - changes in host reflect immediately in container
+      - ../monitor:/app/monitor
+      # Persistent data volume (if needed for metrics/logs)
+      - dashboard-data:/app/data
+    environment:
+      FLASK_APP: monitor.dashboard_server
+      FLASK_ENV: ${FLASK_ENV:-development}
+      LOG_LEVEL: ${LOG_LEVEL:-INFO}
+      # Pass through optional env vars
+      DEBUG: ${DEBUG:-false}
+    restart: unless-stopped
+    networks:
+      - hermes-network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:5000/"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 5s
+    depends_on:
+      - network-init
+    profiles:
+      - default
+      - services
+
+  # =========================================================================
+  # Training Service - Jupyter Lab for LoRA model training
+  # =========================================================================
+  training:
+    build:
+      context: ../..
+      dockerfile: hermes-lyric-server/docker/Dockerfile
+      target: training
+    container_name: hermes-training
+    image: kudbee/hermes-training:latest
+    ports:
+      - "${JUPYTER_PORT:-8888}:8888"
+    volumes:
+      # Notebooks and training data
+      - ../training:/app/training
+      # HuggingFace cache (persistent to avoid re-downloading models)
+      - hf-cache:/root/.cache/huggingface
+      # Training outputs
+      - training-outputs:/app/training/outputs
+      # Shared data volume
+      - shared-data:/app/data
+    environment:
+      JUPYTER_ENABLE_LAB: "yes"
+      HF_DATASETS_CACHE: /root/.cache/huggingface/datasets
+      HF_HOME: /root/.cache/huggingface
+      TRANSFORMERS_CACHE: /root/.cache/huggingface
+      CUDA_VISIBLE_DEVICES: ${CUDA_VISIBLE_DEVICES:-}
+      # Optional: Set to 0 for GPU if available
+    restart: unless-stopped
+    networks:
+      - hermes-network
+    depends_on:
+      - network-init
+    profiles:
+      - training
+      - all
+
+  # =========================================================================
+  # Development Service - Interactive shell with all tools
+  # =========================================================================
+  dev:
+    build:
+      context: ../..
+      dockerfile: hermes-lyric-server/docker/Dockerfile
+      target: dev
+    container_name: hermes-dev
+    image: kudbee/hermes-dev:latest
+    ports:
+      - "${DASHBOARD_PORT:-5000}:5000"
+      - "${JUPYTER_PORT:-8888}:8888"
+      - "8000:8000"
+    volumes:
+      # Mount entire project for development
+      - ../../..:/app
+      # HuggingFace cache (persistent)
+      - hf-cache:/root/.cache/huggingface
+      # Training outputs
+      - training-outputs:/app/hermes-lyric-server/training/outputs
+      # Shared data
+      - shared-data:/app/data
+    environment:
+      FLASK_APP: hermes-lyric-server/monitor/dashboard_server.py
+      FLASK_ENV: development
+      DEBUG: "true"
+      LOG_LEVEL: DEBUG
+      JUPYTER_ENABLE_LAB: "yes"
+      HF_DATASETS_CACHE: /root/.cache/huggingface/datasets
+      HF_HOME: /root/.cache/huggingface
+      CUDA_VISIBLE_DEVICES: ${CUDA_VISIBLE_DEVICES:-}
+    restart: unless-stopped
+    networks:
+      - hermes-network
+    stdin_open: true
+    tty: true
+    depends_on:
+      - network-init
+    profiles:
+      - dev
+      - all
+
+  # =========================================================================
+  # Network Initialization Service - Ensures network exists
+  # =========================================================================
+  # This is a minimal service that just ensures the network is created
+  # It exits immediately; other services depend on it for startup ordering
+  network-init:
+    image: busybox:latest
+    container_name: hermes-network-init
+    command: "echo Network ready"
+    networks:
+      - hermes-network
+    profiles:
+      - default
+      - services
+      - training
+      - dev
+      - all
+
+# =========================================================================
+# Named Volumes - Persist data across container restarts
+# =========================================================================
+volumes:
+  # Dashboard data (metrics, logs if saved)
+  dashboard-data:
+    driver: local
+
+  # HuggingFace models cache (large, shared across services)
+  hf-cache:
+    driver: local
+
+  # Training outputs (model checkpoints, adapters)
+  training-outputs:
+    driver: local
+
+  # Shared data directory
+  shared-data:
+    driver: local
+
+# =========================================================================
+# Custom Network - Allows service-to-service communication by name
+# =========================================================================
+networks:
+  hermes-network:
+    driver: bridge

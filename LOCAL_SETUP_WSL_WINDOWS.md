@@ -14,8 +14,9 @@ This guide walks you through setting up a complete local development environment
 4. [Clone Repositories](#clone-repositories)
 5. [Local Development Workflow](#local-development-workflow)
 6. [Dashboard Access](#dashboard-access)
-7. [IDE Setup (VS Code)](#ide-setup--vs-code)
-8. [Troubleshooting](#troubleshooting)
+7. [Docker Setup (Recommended for Development)](#docker-setup-recommended-for-development)
+8. [IDE Setup (VS Code)](#ide-setup--vs-code)
+9. [Troubleshooting](#troubleshooting)
 
 ---
 
@@ -338,6 +339,175 @@ If the `kudbee-music` repo contains dashboard code, you can run a local copy:
    ```
 
 The local dashboard will typically be at `http://localhost:5000` or similar. Check your project docs.
+
+---
+
+## Docker Setup (Recommended for Development)
+
+### Overview
+
+Docker containerization provides consistent environments across local (WSL2) and cloud. This is **optional but recommended** for easier setup and testing.
+
+**Time: 10-15 minutes**
+
+### Step 1: Install Docker Desktop
+
+1. Download [Docker Desktop for Windows](https://www.docker.com/products/docker-desktop)
+2. Run the installer as Administrator
+3. **Important**: When prompted, select **"Use WSL 2 instead of Hyper-V"**
+4. Restart your computer
+
+### Step 2: Verify Installation
+
+In PowerShell or WSL terminal:
+
+```bash
+docker --version
+docker-compose --version
+```
+
+Both should show version numbers.
+
+### Step 3: Allocate Resources
+
+Docker Desktop uses WSL2 system resources. Ensure adequate allocation:
+
+1. Open Docker Desktop
+2. Go to **Settings** → **Resources**
+3. Set:
+   - **CPU**: 4+ cores (half your system cores recommended)
+   - **Memory**: 4-8 GB (if you have 16GB, allocate 8GB)
+   - **Disk**: 20-30 GB
+4. Click **Apply & Restart**
+
+### Step 4: Start Services
+
+Navigate to the Docker directory:
+
+```bash
+cd ~/projects/kudbee-music/hermes-lyric-server/docker
+```
+
+Copy the environment configuration:
+
+```bash
+cp .env.example .env
+# Edit .env if you need custom ports (optional)
+```
+
+Start services using Make (recommended):
+
+```bash
+make up-dev
+```
+
+Or using docker-compose directly:
+
+```bash
+docker-compose --profile dev up
+```
+
+### Step 5: Access Services
+
+Once running:
+
+- **Dashboard**: http://localhost:5000
+- **Jupyter Lab** (optional): http://localhost:8888
+
+### Using Docker for Development
+
+#### Live Code Editing
+
+Changes to Python files in `hermes-lyric-server/` automatically reflect in the running container due to volume mounts. Flask auto-reloads in development mode.
+
+```bash
+# Edit dashboard_server.py in VS Code
+# Refresh http://localhost:5000 to see changes
+```
+
+#### Interactive Container Shell
+
+Open a bash shell inside the dev container:
+
+```bash
+make shell
+# Now you're inside the container
+python3 -m monitor.dashboard_server
+# Or run any Python command
+```
+
+#### Viewing Logs
+
+```bash
+make logs              # All services
+make logs-dashboard   # Dashboard only
+docker-compose logs -f dashboard  # Real-time follow
+```
+
+#### Common Docker Commands
+
+```bash
+# Start/Stop
+make up              # Start default services
+make up-dev          # Start dev environment
+make down            # Stop all services
+
+# Management
+make ps              # List containers
+make restart         # Restart services
+make status          # Show detailed status
+
+# Cleanup
+make clean           # Remove containers and volumes
+make prune           # Clean Docker system
+
+# Logs
+make logs            # View all logs
+make shell           # Open container shell
+
+# For more commands
+make help
+```
+
+### GPU Support (Optional)
+
+If you have an NVIDIA GPU:
+
+```bash
+make gpu-check
+```
+
+If GPU is detected, enable it in Docker Desktop:
+
+1. **Settings** → **Resources** → enable GPU
+2. Edit `docker-compose.yml` to add GPU configuration (see [DOCKER_SETUP_GUIDE.md](hermes-lyric-server/docker/DOCKER_SETUP_GUIDE.md#gpu-support))
+
+### Stopping Docker Services
+
+When done developing:
+
+```bash
+make down
+```
+
+This stops all containers but preserves volumes (model cache, data).
+
+To completely remove:
+
+```bash
+make clean
+```
+
+### Full Docker Documentation
+
+For comprehensive setup, advanced configuration, and troubleshooting:
+
+See [hermes-lyric-server/docker/DOCKER_SETUP_GUIDE.md](hermes-lyric-server/docker/DOCKER_SETUP_GUIDE.md)
+
+Quick reference:
+- [Docker Setup Guide](hermes-lyric-server/docker/DOCKER_SETUP_GUIDE.md)
+- [README](hermes-lyric-server/docker/README.md)
+- Available Makefile targets: `cd hermes-lyric-server/docker && make help`
 
 ---
 
