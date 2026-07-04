@@ -144,9 +144,18 @@ contribution loop are the seeds of this.
   before committing. **Adapter half DONE (2026-07-03):** `studio/lightning.mjs` +
   `hermes lightning` — a key-gated CLI that POSTs a prompt to a LitServe / Lightning Studios
   endpoint and extracts the lyrics, unit-tested with an injected fetch (no live key needed),
-  reading `LIGHTNING_ENDPOINT` + `LIGHTNING_API_KEY` from gitignored `.env.local` only. Live
-  end-to-end run is now the *only* blocker: the founder stands up an endpoint, drops the two
-  values in `.env.local`, and runs `hermes lightning --ping`. See `docs/lightning-plan.md`.
+  reading `LIGHTNING_ENDPOINT` + `LIGHTNING_API_KEY` from gitignored `.env.local` only.
+  **Live end-to-end run DONE (2026-07-04):** the founder stood up one Lightning Studio
+  (Qwen2.5-14B-Instruct behind a LitServe HTTPS endpoint), dropped the two values in
+  `.env.local`, and both `node studio/lightning.mjs --ping` and a real `--prompt` call
+  round-tripped, returning actual generated lyrics — the adapter contract is proven live.
+  Also surfaced: prompting an LLM to hold a rhyme scheme (AABB) isn't reliable (a generic
+  prompt broke both couplets; an explicit AABB + tag + banned-word prompt fixed only the
+  first), the exact gap HERMES's own engine avoids by guaranteeing rhyme by construction
+  (`lib/hermes/rhyme.ts`) — which is why a LoRA fine-tuning smoke test was started on the
+  founder's own, separate Lightning-Studio project (not this repo). The real remaining
+  piece is the visitor-facing BYOK Lightning slot in the Engine Rack, mirroring
+  `lib/hermes/claudeKey.ts`. See `docs/lightning-plan.md`.
 - 💭 **Durable cloud brain** — optional Notion / Google Drive backing so a cleared
   browser never loses the vault (fixes the localStorage weakness).
 - 💭 **Reference study (opt-in)** — Spotify to study a *described* sound (never names),
@@ -305,13 +314,15 @@ A second-opinion review flagged real risks worth acting on (truth-first):
     config seam. 11 tests cover every request shape against a mocked fetch. Remaining before
     UI-wiring + live test: the two founder dashboard steps (create the `brains` table; turn off
     email-confirmation or enable Google).
-  - **(D) Lightning AI — "unlock your own agent / your own brain"** — *blocked on the founder*:
-    needs a Lightning Studio running a HERMES agent behind HTTPS/SSL the founder connects
-    (already tracked in TODO "Lightning AI spike"). The security laws forbid routing a key
-    through our infra or shipping unattended code-write-and-push, so this stays a founder-paced,
-    opt-in provider behind the same adapter seam the Claude/Runway engines use. Not fakeable
-    locally — but (B)'s exportable Brain Pack is the "documents locally" stand-in the founder
-    themselves proposed for now.
+  - **(D) Lightning AI — "unlock your own agent / your own brain"** — *live-tested
+    2026-07-04*: the founder stood up a Lightning Studio (Qwen2.5-14B-Instruct behind a
+    LitServe HTTPS endpoint) and both `--ping` and a real `--prompt` call round-tripped
+    end-to-end (already tracked in TODO "Lightning AI spike"). The security laws still
+    forbid routing a key through our infra or shipping unattended code-write-and-push, so
+    this stays a founder-paced, opt-in provider behind the same adapter seam the
+    Claude/Runway engines use — the remaining piece is the visitor-facing BYOK slot, not
+    the founder's own endpoint. Not fakeable locally — but (B)'s exportable Brain Pack is
+    the "documents locally" stand-in the founder themselves proposed for now.
   Next $0 slices toward the goal (loop will work these): (A) persist the Claude Engine per
   profile; extend the Brain Pack to optionally carry a "bring your key on the new device"
   reminder; a clearer "this is your agent" surface tying identity + brain + PWA-install into

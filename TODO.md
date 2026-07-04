@@ -71,7 +71,13 @@ chat. Detail for each is in [`brain/roadmap.json`](brain/roadmap.json) + [`IDEAS
    key), rendered in Council.tsx next to each name. Still open, founder-paced: real per-codename
    still **portraits** (Grok/Gen-4-image) to replace the glyphs, then Runway Phase 3 can animate
    them (`docs/runway-plan.md`).
-- [ ] **Lightning AI spike** — one Studio running a HERMES agent behind **HTTPS/SSL** as an opt-in provider (you connect SSL).
+- [x] **Lightning AI spike** — one Studio running a HERMES agent behind **HTTPS/SSL** as an opt-in
+   provider (you connect SSL); live-tested end-to-end 2026-07-04 — `--ping` and a real `--prompt`
+   both round-tripped against the founder's own Qwen2.5-14B Lightning Studio. See
+   `docs/lightning-plan.md`.
+- [ ] **Lightning visitor BYOK slot** — the visitor-facing bring-your-own-endpoint/key slot in
+   the Engine Rack, mirroring `lib/hermes/claudeKey.ts`; the CLI-side adapter is now live-tested,
+   this client slot is the real remaining piece (`docs/lightning-plan.md`).
 - [ ] **Discord server** (+ GitHub→Discord webhook) — channels/roles/listening parties; wire on your go-ahead.
 - [ ] **Cloud brain** — server-side vault/memory (Notion/Drive/Supabase creds) so it's not localStorage-only.
 
@@ -256,11 +262,12 @@ vector memory, and document the architecture — lifts output quality, dev appea
    wire the webhook on founder's go-ahead; optional Telegram announce mirror later.
 - [x] **`LAUNCH.md` kit** — star-launch checklist + draft Twitter/X thread + demo-recording
    script shipped _(#43)_; the pre-flight boxes inside it are the founder's launch-day gate.
-- [ ] **Lightning AI spike** — per-agent compute for the opt-in "advance your model" tier
+- [x] **Lightning AI spike** — per-agent compute for the opt-in "advance your model" tier
    (user signs up → their own agent). Best used as the **optional GPU lane**, not the
    backbone; base stays $0/local/serverless. Prereq: accounts + persistent vault (Phase 4).
-   **Spike when SSL is connected:** one Lightning Studio running a single HERMES agent
-   behind HTTPS, wired as an opt-in provider; compare vs Anthropic-API-direct + Modal/Replicate.
+   Live-tested 2026-07-04: one Lightning Studio (Qwen2.5-14B behind HTTPS) wired as an
+   opt-in provider; `--ping` + a real `--prompt` round-tripped against the founder's own
+   endpoint. See `docs/lightning-plan.md`.
 - [ ] **Per-track Suno structure hints** — `[Intro]`/`[Bridge]` pacing, stems, BPM/key
    tags in the Suno export (folds into Phase 5).
 - [ ] **Docs site on GitHub Pages** — Astro Starlight.
