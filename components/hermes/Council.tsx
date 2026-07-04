@@ -40,74 +40,79 @@ export default function Council({ outputs, pkg, taste }: { outputs: Record<strin
 
   const Bench = ({ title, defs, tint }: { title: string; defs: typeof AGENT_DEFINITIONS; tint: string }) => (
     <div style={{ flex: 1, minWidth: 0 }}>
-      <div className={styles.hint} style={{ color: tint, fontWeight: 600 }}>{title}</div>
-      <div style={{ marginTop: 6, display: 'flex', flexDirection: 'column', gap: 6 }}>
+      <div className={styles.councilBenchLabel} style={{ color: tint }}>{title}</div>
+      <div className={styles.councilBenchList}>
         {defs.map((def) => (
-          <div key={def.id} className={styles.flag} style={{ borderLeft: `2px solid ${tint}` }}>
-            <div className={styles.flagKind} style={{ display: 'flex', alignItems: 'center', gap: 5 }}>
-              <AgentAvatar codename={def.codename} color={tint} size={14} />
-              {def.codename ?? def.name}
-              {def.codename && <span className={styles.hint} style={{ marginLeft: 2, fontWeight: 400 }}>{def.name}</span>}
+          <div key={def.id} className={styles.councilCard} style={{ ['--tint' as string]: tint }}>
+            <div className={styles.councilAvatarWrap} style={{ border: `1px solid ${tint}55`, boxShadow: `0 0 10px -2px ${tint}` }}>
+              <AgentAvatar codename={def.codename} color={tint} size={16} />
             </div>
-            <div className={styles.hint}>{outputs[def.id]?.finding ?? def.role}</div>
+            <div className={styles.councilCardBody}>
+              <div className={styles.councilCardName}>
+                {def.codename ?? def.name}
+                {def.codename && <span className={styles.councilCardCodename}>{def.name}</span>}
+              </div>
+              <div className={styles.councilCardFinding}>{outputs[def.id]?.finding ?? def.role}</div>
+            </div>
           </div>
         ))}
       </div>
     </div>
   );
 
+  const SeatChip = ({ id, emoji, label, description }: { id: string; emoji: string; label: string; description: string }) => {
+    const seated = guestIds.includes(id);
+    return (
+      <button key={id} className={styles.councilSeatChip} onClick={() => toggleGuest(id)} title={description} aria-pressed={seated}>
+        <span className={styles.councilVoteIcon} aria-hidden>
+          <svg viewBox="0 0 16 16" width="9" height="9">
+            {seated
+              ? <path d="M4 6 L8 10 L12 6" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+              : <path d="M4 10 L8 6 L12 10" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />}
+          </svg>
+        </span>
+        {emoji} {label}
+      </button>
+    );
+  };
+
   return (
     <div className={styles.panel}>
-      <div className={styles.panelTitle}>🏛️ The Council</div>
+      <div className={styles.councilPanelHead}>
+        <div className={styles.panelTitle} style={{ marginBottom: 0 }}>🏛️ The Council</div>
+        <div className={styles.councilLogo} aria-hidden>
+          <svg viewBox="0 0 32 32" width="18" height="18">
+            <defs>
+              <linearGradient id="councilLogoGrad" x1="0" y1="0" x2="32" y2="32">
+                <stop offset="0" stopColor="var(--violet)" />
+                <stop offset="1" stopColor="var(--magenta)" />
+              </linearGradient>
+            </defs>
+            <path d="M16 3 L27 16 L16 29 L5 16 Z" fill="none" stroke="url(#councilLogoGrad)" strokeWidth="2.2" strokeLinejoin="round" />
+            <path d="M16 11 L21 16 L16 21 L11 16 Z" fill="url(#councilLogoGrad)" opacity="0.32" />
+          </svg>
+          <span className={styles.councilLogoWord}>WiFi <strong>DJ</strong></span>
+        </div>
+      </div>
       <div className={styles.hint}>Right hemisphere <strong>proposes</strong> · left hemisphere <strong>challenges</strong> · <strong>you decide</strong>.</div>
-      <div style={{ display: 'flex', gap: 10, marginTop: 8 }}>
+      <div className={styles.councilBenches}>
         <Bench title="✦ Proposes (right)" defs={right} tint="var(--magenta)" />
         <Bench title="⚖ Challenges (left)" defs={left} tint="var(--cyan)" />
       </div>
       <div style={{ marginTop: 10 }}>
         <div className={styles.hint}>🎭 Guest Judges — seat an extra voice at the board for this session</div>
         <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap', marginTop: 5 }}>
-          {GUEST_JUDGES.map((j) => {
-            const seated = guestIds.includes(j.id);
-            return (
-              <button
-                key={j.id}
-                className={styles.chip}
-                onClick={() => toggleGuest(j.id)}
-                title={j.description}
-                aria-pressed={seated}
-                style={{
-                  cursor: 'pointer', borderColor: seated ? 'var(--amber)' : undefined,
-                  color: seated ? 'var(--amber)' : undefined, background: seated ? 'rgba(255,177,78,0.1)' : undefined,
-                }}
-              >
-                {j.emoji} {j.label}
-              </button>
-            );
-          })}
+          {GUEST_JUDGES.map((j) => (
+            <SeatChip key={j.id} id={j.id} emoji={j.emoji} label={j.label} description={j.description} />
+          ))}
         </div>
       </div>
       <div style={{ marginTop: 8 }}>
         <div className={styles.hint}>🎛️ Agent Packs — genre/scene lenses, seated the same way</div>
         <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap', marginTop: 5 }}>
-          {AGENT_PACKS.map((p) => {
-            const seated = guestIds.includes(p.id);
-            return (
-              <button
-                key={p.id}
-                className={styles.chip}
-                onClick={() => toggleGuest(p.id)}
-                title={p.description}
-                aria-pressed={seated}
-                style={{
-                  cursor: 'pointer', borderColor: seated ? 'var(--amber)' : undefined,
-                  color: seated ? 'var(--amber)' : undefined, background: seated ? 'rgba(255,177,78,0.1)' : undefined,
-                }}
-              >
-                {p.emoji} {p.label}
-              </button>
-            );
-          })}
+          {AGENT_PACKS.map((p) => (
+            <SeatChip key={p.id} id={p.id} emoji={p.emoji} label={p.label} description={p.description} />
+          ))}
         </div>
       </div>
       {ranking.length > 1 && (
@@ -125,8 +130,8 @@ export default function Council({ outputs, pkg, taste }: { outputs: Record<strin
             {ranking.map((r) => {
               const isPick = r.hook.text === chosenText;
               return (
-                <div key={`${r.rank}-${r.hook.text}`} style={{ display: 'flex', alignItems: 'center', gap: 8, opacity: isPick ? 1 : 0.72 }}>
-                  <span style={{ width: 34, fontWeight: 700, color: isPick ? 'var(--magenta)' : 'var(--ink-faint)' }}>{r.councilScore}</span>
+                <div key={`${r.rank}-${r.hook.text}`} className={styles.councilRankRow} data-pick={isPick} style={{ opacity: isPick ? 1 : 0.9 }}>
+                  <span className={styles.councilRankScore}>{r.councilScore}</span>
                   <span className={styles.hint} style={{ flex: 1, minWidth: 0, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', color: isPick ? 'var(--ink)' : undefined }}>
                     {isPick ? '★ ' : `${r.rank}. `}{r.hook.text}
                   </span>
@@ -141,7 +146,7 @@ export default function Council({ outputs, pkg, taste }: { outputs: Record<strin
         </div>
       )}
       {d && (
-        <div style={{ marginTop: 10, borderTop: '1px solid var(--line)', paddingTop: 8 }}>
+        <div className={styles.councilVerdictCard}>
           <div className={styles.hint}>The decision on the lead hook — “{pkg.chosenHook!.text}”</div>
           <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap', marginTop: 4 }}>
             {d.secondThought.map((c, i) => (

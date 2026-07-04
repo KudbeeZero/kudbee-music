@@ -175,6 +175,45 @@ _The autonomous `/loop` is working the phased roadmap. **Source of truth:
 [`brain/roadmap.json`](brain/roadmap.json)** — it indexes every item + the PR that
 shipped it. This file is the human-readable view; keep the two in sync._
 
+- [~] **WIFI DJ visual redesign** — founder-supplied "Production UI Kit" mockups
+  (Desktop/Mobile Studio + 24-element component library + a Lyrics Editor screen)
+  reimagine the whole Hit Factory UI. Full button/route directory, gap analysis
+  against existing code, and the phased build plan live in
+  [`docs/wifi-dj-redesign.md`](docs/wifi-dj-redesign.md) — read that first. Decided
+  **mobile-first** build order (matches the existing `useDevice`/capability-flag
+  responsive system).
+  - **Phase 1 (Council redesign + new logo treatment) — shipped as an interim
+    step (founder's call, 2026-07-04).** 5 build→screenshot→independent-review
+    rounds against the mockup (6 → 8 → 8 → 8 → 8/10, including dedicated
+    desktop- and mobile-specialist polish passes between rounds 2-3) never
+    cleared the 9/10 bar. Per the founder's own instruction ("after the fifth
+    attempt stop and ask me for help"), stopped and escalated rather than keep
+    iterating blind — founder's answer: "ship 8/10 as interim." Precise
+    remaining gaps from the final review, still open as future polish: a
+    green/teal hue reads as present in the Challenges bench + default
+    chips/badges alongside the mockup's cyan/magenta/amber trio (this is the
+    existing `--cyan` token, used everywhere else in the app too — flagging as
+    reviewer feedback to weigh, not a confirmed defect); amber only has one
+    foothold (Agent Pack chips) versus appearing throughout the mockup; the
+    two hemisphere hues sit on two different card *types* rather than
+    blending within one card face the way the mockup's Council Card does.
+    Fully gated and merged via `claude/github-pr-review-z0zjwi` → PR #187
+    (screenshots: `assets/concept-art/council-redesign-attempts/`). See
+    `brain/roadmap.json` 8.11 for the full round-by-round history.
+  - Every subsequent phase still ships as its own PR, same review-loop discipline.
+  - **De-gray sweep (header nav, dropdowns, BottomNav) — shipped.** Per founder
+    directive to hand off gap-driven UI work to agents rather than do it directly,
+    built a persistent `hermes-ui` subagent charter
+    ([`.claude/agents/hermes-ui.md`](.claude/agents/hermes-ui.md)) backed by a new
+    memory layer ([`brain/uiDesignLanguage.json`](brain/uiDesignLanguage.json)) —
+    hard rules + a gaps backlog it reads before every change and an
+    agent-learnings log it appends to after. First dispatch shipped all 3 queued
+    gaps: header nav split into primary (gradient pill)/utility (tinted panel)
+    tiers, the 6 real `<select>` dropdowns got a glow+chevron treatment, and
+    `BottomNav.tsx` got a real active-state. See `brain/roadmap.json` 8.12. New
+    gap logged for later: a custom listbox component (native `<select>` popups
+    can't be restyled past the trigger).
+
 ## 🧠 Brain buildout queue (autonomous /loop — research-informed)
 1. [x] **Local lexicon** (vocabulary cortex) — token-free word store. _(shipped)_
 2. [x] **Rhyme + meter engine** — `lib/hermes/rhyme.ts`: end-rhyme/scheme/density +

@@ -15,9 +15,13 @@ const ITEMS = [
   { key: 'vault', icon: '🎒', label: 'Vault', always: true },
 ] as const;
 
-export default function BottomNav({ visible, hasPkg, onLab, onCouncil, onStudio, onPackage, onVault }: {
+export default function BottomNav({ visible, hasPkg, active, onLab, onCouncil, onStudio, onPackage, onVault }: {
   visible: boolean;
   hasPkg: boolean;
+  /** Current-view key, so the dock reads as real navigation (matching the mockup's Dock
+   * Button) rather than a row of one-shot triggers. Optional — callers that don't track a
+   * "current view" concept can omit it and every item stays in its resting state. */
+  active?: (typeof ITEMS)[number]['key'];
   onLab: () => void;
   onCouncil: () => void;
   onStudio: () => void;
@@ -36,9 +40,11 @@ export default function BottomNav({ visible, hasPkg, onLab, onCouncil, onStudio,
           <button
             key={it.key}
             className={styles.bottomNavItem}
+            data-active={it.key === active || undefined}
             disabled={!enabled}
             onClick={handlers[it.key]}
             aria-label={it.label}
+            aria-current={it.key === active ? 'page' : undefined}
             title={enabled ? it.label : `${it.label} — generate a song first`}
           >
             <span aria-hidden="true">{it.icon}</span>

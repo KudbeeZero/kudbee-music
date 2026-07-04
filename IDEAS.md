@@ -233,6 +233,75 @@ A second-opinion review flagged real risks worth acting on (truth-first):
   disclaimer in the README + Uniqueness panel. _(#37)_
 
 ## 🌱 Fresh captures
+- ✏️ **WIFI DJ visual redesign — the "Production UI Kit" + Lyrics Editor mockups**
+  *(founder-supplied concept images, 2026-07-03)* — a full DAW-style reimagining of
+  the Hit Factory UI: a Desktop Studio (sidebar nav, transport bar, track lanes,
+  mixer, AI Co-Pilot slide-out, community feed), a Mobile Studio landscape variant,
+  a 24-element component library, and a separate Lyrics Editor screen (violet theme,
+  inline verse editor with rhyme/word suggestions, section tools, lyric stats).
+  Founder's ask: dispatch mapping/architecture/design agents, map every button and
+  route into a directory, decide mobile vs. desktop build order, then build —
+  design agents get creative license to fill mockup gaps, and two agents agreeing
+  on a call is enough to proceed without asking first. Three parallel research
+  agents produced the full directory — see `docs/wifi-dj-redesign.md` for the
+  complete button-by-button mapping against existing code (what's a restyle vs.
+  genuinely net-new) and the phased build plan (roadmap item 8.10). Decided
+  mobile-first (matches the existing capability-flag responsive system). Flagged
+  two open questions for later: the mockups' DAW mixer/track-lane concept has no
+  real multi-stem-audio backing in HERMES today (building it as an honest UI
+  metaphor, not a literal claim — same discipline as the Brain Scan's honesty
+  rule), and the Lyrics Editor's violet accent vs. the Studio Kit's cyan/magenta
+  (treating as same token set, different section accent, until told otherwise).
+  Phase 1 (Council redesign + new logo) is in progress now.
+  - **Phase 1 outcome — shipped as an interim step (founder's call, 2026-07-04).**
+    Two independent
+    design agents proposed the redesign (converged closely on a glowing avatar-
+    ringed card language, filled+glowing seat chips, a diamond-mark "WiFi DJ"
+    logo lockup in the panel header, a violet-tinted verdict card) — implemented,
+    then put through 5 build→screenshot→independent-review rounds against the
+    mockup: **6 → 8 → 8 → 8 → 8/10**, including a dedicated desktop-specialist
+    polish pass (real per-card ambient glow, filled chips) and a mobile-
+    specialist pass (tap targets, glow-radius/density tuning at ≤640px) between
+    rounds 2 and 3, plus a targeted gradient-opacity fix in round 4→5 after a
+    review specifically said the fix was "present in the CSS but doesn't land
+    visually." Never reached the founder's 9/10 bar. Per his own instruction —
+    "after the fifth attempt then you stop and then ask me for help" — stopped
+    rather than keep spending attempts blind. Final review's precise gaps: a
+    green/teal hue reads as present in the Challenges bench + default chips
+    alongside the mockup's cyan/magenta/amber trio (this is the pre-existing
+    `--cyan` token used everywhere else in the app, not a new hue introduced by
+    the redesign — noting the reviewer's read, not asserting it's a confirmed
+    defect); amber has only one foothold (Agent Pack chips) instead of
+    appearing throughout like the mockup; the mockup's Council Card blends both
+    hemisphere hues within one card face, while this implementation splits them
+    across two different card *types* (one bench per hue) instead. Fully gated
+    (tsc/tests/build/mobile-matrix/eval green) on `claude/github-pr-review-z0zjwi`,
+    screenshots at `assets/concept-art/council-redesign-attempts/`. Founder's
+    call after escalation: "ship 8/10 as interim" — merged as a real, tested
+    improvement over the starting point (round 1 was 6/10), not a claim of
+    hitting the 9/10 bar. Further palette-balance polish stays open as future
+    work (a candidate for a later `hermes-ui` dispatch) rather than blocking
+    the rest of the redesign.
+  - **Self-expanding UI-agent infrastructure + first de-gray sweep — shipped.**
+    Founder: "I don't want you actually doing work you're handing any work
+    off... if you see something that needs to be done and there's not an agent
+    created for it then you create that gap and the knowledge that you create,
+    it's logged in the memory layer." Built a persistent `hermes-ui` subagent
+    charter (`.claude/agents/hermes-ui.md`) backed by a new memory layer
+    (`brain/uiDesignLanguage.json` — hard rules + a gaps backlog it reads
+    before every change, an agent-learnings log it appends after) instead of
+    doing the "no grey ingredients" work directly. First dispatch shipped all
+    3 queued gaps: header nav split into a primary gradient-pill tier and a
+    calmer single-hue utility tier (replacing one undifferentiated flat
+    button); the 6 real `<select>` dropdowns (corrected down from an earlier
+    "~15" guess) got a dark-fill/glowing-border/custom-chevron treatment
+    matched to the mockup's actual dropdown tiles rather than a forced
+    gradient; `BottomNav.tsx` got a real active-state matching the Council's
+    picked-rank-badge glow. Logged a new gap (a custom listbox component —
+    native `<select>` popups can't be restyled past the trigger) and a design
+    refinement (not every element should be a bright gradient; some are
+    deliberately a calmer single-hue glow) straight into the memory layer for
+    the next dispatch to read. See `brain/roadmap.json` 8.12.
 - 📊 **Claude Code session-cost characteristics (educational, 2026-07-04)** — a usage
   breakdown of the agent sessions building HERMES, captured so we tune how we work, not the
   product. Observed: **100%** of usage came from *subagent-heavy* sessions (each subagent

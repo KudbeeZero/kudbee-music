@@ -120,7 +120,7 @@ node scripts/mobile-matrix.mjs   # anything touching layout (build the export fi
 ## Status board
 
 <!-- STATUS:BEGIN generated: edit brain/roadmap.json, then GEN_DOCS=1 npx vitest run status -->
-**📊 Status board:** ✅ 73 shipped · 🔨 2 in build · 💤 8 queued (83 tracked) — full tables in [`STATUS.md`](STATUS.md), source of truth [`brain/roadmap.json`](brain/roadmap.json).
+**📊 Status board:** ✅ 75 shipped · 🔨 3 in build · 💤 8 queued (86 tracked) — full tables in [`STATUS.md`](STATUS.md), source of truth [`brain/roadmap.json`](brain/roadmap.json).
 <!-- STATUS:END -->
 
 ## Memory layers — where the brain keeps things
@@ -145,6 +145,7 @@ table is the top-level index across *all* memory tiers, folder pages included.
 | Vocabulary cortex | `brain/lexicon/core.json` → `lib/hermes/lexicon.ts` |
 | Pattern packs (form + rhyme-scheme presets) | `brain/patternPacks.json` → `lib/hermes/patternPacks.ts` — see `docs/pattern-packs.md` |
 | Occasion packs (holiday/life-moment lexicon + dedication) | `brain/occasionPacks.json` → `lib/hermes/occasionPacks.ts` |
+| WIFI DJ UI design language (Hit Factory web-UI visual rules, gaps backlog, agent learnings log) | `brain/uiDesignLanguage.json` → read/updated by the `hermes-ui` agent (`.claude/agents/hermes-ui.md`) |
 | Living-state spine (machine-readable) | `brain/roadmap.json` |
 | Branch ledger (every branch, cross-referenced against its PR + merge status) | `brain/branches.json` ← `scripts/branch-ledger.mjs` refreshes git-derived fields; PR/status filled in by a periodic branch audit |
 | Vector memory (generated, gitignored) | `brain/vector-memory.json` → `lib/hermes/vectorMemory.ts` / `vectorRecall.ts` (node-only) |

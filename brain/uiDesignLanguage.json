@@ -1,0 +1,63 @@
+{
+  "note": "The WIFI DJ visual-language memory — the accumulated design rules for the Hit Factory's web UI (components/hermes/*), read by the hermes-ui agent (.claude/agents/hermes-ui.md) before every styling change and appended to after. Reference/design doc, not imported by runtime code — the executable styles live in components/hermes/hermes.module.css + app/globals.css. Distinct from hermes-art (which owns the video-studio canvas compositor, a different surface entirely).",
+  "updated": "2026-07-04",
+  "sourceMockups": [
+    "assets/concept-art/wifi-dj-production-ui-kit-desktop-mobile.png",
+    "assets/concept-art/wifi-dj-lyrics-editor.png"
+  ],
+  "hardRules": [
+    {
+      "rule": "Never ship a flat, gray, or outline-only interactive element.",
+      "why": "Founder's explicit, repeated complaint: \"I don't like the grey ingredients.\" Every button/chip/dropdown/badge must read as vivid neon — filled with a real gradient, glowing (box-shadow bloom), never a plain 1px border on a dark/gray fill.",
+      "learnedFrom": "Council redesign round 1 (6/10) and round 2 (8/10) reviews both flagged outline-only chips and flat cards as the #1 gap versus the mockup."
+    },
+    {
+      "rule": "A gradient must use near-solid/full-opacity stops (match --runBtn's amber gradient or the Council's picked-rank-badge treatment), never both stops under ~0.3 alpha.",
+      "why": "Two low-opacity color stops stacked on a dark background optically average into a neutral gray/brown smear — technically a gradient, but doesn't read as two hues. This is probably the single most common way a 'fix' silently fails to fix the grey complaint.",
+      "learnedFrom": "Council redesign round 4 (8/10): a cyan→amber gradient at 0.14-0.24 alpha was \"present in the CSS but doesn't land visually\" per independent review. Round 5 fixed it by raising to near-solid stops (var(--cyan), var(--amber) directly, or 0.85+/0.55+ alpha) with dark (#0a0d12) text for contrast, matching how .runBtn already does it."
+    },
+    {
+      "rule": "Every interactive element gets an ambient glow (tinted box-shadow with real blur/spread), not just a colored border.",
+      "why": "The mockup's whole identity is bloom/glow, not flat panels. A thin colored border reads as generic dark-mode, not neon.",
+      "learnedFrom": "Council round 1→2: box-shadow bloom (0 0 Npx -Mpx rgba(tint)) was the single highest-impact fix."
+    },
+    {
+      "rule": "Only use the locked palette tokens (--cyan, --magenta, --violet, --amber, --good, --warn, --bad in app/globals.css) at different opacities/gradient combinations. Never introduce a new hex value or a 4th/5th hue.",
+      "why": "Keeps the whole app's palette coherent and never requires touching globals.css (which every other component also depends on).",
+      "learnedFrom": "Council round 5 review flagged a perceived \"green\" creeping in — traced to --cyan (#36e0d4, a cyan-teal) being used more heavily than magenta/amber in that pass, not a new color. Lesson: when in doubt, deliberately balance panel real-estate across all 3-4 tokens rather than leaning on one."
+    },
+    {
+      "rule": "Grep hermes.module.css for a class name before adding it. Never touch --cyan/--magenta/--violet/--amber's hex values in globals.css.",
+      "why": "A past incident (roadmap 8.9) silently reskinned 17+ live components via a colliding class name. hermes.module.css has ~150 existing classes; a palette-token change would ripple across the whole app instantly, untested.",
+      "learnedFrom": "pr-doctor's standing rule (.claude/agents/pr-doctor.md), reused here."
+    },
+    {
+      "rule": "Never touch lib/hermes/* generation logic, data shapes, or example fixtures for a styling change. This is a CSS/markup-only layer over existing data.",
+      "why": "Determinism contract (CLAUDE.md iron law #1) — example/golden fixtures embed agent `name` strings verbatim; a rename or logic touch breaks byte-identical regression.",
+      "learnedFrom": "Agent Network codenames PR (#185) — confirmed agent name strings are baked into examples/*/song.json."
+    },
+    {
+      "rule": "Every visual change gets screenshot-verified at both desktop (1280px) and phone (375-390px) widths before being called done — mobile-first, per the app's own convention.",
+      "why": "A card/chip/glow tuned only for desktop density can bleed/mud together once things stack into one narrow column.",
+      "learnedFrom": "Council mobile-specialist pass: desktop's 28px glow blur read as muddy at 375px until reduced under a max-width:640px override."
+    }
+  ],
+  "knownGapsBacklog": [
+    { "id": "nav-tabs", "title": "Header nav is flat .ghostBtn buttons, no active-state or hierarchy", "home": "components/hermes/HermesHitFactory.tsx header + hermes.module.css .ghostBtn/.headerSpacer", "status": "shipped", "note": "2026-07-04: split into .navPrimary (Lyric Lab, New, Crossroads — near-solid cyan→violet gradient pill, real glow, magenta data-active state) and .navUtility (Agent, Albums, Vault, Sign out — calmer single-hue tinted panel + border glow, data-tone=\"danger\" variant for Sign out). .ghostBtn itself untouched — still used by ~15 other modal/utility buttons outside the header. Crossroads' data-active is wired via usePathname() but is currently dead in practice: /crossroads is rendered by CrossroadsBoard.tsx with its own separate header, so the shared shell header (and this nav) never appears on that page. Harmless, and correct if the header is ever shared, but noted here so it isn't mistaken for a bug later." },
+    { "id": "audio-level-meter", "title": "VoiceNotes.tsx recording shows only an elapsed-time counter, no live input-level feedback", "home": "components/hermes/VoiceNotes.tsx", "status": "queued", "note": "$0 fix available: native Web Audio AnalyserNode, no new deps." },
+    { "id": "waveform-preview", "title": "Saved voice/riff clips show no waveform, just a play button + label + duration", "home": "components/hermes/VoiceNotes.tsx", "status": "queued" },
+    { "id": "shared-primitives", "title": "Plain <select> dropdowns across the app (pattern pack, rhyme scheme, structure, occasion in SongLabForm.tsx; sort in VaultDrawer.tsx) with zero shared visual language", "home": "docs/wifi-dj-redesign.md Phase 2", "status": "shipped", "note": "2026-07-04: only 6 real <select> elements exist (all already on the shared .select class, not ~15 as originally logged — corrected count here). Gave .select its own rule split out of the old `.input, .textarea, .select` combined block: dark fill + glowing cyan border + custom chevron (data-uri SVG, no new asset), matching the mockup's Filter Dropdown / Key Display language exactly (those are dark-glow pills, not full bright-gradient buttons — confirmed by re-inspecting the mockup, not assumed). .input/.textarea untouched." },
+    { "id": "bottomnav-reskin", "title": "BottomNav.tsx (mobile dock) is structurally the closest 1:1 mockup match but visually untouched by the new glow language", "home": "components/hermes/BottomNav.tsx", "status": "shipped", "note": "2026-07-04: active item gets the Council picked-rank-badge treatment (near-solid magenta→violet gradient + real glow, white text/icon); inactive-but-enabled items get a faint violet icon glow instead of plain grey text, hover/active states get a real (if subtle) tinted background. Disabled items (no package yet) stay dimmed via opacity — that's an intentional affordance, not the grey-complaint. Added an `active` key prop (BottomNav.tsx) computed in HermesHitFactory.tsx from vaultOpen/mode/flowStage so the dock now reflects a real 'current view', not just one-shot triggers." },
+    { "id": "custom-select-listbox", "title": "Native <select> popup listbox is OS-rendered and can't be restyled — only the closed-state trigger got the neon treatment this round. A real custom dropdown/listbox component (button + absolutely-positioned option panel, keyboard nav, click-outside) would let the open state match the design language too, but is materially bigger than a CSS pass and touches 6 call sites' interaction model.", "home": "components/hermes/SongLabForm.tsx, components/hermes/VaultDrawer.tsx — new shared component, e.g. components/hermes/Dropdown.tsx", "status": "queued" }
+  ],
+  "agentLearningsLog": [
+    {
+      "entry": "Council redesign (2026-07-03): 5 review rounds, 6→8→8→8→8/10. Never cleared 9/10. See brain/roadmap.json 8.11 for full history. Biggest lesson carried forward: opacity/intensity matters as much as hue choice — a technically-correct gradient at the wrong alpha reads as no gradient at all.",
+      "date": "2026-07-03"
+    },
+    {
+      "entry": "Header nav + shared <select> + BottomNav reskin (2026-07-04, first hermes-ui pass under the new charter). Shipped all three knownGapsBacklog items from this round. New rule learned: not every mockup component is a full bright-gradient fill — re-inspected the mockup's own Filter Dropdown (#19) and Key Display (#21) tiles closely before styling .select, and they're actually dark-filled pills with a vivid glowing colored border + chevron, not a two-hue gradient. Matched that honestly instead of forcing every element into the Primary-Button gradient template — the 'no flat/grey' rule is about real glow + a genuine on-brand hue, not literally 'must be a gradient'. Also: for a 'secondary/utility' emphasis tier (header's Agent/Albums/Vault), a single-hue tinted panel (color mixed toward one dark, fully-opaque stop) reads as clearly colored and avoids the two-low-alpha-stops grey-smear trap entirely, since there's no second translucent hue to average against — a simpler and safer pattern than reaching for a second gradient stop when the goal is deliberately less emphasis than the primary tier.",
+      "date": "2026-07-04"
+    }
+  ]
+}
