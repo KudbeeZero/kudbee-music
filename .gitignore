@@ -28,12 +28,17 @@ venv/
 ENV/
 env/
 
-# IDEs
+# IDEs and IDE servers
 .vscode/
+.vscode-server/
+.cursor-server/
+.windsurf-server/
+.lightning_studio/
 .idea/
 *.swp
 *.swo
 *~
+.claude.json*
 
 # OS
 .DS_Store
