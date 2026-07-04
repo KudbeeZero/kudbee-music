@@ -1,0 +1,37 @@
+# Development Dependencies for HERMES
+# Install with: pip install -r requirements.txt -r requirements-dev.txt
+
+# Code Quality
+black==23.12.0          # Code formatter
+flake8==6.1.0           # Linter
+pylint==3.0.3           # Python code analyzer
+isort==5.13.2           # Import sorter
+
+# Testing
+pytest==7.4.3           # Test framework
+pytest-cov==4.1.0       # Coverage reporting
+pytest-xdist==3.5.0     # Parallel testing
+
+# Jupyter & Interactive
+jupyter==1.0.0          # Jupyter notebook
+jupyterlab==4.0.9       # JupyterLab IDE
+ipykernel==6.26.0       # IPython kernel
+ipywidgets==8.1.1       # Interactive widgets
+ipython==8.17.2         # Enhanced interactive shell
+
+# Visualization (for notebooks)
+matplotlib==3.8.2       # Plotting
+seaborn==0.13.0         # Statistical visualization
+
+# Development Tools
+python-dotenv==1.0.0    # Environment variables
+watchdog==3.0.0         # File system monitoring
+pre-commit==3.6.0       # Git hooks
+
+# Documentation (optional)
+sphinx==7.2.6           # Documentation generator
+sphinx-rtd-theme==2.0.0 # ReadTheDocs theme
+
+# Type Checking (optional)
+mypy==1.8.0             # Static type checker
+types-requests          # Type hints for requests
