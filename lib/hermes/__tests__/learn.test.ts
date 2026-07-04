@@ -73,11 +73,12 @@ describe('album builder', () => {
 
 describe('expansion packs', () => {
   it('loads packs with a Suno style string + production', () => {
-    expect(EXPANSION_PACKS.length).toBeGreaterThanOrEqual(3);
+    expect(EXPANSION_PACKS.length).toBeGreaterThanOrEqual(4);
     for (const p of EXPANSION_PACKS) {
       expect(p.style).toBeTruthy();
       expect(p.production.tempoBpm).toBeGreaterThan(0);
     }
     expect(getExpansionPack('drill-dark')?.title).toBe('Dark Drill');
+    expect(getExpansionPack('pop-anthem')?.title).toBe('Pop Anthem');
   });
 });
