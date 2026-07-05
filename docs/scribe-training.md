@@ -277,6 +277,50 @@ When you deploy a fine-tuned SCRIBE model to a Lightning Studio:
 
 ---
 
+## 8. Blackwell training run (2026-07-05)
+
+**Hardware:** RTX PRO 6000 Blackwell, 97 GB VRAM, CUDA 13.0
+
+**Dataset:** 22 SCRIBE line-rewrite examples (smoke test size)
+- Source: 106 deterministic HERMES songs (6 golden + 100 synthetic)
+- Extraction: `scribeLineRewriteExample()` parses lyrics, filters section labels, uses first line with context
+- Format: Alpaca-style `{instruction, input, output}`
+- Avg input: 89 chars | Avg output: 32 chars
+
+**Training command:**
+```bash
+litgpt finetune_lora Qwen/Qwen2.5-14B-Instruct \
+  --data JSON \
+  --data.json_path out/training-data/scribe-line-rewrite.alpaca.json \
+  --out_dir /teamspace/studios/this_studio/scribe-runs/scribe-qwen2.5-14b-lora-v1 \
+  --train.epochs 3 \
+  --train.global_batch_size 4 \
+  --train.micro_batch_size 1 \
+  --precision bf16-mixed
+```
+
+**Status:** Smoke test (22 examples < 500 minimum for production LoRA)
+- Model download: In progress
+- Training: Queued
+- Expected runtime: ~5–10 minutes for 3 epochs on this small dataset
+- Adapter output: `/teamspace/studios/this_studio/scribe-runs/scribe-qwen2.5-14b-lora-v1`
+
+**Next steps after training:**
+1. Run inference test on held-out example
+2. Evaluate: meaning preservation, banned-word adherence, singability
+3. Add more SCRIBE rows (recommend 100–500) via:
+   - Additional founder vault exports
+   - Expanding synthetic themes/seeds
+4. Re-run training with full dataset
+5. Connect adapter to Lightning endpoint for Scribe UI
+
+**Repo coordination:**
+- This training workflow coordinates with Claude Code session working on SCRIBE Lightning provider (PR #200 merged)
+- Training fix (PR #201) applied to `trainingData.ts` to filter section labels
+- Large artifacts kept outside repo: `/teamspace/studios/this_studio/scribe-runs/` ignored
+
+---
+
 ## See also
 
 - [`docs/lightning-plan.md`](lightning-plan.md) — The broader Lightning AI rollout, including CLI adapter and endpoint setup.
