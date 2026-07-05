@@ -94,48 +94,56 @@ function videoTreatmentExample(pkg: SongPackage): TrainingExample | null {
   };
 }
 
-function scribeLineRewriteExample(pkg: SongPackage): TrainingExample | null {
-  if (!pkg.finalLyrics.trim()) return null;
+function scribeLineRewriteExamples(pkg: SongPackage): TrainingExample[] {
+  if (!pkg.finalLyrics.trim()) return [];
 
   // Parse all lines, filter section labels (lines starting with [) and empty ones
   const allLines = pkg.finalLyrics.split('\n').map((line) => line.trim());
   const lyricLines = allLines.filter((line) => line && !line.startsWith('['));
 
-  if (lyricLines.length === 0) return null;
+  if (lyricLines.length === 0) return [];
 
-  // Use the first non-section lyric line as the example
-  const lineIndex = 0;
-  const line = lyricLines[lineIndex];
-  const precedingLine = lineIndex > 0 ? lyricLines[lineIndex - 1] : '';
-  const followingLine = lineIndex < lyricLines.length - 1 ? lyricLines[lineIndex + 1] : '';
+  // Generate examples for multiple lines in the song (sample across sections)
+  const examples: TrainingExample[] = [];
+  const step = Math.max(1, Math.floor(lyricLines.length / 4)); // Sample ~4 lines per song
+  for (let i = 0; i < lyricLines.length; i += step) {
+    const line = lyricLines[i];
+    const precedingLine = i > 0 ? lyricLines[i - 1] : '';
+    const followingLine = i < lyricLines.length - 1 ? lyricLines[i + 1] : '';
 
-  // Build input with context if available
-  let input = '';
-  if (precedingLine) input += `[Previous]\n${precedingLine}\n`;
-  input += `[LINE]\n${line}`;
-  if (followingLine) input += `\n[Following]\n${followingLine}`;
+    // Build input with context
+    let input = '';
+    if (precedingLine) input += `[Previous]\n${precedingLine}\n`;
+    input += `[LINE]\n${line}`;
+    if (followingLine) input += `\n[Following]\n${followingLine}`;
 
-  // Output: the line itself (placeholder; in real use this would be 3-5 alternative phrasings)
-  const output = line;
+    // Output: the line itself (placeholder for now; real alts come from manual review or secondary model)
+    const output = line;
 
-  return {
-    task: 'scribe-line-rewrite',
-    instruction: INSTRUCTIONS['scribe-line-rewrite'],
-    input,
-    output,
-    meta: meta(pkg),
-  };
+    examples.push({
+      task: 'scribe-line-rewrite',
+      instruction: INSTRUCTIONS['scribe-line-rewrite'],
+      input,
+      output,
+      meta: meta(pkg),
+    });
+  }
+  return examples;
 }
 
-/** One song → up to 5 task-specific training examples (skips a task if the song is missing that field). */
+/** One song → up to 5+ task-specific training examples (skips a task if the song is missing that field). */
 export function songToTrainingExamples(pkg: SongPackage): TrainingExample[] {
-  return [
+  const singleExamples = [
     lyricsExample(pkg),
     productionExample(pkg),
     albumCoverExample(pkg),
     videoTreatmentExample(pkg),
-    scribeLineRewriteExample(pkg),
   ].filter((e): e is TrainingExample => e !== null);
+
+  // SCRIBE generates multiple examples per song (one per sampled line)
+  const scribeExamples = scribeLineRewriteExamples(pkg);
+
+  return [...singleExamples, ...scribeExamples];
 }
 
 /** Alpaca-style {instruction,input,output} JSONL — the default format LitGPT (Lightning

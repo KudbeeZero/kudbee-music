@@ -111,9 +111,15 @@ describe('training-data extraction (Lightning AI fine-tuning prep)', () => {
   it('extracts production, album-cover, and video-treatment examples when present', async () => {
     const { pkg } = await runPipeline(SYNTHETIC_THEMES[1], { id: 't2', now: NOW, seed: 1 });
     const examples = songToTrainingExamples(pkg);
-    expect(examples.map((e) => e.task).sort()).toEqual(
-      ['album-cover-prompt', 'lyrics', 'production', 'scribe-line-rewrite', 'video-treatment'].sort()
-    );
+    const tasks = examples.map((e) => e.task);
+    const uniqueTasks = new Set(tasks);
+    // SCRIBE generates multiple examples per song, so check for presence of required task types
+    expect(uniqueTasks).toContain('lyrics');
+    expect(uniqueTasks).toContain('production');
+    expect(uniqueTasks).toContain('album-cover-prompt');
+    expect(uniqueTasks).toContain('video-treatment');
+    expect(uniqueTasks).toContain('scribe-line-rewrite');
+    expect(tasks.filter((t) => t === 'scribe-line-rewrite').length).toBeGreaterThan(0);
   });
 
   it('is deterministic — same inputs + seed produce byte-identical training examples', async () => {
