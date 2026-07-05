@@ -143,7 +143,7 @@
 | ✅ | **🧱 TDE Branch 01 — /tde shell route** | `app/tde/page.tsx + components/tde/` | #207 |
 | ✅ | **🎯 TDE Branch 02 — Mission panel** | `components/tde/` | #208 |
 | ✅ | **📦 TDE Branch 03 — Repo panel** | `components/tde/` | #209 |
-| ✅ | **🕸️ TDE Branch 04 — Agent map panel** | `components/tde/` | — |
+| ✅ | **🕸️ TDE Branch 04 — Agent map panel** | `components/tde/` | #210 |
 | 💤 | **🧠 TDE Branch 05 — Model/GPU panel** | `components/tde/` | — |
 | 💤 | **📚 TDE Branch 06 — Memory/Training panel** | `components/tde/` | — |
 | 💤 | **🚧 TDE Branch 07 — Safety gate UI** | `components/tde/` | — |
