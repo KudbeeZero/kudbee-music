@@ -97,23 +97,17 @@ function videoTreatmentExample(pkg: SongPackage): TrainingExample | null {
 function scribeLineRewriteExample(pkg: SongPackage): TrainingExample | null {
   if (!pkg.finalLyrics.trim()) return null;
 
-  // Parse lyric lines, skip empty ones
-  const lines = pkg.finalLyrics
-    .split('\n')
-    .map((line) => line.trim())
-    .filter(Boolean);
+  // Parse all lines, filter section labels (lines starting with [) and empty ones
+  const allLines = pkg.finalLyrics.split('\n').map((line) => line.trim());
+  const lyricLines = allLines.filter((line) => line && !line.startsWith('['));
 
-  // Process only first 3 lines
-  const linesToProcess = lines.slice(0, 3);
-  if (linesToProcess.length === 0) return null;
+  if (lyricLines.length === 0) return null;
 
-  // For simplicity, create an example using the first line available.
-  // The output will be the line itself (or placeholder rewrites if synthetic data existed).
-  // In a real pipeline, you'd have access to manually curated rewrites per line.
+  // Use the first non-section lyric line as the example
   const lineIndex = 0;
-  const line = linesToProcess[lineIndex];
-  const precedingLine = lineIndex > 0 ? linesToProcess[lineIndex - 1] : '';
-  const followingLine = lineIndex < linesToProcess.length - 1 ? linesToProcess[lineIndex + 1] : '';
+  const line = lyricLines[lineIndex];
+  const precedingLine = lineIndex > 0 ? lyricLines[lineIndex - 1] : '';
+  const followingLine = lineIndex < lyricLines.length - 1 ? lyricLines[lineIndex + 1] : '';
 
   // Build input with context if available
   let input = '';
