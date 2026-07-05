@@ -20,7 +20,7 @@ export default function SongPackageView({ pkg, onSaveEdit, onChooseHook, onRegen
   pkg: SongPackage; onSaveEdit?: (newText: string) => void; onChooseHook?: (h: HookOption) => void;
   onRegenerateFromCritiques?: (keys: CritiqueKey[]) => void;
   /** Studio Flow rail stage — highlights the toolbar (release) or lyrics section (refine) when active. */
-  flowStage?: 'review' | 'refine' | 'keep' | 'release' | 'studio';
+  flowStage?: 'review' | 'refine' | 'lyrics' | 'keep' | 'release' | 'studio';
 }) {
   const rawLyrics = pkg.sections.map((s) => `[${s.label}]\n${s.lines.join('\n')}`).join('\n\n');
   const [editing, setEditing] = useState(false);
