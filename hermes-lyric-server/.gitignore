@@ -1,0 +1,43 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+.venv
+pip-log.txt
+pip-delete-this-directory.txt
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Local artifacts - not part of this repo
+checkpoints/
+out/
+*.pth
+*.lora
+*.safetensors
+__pycache__
+
+# Parent directories (local-only projects)
+../kudbee-music/
+../scribe-runs/
+
+# Cache
+.cache/
+*.cache
