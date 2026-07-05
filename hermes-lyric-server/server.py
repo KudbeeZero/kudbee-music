@@ -18,6 +18,7 @@ import sys
 import argparse
 import json
 import time
+import re
 from datetime import datetime
 from typing import Dict, Tuple, Optional
 import logging
@@ -98,6 +99,183 @@ def get_metrics():
         "last_generation": inference_metrics["last_generation"],
         "timestamp": datetime.now().isoformat()
     })
+
+# ============================================================================
+# SCRIBE Health Endpoint
+# ============================================================================
+SCRIBE_MODEL_LOADED = False
+SCRIBE_MODEL_PATH = "/teamspace/studios/this_studio/scribe-runs/scribe-real-qwen2.5-14b-lora-v1/final"
+
+@app.route("/scribe/health", methods=["GET"])
+def scribe_health():
+    """Health check for SCRIBE model endpoint."""
+    return jsonify({
+        "modelLoaded": SCRIBE_MODEL_LOADED,
+        "cudaAvailable": torch.cuda.is_available(),
+        "artifactPath": SCRIBE_MODEL_PATH,
+        "serverStatus": "ready" if torch.cuda.is_available() else "gpu_required",
+        "timestamp": datetime.now().isoformat()
+    })
+
+# ============================================================================
+# SCRIBE Rewrite Endpoint
+# ============================================================================
+def build_scribe_prompt(data: dict) -> str:
+    """Build SCRIBE prompt from rich context or simple prompt."""
+    if "prompt" in data and not any(k in data for k in ["lineToRewrite", "title"]):
+        return data["prompt"]
+    
+    # Build rich prompt matching provider contract
+    lines = [
+        f"Title: {data.get('title', 'Untitled')}",
+        f"Theme: {data.get('theme', '')}",
+        f"Mood: {data.get('mood', '')}",
+        f"Genre: {data.get('genre', '')}",
+        f"Section: [{data.get('section', 'Verse')}]",
+    ]
+    
+    if data.get("lineBefore"):
+        lines.append(f'Line before (context, do not rewrite): "{data["lineBefore"]}"')
+    if data.get("lineToRewrite"):
+        lines.append(f'LINE TO REWRITE: "{data["lineToRewrite"]}"')
+    if data.get("lineAfter"):
+        lines.append(f'Line after (context, do not rewrite): "{data["lineAfter"]}"')
+    
+    if data.get("avoidWords"):
+        lines.append(f"Avoid words: {', '.join(data['avoidWords'])}")
+    if data.get("userInstruction"):
+        lines.append(f"User instruction: {data['userInstruction']}")
+    
+    lines.extend([
+        "",
+        "Keep roughly the same meaning, syllable count, and rhyme role as the original line.",
+        "Each alternative must be a single, complete, singable line (no bar numbers, no explanation).",
+        "",
+        "Output ONLY a JSON object in this exact format (no markdown, no extra text):",
+        '{"alternatives":["line 1","line 2","line 3"]}',
+        "- exactly 3 alternatives, each a string",
+    ])
+    
+    return "\n".join(lines)
+
+def parse_scribe_alternatives(text: str) -> list:
+    """Parse alternatives from model response."""
+    # Try JSON first
+    try:
+        parsed = json.loads(text)
+        if isinstance(parsed.get("alternatives"), list):
+            return parsed["alternatives"]
+    except json.JSONDecodeError:
+        pass
+    
+    # Try to extract JSON from text
+    json_match = re.search(r'\{"alternatives":\s*\[[^\]]+\]\}', text)
+    if json_match:
+        try:
+            parsed = json.loads(json_match.group())
+            if isinstance(parsed.get("alternatives"), list):
+                return parsed["alternatives"]
+        except json.JSONDecodeError:
+            pass
+    
+    # Try numbered lines
+    lines = text.split('\n')
+    alternatives = []
+    for line in lines:
+        line = line.strip()
+        # Remove numbering patterns like "1.", "1)", "- ", "* "
+        cleaned = re.sub(r'^[\d.)-]+\s*', '', line).strip()
+        if cleaned and not cleaned.startswith('{'):
+            alternatives.append(cleaned)
+    
+    return alternatives
+
+@app.route("/scribe/rewrite", methods=["POST"])
+def scribe_rewrite():
+    """
+    SCRIBE line rewrite endpoint.
+    
+    Request JSON (simple):
+    { "prompt": "..." }
+    
+    Request JSON (rich):
+    {
+      "title": "...",
+      "theme": "...",
+      "mood": "...",
+      "genre": "...",
+      "section": "...",
+      "lineBefore": "...",
+      "lineToRewrite": "...",
+      "lineAfter": "...",
+      "avoidWords": ["..."],
+      "userInstruction": "..."
+    }
+    
+    Response JSON:
+    {
+      "alternatives": ["line 1", "line 2", "line 3"],
+      "model": "scribe-real-qwen2.5-14b-lora-v1",
+      "source": "lightning-scribe"
+    }
+    """
+    # Check API key if configured
+    api_key = os.getenv("SCRIBE_API_KEY")
+    if api_key:
+        provided_key = request.headers.get("X-SCRIBE-KEY")
+        if provided_key != api_key:
+            return jsonify({"error": "Invalid or missing API key"}), 401
+    
+    # Check if model is available
+    if not torch.cuda.is_available():
+        return jsonify({
+            "error": "SCRIBE model is not loaded",
+            "needsGpu": True
+        }), 503
+    
+    if generator is None:
+        return jsonify({
+            "error": "SCRIBE model is not loaded",
+            "needsGpu": True
+        }), 503
+    
+    try:
+        data = request.get_json()
+        if not data:
+            return jsonify({"error": "No JSON data provided"}), 400
+        
+        # Build prompt
+        prompt = build_scribe_prompt(data)
+        
+        # Generate
+        generated, num_tokens = generator.generate(
+            prompt=prompt,
+            max_length=300,
+            profile="lyrics"
+        )
+        
+        # Parse alternatives
+        alternatives = parse_scribe_alternatives(generated)
+        
+        if len(alternatives) < 3:
+            return jsonify({
+                "error": "Could not extract 3 alternatives",
+                "rawOutput": generated,
+                "found": len(alternatives)
+            }), 502
+        
+        return jsonify({
+            "alternatives": alternatives[:3],
+            "model": "scribe-real-qwen2.5-14b-lora-v1",
+            "source": "lightning-scribe"
+        })
+        
+    except Exception as e:
+        logger.error(f"SCRIBE rewrite failed: {str(e)}", exc_info=True)
+        return jsonify({
+            "error": "Generation failed",
+            "message": str(e)
+        }), 500
 
 # ============================================================================
 # Main Lyric Generation Endpoint
@@ -376,6 +554,8 @@ def main():
     logger.info(f"  - Metrics: GET /api/metrics")
     logger.info(f"  - Generate: POST /api/generate")
     logger.info(f"  - Batch: POST /api/generate/batch")
+    logger.info(f"  - SCRIBE Health: GET /scribe/health")
+    logger.info(f"  - SCRIBE Rewrite: POST /scribe/rewrite")
     logger.info("=" * 70)
 
     app.run(host=args.host, port=args.port, debug=args.debug, threaded=False)
