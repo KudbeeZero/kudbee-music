@@ -1,0 +1,160 @@
+/* Kudbee TDE workbench — isolated module (never hermes.module.css; class-collision
+   lesson, roadmap 8.9). Locked palette tokens from app/globals.css only. Design
+   language: real fills + tinted glows, never flat/outline-only (brain/uiDesignLanguage.json). */
+
+.wrap {
+  max-width: var(--maxw);
+  margin: 0 auto;
+  padding: 28px 20px 64px;
+  min-height: 100vh;
+}
+
+.header {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+  margin-bottom: 14px;
+}
+
+.title {
+  font-size: var(--fs-display);
+  line-height: 1.05;
+  background: linear-gradient(100deg, var(--cyan) 10%, var(--violet) 55%, var(--magenta) 95%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.subtitle {
+  margin: 6px 0 0;
+  color: var(--ink-dim);
+  font-size: var(--fs-h2);
+}
+
+.statusBadge {
+  display: inline-flex;
+  align-items: center;
+  padding: 7px 14px;
+  border-radius: 999px;
+  font-size: var(--fs-sm);
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  color: #0b0b12;
+  background: linear-gradient(120deg, var(--amber) 15%, var(--amber-2) 90%);
+  box-shadow: var(--glow-amber);
+  white-space: nowrap;
+}
+
+.safetyNote {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  margin: 0 0 24px;
+  padding: 12px 16px;
+  border-radius: var(--radius);
+  background: linear-gradient(120deg, rgba(87, 217, 138, 0.16), rgba(54, 224, 212, 0.10));
+  border: 1px solid rgba(87, 217, 138, 0.35);
+  box-shadow: 0 0 24px rgba(87, 217, 138, 0.12);
+  color: var(--ink-dim);
+  font-size: var(--fs-sm);
+  line-height: 1.55;
+}
+
+.safetyNote code {
+  color: var(--ink);
+  font-size: var(--fs-xs);
+}
+
+.safetyDot {
+  flex: none;
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: var(--good);
+  box-shadow: 0 0 12px var(--good);
+  transform: translateY(-1px);
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 16px;
+}
+
+.slot {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 18px;
+  border-radius: var(--radius);
+  background: var(--panel);
+  border: 1px solid var(--line);
+  backdrop-filter: blur(8px);
+  overflow: hidden;
+}
+
+/* Per-panel accent: a glowing top rail + tinted bloom so no slot reads flat/gray. */
+.slot::before {
+  content: '';
+  position: absolute;
+  inset: 0 0 auto 0;
+  height: 3px;
+  background: var(--slot-accent);
+  box-shadow: 0 0 18px var(--slot-accent);
+}
+
+.slot[data-tone='cyan'] { --slot-accent: var(--cyan); }
+.slot[data-tone='violet'] { --slot-accent: var(--violet); }
+.slot[data-tone='magenta'] { --slot-accent: var(--magenta); }
+.slot[data-tone='amber'] { --slot-accent: var(--amber); }
+.slot[data-tone='good'] { --slot-accent: var(--good); }
+
+.slotHead {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.slotName {
+  font-size: var(--fs-h2);
+  color: var(--ink);
+}
+
+.slotArrives {
+  flex: none;
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: var(--fs-xs);
+  font-weight: 700;
+  color: #0b0b12;
+  background: linear-gradient(120deg, var(--slot-accent), var(--slot-accent));
+  box-shadow: 0 0 14px var(--slot-accent);
+  opacity: 0.92;
+}
+
+.slotBlurb {
+  margin: 0;
+  color: var(--ink-dim);
+  font-size: var(--fs-sm);
+  line-height: 1.55;
+}
+
+.slotEmpty {
+  margin: auto 0 0;
+  padding-top: 10px;
+  border-top: 1px dashed var(--line-strong);
+  color: var(--ink-faint);
+  font-size: var(--fs-xs);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+@media (max-width: 640px) {
+  .wrap { padding: 20px 14px 48px; }
+  .header { align-items: flex-start; }
+  .grid { grid-template-columns: 1fr; }
+}
