@@ -25,3 +25,8 @@ brain/vector-memory.json
 # personal creative work; regenerate, never commit. (The generated dataset itself
 # lands in out/training-data/, already covered by the out/ rule above.)
 training-data-input/*.json
+
+# Lightning AI model training outputs (LoRA adapters, checkpoints, large artifacts)
+# Keep outside repo; regenerable from dataset + training script
+/scribe-runs/
+.cache/
