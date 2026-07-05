@@ -139,7 +139,7 @@
 
 | | Item | Where it lives | PR |
 |---|------|----------------|----|
-| ✅ | **🗺️ TDE Branch 00 — roadmap + spine sync** | `docs/kudbee-tde-roadmap.md` | — |
+| ✅ | **🗺️ TDE Branch 00 — roadmap + spine sync** | `docs/kudbee-tde-roadmap.md` | #206 |
 | 💤 | **🧱 TDE Branch 01 — /tde shell route** | `app/tde/page.tsx + components/tde/` | — |
 | 💤 | **🎯 TDE Branch 02 — Mission panel** | `components/tde/` | — |
 | 💤 | **📦 TDE Branch 03 — Repo panel** | `components/tde/` | — |

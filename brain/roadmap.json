@@ -166,6 +166,7 @@
           "id": "9.1",
           "title": "🗺️ TDE Branch 00 — roadmap + spine sync",
           "status": "shipped",
+          "pr": "#206",
           "home": "docs/kudbee-tde-roadmap.md",
           "note": "The branch-by-branch plan: 13 branches (00 roadmap → 12 backend-bridge plan), branch naming, PR/safety checklists, model routing rules, agent depth-1 rules, memory/training capture rules, and the live-execution gate that keeps everything mocked until a founder-approved permission layer exists. Docs only, no UI."
         },
