@@ -32,6 +32,7 @@ import ArtistCard from './ArtistCard';
 import Rack from './Rack';
 import AlbumView from './AlbumView';
 import LyricLab from './LyricLab';
+import LyricTimingEditor from './LyricTimingEditor';
 import BrainScan from './BrainScan';
 import VoiceMirror from './VoiceMirror';
 import { createNervousSystem, signalForAgent, type Signal } from '@/lib/hermes/nervousSystem';
@@ -115,10 +116,11 @@ export default function HermesHitFactory() {
   // Studio Flow: a Review -> Refine -> Keep -> Release rail over the existing studio-mode
   // panels. A focus state, not a wall — every panel stays rendered and reachable; a tab
   // click just scrolls to + highlights the panels for that stage of the journey.
-  const [flowStage, setFlowStage] = useState<'review' | 'refine' | 'keep' | 'release' | 'studio'>('review');
+  const [flowStage, setFlowStage] = useState<'review' | 'refine' | 'lyrics' | 'keep' | 'release' | 'studio'>('review');
   const FLOW_ANCHOR: Record<typeof flowStage, string> = {
     review: 'stage-review',
     refine: 'song-lyrics',
+    lyrics: 'stage-lyrics',
     keep: 'stage-keep',
     release: 'song-toolbar',
     studio: 'stage-studio',
@@ -551,6 +553,7 @@ export default function HermesHitFactory() {
           {([
             { id: 'review', label: '① Review', title: 'Hooks, scores, and the Council verdict' },
             { id: 'refine', label: '② Refine', title: 'Edit the lyrics, regenerate from critiques' },
+            { id: 'lyrics', label: '⏱️ Lyrics', title: 'Sync lyrics to audio with time markers' },
             { id: 'keep', label: '③ Keep', title: 'Artist profile, the crate, recommendations — save what you like' },
             { id: 'release', label: '④ Release', title: 'Share link, PNG card, Suno prompt, exports' },
             { id: 'studio', label: '🎚️ Studio', title: 'The arrangement timeline, the Engine Rack, and the Brain Scan as one workspace' },
@@ -718,6 +721,9 @@ export default function HermesHitFactory() {
             <>
               <div className={styles.flowFocus} data-active={flowStage === 'review'}>
                 <BangerScoreCard score={pkg.score} />
+              </div>
+              <div id="stage-lyrics" className={styles.flowFocus} data-active={flowStage === 'lyrics'}>
+                <LyricTimingEditor pkg={pkg} />
               </div>
               <VoiceMirror pkg={pkg} taste={taste} priorSongs={vault.filter((s) => s.id !== pkg.id)} />
               <UniquenessReportView report={pkg.uniqueness} />
