@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useRef } from 'react';
 import type { SongPackage } from '@/lib/hermes/types';
+import { toSrt, toSyncJson, toMidiCc } from '@/lib/hermes/lyricSync';
 import styles from './hermes.module.css';
 
 export interface LyricMarker {
@@ -184,6 +185,35 @@ export default function LyricTimingEditor({
 
   function save() {
     if (onSave) onSave(sections);
+  }
+
+  function exportFormat(format: 'srt' | 'json' | 'csv') {
+    const syncSections = sections.map((s) => ({
+      label: s.label,
+      lines: s.markers.map((m) => ({ text: m.text, startMs: m.startMs, endMs: m.endMs })),
+    }));
+
+    let content = '';
+    let filename = '';
+
+    if (format === 'srt') {
+      content = toSrt(syncSections);
+      filename = `${pkg?.title || 'lyrics'}.srt`;
+    } else if (format === 'json') {
+      content = toSyncJson(syncSections);
+      filename = `${pkg?.title || 'lyrics'}-sync.json`;
+    } else if (format === 'csv') {
+      content = toMidiCc(syncSections);
+      filename = `${pkg?.title || 'lyrics'}-midi.csv`;
+    }
+
+    const blob = new Blob([content], { type: 'text/plain' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = filename;
+    a.click();
+    URL.revokeObjectURL(url);
   }
 
   if (!pkg) {
@@ -380,23 +410,70 @@ export default function LyricTimingEditor({
             </div>
           )}
 
-          {/* Save button */}
-          <button
-            onClick={save}
-            style={{
-              width: '100%',
-              padding: '10px 16px',
-              borderRadius: 6,
-              border: '1px solid var(--cyan)',
-              background: 'var(--cyan)',
-              color: 'var(--bg-0)',
-              cursor: 'pointer',
-              fontWeight: 600,
-              fontSize: 13,
-            }}
-          >
-            Save Timing Map
-          </button>
+          {/* Save & Export buttons */}
+          <div style={{ display: 'flex', gap: 6, marginBottom: 12 }}>
+            <button
+              onClick={save}
+              style={{
+                flex: 1,
+                padding: '10px 12px',
+                borderRadius: 6,
+                border: '1px solid var(--cyan)',
+                background: 'var(--cyan)',
+                color: 'var(--bg-0)',
+                cursor: 'pointer',
+                fontWeight: 600,
+                fontSize: 12,
+              }}
+            >
+              Save Map
+            </button>
+            <button
+              onClick={() => exportFormat('srt')}
+              style={{
+                padding: '10px 12px',
+                borderRadius: 6,
+                border: '1px solid var(--line)',
+                background: 'var(--bg-1)',
+                color: 'var(--ink)',
+                cursor: 'pointer',
+                fontWeight: 600,
+                fontSize: 12,
+              }}
+            >
+              .srt
+            </button>
+            <button
+              onClick={() => exportFormat('json')}
+              style={{
+                padding: '10px 12px',
+                borderRadius: 6,
+                border: '1px solid var(--line)',
+                background: 'var(--bg-1)',
+                color: 'var(--ink)',
+                cursor: 'pointer',
+                fontWeight: 600,
+                fontSize: 12,
+              }}
+            >
+              .json
+            </button>
+            <button
+              onClick={() => exportFormat('csv')}
+              style={{
+                padding: '10px 12px',
+                borderRadius: 6,
+                border: '1px solid var(--line)',
+                background: 'var(--bg-1)',
+                color: 'var(--ink)',
+                cursor: 'pointer',
+                fontWeight: 600,
+                fontSize: 12,
+              }}
+            >
+              .csv
+            </button>
+          </div>
 
           <audio ref={audioRef} />
         </>
