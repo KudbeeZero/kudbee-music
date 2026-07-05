@@ -46,7 +46,8 @@ _Subdivided into components:_
 - [x] **Phase 2A: Subscription Tier System** — Free/Pro/Premium/Enterprise with 8 feature flags _(#198)_
 - [x] **Phase 2B: Plugin Registry** — 8 first-party plugins (stems, sync, analytics, mastering, collab, API, white-label), tier-gated access _(#198)_
 - [x] **Phase 2C: Plugin Marketplace UI** — Browse, install, rate plugins _(#199)_
-- [ ] **Phase 2D: Revenue Tracking** — Tier earnings + marketplace commission splits (next)
+- [x] **Phase 2D-1: Lightning AI Line Rewrites** — SCRIBE editor gets a Lightning provider toggle for per-line rewrites. New `lightningLineRewriteProvider.ts` + `lightningLyricsProvider.ts` (full generation variant) + `lightningKey.ts` (visitor BYOK storage) + training data generator (`trainingData.ts` enhanced with 'scribe-line-rewrite' task) + UI toggle (Claude vs Lightning) in ScribeEditor. 39 new unit tests, all gates green. _(#200)_
+- [ ] **Phase 2D-2: Revenue Tracking** — Tier earnings + marketplace commission splits (next)
 
 **Phase 3: Stem Export + Multi-track Downloads** — Release-ready audio packages
 
@@ -126,7 +127,7 @@ chat. Detail for each is in [`brain/roadmap.json`](brain/roadmap.json) + [`IDEAS
    - [ ] **Video Concept (VideoPromptProvider)** — generate cinematic scene breakdowns for music videos (replaces mock templates). New `lib/hermes/providers/lightningVideoPromptProvider.ts`. UI: "🎬 Generate video treatment" button; unlocks `from-song.mjs` integration.
 - [ ] **Lightning AI expansion — Phase 2 (production guidance + rewrites):**
    - [ ] **Production Direction (AudioProvider)** — generate music production suggestions (drums, bass, arrangement, tempo, mix vibe) instead of hardcoded RNG picks. New `lib/hermes/providers/lightningAudioProvider.ts`. Richer, theme-specific suggestions beat random selection. Optional CLI: `hermes production --theme "..." --mood "..." --tempo 120-140`.
-   - [ ] **Line Rewrites — Lightning variant** — add Lightning as a parallel cheap/fast option to Claude for per-line lyric rewrites. New `lib/hermes/providers/lightningLineRewriteProvider.ts` (separate utility, not in ProviderBundle). UI toggle in ScribeEditor: "✨ Rewrite with: Claude / Lightning".
+   - [x] **Line Rewrites — Lightning variant** — add Lightning as a parallel cheap/fast option to Claude for per-line lyric rewrites. New `lib/hermes/providers/lightningLineRewriteProvider.ts` (separate utility, not in ProviderBundle). UI toggle in ScribeEditor: "✨ Rewrite with: Claude / Lightning". _(#200)_
 - [x] **Lightning training-data prep pipeline** — founder ask: get fine-tuning data ready
    for the LoRA smoke test *before* spending GPU credits on the Lightning Studio. New
    `lib/hermes/trainingData.ts` (pure extraction/formatting/stats) + env-gated generator
