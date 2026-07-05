@@ -109,13 +109,94 @@ SCRIBE_MODEL_PATH = "/teamspace/studios/this_studio/scribe-runs/scribe-real-qwen
 @app.route("/scribe/health", methods=["GET"])
 def scribe_health():
     """Health check for SCRIBE model endpoint."""
+    use_mock = os.getenv("SCRIBE_MOCK", "0") == "1"
     return jsonify({
         "modelLoaded": SCRIBE_MODEL_LOADED,
         "cudaAvailable": torch.cuda.is_available(),
+        "mockMode": use_mock,
         "artifactPath": SCRIBE_MODEL_PATH,
-        "serverStatus": "ready" if torch.cuda.is_available() else "gpu_required",
+        "serverStatus": "mock" if use_mock else ("ready" if torch.cuda.is_available() else "gpu_required"),
         "timestamp": datetime.now().isoformat()
     })
+
+# ============================================================================
+# SCRIBE Mock Mode
+# ============================================================================
+def generate_scribe_alternatives_mock(line_to_rewrite: str, avoid_words: list = None) -> list:
+    """Generate realistic mock alternatives for a lyric line."""
+    if avoid_words is None:
+        avoid_words = []
+
+    avoid_words_lower = [w.lower() for w in avoid_words]
+
+    alternatives = []
+
+    # Strategy 1: Swap key word with synonym
+    words = line_to_rewrite.split()
+    if len(words) > 2:
+        alt1 = line_to_rewrite
+        # Simple word variations (in production, use a thesaurus or model)
+        replacements = {
+            "whole": "entire", "every": "all", "wakes": "comes alive",
+            "brain": "mind", "mind": "heart", "heart": "soul",
+            "open": "push", "close": "shut", "light": "shine",
+            "dark": "dim", "room": "space", "door": "gate",
+            "floor": "ground", "sky": "air", "night": "dark",
+            "day": "sun", "time": "moment", "place": "spot",
+            "way": "path", "hand": "reach", "eye": "sight",
+        }
+        for word, replacement in replacements.items():
+            if word in line_to_rewrite.lower() and replacement.lower() not in avoid_words_lower:
+                alt1 = re.sub(r'\b' + word + r'\b', replacement, line_to_rewrite, flags=re.IGNORECASE)
+                if alt1 != line_to_rewrite and alt1.lower() not in [a.lower() for a in alternatives]:
+                    alternatives.append(alt1)
+                    break
+
+    # Strategy 2: Reorder words slightly
+    if len(words) > 2 and len(alternatives) < 2:
+        alt2 = line_to_rewrite
+        if len(words) >= 4:
+            # Try swapping adjective and noun or similar
+            alt2 = " ".join(words[:2] + words[3:4] + words[2:3] + words[4:]) if len(words) > 3 else line_to_rewrite
+        if alt2 != line_to_rewrite and alt2.lower() not in [a.lower() for a in alternatives]:
+            alternatives.append(alt2)
+
+    # Strategy 3: Change tense/form
+    if len(alternatives) < 3:
+        alt3 = line_to_rewrite
+        tense_replacements = {
+            "wakes": "awakes", "opens": "unfolds", "comes": "appears",
+            "goes": "flows", "takes": "holds", "makes": "builds",
+            "finds": "seeks", "sees": "watches", "hears": "listens",
+        }
+        for word, replacement in tense_replacements.items():
+            if word in line_to_rewrite.lower() and replacement.lower() not in avoid_words_lower:
+                alt3 = re.sub(r'\b' + word + r'\b', replacement, line_to_rewrite, flags=re.IGNORECASE)
+                if alt3 != line_to_rewrite and alt3.lower() not in [a.lower() for a in alternatives]:
+                    alternatives.append(alt3)
+                    break
+
+    # Fill remaining with simple variations
+    while len(alternatives) < 3:
+        # Add a slight variation (capitalization, article swap, etc.)
+        if len(alternatives) == 0:
+            alternatives.append(line_to_rewrite.replace("the ", "a ") if "the " in line_to_rewrite else line_to_rewrite)
+        elif len(alternatives) == 1:
+            alternatives.append(line_to_rewrite.replace("a ", "the ") if "a " in line_to_rewrite else line_to_rewrite)
+        else:
+            alternatives.append(line_to_rewrite)
+
+    # Ensure no duplicates, all unique
+    unique_alts = []
+    seen = set()
+    for alt in alternatives:
+        alt_lower = alt.lower()
+        if alt_lower not in seen:
+            seen.add(alt_lower)
+            unique_alts.append(alt)
+
+    # Return exactly 3
+    return unique_alts[:3]
 
 # ============================================================================
 # SCRIBE Rewrite Endpoint
@@ -194,10 +275,10 @@ def parse_scribe_alternatives(text: str) -> list:
 def scribe_rewrite():
     """
     SCRIBE line rewrite endpoint.
-    
+
     Request JSON (simple):
     { "prompt": "..." }
-    
+
     Request JSON (rich):
     {
       "title": "...",
@@ -211,13 +292,18 @@ def scribe_rewrite():
       "avoidWords": ["..."],
       "userInstruction": "..."
     }
-    
+
     Response JSON:
     {
       "alternatives": ["line 1", "line 2", "line 3"],
       "model": "scribe-real-qwen2.5-14b-lora-v1",
       "source": "lightning-scribe"
     }
+
+    Mock mode (SCRIBE_MOCK=1):
+    - Returns realistic alternatives without loading model
+    - CPU-safe for UI testing
+    - Same request/response format
     """
     # Check API key if configured
     api_key = os.getenv("SCRIBE_API_KEY")
@@ -225,51 +311,83 @@ def scribe_rewrite():
         provided_key = request.headers.get("X-SCRIBE-KEY")
         if provided_key != api_key:
             return jsonify({"error": "Invalid or missing API key"}), 401
-    
-    # Check if model is available
-    if not torch.cuda.is_available():
-        return jsonify({
-            "error": "SCRIBE model is not loaded",
-            "needsGpu": True
-        }), 503
-    
-    if generator is None:
-        return jsonify({
-            "error": "SCRIBE model is not loaded",
-            "needsGpu": True
-        }), 503
-    
+
+    # Check if mock mode is enabled
+    use_mock = os.getenv("SCRIBE_MOCK", "0") == "1"
+
     try:
         data = request.get_json()
         if not data:
             return jsonify({"error": "No JSON data provided"}), 400
-        
+
+        # Extract line to rewrite
+        line_to_rewrite = data.get("lineToRewrite")
+        if not line_to_rewrite and "prompt" in data:
+            # Try to extract from simple prompt
+            lines = data["prompt"].split("\n")
+            for i, line in enumerate(lines):
+                if "LINE TO REWRITE" in line.upper():
+                    if i + 1 < len(lines):
+                        line_to_rewrite = lines[i + 1].strip()
+                        break
+
+        if not line_to_rewrite:
+            return jsonify({
+                "error": "No 'lineToRewrite' found in request"
+            }), 400
+
+        # Use mock mode if enabled
+        if use_mock:
+            avoid_words = data.get("avoidWords", [])
+            alternatives = generate_scribe_alternatives_mock(
+                line_to_rewrite,
+                avoid_words
+            )
+            return jsonify({
+                "alternatives": alternatives[:3],
+                "model": "scribe-mock",
+                "source": "mock"
+            })
+
+        # Real mode: check if model is available
+        if not torch.cuda.is_available():
+            return jsonify({
+                "error": "SCRIBE model is not loaded",
+                "needsGpu": True
+            }), 503
+
+        if generator is None:
+            return jsonify({
+                "error": "SCRIBE model is not loaded",
+                "needsGpu": True
+            }), 503
+
         # Build prompt
         prompt = build_scribe_prompt(data)
-        
+
         # Generate
         generated, num_tokens = generator.generate(
             prompt=prompt,
             max_length=300,
             profile="lyrics"
         )
-        
+
         # Parse alternatives
         alternatives = parse_scribe_alternatives(generated)
-        
+
         if len(alternatives) < 3:
             return jsonify({
                 "error": "Could not extract 3 alternatives",
                 "rawOutput": generated,
                 "found": len(alternatives)
             }), 502
-        
+
         return jsonify({
             "alternatives": alternatives[:3],
             "model": "scribe-real-qwen2.5-14b-lora-v1",
             "source": "lightning-scribe"
         })
-        
+
     except Exception as e:
         logger.error(f"SCRIBE rewrite failed: {str(e)}", exc_info=True)
         return jsonify({
@@ -493,6 +611,12 @@ def generate_batch():
 def initialize_generator(model_id: str, lora_path: Optional[str] = None, quantize: bool = True):
     """Initialize the lyric generator and constraints."""
     global generator, constraints
+
+    # Skip model initialization if in mock mode
+    use_mock = os.getenv("SCRIBE_MOCK", "0") == "1"
+    if use_mock:
+        logger.info("🎭 SCRIBE_MOCK mode enabled - skipping model initialization")
+        return True
 
     logger.info(f"Initializing generator with model: {model_id}")
     logger.info(f"LoRA adapter path: {lora_path}")
