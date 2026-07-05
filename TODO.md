@@ -100,6 +100,21 @@ chat. Detail for each is in [`brain/roadmap.json`](brain/roadmap.json) + [`IDEAS
 - [ ] **Cloud brain** — server-side vault/memory (Notion/Drive/Supabase creds) so it's not localStorage-only.
 
 **Lyrical Machine Enhancements ($0 — extend existing lexicon+rhyme+emotion system, no new engine needed):**
+- [x] **Grammaticality fix — indefinite pronouns leaking into noun slots** — found via
+   interactive song-generation testing (a founder-requested custom song surfaced "still
+   standing where the one used to be" and "tell doubters I made it out the other").
+   Same defect class as the already-fixed gerund/participle leak (`nounable()`'s
+   `NON_NOUN` set already excludes "something"/"someone"/"another" — "one"/"ones"/
+   "other"/"others" were simply missing). Fixed in `mockLyricsProvider.ts`; regression
+   test added to `lyricCore.test.ts` (failed before the fix, confirmed). Verified
+   byte-identical against every committed golden demo (`GEN_DEMOS=1` regenerate + diff,
+   zero changes) — the fix only changes output for themes that actually contain these
+   words. **Because `prepare-training-data` always regenerates its synthetic examples
+   fresh from the live pipeline (never cached), this fix flows into the Lightning AI
+   training set automatically on the next `GEN_TRAINING_DATA=1` run** — verified by
+   regenerating and grepping the output for the bug pattern (zero matches). No stale
+   bad examples to scrub from a previously-generated dataset, since `out/training-data/`
+   is gitignored/ephemeral and was never committed. _(this PR)_
 - [x] **Singability/Meter Constraints** — grounded by a deep-research pass (Condit-Schultz's
    MCFlow corpus, Adams' flow decomposition, CMU-dict/vowel-cluster syllable-counting
    literature — see `docs/pattern-packs.md` → "Meter / singability — shipped in scoped

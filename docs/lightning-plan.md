@@ -117,6 +117,19 @@ dataset under `out/training-data/` — entirely local, deterministic, no API key
 Everything under `out/training-data/` and `training-data-input/*.json` is gitignored —
 regenerate, never commit (same reasoning as `out/` for rendered video).
 
+**Generator quality fixes always flow into the next training run.** The synthetic source
+songs aren't a fixture — `GEN_TRAINING_DATA=1` calls the real, live `runPipeline` fresh
+every time, so any grammaticality/quality fix to `mockLyricsProvider.ts` is automatically
+reflected the next time the dataset is regenerated, with no separate "sync the fix into
+the trainer" step. (Case in point: a pronoun-leak bug — "one"/"other" slipping into noun
+slots, e.g. "the one used to be" — was found via interactive testing, fixed in
+`mockLyricsProvider.ts`'s `nounable()` exclusion list, and confirmed gone from a
+regenerated training set by re-running the generator and grepping the output — see
+`TODO.md`'s "Grammaticality fix" entry.) The one thing that does NOT auto-update is a
+dataset you've already exported/uploaded to your Lightning Studio — re-run
+`GEN_TRAINING_DATA=1 npx vitest run trainingData` and re-upload before starting a new
+training run whenever a generator fix lands.
+
 ## Guardrails carried forward
 
 - `LIGHTNING_ENDPOINT` / `LIGHTNING_API_KEY` live only in `.env.local` (gitignored);

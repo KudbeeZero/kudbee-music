@@ -56,6 +56,18 @@ describe('grammaticality — no verb/adjective/gerund in a noun slot', () => {
     for (const v of ['carry', 'grind', 'hustle', 'climb', 'survive', 'reach']) expect(nounable(v)).toBe(false);
   });
 
+  // regression: interactive testing surfaced "still standing where the one used to be" and
+  // "tell doubters I made it out the other" — indefinite pronouns/quantifiers ("one", "other")
+  // are the same class of defect as "something"/"someone" (already excluded) but were missing
+  // from the list, so a theme containing "one step" or "the other" leaked them into a noun slot.
+  it('rejects indefinite pronouns/quantifiers as nouns (regression: "the one used to be")', () => {
+    for (const w of ['one', 'ones', 'other', 'others']) expect(nounable(w)).toBe(false);
+    const inputs = brief({ theme: 'climbing one step at a time until you pass every other doubter', references: '' });
+    const words = themeNouns(inputs);
+    expect(words).not.toContain('one');
+    expect(words).not.toContain('other');
+  });
+
   it("keeps the audience word out of noun slots (audit: 'for daughter … through the daughter')", async () => {
     const inputs = brief({ theme: 'made it out the struggle for my daughter, still carry the block', audience: 'my daughter', references: '' });
     expect(themeNouns(inputs)).not.toContain('daughter');
