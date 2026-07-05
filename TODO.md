@@ -75,11 +75,22 @@ chat. Detail for each is in [`brain/roadmap.json`](brain/roadmap.json) + [`IDEAS
    provider (you connect SSL); live-tested end-to-end 2026-07-04 — `--ping` and a real `--prompt`
    both round-tripped against the founder's own Qwen2.5-14B Lightning Studio. See
    `docs/lightning-plan.md`.
+- [ ] **Lightning AI expansion — Phase 1 (low-effort, reuse tested adapter + ProviderBundle pattern):**
+   - [ ] **Image Prompt (ImagePromptProvider)** — generate Midjourney/DALL-E album cover prompts; simplest surface area. New `lib/hermes/providers/lightningImagePromptProvider.ts` (mirrors `claudeLyricsProvider.ts`). UI: "🎨 Generate cover concept" button in Visuals panel.
+   - [ ] **Video Concept (VideoPromptProvider)** — generate cinematic scene breakdowns for music videos (replaces mock templates). New `lib/hermes/providers/lightningVideoPromptProvider.ts`. UI: "🎬 Generate video treatment" button; unlocks `from-song.mjs` integration.
+- [ ] **Lightning AI expansion — Phase 2 (production guidance + rewrites):**
+   - [ ] **Production Direction (AudioProvider)** — generate music production suggestions (drums, bass, arrangement, tempo, mix vibe) instead of hardcoded RNG picks. New `lib/hermes/providers/lightningAudioProvider.ts`. Richer, theme-specific suggestions beat random selection. Optional CLI: `hermes production --theme "..." --mood "..." --tempo 120-140`.
+   - [ ] **Line Rewrites — Lightning variant** — add Lightning as a parallel cheap/fast option to Claude for per-line lyric rewrites. New `lib/hermes/providers/lightningLineRewriteProvider.ts` (separate utility, not in ProviderBundle). UI toggle in ScribeEditor: "✨ Rewrite with: Claude / Lightning".
 - [ ] **Lightning visitor BYOK slot** — the visitor-facing bring-your-own-endpoint/key slot in
    the Engine Rack, mirroring `lib/hermes/claudeKey.ts`; the CLI-side adapter is now live-tested,
    this client slot is the real remaining piece (`docs/lightning-plan.md`).
 - [ ] **Discord server** (+ GitHub→Discord webhook) — channels/roles/listening parties; wire on your go-ahead.
 - [ ] **Cloud brain** — server-side vault/memory (Notion/Drive/Supabase creds) so it's not localStorage-only.
+
+**Lyrical Machine Enhancements ($0 — extend existing lexicon+rhyme+emotion system, no new engine needed):**
+- [ ] **Narrative Arc Control** — add `narrativeArc` dial to `SongInputs` (escalation mode: linear/cumulative/cyclical; scene-setting strength; callback frequency). Enforce story-beat progression across verses (setup → complication → climax → resolution). Modify `mockLyricsProvider.ts` to tag verse lines with story beats; add evaluation in `emotion.ts` to track semantic intensity growth across the song.
+- [ ] **Singability/Meter Constraints** — add `deliveryPreferences` to `SongInputs` (syllable target per line 8–12, 10–14, etc.; line-length variance tight/loose; internal rhyme weight; breathing points for vocalists). Extend `rhyme.ts` to surface syllable analysis; score `mockLyricsProvider.ts` output against meter constraints before returning.
+- [ ] **Emotional Texture Evolution** — add `emotionalArc` to `SongInputs` (intensity curve: grows/shrinks/stable; valence progression: dark→bright/bright→dark/oscillating/u-shaped; contrast injection point; emotional beats per section). Feed `deriveEmotion()` a section-by-section curve; bias word choice per section's emotional color; score in `scoring.ts` that the arc was tracked end to end.
 
 **$0/local, no key — I can just build these next:**
 - [x] **Deeper lyric craft** (the moat) — grammaticality shipped _(#58)_; imagery coherence shipped
