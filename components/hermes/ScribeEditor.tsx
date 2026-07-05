@@ -6,13 +6,14 @@ import { renderSections } from '@/lib/hermes/edits';
 import { claudeEngineReady, getClaudeKey } from '@/lib/hermes/claudeKey';
 import { suggestLineRewrites, ClaudeProviderError } from '@/lib/hermes/providers/claudeLyricsProvider';
 import { suggestLightningLineRewrites, LightningProviderError } from '@/lib/hermes/providers/lightningLyricsProvider';
+import { suggestHermesScribeLineRewrites, HermesScribeProviderError } from '@/lib/hermes/providers/hermesScribeLyricsProvider';
 import { getLightningEndpoint, getLightningApiKey, lightningConfigured } from '@/lib/hermes/lightningKey';
 import { similarWords } from '@/lib/hermes/lexicon';
 import { hasSeenScribeTour, markScribeTourSeen } from '@/lib/hermes/storage';
 import GuidedTour, { type TourStep } from './GuidedTour';
 import styles from './hermes.module.css';
 
-type RewriteProvider = 'claude' | 'lightning';
+type RewriteProvider = 'hermes' | 'claude' | 'lightning';
 
 interface Target { section: number; line: number }
 interface WordTarget { section: number; line: number; word: string; start: number; end: number }
@@ -20,12 +21,13 @@ interface WordTarget { section: number; line: number; word: string; start: numbe
 const SCRIBE_PROVIDER_KEY = 'hermes.scribeProvider.v1';
 
 function getScribeProvider(): RewriteProvider {
-  if (typeof window === 'undefined') return 'claude';
+  if (typeof window === 'undefined') return 'hermes';
   try {
     const stored = localStorage.getItem(SCRIBE_PROVIDER_KEY);
-    return (stored === 'lightning' ? 'lightning' : 'claude') as RewriteProvider;
+    if (stored === 'claude' || stored === 'lightning') return stored as RewriteProvider;
+    return 'hermes';
   } catch {
-    return 'claude';
+    return 'hermes';
   }
 }
 
@@ -41,7 +43,7 @@ function setScribeProvider(provider: RewriteProvider): void {
 const TOUR_STEPS: TourStep[] = [
   { selector: '[data-tour="scribe-line-input"]', title: 'Edit any line', body: 'Every line is its own field — click in and type, just like a text box.' },
   { selector: '[data-tour="scribe-line-input"]', title: 'Word ideas', body: 'Double-click a word for similar words — same imagery and mood, sourced from the real lexicon.' },
-  { selector: '[data-tour="scribe-ai-rewrite"]', title: 'AI rewrite', body: 'Get 3 alternate phrasings for this line. Unlocks once you paste your own Anthropic key into the Engine Rack.' },
+  { selector: '[data-tour="scribe-ai-rewrite"]', title: 'AI rewrite', body: 'Get 3 alternate phrasings for this line, powered by the HERMES brain.' },
   { selector: '[data-tour="scribe-add-line"]', title: 'Add a line', body: 'Insert a new blank line right below this one.' },
   { selector: '[data-tour="scribe-delete-line"]', title: 'Delete a line', body: "Remove a line you don't need." },
 ];
@@ -63,7 +65,7 @@ export default function ScribeEditor({
   const [suggestError, setSuggestError] = useState<string | null>(null);
   const claudeReady = claudeEngineReady();
   const lightningReady = lightningConfigured();
-  const [rewriteProvider, setRewriteProvider] = useState<RewriteProvider>('claude');
+  const [rewriteProvider, setRewriteProvider] = useState<RewriteProvider>('hermes');
   useEffect(() => {
     setRewriteProvider(getScribeProvider());
   }, []);
@@ -105,14 +107,6 @@ export default function ScribeEditor({
   }
 
   async function requestRewrite(section: number, line: number) {
-    // Check if at least one provider is available
-    if (!claudeReady && !lightningReady) {
-      setSuggestFor({ section, line });
-      setSuggestions([]);
-      setSuggestError('Unlock a rewrite provider in the rack above (Claude Engine with Anthropic key, or Lightning with endpoint + key) to enable AI line rewrites.');
-      return;
-    }
-
     const s = sections[section];
     setSuggestFor({ section, line });
     setSuggestions([]);
@@ -139,30 +133,38 @@ export default function ScribeEditor({
           setSuggestions(alts);
           return;
         } catch (e) {
-          // Log the error but fall through to Claude fallback if available
-          const msg = e instanceof LightningProviderError ? e.message : 'Lightning rewrite failed';
-          if (!claudeReady) {
-            // No fallback available — show the error
-            setSuggestError(msg + ' — Lightning not available for fallback.');
-            return;
-          }
-          // Fall through to Claude (will attempt below)
+          // Fall through to next provider
         }
       }
 
-      // Try Claude (either primary choice or fallback)
-      if (claudeReady) {
-        const alts = await suggestLineRewrites(
-          { apiKey: getClaudeKey() ?? undefined },
+      // Try Claude (if selected or as fallback)
+      if (rewriteProvider === 'claude' && claudeReady) {
+        try {
+          const alts = await suggestLineRewrites(
+            { apiKey: getClaudeKey() ?? undefined },
+            ctx,
+            3,
+          );
+          setSuggestions(alts);
+          return;
+        } catch (e) {
+          // Fall through to HERMES
+        }
+      }
+
+      // Always try HERMES as primary or final fallback
+      try {
+        const alts = await suggestHermesScribeLineRewrites(
+          { endpoint: process.env.NEXT_PUBLIC_SCRIBE_REWRITE_ENDPOINT },
           ctx,
           3,
         );
         setSuggestions(alts);
         return;
+      } catch (e) {
+        const msg = e instanceof HermesScribeProviderError ? e.message : 'HERMES rewrite unavailable';
+        setSuggestError(msg + ' — ensure the SCRIBE backend is running.');
       }
-
-      // Should not reach here, but cover it just in case
-      setSuggestError('No rewrite provider is ready — unlock Claude Engine or Lightning in the rack.');
     } catch (e) {
       setSuggestError(e instanceof ClaudeProviderError ? e.message : 'Rewrite request failed — try again.');
     } finally {
@@ -231,6 +233,7 @@ export default function ScribeEditor({
                         title="Choose rewrite provider"
                         style={{ marginLeft: 0, padding: '2px 4px', fontSize: 11, cursor: 'pointer' }}
                       >
+                        <option value="hermes">HERMES</option>
                         {claudeReady && <option value="claude">Claude</option>}
                         {lightningReady && <option value="lightning">Lightning</option>}
                       </select>
@@ -242,9 +245,9 @@ export default function ScribeEditor({
                       title={
                         rewriteProvider === 'lightning' && lightningReady
                           ? 'AI rewrite with Lightning — 3 alternate phrasings'
-                          : claudeReady
+                          : rewriteProvider === 'claude' && claudeReady
                             ? 'AI rewrite with Claude Engine — 3 alternate phrasings'
-                            : 'Unlock a rewrite provider in the rack to enable AI rewrites'
+                            : 'AI rewrite with HERMES — 3 alternate phrasings'
                       }
                       data-tour={si === 0 && li === 0 ? 'scribe-ai-rewrite' : undefined}
                     >
