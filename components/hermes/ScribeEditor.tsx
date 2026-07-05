@@ -1,17 +1,42 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import type { SongInputs, SongSection } from '@/lib/hermes/types';
 import { renderSections } from '@/lib/hermes/edits';
 import { claudeEngineReady, getClaudeKey } from '@/lib/hermes/claudeKey';
 import { suggestLineRewrites, ClaudeProviderError } from '@/lib/hermes/providers/claudeLyricsProvider';
+import { suggestLightningLineRewrites, LightningProviderError } from '@/lib/hermes/providers/lightningLyricsProvider';
+import { getLightningEndpoint, getLightningApiKey, lightningConfigured } from '@/lib/hermes/lightningKey';
 import { similarWords } from '@/lib/hermes/lexicon';
 import { hasSeenScribeTour, markScribeTourSeen } from '@/lib/hermes/storage';
 import GuidedTour, { type TourStep } from './GuidedTour';
 import styles from './hermes.module.css';
 
+type RewriteProvider = 'claude' | 'lightning';
+
 interface Target { section: number; line: number }
 interface WordTarget { section: number; line: number; word: string; start: number; end: number }
+
+const SCRIBE_PROVIDER_KEY = 'hermes.scribeProvider.v1';
+
+function getScribeProvider(): RewriteProvider {
+  if (typeof window === 'undefined') return 'claude';
+  try {
+    const stored = localStorage.getItem(SCRIBE_PROVIDER_KEY);
+    return (stored === 'lightning' ? 'lightning' : 'claude') as RewriteProvider;
+  } catch {
+    return 'claude';
+  }
+}
+
+function setScribeProvider(provider: RewriteProvider): void {
+  if (typeof window === 'undefined') return;
+  try {
+    localStorage.setItem(SCRIBE_PROVIDER_KEY, provider);
+  } catch {
+    /* ignore quota/unavailable */
+  }
+}
 
 const TOUR_STEPS: TourStep[] = [
   { selector: '[data-tour="scribe-line-input"]', title: 'Edit any line', body: 'Every line is its own field — click in and type, just like a text box.' },
@@ -37,6 +62,11 @@ export default function ScribeEditor({
   const [suggestLoading, setSuggestLoading] = useState(false);
   const [suggestError, setSuggestError] = useState<string | null>(null);
   const claudeReady = claudeEngineReady();
+  const lightningReady = lightningConfigured();
+  const [rewriteProvider, setRewriteProvider] = useState<RewriteProvider>('claude');
+  useEffect(() => {
+    setRewriteProvider(getScribeProvider());
+  }, []);
   // Word ideas — double-click any word while editing to see similar words (same
   // imagery category, closest affect), sourced from lexicon.ts's real word store,
   // never invented. Click a suggestion to replace the double-clicked word in place.
@@ -75,29 +105,75 @@ export default function ScribeEditor({
   }
 
   async function requestRewrite(section: number, line: number) {
-    if (!claudeReady) {
+    // Check if at least one provider is available
+    if (!claudeReady && !lightningReady) {
       setSuggestFor({ section, line });
       setSuggestions([]);
-      setSuggestError('Unlock the Claude Engine in the rack above (your own Anthropic key) to enable AI line rewrites.');
+      setSuggestError('Unlock a rewrite provider in the rack above (Claude Engine with Anthropic key, or Lightning with endpoint + key) to enable AI line rewrites.');
       return;
     }
+
     const s = sections[section];
     setSuggestFor({ section, line });
     setSuggestions([]);
     setSuggestError(null);
     setSuggestLoading(true);
+
+    const ctx = {
+      sectionLabel: s.label,
+      line: s.lines[line],
+      precedingLine: s.lines[line - 1],
+      followingLine: s.lines[line + 1],
+      inputs,
+    };
+
     try {
-      const alts = await suggestLineRewrites(
-        { apiKey: getClaudeKey() ?? undefined },
-        { sectionLabel: s.label, line: s.lines[line], precedingLine: s.lines[line - 1], followingLine: s.lines[line + 1], inputs },
-        3,
-      );
-      setSuggestions(alts);
+      // Try the selected provider first
+      if (rewriteProvider === 'lightning' && lightningReady) {
+        try {
+          const alts = await suggestLightningLineRewrites(
+            { endpoint: getLightningEndpoint() ?? undefined, apiKey: getLightningApiKey() ?? undefined },
+            ctx,
+            3,
+          );
+          setSuggestions(alts);
+          return;
+        } catch (e) {
+          // Log the error but fall through to Claude fallback if available
+          const msg = e instanceof LightningProviderError ? e.message : 'Lightning rewrite failed';
+          if (!claudeReady) {
+            // No fallback available — show the error
+            setSuggestError(msg + ' — Lightning not available for fallback.');
+            return;
+          }
+          // Fall through to Claude (will attempt below)
+        }
+      }
+
+      // Try Claude (either primary choice or fallback)
+      if (claudeReady) {
+        const alts = await suggestLineRewrites(
+          { apiKey: getClaudeKey() ?? undefined },
+          ctx,
+          3,
+        );
+        setSuggestions(alts);
+        return;
+      }
+
+      // Should not reach here, but cover it just in case
+      setSuggestError('No rewrite provider is ready — unlock Claude Engine or Lightning in the rack.');
     } catch (e) {
       setSuggestError(e instanceof ClaudeProviderError ? e.message : 'Rewrite request failed — try again.');
     } finally {
       setSuggestLoading(false);
     }
+  }
+
+  function handleProviderChange(newProvider: RewriteProvider) {
+    setRewriteProvider(newProvider);
+    setScribeProvider(newProvider);
+    closeSuggestions();
   }
 
   function applySuggestion(text: string) {
@@ -146,21 +222,41 @@ export default function ScribeEditor({
                     aria-label={`${s.label} line ${li + 1}`}
                     data-tour={si === 0 && li === 0 ? 'scribe-line-input' : undefined}
                   />
-                  <button
-                    className={styles.copyBtn}
-                    style={{ marginLeft: 0 }}
-                    onClick={() => requestRewrite(si, li)}
-                    title={claudeReady ? 'AI rewrite — 3 alternate phrasings from the Claude Engine' : 'Unlock the Claude Engine in the rack to enable AI rewrites'}
-                    data-tour={si === 0 && li === 0 ? 'scribe-ai-rewrite' : undefined}
-                  >
-                    ✨
-                  </button>
+                  <div style={{ display: 'flex', gap: 2, alignItems: 'center' }}>
+                    {(claudeReady || lightningReady) && (
+                      <select
+                        className={styles.copyBtn}
+                        value={rewriteProvider}
+                        onChange={(e) => handleProviderChange(e.target.value as RewriteProvider)}
+                        title="Choose rewrite provider"
+                        style={{ marginLeft: 0, padding: '2px 4px', fontSize: 11, cursor: 'pointer' }}
+                      >
+                        {claudeReady && <option value="claude">Claude</option>}
+                        {lightningReady && <option value="lightning">Lightning</option>}
+                      </select>
+                    )}
+                    <button
+                      className={styles.copyBtn}
+                      style={{ marginLeft: 0 }}
+                      onClick={() => requestRewrite(si, li)}
+                      title={
+                        rewriteProvider === 'lightning' && lightningReady
+                          ? 'AI rewrite with Lightning — 3 alternate phrasings'
+                          : claudeReady
+                            ? 'AI rewrite with Claude Engine — 3 alternate phrasings'
+                            : 'Unlock a rewrite provider in the rack to enable AI rewrites'
+                      }
+                      data-tour={si === 0 && li === 0 ? 'scribe-ai-rewrite' : undefined}
+                    >
+                      ✨
+                    </button>
+                  </div>
                   <button className={styles.copyBtn} style={{ marginLeft: 0 }} onClick={() => addLineAfter(si, li)} title="Add a line below" data-tour={si === 0 && li === 0 ? 'scribe-add-line' : undefined}>+</button>
                   <button className={styles.copyBtn} style={{ marginLeft: 0 }} onClick={() => deleteLine(si, li)} title="Delete this line" data-tour={si === 0 && li === 0 ? 'scribe-delete-line' : undefined}>×</button>
                 </div>
                 {suggestFor?.section === si && suggestFor.line === li && (
                   <div style={{ marginTop: 4, marginLeft: 4, padding: 8, border: '1px solid var(--line)', borderRadius: 8, background: 'var(--bg-1)' }}>
-                    {suggestLoading && <div className={styles.hint}>✨ asking the Claude Engine…</div>}
+                    {suggestLoading && <div className={styles.hint}>✨ asking for alternatives…</div>}
                     {suggestError && <div className={styles.hint} style={{ color: 'var(--amber)' }}>{suggestError}</div>}
                     {!suggestLoading && suggestions.map((alt, ai) => (
                       <div

@@ -6,7 +6,7 @@
 // generator that actually produces the JSONL files.
 import type { SongPackage } from './types';
 
-export type TrainingTask = 'lyrics' | 'production' | 'album-cover-prompt' | 'video-treatment';
+export type TrainingTask = 'lyrics' | 'production' | 'album-cover-prompt' | 'video-treatment' | 'scribe-line-rewrite';
 
 export interface TrainingExample {
   task: TrainingTask;
@@ -20,18 +20,22 @@ export interface TrainingExample {
 // wording per their fine-tuning framework without touching the extraction logic.
 const INSTRUCTIONS: Record<TrainingTask, string> = {
   lyrics:
-    'You are a songwriting assistant. Write original song lyrics, formatted with ' +
-    '[Section] tags, that match the brief. Never mimic a living artist’s actual words.',
+    "You are a songwriting assistant. Write original song lyrics, formatted with " +
+    "[Section] tags, that match the brief. Never mimic a living artist’s actual words.",
   production:
-    'You are a music production assistant. Given a song brief and its lyrics, suggest ' +
-    'tempo, drums, bass, instrumentation, arrangement, and mix direction.',
-  'album-cover-prompt':
-    'You are a visual-direction assistant. Given a song brief and concept, write a one- ' +
-    'or two-sentence prompt for an album cover image generator. No real-artist likeness, ' +
-    'no text or logos.',
-  'video-treatment':
-    'You are a music-video-concept assistant. Given a song brief and concept, write a ' +
-    'cinematic 16:9 music video treatment plus 3-5 scene ideas.',
+    "You are a music production assistant. Given a song brief and its lyrics, suggest " +
+    "tempo, drums, bass, instrumentation, arrangement, and mix direction.",
+  "album-cover-prompt":
+    "You are a visual-direction assistant. Given a song brief and concept, write a one- " +
+    "or two-sentence prompt for an album cover image generator. No real-artist likeness, " +
+    "no text or logos.",
+  "video-treatment":
+    "You are a music-video-concept assistant. Given a song brief and concept, write a " +
+    "cinematic 16:9 music video treatment plus 3-5 scene ideas.",
+  "scribe-line-rewrite":
+    "You are a lyric refinement assistant. Rewrite a single song line, offering 3 " +
+    "alternative phrasings that preserve meaning, syllable count, and rhyme role. Each " +
+    "alternative must be a single, singable line.",
 };
 
 function meta(pkg: SongPackage): TrainingExample['meta'] {
@@ -90,11 +94,54 @@ function videoTreatmentExample(pkg: SongPackage): TrainingExample | null {
   };
 }
 
-/** One song → up to 4 task-specific training examples (skips a task if the song is missing that field). */
+function scribeLineRewriteExample(pkg: SongPackage): TrainingExample | null {
+  if (!pkg.finalLyrics.trim()) return null;
+
+  // Parse lyric lines, skip empty ones
+  const lines = pkg.finalLyrics
+    .split('\n')
+    .map((line) => line.trim())
+    .filter(Boolean);
+
+  // Process only first 3 lines
+  const linesToProcess = lines.slice(0, 3);
+  if (linesToProcess.length === 0) return null;
+
+  // For simplicity, create an example using the first line available.
+  // The output will be the line itself (or placeholder rewrites if synthetic data existed).
+  // In a real pipeline, you'd have access to manually curated rewrites per line.
+  const lineIndex = 0;
+  const line = linesToProcess[lineIndex];
+  const precedingLine = lineIndex > 0 ? linesToProcess[lineIndex - 1] : '';
+  const followingLine = lineIndex < linesToProcess.length - 1 ? linesToProcess[lineIndex + 1] : '';
+
+  // Build input with context if available
+  let input = '';
+  if (precedingLine) input += `[Previous]\n${precedingLine}\n`;
+  input += `[LINE]\n${line}`;
+  if (followingLine) input += `\n[Following]\n${followingLine}`;
+
+  // Output: the line itself (placeholder; in real use this would be 3-5 alternative phrasings)
+  const output = line;
+
+  return {
+    task: 'scribe-line-rewrite',
+    instruction: INSTRUCTIONS['scribe-line-rewrite'],
+    input,
+    output,
+    meta: meta(pkg),
+  };
+}
+
+/** One song → up to 5 task-specific training examples (skips a task if the song is missing that field). */
 export function songToTrainingExamples(pkg: SongPackage): TrainingExample[] {
-  return [lyricsExample(pkg), productionExample(pkg), albumCoverExample(pkg), videoTreatmentExample(pkg)].filter(
-    (e): e is TrainingExample => e !== null
-  );
+  return [
+    lyricsExample(pkg),
+    productionExample(pkg),
+    albumCoverExample(pkg),
+    videoTreatmentExample(pkg),
+    scribeLineRewriteExample(pkg),
+  ].filter((e): e is TrainingExample => e !== null);
 }
 
 /** Alpaca-style {instruction,input,output} JSONL — the default format LitGPT (Lightning
