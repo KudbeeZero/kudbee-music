@@ -84,6 +84,10 @@ const NON_NOUN = new Set([
   'supposed', 'beautiful', 'lonely', 'really', 'very', 'just', 'always', 'never',
   'every', 'some', 'more', 'most', 'much', 'many', 'own', 'same', 'another', 'something',
   'nothing', 'everything', 'anything', 'someone', 'anyone', 'everyone',
+  // indefinite pronouns/quantifiers — same defect class as "something"/"someone" above,
+  // just missing: "the one used to be" / "made it out the other" (found via interactive
+  // song-generation testing, 2026-07-05).
+  'one', 'ones', 'other', 'others',
   'yet', 'fake', 'real', 'free', 'next', 'last', 'first', 'best', 'only', 'even', 'else',
   'enough', 'quite', 'almost', 'else', 'true', 'false', 'whole', 'half', 'sure', 'able',
   // prepositions / conjunctions — never a concrete noun ("started with the ACROSS")
