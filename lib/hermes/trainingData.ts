@@ -97,28 +97,55 @@ function videoTreatmentExample(pkg: SongPackage): TrainingExample | null {
 function scribeLineRewriteExamples(pkg: SongPackage): TrainingExample[] {
   if (!pkg.finalLyrics.trim()) return [];
 
-  // Parse all lines, filter section labels (lines starting with [) and empty ones
+  // Parse lyrics: extract section labels and lyric lines
   const allLines = pkg.finalLyrics.split('\n').map((line) => line.trim());
-  const lyricLines = allLines.filter((line) => line && !line.startsWith('['));
+  const lines: { text: string; section: string }[] = [];
+  let currentSection = 'Verse';
 
-  if (lyricLines.length === 0) return [];
+  for (const line of allLines) {
+    if (line.startsWith('[') && line.endsWith(']')) {
+      currentSection = line.slice(1, -1);
+    } else if (line) {
+      lines.push({ text: line, section: currentSection });
+    }
+  }
 
-  // Generate examples for multiple lines in the song (sample across sections)
+  if (lines.length === 0) return [];
+
+  // Generate examples for multiple lines across sections
   const examples: TrainingExample[] = [];
-  const step = Math.max(1, Math.floor(lyricLines.length / 4)); // Sample ~4 lines per song
-  for (let i = 0; i < lyricLines.length; i += step) {
-    const line = lyricLines[i];
-    const precedingLine = i > 0 ? lyricLines[i - 1] : '';
-    const followingLine = i < lyricLines.length - 1 ? lyricLines[i + 1] : '';
+  const step = Math.max(1, Math.floor(lines.length / 4)); // Sample ~4 lines per song
 
-    // Build input with context
-    let input = '';
-    if (precedingLine) input += `[Previous]\n${precedingLine}\n`;
-    input += `[LINE]\n${line}`;
-    if (followingLine) input += `\n[Following]\n${followingLine}`;
+  for (let i = 0; i < lines.length; i += step) {
+    const target = lines[i];
+    const precedingLine = i > 0 ? lines[i - 1]?.text : '';
+    const followingLine = i < lines.length - 1 ? lines[i + 1]?.text : '';
 
-    // Output: the line itself (placeholder for now; real alts come from manual review or secondary model)
-    const output = line;
+    // Build input matching the real Lightning provider contract
+    const inputParts = [
+      `Rewrite ONE line from a song, offering 3 alternative phrasings.`,
+      '',
+      `Title: ${pkg.title || 'Untitled'}`,
+      `Theme: ${pkg.inputs.theme}`,
+      `Mood: ${pkg.inputs.mood}`,
+      `Genre: ${pkg.inputs.genre}`,
+      '',
+      `Section: [${target.section}]`,
+      precedingLine ? `Line before (context, do not rewrite): "${precedingLine}"` : '',
+      `LINE TO REWRITE: "${target.text}"`,
+      followingLine ? `Line after (context, do not rewrite): "${followingLine}"` : '',
+      '',
+      'Keep roughly the same meaning, syllable count, and rhyme role as the original line.',
+      'Each alternative must be a single, complete, singable line (no bar numbers, no explanation).',
+      '',
+      `Output ONLY a JSON object in this exact format (no markdown, no extra text):`,
+      `{"alternatives":["line 1","line 2","line 3"]}`,
+      `- exactly 3 alternatives, each a string`,
+    ];
+    const input = inputParts.filter(Boolean).join('\n');
+
+    // Output: the line itself (training learns to rewrite/preserve meaning in context)
+    const output = target.text;
 
     examples.push({
       task: 'scribe-line-rewrite',
