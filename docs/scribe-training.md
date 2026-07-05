@@ -1,0 +1,286 @@
+# SCRIBE Lightning training data guide
+
+**What this is / who reads it:** the training-data strategy for HERMES's **SCRIBE** module — the line-rewrite engine that offers 3–5 alternative phrasings per lyric, one line at a time. Read this alongside [`docs/lightning-plan.md`](lightning-plan.md) to understand how training data fits into the broader Lightning AI rollout.
+
+## 1. Overview: What SCRIBE is
+
+**SCRIBE** is the per-line lyric editor in the Hit Factory (Scribe Editor component). Its flagship feature is the **✨ rewrite button** — click it to ask the Claude Engine for 3 alternative phrasings of that lyric line, keeping the same meaning, syllable count, and rhyme role.
+
+**Current state:**
+- Lives in `components/hermes/ScribeEditor.tsx`
+- Calls `suggestLineRewrites()` from `lib/hermes/providers/claudeLyricsProvider.ts`
+- Requires a visitor's own Claude API key (BYOK via the Engine Rack)
+- Generates alternatives on-demand, not deterministically
+
+**Lightning goal:**
+- Optional, fine-tuned model on a Lightning Studio (same bring-your-own-endpoint pattern as other providers)
+- Instructor can toggle in the UI between Claude (default, production) and Lightning (optional, custom-trained)
+- Fine-tuning dataset built entirely locally and free, from golden examples and synthetic songs
+
+---
+
+## 2. Training data format
+
+SCRIBE training examples follow the **Alpaca + Chat JSONL** format, identical to the other generation tasks (lyrics, production, etc.) defined in `lib/hermes/trainingData.ts`.
+
+### Alpaca format (LitGPT default)
+```json
+{
+  "instruction": "You are a lyric line rewriter. Given a line in context, offer 3-5 alternative phrasings that keep the same meaning, meter, and rhyme role.",
+  "input": "[Section] Verse 1\nLine before: \"some earlier line\"\nLINE TO REWRITE: \"the actual lyric to rewrite\"\nLine after: \"some following line\"\n\nBrief: theme / mood / genre / voice",
+  "output": "Alternative 1 | Alternative 2 | Alternative 3"
+}
+```
+
+### Chat format (Axolotl sharegpt / TRL chat templates)
+```json
+{
+  "messages": [
+    { "role": "system", "content": "You are a lyric line rewriter..." },
+    { "role": "user", "content": "[Section] Verse 1\nLine before: ...\nLINE TO REWRITE: ..." },
+    { "role": "assistant", "content": "Alternative 1 | Alternative 2 | Alternative 3" }
+  ]
+}
+```
+
+**Field details:**
+- **instruction:** One sentence, generic — same for all SCRIBE examples. The fine-tuning framework (LitGPT, Axolotl, TRL) can adapt the wording without changing the extraction logic.
+- **input:** The context block, structured exactly as `buildLineRewritePrompt()` in `claudeLyricsProvider.ts` formats it (section label, preceding/following lines if present, the target line, and the song brief).
+- **output:** The alternatives, separated by ` | ` (pipe + space). Alternatively, one per line or in an array — the framework controls the format; the extraction logic is format-agnostic.
+- **meta:** (in both formats) `{ songId, title, genre }` for auditing which golden song or synthetic variant produced this example.
+
+---
+
+## 3. Dataset generation
+
+### Current pipeline (as of 2026-07-05)
+
+The `scribe-line-rewrite` task **is declared** in `lib/hermes/trainingData.ts` (line 9) but **not yet implemented**. The extraction function `scribeLineRewriteExample()` is a planned addition.
+
+#### How it will work
+
+**Source:** Every `SongPackage` (golden examples, synthetic songs, founder exports) → one training example per rewritable lyric line.
+
+**Implementation steps (once wired):**
+
+1. **Extract from SongPackage:**
+   ```typescript
+   function scribeLineRewriteExample(pkg: SongPackage): TrainingExample[] {
+     const examples: TrainingExample[] = [];
+     for (const section of pkg.finalLyricsArray) {  // or reparsed from finalLyrics
+       for (let lineIdx = 0; lineIdx < section.lines.length; lineIdx++) {
+         examples.push({
+           task: 'scribe-line-rewrite',
+           instruction: INSTRUCTIONS['scribe-line-rewrite'],
+           input: buildLineRewritePrompt(
+             {
+               sectionLabel: section.label,
+               line: section.lines[lineIdx],
+               precedingLine: section.lines[lineIdx - 1],
+               followingLine: section.lines[lineIdx + 1],
+               inputs: pkg.inputs,
+             },
+             3,  // count (for training, we always produce 3)
+           ),
+           output: pkg.scribeAlternatives?.[section.label]?.[lineIdx]?.join(' | ') ?? '',
+           meta: meta(pkg),
+         });
+       }
+     }
+     return examples.filter((e) => e.output.trim().length > 0);
+   }
+   ```
+
+2. **Source lines:**
+   - **Golden set** (`examples/demos/`, `examples/cold-hard-gold/`): Human-reviewed songs where SCRIBE alternatives have been validated by hand (the founder's own rewrites or other lyricists).
+   - **Synthetic set** (10 themes × 5 rhyme schemes × 2 seeds = 100 songs): Every song generated by the deterministic pipeline via `runPipeline()`. Each line becomes a training example; the "alternatives" come from a secondary, seeded Claude call (cached once, stored with the song, never recomputed).
+   - **Founder exports** (`training-data-input/*.json`): Vault/brain exports where the founder has manually added `scribeAlternatives` to their own songs.
+
+3. **Dedup & stats:**
+   - `dedupeByOutput()` drops repeated alternative sets (case-insensitive).
+   - `datasetStats()` reports task coverage, average input/output words, and duplicate count.
+
+4. **Output files** (under `out/training-data/`, gitignored):
+   - `scribe-line-rewrite.alpaca.jsonl` — Alpaca format, ready for LitGPT.
+   - `scribe-line-rewrite.chat.jsonl` — Chat format, ready for Axolotl/TRL.
+   - Included in `all-tasks.alpaca.jsonl` for multi-task fine-tuning.
+
+---
+
+## 4. Provider toggle: Claude vs. Lightning in the UI
+
+**Current state:** The Scribe Editor always calls Claude via `suggestLineRewrites()`.
+
+**Lightning integration (roadmap):**
+
+Once a fine-tuned Lightning model is deployed on a Lightning Studio, the UI will offer a provider toggle, similar to existing provider selection in the Hit Factory.
+
+### Expected flow (not yet built):
+
+1. **Engine Rack:** Visitor pastes their Lightning endpoint + API key alongside their Claude key.
+   ```
+   🔑 LIGHTNING ENDPOINT: https://your-studio/predict
+   🔑 LIGHTNING API KEY: token_...
+   ```
+
+2. **Provider menu** (in Scribe Editor or a parent panel):
+   - "Line rewrites from: ⭐ Claude (default) / Lightning (custom)"
+
+3. **Toggle behavior:**
+   - **Claude:** Current flow — `suggestLineRewrites(claudeOpts, ...)` from `claudeLyricsProvider.ts`.
+   - **Lightning:** New adapter — `suggestLineRewrites(lightningOpts, ...)` calling the Lightning Studios endpoint with the same request/response contract.
+
+4. **Request shape (Lightning adapter):**
+   ```javascript
+   POST /predict
+   Authorization: Bearer {LIGHTNING_API_KEY}
+   Content-Type: application/json
+   {
+     "prompt": "Rewrite ONE line from a song, offering 3 alternative phrasings.\n\n[full context block]",
+     "max_tokens": 512
+   }
+   ```
+
+5. **Response parsing:**
+   - Extract alternatives from the endpoint's response (format TBD by Lightning model deployment).
+   - Fall back to Claude if the request fails or times out.
+
+**Build path:** This UI toggle is **not in the v1 spike** (see Status, below) — it ships after both the CLI adapter (`studio/lightning.mjs`) and the visitor BYOK slot are proven out. Until then, SCRIBE always uses Claude.
+
+---
+
+## 5. Fine-tuning: Using generated data with LitGPT/Axolotl/TRL
+
+Once you have a `scribe-line-rewrite.alpaca.jsonl` file (from `GEN_TRAINING_DATA=1 npm run prepare-training-data`), here's how to fine-tune with your choice of framework.
+
+### LitGPT (Lightning AI's official fine-tuning toolkit)
+
+```bash
+litgpt finetune \
+  --config litgpt/configs/recipes/finetune/lora.yaml \
+  --data scribe-line-rewrite.alpaca.jsonl \
+  --out_dir ./scribe-lora-ckpt \
+  --base_model meta-llama/Llama-2-7b-hf
+```
+
+Key files to customize:
+- `data_path` → path to your `.alpaca.jsonl`
+- `output_dir` → checkpoint save location
+- `base_model` → the model to fine-tune (Llama-2, Qwen, Mistral, etc.)
+- `learning_rate`, `batch_size`, `num_epochs` → tuning knobs
+
+### Axolotl (multi-model, chat-aware fine-tuning)
+
+Create an Axolotl config (`scribe-config.yaml`):
+
+```yaml
+base_model: meta-llama/Llama-2-7b-hf
+load_in_8bit: true
+output_dir: ./scribe-lora-ckpt
+
+datasets:
+  - path: scribe-line-rewrite.chat.jsonl
+    type: sharegpt
+    # or type: alpaca (if using the Alpaca format instead)
+
+adapter: lora
+lora_r: 8
+lora_alpha: 16
+lora_dropout: 0.1
+lora_target_modules:
+  - q_proj
+  - v_proj
+
+num_epochs: 3
+learning_rate: 5e-4
+batch_size: 4
+gradient_checkpointing: true
+```
+
+Then run:
+```bash
+axolotl train scribe-config.yaml
+```
+
+### TRL (Hugging Face Transformers Reinforcement Learning)
+
+Use the `SFTTrainer` for supervised fine-tuning:
+
+```python
+from trl import SFTTrainer, DataCollatorForCompletionOnlyLM
+from transformers import TrainingArguments
+
+trainer = SFTTrainer(
+    model="meta-llama/Llama-2-7b-hf",
+    args=TrainingArguments(
+        output_dir="./scribe-lora-ckpt",
+        num_train_epochs=3,
+        learning_rate=5e-4,
+        per_device_train_batch_size=4,
+    ),
+    train_dataset=load_dataset("json", data_files="scribe-line-rewrite.chat.jsonl"),
+    packing=False,
+    max_seq_length=512,
+)
+trainer.train()
+```
+
+### Shared principles across all three
+
+1. **Start small.** The `scribe-line-rewrite` dataset is seeded with 10 themes × 5 rhyme schemes × 2 seeds = 100 songs = ~800–1000 training lines. LoRA style-adaptation typically wants 100–1000 rows per task to move the needle; grow the set for $0 first before spending GPU time.
+2. **Validate on a subset.** Hold out 10–20% as a validation set; watch for overfitting (train loss ↓, val loss ↑).
+3. **Use LoRA, not full fine-tuning.** LoRA adapters are smaller, cheaper, and faster to deploy to a Lightning Studio.
+4. **Evaluate on held-out golden songs.** After fine-tuning, test the model on a few hand-picked SCRIBE examples from the golden set that weren't in the training data — does it produce comparable alternatives?
+
+---
+
+## 6. Safety: Original-only, no living-artist mimicry, banned words
+
+Every training example inherits HERMES's safety constraints. The fine-tuned model **must respect** these boundaries just as Claude does.
+
+### Guardrails enforced at generation time
+
+- **No living-artist mimicry:** The system prompt in `buildLineRewritePrompt()` enforces `CRAFT_RULES`, which include "No artist mimicry: do not write 'in the style of' any named artist."
+- **Original-only:** "Write 100% ORIGINAL material. Never quote, interpolate, or imitate any existing song."
+- **Banned words:** Every example includes the visitor's `doNotUse` list (from the song inputs) and the system-wide `bannedWords` (e.g., problematic clichés). These are listed explicitly in the prompt, and the fine-tuned model sees them in every training example.
+
+### Best practice for deployed models
+
+When you deploy a fine-tuned SCRIBE model to a Lightning Studio:
+
+1. **Keep the system prompt unchanged.** The `CRAFT_RULES` block is essential — it must appear in the model's context every time it runs.
+2. **Log alternatives for auditing.** Store the input line, the prompt context, and the 3 alternatives in a timestamped log — spot-check quarterly to catch any model drift (e.g., alternatives slipping into clichés).
+3. **Retrain on new golden examples.** If you add new SCRIBE examples to the golden set (validated by hand), regenerate `scribe-line-rewrite.alpaca.jsonl` and re-fine-tune. The model should stay in sync with the latest craft wisdom.
+
+---
+
+## 7. Status: v1 spike
+
+**Current state (2026-07-05):**
+- ✅ Task type declared in `trainingData.ts` (line 9: `'scribe-line-rewrite'`).
+- ✅ Prompt template (`buildLineRewritePrompt()`) and response parser (`parseLineRewrites()`) working in Claude provider.
+- 🔨 Data extraction function (`scribeLineRewriteExample()`) is **not yet implemented** — planned for the next iteration.
+- 🔨 UI provider toggle (Claude vs. Lightning) is **not yet built** — it ships after the CLI adapter and visitor BYOK slot are proven.
+- 🔨 Lightning Studio deployment is **assumed to be founder-run** — end-user support is out of scope for v1.
+
+**What happens next (roadmap):**
+1. Wire `scribeLineRewriteExample()` into `songToTrainingExamples()` so golden + synthetic examples produce training data.
+2. Run `GEN_TRAINING_DATA=1 npm run prepare-training-data` to generate `scribe-line-rewrite.alpaca.jsonl`.
+3. Founder fine-tunes a model on their own Lightning Studio (using LitGPT, Axolotl, or TRL — no script provided yet).
+4. Once the CLI adapter (`studio/lightning.mjs`) is live-tested and the visitor BYOK slot is built, add the UI toggle.
+5. Visitors can paste their Lightning endpoint + key; SCRIBE rewrites come from their custom model, not Claude.
+
+**Cost model:**
+- **Data generation:** $0 — entirely local, deterministic, same pipeline that seeds all other training tasks.
+- **GPU training:** Founder-run, self-funded (1–2 hours on a single GPU, typically $50–$200 depending on instance).
+- **Inference:** Founder pays per request to their Lightning Studio (or, later, a visitor uses their own endpoint).
+
+---
+
+## See also
+
+- [`docs/lightning-plan.md`](lightning-plan.md) — The broader Lightning AI rollout, including CLI adapter and endpoint setup.
+- [`lib/hermes/providers/claudeLyricsProvider.ts`](../lib/hermes/providers/claudeLyricsProvider.ts) — The current Claude SCRIBE implementation (`suggestLineRewrites`, `buildLineRewritePrompt`, `parseLineRewrites`).
+- [`components/hermes/ScribeEditor.tsx`](../components/hermes/ScribeEditor.tsx) — The UI that calls SCRIBE rewrites.
+- [`lib/hermes/trainingData.ts`](../lib/hermes/trainingData.ts) — The training-data extraction core (other tasks already working; `scribe-line-rewrite` pending).
+- [`TODO.md`](../TODO.md) — Live build log, including any SCRIBE fine-tuning entries.

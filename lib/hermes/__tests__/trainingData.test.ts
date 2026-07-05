@@ -112,7 +112,7 @@ describe('training-data extraction (Lightning AI fine-tuning prep)', () => {
     const { pkg } = await runPipeline(SYNTHETIC_THEMES[1], { id: 't2', now: NOW, seed: 1 });
     const examples = songToTrainingExamples(pkg);
     expect(examples.map((e) => e.task).sort()).toEqual(
-      ['album-cover-prompt', 'lyrics', 'production', 'video-treatment'].sort()
+      ['album-cover-prompt', 'lyrics', 'production', 'scribe-line-rewrite', 'video-treatment'].sort()
     );
   });
 

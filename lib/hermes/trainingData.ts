@@ -25,14 +25,14 @@ const INSTRUCTIONS: Record<TrainingTask, string> = {
   production:
     "You are a music production assistant. Given a song brief and its lyrics, suggest " +
     "tempo, drums, bass, instrumentation, arrangement, and mix direction.",
-  ‘album-cover-prompt’:
+  "album-cover-prompt":
     "You are a visual-direction assistant. Given a song brief and concept, write a one- " +
     "or two-sentence prompt for an album cover image generator. No real-artist likeness, " +
     "no text or logos.",
-  ‘video-treatment’:
+  "video-treatment":
     "You are a music-video-concept assistant. Given a song brief and concept, write a " +
     "cinematic 16:9 music video treatment plus 3-5 scene ideas.",
-  ‘scribe-line-rewrite’:
+  "scribe-line-rewrite":
     "You are a lyric refinement assistant. Rewrite a single song line, offering 3 " +
     "alternative phrasings that preserve meaning, syllable count, and rhyme role. Each " +
     "alternative must be a single, singable line.",
