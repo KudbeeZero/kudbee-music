@@ -10,8 +10,9 @@ export type AuthProvider = 'google' | 'github';
 export interface Profile {
   id: string;
   name: string;
-  kind: 'guest' | 'dev' | 'oauth';
+  kind: 'guest' | 'dev' | 'oauth' | 'email';
   provider?: AuthProvider;
+  email?: string;
   createdAt: string;
 }
 

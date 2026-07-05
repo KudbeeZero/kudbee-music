@@ -308,6 +308,14 @@ shipped it. This file is the human-readable view; keep the two in sync._
 7. [x] **"Becoming you" self-portrait** — the 🪞 panel surfaces how much of a song is the
    learned voice vs fresh suggestion. _(#30)_
 
+## 💰 Marketplace Expansion (5 phases toward $1M)
+_Creator economy + monetization pipeline. Each phase ships as a separate PR following green-loop discipline._
+- **Phase 1 ✅ — Email/password auth** (`lib/hermes/auth.ts`, `EmailAuth.tsx`). Unblocks user identity for all downstream features.
+- **Phase 2 — Creator marketplace** — Artist profiles + beat/template uploads + revenue-share model (30/70 split).
+- **Phase 3 — Stem export** — Multi-track downloads (drums/bass/melody/FX as separate .wav). Premium tier unlock.
+- **Phase 4 — Workflow docs** — SCRIBE-style interactive guides + onboarding walkthroughs.
+- **Phase 5 — Streaming publish** — Direct release to Spotify/TikTok/YouTube Music (via DistroKit/Tunecore API).
+
 ## 🎯 Up next (ordered) — the phased roadmap (see [`brain/roadmap.json`](brain/roadmap.json))
 - **Phase 1 — Measure & make it safe:** eval harness + golden songs (`npm run eval`);
   output-safety filter + disclaimer; one-command demo (`npm run demo`).
@@ -432,6 +440,13 @@ Board** governance / Solana / token / NFT layer integrates with this engine via 
 later (kept out of this repo's core so it stays free + local).
 
 ## ✅ Shipped (newest first)
+- [x] **🔐 Email/password authentication — local-first sessions with customizable timeout** —
+      Phase 1 of the $1M marketplace expansion. New `lib/hermes/auth.ts` (`emailSignUp`, `emailSignIn`,
+      `currentSession`, `refreshSession`, `changePassword`) using Web Crypto API (PBKDF2, no deps)
+      for password hashing. Sessions stored in localStorage with customizable duration (1h/8h/30d).
+      New `EmailAuth.tsx` component wired to sign up / sign in / switch modes. All 21 unit tests pass.
+      Profile type extended to support `kind: 'email'` + optional email field. Unblocks Creator
+      Marketplace (Phase 2), Stem Export (Phase 3), and Streaming Publish (Phase 5). _(this PR)_
 - [~] **🕸️ Agent Lifecycle library — data layer only, no UI wired up yet (medium-feature
       arc, item 8.9)** — Foundry-inspired `BeaconState` + selector pattern for the agent
       brain: `lib/hermes/agentLifecycle.ts`'s `buildAgentLifecycleState(songs, opts?)`
