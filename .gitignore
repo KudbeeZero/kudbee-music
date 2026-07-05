@@ -20,3 +20,8 @@ brain/vector-memory.json
 
 # ephemeral git worktrees created by isolated background agents (Agent tool, isolation: "worktree")
 .claude/worktrees/
+
+# Lightning AI training-data prep — founder-dropped vault/brain exports may carry
+# personal creative work; regenerate, never commit. (The generated dataset itself
+# lands in out/training-data/, already covered by the out/ rule above.)
+training-data-input/*.json

@@ -81,6 +81,18 @@ chat. Detail for each is in [`brain/roadmap.json`](brain/roadmap.json) + [`IDEAS
 - [ ] **Lightning AI expansion — Phase 2 (production guidance + rewrites):**
    - [ ] **Production Direction (AudioProvider)** — generate music production suggestions (drums, bass, arrangement, tempo, mix vibe) instead of hardcoded RNG picks. New `lib/hermes/providers/lightningAudioProvider.ts`. Richer, theme-specific suggestions beat random selection. Optional CLI: `hermes production --theme "..." --mood "..." --tempo 120-140`.
    - [ ] **Line Rewrites — Lightning variant** — add Lightning as a parallel cheap/fast option to Claude for per-line lyric rewrites. New `lib/hermes/providers/lightningLineRewriteProvider.ts` (separate utility, not in ProviderBundle). UI toggle in ScribeEditor: "✨ Rewrite with: Claude / Lightning".
+- [x] **Lightning training-data prep pipeline** — founder ask: get fine-tuning data ready
+   for the LoRA smoke test *before* spending GPU credits on the Lightning Studio. New
+   `lib/hermes/trainingData.ts` (pure extraction/formatting/stats) + env-gated generator
+   `lib/hermes/__tests__/trainingData.test.ts` (`GEN_TRAINING_DATA=1 npx vitest run
+   trainingData`, same convention as `GEN_DEMOS`) mints Alpaca-style `{instruction,input,
+   output}` JSONL (LitGPT's default format) across 4 tasks (lyrics/production/album-cover/
+   video-treatment) from three combined sources: the golden set, a $0 synthetic matrix (10
+   original themes × 5 rhyme schemes × 2 seeds, all real deterministic pipeline runs — no
+   GPU, no API key), and an optional founder drop folder (`training-data-input/`, validated
+   through `sanitizeSong()`). Writes `out/training-data/REPORT.md` with row counts + an
+   honest "grow the set for $0 first" note. See `docs/lightning-plan.md` → "Training-data
+   prep." _(this PR)_
 - [ ] **Lightning visitor BYOK slot** — the visitor-facing bring-your-own-endpoint/key slot in
    the Engine Rack, mirroring `lib/hermes/claudeKey.ts`; the CLI-side adapter is now live-tested,
    this client slot is the real remaining piece (`docs/lightning-plan.md`).
