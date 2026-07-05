@@ -593,3 +593,93 @@
   color: var(--magenta);
   text-shadow: 0 0 10px rgba(210, 75, 255, 0.5);
 }
+/* --- Model/GPU panel (Branch 05) --- */
+
+.modelGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 12px;
+}
+
+.modelCard {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 14px;
+  border-radius: var(--radius);
+  background: rgba(7, 7, 11, 0.5);
+  border: 1px solid var(--line);
+  border-top: 3px solid var(--amber);
+  box-shadow: 0 0 14px rgba(255, 177, 78, 0.08);
+}
+
+.modelName {
+  font-size: var(--fs-body);
+  color: var(--ink);
+  letter-spacing: 0.01em;
+}
+
+.modelLane {
+  margin: 0;
+  font-size: var(--fs-xs);
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--amber);
+  text-shadow: 0 0 10px rgba(255, 177, 78, 0.4);
+}
+
+.modelStatus {
+  margin: 0;
+  font-size: var(--fs-xs);
+  font-weight: 700;
+  color: var(--cyan);
+  text-shadow: 0 0 10px rgba(54, 224, 212, 0.35);
+}
+
+.hwRow {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 12px;
+}
+
+.hwCard {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 14px;
+  border-radius: var(--radius);
+  border: 1px solid var(--line);
+  background:
+    linear-gradient(140deg, rgba(54, 224, 212, 0.12), rgba(7, 7, 11, 0.6) 60%);
+  box-shadow: 0 0 16px rgba(54, 224, 212, 0.1);
+}
+
+.hwCard[data-tone='amber'] {
+  background:
+    linear-gradient(140deg, rgba(255, 177, 78, 0.14), rgba(7, 7, 11, 0.6) 60%);
+  box-shadow: 0 0 16px rgba(255, 177, 78, 0.12);
+}
+
+.hwFits {
+  margin: 0;
+  font-size: var(--fs-sm);
+  font-weight: 700;
+  color: var(--ink);
+}
+
+.jobGpu {
+  color: var(--amber);
+  text-shadow: 0 0 10px rgba(255, 177, 78, 0.4);
+  font-size: var(--fs-xs);
+}
+
+.jobState {
+  font-size: var(--fs-xs);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--warn);
+}
+
+.jobState[data-done] { color: var(--good); }
