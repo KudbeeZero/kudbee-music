@@ -181,7 +181,8 @@
         {
           "id": "9.3",
           "title": "🎯 TDE Branch 02 — Mission panel",
-          "status": "queued",
+          "status": "shipped",
+          "pr": "#208",
           "home": "components/tde/",
           "note": "Mission input + type selector (Code / SCRIBE / Training / GPU Eval / Memory / GitHub PR / Visual-Creative), mock submit, mock queued-mission cards. Suggest-only, nothing executes."
         },
