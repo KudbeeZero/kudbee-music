@@ -34,6 +34,28 @@ with a songwriting brain that learns them over time.
 
 ---
 
+## 🚀 $1M Trajectory — Five-Phase Build Plan
+
+**Phase 1: Authentication (Email/password, session carryover)** — Foundational layer for user accounts.
+- [ ] Email/password sign-up + sign-in (PBKDF2, no external deps) — in progress on `claude/auth-phase-1`
+
+**Phase 2: Creator Marketplace — Revenue Foundation ($18/mo–$45/mo tiers + plugin ecosystem)**
+
+_Subdivided into components:_
+
+- [x] **Phase 2A: Subscription Tier System** — Free/Pro/Premium/Enterprise with 8 feature flags _(#198)_
+- [x] **Phase 2B: Plugin Registry** — 8 first-party plugins (stems, sync, analytics, mastering, collab, API, white-label), tier-gated access _(#198)_
+- [ ] **Phase 2C: Plugin Marketplace UI** — Browse, install, rate plugins (next)
+- [ ] **Phase 2D: Revenue Tracking** — Tier earnings + marketplace commission splits
+
+**Phase 3: Stem Export + Multi-track Downloads** — Release-ready audio packages
+
+**Phase 4: Workflow Docs (SCRIBE Model)** — Interactive songwriting tutorials
+
+**Phase 5: Direct Streaming Publish** — Spotify/TikTok distribution integration
+
+---
+
 ## 🔑 Founder vision — everything you raised (one place, honest status)
 _A consolidated index of every big idea the founder brought up, so nothing lives only in
 chat. Detail for each is in [`brain/roadmap.json`](brain/roadmap.json) + [`IDEAS.md`](IDEAS.md)._
