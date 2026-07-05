@@ -1,5 +1,6 @@
 'use client';
 
+import MissionPanel from './MissionPanel';
 import styles from './tde.module.css';
 
 // The Kudbee TDE (Task-Driven Environment) shell — Branch 01 of the TDE track
@@ -7,14 +8,6 @@ import styles from './tde.module.css';
 // state only; the live-execution gate in the roadmap defines what must exist
 // before any panel gets a real button. Panels land one branch at a time.
 const PANELS = [
-  {
-    key: 'mission',
-    name: 'Mission',
-    tone: 'cyan',
-    arrives: 'Branch 02',
-    blurb:
-      'Mission input + type selector (Code, SCRIBE, Training, GPU Eval, Memory, GitHub PR, Visual). Suggest-only queue — nothing executes.',
-  },
   {
     key: 'repos',
     name: 'Repos',
@@ -70,6 +63,7 @@ export default function TdeWorkbench() {
       </p>
 
       <section className={styles.grid} aria-label="Workbench panels">
+        <MissionPanel />
         {PANELS.map((p) => (
           <article key={p.key} className={styles.slot} data-tone={p.tone}>
             <div className={styles.slotHead}>
