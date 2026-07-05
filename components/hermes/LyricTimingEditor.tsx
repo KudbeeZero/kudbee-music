@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import type { SongPackage } from '@/lib/hermes/types';
 import styles from './hermes.module.css';
 
@@ -31,6 +31,11 @@ export default function LyricTimingEditor({
   const [selectedSection, setSelectedSection] = useState(0);
   const [selectedLineIdx, setSelectedLineIdx] = useState<number | null>(null);
   const [audioPos, setAudioPos] = useState(0);
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [audioUrl, setAudioUrl] = useState<string>('');
+  const [duration, setDuration] = useState(0);
+  const audioRef = useRef<HTMLAudioElement>(null);
+  const canvasRef = useRef<HTMLCanvasElement>(null);
 
   useEffect(() => {
     if (!pkg) return;
@@ -46,13 +51,108 @@ export default function LyricTimingEditor({
     setSections(init);
   }, [pkg]);
 
+  useEffect(() => {
+    const audio = audioRef.current;
+    if (!audio) return;
+
+    const updatePos = () => setAudioPos(audio.currentTime * 1000);
+    const updateDuration = () => setDuration(audio.duration * 1000);
+
+    audio.addEventListener('timeupdate', updatePos);
+    audio.addEventListener('loadedmetadata', updateDuration);
+    audio.addEventListener('ended', () => setIsPlaying(false));
+
+    return () => {
+      audio.removeEventListener('timeupdate', updatePos);
+      audio.removeEventListener('loadedmetadata', updateDuration);
+      audio.removeEventListener('ended', () => setIsPlaying(false));
+    };
+  }, []);
+
+  useEffect(() => {
+    if (!canvasRef.current || !duration) return;
+    drawWaveform();
+  }, [audioPos, duration]);
+
+  function drawWaveform() {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return;
+
+    const w = canvas.width;
+    const h = canvas.height;
+    const bgColor = getComputedStyle(document.documentElement).getPropertyValue('--bg-1').trim();
+    const lineColor = getComputedStyle(document.documentElement).getPropertyValue('--line').trim();
+    const cyanColor = getComputedStyle(document.documentElement).getPropertyValue('--cyan').trim();
+
+    ctx.fillStyle = bgColor;
+    ctx.fillRect(0, 0, w, h);
+
+    ctx.strokeStyle = lineColor;
+    ctx.lineWidth = 1;
+    ctx.beginPath();
+    ctx.moveTo(0, h / 2);
+    ctx.lineTo(w, h / 2);
+    ctx.stroke();
+
+    const barWidth = Math.max(2, w / 200);
+    const barGap = 2;
+    let x = 0;
+    while (x < w) {
+      const hue = Math.sin((x / w) * Math.PI) * 0.5 + 0.5;
+      const barHeight = hue * h * 0.4;
+      ctx.fillStyle = `hsla(${Math.random() * 60 + 180}, 70%, 50%, 0.6)`;
+      ctx.fillRect(x, h / 2 - barHeight / 2, barWidth, barHeight);
+      x += barWidth + barGap;
+    }
+
+    const playheadX = (audioPos / duration) * w;
+    ctx.strokeStyle = cyanColor;
+    ctx.lineWidth = 2;
+    ctx.beginPath();
+    ctx.moveTo(playheadX, 0);
+    ctx.lineTo(playheadX, h);
+    ctx.stroke();
+  }
+
+  function togglePlay() {
+    if (!audioRef.current) return;
+    if (isPlaying) {
+      audioRef.current.pause();
+    } else {
+      audioRef.current.play();
+    }
+    setIsPlaying(!isPlaying);
+  }
+
+  function handleSeek(e: React.ChangeEvent<HTMLInputElement>) {
+    const ms = Number(e.target.value);
+    setAudioPos(ms);
+    if (audioRef.current) {
+      audioRef.current.currentTime = ms / 1000;
+    }
+  }
+
+  function uploadAudio(e: React.ChangeEvent<HTMLInputElement>) {
+    const file = e.target.files?.[0];
+    if (file) {
+      const url = URL.createObjectURL(file);
+      setAudioUrl(url);
+      if (audioRef.current) {
+        audioRef.current.src = url;
+      }
+    }
+  }
+
   const section = sections[selectedSection];
 
   function markStart() {
-    if (!selectedLineIdx || !section) return;
+    if (selectedLineIdx === null || !section) return;
     setSections((prev) => {
       const next = [...prev];
-      next[selectedSection].markers[selectedLineIdx].startMs = audioPos;
+      next[selectedSection].markers[selectedLineIdx].startMs = Math.round(audioPos);
       return next;
     });
   }
@@ -61,7 +161,7 @@ export default function LyricTimingEditor({
     if (selectedLineIdx === null || !section) return;
     setSections((prev) => {
       const next = [...prev];
-      next[selectedSection].markers[selectedLineIdx].endMs = audioPos;
+      next[selectedSection].markers[selectedLineIdx].endMs = Math.round(audioPos);
       return next;
     });
   }
@@ -92,7 +192,7 @@ export default function LyricTimingEditor({
 
   return (
     <div id={id} className={`${styles.panel} ${styles.flowFocus}`} data-active={active}>
-      <div className={styles.panelTitle}>⏱️ Lyric Timing Editor — Phase 1</div>
+      <div className={styles.panelTitle}>⏱️ Lyric Timing Editor — Phase 2</div>
 
       {/* Section tabs */}
       <div style={{ display: 'flex', gap: 6, overflowX: 'auto', padding: '10px 2px', marginBottom: 12 }}>
@@ -118,10 +218,72 @@ export default function LyricTimingEditor({
 
       {section && (
         <>
+          {/* Audio upload */}
+          {!audioUrl && (
+            <div style={{ marginBottom: 12, padding: 12, background: 'var(--bg-2)', borderRadius: 8 }}>
+              <label style={{ fontSize: 12, display: 'block', marginBottom: 6 }}>
+                Upload audio:
+                <input
+                  type="file"
+                  accept="audio/*"
+                  onChange={uploadAudio}
+                  style={{ marginLeft: 6 }}
+                />
+              </label>
+            </div>
+          )}
+
+          {/* Waveform canvas */}
+          {audioUrl && (
+            <div style={{ marginBottom: 12, borderRadius: 8, overflow: 'hidden' }}>
+              <canvas
+                ref={canvasRef}
+                width={400}
+                height={100}
+                style={{ width: '100%', display: 'block', background: 'var(--bg-1)' }}
+              />
+            </div>
+          )}
+
+          {/* Playback controls */}
+          {audioUrl && (
+            <div style={{ marginBottom: 12, padding: 12, background: 'var(--bg-1)', borderRadius: 8 }}>
+              <div style={{ display: 'flex', gap: 8, marginBottom: 8 }}>
+                <button
+                  onClick={togglePlay}
+                  style={{
+                    padding: '6px 12px',
+                    borderRadius: 6,
+                    border: '1px solid var(--cyan)',
+                    background: 'var(--cyan)',
+                    color: 'var(--bg-0)',
+                    cursor: 'pointer',
+                    fontWeight: 600,
+                    fontSize: 12,
+                  }}
+                >
+                  {isPlaying ? '⏸ Pause' : '▶ Play'}
+                </button>
+                <div style={{ fontSize: 12, display: 'flex', alignItems: 'center', gap: 6 }}>
+                  {(audioPos / 1000).toFixed(2)}s / {(duration / 1000).toFixed(2)}s
+                </div>
+              </div>
+              <input
+                type="range"
+                min="0"
+                max={Math.ceil(duration)}
+                value={audioPos}
+                onChange={handleSeek}
+                style={{ width: '100%', cursor: 'pointer' }}
+              />
+            </div>
+          )}
+
           {/* Lyric list */}
-          <div style={{ maxHeight: 300, overflowY: 'auto', marginBottom: 16, border: '1px solid var(--line)', borderRadius: 8, padding: 8 }}>
+          <div style={{ maxHeight: 250, overflowY: 'auto', marginBottom: 12, border: '1px solid var(--line)', borderRadius: 8, padding: 8 }}>
             {section.markers.map((m, idx) => {
               const isSelected = selectedLineIdx === idx;
+              const isPlayingLine = isPlaying && m.startMs !== undefined && m.endMs !== undefined && audioPos >= m.startMs && audioPos <= m.endMs;
               return (
                 <div
                   key={idx}
@@ -130,8 +292,8 @@ export default function LyricTimingEditor({
                     padding: 8,
                     marginBottom: 4,
                     borderRadius: 6,
-                    border: `1px solid ${isSelected ? 'var(--cyan)' : 'var(--line)'}`,
-                    background: isSelected ? 'var(--bg-2)' : 'var(--bg-0)',
+                    border: `1px solid ${isPlayingLine ? 'var(--good)' : isSelected ? 'var(--cyan)' : 'var(--line)'}`,
+                    background: isPlayingLine ? 'rgba(76,175,80,0.1)' : isSelected ? 'var(--bg-2)' : 'var(--bg-0)',
                     cursor: 'pointer',
                   }}
                 >
@@ -140,6 +302,7 @@ export default function LyricTimingEditor({
                     type="text"
                     value={m.text}
                     onChange={(e) => updateText(idx, e.target.value)}
+                    onClick={(e) => e.stopPropagation()}
                     style={{
                       width: '100%',
                       padding: 6,
@@ -179,64 +342,43 @@ export default function LyricTimingEditor({
             })}
           </div>
 
-          {/* Controls */}
+          {/* Mark buttons */}
           {selectedLineIdx !== null && (
-            <div style={{ marginBottom: 16, padding: 12, background: 'var(--bg-1)', borderRadius: 8 }}>
-              <div style={{ fontSize: 12, marginBottom: 8 }}>
-                Position: <strong>{(audioPos / 1000).toFixed(2)}s</strong>
-              </div>
-              <div style={{ display: 'flex', gap: 6 }}>
-                <button
-                  onClick={markStart}
-                  style={{
-                    flex: 1,
-                    padding: '8px 12px',
-                    borderRadius: 6,
-                    border: '1px solid var(--good)',
-                    background: 'var(--good)',
-                    color: 'var(--bg-0)',
-                    cursor: 'pointer',
-                    fontWeight: 600,
-                    fontSize: 12,
-                  }}
-                >
-                  Mark Start
-                </button>
-                <button
-                  onClick={markEnd}
-                  style={{
-                    flex: 1,
-                    padding: '8px 12px',
-                    borderRadius: 6,
-                    border: '1px solid var(--good)',
-                    background: 'var(--good)',
-                    color: 'var(--bg-0)',
-                    cursor: 'pointer',
-                    fontWeight: 600,
-                    fontSize: 12,
-                  }}
-                >
-                  Mark End
-                </button>
-              </div>
+            <div style={{ marginBottom: 12, display: 'flex', gap: 6 }}>
+              <button
+                onClick={markStart}
+                style={{
+                  flex: 1,
+                  padding: '8px 12px',
+                  borderRadius: 6,
+                  border: '1px solid var(--good)',
+                  background: 'var(--good)',
+                  color: 'var(--bg-0)',
+                  cursor: 'pointer',
+                  fontWeight: 600,
+                  fontSize: 12,
+                }}
+              >
+                Mark Start
+              </button>
+              <button
+                onClick={markEnd}
+                style={{
+                  flex: 1,
+                  padding: '8px 12px',
+                  borderRadius: 6,
+                  border: '1px solid var(--good)',
+                  background: 'var(--good)',
+                  color: 'var(--bg-0)',
+                  cursor: 'pointer',
+                  fontWeight: 600,
+                  fontSize: 12,
+                }}
+              >
+                Mark End
+              </button>
             </div>
           )}
-
-          {/* Audio controls (placeholder) */}
-          <div style={{ padding: 12, background: 'var(--bg-1)', borderRadius: 8, marginBottom: 16 }}>
-            <div style={{ fontSize: 12, marginBottom: 8 }}>Audio Playback (Phase 2)</div>
-            <input
-              type="range"
-              min="0"
-              max="180000"
-              value={audioPos}
-              onChange={(e) => setAudioPos(Number(e.target.value))}
-              style={{ width: '100%', cursor: 'pointer' }}
-            />
-            <div style={{ fontSize: 11, opacity: 0.6, marginTop: 6 }}>
-              Drag to set playback position (waveform visualization in phase 2)
-            </div>
-          </div>
 
           {/* Save button */}
           <button
@@ -255,6 +397,8 @@ export default function LyricTimingEditor({
           >
             Save Timing Map
           </button>
+
+          <audio ref={audioRef} />
         </>
       )}
     </div>
