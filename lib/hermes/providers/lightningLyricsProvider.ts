@@ -78,6 +78,10 @@ function extractResponseText(body: unknown): string {
   if (body == null) return '';
   if (typeof body === 'string') return body;
   if (typeof body !== 'object') return String(body);
+  // If the body directly has alternatives (our expected format), return it as JSON
+  if (isRecord(body) && Array.isArray((body as Record<string, unknown>).alternatives)) {
+    return JSON.stringify(body);
+  }
   const direct = (body as Record<string, unknown>).output
     ?? (body as Record<string, unknown>).text
     ?? (body as Record<string, unknown>).generated_text

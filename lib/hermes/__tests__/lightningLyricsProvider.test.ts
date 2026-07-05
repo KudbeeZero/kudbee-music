@@ -90,10 +90,10 @@ describe('Lightning lyrics provider', () => {
   });
 
   it('throws http-error on non-2xx response', async () => {
-    const mockFetch = async () => new Response('error', { status: 500 });
+    const mockFetch = (async () => new Response('error', { status: 500 })) as unknown as typeof fetch;
     try {
       await suggestLightningLineRewrites(
-        { endpoint: 'https://example.com/predict', fetchImpl: mockFetch as any },
+        { endpoint: 'https://example.com/predict', fetchImpl: mockFetch },
         {
           sectionLabel: 'Verse 1',
           line: 'test line',
@@ -110,15 +110,18 @@ describe('Lightning lyrics provider', () => {
 
   it('extracts text from various response shapes', async () => {
     const testCases = [
-      { response: '{"output":"{\\"alternatives\\":[\\"line one\\"]}"}' },
-      { response: '{"text":"{\\"alternatives\\":[\\"line two\\"]}"}' },
-      { response: '{"generated_text":"{\\"alternatives\\":[\\"line three\\"]}"}' },
+      { response: JSON.stringify({ output: JSON.stringify({ alternatives: ['line one'] }) }) },
+      { response: JSON.stringify({ text: JSON.stringify({ alternatives: ['line two'] }) }) },
+      { response: JSON.stringify({ generated_text: JSON.stringify({ alternatives: ['line three'] }) }) },
     ];
 
     for (const testCase of testCases) {
-      const mockFetch = async () => new Response(testCase.response);
+      const mockFetch = (async () => new Response(testCase.response, {
+        status: 200,
+        headers: { 'content-type': 'application/json' },
+      })) as unknown as typeof fetch;
       const result = await suggestLightningLineRewrites(
-        { endpoint: 'https://example.com/predict', fetchImpl: mockFetch as any },
+        { endpoint: 'https://example.com/predict', fetchImpl: mockFetch },
         {
           sectionLabel: 'Verse 1',
           line: 'test line',
@@ -131,17 +134,20 @@ describe('Lightning lyrics provider', () => {
   });
 
   it('sends bearer token when apiKey is provided', async () => {
-    let capturedHeaders: Record<string, string> = {};
-    const mockFetch = async (url: string, init: any) => {
+    let capturedHeaders: Record<string, string> | null = null;
+    const mockFetch = (async (url: string, init: any) => {
       capturedHeaders = init.headers;
-      return new Response('{"alternatives":["line one"]}');
-    };
+      return new Response(JSON.stringify({ alternatives: ['line one'] }), {
+        status: 200,
+        headers: { 'content-type': 'application/json' },
+      });
+    }) as unknown as typeof fetch;
 
     await suggestLightningLineRewrites(
       {
         endpoint: 'https://example.com/predict',
         apiKey: 'test-token-123',
-        fetchImpl: mockFetch as any,
+        fetchImpl: mockFetch,
       },
       {
         sectionLabel: 'Verse 1',
@@ -151,21 +157,24 @@ describe('Lightning lyrics provider', () => {
       1,
     );
 
-    expect(capturedHeaders.Authorization).toBe('Bearer test-token-123');
+    expect(capturedHeaders?.Authorization).toBe('Bearer test-token-123');
   });
 
   it('omits Authorization header when apiKey is not provided', async () => {
-    let capturedHeaders: Record<string, string> = {};
-    const mockFetch = async (url: string, init: any) => {
+    let capturedHeaders: Record<string, string> | null = null;
+    const mockFetch = (async (url: string, init: any) => {
       capturedHeaders = init.headers;
-      return new Response('{"alternatives":["line one"]}');
-    };
+      return new Response(JSON.stringify({ alternatives: ['line one'] }), {
+        status: 200,
+        headers: { 'content-type': 'application/json' },
+      });
+    }) as unknown as typeof fetch;
 
     await suggestLightningLineRewrites(
       {
         endpoint: 'https://example.com/predict',
         apiKey: undefined,
-        fetchImpl: mockFetch as any,
+        fetchImpl: mockFetch,
       },
       {
         sectionLabel: 'Verse 1',
@@ -175,6 +184,6 @@ describe('Lightning lyrics provider', () => {
       1,
     );
 
-    expect(capturedHeaders.Authorization).toBeUndefined();
+    expect(capturedHeaders?.Authorization).toBeUndefined();
   });
 });
