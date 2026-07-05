@@ -45,8 +45,8 @@ _Subdivided into components:_
 
 - [x] **Phase 2A: Subscription Tier System** — Free/Pro/Premium/Enterprise with 8 feature flags _(#198)_
 - [x] **Phase 2B: Plugin Registry** — 8 first-party plugins (stems, sync, analytics, mastering, collab, API, white-label), tier-gated access _(#198)_
-- [ ] **Phase 2C: Plugin Marketplace UI** — Browse, install, rate plugins (next)
-- [ ] **Phase 2D: Revenue Tracking** — Tier earnings + marketplace commission splits
+- [x] **Phase 2C: Plugin Marketplace UI** — Browse, install, rate plugins _(#199)_
+- [ ] **Phase 2D: Revenue Tracking** — Tier earnings + marketplace commission splits (next)
 
 **Phase 3: Stem Export + Multi-track Downloads** — Release-ready audio packages
 
