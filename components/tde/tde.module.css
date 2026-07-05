@@ -460,3 +460,136 @@
   flex-direction: column;
   gap: 2px;
 }
+/* --- Agent map panel (Branch 04) --- */
+
+.depthRule {
+  margin: 0;
+  padding: 10px 14px;
+  border-radius: var(--radius);
+  font-size: var(--fs-sm);
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  color: var(--ink);
+  background: linear-gradient(120deg, rgba(255, 93, 108, 0.22), rgba(210, 75, 255, 0.16));
+  border: 1px solid rgba(255, 93, 108, 0.4);
+  box-shadow: 0 0 18px rgba(255, 93, 108, 0.15);
+}
+
+.agentGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 12px;
+}
+
+.agentCard {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 14px;
+  border-radius: var(--radius);
+  background: rgba(7, 7, 11, 0.5);
+  border: 1px solid var(--line);
+  border-top: 3px solid var(--magenta);
+  box-shadow: 0 0 14px rgba(210, 75, 255, 0.08);
+}
+
+.agentCard[data-status='planned'] { opacity: 0.82; }
+
+.agentStatus {
+  flex: none;
+  padding: 3px 9px;
+  border-radius: 999px;
+  font-size: var(--fs-xs);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #0b0b12;
+}
+
+.agentStatus[data-status='active'] {
+  background: linear-gradient(120deg, var(--good), var(--cyan));
+  box-shadow: 0 0 12px rgba(87, 217, 138, 0.4);
+}
+
+.agentStatus[data-status='standby'] {
+  background: linear-gradient(120deg, var(--amber), var(--amber-2));
+  box-shadow: 0 0 12px rgba(255, 177, 78, 0.4);
+}
+
+.agentStatus[data-status='planned'] {
+  background: linear-gradient(120deg, var(--violet), var(--magenta));
+  box-shadow: 0 0 12px rgba(139, 92, 255, 0.4);
+}
+
+.agentMetaRow {
+  display: flex;
+  gap: 18px;
+  flex-wrap: wrap;
+}
+
+.riskBadge {
+  display: inline-block;
+  padding: 2px 10px;
+  border-radius: 999px;
+  font-size: var(--fs-xs);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #0b0b12;
+}
+
+.riskBadge[data-risk='low'] {
+  background: linear-gradient(120deg, var(--good), var(--cyan));
+  box-shadow: 0 0 10px rgba(87, 217, 138, 0.4);
+}
+
+.riskBadge[data-risk='medium'] {
+  background: linear-gradient(120deg, var(--warn), var(--amber-2));
+  box-shadow: 0 0 10px rgba(255, 206, 90, 0.4);
+}
+
+.riskBadge[data-risk='high'] {
+  background: linear-gradient(120deg, var(--bad), var(--magenta));
+  box-shadow: 0 0 10px rgba(255, 93, 108, 0.45);
+}
+
+.traceBox {
+  padding: 14px;
+  border-radius: var(--radius);
+  background: rgba(7, 7, 11, 0.55);
+  border: 1px solid rgba(210, 75, 255, 0.3);
+  box-shadow: 0 0 16px rgba(210, 75, 255, 0.08) inset;
+}
+
+.traceTitle {
+  margin: 0 0 10px;
+  font-size: var(--fs-sm);
+  color: var(--ink-dim);
+}
+
+.traceList {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.traceLine {
+  display: flex;
+  gap: 12px;
+  align-items: baseline;
+  font-size: var(--fs-sm);
+  color: var(--ink-dim);
+  line-height: 1.5;
+}
+
+.traceAt {
+  flex: none;
+  min-width: 52px;
+  font-size: var(--fs-xs);
+  font-weight: 700;
+  color: var(--magenta);
+  text-shadow: 0 0 10px rgba(210, 75, 255, 0.5);
+}

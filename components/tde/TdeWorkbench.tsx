@@ -1,6 +1,7 @@
 'use client';
 
 import MissionPanel from './MissionPanel';
+import AgentMapPanel from './AgentMapPanel';
 import RepoPanel from './RepoPanel';
 import styles from './tde.module.css';
 
@@ -9,14 +10,6 @@ import styles from './tde.module.css';
 // state only; the live-execution gate in the roadmap defines what must exist
 // before any panel gets a real button. Panels land one branch at a time.
 const PANELS = [
-  {
-    key: 'agents',
-    name: 'Agents',
-    tone: 'magenta',
-    arrives: 'Branch 04',
-    blurb:
-      'Main Agent + sub-agent roster: allowed and forbidden actions, spawned_by, risk level. Sub-agent depth 1 only — recursive spawning blocked.',
-  },
   {
     key: 'models',
     name: 'Models / GPU',
@@ -58,6 +51,7 @@ export default function TdeWorkbench() {
       <section className={styles.grid} aria-label="Workbench panels">
         <MissionPanel />
         <RepoPanel />
+        <AgentMapPanel />
         {PANELS.map((p) => (
           <article key={p.key} className={styles.slot} data-tone={p.tone}>
             <div className={styles.slotHead}>

@@ -197,7 +197,7 @@
         {
           "id": "9.5",
           "title": "🕸️ TDE Branch 04 — Agent map panel",
-          "status": "queued",
+          "status": "shipped",
           "home": "components/tde/",
           "note": "Main Agent + Training Scribe, Safety Reviewer, Eval Runner, Memory Agent, Future Integration Scout: status, role, allowed/forbidden actions, spawned_by, risk level, mock trace. Visible rule: sub-agent depth 1 only, recursive spawning blocked."
         },
