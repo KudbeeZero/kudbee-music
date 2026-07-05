@@ -16,6 +16,8 @@ entirely from code — no paid software.
 - [Sharing a song](share.md) — the deterministic link + PNG card
 - [Claude Engine (opt-in)](claude-engine.md) — bring-your-own-key real-AI lyrics
 - [SCRIBE Lightning training](scribe-training.md) — fine-tuning data for the line-rewrite engine
+- [SCRIBE Real LoRA v1](scribe-real-training-v1.md) — evaluation prompts and real test cases
+- [SCRIBE evaluation prompts](scribe-evaluation-prompts.md) — test cases for line-rewrite quality
 - [Watchdog](watchdog.md) — the scheduled Claude security/quality review
 - [OG unfurl](og-unfurl.md) — per-song link previews *(inert until founder-activated)*
 - [Living-Brain dNFT standard](nft-standard.md) — the metadata format decision
