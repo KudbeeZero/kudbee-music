@@ -298,6 +298,12 @@ _The autonomous `/loop` is working the phased roadmap. **Source of truth:
 [`brain/roadmap.json`](brain/roadmap.json)** — it indexes every item + the PR that
 shipped it. This file is the human-readable view; keep the two in sync._
 
+- [~] **Kudbee TDE / HERMES Workbench** — the side cockpit for Kudbee agents, repos,
+  memory, models, GPU jobs, training rows, PRs, and SCRIBE. Strictly suggest-only /
+  mock-state / read-only in v1 (no live APIs, no keys, no execution). 13 branches,
+  one at a time — plan in [`docs/kudbee-tde-roadmap.md`](docs/kudbee-tde-roadmap.md),
+  status in `brain/roadmap.json` phase 9. Branch 00 (roadmap) shipped; next up:
+  Branch 01, the isolated `/tde` shell route.
 - [~] **WIFI DJ visual redesign** — founder-supplied "Production UI Kit" mockups
   (Desktop/Mobile Studio + 24-element component library + a Lyrics Editor screen)
   reimagine the whole Hit Factory UI. Full button/route directory, gap analysis

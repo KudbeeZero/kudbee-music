@@ -2,7 +2,7 @@
 
 > **Generated from [`brain/roadmap.json`](brain/roadmap.json) — do not hand-edit.** Status lives ONLY in the spine; edit it there, then regenerate with `GEN_DOCS=1 npx vitest run status`. `statusBoard.test.ts` fails CI if this file drifts.
 
-**Scoreboard:** ✅ 75 shipped · 🔨 3 in build · 💤 8 queued — 86 tracked items
+**Scoreboard:** ✅ 76 shipped · 🔨 3 in build · 💤 20 queued — 99 tracked items
 (legend: ✅ shipped · 🔌 scaffold shipped, founder-gated · 🔨 in build · ⏭️ next · 💤 queued · 💭 idea · 🚧 blocked on founder)
 
 ## Tracks
@@ -134,6 +134,24 @@
 | 🔨 | **🎨 WIFI DJ visual redesign — directory + phased plan** | `docs/wifi-dj-redesign.md` | — |
 | ✅ | **🎨 Council redesign — Phase 1, shipped as interim** | `components/hermes/Council.tsx + hermes.module.css` | — |
 | ✅ | **🕸️ Self-expanding UI-agent infrastructure + first de-gray sweep** | `.claude/agents/hermes-ui.md + brain/uiDesignLanguage.json` | — |
+
+### Phase 9 — Kudbee TDE / HERMES Workbench — `▰▱▱▱▱▱▱▱▱▱` 1/13
+
+| | Item | Where it lives | PR |
+|---|------|----------------|----|
+| ✅ | **🗺️ TDE Branch 00 — roadmap + spine sync** | `docs/kudbee-tde-roadmap.md` | #206 |
+| 💤 | **🧱 TDE Branch 01 — /tde shell route** | `app/tde/page.tsx + components/tde/` | — |
+| 💤 | **🎯 TDE Branch 02 — Mission panel** | `components/tde/` | — |
+| 💤 | **📦 TDE Branch 03 — Repo panel** | `components/tde/` | — |
+| 💤 | **🕸️ TDE Branch 04 — Agent map panel** | `components/tde/` | — |
+| 💤 | **🧠 TDE Branch 05 — Model/GPU panel** | `components/tde/` | — |
+| 💤 | **📚 TDE Branch 06 — Memory/Training panel** | `components/tde/` | — |
+| 💤 | **🚧 TDE Branch 07 — Safety gate UI** | `components/tde/` | — |
+| 💤 | **🧭 TDE Branch 08 — Mock model router** | `components/tde/` | — |
+| 💤 | **📄 TDE Branch 09 — Integration contracts** | `components/tde/ (types)` | — |
+| 💤 | **💾 TDE Branch 10 — Local mock persistence** | `components/tde/ + lib` | — |
+| 💤 | **✨ TDE Branch 11 — Polish + navigation** | `components/tde/` | — |
+| 💤 | **🌉 TDE Branch 12 — Backend bridge plan** | `docs/kudbee-tde-backend-bridge.md` | — |
 
 ### Video studio — `▰▰▰▰▰▱▱▱▱▱` 4/8
 

@@ -233,6 +233,18 @@ A second-opinion review flagged real risks worth acting on (truth-first):
   disclaimer in the README + Uniqueness panel. _(#37)_
 
 ## 🌱 Fresh captures
+- 🔨 **Kudbee TDE / HERMES Workbench — the agent cockpit inside the app**
+  *(founder directive, 2026-07-05)* — a Task-Driven Environment side route (`/tde`)
+  that renders the whole Kudbee operation as five panels: Missions (suggest-only
+  queue), Repos (kudbee-music / hermes-lyric-server / kudbee-engine cards), Agents
+  (roster + depth-1 spawn rule + mock traces), Models/GPU (KUDBEE model family, T4 vs
+  RTX 6000 lanes, mock job queue), and Memory/Training (rows, eval pass rate, drop
+  queue, next GPU action). Everything mocked until a founder-approved backend
+  permission layer exists — the dashboard is a window, not a lever, and the roadmap
+  bakes that in as a live-execution gate. Long-term: the cockpit becomes the front
+  end for local Claude-Code-style agent execution (KUDBEECODEV0). Plan:
+  [`docs/kudbee-tde-roadmap.md`](docs/kudbee-tde-roadmap.md) · status: roadmap.json
+  phase 9.
 - ✏️ **WIFI DJ visual redesign — the "Production UI Kit" + Lyrics Editor mockups**
   *(founder-supplied concept images, 2026-07-03)* — a full DAW-style reimagining of
   the Hit Factory UI: a Desktop Studio (sidebar nav, transport bar, track lanes,
