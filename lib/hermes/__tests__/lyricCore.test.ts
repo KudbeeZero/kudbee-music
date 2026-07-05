@@ -4,6 +4,7 @@ import { selfSimilarity, lineSkeleton, keywords } from '../text';
 import { slantKey, rhymeKey } from '../lexicon';
 import { rhymeFamily } from '../rhyme';
 import { makeRng } from '../text';
+import { lineSyllables, syllableFit } from '../meter';
 import type { SongInputs, SongSection } from '../types';
 
 function brief(over: Partial<SongInputs> = {}): SongInputs {
@@ -256,5 +257,41 @@ describe('avoid-word enforcement — exclusions actually prevent generation, not
       const fam = rhymeFamily(rng, 0.5, 2, 'balanced', new Set(['crown', 'throne']));
       for (const e of fam) expect(['crown', 'throne']).not.toContain(e.w);
     }
+  });
+});
+
+describe('singability dial — deliveryPreferences.syllableTarget (docs/pattern-packs.md meter backlog, scoped)', () => {
+  it('is a no-op when unset — byte-identical to a plain brief (Iron Law #1)', async () => {
+    const withoutDial = brief();
+    const withUndefinedDial = brief({ deliveryPreferences: undefined });
+    const a = await gen(withoutDial, 3);
+    const b = await gen(withUndefinedDial, 3);
+    expect(a).toEqual(b);
+  });
+
+  it('is deterministic — same inputs + seed produce byte-identical verses when set', async () => {
+    const inputs = brief({ deliveryPreferences: { syllableTarget: [6, 9] } });
+    const a = await gen(inputs, 9);
+    const b = await gen(inputs, 9);
+    expect(a).toEqual(b);
+  });
+
+  it('pulls verse-line syllable counts closer to a tight target than the unconstrained draw', async () => {
+    const target: [number, number] = [6, 8];
+    const unconstrained = brief();
+    const constrained = brief({ deliveryPreferences: { syllableTarget: target } });
+    // average over several seeds so one lucky/unlucky draw can't flip the result
+    let sumUnconstrained = 0;
+    let sumConstrained = 0;
+    let n = 0;
+    for (let seed = 0; seed < 8; seed++) {
+      const a = verseLines(await gen(unconstrained, seed));
+      const b = verseLines(await gen(constrained, seed));
+      for (const l of a) { sumUnconstrained += 1 - syllableFit(lineSyllables(l), target); n++; }
+      for (const l of b) sumConstrained += 1 - syllableFit(lineSyllables(l), target);
+    }
+    // constrained runs should have strictly less total "distance from the target" error
+    expect(sumConstrained).toBeLessThan(sumUnconstrained);
+    expect(n).toBeGreaterThan(0);
   });
 });

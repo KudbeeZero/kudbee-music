@@ -64,6 +64,13 @@ export interface SongInputs {
    *  occasionPacks.ts's OCCASION_PACKS at every untrusted-input boundary (pipeline
    *  normalize, share decode, vault import) — same discipline as rhymeScheme. */
   occasion?: string;
+  /** Singability dial (docs/pattern-packs.md's "Meter/stress" backlog item, now shipped
+   *  in scoped form): a `[min,max]` syllable-per-line target. Verse lines prefer the
+   *  best-fitting of a few deterministic candidates instead of the first draw — a
+   *  scoped slice of MCFlow's "speed" dial (Condit-Schultz), not full metric-position
+   *  flow (still out of scope — see lib/hermes/meter.ts). Undefined = today's behavior,
+   *  byte-identical (Iron Law #1). */
+  deliveryPreferences?: { syllableTarget?: [number, number] };
 }
 
 /** The 10 Agent Network display codenames — kept in sync with AGENT_DEFINITIONS

@@ -100,9 +100,47 @@ chat. Detail for each is in [`brain/roadmap.json`](brain/roadmap.json) + [`IDEAS
 - [ ] **Cloud brain** — server-side vault/memory (Notion/Drive/Supabase creds) so it's not localStorage-only.
 
 **Lyrical Machine Enhancements ($0 — extend existing lexicon+rhyme+emotion system, no new engine needed):**
-- [ ] **Narrative Arc Control** — add `narrativeArc` dial to `SongInputs` (escalation mode: linear/cumulative/cyclical; scene-setting strength; callback frequency). Enforce story-beat progression across verses (setup → complication → climax → resolution). Modify `mockLyricsProvider.ts` to tag verse lines with story beats; add evaluation in `emotion.ts` to track semantic intensity growth across the song.
-- [ ] **Singability/Meter Constraints** — add `deliveryPreferences` to `SongInputs` (syllable target per line 8–12, 10–14, etc.; line-length variance tight/loose; internal rhyme weight; breathing points for vocalists). Extend `rhyme.ts` to surface syllable analysis; score `mockLyricsProvider.ts` output against meter constraints before returning.
-- [ ] **Emotional Texture Evolution** — add `emotionalArc` to `SongInputs` (intensity curve: grows/shrinks/stable; valence progression: dark→bright/bright→dark/oscillating/u-shaped; contrast injection point; emotional beats per section). Feed `deriveEmotion()` a section-by-section curve; bias word choice per section's emotional color; score in `scoring.ts` that the arc was tracked end to end.
+- [x] **Singability/Meter Constraints** — grounded by a deep-research pass (Condit-Schultz's
+   MCFlow corpus, Adams' flow decomposition, CMU-dict/vowel-cluster syllable-counting
+   literature — see `docs/pattern-packs.md` → "Meter / singability — shipped in scoped
+   form") and shipped as `SongInputs.deliveryPreferences.syllableTarget?: [number,number]`.
+   New `lib/hermes/meter.ts` (`lineSyllables`/`syllableFit`/`sanitizeSyllableTarget`, built on
+   the lexicon's existing `syllableCount` heuristic) + `mockLyricsProvider.ts`'s
+   `buildRhymedVerse` scores up to 3 deterministic candidate lines per verse line and keeps
+   the closest syllable-count fit when the dial is set; unset stays byte-identical to
+   today's behavior (Iron Law #1 — proven by a regression test + the unchanged golden-set
+   eval scores). Scoped to line-length only, not full MCFlow metric-position flow (needs a
+   beat grid HERMES doesn't have — tracked as a separate backlog item below). _(this PR)_
+- [ ] **Narrative Arc Control** — add `narrativeArc` dial to `SongInputs` (escalation mode:
+   linear/cumulative/cyclical; scene-setting strength; callback frequency). Research-grounded
+   (2026-07-05 pass): Freytag's pyramid (climax weighted toward the end — "The Formal
+   Structure of Popular Songs," secretsofsongwriting.com), the folk **cumulative song** form
+   (Wikipedia) for the "cumulative" mode, and the repo's own already-shipped AABA
+   "no new lyrics after the first cycle" mechanic for the "cyclical" mode — so all three
+   escalation modes trace to a real, citable convention, not an invented taxonomy. Enforce
+   story-beat progression across verses (setup → complication → climax → resolution) by
+   tagging verse lines with a story beat in `mockLyricsProvider.ts`; cumulative mode re-injects
+   the previous verse's imagery-cluster nouns (reuse `themeImagery`/`imageryNouns`) plus one
+   new; score in `emotion.ts`/`scoring.ts` that beat intensity is non-decreasing toward the
+   climax section. Do NOT invent a genre→escalation-mode mapping (pattern-packs.md's
+   deep-research pass already killed genre→rhyme-scheme mapping under adversarial
+   verification — same trap applies here).
+- [ ] **Emotional Texture Evolution** — add `emotionalArc` dial to `SongInputs` (intensity
+   curve: grows/shrinks/stable; valence progression drawn from Reagan/Vonnegut's **six basic
+   emotional-arc shapes**, EPJ Data Science 2016 — reduced to song-length as
+   dark→bright/bright→dark/u-shape/arch/oscillate) and the music-psychology
+   valence-arousal model (the two axes are separable — compositional cues carry valence,
+   intensity/performance cues carry arousal). Compute a per-section `(valence,intensity)`
+   target from the chosen shape (a deterministic function of section index / total
+   sections); feed it into `deriveEmotion()` to bias word choice per section using the
+   existing dark/bright adjective + rhyme-family pools (the mechanism already exists —
+   valence already picks diction, this just makes it vary by section instead of once for
+   the whole song); assert in `scoring.ts` that realized section valences track the
+   requested shape. Honest scope note: the six-shape research is on prose narratives, not
+   song lyrics specifically — cite it as the shape *vocabulary* source, not proof songs
+   follow it; and only lexical/word-affect valence is in scope (valence-from-melody is out
+   of reach for a lyric-only engine). "Contrast injection point" stays a coarse, offered
+   dial — no source was found quantifying an optimal position.
 
 **$0/local, no key — I can just build these next:**
 - [x] **Deeper lyric craft** (the moat) — grammaticality shipped _(#58)_; imagery coherence shipped
