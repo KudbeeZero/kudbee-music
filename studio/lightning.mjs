@@ -38,6 +38,17 @@ export function loadEnvLocal(root = ROOT) {
 
 // ---- pure, testable core (no network) --------------------------------------
 
+/** Prototype-pollution protection: keys that must never be used as object properties. */
+const DANGEROUS_KEYS = new Set(['__proto__', 'constructor', 'prototype']);
+
+/**
+ * Validate that a key is safe to use as an object property (not a prototype-pollution vector).
+ * Returns true only if the key is a safe string and not a dangerous identifier.
+ */
+function isSafeKey(key) {
+  return typeof key === 'string' && key && !DANGEROUS_KEYS.has(key);
+}
+
 /**
  * Build the POST request for a Lightning inference endpoint. The body shape is
  * intentionally generic — most LitServe `decode_request` handlers read a single
@@ -47,9 +58,16 @@ export function loadEnvLocal(root = ROOT) {
  */
 export function buildRequest({ endpoint, apiKey, prompt, field = 'prompt', extra = {} }) {
   if (!endpoint) throw new Error('no Lightning endpoint configured');
+  if (!isSafeKey(field)) throw new Error(`invalid field parameter: "${field}" is reserved`);
   const headers = { 'Content-Type': 'application/json' };
   if (apiKey) headers.Authorization = `Bearer ${apiKey}`;
-  const body = { [field]: prompt, ...extra };
+  // Filter extra keys through safety check — drop any dangerous keys silently
+  const body = { [field]: prompt };
+  if (extra && typeof extra === 'object') {
+    for (const [k, v] of Object.entries(extra)) {
+      if (isSafeKey(k)) body[k] = v;
+    }
+  }
   return { url: endpoint, init: { method: 'POST', headers, body: JSON.stringify(body) } };
 }
 

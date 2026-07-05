@@ -25,6 +25,28 @@ test('buildRequest throws without an endpoint (never a silent no-op that posts n
   assert.throws(() => buildRequest({ prompt: 'x' }), /endpoint/);
 });
 
+test('buildRequest rejects prototype-pollution field values (__proto__, constructor, prototype)', () => {
+  assert.throws(() => buildRequest({ endpoint: 'https://x', prompt: 'x', field: '__proto__' }), /invalid field/);
+  assert.throws(() => buildRequest({ endpoint: 'https://x', prompt: 'x', field: 'constructor' }), /invalid field/);
+  assert.throws(() => buildRequest({ endpoint: 'https://x', prompt: 'x', field: 'prototype' }), /invalid field/);
+});
+
+test('buildRequest filters dangerous keys from extra parameter', () => {
+  const { init } = buildRequest({
+    endpoint: 'https://x',
+    prompt: 'test',
+    extra: { __proto__: 'bad', constructor: 'bad', prototype: 'bad', safe_key: 'good' },
+  });
+  const body = JSON.parse(init.body);
+  // Only prompt (the main field) and safe_key should be in the body
+  assert.deepEqual(Object.keys(body).sort(), ['prompt', 'safe_key']);
+  assert.equal(body.prompt, 'test');
+  assert.equal(body.safe_key, 'good');
+  // Dangerous keys should never be in the serialized JSON
+  assert(!JSON.stringify(body).includes('__proto__'));
+  assert(!JSON.stringify(body).includes('prototype'));
+});
+
 test('extractText pulls text from the common LitServe / OpenAI-compatible shapes', () => {
   assert.equal(extractText('raw string'), 'raw string');
   assert.equal(extractText({ output: 'a' }), 'a');

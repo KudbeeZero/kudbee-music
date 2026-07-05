@@ -24,29 +24,15 @@ function loadEnvLocal() {
     if (m && !process.env[m[1]]) process.env[m[1]] = m[2];
   }
 }
-loadEnvLocal();
+// Declare module-scope variables that will be initialized in main() if running as a script
+let KEY, argv, opt, API, headers, MIME, toDataUri;
 
-const KEY = process.env.RUNWAY_API_KEY;
-if (!KEY) {
-  console.error(
-    'RUNWAY_API_KEY not set. Put it in .env.local (gitignored — see .env.example).\n' +
-    'Runway is opt-in and key-gated: the free core never calls this script.',
-  );
-  process.exit(1);
+/** Validate task ID from API response — reject non-alphanumeric IDs to prevent URL injection. */
+export function validateTaskId(id) {
+  if (typeof id !== 'string' || !id) throw new Error('invalid task id: not a non-empty string');
+  if (!/^[a-zA-Z0-9_-]+$/.test(id)) throw new Error(`invalid task id format: "${id}" contains non-alphanumeric characters`);
+  return id;
 }
-
-const argv = process.argv.slice(2);
-const opt = (k, d) => { const i = argv.indexOf('--' + k); return i >= 0 ? argv[i + 1] : d; };
-
-const API = 'https://api.dev.runwayml.com/v1';
-const headers = {
-  Authorization: `Bearer ${KEY}`,
-  'X-Runway-Version': '2024-11-06',
-  'Content-Type': 'application/json',
-};
-
-const MIME = { '.jpg': 'image/jpeg', '.jpeg': 'image/jpeg', '.webp': 'image/webp', '.png': 'image/png' };
-const toDataUri = (path) => `data:${MIME[extname(path).toLowerCase()] || 'image/png'};base64,${readFileSync(path).toString('base64')}`;
 
 async function createTask({ image, prompt, duration, ratio, model, seed }) {
   const body = { model, promptImage: image, promptText: prompt, ratio, duration };
@@ -54,10 +40,11 @@ async function createTask({ image, prompt, duration, ratio, model, seed }) {
   const r = await fetch(`${API}/image_to_video`, { method: 'POST', headers, body: JSON.stringify(body) });
   const j = await r.json();
   if (!r.ok) throw new Error(`create task failed (${r.status}): ${JSON.stringify(j)}`);
-  return j.id;
+  return validateTaskId(j.id);
 }
 
 async function pollTask(id, { intervalMs = 6000, timeoutMs = 10 * 60 * 1000 } = {}) {
+  id = validateTaskId(id);
   const start = Date.now();
   for (;;) {
     const r = await fetch(`${API}/tasks/${id}`, { headers });
@@ -86,6 +73,27 @@ async function checkBalance() {
 }
 
 async function main() {
+  // Initialize module-scope variables that are only needed when running as a script
+  loadEnvLocal();
+  KEY = process.env.RUNWAY_API_KEY;
+  if (!KEY) {
+    console.error(
+      'RUNWAY_API_KEY not set. Put it in .env.local (gitignored — see .env.example).\n' +
+      'Runway is opt-in and key-gated: the free core never calls this script.',
+    );
+    process.exit(1);
+  }
+  argv = process.argv.slice(2);
+  opt = (k, d) => { const i = argv.indexOf('--' + k); return i >= 0 ? argv[i + 1] : d; };
+  API = 'https://api.dev.runwayml.com/v1';
+  headers = {
+    Authorization: `Bearer ${KEY}`,
+    'X-Runway-Version': '2024-11-06',
+    'Content-Type': 'application/json',
+  };
+  MIME = { '.jpg': 'image/jpeg', '.jpeg': 'image/jpeg', '.webp': 'image/webp', '.png': 'image/png' };
+  toDataUri = (path) => `data:${MIME[extname(path).toLowerCase()] || 'image/png'};base64,${readFileSync(path).toString('base64')}`;
+
   if (argv.includes('--balance')) return checkBalance();
 
   const imageArg = opt('image');
@@ -122,4 +130,6 @@ async function main() {
   console.log(`done -> ${out}`);
 }
 
-main().catch((e) => { console.error(e.message); process.exit(1); });
+if (process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {
+  main().catch((e) => { console.error(e.message); process.exit(1); });
+}

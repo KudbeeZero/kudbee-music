@@ -691,7 +691,7 @@ export function loadSongNotes(): Record<string, string> {
   try {
     const raw = kv().getItem(SONG_NOTES_KEY);
     if (raw) {
-      const obj = JSON.parse(raw);
+      const obj = JSON.parse(raw, stripDangerous);
       if (obj && typeof obj === 'object' && !Array.isArray(obj)) {
         const out: Record<string, string> = {};
         for (const [k, v] of Object.entries(obj)) if (typeof v === 'string') out[k] = v;
