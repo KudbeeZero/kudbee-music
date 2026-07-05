@@ -85,17 +85,31 @@ them is "the rap scheme" or "the country scheme." Each pack's `sourceNote` in
 `patternPacks.json` says exactly which part is research-backed and which is a craft-variety
 offering — never overclaimed.
 
+## Meter / singability — shipped in scoped form (2026-07-05)
+
+A follow-up deep-research pass (Condit-Schultz's MCFlow corpus, Adams' flow decomposition,
+and the CMU-dict / vowel-cluster syllable-counting literature) re-confirmed the iambic-
+default pedagogy and grounded a deliverable slice of the "Meter/stress" backlog item below:
+**`SongInputs.deliveryPreferences.syllableTarget?: [number, number]`** — a per-line
+syllable-count range. `lib/hermes/meter.ts` scores candidate verse lines
+(`lineSyllables`/`syllableFit`, built on the lexicon's existing `syllableCount`
+heuristic); `mockLyricsProvider.ts`'s `buildRhymedVerse` picks the best-fitting of up to 3
+deterministic candidate frames per line when the dial is set. Unset (the default) is
+byte-identical to today's single-draw behavior — Iron Law #1 holds. This is explicitly
+**not** full MCFlow flow (aligning stresses/rhymes to a beat grid — that needs a beat grid
+HERMES doesn't have); it's the "speed" dial only (syllables per line), scoped and shipped
+rather than left as an unbuildable someday-feature. See `lib/hermes/meter.ts` for the exact
+scope note and `lib/hermes/__tests__/meter.test.ts` / `lyricCore.test.ts`'s "singability
+dial" block for the tests.
+
 ## Deliberately out of scope for this pass
 
-- **Meter / stress patterns** (iambic baseline, syllable-per-line norms). The research
-  confirmed the pedagogy (iambic default, vary by mutating the template not mis-stressing a
-  word) but flagged genre-specific syllable-count norms as an open question, and HERMES's
-  line templates aren't syllable-aware yet — doing this properly needs new infrastructure,
-  not just a new dial. Captured in `IDEAS.md` / `TODO.md` backlog.
-- **Rap-flow parameters** (MCFlow's 6 quantified dials: speed, rhyme density, metric
-  position of stresses/rhymes/phrases, phrase length) — well-sourced but a genuinely
-  separate, bigger feature (would need its own line-generation mode, not a tweak to the
-  couplet builder). Backlog.
+- **Full metric-position flow** (MCFlow's other 5 dials: rhyme density, metric position
+  of stresses/rhymes/phrases, phrase length, aligned to an actual beat grid) — well-sourced
+  but a genuinely separate, bigger feature (needs its own line-generation mode and a beat
+  grid, not a tweak to the couplet builder). Backlog.
+- **Genre-specific syllable-count norms** — flagged as an open question in both research
+  passes; `syllableTarget` ships as a user-set dial, not a genre-inferred default.
 - **Repetition devices beyond anaphora** (epistrophe, call-and-response, list songs, POV
   shifts) — only anaphora survived verification as a sourced, teachable device; the others
   had no surviving claim to build from.

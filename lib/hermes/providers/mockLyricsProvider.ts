@@ -9,6 +9,7 @@ import { makeRng, hashString, pick, keywords, titleCase, shuffle, tidyLine, sing
 import { rhymeFamily, type RhymeTemp } from '../rhyme';
 import { deriveEmotion } from '../emotion';
 import { findOccasionPack } from '../occasionPacks';
+import { lineSyllables, syllableFit } from '../meter';
 
 function seedOf(inputs: SongInputs, salt = '', seed = 0): number {
   return hashString(
@@ -286,7 +287,12 @@ function filterFrames(pool: string[], banned: Set<string>): string[] {
   return kept.length ? kept : pool;
 }
 
-interface VerseOpts { pool: string[]; thread: string[]; used: Set<string>; temp: RhymeTemp; anchorIdx: number; banned: Set<string>; }
+interface VerseOpts {
+  pool: string[]; thread: string[]; used: Set<string>; temp: RhymeTemp; anchorIdx: number; banned: Set<string>;
+  /** Singability dial (types.ts SongInputs.deliveryPreferences) — undefined means
+   *  today's single-draw-per-line behavior, byte-identical (Iron Law #1). */
+  syllableTarget?: [number, number];
+}
 
 // pick a frame not already used elsewhere in the song (diversity guard), falling
 // back to the whole pool once exhausted; records the choice so it isn't reused.
@@ -327,7 +333,7 @@ function buildRhymedVerse(
   inputs: SongInputs, rng: () => number, valence: number, lineCount: number, opts: VerseOpts,
   scheme: RhymeSchemeId = 'AABB',
 ): string[] {
-  const { pool, thread, used, temp, anchorIdx, banned } = opts;
+  const { pool, thread, used, temp, anchorIdx, banned, syllableTarget } = opts;
   const layout = layoutFor(scheme, lineCount);
 
   // One rhyme-family draw per distinct family id, sized to how many lines share it —
@@ -349,11 +355,34 @@ function buildRhymedVerse(
     // pick(<empty>) returning undefined and crashing — reachable from the public
     // doNotUse field (audit follow-up).
     const framePool = prevFrame && pool.length > 1 ? pool.filter((x) => x !== prevFrame) : pool;
-    const t = pickFresh(framePool, used, rng);
-    prevFrame = t;
     // anchor threading: only the first line of every 2-line unit carries the theme anchor
     const anchor = thread.length && i % 2 === 0 ? thread[(anchorIdx + Math.floor(i / 2)) % thread.length] : '';
-    lines.push(capitalize(fill(t, inputs, rng, word, valence, anchor, banned)));
+    let t: string;
+    let lineText: string;
+    if (syllableTarget) {
+      // Singability dial: score up to 3 deterministic candidate frames (fresh-first,
+      // same preference pickFresh uses) and keep the closest syllable-count fit —
+      // MCFlow's "speed" dial, scoped to line length only (see lib/hermes/meter.ts).
+      // A separate code path, only reachable when the dial is set, so today's
+      // single-draw behavior with the dial unset stays byte-identical (Iron Law #1).
+      const shuffled = shuffle(framePool, rng);
+      const freshFirst = [...shuffled.filter((x) => !used.has(x)), ...shuffled.filter((x) => used.has(x))];
+      const candidates = freshFirst.slice(0, Math.min(3, freshFirst.length));
+      let best = { frame: candidates[0], text: '', score: -1 };
+      for (const cand of candidates) {
+        const filled = capitalize(fill(cand, inputs, rng, word, valence, anchor, banned));
+        const score = syllableFit(lineSyllables(filled), syllableTarget);
+        if (score > best.score) best = { frame: cand, text: filled, score };
+      }
+      t = best.frame;
+      lineText = best.text;
+      used.add(t);
+    } else {
+      t = pickFresh(framePool, used, rng);
+      lineText = capitalize(fill(t, inputs, rng, word, valence, anchor, banned));
+    }
+    prevFrame = t;
+    lines.push(lineText);
   }
   return dedupe(lines);
 }
@@ -447,10 +476,11 @@ export const mockLyricsProvider: LyricsProvider = {
     // padded from the concrete bank so a thin theme (1 usable noun) doesn't repeat it every verse.
     const thread = [...themeNouns(inputs).filter((n) => !banned.has(n.toLowerCase())), ...imageryNouns(inputs, rng, banned)].slice(0, 3);
     const used = new Set<string>();
+    const syllableTarget = inputs.deliveryPreferences?.syllableTarget;
     // hierarchical generation: each verse pursues its section goal (setup → turn → reflect)
-    const v1 = buildRhymedVerse(inputs, rng, valence, 4, { pool: filterFrames(SETUP_LINES, banned), thread, used, temp, anchorIdx: 0, banned }, scheme);
-    const v2 = buildRhymedVerse(inputs, rng, valence, 4, { pool: filterFrames(TURN_LINES, banned), thread, used, temp, anchorIdx: 1, banned }, scheme);
-    const bridge = buildRhymedVerse(inputs, rng, valence, 2, { pool: filterFrames(REFLECT_LINES, banned), thread, used, temp, anchorIdx: 2, banned }, scheme);
+    const v1 = buildRhymedVerse(inputs, rng, valence, 4, { pool: filterFrames(SETUP_LINES, banned), thread, used, temp, anchorIdx: 0, banned, syllableTarget }, scheme);
+    const v2 = buildRhymedVerse(inputs, rng, valence, 4, { pool: filterFrames(TURN_LINES, banned), thread, used, temp, anchorIdx: 1, banned, syllableTarget }, scheme);
+    const bridge = buildRhymedVerse(inputs, rng, valence, 2, { pool: filterFrames(REFLECT_LINES, banned), thread, used, temp, anchorIdx: 2, banned, syllableTarget }, scheme);
     const hookLines = [hook.text, hook.text, secondHookLine(inputs, rng, banned), hook.text];
     // Final-chorus lift (review improvement #2): the LAST hook of the arrangement
     // evolves one repeat into a fresh second line — the engine's own uniqueness
@@ -491,7 +521,7 @@ export const mockLyricsProvider: LyricsProvider = {
         // Fresh `used` set (audit fix): v1's output is discarded for short-form but
         // had consumed most of SETUP_LINES — sharing its set could starve the pool
         // under banned-word filtering and collapse the couplet to one deduped line.
-        const shortV1 = buildRhymedVerse(inputs, rng, valence, 2, { pool: filterFrames(SETUP_LINES, banned), thread, used: new Set<string>(), temp, anchorIdx: 0, banned }, scheme);
+        const shortV1 = buildRhymedVerse(inputs, rng, valence, 2, { pool: filterFrames(SETUP_LINES, banned), thread, used: new Set<string>(), temp, anchorIdx: 0, banned, syllableTarget }, scheme);
         return arrange([{ label: 'Hook', lines: hookLines }, { label: 'Verse 1', lines: shortV1 }]);
       }
       case 'radio-edit':
