@@ -23,6 +23,8 @@ entirely from code — no paid software.
 - [Living-Brain dNFT standard](nft-standard.md) — the metadata format decision
 - [WIFI DJ redesign](wifi-dj-redesign.md) — the founder's new production-UI mockups,
   mapped to existing code, phased build plan
+- [Kudbee TDE roadmap](kudbee-tde-roadmap.md) — the branch-by-branch plan for the
+  TDE / HERMES Workbench side cockpit (suggest-only, mock-state v1)
 
 ## 🎬 Video Studio
 
