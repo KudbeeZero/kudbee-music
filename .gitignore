@@ -30,3 +30,4 @@ training-data-input/*.json
 # Keep outside repo; regenerable from dataset + training script
 /scribe-runs/
 .cache/
+checkpoints/
