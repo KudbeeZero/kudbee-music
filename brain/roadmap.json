@@ -189,7 +189,7 @@
         {
           "id": "9.4",
           "title": "📦 TDE Branch 03 — Repo panel",
-          "status": "queued",
+          "status": "shipped",
           "home": "components/tde/",
           "note": "Mock repo cards: kudbee-music (this app), hermes-lyric-server (external backend/model repo), kudbee-engine (archived planning) — canonical branch, role, protected paths, status, integration status. External repos labeled as such."
         },

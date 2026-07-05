@@ -1,6 +1,7 @@
 'use client';
 
 import MissionPanel from './MissionPanel';
+import RepoPanel from './RepoPanel';
 import styles from './tde.module.css';
 
 // The Kudbee TDE (Task-Driven Environment) shell — Branch 01 of the TDE track
@@ -8,14 +9,6 @@ import styles from './tde.module.css';
 // state only; the live-execution gate in the roadmap defines what must exist
 // before any panel gets a real button. Panels land one branch at a time.
 const PANELS = [
-  {
-    key: 'repos',
-    name: 'Repos',
-    tone: 'violet',
-    arrives: 'Branch 03',
-    blurb:
-      'kudbee-music, hermes-lyric-server, kudbee-engine — canonical branch, role, protected paths, status.',
-  },
   {
     key: 'agents',
     name: 'Agents',
@@ -64,6 +57,7 @@ export default function TdeWorkbench() {
 
       <section className={styles.grid} aria-label="Workbench panels">
         <MissionPanel />
+        <RepoPanel />
         {PANELS.map((p) => (
           <article key={p.key} className={styles.slot} data-tone={p.tone}>
             <div className={styles.slotHead}>
