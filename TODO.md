@@ -10,6 +10,30 @@ artist says gets lost), then graduate here once designed. Check items off as the
 
 ---
 
+## 🎯 WIFI DJ Vision
+
+**Turn rough ideas into release-ready songs.**
+
+WIFI DJ helps independent creators turn rough thoughts, lyrics, voice notes, and life
+stories into complete songs, Suno-ready prompts, release packages, and visual worlds —
+with a songwriting brain that learns them over time.
+
+**The flow: Idea In → Brain Thinks → Song Out**
+
+| Input | Engine | Output |
+|-------|--------|--------|
+| Rough Thoughts, Lyric Snippets, Voice Notes, Life Stories | **HERMES Songwriting Brain** (Songwriting Brain, Artist Memory, Scribe Editing, Council Feedback) | Complete Songs, Suno-Ready Prompts, Release Packages, Cover Art Concepts, Short-Form Content Ideas, Visual Worlds |
+
+**Core pillars:**
+- **Songwriting Brain** — HERMES learns your voice, taste, and story over time
+- **Artist Memory** — stores preferences, exclusions, and the taste you build
+- **Scribe Editing** — line-by-line lyric editing with real-time sync
+- **Council Feedback** — agent perspectives on arrangement, mood, production
+- **Release Packages** — audio stems, Suno-ready UVN prompts, metadata
+- **Visual Worlds** — cinematic music video concepts tied to mood and theme
+
+---
+
 ## 🔑 Founder vision — everything you raised (one place, honest status)
 _A consolidated index of every big idea the founder brought up, so nothing lives only in
 chat. Detail for each is in [`brain/roadmap.json`](brain/roadmap.json) + [`IDEAS.md`](IDEAS.md)._
