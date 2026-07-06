@@ -2,7 +2,7 @@
 
 > **Generated from [`brain/roadmap.json`](brain/roadmap.json) — do not hand-edit.** Status lives ONLY in the spine; edit it there, then regenerate with `GEN_DOCS=1 npx vitest run status`. `statusBoard.test.ts` fails CI if this file drifts.
 
-**Scoreboard:** ✅ 86 shipped · 🔨 3 in build · 💤 10 queued — 99 tracked items
+**Scoreboard:** ✅ 87 shipped · 🔨 3 in build · 💤 9 queued — 99 tracked items
 (legend: ✅ shipped · 🔌 scaffold shipped, founder-gated · 🔨 in build · ⏭️ next · 💤 queued · 💭 idea · 🚧 blocked on founder)
 
 ## Tracks
@@ -135,7 +135,7 @@
 | ✅ | **🎨 Council redesign — Phase 1, shipped as interim** | `components/hermes/Council.tsx + hermes.module.css` | — |
 | ✅ | **🕸️ Self-expanding UI-agent infrastructure + first de-gray sweep** | `.claude/agents/hermes-ui.md + brain/uiDesignLanguage.json` | — |
 
-### Phase 9 — Kudbee TDE / HERMES Workbench — `▰▰▰▰▰▰▰▰▱▱` 11/13
+### Phase 9 — Kudbee TDE / HERMES Workbench — `▰▰▰▰▰▰▰▰▰▱` 12/13
 
 | | Item | Where it lives | PR |
 |---|------|----------------|----|
@@ -150,7 +150,7 @@
 | ✅ | **🧭 TDE Branch 08 — Mock model router** | `components/tde/` | #214 |
 | ✅ | **📄 TDE Branch 09 — Integration contracts** | `components/tde/ (types)` | #215 |
 | ✅ | **💾 TDE Branch 10 — Local mock persistence** | `components/tde/ + lib` | #216 |
-| 💤 | **✨ TDE Branch 11 — Polish + navigation** | `components/tde/` | — |
+| ✅ | **✨ TDE Branch 11 — Polish + navigation** | `components/tde/` | — |
 | 💤 | **🌉 TDE Branch 12 — Backend bridge plan** | `docs/kudbee-tde-backend-bridge.md` | — |
 
 ### Video studio — `▰▰▰▰▰▱▱▱▱▱` 4/8

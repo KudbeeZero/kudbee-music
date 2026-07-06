@@ -253,7 +253,7 @@
         {
           "id": "9.12",
           "title": "✨ TDE Branch 11 — Polish + navigation",
-          "status": "queued",
+          "status": "shipped",
           "home": "components/tde/",
           "note": "Nav link only if safe, responsive/mobile stacking (mobile-matrix), empty/loading states, WIFI DJ design-language polish (fill+glow, locked palette)."
         },

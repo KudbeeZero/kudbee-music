@@ -480,6 +480,7 @@ export default function HermesHitFactory() {
             {mode === 'studio' && <button className={styles.navPrimary} onClick={newSong}>✨ New</button>}
             <button className={styles.navPrimary} onClick={() => setLabOpen(true)}>✍️ Lyric Lab</button>
             <Link href="/crossroads" className={styles.navPrimary} data-active={pathname === '/crossroads' || undefined}>🧭 Crossroads</Link>
+            <Link href="/tde" className={styles.navUtility} data-active={pathname === '/tde' || undefined} title="Kudbee TDE — the agent workbench (suggest-only prototype)">🛰️ TDE</Link>
             <button className={styles.navUtility} onClick={() => setAlbumOpen(true)}>Albums ({albums.length})</button>
             <button className={styles.navUtility} onClick={() => setVaultOpen(true)}>Vault ({vault.length})</button>
             <span className={authStyles.profileChip} title={`Signed in as ${profile.name} (${profile.kind}) — local to this browser`}>
