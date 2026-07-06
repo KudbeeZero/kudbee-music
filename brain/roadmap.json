@@ -205,7 +205,8 @@
         {
           "id": "9.6",
           "title": "🧠 TDE Branch 05 — Model/GPU panel",
-          "status": "queued",
+          "status": "shipped",
+          "pr": "#211",
           "home": "components/tde/",
           "note": "Model router cards (KUDBEECODEV0-MINI/14B, KUDBEESCRIBEV1, KUDBEEV1, HERMES, embeddings, Mistral 7B legacy lane), T4 vs RTX 6000 hardware-mode cards, mock GPU job queue, next-GPU-action card."
         },

@@ -303,8 +303,9 @@ shipped it. This file is the human-readable view; keep the two in sync._
   mock-state / read-only in v1 (no live APIs, no keys, no execution). 13 branches,
   one at a time — plan in [`docs/kudbee-tde-roadmap.md`](docs/kudbee-tde-roadmap.md),
   status in `brain/roadmap.json` phase 9. Branches 00 (roadmap, #206), 01 (the
-  `/tde` shell, #207), 02 (Mission panel, #208), 03 (Repo panel, #209) and 04
-  (Agent map) shipped; next up: Branch 05, the Model/GPU panel.
+  `/tde` shell, #207), 02 (Mission panel, #208), 03 (Repo panel, #209), 04
+  (Agent map, #210) and 05 (Model/GPU panel) shipped; next up: Branch 06, the
+  Memory/Training panel.
 - [~] **WIFI DJ visual redesign** — founder-supplied "Production UI Kit" mockups
   (Desktop/Mobile Studio + 24-element component library + a Lyrics Editor screen)
   reimagine the whole Hit Factory UI. Full button/route directory, gap analysis

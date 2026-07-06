@@ -1,6 +1,7 @@
 'use client';
 
 import MissionPanel from './MissionPanel';
+import ModelGpuPanel from './ModelGpuPanel';
 import AgentMapPanel from './AgentMapPanel';
 import RepoPanel from './RepoPanel';
 import styles from './tde.module.css';
@@ -10,14 +11,6 @@ import styles from './tde.module.css';
 // state only; the live-execution gate in the roadmap defines what must exist
 // before any panel gets a real button. Panels land one branch at a time.
 const PANELS = [
-  {
-    key: 'models',
-    name: 'Models / GPU',
-    tone: 'amber',
-    arrives: 'Branch 05',
-    blurb:
-      'Model router cards (KUDBEECODEV0, KUDBEESCRIBEV1, KUDBEEV1, HERMES…), T4 vs RTX 6000 lanes, mock GPU job queue.',
-  },
   {
     key: 'memory',
     name: 'Memory / Training',
@@ -52,6 +45,7 @@ export default function TdeWorkbench() {
         <MissionPanel />
         <RepoPanel />
         <AgentMapPanel />
+        <ModelGpuPanel />
         {PANELS.map((p) => (
           <article key={p.key} className={styles.slot} data-tone={p.tone}>
             <div className={styles.slotHead}>
