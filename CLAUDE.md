@@ -120,7 +120,7 @@ node scripts/mobile-matrix.mjs   # anything touching layout (build the export fi
 ## Status board
 
 <!-- STATUS:BEGIN generated: edit brain/roadmap.json, then GEN_DOCS=1 npx vitest run status -->
-**📊 Status board:** ✅ 84 shipped · 🔨 3 in build · 💤 12 queued (99 tracked) — full tables in [`STATUS.md`](STATUS.md), source of truth [`brain/roadmap.json`](brain/roadmap.json).
+**📊 Status board:** ✅ 85 shipped · 🔨 3 in build · 💤 11 queued (99 tracked) — full tables in [`STATUS.md`](STATUS.md), source of truth [`brain/roadmap.json`](brain/roadmap.json).
 <!-- STATUS:END -->
 
 ## Memory layers — where the brain keeps things
