@@ -1,11 +1,13 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { loadMissions, saveMissions } from './tdeStorage';
 import styles from './tde.module.css';
 
 // TDE Mission panel — Branch 02 (docs/kudbee-tde-roadmap.md). Suggest-only:
-// submitting a mission appends a mock card to in-memory state and nothing else.
-// No network, no execution, no persistence (persistence is Branch 10).
+// submitting a mission appends a mock card and (since Branch 10) persists the
+// queue to the visitor's own localStorage via tdeStorage.ts. No network, no
+// execution — the saved cards are suggestions, never commands.
 
 export const MISSION_TYPES = [
   'Code',
@@ -57,19 +59,30 @@ export default function MissionPanel() {
   const [missionType, setMissionType] = useState<MissionType>('Code');
   const [missions, setMissions] = useState<MockMission[]>(SEED_MISSIONS);
 
+  // Hydration-safe restore: first paint always shows the seeds (matches the
+  // prerendered HTML), then the visitor's saved queue loads in an effect.
+  useEffect(() => {
+    const stored = loadMissions();
+    if (stored && stored.length > 0) setMissions(stored);
+  }, []);
+
   const submit = () => {
     const text = missionText.trim();
     if (!text) return;
-    setMissions((prev) => [
-      {
-        id: (prev[0]?.id ?? 0) + 1,
-        type: missionType,
-        text,
-        status: 'suggested',
-        note: 'Suggest-only — recorded in this tab, executed nowhere.',
-      },
-      ...prev,
-    ]);
+    setMissions((prev) => {
+      const next: MockMission[] = [
+        {
+          id: (prev[0]?.id ?? 0) + 1,
+          type: missionType,
+          text,
+          status: 'suggested' as const,
+          note: 'Suggest-only — recorded in this browser, executed nowhere.',
+        },
+        ...prev,
+      ];
+      saveMissions(next);
+      return next;
+    });
     setMissionText('');
   };
 

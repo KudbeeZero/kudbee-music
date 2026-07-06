@@ -245,7 +245,8 @@
         {
           "id": "9.11",
           "title": "💾 TDE Branch 10 — Local mock persistence",
-          "status": "queued",
+          "status": "shipped",
+          "pr": "#216",
           "home": "components/tde/ + lib",
           "note": "Persist mock missions in the visitor's own localStorage following storage.ts conventions (sanitized imports, length caps). No secrets, no credentials, no execution."
         },

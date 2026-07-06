@@ -305,8 +305,9 @@ shipped it. This file is the human-readable view; keep the two in sync._
   status in `brain/roadmap.json` phase 9. Branches 00 (roadmap, #206), 01 (the
   `/tde` shell, #207), 02 (Mission panel, #208), 03 (Repo panel, #209), 04
   (Agent map, #210), 05 (Model/GPU panel, #211), 06 (Memory/Training panel,
-  #212), 07 (Safety Gate panel, #213), 08 (mock model router, #214) and 09
-  (integration contracts) shipped; next up: Branch 10, local mock persistence.
+  #212), 07 (Safety Gate panel, #213), 08 (mock model router, #214), 09
+  (integration contracts, #215) and 10 (local mock persistence) shipped;
+  next up: Branch 11, polish + navigation.
 - [~] **WIFI DJ visual redesign** — founder-supplied "Production UI Kit" mockups
   (Desktop/Mobile Studio + 24-element component library + a Lyrics Editor screen)
   reimagine the whole Hit Factory UI. Full button/route directory, gap analysis
