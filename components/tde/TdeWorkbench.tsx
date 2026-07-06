@@ -4,6 +4,7 @@ import MemoryTrainingPanel from './MemoryTrainingPanel';
 import SafetyGatePanel from './SafetyGatePanel';
 import MissionPanel from './MissionPanel';
 import ModelGpuPanel from './ModelGpuPanel';
+import ModelRouterPanel from './ModelRouterPanel';
 import AgentMapPanel from './AgentMapPanel';
 import RepoPanel from './RepoPanel';
 import styles from './tde.module.css';
@@ -40,6 +41,7 @@ export default function TdeWorkbench() {
         <ModelGpuPanel />
         <MemoryTrainingPanel />
         <SafetyGatePanel />
+        <ModelRouterPanel />
       </section>
     </main>
   );

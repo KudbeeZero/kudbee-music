@@ -2,7 +2,7 @@
 
 > **Generated from [`brain/roadmap.json`](brain/roadmap.json) — do not hand-edit.** Status lives ONLY in the spine; edit it there, then regenerate with `GEN_DOCS=1 npx vitest run status`. `statusBoard.test.ts` fails CI if this file drifts.
 
-**Scoreboard:** ✅ 83 shipped · 🔨 3 in build · 💤 13 queued — 99 tracked items
+**Scoreboard:** ✅ 84 shipped · 🔨 3 in build · 💤 12 queued — 99 tracked items
 (legend: ✅ shipped · 🔌 scaffold shipped, founder-gated · 🔨 in build · ⏭️ next · 💤 queued · 💭 idea · 🚧 blocked on founder)
 
 ## Tracks
@@ -135,7 +135,7 @@
 | ✅ | **🎨 Council redesign — Phase 1, shipped as interim** | `components/hermes/Council.tsx + hermes.module.css` | — |
 | ✅ | **🕸️ Self-expanding UI-agent infrastructure + first de-gray sweep** | `.claude/agents/hermes-ui.md + brain/uiDesignLanguage.json` | — |
 
-### Phase 9 — Kudbee TDE / HERMES Workbench — `▰▰▰▰▰▰▱▱▱▱` 8/13
+### Phase 9 — Kudbee TDE / HERMES Workbench — `▰▰▰▰▰▰▰▱▱▱` 9/13
 
 | | Item | Where it lives | PR |
 |---|------|----------------|----|
@@ -147,7 +147,7 @@
 | ✅ | **🧠 TDE Branch 05 — Model/GPU panel** | `components/tde/` | #211 |
 | ✅ | **📚 TDE Branch 06 — Memory/Training panel** | `components/tde/` | #212 |
 | ✅ | **🚧 TDE Branch 07 — Safety gate UI** | `components/tde/` | #213 |
-| 💤 | **🧭 TDE Branch 08 — Mock model router** | `components/tde/` | — |
+| ✅ | **🧭 TDE Branch 08 — Mock model router** | `components/tde/` | — |
 | 💤 | **📄 TDE Branch 09 — Integration contracts** | `components/tde/ (types)` | — |
 | 💤 | **💾 TDE Branch 10 — Local mock persistence** | `components/tde/ + lib` | — |
 | 💤 | **✨ TDE Branch 11 — Polish + navigation** | `components/tde/` | — |

@@ -824,3 +824,112 @@
   color: var(--bad);
   text-shadow: 0 0 10px rgba(255, 93, 108, 0.4);
 }
+/* --- Model router panel (Branch 08) --- */
+
+.routerProbe {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 14px;
+  border-radius: var(--radius);
+  background: rgba(7, 7, 11, 0.55);
+  border: 1px solid rgba(54, 224, 212, 0.3);
+  box-shadow: 0 0 16px rgba(54, 224, 212, 0.08) inset;
+}
+
+.routerProbeLabel {
+  font-size: var(--fs-xs);
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+}
+
+.routerSelect {
+  max-width: 340px;
+  padding: 9px 12px;
+  border-radius: calc(var(--radius) - 4px);
+  background: rgba(7, 7, 11, 0.85);
+  border: 1px solid var(--cyan);
+  box-shadow: 0 0 14px rgba(54, 224, 212, 0.25);
+  color: var(--ink);
+  font-size: var(--fs-sm);
+  cursor: pointer;
+}
+
+.routerAnswer {
+  margin: 0;
+  font-size: var(--fs-sm);
+  color: var(--ink-dim);
+  line-height: 1.6;
+}
+
+.routerAnswer strong { color: var(--cyan); text-shadow: 0 0 10px rgba(54, 224, 212, 0.4); }
+
+.approvalTag {
+  display: inline-block;
+  padding: 2px 9px;
+  border-radius: 999px;
+  font-size: var(--fs-xs);
+  font-weight: 700;
+  color: #0b0b12;
+  background: linear-gradient(120deg, var(--warn), var(--amber-2));
+  box-shadow: 0 0 10px rgba(255, 206, 90, 0.4);
+}
+
+.autoTag {
+  display: inline-block;
+  padding: 2px 9px;
+  border-radius: 999px;
+  font-size: var(--fs-xs);
+  font-weight: 700;
+  color: #0b0b12;
+  background: linear-gradient(120deg, var(--good), var(--cyan));
+  box-shadow: 0 0 10px rgba(87, 217, 138, 0.4);
+}
+
+.routerTable {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  overflow-x: auto;
+}
+
+.routerHead,
+.routerRow {
+  display: grid;
+  grid-template-columns: 1.1fr 1.1fr 2fr 0.5fr 0.6fr;
+  gap: 10px;
+  align-items: center;
+  min-width: 640px;
+  padding: 8px 12px;
+  border-radius: calc(var(--radius) - 6px);
+}
+
+.routerHead {
+  font-size: var(--fs-xs);
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+}
+
+.routerRow {
+  background: rgba(7, 7, 11, 0.5);
+  border: 1px solid var(--line);
+  font-size: var(--fs-sm);
+  color: var(--ink-dim);
+}
+
+.routerRow[data-active] {
+  border-color: var(--cyan);
+  box-shadow: 0 0 14px rgba(54, 224, 212, 0.2);
+}
+
+.routerTask { color: var(--ink); font-weight: 600; }
+.routerTo { color: var(--cyan); }
+.routerWhy { line-height: 1.45; }
+
+@media (max-width: 640px) {
+  .routerHead, .routerRow { min-width: 560px; }
+}
