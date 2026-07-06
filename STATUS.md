@@ -150,7 +150,7 @@
 | ✅ | **🧭 TDE Branch 08 — Mock model router** | `components/tde/` | #214 |
 | ✅ | **📄 TDE Branch 09 — Integration contracts** | `components/tde/ (types)` | #215 |
 | ✅ | **💾 TDE Branch 10 — Local mock persistence** | `components/tde/ + lib` | #216 |
-| ✅ | **✨ TDE Branch 11 — Polish + navigation** | `components/tde/` | — |
+| ✅ | **✨ TDE Branch 11 — Polish + navigation** | `components/tde/` | #217 |
 | 💤 | **🌉 TDE Branch 12 — Backend bridge plan** | `docs/kudbee-tde-backend-bridge.md` | — |
 
 ### Video studio — `▰▰▰▰▰▱▱▱▱▱` 4/8
