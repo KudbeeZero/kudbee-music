@@ -229,7 +229,8 @@
         {
           "id": "9.9",
           "title": "🧭 TDE Branch 08 — Mock model router",
-          "status": "queued",
+          "status": "shipped",
+          "pr": "#214",
           "home": "components/tde/",
           "note": "Typed mock routing rules: task type → recommended model/tool + reason + risk level + approval-required flag. No live calls."
         },
