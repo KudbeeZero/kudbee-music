@@ -304,8 +304,9 @@ shipped it. This file is the human-readable view; keep the two in sync._
   one at a time — plan in [`docs/kudbee-tde-roadmap.md`](docs/kudbee-tde-roadmap.md),
   status in `brain/roadmap.json` phase 9. Branches 00 (roadmap, #206), 01 (the
   `/tde` shell, #207), 02 (Mission panel, #208), 03 (Repo panel, #209), 04
-  (Agent map, #210), 05 (Model/GPU panel, #211) and 06 (Memory/Training panel)
-  shipped; next up: Branch 07, the Safety Gate panel.
+  (Agent map, #210), 05 (Model/GPU panel, #211), 06 (Memory/Training panel,
+  #212) and 07 (Safety Gate panel) shipped; next up: Branch 08, the mock
+  model router.
 - [~] **WIFI DJ visual redesign** — founder-supplied "Production UI Kit" mockups
   (Desktop/Mobile Studio + 24-element component library + a Lyrics Editor screen)
   reimagine the whole Hit Factory UI. Full button/route directory, gap analysis

@@ -1,6 +1,7 @@
 'use client';
 
 import MemoryTrainingPanel from './MemoryTrainingPanel';
+import SafetyGatePanel from './SafetyGatePanel';
 import MissionPanel from './MissionPanel';
 import ModelGpuPanel from './ModelGpuPanel';
 import AgentMapPanel from './AgentMapPanel';
@@ -38,6 +39,7 @@ export default function TdeWorkbench() {
         <AgentMapPanel />
         <ModelGpuPanel />
         <MemoryTrainingPanel />
+        <SafetyGatePanel />
       </section>
     </main>
   );
