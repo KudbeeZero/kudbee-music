@@ -1,6 +1,6 @@
 {
   "note": "The WIFI DJ visual-language memory — the accumulated design rules for the Hit Factory's web UI (components/hermes/*), read by the hermes-ui agent (.claude/agents/hermes-ui.md) before every styling change and appended to after. Reference/design doc, not imported by runtime code — the executable styles live in components/hermes/hermes.module.css + app/globals.css. Distinct from hermes-art (which owns the video-studio canvas compositor, a different surface entirely).",
-  "updated": "2026-07-04",
+  "updated": "2026-07-06",
   "sourceMockups": [
     "assets/concept-art/wifi-dj-production-ui-kit-desktop-mobile.png",
     "assets/concept-art/wifi-dj-lyrics-editor.png"
@@ -84,6 +84,27 @@
       "status": "queued"
     },
     {
+      "id": "tde-gray-smear-chips",
+      "title": "TDE Workbench had the exact two-sub-0.3-alpha-stop gray-smear failure mode (hardRules #2) live in two places",
+      "home": "components/tde/tde.module.css .typeChip (Mission panel) and .depthRule (Agents panel banner)",
+      "status": "shipped",
+      "note": "2026-07-06: .typeChip's unselected mission-type pills used linear-gradient(rgba(139,92,255,0.28), rgba(54,224,212,0.22)) — both stops under 0.3 alpha — and read as flat purple-gray chips next to every other badge in the same file (agentStatus, riskBadge, repoOrigin, missionType, freshTag, blockedTag, approvalTag, autoTag), which all correctly use full-solid gradient tokens + dark text. .depthRule (the 'Sub-agent depth 1 only' banner) had the identical bug (rgba(255,93,108,0.22)/rgba(210,75,255,0.16)). Fixed both with the single-hue-tinted-panel pattern from the nav-tabs entry (one real color stop + one solid dark stop, e.g. rgba(cyan, 0.32) -> rgba(7,7,11,0.85)) rather than forcing a two-hue gradient — this is the safe pattern for anything that isn't a short pill-badge (a full sentence banner needs body-text-on-dark contrast, not dark-text-on-solid-bright). Also added a border + hover state to .typeChip (was border:0, no hover feedback despite being a role=radio button)."
+    },
+    {
+      "id": "tde-missing-hover-states",
+      "title": "TDE's Suggest-mission button and Model Router probe <select> had zero hover/focus feedback",
+      "home": "components/tde/tde.module.css .missionSubmit, .routerSelect",
+      "status": "shipped",
+      "note": "2026-07-06: both had a real gradient+glow base state (compliant with hardRules #1) but no :hover/:focus rule and no transition property at all, so they read static/dead next to every other interactive element in the app (.typeChip, .select in hermes.module.css, .navPrimary/.navUtility all have hover lift/glow-bump). Added transform+box-shadow-bump hover to .missionSubmit (guarded :not(:disabled)) and box-shadow-bump hover + focus ring to .routerSelect, matching the existing .select convention in hermes.module.css."
+    },
+    {
+      "id": "tde-router-table-flat-rows",
+      "title": "Model Router policy table (7 rows) had zero row differentiation beyond the one 'active probe' row",
+      "home": "components/tde/tde.module.css .routerRow",
+      "status": "shipped",
+      "note": "2026-07-06: every non-active row shared the exact same rgba(7,7,11,0.5) flat fill with no hover state, so a 7-row data table read as one undifferentiated block. Added subtle nth-child(even) zebra striping (cyan-tinted, ~0.045 alpha) and a real hover highlight (background+border bump) so the table scans row-by-row like the rest of the app's card-hover language, without touching the existing data-active treatment."
+    },
+    {
       "id": "header-overcrowding",
       "title": "Header renders 8 same-weight controls on phone, wraps to 2 rows, no hierarchy",
       "home": "components/hermes/HermesHitFactory.tsx header (lines ~458-500)",
@@ -106,6 +127,10 @@
     },
     {
       "entry": "Header-overcrowding fix, phases 2-5 (2026-07-06): turned the previously-inert authStyles.profileChip into the sole trigger for everything that isn't the one primary header action, by giving it an onClick and reusing it as both a <button> (header trigger) and a <span> (menu's own read-only header) via the same CSS class gated with :where(button) so hover/cursor rules don't leak onto the non-interactive usage. New rule learned: when consolidating N buttons into a menu, reuse the existing drawerWrap/scrim/drawer bottom-sheet mechanism (already built for VaultDrawer/AlbumView/LyricLab) rather than inventing a new dropdown/popover pattern -- it's free phone-bottom-sheet behavior and keeps every overlay in the app visually and behaviorally consistent.",
+      "date": "2026-07-06"
+    },
+    {
+      "entry": "TDE Workbench polish pass (2026-07-06, components/tde/* — first hermes-ui touch of this surface, no prior gaps backlog entries existed for it). Screenshot-inspected the live page (desktop 1600px + phone 390px) rather than trusting a glance, and found the app's own already-documented hardRules #2 failure mode still live in two places nobody had caught: .typeChip (Mission panel's unselected type pills) and .depthRule (Agents panel's 'depth 1 only' banner) both used two gradient stops under 0.3 alpha and read as flat gray next to every other badge in the same file, which all correctly use full-solid tokens. Fixed with the single-hue-tinted-panel pattern (one real color stop + one solid dark stop) rather than forcing a two-hue gradient onto a full-sentence banner where dark-on-bright text wouldn't read well. Also added missing hover states (.missionSubmit, .routerSelect had zero :hover/:focus and no transition at all) and zebra+hover to the Model Router's 7-row policy table. Confirms the pattern from the nav-tabs/select entries generalizes as a real, reusable rule: when auditing a *new* surface for the first time, specifically grep for two-stop gradients with rgba(...,alpha) where both alphas are under ~0.3 — it's a mechanical, high-confidence way to find hardRules #2 violations instead of relying on eyeballing alone, since the visual smear is subtle enough to walk past in a first-glance screenshot review (as the founder's own initial screenshot check of this page did).",
       "date": "2026-07-06"
     }
   ]
