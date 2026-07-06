@@ -1,5 +1,6 @@
 'use client';
 
+import MemoryTrainingPanel from './MemoryTrainingPanel';
 import MissionPanel from './MissionPanel';
 import ModelGpuPanel from './ModelGpuPanel';
 import AgentMapPanel from './AgentMapPanel';
@@ -9,17 +10,7 @@ import styles from './tde.module.css';
 // The Kudbee TDE (Task-Driven Environment) shell — Branch 01 of the TDE track
 // (docs/kudbee-tde-roadmap.md). A window, not a lever: every panel renders mock
 // state only; the live-execution gate in the roadmap defines what must exist
-// before any panel gets a real button. Panels land one branch at a time.
-const PANELS = [
-  {
-    key: 'memory',
-    name: 'Memory / Training',
-    tone: 'good',
-    arrives: 'Branch 06',
-    blurb:
-      'Project state files, training row count, eval pass rate, drop queue, next GPU action — seeded from real project facts, marked mock.',
-  },
-] as const;
+// before any panel gets a real button. All five panels are live (Branches 02-06).
 
 export default function TdeWorkbench() {
   return (
@@ -46,16 +37,7 @@ export default function TdeWorkbench() {
         <RepoPanel />
         <AgentMapPanel />
         <ModelGpuPanel />
-        {PANELS.map((p) => (
-          <article key={p.key} className={styles.slot} data-tone={p.tone}>
-            <div className={styles.slotHead}>
-              <h2 className={styles.slotName}>{p.name}</h2>
-              <span className={styles.slotArrives}>{p.arrives}</span>
-            </div>
-            <p className={styles.slotBlurb}>{p.blurb}</p>
-            <p className={styles.slotEmpty}>Panel not built yet — reserved slot.</p>
-          </article>
-        ))}
+        <MemoryTrainingPanel />
       </section>
     </main>
   );
