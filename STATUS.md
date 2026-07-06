@@ -147,7 +147,7 @@
 | ✅ | **🧠 TDE Branch 05 — Model/GPU panel** | `components/tde/` | #211 |
 | ✅ | **📚 TDE Branch 06 — Memory/Training panel** | `components/tde/` | #212 |
 | ✅ | **🚧 TDE Branch 07 — Safety gate UI** | `components/tde/` | #213 |
-| ✅ | **🧭 TDE Branch 08 — Mock model router** | `components/tde/` | — |
+| ✅ | **🧭 TDE Branch 08 — Mock model router** | `components/tde/` | #214 |
 | 💤 | **📄 TDE Branch 09 — Integration contracts** | `components/tde/ (types)` | — |
 | 💤 | **💾 TDE Branch 10 — Local mock persistence** | `components/tde/ + lib` | — |
 | 💤 | **✨ TDE Branch 11 — Polish + navigation** | `components/tde/` | — |
