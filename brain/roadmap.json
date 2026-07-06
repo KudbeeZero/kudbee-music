@@ -213,7 +213,8 @@
         {
           "id": "9.7",
           "title": "📚 TDE Branch 06 — Memory/Training panel",
-          "status": "queued",
+          "status": "shipped",
+          "pr": "#212",
           "home": "components/tde/",
           "note": "Memory/state cards (PROJECT_STATE.md, ARCHITECTURE_TRUTH.md, agent-state-tracker, repo atlas), training row count, eval pass rate, drop queue, next data target, next-RTX-command placeholder. Mock values seeded from real project facts, clearly marked mode: mock."
         },
