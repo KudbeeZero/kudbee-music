@@ -262,6 +262,7 @@
           "id": "9.13",
           "title": "🌉 TDE Branch 12 — Backend bridge plan",
           "status": "shipped",
+          "pr": "#218",
           "home": "docs/kudbee-tde-backend-bridge.md",
           "note": "Docs only: the permission layer required before any live execution — GitHub, hermes-server health, Lightning job status, memory/vector, SCRIBE endpoint, KUDBEECODEV0 eval scoreboard integrations, and the safety gates each must pass."
         }
