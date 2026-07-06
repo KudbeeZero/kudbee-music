@@ -320,7 +320,7 @@ flow, and the non-negotiables — plus the code-generated [brain-wiring diagram]
 **Next** — generated from the spine [`brain/roadmap.json`](brain/roadmap.json); the human backlog is [`TODO.md`](TODO.md), the full board is [`STATUS.md`](STATUS.md).
 
 <!-- STATUS:BEGIN generated: edit brain/roadmap.json, then GEN_DOCS=1 npx vitest run status -->
-**📊 Status board:** ✅ 82 shipped · 🔨 3 in build · 💤 14 queued (99 tracked) — full tables in [`STATUS.md`](STATUS.md), source of truth [`brain/roadmap.json`](brain/roadmap.json).
+**📊 Status board:** ✅ 83 shipped · 🔨 3 in build · 💤 13 queued (99 tracked) — full tables in [`STATUS.md`](STATUS.md), source of truth [`brain/roadmap.json`](brain/roadmap.json).
 
 | | Up next | id |
 |---|---------|----|
@@ -331,7 +331,6 @@ flow, and the non-negotiables — plus the code-generated [brain-wiring diagram]
 | 💤 | **Influence Studio** | `6.1` |
 | 🔨 | **🕸️ Agent Lifecycle library** | `8.9` |
 | 🔨 | **🎨 WIFI DJ visual redesign** | `8.10` |
-| 💤 | **🚧 TDE Branch 07** | `9.8` |
 | 💤 | **🧭 TDE Branch 08** | `9.9` |
 | 💤 | **📄 TDE Branch 09** | `9.10` |
 | 💤 | **💾 TDE Branch 10** | `9.11` |

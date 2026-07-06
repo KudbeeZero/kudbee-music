@@ -221,7 +221,7 @@
         {
           "id": "9.8",
           "title": "🚧 TDE Branch 07 — Safety gate UI",
-          "status": "queued",
+          "status": "shipped",
           "home": "components/tde/",
           "note": "The visible blocked-actions list: root git add -A, wrong-repo edits, wrong-branch push, deleting final//model caches, committing secrets/artifacts, CPU training fallback, recursive spawning, unapproved live API calls."
         },

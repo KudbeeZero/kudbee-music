@@ -772,3 +772,55 @@
   line-height: 1.6;
   overflow-x: auto;
 }
+/* --- Safety gate panel (Branch 07) --- */
+
+.blockedTag {
+  flex: none;
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: var(--fs-xs);
+  font-weight: 700;
+  color: #0b0b12;
+  background: linear-gradient(120deg, var(--bad), var(--magenta));
+  box-shadow: 0 0 14px rgba(255, 93, 108, 0.45);
+}
+
+.gateGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 12px;
+}
+
+.gateCard {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 14px;
+  border-radius: var(--radius);
+  background: rgba(7, 7, 11, 0.5);
+  border: 1px solid rgba(255, 93, 108, 0.25);
+  border-left: 3px solid var(--bad);
+  box-shadow: 0 0 14px rgba(255, 93, 108, 0.08);
+}
+
+.gateAction {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  font-size: var(--fs-body);
+  color: var(--ink);
+}
+
+.gateIcon {
+  flex: none;
+  font-size: var(--fs-sm);
+  filter: drop-shadow(0 0 6px rgba(255, 93, 108, 0.6));
+}
+
+.gateTrip {
+  margin: 0;
+  font-size: var(--fs-xs);
+  font-weight: 700;
+  color: var(--bad);
+  text-shadow: 0 0 10px rgba(255, 93, 108, 0.4);
+}
