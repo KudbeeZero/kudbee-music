@@ -65,3 +65,13 @@ Mission execution · GitHub writes · GPU job launches · agent spawning · SCRI
 founder-key calls · memory writes. The only persistence remains the visitor's own
 localStorage mock state (`hermes.tdeMissions.v1`). When in doubt: the TDE is a window;
 opening a lever is a new founder decision, one PR, one gate at a time.
+
+## Future option: the engine behind the permission layer (deferred, not built)
+
+The permission layer above — an action allowlist with risk levels, per-action human
+approval, an audit trail of proposed→approved→executed, GPU-job polling — is close to
+[Kestra](https://kestra.io/)'s feature list out of the box (approval-gate tasks,
+execution-level audit logs, webhook triggers, retries). When this bridge actually gets
+built, evaluate Kestra as the engine instead of hand-writing bespoke approval/audit
+code. Not a decision to make now — there's no bridge to build yet — just noted so it's
+the first thing evaluated rather than reinvented.
