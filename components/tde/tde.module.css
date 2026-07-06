@@ -238,21 +238,29 @@
 
 .typeChip {
   padding: 6px 12px;
-  border: 0;
+  border: 1px solid rgba(54, 224, 212, 0.4);
   border-radius: 999px;
   cursor: pointer;
   font-size: var(--fs-xs);
   font-weight: 700;
   color: var(--ink-dim);
-  background: linear-gradient(120deg, rgba(139, 92, 255, 0.28), rgba(54, 224, 212, 0.22));
-  box-shadow: 0 0 10px rgba(139, 92, 255, 0.12);
-  transition: box-shadow 0.15s ease, color 0.15s ease;
+  /* Single-hue tinted panel (real solid dark stop, not a second translucent hue) —
+     two sub-0.3-alpha stops of different hues optically average into a gray smear
+     (brain/uiDesignLanguage.json hardRules #2); this was that exact failure mode. */
+  background: linear-gradient(135deg, rgba(54, 224, 212, 0.32), rgba(7, 7, 11, 0.85) 75%);
+  box-shadow: 0 0 12px -4px rgba(54, 224, 212, 0.35);
+  transition: box-shadow 0.15s ease, color 0.15s ease, border-color 0.15s ease;
 }
 
-.typeChip:hover { color: var(--ink); box-shadow: 0 0 14px rgba(139, 92, 255, 0.3); }
+.typeChip:hover {
+  color: var(--ink);
+  border-color: rgba(54, 224, 212, 0.7);
+  box-shadow: 0 0 16px -3px rgba(54, 224, 212, 0.55);
+}
 
 .typeChip[data-selected] {
   color: #0b0b12;
+  border-color: transparent;
   background: linear-gradient(120deg, var(--cyan) 10%, var(--violet) 95%);
   box-shadow: 0 0 18px rgba(54, 224, 212, 0.45);
 }
@@ -267,7 +275,15 @@
   color: #0b0b12;
   background: linear-gradient(120deg, var(--cyan) 15%, var(--violet) 90%);
   box-shadow: 0 0 20px rgba(54, 224, 212, 0.4);
+  transition: box-shadow 0.15s ease, transform 0.15s ease;
 }
+
+.missionSubmit:hover:not(:disabled) {
+  transform: translateY(-1px);
+  box-shadow: 0 0 26px rgba(54, 224, 212, 0.6);
+}
+
+.missionSubmit:active:not(:disabled) { transform: translateY(0); }
 
 .missionSubmit:disabled {
   cursor: not-allowed;
@@ -470,9 +486,12 @@
   font-weight: 700;
   letter-spacing: 0.03em;
   color: var(--ink);
-  background: linear-gradient(120deg, rgba(255, 93, 108, 0.22), rgba(210, 75, 255, 0.16));
-  border: 1px solid rgba(255, 93, 108, 0.4);
-  box-shadow: 0 0 18px rgba(255, 93, 108, 0.15);
+  /* Single-hue tinted panel (real solid dark stop, not a second translucent hue) —
+     the previous two sub-0.3-alpha stops (bad + magenta) averaged into a gray
+     smear rather than reading as either hue (brain/uiDesignLanguage.json hardRules #2). */
+  background: linear-gradient(120deg, rgba(255, 93, 108, 0.4), rgba(7, 7, 11, 0.85) 80%);
+  border: 1px solid rgba(255, 93, 108, 0.45);
+  box-shadow: 0 0 18px rgba(255, 93, 108, 0.2);
 }
 
 .agentGrid {
@@ -855,6 +874,15 @@
   color: var(--ink);
   font-size: var(--fs-sm);
   cursor: pointer;
+  transition: box-shadow 0.15s ease, border-color 0.15s ease;
+}
+
+.routerSelect:hover { box-shadow: 0 0 20px rgba(54, 224, 212, 0.4); }
+
+.routerSelect:focus {
+  outline: none;
+  border-color: var(--cyan);
+  box-shadow: 0 0 0 3px rgba(54, 224, 212, 0.18), 0 0 20px rgba(54, 224, 212, 0.45);
 }
 
 .routerAnswer {
@@ -919,12 +947,23 @@
   border: 1px solid var(--line);
   font-size: var(--fs-sm);
   color: var(--ink-dim);
+  transition: background 0.15s ease, border-color 0.15s ease;
+}
+
+/* Zebra striping so a 7-row policy table scans as rows, not one flat block. */
+.routerRow:nth-child(even) { background: rgba(54, 224, 212, 0.045); }
+
+.routerRow:hover {
+  background: rgba(54, 224, 212, 0.1);
+  border-color: rgba(54, 224, 212, 0.4);
 }
 
 .routerRow[data-active] {
   border-color: var(--cyan);
   box-shadow: 0 0 14px rgba(54, 224, 212, 0.2);
 }
+
+.routerRow[data-active]:hover { background: rgba(54, 224, 212, 0.14); }
 
 .routerTask { color: var(--ink); font-weight: 600; }
 .routerTo { color: var(--cyan); }
