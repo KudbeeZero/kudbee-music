@@ -1132,6 +1132,17 @@ A second-opinion review flagged real risks worth acting on (truth-first):
   (`NOUN_STOP` / `text.ts` STOP) so verses read cleaner. Tiny, helps all generation.
 - ✅ **One-command demo** — `npm run demo` generates a full song end-to-end + prints the
   11-region trace (lyrics-focused). The 30-second "see it work" moment. _(#38)_
+- 💭 **NVIDIA HORIZON — researched, not a fit** *(founder asked whether NVIDIA's newly
+  announced "hands-free agent framework" belonged here)* — deep-researched HORIZON
+  (arXiv:2606.28279, "Agentic Hardware Design as Repository-Level Code Evolution," posted
+  ~2026-06-30): hardware/RTL-only (chip design, benchmarked on Verilog suites), unreleased
+  (paper only — no GitHub repo, code, or license found), and its loop is a stochastic
+  multi-attempt search-and-accept process that directly conflicts with our determinism Iron
+  Law (same inputs + seed ⇒ byte-identical output). Not adoptable as infrastructure. The one
+  transferable idea — repo history (diff/commit/log/notes) as the memory + audit-trail
+  substrate, committing only when an acceptance gate passes — just validates what our
+  branch-per-change + `brain/branches.json` ledger + CI gates already do; not a new pattern
+  to build. No action item, captured so it isn't re-researched later.
 
 ## ✅ Captured → shipped
 - ✅ **Nervous system + short-term/long-term memory** — `brain map` (regions + nerves,
