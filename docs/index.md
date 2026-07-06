@@ -25,6 +25,8 @@ entirely from code — no paid software.
   mapped to existing code, phased build plan
 - [Kudbee TDE roadmap](kudbee-tde-roadmap.md) — the branch-by-branch plan for the
   TDE / HERMES Workbench side cockpit (suggest-only, mock-state v1)
+- [Kudbee TDE backend bridge](kudbee-tde-backend-bridge.md) — the permission layer
+  required before any TDE panel goes live (the lever the window doesn't have)
 
 ## 🎬 Video Studio
 

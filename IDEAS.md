@@ -233,7 +233,7 @@ A second-opinion review flagged real risks worth acting on (truth-first):
   disclaimer in the README + Uniqueness panel. _(#37)_
 
 ## 🌱 Fresh captures
-- 🔨 **Kudbee TDE / HERMES Workbench — the agent cockpit inside the app**
+- ✅ **Kudbee TDE / HERMES Workbench — the agent cockpit inside the app** (v1 shipped, 13 branches, #206–#217 + bridge plan)
   *(founder directive, 2026-07-05)* — a Task-Driven Environment side route (`/tde`)
   that renders the whole Kudbee operation as five panels: Missions (suggest-only
   queue), Repos (kudbee-music / hermes-lyric-server / kudbee-engine cards), Agents

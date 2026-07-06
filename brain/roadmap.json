@@ -159,7 +159,7 @@
     {
       "id": 9,
       "name": "Kudbee TDE / HERMES Workbench",
-      "status": "in build",
+      "status": "shipped",
       "goal": "Founder directive, 2026-07-05: build a side cockpit inside the app for Kudbee agents, repos, memory, models, GPU jobs, training rows, PRs, SCRIBE, and future local coding-agent execution. Strictly suggest-only / mock-state / read-only in v1 — no live APIs, no keys, no execution, no changes to existing routes. One feat/tde-NN branch at a time; the full plan is docs/kudbee-tde-roadmap.md.",
       "items": [
         {
@@ -261,7 +261,8 @@
         {
           "id": "9.13",
           "title": "🌉 TDE Branch 12 — Backend bridge plan",
-          "status": "queued",
+          "status": "shipped",
+          "pr": "#218",
           "home": "docs/kudbee-tde-backend-bridge.md",
           "note": "Docs only: the permission layer required before any live execution — GitHub, hermes-server health, Lightning job status, memory/vector, SCRIBE endpoint, KUDBEECODEV0 eval scoreboard integrations, and the safety gates each must pass."
         }
