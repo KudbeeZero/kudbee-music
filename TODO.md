@@ -298,17 +298,15 @@ _The autonomous `/loop` is working the phased roadmap. **Source of truth:
 [`brain/roadmap.json`](brain/roadmap.json)** — it indexes every item + the PR that
 shipped it. This file is the human-readable view; keep the two in sync._
 
-- [~] **Kudbee TDE / HERMES Workbench** — the side cockpit for Kudbee agents, repos,
-  memory, models, GPU jobs, training rows, PRs, and SCRIBE. Strictly suggest-only /
-  mock-state / read-only in v1 (no live APIs, no keys, no execution). 13 branches,
-  one at a time — plan in [`docs/kudbee-tde-roadmap.md`](docs/kudbee-tde-roadmap.md),
-  status in `brain/roadmap.json` phase 9. Branches 00 (roadmap, #206), 01 (the
-  `/tde` shell, #207), 02 (Mission panel, #208), 03 (Repo panel, #209), 04
-  (Agent map, #210), 05 (Model/GPU panel, #211), 06 (Memory/Training panel,
-  #212), 07 (Safety Gate panel, #213), 08 (mock model router, #214), 09
-  (integration contracts, #215), 10 (local mock persistence, #216) and 11
-  (polish + navigation) shipped; next up: Branch 12, the backend bridge plan
-  (docs) — the final TDE branch.
+- [x] **Kudbee TDE / HERMES Workbench — v1 complete (13/13 branches)** — the side
+  cockpit for Kudbee agents, repos, memory, models, GPU jobs, training rows, PRs,
+  and SCRIBE, live at `/tde` (header link 🛰️). Strictly suggest-only / mock-state /
+  read-only: no live APIs, no keys, no execution. Shipped one branch at a time:
+  00 roadmap #206 · 01 shell #207 · 02 Mission #208 · 03 Repos #209 · 04 Agent map
+  #210 · 05 Model/GPU #211 · 06 Memory/Training #212 · 07 Safety Gates #213 ·
+  08 model router #214 · 09 contracts #215 · 10 persistence #216 · 11 polish/nav
+  #217 · 12 backend-bridge plan. Plan: [`docs/kudbee-tde-roadmap.md`](docs/kudbee-tde-roadmap.md) ·
+  going live requires [`docs/kudbee-tde-backend-bridge.md`](docs/kudbee-tde-backend-bridge.md).
 - [~] **WIFI DJ visual redesign** — founder-supplied "Production UI Kit" mockups
   (Desktop/Mobile Studio + 24-element component library + a Lyrics Editor screen)
   reimagine the whole Hit Factory UI. Full button/route directory, gap analysis

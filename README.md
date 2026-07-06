@@ -320,7 +320,7 @@ flow, and the non-negotiables — plus the code-generated [brain-wiring diagram]
 **Next** — generated from the spine [`brain/roadmap.json`](brain/roadmap.json); the human backlog is [`TODO.md`](TODO.md), the full board is [`STATUS.md`](STATUS.md).
 
 <!-- STATUS:BEGIN generated: edit brain/roadmap.json, then GEN_DOCS=1 npx vitest run status -->
-**📊 Status board:** ✅ 87 shipped · 🔨 3 in build · 💤 9 queued (99 tracked) — full tables in [`STATUS.md`](STATUS.md), source of truth [`brain/roadmap.json`](brain/roadmap.json).
+**📊 Status board:** ✅ 88 shipped · 🔨 3 in build · 💤 8 queued (99 tracked) — full tables in [`STATUS.md`](STATUS.md), source of truth [`brain/roadmap.json`](brain/roadmap.json).
 
 | | Up next | id |
 |---|---------|----|
@@ -331,7 +331,6 @@ flow, and the non-negotiables — plus the code-generated [brain-wiring diagram]
 | 💤 | **Influence Studio** | `6.1` |
 | 🔨 | **🕸️ Agent Lifecycle library** | `8.9` |
 | 🔨 | **🎨 WIFI DJ visual redesign** | `8.10` |
-| 💤 | **🌉 TDE Branch 12** | `9.13` |
 | 💤 | **Audio-novelty song-structure detection (segment from beats + energy when lyrics.md has no headers)** | `V5` |
 | 💤 | **hermes-composer** | `V6` |
 | 💤 | **Per-pack scene variety for generic projects (more than the shared scene cycle)** | `V7` |
