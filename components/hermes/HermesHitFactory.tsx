@@ -1,8 +1,6 @@
 'use client';
 
 import { useEffect, useMemo, useRef, useState } from 'react';
-import Link from 'next/link';
-import { usePathname } from 'next/navigation';
 import type { SongInputs, SongPackage, AgentOutput, HookOption, CritiqueKey } from '@/lib/hermes/types';
 import { AGENT_DEFINITIONS } from '@/lib/hermes/agents';
 import { runPipeline, buildClips } from '@/lib/hermes/pipeline';
@@ -27,6 +25,7 @@ import YourAgent from './YourAgent';
 import BangerScoreCard from './BangerScoreCard';
 import UniquenessReportView from './UniquenessReport';
 import VaultDrawer from './VaultDrawer';
+import ProfileMenu from './ProfileMenu';
 import RecommendationsPanel from './RecommendationsPanel';
 import ArtistCard from './ArtistCard';
 import Rack from './Rack';
@@ -58,9 +57,6 @@ export default function HermesHitFactory() {
   // CAPABILITY-driven rules (touch, form factor, animation budget) instead of only
   // viewport width — a landscape phone at 852px still gets 44px touch targets.
   const device = useDevice();
-  // Header nav active-state — Crossroads is a real route, so its current-view indicator
-  // is just a pathname check (no client-side routing state to track).
-  const pathname = usePathname();
   // identity gate — null until hydrated (client-only, avoids SSR mismatch)
   const [profile, setProfile] = useState<Profile | null>(null);
   const [identityReady, setIdentityReady] = useState(false);
@@ -76,6 +72,7 @@ export default function HermesHitFactory() {
   const [albums, setAlbums] = useState<Album[]>([]);
   const [albumOpen, setAlbumOpen] = useState(false);
   const [labOpen, setLabOpen] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
   const [preset, setPreset] = useState<Partial<{ genre: string; mood: string; references: string }> | null>(null);
   const [taste, setTaste] = useState<Taste | undefined>(undefined);
   // words just auto-excluded this session (cut twice in an edit) — surfaced as a
@@ -463,46 +460,48 @@ export default function HermesHitFactory() {
           <span className={styles.subtitle}>Lyrical Combinator Brain · {AGENT_DEFINITIONS.length} agents</span>
         </div>
         <div className={styles.headerSpacer} />
-        {/* header stays minimal on the welcome gate — actions appear after entry */}
+        {/* header stays minimal on the welcome gate — actions appear after entry.
+            Header-overcrowding fix (uiDesignLanguage.json knownGapsBacklog
+            ["header-overcrowding"]): down to brand + the one primary action (✨ New)
+            + the profile-menu trigger. Agent/Lyric Lab/Crossroads/TDE/Albums/Sign-out
+            all live in ProfileMenu now — see that component for why. Vault keeps its
+            own desktop-only button (phase 1) since desktop has no BottomNav to fall
+            back on; phone already reaches Vault via BottomNav's always-on tab. */}
         {profile && (
           <>
             <span className={styles.modeBadge}>● V1 · local mock — no API key</span>
-            <button
-              className={styles.navUtility}
-              onClick={() => {
-                if (mode === 'studio') focusFlowStage('keep');
-                document.getElementById('your-agent')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
-              }}
-              title="Your Agent — your Claude key, your brain, install to your phone"
-            >
-              🚀 Agent
-            </button>
             {mode === 'studio' && <button className={styles.navPrimary} onClick={newSong}>✨ New</button>}
-            <button className={styles.navPrimary} onClick={() => setLabOpen(true)}>✍️ Lyric Lab</button>
-            <Link href="/crossroads" className={styles.navPrimary} data-active={pathname === '/crossroads' || undefined}>🧭 Crossroads</Link>
-            <Link href="/tde" className={styles.navUtility} data-active={pathname === '/tde' || undefined} title="Kudbee TDE — the agent workbench (suggest-only prototype)">🛰️ TDE</Link>
-            <button className={styles.navUtility} onClick={() => setAlbumOpen(true)}>Albums ({albums.length})</button>
-            {/* Phone already has this exact action (setVaultOpen) as BottomNav's always-on
-                Vault tab (BottomNav.tsx onVault) — the header button here is desktop-only
-                to avoid showing the same destination twice on a cramped phone header. */}
             {!device.ui.singleColumn && (
               <button className={styles.navUtility} onClick={() => setVaultOpen(true)}>Vault ({vault.length})</button>
             )}
-            <span className={authStyles.profileChip} title={`Signed in as ${profile.name} (${profile.kind}) — local to this browser`}>
+            <button
+              className={authStyles.profileChip}
+              onClick={() => setMenuOpen(true)}
+              aria-haspopup="dialog"
+              aria-expanded={menuOpen}
+              title={`Signed in as ${profile.name} (${profile.kind}) — local to this browser`}
+            >
               {profile.name}
               {profile.kind === 'dev' && <span className={authStyles.devBadge}>dev</span>}
-            </span>
-            <button
-              className={styles.navUtility}
-              data-tone="danger"
-              onClick={handleSignOut}
-              title="Sign out — your vault stays on this device"
-            >
-              Sign out
             </button>
           </>
         )}
       </header>
+
+      {profile && menuOpen && (
+        <ProfileMenu
+          profile={profile}
+          albumCount={albums.length}
+          onClose={() => setMenuOpen(false)}
+          onAgent={() => {
+            if (mode === 'studio') focusFlowStage('keep');
+            document.getElementById('your-agent')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          }}
+          onLyricLab={() => setLabOpen(true)}
+          onAlbums={() => setAlbumOpen(true)}
+          onSignOut={handleSignOut}
+        />
+      )}
 
       {!identityReady ? null : !profile ? (
         <WelcomeGate onEnter={setProfile} />

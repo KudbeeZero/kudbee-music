@@ -460,6 +460,24 @@
 .scrim { position: absolute; inset: 0; background: rgba(0, 0, 0, 0.55); }
 .drawer { position: relative; width: min(380px, 92vw); height: 100%; background: var(--panel-solid); border-left: 1px solid var(--line-strong); padding: 18px; overflow-y: auto; }
 
+/* ---------- account/profile menu (header-overcrowding fix, phase 2-5) ----------
+   Renders inside the existing drawerWrap/scrim/drawer (same bottom-sheet-on-phone
+   convention as VaultDrawer/AlbumView/LyricLab) — no new overlay mechanism. */
+.menuHead { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-bottom: 14px; }
+.menuList { display: flex; flex-direction: column; gap: 6px; }
+.menuItem {
+  display: flex; align-items: center; gap: 8px; text-decoration: none;
+  border: 1px solid var(--line-strong); background: var(--bg-1); color: var(--ink);
+  padding: 11px 14px; border-radius: 10px; font-weight: 600; font-size: 13.5px; cursor: pointer;
+  transition: border-color 0.15s ease, background 0.15s ease;
+}
+.menuItem:hover { border-color: var(--cyan); background: var(--bg-2); }
+.menuItem[data-active="true"] { border-color: var(--magenta); background: linear-gradient(135deg, rgba(210, 75, 255, 0.18), var(--bg-1) 75%); }
+.menuItem[data-tone="danger"] { border-color: rgba(255, 93, 108, 0.55); color: var(--bad); margin-top: 4px; }
+.menuItem[data-tone="danger"]:hover { border-color: rgba(255, 93, 108, 0.85); background: rgba(255, 93, 108, 0.08); }
+.menuCount { margin-left: auto; color: var(--ink-faint); font-size: 12px; font-weight: 700; }
+.menuDivider { height: 1px; background: var(--line-strong); margin: 12px 0; }
+
 /* ---- Brain Scan ---- */
 .brainSvg { width: 100%; height: auto; display: block; margin: 6px 0 2px; }
 .brainNode {

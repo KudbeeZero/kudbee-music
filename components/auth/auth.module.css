@@ -176,11 +176,16 @@
 
 .devLink:hover { color: var(--cyan); }
 
-/* ---- header profile chip (rendered by the shell after entry) ---- */
+/* ---- header profile chip (rendered by the shell after entry) ----
+   Also the profile-menu trigger (header-overcrowding fix, phase 2) — same class
+   works as the plain read-only chip inside ProfileMenu's own header (a <span>)
+   and as the clickable header trigger (a <button>); the :where(button) rules
+   only apply where it's actually interactive. */
 .profileChip {
   display: inline-flex;
   align-items: center;
   gap: 6px;
+  font: inherit;
   font-size: 12px;
   font-weight: 600;
   color: var(--ink-dim);
@@ -193,6 +198,9 @@
   text-overflow: ellipsis;
   white-space: nowrap;
 }
+.profileChip:where(button) { cursor: pointer; transition: border-color 0.15s ease, background 0.15s ease; }
+.profileChip:where(button):hover,
+.profileChip:where(button):focus-visible { border-color: var(--cyan); background: var(--bg-2); }
 
 .devBadge {
   font-size: 9px;

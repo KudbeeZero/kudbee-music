@@ -87,8 +87,8 @@
       "id": "header-overcrowding",
       "title": "Header renders 8 same-weight controls on phone, wraps to 2 rows, no hierarchy",
       "home": "components/hermes/HermesHitFactory.tsx header (lines ~458-500)",
-      "status": "in progress",
-      "note": "Founder flagged via screenshot (2026-07-06): confused by the header row (Agent, New, Lyric Lab, Crossroads, TDE, Albums, Vault, profile chip, Sign out) wrapping to 2 lines with no grouping. Research + full audit dispatched; roadmap: (1) shipped — drop the header's phone-only Vault button since BottomNav's always-on Vault tab already calls the identical setVaultOpen(true) (HermesHitFactory.tsx onVault, BottomNav.tsx ITEMS.vault.always=true); (2) queued — turn the inert authStyles.profileChip into a real menu-sheet trigger; (3) queued — move Agent/TDE/Albums into that sheet; (4) queued — move Crossroads into BottomNav (also retires the dead data-active wiring already logged under nav-tabs); (5) queued — reduce the header to brand + one primary action; (6) queued — decide whether /crossroads and /tde adopt the shared minimal header. Phases 2-6 blocked on founder decisions (Sign-out visibility, Crossroads placement, New vs Lyric Lab as the one primary action, TDE's nav tier)."
+      "status": "shipped",
+      "note": "Founder flagged via screenshot (2026-07-06): confused by the header row (Agent, New, Lyric Lab, Crossroads, TDE, Albums, Vault, profile chip, Sign out) wrapping to 2 lines with no grouping. Research + full audit dispatched, founder answered the 4 open questions (2026-07-06): Sign-out, Crossroads, and TDE all move into a profile menu; New stays the one visible primary header action. Shipped: (1) #220 dropped the header's redundant phone-only Vault button (BottomNav's Vault tab already covers it). (2)-(5) combined into one branch: new ProfileMenu.tsx component (reuses the existing drawerWrap/scrim/drawer bottom-sheet convention from VaultDrawer.tsx) holding Agent, Lyric Lab, Crossroads, TDE, Albums, and — separated by a divider, de-emphasized not hidden — Sign out. Header is now brand + modeBadge + New (studio mode) + Vault (desktop-only, no BottomNav fallback there) + the profile-chip-as-menu-trigger button. (6) not shipped: whether /crossroads and /tde should adopt this same minimal shared header, or keep their own chrome, stays an open follow-up."
     }
   ],
   "agentLearningsLog": [
@@ -102,6 +102,10 @@
     },
     {
       "entry": "Header-overcrowding fix, phase 1 (2026-07-06): removed the header's redundant phone-only Vault button rather than restyling it — the fix for \"too many buttons\" is sometimes deletion, not a better button, when BottomNav already exposes the identical action one tap away. Kept the desktop header's Vault button (no BottomNav there). Confirms the nav-tabs entry's flagged Crossroads dead-code and extends the same audit into a full header/BottomNav overlap review before touching visual style.",
+      "date": "2026-07-06"
+    },
+    {
+      "entry": "Header-overcrowding fix, phases 2-5 (2026-07-06): turned the previously-inert authStyles.profileChip into the sole trigger for everything that isn't the one primary header action, by giving it an onClick and reusing it as both a <button> (header trigger) and a <span> (menu's own read-only header) via the same CSS class gated with :where(button) so hover/cursor rules don't leak onto the non-interactive usage. New rule learned: when consolidating N buttons into a menu, reuse the existing drawerWrap/scrim/drawer bottom-sheet mechanism (already built for VaultDrawer/AlbumView/LyricLab) rather than inventing a new dropdown/popover pattern -- it's free phone-bottom-sheet behavior and keeps every overlay in the app visually and behaviorally consistent.",
       "date": "2026-07-06"
     }
   ]
