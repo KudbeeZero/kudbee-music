@@ -238,6 +238,7 @@
           "id": "9.10",
           "title": "📄 TDE Branch 09 — Integration contracts",
           "status": "shipped",
+          "pr": "#215",
           "home": "components/tde/ (types)",
           "note": "TypeScript types only for future integrations: RepoStatus, AgentStatus, ModelStatus, GPUJobStatus, MemoryState, TrainingEvalSummary, PRStatus, ScribeStatus. No fetching."
         },
