@@ -933,3 +933,24 @@
 @media (max-width: 640px) {
   .routerHead, .routerRow { min-width: 560px; }
 }
+
+/* --- Polish (Branch 11) --- */
+
+.backLink {
+  color: var(--cyan);
+  text-decoration: none;
+  font-weight: 600;
+  text-shadow: 0 0 10px rgba(54, 224, 212, 0.35);
+}
+
+.backLink:hover { text-decoration: underline; }
+
+.queueEmpty {
+  margin: 0;
+  padding: 14px;
+  border-radius: var(--radius);
+  border: 1px dashed var(--line-strong);
+  color: var(--ink-faint);
+  font-size: var(--fs-sm);
+  text-align: center;
+}

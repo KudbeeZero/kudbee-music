@@ -38,7 +38,7 @@ const MATRIX = [
   { name: 'iPad Mini', profile: devices['iPad Mini'] },
   { name: 'Desktop 1280', profile: { viewport: { width: 1280, height: 800 } } },
 ];
-const PAGES = ['/', '/hermes', '/crossroads'];
+const PAGES = ['/', '/hermes', '/crossroads', '/tde'];
 
 const argv = process.argv.slice(2);
 const argOf = (flag) => {

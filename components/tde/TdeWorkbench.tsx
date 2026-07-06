@@ -1,5 +1,6 @@
 'use client';
 
+import Link from 'next/link';
 import MemoryTrainingPanel from './MemoryTrainingPanel';
 import SafetyGatePanel from './SafetyGatePanel';
 import MissionPanel from './MissionPanel';
@@ -20,7 +21,10 @@ export default function TdeWorkbench() {
       <header className={styles.header}>
         <div className={styles.headerText}>
           <h1 className={styles.title}>Kudbee TDE</h1>
-          <p className={styles.subtitle}>HERMES Workbench / Task-Driven Environment</p>
+          <p className={styles.subtitle}>
+            HERMES Workbench / Task-Driven Environment ·{' '}
+            <Link href="/hermes" className={styles.backLink}>← Hit Factory</Link>
+          </p>
         </div>
         <span className={styles.statusBadge}>Suggest-only prototype</span>
       </header>

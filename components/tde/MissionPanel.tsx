@@ -129,6 +129,11 @@ export default function MissionPanel() {
         </div>
       </div>
 
+      {missions.length === 0 && (
+        <p className={styles.queueEmpty}>
+          Queue empty — describe a mission above to suggest the first one.
+        </p>
+      )}
       <ol className={styles.missionList} aria-label="Mission queue (mock)">
         {missions.map((m) => (
           <li key={m.id} className={styles.missionCard}>
