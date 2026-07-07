@@ -54,5 +54,6 @@ entirely from code — no paid software.
 - [`brain/README.md`](../brain/README.md) — the memory-vault index (beliefs, personas, packs, roadmap…)
 - [`CLAUDE.md`](../CLAUDE.md) — the memory spine: conventions, workflow, routes to everything
 - [Deploy guide](deploy.md) — wiring `wifidj.xyz` to the live app
+- [Environment details template](environment-details-template.md) — fill-in-the-blanks for Lightning Studio / specialized tool setup; prevents command-generation round-trips
 
 See the [flagship example](https://github.com/KudbeeZero/kudbee-music/tree/main/examples/dom-shady).
