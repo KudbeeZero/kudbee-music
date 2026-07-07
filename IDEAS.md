@@ -233,6 +233,26 @@ A second-opinion review flagged real risks worth acting on (truth-first):
   disclaimer in the README + Uniqueness panel. _(#37)_
 
 ## 🌱 Fresh captures
+- 💭 **A tabbed "accomplishments" hub (badges/tracking, Dunkin'-Rewards-style) + an "economic" graphs
+  page + eventual blockchain tie-in** *(founder, 2026-07-07)* — reference screenshot: the Dunkin'
+  Rewards app's home screen (points progress bar, "unlock boosted status" visit-count tracker, a
+  badges/trophy tile, tabbed bottom nav). Ask: "a section... tabs, if you click on a tab it changes...
+  a good breadcrumb system... this is for the brain system, and it has accomplishments, and we have
+  badges and stuff like that... an extensive tracking system... since we already have all the data we
+  can wire it directly into all of this." Separately: "/dataviz here's a bunch of different graphs
+  because we eventually wanna have like an economic type page." And: "all of this needs to tie in to
+  the Blockchain eventually." Real grounding already exists for two of the three pieces — this is not
+  a from-scratch ask: (1) Story Mode's `lib/hermes/badges.ts` + `CHAPTERS`/`StoryProgress` is already
+  the accomplishments/tracking engine the Dunkin' reference is asking for — a tabbed hub UI would be a
+  presentation layer over data that already exists, not a new tracking system (matches the founder's
+  own "we already have all the data" read). (2) The blockchain tie-in already has a real decision
+  behind it: `docs/nft-standard.md` + `lib/hermes/brainSignature.ts` emit Metaplex/Solana dNFT
+  metadata today — badges/accomplishments are a natural fit for that existing standard, not a new
+  integration to invent. (3) The "economic type page" (a graphs/dashboard page) is the one genuinely
+  unscoped piece — no economic/financial data model exists anywhere in this repo yet, so it needs a
+  real scoping pass (what data: user analytics? token/points economy? something crypto-adjacent given
+  the blockchain tie-in?) before any dataviz work starts. Not yet built — captured for prioritization
+  alongside the roadmap 11.3/11.4 backlog items above.
 - 💭 **Rack "flip to the back" cable view + teach-the-Rack onboarding + a real Autotune plugin**
   *(founder, 2026-07-07)* — three linked asks on top of the just-shipped Rack audit
   (`docs/plugin-rack-architecture.md`, roadmap 11.2): (1) explain to the visitor how the
