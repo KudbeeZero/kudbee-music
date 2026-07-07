@@ -233,6 +233,137 @@ A second-opinion review flagged real risks worth acting on (truth-first):
   disclaimer in the README + Uniqueness panel. _(#37)_
 
 ## 🌱 Fresh captures
+- 💭 **Rack "flip to the back" cable view + teach-the-Rack onboarding + a real Autotune plugin**
+  *(founder, 2026-07-07)* — three linked asks on top of the just-shipped Rack audit
+  (`docs/plugin-rack-architecture.md`, roadmap 11.2): (1) explain to the visitor how the
+  Engine Rack actually works — an onboarding/tooltip layer over `Rack.tsx`; (2) a
+  skeuomorphic flourish where the rack panel flips around (like Reason's back-of-rack
+  patch view 20 years ago, or a ProTools chassis) to show dangling cables/plugs
+  connecting each engine — pure CSS/SVG, no new deps, fits the $0 rule; (3) build "our
+  own Autotune" — real pitch-correction, not just a marketplace metadata entry. Sized
+  very differently: (1) is cheap and already flagged as unfinished work in
+  `docs/awakening-onboarding-roadmap.md` Feature 3.4 (GuidedTour never extended past
+  ScribeEditor) — extending it to the Rack is the natural next slice. (2) is a
+  self-contained visual feature (CSS 3D flip + SVG bezier cables), doable client-side,
+  no audio/DSP work required — a good hermes-ui-agent slice once scoped. (3) is the real
+  lift: actual pitch detection/correction (e.g. autocorrelation or YIN for pitch
+  tracking, PSOLA/WSOLA for shifting) via Web Audio API, client-side to stay $0 — a new
+  audio-DSP capability, not a UI feature, and adjacent to but bigger than the existing
+  `mastering-assistant` plugin stub in `plugins.ts`. Not yet scoped into a roadmap phase;
+  awaiting founder priority on which piece to build first.
+- ✅ **Plugin/Rack/Marketplace architecture audit + security fix — banked into memory**
+  *(founder, 2026-07-07)* — "deploy an agent that specializes in the rack mounting and
+  plug-ins... how are the contracts written, we need to be very careful with this with
+  security as well... map everything... bank it into memory so we can recall it later."
+  Done this session — see `docs/plugin-rack-architecture.md` (roadmap 11.2). Central
+  finding: the plugin/tier-gating system is real, tested code but 100% inert (only the
+  never-imported `PluginMarketplace.tsx` calls the gating functions); a plugin is pure
+  metadata with zero code-execution surface. One real defect found and fixed:
+  `installPlugin('constructor'/'__proto__')` bypassed the invalid-id null-check because
+  `FIRST_PARTY_PLUGINS` is a plain object literal — closed with a `hasOwnProperty`-guarded
+  lookup mirroring `shareLink.ts`'s existing pattern, plus regression tests.
+- 🔨 **The Awakening — Council-driven onboarding + a modular ("Lego") unlock architecture**
+  *(founder, 2026-07-07)* — "the brain having a really cool interactive startup where it
+  asks a series of questions... taking me into a council that doesn't have everything in
+  it... things should be able to unlock... this all has to tie in to a [modular/"Lego"]
+  system in regards to the data." Designed and captured as a full roadmap this session —
+  see `docs/awakening-onboarding-roadmap.md` (roadmap phase 11) rather than duplicating the
+  design here. Key reframe: this completes the still-open third piece of the 2026-07-03
+  "Becoming You" onboarding idea above, not a new feature. A 12-system codebase audit
+  grounded every recommendation (Council's `CouncilVoice` seam, `LyricLab`'s step-wizard,
+  `BrainScan`'s boot animation, the Rack's unlock pattern, Story Mode's `CHAPTERS`) and
+  surfaced that `PluginMarketplace.tsx` and `agentLifecycle.ts` are fully built but
+  completely unwired into the app — real prerequisite work, not assumptions. The "Lego"
+  requirement became a dedicated architecture feature: a shared `Brick` contract every
+  plugin/Council-voice/engine-slot/onboarding-module implements, so nothing new invents its
+  own gating logic. Recommended first PR (not yet built, awaiting founder go-ahead): a
+  feature-flagged testable button — the smallest slice that proves the mechanism end to end.
+- 🔨 **Free-CPU stand-in endpoint for Scribe — decouple wiring from the GPU debugging**
+  *(founder, 2026-07-07)* — while SCRIBE-14B's GPU loading issue gets debugged, stand up a
+  genuinely small instruct model (Qwen2.5-1.5B-Instruct class, NOT MiniMax — too large/MoE
+  for CPU) on a SEPARATE, always-on, $0 CPU Lightning Studio, fronted by a tiny Ollama-backed
+  proxy. Real finding: the browser's existing `lightningLyricsProvider.ts` POSTs
+  `{"prompt":"..."}` and its response parser already checks a `.response` field — which is
+  EXACTLY Ollama's native `/api/generate` shape. So this needs ZERO client-side changes, just
+  a ~20-line proxy injecting the model name. Paste the resulting URL into the already-shipped
+  Engine Rack Lightning slot (#233) and the whole browser→endpoint→UI pipeline is
+  provably working with a cheap stand-in TODAY, fully decoupled from the real trained model.
+  Directive posted directly to `brain/handoffs.json` (not just relayed in chat) so the
+  Lightning agent can act on it without a manual round-trip — part of the founder's push
+  to minimize Claude Code usage by making the handoff log the primary instruction channel.
+- 💭 **Storage is the GPU gate — free disk + a small teacher model (the cheap-model plan, honest version)**
+  *(founder, 2026-07-07)* — the RTX 6000 won't attach; founder is over the ~200GB Lightning
+  storage quota (very plausibly the cause — Lightning gates GPU on quota/storage). Founder's
+  instinct: drop the big models, download the SMALLEST model, run it on a server, and have
+  the Claude agent direct it to "train our models." **What's exactly right:** (a) storage is
+  almost certainly the GPU blocker → freeing disk is the real unblock; (b) a small model is
+  the correct tool for the **teacher** role (generate/judge training rows) — cheap, runs on
+  CPU/T4, and Claude Code can direct it over HTTP (`studio/lightning.mjs --field` already
+  does this), matching the MINIMAX-TEACHER catalog entry + docs/lightning-librarian.md §8.
+  **The one constraint (physics):** a small chat model CANNOT *do* the fine-tune — training
+  our 14B models is a gradient-descent GPU job (litgpt/TRL) regardless of which model is
+  "directing." The small model directs DATA CREATION, not the training compute; the actual
+  train step still needs the GPU (which the disk cleanup gets back). **The smart synthesis:**
+  the trained models ARE the tiny LoRA adapters (25–35MB each) — the 56GB litgpt + 69GB HF
+  *merged* checkpoints are reconstructable from base+adapter and are the big space hogs.
+  Keep the tiny adapters (rollback rule), drop the giant merged weights + legacy Mistral-7B +
+  redundant base copies → back under quota → GPU returns. This is Lightning-agent lane (GPU
+  studio disk); kudbee-music side just records the teacher decision in modelFamily.json
+  (behind a handoffs claim). Do NOT delete the LoRA adapters (they are the rollback artifact).
+  *(found 2026-07-07 by a repo scan)* — `tsconfig.json`'s `exclude` lists `lib/hermes/__tests__`
+  (+ `studio`, `bin`), so **test files are never type-checked** by `npx tsc --noEmit`. That
+  is exactly why the original invalid-rhyme-scheme literals slipped through, and the scan
+  found **two more live instances of the same class**: `lib/hermes/__tests__/hermesScribeLyricsProvider.test.ts:17`
+  and `lib/hermes/__tests__/lightningLyricsProvider.test.ts:19` both build a `mockInputs: SongInputs`
+  with `structure: 'standard'` (NOT a valid `SongStructure` — `hook-first|verse-first|radio-edit|short-form|full-song`)
+  and omit the required `doNotUse`/`references` fields. `tsc` would reject all three, but the
+  exclude hides them. **Systemic fix (high leverage):** add a `tsconfig.test.json` that
+  includes `__tests__` and run it as a gate (catches ALL current + future test-file type
+  drift by construction, not whack-a-mole). **Symptomatic fixes:** correct the two
+  `structure:'standard'` mocks. **Latent vector (informational, clean today):** `occasionPacks.ts`
+  and `patternPacks.ts` cast their JSON with `as OccasionPack[]`/`as PatternPack[]`, so an
+  out-of-union `rhymeScheme`/`structure` typed into `brain/occasionPacks.json` /
+  `brain/patternPacks.json` wouldn't fail `tsc` — only the runtime whitelist guards it; a
+  small test validating those JSON files against the unions at load would close it.
+  (Determinism iron law + doc-route freshness both scanned CLEAN — no findings there.)
+- 💭 **Transcript harvester — capture the LIVE agent narration into the trajectory dataset**
+  *(founder, 2026-07-07)* — "this thinking, right here, as Claude Code works through it — is
+  it being captured? It's literally thinking on top of what we're doing, great training
+  material. We should build this out in the database." Extends the agent-trajectory dataset
+  (10.5, `lib/hermes/agentDecisions.ts` + `docs/agent-trajectory-dataset.md`), which today
+  only harvests the DISTILLED decisions (from `brain/modelFamily.json` history[] / PRs /
+  commits). This adds the RAW layer: the session + subagent transcripts (already persisted
+  by the harness) → a harvester that cleans (drop tool spam/retries/dead-ends), **scrubs
+  secrets** (reuse `scrubSecrets()`), and structures into `{situation → plan/decision →
+  action → outcome}` rows tagged `source:'transcript'` → founder-side store → KUDBEECODEV0
+  training rows. Honest boundaries (same as 10.5): (a) it's the EXTERNALIZED narration in
+  the transcript, not a model's hidden chain-of-thought; (b) the "database" is founder-side
+  ops infra, NEVER the $0 static client (no-server iron law) — same boundary as the Kestra
+  idea in `docs/lightning-plan.md`; (c) raw transcripts are noisy + secret-bearing, so the
+  clean+scrub step is mandatory before any row ships. Design next: the transcript→row
+  harvester, and where the founder-side store lives (local file / Supabase / D1 — an opt-in
+  backend the core calls via API, never bundled).
+- 🔨 **Delete the dead `lightningLineRewriteProvider.ts` + fix its misnamed test** *(found
+  + verified 2026-07-07 by a repo scan)* — `lib/hermes/providers/lightningLineRewriteProvider.ts`
+  is **dead code with ZERO importers** (verified: nothing imports it; `ScribeEditor.tsx`
+  imports `suggestLightningLineRewrites` from the LIVE `lightningLyricsProvider.ts`). Worse,
+  it exports the same names (`buildLightningLineRewritePrompt`, `parseLightningLineRewrites`,
+  `suggestLightningLineRewrites`) as the live file but with a **reversed argument order**
+  (`ctx,count,opts` vs live `opts,ctx,count`) — so an agent auto-importing the wrong one
+  fails SILENTLY. Its test `lightningLineRewriteProvider.test.ts` doesn't even test it — it
+  imports from `claudeLyricsProvider` (tests Claude). Action: delete the dead file, and
+  rename/fold the misnamed test into the Claude test it actually covers (don't lose the
+  Claude coverage). Needs full gates. This is the exact class of trip hazard behind an
+  earlier scheme bug.
+- 🔨 **Factor the shared core out of the two LIVE near-duplicate providers** *(same scan)* —
+  `lightningLyricsProvider.ts` and `hermesScribeLyricsProvider.ts` are ~90% identical (same
+  error codes `missing-endpoint|http-error|malformed-response`, same `{"alternatives":[...]}`
+  contract, same `extractResponseText`/`parseJson`, same POST shape) differing mainly by env
+  var (`LIGHTNING_ENDPOINT` vs `NEXT_PUBLIC_SCRIBE_REWRITE_ENDPOINT`). Both are live (both
+  used by ScribeEditor's provider selector) — a fix-it-twice maintenance trap. Extract the
+  shared error/parse/extract core into one module both import. Note: `claudeLyricsProvider.ts`
+  stays the canonical SCRIBE training contract (`buildLineRewritePrompt`/`parseLineRewrites`
+  are what `trainingData.ts` depends on by name) — don't fold that one in.
 - 💭 **Architecture-prediction training target — teach a model to predict what gets built**
   *(founder, 2026-07-07)* — "our models are gonna be different… trained on architecture
   building segments, like GitHub does with workflows… plan/architect the architecture and
@@ -897,8 +1028,13 @@ A second-opinion review flagged real risks worth acting on (truth-first):
   retroactively detected from vault data the way the other badges are; would
   need new tracking (e.g. a flag recorded at save time), which is exactly
   the "don't invent new tracking yet" line this pass was scoped to respect.
-  Still open from the fuller vision: more chapters, the onboarding-surface
-  walkthrough, Runway moments — all bigger, separately-scoped work.
+  Still open from the fuller vision: more chapters, Runway moments — separately-scoped
+  work. **The onboarding-surface walkthrough now has a full roadmap** (2026-07-07):
+  see `docs/awakening-onboarding-roadmap.md` — a Council-driven, animated first-run
+  onboarding (reusing `CouncilVoice`, `LyricLab`'s step-wizard shell, a scripted
+  `BrainScan` boot) that lands the visitor formally in this exact `CHAPTERS` system,
+  plus a shared modular unlock architecture ("Lego" bricks) tying plugins/Council
+  voices/engine slots together. 5 features × 5 sub-items, queued as roadmap phase 11.
 - 🔨 **Agent personality plug-ins** *(founder idea, 2026-07-03 — "some sort of
   personality feature... some sort of plug-in people could select for each
   agent")* — related to but distinct from the Council-voice-registry above:
@@ -1206,7 +1342,9 @@ A second-opinion review flagged real risks worth acting on (truth-first):
   branch-per-change + `brain/branches.json` ledger + CI gates already do; not a new pattern
   to build. No action item, captured so it isn't re-researched later.
 
-- 🔨 **Duplicate Lightning provider exports (tech debt)** — `lightningLineRewriteProvider.ts` and `lightningLyricsProvider.ts` both export `buildLightningLineRewritePrompt` and `parseLightningLineRewrites` (exact duplicate implementations). When refactoring the Lightning provider layer (likely as part of a broader provider consolidation), extract these to a shared `lightningProviderUtils.ts` and have both import from there. No behavioral impact — just DRY cleanup.
+- 🔨 **Duplicate Lightning provider exports** — superseded by the more precise, verified
+  finding above (`lightningLineRewriteProvider.ts` is dead code, not just a duplicate — see
+  "Delete the dead lightningLineRewriteProvider.ts" entry).
 - 💭 **Playwright browser availability (environment setup)** — `node scripts/mobile-matrix.mjs` fails with "Executable doesn't exist at /home/zeus/.cache/ms-playwright/..." CLAUDE.md says browsers are preinstalled at `/opt/pw-browsers`, but that path doesn't exist in this environment. Not a code blocker (all web/node/build tests pass) — investigate/resolve when it halts a session.
 
 ## ✅ Captured → shipped

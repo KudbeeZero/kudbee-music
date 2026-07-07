@@ -5,10 +5,11 @@ program. Conductor routes one song's agents; **the Librarian oversees the model 
 itself** — SCRIBE v1/v2, KUDBEECODEV0, the four HERMES-family models, and the MiniMax
 teacher sidecar. Read by the Lightning agent (GPU side) at every session start, by
 kudbee-music sessions doing training-adjacent work, and by the founder. The *live work
-order* (what to do next, phase by phase, with budgets) stays in
-[`lightning-agent-roadmap.md`](lightning-agent-roadmap.md); this doc is the rules that
-outlive any one phase. Split deliberately: the work order churns every GPU session,
-the governance layer shouldn't churn with it — the same split
+order* (what to do next, phase by phase, with budgets) — **originally authored by
+Fable 5** — stays in [`lightning-agent-roadmap.md`](lightning-agent-roadmap.md); this
+doc adds the rules that outlive any one phase on top of Fable 5's phase structure, it
+doesn't replace it. Split deliberately: the work order churns every GPU session, the
+governance layer shouldn't churn with it — the same split
 [`lightning-plan.md`](lightning-plan.md) (policy) already draws against the roadmap
 (work order).
 

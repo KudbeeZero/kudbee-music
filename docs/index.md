@@ -15,6 +15,9 @@ entirely from code — no paid software.
 - [Mobile](mobile.md) — device detection + phone-testing workflow
 - [Sharing a song](share.md) — the deterministic link + PNG card
 - [Claude Engine (opt-in)](claude-engine.md) — bring-your-own-key real-AI lyrics
+- [Plugin / Rack architecture](plugin-rack-architecture.md) — code-verified map of the
+  plugin registry, tier gating, and Engine Rack unlock contracts, plus the one confirmed
+  security defect found and fixed (2026-07-07)
 - [SCRIBE Lightning training](scribe-training.md) — fine-tuning data for the line-rewrite engine
 - [SCRIBE Real LoRA v1](scribe-real-training-v1.md) — evaluation prompts and real test cases
 - [SCRIBE checkpoint conversion](scribe-training-next-steps.md) — litgpt → HF/PEFT → endpoint deployment workflow
@@ -32,6 +35,9 @@ entirely from code — no paid software.
   TDE / HERMES Workbench side cockpit (suggest-only, mock-state v1)
 - [Kudbee TDE backend bridge](kudbee-tde-backend-bridge.md) — the permission layer
   required before any TDE panel goes live (the lever the window doesn't have)
+- [The Awakening — onboarding roadmap](awakening-onboarding-roadmap.md) — a Council-driven,
+  animated first-run onboarding + the shared "Lego" unlock architecture underneath it,
+  completing the still-open onboarding-surface arc from Story Mode/badges
 
 ## 🎬 Video Studio
 

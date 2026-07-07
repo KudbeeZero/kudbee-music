@@ -2,7 +2,7 @@
 
 > **Generated from [`brain/roadmap.json`](brain/roadmap.json) — do not hand-edit.** Status lives ONLY in the spine; edit it there, then regenerate with `GEN_DOCS=1 npx vitest run status`. `statusBoard.test.ts` fails CI if this file drifts.
 
-**Scoreboard:** ✅ 94 shipped · 🔨 3 in build · 💤 9 queued — 106 tracked items
+**Scoreboard:** ✅ 97 shipped · 🔨 3 in build · 💤 9 queued — 109 tracked items
 (legend: ✅ shipped · 🔌 scaffold shipped, founder-gated · 🔨 in build · ⏭️ next · 💤 queued · 💭 idea · 🚧 blocked on founder)
 
 ## Tracks
@@ -153,7 +153,7 @@
 | ✅ | **✨ TDE Branch 11 — Polish + navigation** | `components/tde/` | #217 |
 | ✅ | **🌉 TDE Branch 12 — Backend bridge plan** | `docs/kudbee-tde-backend-bridge.md` | #218 |
 
-### Phase 10 — Model-family Librarian — `▰▰▰▰▰▰▰▰▰▱` 6/7
+### Phase 10 — Model-family Librarian — `▰▰▰▰▰▰▰▰▰▱` 7/8
 
 | | Item | Where it lives | PR |
 |---|------|----------------|----|
@@ -164,6 +164,14 @@
 | ✅ | **🧠 Agent-trajectory dataset — capture the training program's own process as KUDBEECODEV0 rows** | `lib/hermes/agentDecisions.ts + docs/agent-trajectory-dataset.md` | — |
 | ✅ | **🤝 Cross-agent handoff log — brain/handoffs.json comms channel between the two KUDBEE agents** | `brain/handoffs.json` | — |
 | ✅ | **📊 Training-progress metrics layer — trainingProgress() (the dashboard data source)** | `lib/hermes/modelFamily.ts` | — |
+| ✅ | **⚙️ Living-state automation — SessionStart + Stop hooks in .claude/settings.json** | `.claude/settings.json + docs/agent-autonomy.md` | — |
+
+### Phase 11 — The Awakening — Council onboarding + the Lego unlock architecture — `▰▰▰▰▰▰▰▰▰▰` 2/2
+
+| | Item | Where it lives | PR |
+|---|------|----------------|----|
+| ✅ | **📜 Roadmap doc — docs/awakening-onboarding-roadmap.md** | `docs/awakening-onboarding-roadmap.md` | — |
+| ✅ | **🔌 Plugin/Rack/Marketplace architecture audit + security fix — banked into memory** | `docs/plugin-rack-architecture.md` | — |
 
 ### Video studio — `▰▰▰▰▰▱▱▱▱▱` 4/8
 

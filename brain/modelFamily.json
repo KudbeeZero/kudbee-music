@@ -60,7 +60,7 @@
     ]
   },
   "budget": {
-    "assumptions": "RTX 6000 Lightning Studio \u2248 $2/GPU-hour \u2014 a founder-adjustable ESTIMATE; correct it here the first time a real bill disagrees",
+    "assumptions": "RTX 6000 Lightning Studio \u2248 $1/GPU-hour (corrected 2026-07-07 from an initial $2/hr estimate, per the founder's observed ~23 credits/23 hours rate) \u2014 still a founder-adjustable ESTIMATE, not a confirmed invoice rate; correct it again the first time a real bill disagrees. Note: the per-phase usdCap figures below were set against the OLD $2/hr assumption, so at the corrected rate the gpuHoursCap is now the binding constraint on every phase, not usdCap \u2014 a founder call, not silently recomputed here.",
     "monthlyUsdCap": 100,
     "rule": "Flag to the founder at 80% of any cap; hard-stop at 100%. spentUsd above usdCap fails CI on purpose \u2014 an overrun must be resolved by a founder raising the cap, never by the agent running on.",
     "phases": [
@@ -136,8 +136,8 @@
         "note": "perplexity 1.086; litgpt-native artifacts are lit_model.pth (56GB) + lit_model.pth.lora (25MB)"
       },
       "artifacts": {
-        "checkpoint": "/teamspace/studios/this_studio/scribe-runs/scribe-real-qwen2.5-14b-lora-v1/final/ (litgpt-native) + hf-converted/ (69GB pytorch_model.bin, HF format \u2014 Lightning side, never in git)",
-        "adapter": "scribe-runs/.../20260705-194802/adapter/ (35MB PEFT LoRA)"
+        "checkpoint": "/teamspace/studios/this_studio/scribe-runs/scribe-real-qwen2.5-14b-lora-v1/final/ (litgpt-native, includes the reconstructable lit_model.pth merged weights) + hf-converted/ (69GB pytorch_model.bin, HF format, used for serving \u2014 Lightning side, never in git)",
+        "adapter": "scribe-runs/scribe-real-qwen2.5-14b-lora-v1/final/lit_model.pth.lora (25MB, litgpt-native LoRA \u2014 THE rollback artifact, never delete)"
       },
       "evals": [],
       "gate": {
@@ -174,6 +174,10 @@
         {
           "date": "2026-07-07",
           "event": "Identity-gate fix committed (server.py, recognize merged HF checkpoint as valid real-SCRIBE). G2-verify now CPU-complete; GPU round-trip deferred \u2014 GPU not available this session."
+        },
+        {
+          "date": "2026-07-07",
+          "event": "Data-integrity fix: artifacts.adapter was mistakenly pointing at KUDBEECODEV0's rehearsal_candidate path \u2014 corrected to the real litgpt-native adapter, lit_model.pth.lora (25MB, in final/ next to lit_model.pth). Caught while reviewing a GPU-storage-quota disk-cleanup request (studio at 217GB, needs <200GB to unlock the RTX 6000); the cleanup itself deletes the reconstructable 56GB lit_model.pth merged checkpoint (superseded by the 69GB HF conversion already used for serving) and keeps this adapter \u2014 confirmed safe by this correction, not yet confirmed executed."
         }
       ]
     },
@@ -199,7 +203,7 @@
       },
       "artifacts": {
         "checkpoint": "kudbee-code-v0 side (see its training-notes)",
-        "adapter": "rehearsal_candidate (live)"
+        "adapter": "/teamspace/studios/this_studio/scribe-runs/smoke-tests/kudbee-code-v0/20260705-194802/adapter/ (35MB PEFT LoRA, rehearsal_candidate, live)"
       },
       "evals": [
         {

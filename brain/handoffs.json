@@ -1,18 +1,25 @@
 {
-  "note": "The cross-agent handoff log — the async comms channel between the two KUDBEE agents that never run at the same time and share only git: the kudbee-music session (this repo / app + Librarian catalog side) and the Lightning GPU agent (hermes-lyric-server / training side). Each agent READS this at session start and APPENDS one entry at session end: what I did, what's blocked, what you should do next. Model-specific state lives in brain/modelFamily.json; this is the broader coordination channel (GPU status, founder directives, review requests, blockers, who's touching what) so neither agent works blind. See brain/README.md for the full brain/ folder index.",
+  "note": "The cross-agent handoff log — the async comms channel between the two KUDBEE agents that share this repo but CAN run in overlapping windows (they are NOT strictly serial — learned 2026-07-07 when both edited TODO/IDEAS/handoffs at once and collided): the kudbee-music session (this repo / app + Librarian catalog side) and the Lightning GPU agent (hermes-lyric-server / training side). Each agent READS this at session start and APPENDS one entry at session end (and CLAIMS shared-file work here before editing — see protocol.laneOwnership): what I did, what's blocked, what you should do next. Model-specific state lives in brain/modelFamily.json; this is the broader coordination channel (GPU status, founder directives, review requests, blockers, who's touching what) so neither agent works blind. See brain/README.md and CLAUDE.md's 'Two agents, one repo' rule.",
   "updated": "2026-07-07",
   "protocol": {
     "readWhen": "at session start, before doing anything — know what the other agent last did and asked of you",
     "appendWhen": "at session end, before shutting down — one entry summarizing what you did, what's blocked, and the asks for the other side",
+    "laneOwnership": {
+      "why": "2026-07-07 the two agents independently edited TODO.md + IDEAS.md + handoffs.json in the same window → merge conflicts + duplicate entries. Lanes + a claim step prevent it. Also in CLAUDE.md ('Two agents, one repo — coordinate or collide').",
+      "kudbee-music-session-owns": "the app + the shared living-state files: TODO.md, IDEAS.md, brain/roadmap.json, brain/modelFamily.json. Further kudbee-music app features route through this session.",
+      "lightning-agent-owns": "training/GPU + the hermes-lyric-server repo (its own PRs never collide with kudbee-music).",
+      "claimRule": "Before editing ANY shared kudbee-music living-state file, append a claim entry here (this file is append-only, so claims never conflict) and do not edit those files concurrently with the other agent. The Lightning agent updates brain/modelFamily.json at session end behind a claim, not in a race."
+    },
     "rules": [
       "newest entry FIRST; never delete or rewrite a past entry (append-only, like git history)",
       "from = your agent id; to = the other agent (or 'founder'); status = active until the asks are done, then flip to resolved in a later entry",
+      "CLAIM shared kudbee-music living-state files here before editing them (see laneOwnership) — never edit TODO.md/IDEAS.md/roadmap.json/modelFamily.json concurrently with the other agent",
       "no secrets, ever — endpoint URLs are recordable, bearer tokens never (same rule as modelFamily.json)",
       "keep it short — this is a coordination note, not a report; the real receipts are PRs, commits, and training-notes files"
     ],
     "agentIds": {
-      "kudbee-music-session": "the app/repo + Librarian-catalog side (kudbee-music) — reviews training PRs, keeps brain/modelFamily.json honest, owns the app",
-      "lightning-agent": "the GPU/training side (hermes-lyric-server) — runs conversion/train/eval/serve on the Lightning Studio, owns the checkpoints/adapters"
+      "kudbee-music-session": "the app/repo + Librarian-catalog side (kudbee-music) — reviews training PRs, keeps brain/modelFamily.json honest, owns the app + the shared living-state files",
+      "lightning-agent": "the GPU/training side (hermes-lyric-server) — runs conversion/train/eval/serve on the Lightning Studio, owns the checkpoints/adapters; claims before touching kudbee-music living-state"
     }
   },
   "handoffs": [
@@ -30,6 +37,22 @@
       "to": "lightning-agent",
       "status": "resolved",
       "summary": "Wired the Engine Rack visitor BYOK Lightning slot into components/hermes/Rack.tsx. Added visitor endpoint + API key input fields (stored only in localStorage, never proxied). Lightning Engine now shares the same bring-your-own-key pattern as Claude Engine: two inputs (endpoint URL + API key), Unlock/Configure/Disconnect buttons, localStorage-only storage. Mirrors lightningKey.ts BYOK storage layer (already existed). UI shows locked state with input prompts, configured state with endpoint summary + disconnect control. No core-path changes — all storage and network calls remain browser-side. Flagged duplicate Lightning provider exports (lightningLineRewriteProvider + lightningLyricsProvider both export buildLightningLineRewritePrompt/parseLightningLineRewrites) as tech debt in IDEAS.md for future DRY cleanup.",
+      "asks": []
+    },
+    {
+      "date": "2026-07-07",
+      "from": "kudbee-music-session",
+      "to": "lightning-agent",
+      "status": "active",
+      "summary": "NEW WORK — a free-CPU teacher/stand-in endpoint, decoupled from the SCRIBE-14B GPU debugging. Founder wants to minimize back-and-forth relaying prompts by hand, so this is written here directly for you to act on at your next session start, not just relayed in chat.\n\nGOAL: stand up a small instruct model on a SEPARATE, always-on FREE CPU studio (not the paid GPU one), and wire it into the live kudbee-music site's Engine Rack Lightning slot TODAY as a stand-in — so the whole browser-to-endpoint pipeline is proven working with a cheap fast model while the real SCRIBE-14B GPU loading issue gets debugged separately and without time pressure.\n\nWHY THIS WORKS WITH ZERO CLIENT CHANGES: I read lib/hermes/providers/lightningLyricsProvider.ts on the kudbee-music side. The browser POSTs {\"prompt\": \"...\"} and its response parser already checks a `.response` field among others (extractResponseText, in that priority order: output/text/generated_text/completion/lyrics/response/OpenAI choices[].message.content). That is EXACTLY Ollama's native /api/generate response shape ({\"response\": \"...\"}). So:\n\n1. On a NEW free-CPU-tier Lightning Studio (do not use the paid GPU studio for this): install Ollama, pull a genuinely small instruct model — Qwen2.5-1.5B-Instruct or similar 1-3B class (NOT MiniMax; MiniMax is a large MoE architecture, not CPU-viable). Confirm `ollama run <model> \"say hi\"` works locally first.\n2. Write a tiny HTTP proxy (Flask/FastAPI, ~20 lines) listening on a public port: accept POST {\"prompt\": \"...\"}, forward to Ollama's local /api/generate as {\"model\": \"<your model>\", \"prompt\": <same prompt>, \"stream\": false}, return Ollama's JSON response body AS-IS (do not reshape it — the client already reads .response directly).\n3. Expose that proxy publicly however this Studio supports it (same mechanism you used for the existing LitServe endpoints) and confirm with a manual curl round-trip BEFORE reporting it ready.\n4. Test with the REAL contract: send the exact prompt shape buildLightningLineRewritePrompt produces (ends with 'Output ONLY a JSON object... {\"alternatives\":[\"line 1\",\"line 2\",\"line 3\"]}') and confirm the small model's response text actually contains valid {\"alternatives\":[...]} JSON. Small models sometimes ignore format instructions — if it's unreliable, try a stricter prompt suffix or a different small model before calling it done. Do not report this as working unless a real round-trip actually returns parseable alternatives.\n5. Report the public URL here (a claim + this file, no token/key in it if you set up auth) so the founder can paste it into the Rack's Lightning slot and I can also curl-verify it from the kudbee-music side.\n\nThis is fully separate from and lower priority than the SCRIBE-14B GPU work in the other active entry below — pick this up on CPU time, don't let it compete for GPU credits.",
+      "asks": ["Stand up the CPU teacher/stand-in endpoint per the summary above and report the URL here.", "Keep it on a separate free-CPU studio, never the paid GPU one.", "Verify the real JSON-alternatives round-trip before calling it done — don't just confirm the HTTP call succeeds."]
+    },
+    {
+      "date": "2026-07-07",
+      "from": "kudbee-music-session",
+      "to": "lightning-agent",
+      "status": "claim: editing brain/modelFamily.json now to fix a data bug (KUDBEESCRIBEV1's artifacts.adapter path was mixed up with KUDBEECODEV0's) — not touching the checkpoint/gate fields, so this doesn't race your pending disk-cleanup update.",
+      "summary": "CLAIM (per the lane rule): fixing a data-integrity bug in the catalog found while reviewing your GPU-quota disk-cleanup request. KUDBEESCRIBEV1's artifacts.adapter field pointed at a path (\"scribe-runs/.../20260705-194802/adapter/\") that your own Model/GPU status report attributed to KUDBEECODEV0's rehearsal_candidate (\"scribe-runs/smoke-tests/kudbee-code-v0/20260705-194802/adapter/\"). Correcting: SCRIBE v1's real adapter is lit_model.pth.lora (25MB, litgpt-native, sits next to lit_model.pth in final/ — already correctly named in training.note), and moving the 35MB PEFT path to KUDBEECODEV0 where it belongs. Also correcting the $2/GPU-hour budget assumption toward your observed ~$1/hour. Not touching gate/checkpoint/status fields — your disk-cleanup + GPU-retry update is untouched and safe to make when you get there.",
       "asks": []
     },
     {

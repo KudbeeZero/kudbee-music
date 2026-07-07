@@ -87,6 +87,14 @@ describe('plugins', () => {
       expect(installed.length).toBe(1);
     });
 
+    it('rejects inherited-property ids instead of resolving them off Object.prototype', () => {
+      expect(installPlugin('constructor')).toBeNull();
+      expect(installPlugin('__proto__')).toBeNull();
+      expect(installPlugin('toString')).toBeNull();
+      expect(installPlugin('hasOwnProperty')).toBeNull();
+      expect(getInstalledPlugins()).toEqual([]);
+    });
+
     it('persists install to storage', () => {
       installPlugin('stems-export');
       const installed = getInstalledPlugins();
@@ -143,6 +151,11 @@ describe('plugins', () => {
     it('returns null for invalid plugin', () => {
       const meta = getPluginMetadata('non-existent');
       expect(meta).toBeNull();
+    });
+
+    it('returns null for inherited-property ids', () => {
+      expect(getPluginMetadata('constructor')).toBeNull();
+      expect(getPluginMetadata('__proto__')).toBeNull();
     });
 
     it('returns correct minTier for each plugin', () => {
@@ -202,6 +215,11 @@ describe('plugins', () => {
 
     it('returns false for invalid plugin', () => {
       expect(tierCanAccessPlugin('pro', 'non-existent')).toBe(false);
+    });
+
+    it('returns false for inherited-property ids even at enterprise tier', () => {
+      expect(tierCanAccessPlugin('enterprise', 'constructor')).toBe(false);
+      expect(tierCanAccessPlugin('enterprise', '__proto__')).toBe(false);
     });
   });
 

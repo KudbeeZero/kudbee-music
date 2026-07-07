@@ -37,7 +37,7 @@ with a songwriting brain that learns them over time.
 ## 🚀 $1M Trajectory — Five-Phase Build Plan
 
 **Phase 1: Authentication (Email/password, session carryover)** — Foundational layer for user accounts.
-- [x] Email/password sign-up + sign-in (PBKDF2, no external deps) — shipped in #197
+- [x] Email/password sign-up + sign-in (PBKDF2, no external deps) — shipped in #197 (`lib/hermes/auth.ts` + `EmailAuth.tsx`, 21 tests)
 
 **Phase 2: Creator Marketplace — Revenue Foundation ($18/mo–$45/mo tiers + plugin ecosystem)**
 
@@ -496,6 +496,51 @@ Board** governance / Solana / token / NFT layer integrates with this engine via 
 later (kept out of this repo's core so it stays free + local).
 
 ## ✅ Shipped (newest first)
+- [x] **🔌 Plugin/Rack/Marketplace architecture audit + security fix — banked into memory (roadmap 11.2)** —
+      founder asked for an agent that maps the plugin/Rack import + marketplace/contract system with
+      a security pass "behind it," fixes for anything real found, and the whole map "banked into
+      memory... so we can recall it later." Code-verified findings: the plugin/tier-gating system
+      (`plugins.ts`, `subscription.ts`) is real, tested code but **100% inert** — nothing reachable
+      calls `hasFeature()`/`checkMonthlyQuota()`/`checkVaultQuota()`/`tierCanAccessPlugin()` except
+      `PluginMarketplace.tsx`, which is never imported by any route. A plugin is pure metadata — no
+      code-execution risk anywhere. Tier bypass via localStorage is real but by-design for a $0
+      client-only app with no payment backend yet. One genuine, mechanically-confirmed defect found
+      and fixed: `installPlugin('constructor')`/`installPlugin('__proto__')` bypassed the null-check
+      because `FIRST_PARTY_PLUGINS` is a plain object literal resolving inherited `Object.prototype`
+      members — fixed with a `lookupPlugin()` `hasOwnProperty` guard (mirrors `shareLink.ts`'s
+      existing `DANGEROUS`-set pattern) + 6 new regression tests, all 36 plugin tests pass. Full map
+      banked in `docs/plugin-rack-architecture.md`, cross-referenced from the Awakening roadmap.
+      _(this PR)_
+- [x] **📜 The Awakening — Council onboarding + Lego unlock architecture roadmap (roadmap 11.1)** —
+      planning only, no feature code yet. `docs/awakening-onboarding-roadmap.md`: a 12-system
+      verified audit found Story Mode's `CHAPTERS`+`badges.ts` is half of this exact spec already
+      (IDEAS.md names the onboarding surface as still-open), `PluginMarketplace.tsx` is fully
+      built but never imported anywhere, `agentLifecycle.ts` has zero UI, `GuidedTour` was meant
+      to cover onboarding and shipped scoped to one editor, and the Rack's Lightning-slot unlock
+      is dead code (only Claude's works). 5 features × 5 sub-items: a shared `Brick` contract
+      generalizing `StoryProgress`+`hasFeature()` into one unlock system every plugin/Council-voice
+      /engine-slot snaps into (the "Lego" architecture, explicit founder requirement); the actual
+      Awakening sequence (scripted `BrainScan` boot, a 2-3-seat mini-Council via the existing
+      `CouncilVoice` interface, `LyricLab`'s step-wizard shell reused, landing in the existing
+      Chapter-1 "First Spark"); wiring up the orphaned built-but-unused systems; ongoing unlock
+      content; and a recommended feature-flagged MVP button as the actual first PR. Awaiting
+      founder direction on which feature to build first. _(this PR)_
+- [x] **⚙️ Living-state automation — SessionStart + Stop hooks (roadmap 10.8)** — the
+      living-state-sync discipline was instruction-only (relied on the agent remembering);
+      now `.claude/settings.json` carries two hooks the harness runs mechanically every
+      session: a **SessionStart** hook that injects a reminder to read
+      `brain/modelFamily.json` + `brain/handoffs.json` + TODO/IDEAS and keep the spine
+      synced, and a **non-blocking Stop** hook that nudges if product code (`lib/`/
+      `components/`/`app/`) changed without a `TODO.md`/`IDEAS.md`/`brain/roadmap.json`
+      sync (silent when clean or already synced — low false-positive, pipe-tested across
+      4 scenarios). Documented in `docs/agent-autonomy.md` + CLAUDE.md; hard enforcement
+      stays CI (`statusBoard.test.ts`). Also fixed a stale checkbox (auth Phase 1 is
+      shipped, not in-progress). **Plus** — after two agents collided editing the same
+      living-state files (2026-07-07), documented the **"two agents, one repo" lane rule**
+      in all three memory layers (CLAUDE.md law + `brain/handoffs.json` protocol +
+      `docs/agent-autonomy.md`): kudbee-music session owns the app + shared living-state
+      files, the Lightning agent owns training/GPU + `hermes-lyric-server`, and either
+      **claims work in the append-only `handoffs.json` before editing a shared file**. _(this PR)_
 - [x] **📊 Training-progress metrics layer (roadmap 10.7)** — `trainingProgress()` /
       `familyTrainingProgress()` in `lib/hermes/modelFamily.ts`: pure, deterministic
       projections of the catalog into the "how much has each model been trained" numbers a
