@@ -181,6 +181,27 @@ subjective, do it last).
 
 ---
 
+## Sidecar: the MiniMax studio (investigate, don't block on it)
+
+The founder has **MiniMax 2.5 running with a chat window on a second Lightning
+Studio** (2026-07-07). This is a side quest — never let it stall Phases 1–2.
+When you have idle time on that studio:
+
+1. **Identify it precisely.** Which MiniMax build/size is actually installed, and
+   is the chat window fronted by an HTTP API (LitServe? OpenAI-compatible server?
+   something bespoke)? Record the answer in a training-notes file.
+2. **If it has an HTTP API**, it plugs into kudbee-music's existing seam with zero
+   new code: expose the endpoint, founder puts URL + token in `.env.local`, then
+   `node studio/lightning.mjs --ping` and a real `--prompt` call (use `--field` if
+   its request body key isn't `prompt`).
+3. **Best use is teacher, not student.** MiniMax-class MoE models are far too
+   large to LoRA-train on a single RTX 6000 — do not attempt. Its value is
+   (a) an alternative inference provider to compare against the KUDBEE adapters,
+   and (b) a teacher for synthetic training data (e.g. generating SCRIBE
+   alternatives or judging eval outputs). Teacher-generated data inherits the
+   full safety contract: original-only, no living-artist mimicry, banned-word
+   screen — same as everything else.
+
 ## Standing reporting loop
 
 At the end of every GPU session, before shutting the Studio down:
