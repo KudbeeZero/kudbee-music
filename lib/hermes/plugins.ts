@@ -97,6 +97,17 @@ const FIRST_PARTY_PLUGINS: Record<string, PluginMetadata> = {
   },
 };
 
+// Plain object literal — a bare `FIRST_PARTY_PLUGINS[id]` lookup resolves inherited
+// Object.prototype members (`constructor`, `toString`, ...) or `__proto__` itself for
+// those ids, returning a truthy value instead of undefined. lookupPlugin() guards that.
+const DANGEROUS = new Set(['__proto__', 'constructor', 'prototype']);
+function lookupPlugin(pluginId: string): PluginMetadata | undefined {
+  if (DANGEROUS.has(pluginId) || !Object.prototype.hasOwnProperty.call(FIRST_PARTY_PLUGINS, pluginId)) {
+    return undefined;
+  }
+  return FIRST_PARTY_PLUGINS[pluginId];
+}
+
 const PLUGINS_KEY = 'hermes.plugins.v1';
 
 interface KV {
@@ -154,7 +165,7 @@ export function getInstalledPlugins(): Plugin[] {
  * Install a plugin (add to user's active list).
  */
 export function installPlugin(pluginId: string): Plugin | null {
-  const plugin = FIRST_PARTY_PLUGINS[pluginId];
+  const plugin = lookupPlugin(pluginId);
   if (!plugin) return null;
 
   const installed = getInstalledPlugins();
@@ -207,14 +218,14 @@ export function isPluginActive(pluginId: string): boolean {
  * Get a specific plugin's metadata.
  */
 export function getPluginMetadata(pluginId: string): PluginMetadata | null {
-  return FIRST_PARTY_PLUGINS[pluginId] ?? null;
+  return lookupPlugin(pluginId) ?? null;
 }
 
 /**
  * Get the minimum tier required to access a plugin.
  */
 export function getPluginMinTier(pluginId: string): SubscriptionTier | null {
-  const plugin = FIRST_PARTY_PLUGINS[pluginId];
+  const plugin = lookupPlugin(pluginId);
   return plugin?.minTier ?? null;
 }
 
@@ -222,7 +233,7 @@ export function getPluginMinTier(pluginId: string): SubscriptionTier | null {
  * Check if a tier has access to a plugin (not installed, just licensed).
  */
 export function tierCanAccessPlugin(tier: SubscriptionTier, pluginId: string): boolean {
-  const plugin = FIRST_PARTY_PLUGINS[pluginId];
+  const plugin = lookupPlugin(pluginId);
   if (!plugin) return false;
 
   const tiers: SubscriptionTier[] = ['free', 'pro', 'premium', 'enterprise'];

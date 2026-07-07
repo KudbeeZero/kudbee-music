@@ -233,6 +233,17 @@ A second-opinion review flagged real risks worth acting on (truth-first):
   disclaimer in the README + Uniqueness panel. _(#37)_
 
 ## 🌱 Fresh captures
+- ✅ **Plugin/Rack/Marketplace architecture audit + security fix — banked into memory**
+  *(founder, 2026-07-07)* — "deploy an agent that specializes in the rack mounting and
+  plug-ins... how are the contracts written, we need to be very careful with this with
+  security as well... map everything... bank it into memory so we can recall it later."
+  Done this session — see `docs/plugin-rack-architecture.md` (roadmap 11.2). Central
+  finding: the plugin/tier-gating system is real, tested code but 100% inert (only the
+  never-imported `PluginMarketplace.tsx` calls the gating functions); a plugin is pure
+  metadata with zero code-execution surface. One real defect found and fixed:
+  `installPlugin('constructor'/'__proto__')` bypassed the invalid-id null-check because
+  `FIRST_PARTY_PLUGINS` is a plain object literal — closed with a `hasOwnProperty`-guarded
+  lookup mirroring `shareLink.ts`'s existing pattern, plus regression tests.
 - 🔨 **The Awakening — Council-driven onboarding + a modular ("Lego") unlock architecture**
   *(founder, 2026-07-07)* — "the brain having a really cool interactive startup where it
   asks a series of questions... taking me into a council that doesn't have everything in

@@ -496,6 +496,21 @@ Board** governance / Solana / token / NFT layer integrates with this engine via 
 later (kept out of this repo's core so it stays free + local).
 
 ## ✅ Shipped (newest first)
+- [x] **🔌 Plugin/Rack/Marketplace architecture audit + security fix — banked into memory (roadmap 11.2)** —
+      founder asked for an agent that maps the plugin/Rack import + marketplace/contract system with
+      a security pass "behind it," fixes for anything real found, and the whole map "banked into
+      memory... so we can recall it later." Code-verified findings: the plugin/tier-gating system
+      (`plugins.ts`, `subscription.ts`) is real, tested code but **100% inert** — nothing reachable
+      calls `hasFeature()`/`checkMonthlyQuota()`/`checkVaultQuota()`/`tierCanAccessPlugin()` except
+      `PluginMarketplace.tsx`, which is never imported by any route. A plugin is pure metadata — no
+      code-execution risk anywhere. Tier bypass via localStorage is real but by-design for a $0
+      client-only app with no payment backend yet. One genuine, mechanically-confirmed defect found
+      and fixed: `installPlugin('constructor')`/`installPlugin('__proto__')` bypassed the null-check
+      because `FIRST_PARTY_PLUGINS` is a plain object literal resolving inherited `Object.prototype`
+      members — fixed with a `lookupPlugin()` `hasOwnProperty` guard (mirrors `shareLink.ts`'s
+      existing `DANGEROUS`-set pattern) + 6 new regression tests, all 36 plugin tests pass. Full map
+      banked in `docs/plugin-rack-architecture.md`, cross-referenced from the Awakening roadmap.
+      _(this PR)_
 - [x] **📜 The Awakening — Council onboarding + Lego unlock architecture roadmap (roadmap 11.1)** —
       planning only, no feature code yet. `docs/awakening-onboarding-roadmap.md`: a 12-system
       verified audit found Story Mode's `CHAPTERS`+`badges.ts` is half of this exact spec already
