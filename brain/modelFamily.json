@@ -143,7 +143,7 @@
       "gate": {
         "stage": "G2-verify",
         "cleared": false,
-        "blockedOn": "Identity-gate fix committed (hermes-lyric-server commit 8da1af5, CPU-tested). G2-verify now requires GPU round-trip with one real contract prompt (buildLightningLineRewritePrompt format \u2192 {\"alternatives\":[...]} JSON). No round-trip yet \u2014 G2 cleared only when GPU confirms output format + banned-word check pass."
+        "blockedOn": "Identity-gate fix committed (hermes-lyric-server commit 8da1af5, CPU-tested). G2-verify now requires GPU round-trip with one real contract prompt (buildLightningLineRewritePrompt format \u2192 {\"alternatives\":[...]} JSON). No round-trip yet \u2014 G2 cleared only when GPU confirms output format + banned-word check pass. A separate founder smoke test found PyTorch wheels lack CUDA kernels for RTX PRO 6000 Blackwell (sm_120) entirely \u2014 if the GPU serving this model shares that architecture, the round-trip may hit the same wall until reconciled (see history)."
       },
       "endpoint": {
         "served": false,
@@ -178,6 +178,10 @@
         {
           "date": "2026-07-07",
           "event": "Data-integrity fix: artifacts.adapter was mistakenly pointing at KUDBEECODEV0's rehearsal_candidate path \u2014 corrected to the real litgpt-native adapter, lit_model.pth.lora (25MB, in final/ next to lit_model.pth). Caught while reviewing a GPU-storage-quota disk-cleanup request (studio at 217GB, needs <200GB to unlock the RTX 6000); the cleanup itself deletes the reconstructable 56GB lit_model.pth merged checkpoint (superseded by the 69GB HF conversion already used for serving) and keeps this adapter \u2014 confirmed safe by this correction, not yet confirmed executed."
+        },
+        {
+          "date": "2026-07-07",
+          "event": "Founder hand-ran a LoRA fine-tune smoke test on a SEPARATE, repo-disconnected Lightning Studio (LLM-Finetuning-Toolkit template, transformers+PEFT+bitsandbytes \u2014 not litgpt) to verify pipeline mechanics only. Hit a real blocker: PyTorch's stable AND nightly wheels ship no CUDA kernels for RTX PRO 6000 Blackwell (sm_120) \u2014 'no kernel image available for execution on the device' regardless of dtype/quantization tried. Workaround (CPU-only training on TinyLlama-1.1B, NOT the real Qwen2.5-14B-Instruct checkpoint) proved the fine-tune plumbing works end to end but is explicitly NOT a G2-verify pass for this model \u2014 no real SCRIBE v1 checkpoint or adapter was touched. Open reconciliation question, unresolved: this appears to contradict the 2026-07-05 entry above claiming this exact model trained successfully 'on RTX PRO 6000 Blackwell' via litgpt (val loss 0.082) \u2014 candidate explanation is litgpt's own bundled CUDA/flash-attention build supporting Blackwell where the generic transformers+bitsandbytes stack used in this smoke test doesn't, but unconfirmed."
         }
       ]
     },

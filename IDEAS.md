@@ -233,6 +233,29 @@ A second-opinion review flagged real risks worth acting on (truth-first):
   disclaimer in the README + Uniqueness panel. _(#37)_
 
 ## 🌱 Fresh captures
+- 💭 **Live debugging trajectories ARE training data — real-world validation of the
+  transcript harvester idea** *(founder, 2026-07-07)* — while hand-debugging a LoRA
+  fine-tune smoke test on a fresh, repo-disconnected Lightning Studio (via KILO Code,
+  not the lightning-agent), the founder pasted back a compacted-session summary of the
+  whole debugging arc and asked "isn't this wonderful amazing data that we can save and
+  use to train." Yes — and it's exactly the shape the still-unbuilt **"Transcript
+  harvester"** idea below already speced: a real situation → plan/decision → action →
+  outcome trajectory (CUDA kernel error → root-cause diagnosis → workaround design →
+  verification), the raw-layer counterpart to what `lib/hermes/agentDecisions.ts`'s
+  KUDBEECODEV0 rows already capture at the distilled level. Two honest caveats logged
+  alongside this so they don't get lost if this becomes a training row or a catalog
+  claim later: (1) the LoRA smoke test that "passed" actually trained **TinyLlama-1.1B
+  on CPU**, not KUDBEESCRIBEV1's real Qwen2.5-14B-Instruct checkpoint — it proves the
+  fine-tune *pipeline mechanics* work, not that SCRIBE v1's G2-verify gate cleared;
+  recording it as a SCRIBE v1 pass would be exactly the fabricated gate-clearance the
+  Librarian's `never` list forbids. (2) The root cause found along the way — PyTorch's
+  stable + nightly wheels have zero CUDA kernels for RTX PRO 6000 Blackwell (sm_120) —
+  is genuinely useful and now logged on `KUDBEESCRIBEV1` in `brain/modelFamily.json`,
+  but it appears to contradict the existing 2026-07-05 record that this same model
+  trained successfully "on RTX PRO 6000 Blackwell" via litgpt (val loss 0.082);
+  unreconciled, flagged to the lightning-agent in `brain/handoffs.json` rather than
+  silently trusting either claim. This entry is the concrete seed example — the
+  transcript-harvester build itself is still 💭/not started (see below).
 - 💭 **Rack "flip to the back" cable view + teach-the-Rack onboarding + a real Autotune plugin**
   *(founder, 2026-07-07)* — three linked asks on top of the just-shipped Rack audit
   (`docs/plugin-rack-architecture.md`, roadmap 11.2): (1) explain to the visitor how the

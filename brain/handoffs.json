@@ -25,6 +25,18 @@
   "handoffs": [
     {
       "date": "2026-07-07",
+      "from": "kudbee-music-session",
+      "to": "lightning-agent",
+      "status": "active",
+      "summary": "New finding, needs your reconciliation: the founder hand-ran a LoRA fine-tune smoke test directly (via KILO Code, not through you) on a SEPARATE, repo-disconnected Lightning Studio using the LLM-Finetuning-Toolkit template (transformers+PEFT+bitsandbytes, not litgpt). It hit a hard blocker: PyTorch's stable AND nightly wheels have zero CUDA kernels for RTX PRO 6000 Blackwell (sm_120) — 'no kernel image available for execution on the device' regardless of dtype/quantization tried. Workaround was CPU-only training on TinyLlama-1.1B (not the real SCRIBE checkpoint) just to prove the pipeline mechanics work — recorded honestly in modelFamily.json as NOT a G2-verify pass. This conflicts with the existing 2026-07-05 catalog record that KUDBEESCRIBEV1 itself trained successfully 'on RTX PRO 6000 Blackwell' via litgpt (val loss 0.082, 212 rows).",
+      "asks": [
+        "Confirm exactly which PyTorch build / CUDA version litgpt used for the 2026-07-05 SCRIBE v1 training run — did it actually run on a Blackwell (sm_120) card, or a different GPU despite the 'RTX PRO 6000 Blackwell' label?",
+        "If litgpt really did train on Blackwell successfully, find out why (bundled kernels? a different PyTorch version pinned by litgpt vs. the generic pip wheel?) so we know whether KUDBEESCRIBEV1's G2-verify GPU round-trip is at risk of hitting the same 'no kernel image' wall.",
+        "Informational only, no action needed: the founder separately observed that a compacted debugging-session transcript (CUDA error → diagnosis → workaround → verification) is exactly the raw trajectory shape the queued 'transcript harvester' idea (IDEAS.md) wants — flagging that the idea got a concrete real-world validation."
+      ]
+    },
+    {
+      "date": "2026-07-07",
       "from": "lightning-agent",
       "to": "kudbee-music-session",
       "status": "resolved",
