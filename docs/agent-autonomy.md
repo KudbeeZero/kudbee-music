@@ -100,9 +100,31 @@ allowlist above is the right level, because that tree has your real git identity
 production app. The honest rule: bypass the prompts where the blast radius is contained and
 the output is gated downstream; keep the scoped allowlist everywhere else.
 
+## Automated living-state reminders (hooks)
+
+CLAUDE.md's living-state-sync rule is an *instruction* — an agent has to remember it.
+`.claude/settings.json` also carries two **hooks** (the harness runs these mechanically,
+every session, for every agent in this repo) so the discipline doesn't rely on memory:
+
+- **SessionStart hook** — injects a reminder to read `brain/modelFamily.json`,
+  `brain/handoffs.json`, `TODO.md` and `IDEAS.md` at the start, and to keep the living
+  state synced. So every session — mine, the Lightning agent's, a fresh one — opens
+  oriented to the notes.
+- **Stop hook** — before a session ends, if the working diff touched product code
+  (`lib/`, `components/`, `app/`) but **not** `TODO.md` / `IDEAS.md` / `brain/roadmap.json`,
+  it prints a one-line nudge to sync the living state and regenerate the status board.
+  It's **non-blocking and low-false-positive**: it never stops the agent, and it stays
+  silent when the tree is clean (already committed/pushed) or when the living state was
+  already updated. Docs- or config-only changes don't trigger it.
+
+These are *nudges*, not enforcement. The real enforcement is still CI: `statusBoard.test.ts`
+fails the build on any living-state drift, and the memory-index guards fail if a route
+rots. Hooks catch it early (per session); CI catches it hard (at the PR). To review or
+disable the hooks, open `/hooks`.
+
 ## See also
 
-- [`.claude/settings.json`](../.claude/settings.json) — the allowlist itself
+- [`.claude/settings.json`](../.claude/settings.json) — the allowlist + the hooks
 - [`lightning-librarian.md`](lightning-librarian.md) — the KUDBEE-GATE guardrails that make
   hands-off running safe (the output-side net)
 - [`CLAUDE.md`](../CLAUDE.md) — the security rules the `deny` list keeps mechanical

@@ -233,6 +233,61 @@ A second-opinion review flagged real risks worth acting on (truth-first):
   disclaimer in the README + Uniqueness panel. _(#37)_
 
 ## 🌱 Fresh captures
+- 🔨 **Close the test-file type blind spot (the systemic root cause of the scheme bug)**
+  *(found 2026-07-07 by a repo scan)* — `tsconfig.json`'s `exclude` lists `lib/hermes/__tests__`
+  (+ `studio`, `bin`), so **test files are never type-checked** by `npx tsc --noEmit`. That
+  is exactly why the original invalid-rhyme-scheme literals slipped through, and the scan
+  found **two more live instances of the same class**: `lib/hermes/__tests__/hermesScribeLyricsProvider.test.ts:17`
+  and `lib/hermes/__tests__/lightningLyricsProvider.test.ts:19` both build a `mockInputs: SongInputs`
+  with `structure: 'standard'` (NOT a valid `SongStructure` — `hook-first|verse-first|radio-edit|short-form|full-song`)
+  and omit the required `doNotUse`/`references` fields. `tsc` would reject all three, but the
+  exclude hides them. **Systemic fix (high leverage):** add a `tsconfig.test.json` that
+  includes `__tests__` and run it as a gate (catches ALL current + future test-file type
+  drift by construction, not whack-a-mole). **Symptomatic fixes:** correct the two
+  `structure:'standard'` mocks. **Latent vector (informational, clean today):** `occasionPacks.ts`
+  and `patternPacks.ts` cast their JSON with `as OccasionPack[]`/`as PatternPack[]`, so an
+  out-of-union `rhymeScheme`/`structure` typed into `brain/occasionPacks.json` /
+  `brain/patternPacks.json` wouldn't fail `tsc` — only the runtime whitelist guards it; a
+  small test validating those JSON files against the unions at load would close it.
+  (Determinism iron law + doc-route freshness both scanned CLEAN — no findings there.)
+- 💭 **Transcript harvester — capture the LIVE agent narration into the trajectory dataset**
+  *(founder, 2026-07-07)* — "this thinking, right here, as Claude Code works through it — is
+  it being captured? It's literally thinking on top of what we're doing, great training
+  material. We should build this out in the database." Extends the agent-trajectory dataset
+  (10.5, `lib/hermes/agentDecisions.ts` + `docs/agent-trajectory-dataset.md`), which today
+  only harvests the DISTILLED decisions (from `brain/modelFamily.json` history[] / PRs /
+  commits). This adds the RAW layer: the session + subagent transcripts (already persisted
+  by the harness) → a harvester that cleans (drop tool spam/retries/dead-ends), **scrubs
+  secrets** (reuse `scrubSecrets()`), and structures into `{situation → plan/decision →
+  action → outcome}` rows tagged `source:'transcript'` → founder-side store → KUDBEECODEV0
+  training rows. Honest boundaries (same as 10.5): (a) it's the EXTERNALIZED narration in
+  the transcript, not a model's hidden chain-of-thought; (b) the "database" is founder-side
+  ops infra, NEVER the $0 static client (no-server iron law) — same boundary as the Kestra
+  idea in `docs/lightning-plan.md`; (c) raw transcripts are noisy + secret-bearing, so the
+  clean+scrub step is mandatory before any row ships. Design next: the transcript→row
+  harvester, and where the founder-side store lives (local file / Supabase / D1 — an opt-in
+  backend the core calls via API, never bundled).
+- 🔨 **Delete the dead `lightningLineRewriteProvider.ts` + fix its misnamed test** *(found
+  + verified 2026-07-07 by a repo scan)* — `lib/hermes/providers/lightningLineRewriteProvider.ts`
+  is **dead code with ZERO importers** (verified: nothing imports it; `ScribeEditor.tsx`
+  imports `suggestLightningLineRewrites` from the LIVE `lightningLyricsProvider.ts`). Worse,
+  it exports the same names (`buildLightningLineRewritePrompt`, `parseLightningLineRewrites`,
+  `suggestLightningLineRewrites`) as the live file but with a **reversed argument order**
+  (`ctx,count,opts` vs live `opts,ctx,count`) — so an agent auto-importing the wrong one
+  fails SILENTLY. Its test `lightningLineRewriteProvider.test.ts` doesn't even test it — it
+  imports from `claudeLyricsProvider` (tests Claude). Action: delete the dead file, and
+  rename/fold the misnamed test into the Claude test it actually covers (don't lose the
+  Claude coverage). Needs full gates. This is the exact class of trip hazard behind an
+  earlier scheme bug.
+- 🔨 **Factor the shared core out of the two LIVE near-duplicate providers** *(same scan)* —
+  `lightningLyricsProvider.ts` and `hermesScribeLyricsProvider.ts` are ~90% identical (same
+  error codes `missing-endpoint|http-error|malformed-response`, same `{"alternatives":[...]}`
+  contract, same `extractResponseText`/`parseJson`, same POST shape) differing mainly by env
+  var (`LIGHTNING_ENDPOINT` vs `NEXT_PUBLIC_SCRIBE_REWRITE_ENDPOINT`). Both are live (both
+  used by ScribeEditor's provider selector) — a fix-it-twice maintenance trap. Extract the
+  shared error/parse/extract core into one module both import. Note: `claudeLyricsProvider.ts`
+  stays the canonical SCRIBE training contract (`buildLineRewritePrompt`/`parseLineRewrites`
+  are what `trainingData.ts` depends on by name) — don't fold that one in.
 - 💭 **Architecture-prediction training target — teach a model to predict what gets built**
   *(founder, 2026-07-07)* — "our models are gonna be different… trained on architecture
   building segments, like GitHub does with workflows… plan/architect the architecture and

@@ -322,6 +322,13 @@
           "status": "shipped",
           "home": "lib/hermes/modelFamily.ts",
           "note": "SHIPPED (this PR). The data foundation for the founder's 'how much has each agent been trained' dashboard (10.3): trainingProgress(id) / familyTrainingProgress() are pure projections of the catalog into the numbers a dataviz dashboard renders — gateIndex + gatePercent over the 7 KUDBEE-GATE stages (G0→G6), datasetRows (training volume), valLoss, the most-repeated eval's run count + pass rate + a confirmed flag (never reports a single run as confirmed — the honesty rule, tested), iterations (length of the decision trail), served, nextAction. GATE_STAGES exported as the ordered pipeline. Deterministic, no clock. +4 tests. Wiring these into the /tde Models panel with graphs is the dashboard build itself (10.3, queued) — a detailed build prompt using the /dataviz skill was handed to the founder."
+        },
+        {
+          "id": "10.8",
+          "title": "⚙️ Living-state automation — SessionStart + Stop hooks in .claude/settings.json",
+          "status": "shipped",
+          "home": ".claude/settings.json + docs/agent-autonomy.md",
+          "note": "SHIPPED (this PR). Founder directive: 'make sure you're creating notes and updating... set up this workflow so it happens automatically all the time.' The living-state-sync rule was instruction-only (relied on the agent remembering CLAUDE.md). Now the harness runs two hooks mechanically for EVERY agent session in this repo: a SessionStart hook injecting a reminder to read brain/modelFamily.json + brain/handoffs.json + TODO/IDEAS and keep the spine synced, and a NON-BLOCKING Stop hook that nudges if product code (lib/|components/|app/) changed without a TODO.md/IDEAS.md/brain/roadmap.json sync — silent when the tree is clean or already synced (low false-positive; pipe-tested across 4 scenarios; jq schema-validated; permissions block preserved). Configured via the update-config skill. Hard enforcement stays CI (statusBoard.test.ts fails on drift) — hooks catch it early per-session, CI catches it hard at the PR. Also fixed a stale TODO checkbox (auth Phase 1 shipped, not in-progress) and tracked the two-Lightning-provider-files duplicate-export tech debt in IDEAS.md (found in a same-session repo scan; the 'recurring noise gets a tracked item' rule)."
         }
       ]
     }

@@ -75,5 +75,27 @@
       "Write(.env.local)",
       "Write(.env)"
     ]
+  },
+  "hooks": {
+    "SessionStart": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "echo '{\"hookSpecificOutput\":{\"hookEventName\":\"SessionStart\",\"additionalContext\":\"KUDBEE living-state discipline: at session start read brain/modelFamily.json (the model catalog), brain/handoffs.json (the cross-agent log), TODO.md and IDEAS.md. Every behavior PR updates TODO.md + IDEAS.md + brain/roadmap.json together and regenerates the status board (GEN_DOCS=1 npx vitest run status); capture new ideas in IDEAS.md the moment they are said; end a session by appending a brain/handoffs.json entry. A PR that skips the living-state sync is not done (CLAUDE.md).\"}}'"
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "d=$(git diff --name-only 2>/dev/null; git diff --cached --name-only 2>/dev/null); if echo \"$d\" | grep -qE '^(lib/|components/|app/)'; then if ! echo \"$d\" | grep -qE '(TODO[.]md|IDEAS[.]md|brain/roadmap[.]json)'; then echo '{\"systemMessage\":\"Living-state reminder: product code changed but TODO.md / IDEAS.md / brain/roadmap.json are not in the working diff. Per CLAUDE.md, sync the living state, regenerate the status board (GEN_DOCS=1 npx vitest run status), and consider a brain/handoffs.json entry before wrapping up.\"}'; fi; fi"
+          }
+        ]
+      }
+    ]
   }
 }

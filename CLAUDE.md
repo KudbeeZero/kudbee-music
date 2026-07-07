@@ -71,6 +71,12 @@ node scripts/mobile-matrix.mjs   # anything touching layout (build the export fi
 - Respect `.github/PULL_REQUEST_TEMPLATE.md`; commits carry the harness's
   `Co-Authored-By` + session-link footer.
 - Start-of-session orientation: the `resume` skill (`.claude/skills/resume/SKILL.md`).
+- **Automated so it can't rely on memory**: `.claude/settings.json` carries a SessionStart
+  hook (reminds every session to read the living-state files + keep them synced) and a
+  non-blocking Stop hook (nudges if product code changed without a `TODO.md`/`IDEAS.md`/
+  `brain/roadmap.json` sync). Plus the autonomy allowlist (safe commands run without
+  asking). The hard enforcement is still CI (`statusBoard.test.ts` fails on drift). See
+  `docs/agent-autonomy.md`.
 
 ## Security rules (learned the hard way)
 
@@ -120,7 +126,7 @@ node scripts/mobile-matrix.mjs   # anything touching layout (build the export fi
 ## Status board
 
 <!-- STATUS:BEGIN generated: edit brain/roadmap.json, then GEN_DOCS=1 npx vitest run status -->
-**📊 Status board:** ✅ 93 shipped · 🔨 3 in build · 💤 10 queued (106 tracked) — full tables in [`STATUS.md`](STATUS.md), source of truth [`brain/roadmap.json`](brain/roadmap.json).
+**📊 Status board:** ✅ 94 shipped · 🔨 3 in build · 💤 10 queued (107 tracked) — full tables in [`STATUS.md`](STATUS.md), source of truth [`brain/roadmap.json`](brain/roadmap.json).
 <!-- STATUS:END -->
 
 ## Memory layers — where the brain keeps things

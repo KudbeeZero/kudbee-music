@@ -37,7 +37,7 @@ with a songwriting brain that learns them over time.
 ## 🚀 $1M Trajectory — Five-Phase Build Plan
 
 **Phase 1: Authentication (Email/password, session carryover)** — Foundational layer for user accounts.
-- [x] Email/password sign-up + sign-in (PBKDF2, no external deps) — shipped in #197
+- [x] Email/password sign-up + sign-in (PBKDF2, no external deps) — shipped in #197 (`lib/hermes/auth.ts` + `EmailAuth.tsx`, 21 tests)
 
 **Phase 2: Creator Marketplace — Revenue Foundation ($18/mo–$45/mo tiers + plugin ecosystem)**
 
@@ -496,6 +496,17 @@ Board** governance / Solana / token / NFT layer integrates with this engine via 
 later (kept out of this repo's core so it stays free + local).
 
 ## ✅ Shipped (newest first)
+- [x] **⚙️ Living-state automation — SessionStart + Stop hooks (roadmap 10.8)** — the
+      living-state-sync discipline was instruction-only (relied on the agent remembering);
+      now `.claude/settings.json` carries two hooks the harness runs mechanically every
+      session: a **SessionStart** hook that injects a reminder to read
+      `brain/modelFamily.json` + `brain/handoffs.json` + TODO/IDEAS and keep the spine
+      synced, and a **non-blocking Stop** hook that nudges if product code (`lib/`/
+      `components/`/`app/`) changed without a `TODO.md`/`IDEAS.md`/`brain/roadmap.json`
+      sync (silent when clean or already synced — low false-positive, pipe-tested across
+      4 scenarios). Documented in `docs/agent-autonomy.md` + CLAUDE.md; hard enforcement
+      stays CI (`statusBoard.test.ts`). Also fixed a stale checkbox (auth Phase 1 is
+      shipped, not in-progress). _(this PR)_
 - [x] **📊 Training-progress metrics layer (roadmap 10.7)** — `trainingProgress()` /
       `familyTrainingProgress()` in `lib/hermes/modelFamily.ts`: pure, deterministic
       projections of the catalog into the "how much has each model been trained" numbers a
