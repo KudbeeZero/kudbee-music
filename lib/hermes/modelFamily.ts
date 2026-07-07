@@ -167,3 +167,71 @@ export function staleModels(nowIso: string): { id: string; daysSinceTouch: numbe
     .filter((m) => m.daysSinceTouch > m.staleAfterDays)
     .map(({ id, daysSinceTouch }) => ({ id, daysSinceTouch }));
 }
+
+// ---- training-progress metrics (the dashboard data source) -------------------------
+// "How much has each model been trained?" — a pure projection of the catalog into the
+// numbers a dashboard renders (docs/agent-trajectory-dataset.md + the /tde cockpit).
+// Deterministic: same catalog ⇒ same metrics, no clock. The gate stages are the KUDBEE-
+// GATE pipeline in order, so an index over them is an honest "how far through" measure.
+
+/** The KUDBEE-GATE stages in pipeline order — G0 → G6. */
+export const GATE_STAGES = [
+  'G0-dataset', 'G1-train', 'G2-verify', 'G3-eval', 'G4-head-to-head', 'G5-serve', 'G6-promote',
+] as const;
+export type GateStage = (typeof GATE_STAGES)[number];
+
+export interface TrainingProgress {
+  id: string;
+  family: string;
+  status: string;
+  gateStage: string | null;
+  /** Index into GATE_STAGES, or -1 if not started. */
+  gateIndex: number;
+  /** How far through the 7-stage pipeline, 0–100 (0 when not started). */
+  gatePercent: number;
+  gateCleared: boolean;
+  /** Training-set size — the clearest "how much data it was trained on". */
+  datasetRows: number | null;
+  valLoss: number | null;
+  /** Most-repeated eval's run count (0 if never evaluated) and its pass rate. */
+  evalRuns: number;
+  evalPassRate: number | null;
+  evalConfirmed: boolean;
+  /** Recorded training-ops iterations — the length of the decision trail. */
+  iterations: number;
+  served: boolean;
+  nextAction: string;
+}
+
+/** One model's training progress. Returns null for an unknown id. */
+export function trainingProgress(id: string): TrainingProgress | null {
+  const m = modelById(id);
+  if (!m) return null;
+  const gateIndex = m.gate.stage ? GATE_STAGES.indexOf(m.gate.stage as GateStage) : -1;
+  // The eval that carries the most runs is the most-settled signal for this model.
+  const topEval = m.evals.length
+    ? m.evals.reduce((best, e) => (e.runs > best.runs ? e : best), m.evals[0])
+    : null;
+  return {
+    id: m.id,
+    family: m.family,
+    status: m.status,
+    gateStage: m.gate.stage,
+    gateIndex,
+    gatePercent: gateIndex < 0 ? 0 : Math.round((gateIndex / (GATE_STAGES.length - 1)) * 100),
+    gateCleared: m.gate.cleared,
+    datasetRows: m.dataset.rows,
+    valLoss: m.training.valLoss,
+    evalRuns: topEval?.runs ?? 0,
+    evalPassRate: topEval?.value ?? null,
+    evalConfirmed: m.evals.some((e) => e.confirmed && e.runs >= CONFIRM_RUNS),
+    iterations: m.history?.length ?? 0,
+    served: m.endpoint.served,
+    nextAction: m.nextAction,
+  };
+}
+
+/** Training progress for the whole family, in catalog order — the dashboard's row set. */
+export function familyTrainingProgress(): TrainingProgress[] {
+  return spine.models.map((m) => trainingProgress(m.id)!);
+}

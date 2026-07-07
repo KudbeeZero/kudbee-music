@@ -496,6 +496,14 @@ Board** governance / Solana / token / NFT layer integrates with this engine via 
 later (kept out of this repo's core so it stays free + local).
 
 ## ✅ Shipped (newest first)
+- [x] **📊 Training-progress metrics layer (roadmap 10.7)** — `trainingProgress()` /
+      `familyTrainingProgress()` in `lib/hermes/modelFamily.ts`: pure, deterministic
+      projections of the catalog into the "how much has each model been trained" numbers a
+      dashboard renders — gate progress (index + % over the 7 KUDBEE-GATE stages), dataset
+      rows, val loss, top eval's run-count + pass-rate + confirmed flag (never reports a
+      single run as confirmed), decision-trail length, served, next action. The data source
+      for the founder's training dashboard; the graph-rendering build itself is roadmap 10.3
+      (a detailed `/dataviz`-based build prompt was handed off). +4 tests. _(this PR)_
 - [x] **🔓 Agent autonomy + 🧠 trajectory dataset + 🤝 cross-agent handoff log (roadmap 10.4–10.6)** —
       three founder directives in one PR. **Autonomy:** `.claude/settings.json` allowlist so
       the training agents run the safe repeated commands without asking (deny keeps
