@@ -178,6 +178,8 @@ table is the top-level index across *all* memory tiers, folder pages included.
 | TDE mock mission queue (browser) | localStorage `hermes.tdeMissions.v1` (+ `.bak` mirror) via `components/tde/tdeStorage.ts` — the visitor’s own suggest-only mission cards on `/tde`; sanitized on load, mock state only, never executed |
 | Identity / dev door (browser) | localStorage `hermes.profile.v1`, `hermes.devDoor.v1` via `lib/hermes/identity.ts` |
 | Claude Engine BYOK key (browser, visitor's own) | localStorage `hermes.claudeKey.v1`, `hermes.claudeEngineActive.v1` via `lib/hermes/claudeKey.ts` — never sent to any server we control |
+| Lightning Engine BYOK endpoint (browser, visitor's own) | localStorage `hermes.lightningEndpoint.v1`, `hermes.lightningApiKey.v1` via `lib/hermes/lightningKey.ts` — same shape as Claude's slot, never sent to any server we control |
+| Rack first-visit explainer flag (browser) | localStorage `hermes.rackTourSeen.v1` via `lib/hermes/rackTour.ts` — a plain one-time "seen it" flag, same idiom as `storage.ts`'s `scribeTourSeen` |
 | Session RAM | `lib/hermes/workingMemory.ts` (decays + consolidates, in-memory) |
 | Docs index | `docs/` — hit-factory, brain-wiring (generated from brainMap — regen `GEN_DOCS=1 npx vitest run wiring`), mobile, share, og-unfurl, accounts, nft-standard, claude-engine, runway-plan, lightning-plan, pattern-packs, watchdog |
 

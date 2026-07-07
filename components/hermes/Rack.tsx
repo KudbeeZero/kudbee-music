@@ -5,12 +5,15 @@ import { ENGINE_UNITS } from '@/lib/hermes/engines';
 import { getClaudeKey, setClaudeKey, clearClaudeKey, isClaudeEngineActive, setClaudeEngineActive } from '@/lib/hermes/claudeKey';
 import { getLightningEndpoint, setLightningEndpoint, getLightningApiKey, setLightningApiKey, clearLightningConfig, lightningConfigured } from '@/lib/hermes/lightningKey';
 import { testClaudeKey, type ClaudeKeyTestResult } from '@/lib/hermes/providers/claudeLyricsProvider';
+import { hasSeenRackTour, markRackTourSeen } from '@/lib/hermes/rackTour';
+import KeyUnlockRow from './KeyUnlockRow';
 import styles from './hermes.module.css';
 
 // The Pro Studio Rack — the lyrical engines as a DAW-style rack of modular units.
 // The free Local Combinator is lit and active; Claude Engine is a bring-your-own-key
 // slot — paste a key, it lives only in this browser, and this browser calls Anthropic
 // directly (see the claudeKey.ts header comment for why that's the $0-safe design).
+
 export default function Rack() {
   // Read from localStorage after mount only — server-rendered HTML has no
   // localStorage, so this starts "locked" and hydrates to the real state.
@@ -26,11 +29,19 @@ export default function Rack() {
   const [lightningKeyInput, setLightningKeyInput] = useState('');
   const [lightningEditing, setLightningEditing] = useState(false);
 
+  const [tourSeen, setTourSeen] = useState(true); // default hidden until hydrated, so SSR never flashes it
+
   useEffect(() => {
     setHasClaudeKey(!!getClaudeKey());
     setClaudeActive(isClaudeEngineActive());
     setHasLightningConfig(lightningConfigured());
+    setTourSeen(hasSeenRackTour());
   }, []);
+
+  function dismissTour() {
+    markRackTourSeen();
+    setTourSeen(true);
+  }
 
   function unlockClaude() {
     const trimmed = claudeKeyInput.trim();
@@ -90,9 +101,33 @@ export default function Rack() {
   }
 
   return (
-    <div className={styles.panel}>
+    <div className={`${styles.panel} ${styles.rackChassis}`}>
       <div className={styles.panelTitle}>🎛️ Engine Rack</div>
       <div className={styles.hint}>Swappable lyrical engines. The free unit drives everything; Claude Engine unlocks with your own Anthropic key.</div>
+
+      {!tourSeen && (
+        <div className={styles.rackTour}>
+          <div className={styles.rackTourTitle}>How the rack works</div>
+          <div className={styles.rackTourBody}>
+            Each unit below is a lyrical engine — think of it like outboard gear in a
+            recording studio. The <strong>Local Combinator</strong> is always on and free.
+            The other slots unlock when you connect your own key: paste it, hit Unlock,
+            and that engine lights up green and starts driving generation. Nothing you
+            paste ever leaves your browser except straight to the provider it's for.
+          </div>
+          <button className={styles.ghostBtn} onClick={dismissTour}>Got it</button>
+        </div>
+      )}
+
+      {/* Purely cosmetic — a power-strip fixture at the top of the chassis, like the
+          conditioner unit at the top of a real studio rack. No function yet; a natural
+          spot to grow into (e.g. session status) once there's something real to show. */}
+      <div className={styles.rackPower} aria-hidden="true">
+        <span className={styles.rackPowerLabel}>HERMES</span>
+        <span className={styles.rackPowerVents} />
+        <span className={styles.rackPowerLed} />
+      </div>
+
       <div style={{ marginTop: 8, display: 'flex', flexDirection: 'column', gap: 8 }}>
         {ENGINE_UNITS.map((u) => {
           const isClaude = u.id === 'claude-engine';
@@ -104,7 +139,7 @@ export default function Rack() {
           return (
             <div
               key={u.id}
-              className={styles.flag}
+              className={`${styles.flag} ${styles.rackUnit}`}
               style={{
                 borderLeft: `3px solid ${isActive ? 'var(--good)' : locked ? 'var(--line-strong)' : 'var(--amber)'}`,
                 opacity: locked ? 0.6 : 1,
@@ -121,83 +156,55 @@ export default function Rack() {
                 <div className={styles.hint} style={{ marginTop: 2, color: 'var(--amber)' }}>↑ {u.unlockHint}</div>
               )}
 
-              {/* Claude Engine Key Input */}
-              {isClaude && locked && !claudeEditing && (
-                <button className={styles.ghostBtn} style={{ marginTop: 6 }} onClick={() => setClaudeEditing(true)}>
-                  🔑 Enter your Anthropic key
-                </button>
-              )}
-              {isClaude && locked && claudeEditing && (
-                <div style={{ marginTop: 6, display: 'flex', gap: 6 }}>
-                  <input
-                    type="password"
-                    autoComplete="off"
-                    className={styles.input}
-                    placeholder="sk-ant-..."
-                    value={claudeKeyInput}
-                    onChange={(e) => setClaudeKeyInput(e.target.value)}
-                    onKeyDown={(e) => { if (e.key === 'Enter') unlockClaude(); }}
-                    style={{ flex: 1 }}
-                  />
-                  <button className={styles.ghostBtn} onClick={unlockClaude} disabled={!claudeKeyInput.trim()}>Unlock</button>
-                  <button className={styles.ghostBtn} onClick={() => { setClaudeEditing(false); setClaudeKeyInput(''); }}>Cancel</button>
-                </div>
-              )}
-              {isClaude && hasClaudeKey && (
-                <>
-                  <div style={{ marginTop: 6, display: 'flex', gap: 6, flexWrap: 'wrap' }}>
-                    <button className={styles.ghostBtn} onClick={toggleClaudeActive}>{claudeActive ? 'Turn off' : 'Turn on'}</button>
-                    <button className={styles.ghostBtn} onClick={testClaudeKeyFn} disabled={claudeTesting} title="Makes one small, real request to api.anthropic.com with your key to confirm it works">
-                      {claudeTesting ? 'Testing…' : '🔌 Test key'}
-                    </button>
-                    <button className={styles.ghostBtn} onClick={forgetClaude}>Forget key</button>
-                  </div>
-                  {claudeTestResult && (
-                    <div className={styles.hint} style={{ marginTop: 4, color: claudeTestResult.ok ? 'var(--good)' : 'var(--bad)' }}>
-                      {claudeTestResult.ok ? '✓ Claude API is working — connection confirmed.' : `✗ ${claudeTestResult.message}`}
-                    </div>
-                  )}
-                </>
+              {isClaude && (
+                <KeyUnlockRow
+                  promptLabel="🔑 Enter your Anthropic key"
+                  locked={locked}
+                  editing={claudeEditing}
+                  onStartEdit={() => setClaudeEditing(true)}
+                  onCancelEdit={() => { setClaudeEditing(false); setClaudeKeyInput(''); }}
+                  onUnlock={unlockClaude}
+                  unlockDisabled={!claudeKeyInput.trim()}
+                  fields={[{ value: claudeKeyInput, onChange: setClaudeKeyInput, placeholder: 'sk-ant-...', type: 'password' }]}
+                  configuredContent={
+                    <>
+                      <div style={{ marginTop: 6, display: 'flex', gap: 6, flexWrap: 'wrap' }}>
+                        <button className={styles.ghostBtn} onClick={toggleClaudeActive}>{claudeActive ? 'Turn off' : 'Turn on'}</button>
+                        <button className={styles.ghostBtn} onClick={testClaudeKeyFn} disabled={claudeTesting} title="Makes one small, real request to api.anthropic.com with your key to confirm it works">
+                          {claudeTesting ? 'Testing…' : '🔌 Test key'}
+                        </button>
+                        <button className={styles.ghostBtn} onClick={forgetClaude}>Forget key</button>
+                      </div>
+                      {claudeTestResult && (
+                        <div className={styles.hint} style={{ marginTop: 4, color: claudeTestResult.ok ? 'var(--good)' : 'var(--bad)' }}>
+                          {claudeTestResult.ok ? '✓ Claude API is working — connection confirmed.' : `✗ ${claudeTestResult.message}`}
+                        </div>
+                      )}
+                    </>
+                  }
+                />
               )}
 
-              {/* Lightning Engine Configuration */}
-              {isLightning && locked && !lightningEditing && (
-                <button className={styles.ghostBtn} style={{ marginTop: 6 }} onClick={() => setLightningEditing(true)}>
-                  ⚡ Enter your Lightning endpoint
-                </button>
-              )}
-              {isLightning && locked && lightningEditing && (
-                <div style={{ marginTop: 6, display: 'flex', flexDirection: 'column', gap: 6 }}>
-                  <input
-                    type="url"
-                    autoComplete="off"
-                    className={styles.input}
-                    placeholder="https://your-lightning-endpoint.com/predict"
-                    value={lightningEndpointInput}
-                    onChange={(e) => setLightningEndpointInput(e.target.value)}
-                    style={{ width: '100%' }}
-                  />
-                  <input
-                    type="password"
-                    autoComplete="off"
-                    className={styles.input}
-                    placeholder="your-api-key"
-                    value={lightningKeyInput}
-                    onChange={(e) => setLightningKeyInput(e.target.value)}
-                    onKeyDown={(e) => { if (e.key === 'Enter') unlockLightning(); }}
-                    style={{ width: '100%' }}
-                  />
-                  <div style={{ display: 'flex', gap: 6 }}>
-                    <button className={styles.ghostBtn} onClick={unlockLightning} disabled={!lightningEndpointInput.trim() || !lightningKeyInput.trim()}>Unlock</button>
-                    <button className={styles.ghostBtn} onClick={() => { setLightningEditing(false); setLightningEndpointInput(''); setLightningKeyInput(''); }}>Cancel</button>
-                  </div>
-                </div>
-              )}
-              {isLightning && hasLightningConfig && (
-                <div style={{ marginTop: 6, display: 'flex', gap: 6, flexWrap: 'wrap' }}>
-                  <button className={styles.ghostBtn} onClick={forgetLightning}>Disconnect endpoint</button>
-                  <span className={styles.hint} style={{ marginTop: 0 }}>🟢 Lightning endpoint configured</span>
-                </div>
+              {isLightning && (
+                <KeyUnlockRow
+                  promptLabel="⚡ Enter your Lightning endpoint"
+                  locked={locked}
+                  editing={lightningEditing}
+                  onStartEdit={() => setLightningEditing(true)}
+                  onCancelEdit={() => { setLightningEditing(false); setLightningEndpointInput(''); setLightningKeyInput(''); }}
+                  onUnlock={unlockLightning}
+                  unlockDisabled={!lightningEndpointInput.trim() || !lightningKeyInput.trim()}
+                  fields={[
+                    { value: lightningEndpointInput, onChange: setLightningEndpointInput, placeholder: 'https://your-lightning-endpoint.com/predict', type: 'url' },
+                    { value: lightningKeyInput, onChange: setLightningKeyInput, placeholder: 'your-api-key', type: 'password' },
+                  ]}
+                  configuredContent={
+                    <div style={{ marginTop: 6, display: 'flex', gap: 6, flexWrap: 'wrap' }}>
+                      <button className={styles.ghostBtn} onClick={forgetLightning}>Disconnect endpoint</button>
+                      <span className={styles.hint} style={{ marginTop: 0 }}>🟢 Lightning endpoint configured</span>
+                    </div>
+                  }
+                />
               )}
             </div>
           );

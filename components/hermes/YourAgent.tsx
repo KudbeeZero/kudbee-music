@@ -7,6 +7,7 @@ import { currentProfile, type Profile } from '@/lib/hermes/identity';
 import { getClaudeKey, setClaudeKey, clearClaudeKey, isClaudeEngineActive, setClaudeEngineActive } from '@/lib/hermes/claudeKey';
 import { testClaudeKey, type ClaudeKeyTestResult } from '@/lib/hermes/providers/claudeLyricsProvider';
 import { computeBadges } from '@/lib/hermes/badges';
+import KeyUnlockRow from './KeyUnlockRow';
 import styles from './hermes.module.css';
 
 // The minimal shape of the beforeinstallprompt event (not in lib.dom yet).
@@ -119,44 +120,32 @@ export default function YourAgent({ songs, taste, becomingYou, id }: { songs: So
               : 'Running the free Local Combinator. Paste your own Anthropic key to generate with your own Claude brain — it lives only in this browser and calls Anthropic directly.'}
         </div>
 
-        {!hasKey && !editing && (
-          <button className={styles.ghostBtn} style={{ marginTop: 6 }} onClick={() => setEditing(true)}>
-            🔑 Enter your Anthropic key
-          </button>
-        )}
-        {!hasKey && editing && (
-          <div style={{ marginTop: 6, display: 'flex', gap: 6, flexWrap: 'wrap' }}>
-            <input
-              type="password"
-              autoComplete="off"
-              className={styles.input}
-              placeholder="sk-ant-..."
-              value={keyInput}
-              onChange={(e) => setKeyInput(e.target.value)}
-              onKeyDown={(e) => { if (e.key === 'Enter') unlockKey(); }}
-              style={{ flex: 1, minWidth: 160 }}
-              aria-label="Anthropic API key"
-            />
-            <button className={styles.ghostBtn} onClick={unlockKey} disabled={!keyInput.trim()}>Unlock</button>
-            <button className={styles.ghostBtn} onClick={() => { setEditing(false); setKeyInput(''); }}>Cancel</button>
-          </div>
-        )}
-        {hasKey && (
-          <>
-            <div style={{ marginTop: 6, display: 'flex', gap: 6, flexWrap: 'wrap' }}>
-              <button className={styles.ghostBtn} onClick={toggleActive}>{active ? 'Turn off' : 'Turn on'}</button>
-              <button className={styles.ghostBtn} onClick={doTestKey} disabled={testing} title="Makes one small, real request to api.anthropic.com with your key to confirm it works">
-                {testing ? 'Testing…' : '🔌 Test key'}
-              </button>
-              <button className={styles.ghostBtn} onClick={forgetKey}>Forget key</button>
-            </div>
-            {testResult && (
-              <div className={styles.hint} style={{ marginTop: 4, color: testResult.ok ? 'var(--good)' : 'var(--bad)' }}>
-                {testResult.ok ? '✓ Claude API is working — connection confirmed.' : `✗ ${testResult.message}`}
+        <KeyUnlockRow
+          promptLabel="🔑 Enter your Anthropic key"
+          locked={!hasKey}
+          editing={editing}
+          onStartEdit={() => setEditing(true)}
+          onCancelEdit={() => { setEditing(false); setKeyInput(''); }}
+          onUnlock={unlockKey}
+          unlockDisabled={!keyInput.trim()}
+          fields={[{ value: keyInput, onChange: setKeyInput, placeholder: 'sk-ant-...', type: 'password' }]}
+          configuredContent={
+            <>
+              <div style={{ marginTop: 6, display: 'flex', gap: 6, flexWrap: 'wrap' }}>
+                <button className={styles.ghostBtn} onClick={toggleActive}>{active ? 'Turn off' : 'Turn on'}</button>
+                <button className={styles.ghostBtn} onClick={doTestKey} disabled={testing} title="Makes one small, real request to api.anthropic.com with your key to confirm it works">
+                  {testing ? 'Testing…' : '🔌 Test key'}
+                </button>
+                <button className={styles.ghostBtn} onClick={forgetKey}>Forget key</button>
               </div>
-            )}
-          </>
-        )}
+              {testResult && (
+                <div className={styles.hint} style={{ marginTop: 4, color: testResult.ok ? 'var(--good)' : 'var(--bad)' }}>
+                  {testResult.ok ? '✓ Claude API is working — connection confirmed.' : `✗ ${testResult.message}`}
+                </div>
+              )}
+            </>
+          }
+        />
       </div>
 
       <div className={styles.hint} style={{ marginTop: 8 }}>
