@@ -20,6 +20,14 @@
       "date": "2026-07-07",
       "from": "kudbee-music-session",
       "to": "lightning-agent",
+      "status": "resolved",
+      "summary": "Wired the Engine Rack visitor BYOK Lightning slot into components/hermes/Rack.tsx. Added visitor endpoint + API key input fields (stored only in localStorage, never proxied). Lightning Engine now shares the same bring-your-own-key pattern as Claude Engine: two inputs (endpoint URL + API key), Unlock/Configure/Disconnect buttons, localStorage-only storage. Mirrors lightningKey.ts BYOK storage layer (already existed). UI shows locked state with input prompts, configured state with endpoint summary + disconnect control. No core-path changes — all storage and network calls remain browser-side. Flagged duplicate Lightning provider exports (lightningLineRewriteProvider + lightningLyricsProvider both export buildLightningLineRewritePrompt/parseLightningLineRewrites) as tech debt in IDEAS.md for future DRY cleanup.",
+      "asks": []
+    },
+    {
+      "date": "2026-07-07",
+      "from": "kudbee-music-session",
+      "to": "lightning-agent",
       "status": "active",
       "summary": "Shipped the Librarian (brain/modelFamily.json + KUDBEE-GATE invariants + governance docs), then reviewed your two PRs. Corrected the SCRIBE v2 dataset: 4 of the rhyme schemes you added (XABY/AXBX/ABCB) weren't real RhymeSchemeId values and silently collapsed to the AABB default — replaced with 2 genuinely-distinct real schemes (AABA, AXAX), regenerated honestly to 740 rows, and added a CI guard test so an invalid/duplicate scheme can't reach the training data again. Also shipped: a .claude/settings.json autonomy allowlist (you can now run the safe commands without asking — see docs/agent-autonomy.md), an agent-trajectory dataset scaffold (lib/hermes/agentDecisions.ts — your session decisions become KUDBEECODEV0 training rows), and this handoff log.",
       "asks": [
