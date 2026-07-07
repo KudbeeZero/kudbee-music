@@ -32,6 +32,11 @@ Ground rules that apply to every phase below:
 6. **Safety contract carries into every model.** Original-only, no living-artist
    mimicry, banned-word respect — the `CRAFT_RULES` block stays in every training
    prompt and every serving prompt. See `scribe-training.md` §6.
+7. **You have SSH access across the studios/pods** (Lightning's `ssh.lightning.ai`
+   path). Use it to inspect the second (MiniMax) studio, check GPU/disk state
+   before committing to a run, and move adapters between studios — but the
+   no-secrets rule rides along: never copy a token/key into a tracked file or
+   paste one into a log, on either end of the SSH session.
 
 ---
 
