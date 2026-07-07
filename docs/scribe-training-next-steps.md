@@ -59,13 +59,13 @@ print(tokenizer.decode(outputs[0], skip_special_tokens=True))
 
 ## Pre-Deployment Checklist
 
-Before converting the checkpoint:
+**Training complete (val loss: 0.082)** ✓
 
-- [x] Training complete (val loss 0.082)
-- [ ] Checkpoint located: `/path/to/KUDBEESCRIBEV1/lit_model.pth` (56GB)
-- [ ] RTX 6000 GPU available (20GB+ VRAM required for conversion + testing)
-- [ ] LitGPT CLI installed: `pip install litgpt` (or already available on RTX 6000)
-- [ ] Output directory ready for HF conversion: `./KUDBEESCRIBEV1-hf-peft/`
+Before converting the checkpoint, ensure:
+1. Checkpoint is located at `/path/to/KUDBEESCRIBEV1/lit_model.pth` (56GB)
+2. RTX 6000 GPU is available (20GB+ VRAM required for conversion + testing)
+3. LitGPT CLI is installed: `pip install litgpt` (or already available on RTX 6000)
+4. Output directory is ready for HF conversion: `./KUDBEESCRIBEV1-hf-peft/`
 
 ---
 
