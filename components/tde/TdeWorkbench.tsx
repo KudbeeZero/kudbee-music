@@ -8,6 +8,7 @@ import ModelGpuPanel from './ModelGpuPanel';
 import ModelRouterPanel from './ModelRouterPanel';
 import AgentMapPanel from './AgentMapPanel';
 import RepoPanel from './RepoPanel';
+import TrainingProgressPanel from './TrainingProgressPanel';
 import styles from './tde.module.css';
 
 // The Kudbee TDE (Task-Driven Environment) shell — Branch 01 of the TDE track
@@ -40,6 +41,7 @@ export default function TdeWorkbench() {
 
       <section className={styles.grid} aria-label="Workbench panels">
         <MissionPanel />
+        <TrainingProgressPanel />
         <RepoPanel />
         <AgentMapPanel />
         <ModelGpuPanel />
