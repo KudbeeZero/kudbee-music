@@ -253,8 +253,10 @@ A second-opinion review flagged real risks worth acting on (truth-first):
   real scoping pass (what data: user analytics? token/points economy? something crypto-adjacent given
   the blockchain tie-in?) before any dataviz work starts. Not yet built — captured for prioritization
   alongside the roadmap 11.3/11.4 backlog items above.
-- 💭 **Rack "flip to the back" cable view + teach-the-Rack onboarding + a real Autotune plugin**
-  *(founder, 2026-07-07)* — three linked asks on top of the just-shipped Rack audit
+- 🔨 **Rack "flip to the back" cable view + teach-the-Rack onboarding + a real Autotune plugin**
+  *(founder, 2026-07-07)* — onboarding SHIPPED (roadmap 11.5, the metal rack-mount overhaul +
+  first-visit explainer). Cable-flip view + real Autotune registered as queued backlog items
+  (roadmap 11.3/11.4) — not yet built. Original three linked asks, on top of the Rack audit
   (`docs/plugin-rack-architecture.md`, roadmap 11.2): (1) explain to the visitor how the
   Engine Rack actually works — an onboarding/tooltip layer over `Rack.tsx`; (2) a
   skeuomorphic flourish where the rack panel flips around (like Reason's back-of-rack

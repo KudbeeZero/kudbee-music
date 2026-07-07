@@ -147,7 +147,14 @@ export default function Rack() {
             >
               <div className={styles.flagKind} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                 <span>{locked ? '🔒 ' : isActive ? '🟢 ' : ''}{u.label}</span>
-                <span className={styles.chip} style={{ marginLeft: 0 }}>
+                <span
+                  className={styles.chip}
+                  style={{
+                    marginLeft: 0,
+                    color: isActive ? 'var(--good)' : u.tier === 'free' ? 'var(--cyan)' : 'var(--amber)',
+                    borderColor: isActive ? 'rgba(87, 217, 138, 0.4)' : u.tier === 'free' ? 'rgba(54, 224, 212, 0.4)' : 'rgba(255, 177, 78, 0.4)',
+                  }}
+                >
                   {isActive ? 'active' : u.tier === 'free' ? 'free' : 'upgrade'}
                 </span>
               </div>

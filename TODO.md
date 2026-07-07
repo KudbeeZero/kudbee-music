@@ -496,6 +496,21 @@ Board** governance / Solana / token / NFT layer integrates with this engine via 
 later (kept out of this repo's core so it stays free + local).
 
 ## ✅ Shipped (newest first)
+- [x] **🎛️ Rack visual overhaul + public "What's Coming" page (roadmap 11.3–11.5)** —
+      founder ask: teach-the-rack onboarding, a "made of metal" rack-mount look with a
+      decorative power unit, clean up the duplicated Claude/Lightning key-entry flow, and a
+      flashy public feature page. Shipped: metal rack-mount CSS (`.rackChassis`/`.rackUnit`/
+      `.rackPower`) with a dismissible first-visit explainer (`lib/hermes/rackTour.ts`); a
+      shared `KeyUnlockRow` component replacing THREE near-duplicate unlock flows (Rack's
+      Claude + Lightning slots, and `YourAgent.tsx`'s separate early-access Claude entry — a
+      second duplicate found while cleaning up, not just the one originally flagged);
+      `/features`, a server-rendered public page generated live from `brain/roadmap.json` via
+      the existing `statusBoard.ts` reader (no second hand-maintained list). The cable-flip
+      view and real-Autotune ideas registered as proper queued backlog items (11.3/11.4)
+      instead of just IDEAS.md prose. `hermes-ui` agent pass fixed a real bug found along the
+      way (engine-unit status chip was using the red `.chip` default, uncorrected for
+      active/free/upgrade states) plus texture/contrast polish. Verified via real browser
+      walkthroughs at desktop + mobile widths, zero console errors from this branch's diff.
 - [x] **🔌 Plugin/Rack/Marketplace architecture audit + security fix — banked into memory (roadmap 11.2)** —
       founder asked for an agent that maps the plugin/Rack import + marketplace/contract system with
       a security pass "behind it," fixes for anything real found, and the whole map "banked into

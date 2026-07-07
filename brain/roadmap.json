@@ -366,6 +366,20 @@
           "status": "queued",
           "home": "lib/hermes/",
           "note": "QUEUED — founder idea, 2026-07-07 (IDEAS.md fresh captures). Real pitch-correction (e.g. autocorrelation/YIN for tracking, PSOLA/WSOLA for shifting) via the Web Audio API, client-side to stay $0/no-server. A genuinely new audio-DSP capability class for this repo — nothing here does real-time audio manipulation yet. Adjacent to but bigger than the existing mastering-assistant plugin stub in lib/hermes/plugins.ts (currently metadata-only, no DSP behind it). Deserves its own dedicated scoping pass, not a quick add."
+        },
+        {
+          "id": "11.5",
+          "title": "🎛️ Rack visual overhaul — metal rack-mount look, onboarding, BYOK flow dedup",
+          "status": "shipped",
+          "home": "components/hermes/Rack.tsx",
+          "note": "SHIPPED. Metal rack-mount CSS (.rackChassis/.rackUnit/.rackPower) with rack-ear screw accents and a decorative power-strip fixture; a dismissible first-visit explainer (lib/hermes/rackTour.ts, hermes.rackTourSeen.v1). Extracted the Claude/Lightning unlock prompt->editing->unlock JSX into a shared components/hermes/KeyUnlockRow.tsx used by THREE call sites — Rack's two engine slots plus a second, previously-undiscovered duplicate in YourAgent.tsx's early-access Claude entry point. hermes-ui polish pass fixed a real bug: the engine-unit status chip used the unstyled-for-this-context .chip default (red), now overridden per state (good/cyan/amber) matching YourAgent.tsx's existing pattern. Verified via real-browser walkthroughs, desktop + mobile, zero new console errors."
+        },
+        {
+          "id": "11.6",
+          "title": "🚀 Public \"What's Coming\" feature page — /features",
+          "status": "shipped",
+          "home": "app/features/page.tsx",
+          "note": "SHIPPED. Server-rendered, static-export-compatible page generated live from brain/roadmap.json via lib/hermes/statusBoard.ts's existing tracks()/scoreboard() reader — no second hand-maintained feature list. Shows shipped/building/queued counts + grouped cards, reuses components/landing/landing.module.css's section chrome for brand consistency. Not yet linked from navigation, pending founder review."
         }
       ]
     }
