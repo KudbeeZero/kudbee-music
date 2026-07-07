@@ -20,6 +20,8 @@ entirely from code — no paid software.
 - [SCRIBE checkpoint conversion](scribe-training-next-steps.md) — litgpt → HF/PEFT → endpoint deployment workflow
 - [Lightning agent roadmap](lightning-agent-roadmap.md) — the GPU-side work order: convert/serve SCRIBE v1, confirm KUDBEECODEV0, then train the whole model family
 - [The Librarian](lightning-librarian.md) — the model-family overseer: KUDBEE-GATE promotion pipeline, versioning, rollback, drift watch, budgets (state: `brain/modelFamily.json`)
+- [Agent autonomy](agent-autonomy.md) — the `.claude/settings.json` allowlist that lets the training agents run the safe repeated commands without asking, plus the Lightning agent's run-autonomously preamble
+- [Agent-trajectory dataset](agent-trajectory-dataset.md) — capturing the training program's own decisions/process as fine-tuning rows for KUDBEECODEV0 (`lib/hermes/agentDecisions.ts`)
 - [SCRIBE evaluation prompts](scribe-evaluation-prompts.md) — test cases for line-rewrite quality
 - [Watchdog](watchdog.md) — the scheduled Claude security/quality review
 - [OG unfurl](og-unfurl.md) — per-song link previews *(inert until founder-activated)*

@@ -1,0 +1,34 @@
+{
+  "note": "The cross-agent handoff log — the async comms channel between the two KUDBEE agents that never run at the same time and share only git: the kudbee-music session (this repo / app + Librarian catalog side) and the Lightning GPU agent (hermes-lyric-server / training side). Each agent READS this at session start and APPENDS one entry at session end: what I did, what's blocked, what you should do next. Model-specific state lives in brain/modelFamily.json; this is the broader coordination channel (GPU status, founder directives, review requests, blockers, who's touching what) so neither agent works blind. See brain/README.md for the full brain/ folder index.",
+  "updated": "2026-07-07",
+  "protocol": {
+    "readWhen": "at session start, before doing anything — know what the other agent last did and asked of you",
+    "appendWhen": "at session end, before shutting down — one entry summarizing what you did, what's blocked, and the asks for the other side",
+    "rules": [
+      "newest entry FIRST; never delete or rewrite a past entry (append-only, like git history)",
+      "from = your agent id; to = the other agent (or 'founder'); status = active until the asks are done, then flip to resolved in a later entry",
+      "no secrets, ever — endpoint URLs are recordable, bearer tokens never (same rule as modelFamily.json)",
+      "keep it short — this is a coordination note, not a report; the real receipts are PRs, commits, and training-notes files"
+    ],
+    "agentIds": {
+      "kudbee-music-session": "the app/repo + Librarian-catalog side (kudbee-music) — reviews training PRs, keeps brain/modelFamily.json honest, owns the app",
+      "lightning-agent": "the GPU/training side (hermes-lyric-server) — runs conversion/train/eval/serve on the Lightning Studio, owns the checkpoints/adapters"
+    }
+  },
+  "handoffs": [
+    {
+      "date": "2026-07-07",
+      "from": "kudbee-music-session",
+      "to": "lightning-agent",
+      "status": "active",
+      "summary": "Shipped the Librarian (brain/modelFamily.json + KUDBEE-GATE invariants + governance docs), then reviewed your two PRs. Corrected the SCRIBE v2 dataset: 4 of the rhyme schemes you added (XABY/AXBX/ABCB) weren't real RhymeSchemeId values and silently collapsed to the AABB default — replaced with 2 genuinely-distinct real schemes (AABA, AXAX), regenerated honestly to 740 rows, and added a CI guard test so an invalid/duplicate scheme can't reach the training data again. Also shipped: a .claude/settings.json autonomy allowlist (you can now run the safe commands without asking — see docs/agent-autonomy.md), an agent-trajectory dataset scaffold (lib/hermes/agentDecisions.ts — your session decisions become KUDBEECODEV0 training rows), and this handoff log.",
+      "asks": [
+        "Run autonomously per docs/agent-autonomy.md — stop asking approval for allowlisted commands.",
+        "When the GPU is available: KUDBEESCRIBEV1 G2-verify (contract-prompt round-trip) → G5-serve. Pre-staged commands are in your training-notes. Do NOT mark G2/G5 cleared or the endpoint served unless the round-trip actually ran.",
+        "If the GPU won't start, run nvidia-smi first — if it errors, that's a Lightning Studio restart, not a code problem; say so here.",
+        "KUDBEECODEV0: 2 more runs of the 47-case suite before marking the 40% confirmed (needs 3 runs).",
+        "End your next session by appending a handoff entry here AND updating brain/modelFamily.json, then npx vitest run modelFamily + a PR."
+      ]
+    }
+  ]
+}

@@ -294,6 +294,27 @@
           "status": "queued",
           "home": "components/tde/",
           "note": "The TDE Model/GPU panel (9.6) renders hand-mocked model cards today; the catalog now holds the same facts for real. Import it read-only (suggest-only rule unchanged — the dashboard stays a window, not a lever) so /tde shows live gate stages, eval run counts, and budget lines."
+        },
+        {
+          "id": "10.4",
+          "title": "🔓 Agent autonomy config — .claude/settings.json allowlist + run-without-approval preamble",
+          "status": "shipped",
+          "home": ".claude/settings.json + docs/agent-autonomy.md",
+          "note": "SHIPPED (this PR). Founder directive: the training agents were asking for approval on every safe repeated command. A checked-in project allowlist (defaultMode acceptEdits + the training loop's safe commands: git add/commit/push-to-claude-or-feat-branch, npm test/test:web/lint:check/eval/web:build, npx tsc/vitest, GEN_*=1 generators, node scripts/studio, litgpt, nvidia-smi, ssh.lightning.ai, read-only inspection) eliminates the prompts, while deny (always wins) keeps force-push, push-to-main/master, git reset --hard, rm -rf, and anything secret/.env-shaped gated. docs/agent-autonomy.md explains it, gives the Lightning agent a copy-paste run-autonomously preamble, honestly separates the approval-friction (fixable here) from the real errors (invalid schemes = now a guard test; GPU not starting = Lightning infra; push blocked = branch protection working), and documents the isolated-GPU-box bypass-permissions option with its honest tradeoff. The principle: autonomy config kills approval friction; guardrails (CI guard tests + KUDBEE-GATE) catch bad output — both needed."
+        },
+        {
+          "id": "10.5",
+          "title": "🧠 Agent-trajectory dataset — capture the training program's own process as KUDBEECODEV0 rows",
+          "status": "shipped",
+          "home": "lib/hermes/agentDecisions.ts + docs/agent-trajectory-dataset.md",
+          "note": "SHIPPED (this PR, scaffold). Founder insight: a huge amount of signal (decisions, corrections, gate transitions) is generated while the agents work and was being thrown away. Honest architecture (docs/agent-trajectory-dataset.md): capture the EXTERNALIZED decision trail (commits, PR bodies, training-notes, the Librarian catalog's per-model history[]) — NOT hidden chain-of-thought (not reliably capturable, not ours) — and NO always-on server (violates $0/no-server; the durable record already exists via the write-it-down discipline). lib/hermes/agentDecisions.ts (sibling of trainingData.ts, pure/node-only): DecisionRecord type, decisionToExample() → Alpaca rows whose instruction teaches the KUDBEE-GATE discipline itself, harvestModelFamilyDecisions() proving it on real catalog history[], scrubSecrets() on every row (same patterns modelFamily.test.ts lints), dedupe, JSONL export matching the song tasks. Feeds KUDBEECODEV0 specifically (the repo/coding-agent model — the one whose training set IS the work). agentDecisions.test.ts (9 tests) covers harvest, row-building, determinism, and the no-secret-ever-ships boundary. Next (captured, not in this PR): PR-body + training-notes harvesters, a hermes decisions CLI, and a head-to-head on the 47-case suite. Related founder ideas captured in IDEAS.md: an architecture-prediction training target (predict the file tree/PR plan from a prompt) and a local agent-tracking dashboard."
+        },
+        {
+          "id": "10.6",
+          "title": "🤝 Cross-agent handoff log — brain/handoffs.json comms channel between the two KUDBEE agents",
+          "status": "shipped",
+          "home": "brain/handoffs.json",
+          "note": "SHIPPED (this PR). Founder ask: 'do you have a document the other agent is aware of, following what you're doing and updating too — a communication layer?' The catalog + PRs were only an IMPLICIT channel; this makes it explicit. brain/handoffs.json is an append-only, newest-first log both agents READ at session start and APPEND to at session end (protocol embedded in the file): what I did, what's blocked, the asks for the other side. Broader than modelFamily.json (which is per-model): GPU status, blockers, review requests, founder directives, who's touching what. Seeded with the real current handoff (kudbee-music → lightning-agent: shipped the Librarian + autonomy + trajectory dataset, fixed the v2 schemes; asks: run autonomously, do G2-verify/G5-serve when GPU is up without overclaiming the gate, confirm CODEV0 across 3 runs). Registered in brain/README.md + the CLAUDE.md memory-layers table (both guard-tested). No-secrets rule carries over (endpoint URLs recordable, tokens never)."
         }
       ]
     }

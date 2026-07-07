@@ -120,7 +120,7 @@ node scripts/mobile-matrix.mjs   # anything touching layout (build the export fi
 ## Status board
 
 <!-- STATUS:BEGIN generated: edit brain/roadmap.json, then GEN_DOCS=1 npx vitest run status -->
-**📊 Status board:** ✅ 89 shipped · 🔨 3 in build · 💤 10 queued (102 tracked) — full tables in [`STATUS.md`](STATUS.md), source of truth [`brain/roadmap.json`](brain/roadmap.json).
+**📊 Status board:** ✅ 92 shipped · 🔨 3 in build · 💤 10 queued (105 tracked) — full tables in [`STATUS.md`](STATUS.md), source of truth [`brain/roadmap.json`](brain/roadmap.json).
 <!-- STATUS:END -->
 
 ## Memory layers — where the brain keeps things
@@ -149,6 +149,8 @@ table is the top-level index across *all* memory tiers, folder pages included.
 | Living-state spine (machine-readable) | `brain/roadmap.json` |
 | Branch ledger (every branch, cross-referenced against its PR + merge status) | `brain/branches.json` ← `scripts/branch-ledger.mjs` refreshes git-derived fields; PR/status filled in by a periodic branch audit |
 | Model-family card catalog (the Librarian's ledger — training-program state, KUDBEE-GATE promotion, dataset lineage, budgets) | `brain/modelFamily.json` → `lib/hermes/modelFamily.ts` (gate invariants CI-enforced by `modelFamily.test.ts`); protocol + never-do list: `docs/lightning-librarian.md` |
+| Cross-agent handoff log (async comms between the kudbee-music session + the Lightning GPU agent) | `brain/handoffs.json` — read at session start, append at session end; broader than the model catalog (GPU status, blockers, review asks). Autonomy context: `docs/agent-autonomy.md` |
+| Agent-decision training source (the program's own process → KUDBEECODEV0 rows) | `lib/hermes/agentDecisions.ts` (harvests `brain/modelFamily.json` history[]); design: `docs/agent-trajectory-dataset.md` |
 | Vector memory (generated, gitignored) | `brain/vector-memory.json` → `lib/hermes/vectorMemory.ts` / `vectorRecall.ts` (node-only) |
 | Working list / idea inbox / build log | `TODO.md` · `IDEAS.md` · `BUILD_LOG.md` |
 | Per-user vault (browser) | localStorage `hermes.vault.v1`, `hermes.albums.v1`, `hermes.taste.v1`, `hermes.bannedWords.v1`, `hermes.artistAlias.v1`, `hermes.favorites.v1`, `hermes.songNotes.v1`, `hermes.recentlyViewed.v1` (each mirrored to a `.bak` key), `hermes.scribeTourSeen.v1` (a plain one-time "seen it" flag, not `.bak`-mirrored) via `lib/hermes/storage.ts`. Each of these keys is **namespaced per signed-in profile** (`<key>::<profileId>`) so every account has its own saved memory; the first profile "adopts" the un-namespaced legacy keys (no migration), tracked by `hermes.primaryProfile.v1` |
