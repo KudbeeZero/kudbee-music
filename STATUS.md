@@ -2,7 +2,7 @@
 
 > **Generated from [`brain/roadmap.json`](brain/roadmap.json) — do not hand-edit.** Status lives ONLY in the spine; edit it there, then regenerate with `GEN_DOCS=1 npx vitest run status`. `statusBoard.test.ts` fails CI if this file drifts.
 
-**Scoreboard:** ✅ 93 shipped · 🔨 3 in build · 💤 10 queued — 106 tracked items
+**Scoreboard:** ✅ 94 shipped · 🔨 3 in build · 💤 9 queued — 106 tracked items
 (legend: ✅ shipped · 🔌 scaffold shipped, founder-gated · 🔨 in build · ⏭️ next · 💤 queued · 💭 idea · 🚧 blocked on founder)
 
 ## Tracks
@@ -153,13 +153,13 @@
 | ✅ | **✨ TDE Branch 11 — Polish + navigation** | `components/tde/` | #217 |
 | ✅ | **🌉 TDE Branch 12 — Backend bridge plan** | `docs/kudbee-tde-backend-bridge.md` | #218 |
 
-### Phase 10 — Model-family Librarian — `▰▰▰▰▰▰▰▱▱▱` 5/7
+### Phase 10 — Model-family Librarian — `▰▰▰▰▰▰▰▰▰▱` 6/7
 
 | | Item | Where it lives | PR |
 |---|------|----------------|----|
 | ✅ | **📚 Librarian memory layer — brain/modelFamily.json card catalog + KUDBEE-GATE invariants + governance docs** | `brain/modelFamily.json + lib/hermes/modelFamily.ts + docs/lightning-librarian.md` | — |
 | 💤 | **🔁 First GPU session under the Librarian protocol (Lightning agent adopts the catalog sync)** | `docs/lightning-agent-roadmap.md ground rule 8` | — |
-| 💤 | **🖥️ TDE Models panel reads brain/modelFamily.json (real state replaces the mock model cards)** | `components/tde/` | — |
+| ✅ | **🖥️ TDE Models panel reads brain/modelFamily.json (real state replaces the mock model cards)** | `components/tde/TrainingProgressPanel.tsx` | #231 |
 | ✅ | **🔓 Agent autonomy config — .claude/settings.json allowlist + run-without-approval preamble** | `.claude/settings.json + docs/agent-autonomy.md` | — |
 | ✅ | **🧠 Agent-trajectory dataset — capture the training program's own process as KUDBEECODEV0 rows** | `lib/hermes/agentDecisions.ts + docs/agent-trajectory-dataset.md` | — |
 | ✅ | **🤝 Cross-agent handoff log — brain/handoffs.json comms channel between the two KUDBEE agents** | `brain/handoffs.json` | — |
