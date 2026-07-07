@@ -233,6 +233,22 @@ A second-opinion review flagged real risks worth acting on (truth-first):
   disclaimer in the README + Uniqueness panel. _(#37)_
 
 ## 🌱 Fresh captures
+- ✅ **The Librarian — an overseer for the model-training team** *(founder, 2026-07-07;
+  designed + shipped same session, roadmap 10.1)* — Conductor routes one song's agent
+  pipeline; the Librarian sits one level up and oversees the *model family itself*
+  (SCRIBE v1/v2, KUDBEECODEV0, the four HERMES models, the MiniMax teacher). Shipped as
+  a memory layer + governance doc, not a process: `brain/modelFamily.json` (card
+  catalog) + `lib/hermes/modelFamily.ts` (CI-enforced KUDBEE-GATE invariants) +
+  `docs/lightning-librarian.md`. Decisions worth remembering: **(a)** it is NOT a
+  `brainMap.ts` region — Brain Scan regions must point at code that runs in the
+  song-generation path (the brainAtlas honesty rule), and the Librarian never fires
+  during a song; **(b)** its natural UI surface is the TDE Models panel reading the
+  catalog read-only (queued as roadmap 10.3); **(c)** stall detection is a pure
+  injected-now session check, deliberately not a CI assertion, so a quiet fortnight
+  fails a session checklist instead of turning an unrelated commit red; **(d)** when
+  the train → eval → promote loop becomes genuinely recurring, the Kestra evaluation
+  already flagged in `docs/lightning-plan.md` is the orchestration candidate — the
+  Librarian's catalog would be its state store, not a competitor.
 - 💭 **MiniMax 2.5 on a second Lightning Studio — tap it into the KUDBEE stack**
   *(founder, 2026-07-07 — demo video was too large to transmit; captured from the
   description)* — the founder has MiniMax 2.5 downloaded and running with a chat

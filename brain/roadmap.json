@@ -1,6 +1,6 @@
 {
   "note": "The living-state spine — every roadmap item + the PR/status that shipped it (see livingState below for the full sync rule). Read by lib/hermes/statusBoard.ts to generate STATUS.md + the STATUS blocks in CLAUDE.md/README.md/BUILD_LOG.md. See brain/README.md for the full brain/ folder index.",
-  "updated": "2026-07-05",
+  "updated": "2026-07-07",
   "northStar": "The AI-engine pillar of WIFI DJ (wifidj.xyz). The lyrical process + the brain are the moat — not the video studio.",
   "principles": [
     "$0 / local / original-only by default",
@@ -265,6 +265,35 @@
           "pr": "#218",
           "home": "docs/kudbee-tde-backend-bridge.md",
           "note": "Docs only: the permission layer required before any live execution — GitHub, hermes-server health, Lightning job status, memory/vector, SCRIBE endpoint, KUDBEECODEV0 eval scoreboard integrations, and the safety gates each must pass."
+        }
+      ]
+    },
+    {
+      "id": 10,
+      "name": "Model-family Librarian",
+      "status": "in build",
+      "goal": "Founder directive, 2026-07-07: a standing overseer for the model-training program — Conductor routes one song's agents; the Librarian oversees the model family itself (SCRIBE v1/v2, KUDBEECODEV0, the four HERMES models, the MiniMax teacher). Model-family state becomes a first-class memory layer, promotion becomes a named CI-enforced gate (KUDBEE-GATE), and stalls/budgets get watched instead of drifting — the never-skip-silently rule, applied to training.",
+      "items": [
+        {
+          "id": "10.1",
+          "title": "📚 Librarian memory layer — brain/modelFamily.json card catalog + KUDBEE-GATE invariants + governance docs",
+          "status": "shipped",
+          "home": "brain/modelFamily.json + lib/hermes/modelFamily.ts + docs/lightning-librarian.md",
+          "note": "SHIPPED (this PR). brain/modelFamily.json is the card catalog: 8 models tracked (KUDBEESCRIBEV1 trained-unconverted, KUDBEECODEV0 evaluating with its 40% eval honestly marked runs:1/confirmed:false, KUDBEESCRIBEV2 planned, four HERMES models dataset-ready, MINIMAX-TEACHER teacher) with per-model dataset lineage, gate stage, endpoint slot (URL recordable, token never), trainingNotes refs, nextAction, lastTouched/staleAfterDays stall tripwires, and history. lib/hermes/modelFamily.ts + modelFamily.test.ts make the rules mechanical: promoted requires gate.cleared, gate.cleared requires a confirmed eval (runs ≥ 3) + served endpoint, teacher can never clear the gate, budget spentUsd > usdCap fails CI, plus a secrets lint (key_/sk-/Bearer/token_ patterns) on the raw file. Stall detection is a pure staleModels(nowIso) session-protocol check — injected now, deliberately NOT a CI assertion so a quiet fortnight fails a session checklist, not an unrelated commit. docs/lightning-librarian.md carries the governance layer (KUDBEE-GATE G0–G6 with the SCRIBE worked example, versioning scheme, rollback path incl. the safety-violation immediate-revert exception, monthly/quarterly drift cadence, MiniMax teacher quality bar, the never-do list); docs/lightning-agent-roadmap.md updated in place with per-phase budgets + the Librarian session protocol as ground rule 8. Deliberately NOT a brainMap.ts region: Brain Scan regions must point at code that runs in the song-generation path (brainAtlas honesty rule) and the Librarian never fires during a song — its future UI surface is the TDE Models panel (10.3)."
+        },
+        {
+          "id": "10.2",
+          "title": "🔁 First GPU session under the Librarian protocol (Lightning agent adopts the catalog sync)",
+          "status": "queued",
+          "home": "docs/lightning-agent-roadmap.md ground rule 8",
+          "note": "The next Lightning session runs Phase 1 (SCRIBE v1 convert→verify→serve) wearing the Librarian role end-to-end: stall check + budget check at start, catalog update + modelFamily vitest + PR at end. Proves the cross-session read/write loop for real."
+        },
+        {
+          "id": "10.3",
+          "title": "🖥️ TDE Models panel reads brain/modelFamily.json (real state replaces the mock model cards)",
+          "status": "queued",
+          "home": "components/tde/",
+          "note": "The TDE Model/GPU panel (9.6) renders hand-mocked model cards today; the catalog now holds the same facts for real. Import it read-only (suggest-only rule unchanged — the dashboard stays a window, not a lever) so /tde shows live gate stages, eval run counts, and budget lines."
         }
       ]
     }
