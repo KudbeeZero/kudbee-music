@@ -143,7 +143,7 @@
       "gate": {
         "stage": "G2-verify",
         "cleared": false,
-        "blockedOn": "Identity-gate fix committed (hermes-lyric-server commit 8da1af5, CPU-tested). G2-verify now requires GPU round-trip with one real contract prompt (buildLightningLineRewritePrompt format \u2192 {\"alternatives\":[...]} JSON). No round-trip yet \u2014 G2 cleared only when GPU confirms output format + banned-word check pass. A separate founder smoke test found PyTorch wheels lack CUDA kernels for RTX PRO 6000 Blackwell (sm_120) entirely \u2014 if the GPU serving this model shares that architecture, the round-trip may hit the same wall until reconciled (see history)."
+        "blockedOn": "RECONCILED: litgpt confirmed working on this RTX PRO 6000 Blackwell (sm_120) GPU (2026-07-07 founder smoke test) \u2014 the earlier PyTorch/transformers+bitsandbytes kernel gap was specific to that generic stack, not the GPU or driver. A litgpt-trained Qwen2.5-14B smoke adapter (10-row toy dataset, this session \u2014 NOT the real 212-row KUDBEESCRIBEV1 adapter) round-tripped the real contract prompt to valid {\"alternatives\":[...]} JSON with confirmed GPU inference (exit 0, ~40s). Remaining to formally clear G2 for this model: run the identical contract-prompt round-trip against the REAL adapter (scribe-runs/scribe-real-qwen2.5-14b-lora-v1/final/lit_model.pth.lora) via litgpt on this same GPU \u2014 now low-risk since the pipeline is GPU-proven end to end."
       },
       "endpoint": {
         "served": false,
@@ -155,7 +155,7 @@
         "hermes-lyric-server/kudbee-code-v0/training-notes/2026-07-07_phase1_scribe_litgpt_conversion.md",
         "hermes-lyric-server/kudbee-code-v0/training-notes/2026-07-07_phase3_scribe_v2_dataset_baseline.md"
       ],
-      "nextAction": "G2-verify: fix the server.py identity gate (~1-5 lines) so it recognizes the merged checkpoint, then round-trip one real SCRIBE contract prompt (buildLightningLineRewritePrompt format \u2192 valid {\"alternatives\":[...]} JSON) before serving behind /scribe/rewrite",
+      "nextAction": "G2-verify: load the REAL KUDBEESCRIBEV1 adapter (scribe-real-qwen2.5-14b-lora-v1/final/lit_model.pth.lora \u2014 not the smoke-test adapter) via litgpt on this same confirmed-working GPU, round-trip the same contract prompt, confirm valid {\"alternatives\":[...]} JSON + banned-word pass. On pass: proceed straight to G5-serve.",
       "lastTouched": "2026-07-07",
       "staleAfterDays": 14,
       "history": [
@@ -182,6 +182,10 @@
         {
           "date": "2026-07-07",
           "event": "Founder hand-ran a LoRA fine-tune smoke test on a SEPARATE, repo-disconnected Lightning Studio (LLM-Finetuning-Toolkit template, transformers+PEFT+bitsandbytes \u2014 not litgpt) to verify pipeline mechanics only. Hit a real blocker: PyTorch's stable AND nightly wheels ship no CUDA kernels for RTX PRO 6000 Blackwell (sm_120) \u2014 'no kernel image available for execution on the device' regardless of dtype/quantization tried. Workaround (CPU-only training on TinyLlama-1.1B, NOT the real Qwen2.5-14B-Instruct checkpoint) proved the fine-tune plumbing works end to end but is explicitly NOT a G2-verify pass for this model \u2014 no real SCRIBE v1 checkpoint or adapter was touched. Open reconciliation question, unresolved: this appears to contradict the 2026-07-05 entry above claiming this exact model trained successfully 'on RTX PRO 6000 Blackwell' via litgpt (val loss 0.082) \u2014 candidate explanation is litgpt's own bundled CUDA/flash-attention build supporting Blackwell where the generic transformers+bitsandbytes stack used in this smoke test doesn't, but unconfirmed."
+        },
+        {
+          "date": "2026-07-07",
+          "event": "RECONCILED: founder switched the same Lightning Studio to litgpt directly (matching the tool that trained this model on 2026-07-05) and confirmed real GPU utilization on the RTX PRO 6000 Blackwell card during both training and inference (nvidia-smi utilization bars active). Ran litgpt finetune_lora on Qwen2.5-14B-Instruct against the 10-row smoke dataset, then round-tripped the real SCRIBE contract prompt against the resulting checkpoint: exit code 0, ~40s, clean JSON, exactly 3 alternatives, GPU inference confirmed (not a CPU fallback). This resolves the prior contradiction \u2014 litgpt's bundled stack supports Blackwell; the earlier failure was specific to the generic transformers+bitsandbytes pip stack. Still NOT a G2-verify pass for the real KUDBEESCRIBEV1 adapter itself (this used a freshly-trained smoke adapter on the 10-row toy set) \u2014 but proves the exact same round-trip against the real 212-row adapter should now just work."
         }
       ]
     },

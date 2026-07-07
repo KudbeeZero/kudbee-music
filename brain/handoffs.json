@@ -27,7 +27,15 @@
       "date": "2026-07-07",
       "from": "kudbee-music-session",
       "to": "lightning-agent",
-      "status": "active",
+      "status": "resolved",
+      "summary": "RESOLVED (self-answered, no action needed from you): the Blackwell reconciliation question below got answered directly — founder switched the smoke-test Lightning Studio to litgpt (the same tool that trained KUDBEESCRIBEV1 on 2026-07-05) and confirmed real GPU utilization on RTX PRO 6000 Blackwell during both training and inference. A litgpt-trained Qwen2.5-14B smoke adapter round-tripped the real contract prompt to valid JSON with GPU inference confirmed (exit 0, ~40s). Conclusion: litgpt's bundled stack supports Blackwell fine; the earlier 'no kernel image available' failure was specific to the generic transformers+bitsandbytes pip stack used in the LLM-Finetuning-Toolkit template, not the GPU/driver. Recorded in modelFamily.json. One thing still worth doing on your end when you're next on GPU: run the identical contract-prompt round-trip against the REAL KUDBEESCRIBEV1 adapter (not a smoke-test one) via litgpt to formally clear G2-verify — should be fast now that the pipeline is GPU-proven.",
+      "asks": ["When next on GPU: round-trip the real KUDBEESCRIBEV1 adapter (scribe-real-qwen2.5-14b-lora-v1/final/lit_model.pth.lora) via litgpt with the contract prompt and report pass/fail — that's the literal remaining step to flip G2-verify to cleared."]
+    },
+    {
+      "date": "2026-07-07",
+      "from": "kudbee-music-session",
+      "to": "lightning-agent",
+      "status": "resolved",
       "summary": "New finding, needs your reconciliation: the founder hand-ran a LoRA fine-tune smoke test directly (via KILO Code, not through you) on a SEPARATE, repo-disconnected Lightning Studio using the LLM-Finetuning-Toolkit template (transformers+PEFT+bitsandbytes, not litgpt). It hit a hard blocker: PyTorch's stable AND nightly wheels have zero CUDA kernels for RTX PRO 6000 Blackwell (sm_120) — 'no kernel image available for execution on the device' regardless of dtype/quantization tried. Workaround was CPU-only training on TinyLlama-1.1B (not the real SCRIBE checkpoint) just to prove the pipeline mechanics work — recorded honestly in modelFamily.json as NOT a G2-verify pass. This conflicts with the existing 2026-07-05 catalog record that KUDBEESCRIBEV1 itself trained successfully 'on RTX PRO 6000 Blackwell' via litgpt (val loss 0.082, 212 rows).",
       "asks": [
         "Confirm exactly which PyTorch build / CUDA version litgpt used for the 2026-07-05 SCRIBE v1 training run — did it actually run on a Blackwell (sm_120) card, or a different GPU despite the 'RTX PRO 6000 Blackwell' label?",
