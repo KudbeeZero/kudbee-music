@@ -496,6 +496,17 @@ Board** governance / Solana / token / NFT layer integrates with this engine via 
 later (kept out of this repo's core so it stays free + local).
 
 ## ✅ Shipped (newest first)
+- [x] **📚 The Librarian — model-family overseer layer (roadmap 10.1)** — the training
+      program's standing "who's in charge": `brain/modelFamily.json` (a new memory layer,
+      the card catalog — 8 models tracked with dataset lineage, evals **with run counts**,
+      KUDBEE-GATE stage, budgets, train order, stall tripwires) + `lib/hermes/modelFamily.ts`
+      whose guard test makes the rules mechanical (no promotion without the gate cleared, no
+      "confirmed" eval under 3 runs, no budget overrun, no token-shaped string in the file) +
+      `docs/lightning-librarian.md` (KUDBEE-GATE G0–G6 with the SCRIBE worked example,
+      versioning, rollback, monthly/quarterly drift watch, the MiniMax teacher quality bar,
+      the never-do list) + per-phase GPU budgets and the Librarian session protocol wired
+      into `docs/lightning-agent-roadmap.md`. Deliberately NOT a Brain Scan region — its
+      future UI surface is the TDE Models panel (roadmap 10.3). _(this PR)_
 - [x] **🔐 Email/password authentication — local-first sessions with customizable timeout** —
       Phase 1 of the $1M marketplace expansion. New `lib/hermes/auth.ts` (`emailSignUp`, `emailSignIn`,
       `currentSession`, `refreshSession`, `changePassword`) using Web Crypto API (PBKDF2, no deps)

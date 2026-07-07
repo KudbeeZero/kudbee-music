@@ -7,6 +7,14 @@ model in the family. The kudbee-music side of each hookup lives in
 [`scribe-training-next-steps.md`](scribe-training-next-steps.md) and
 [`lightning-plan.md`](lightning-plan.md).
 
+**Governed by the Librarian** ([`lightning-librarian.md`](lightning-librarian.md)) —
+the standing overseer layer above these phases. Model-family **state** lives in
+[`brain/modelFamily.json`](../brain/modelFamily.json) (the card catalog: per-model
+status, dataset lineage, evals with run counts, gate state, budgets, train order);
+this doc is the **work order** executed against that state. Promotion for every model
+follows **KUDBEE-GATE** (G0-dataset → G6-promote, defined in the Librarian doc);
+per-phase budgets below are mirrored in the catalog and are hard ceilings, not vibes.
+
 **Last synced:** 2026-07-07 (kudbee-code-v0 master at `330e387`)
 
 ---
@@ -37,10 +45,22 @@ Ground rules that apply to every phase below:
    before committing to a run, and move adapters between studios — but the
    no-secrets rule rides along: never copy a token/key into a tracked file or
    paste one into a log, on either end of the SSH session.
+8. **Wear the Librarian role, both ends of the session.** Session start: pull
+   kudbee-music, read `brain/modelFamily.json`, run the stall check, confirm the
+   planned work is first in `trainOrder.queue` and fits the phase budget. Session
+   end: update the touched models (status, evals **with run counts**, gate stage,
+   spent budget, `lastTouched`, `nextAction`, a history event), run
+   `npx vitest run modelFamily`, commit on a fresh branch off `origin/main`, push,
+   PR. A session that trained something but didn't update the catalog is not done.
+   Full protocol + the never-do list: [`lightning-librarian.md`](lightning-librarian.md).
 
 ---
 
 ## The model family (current state)
+
+> **Source of truth: [`brain/modelFamily.json`](../brain/modelFamily.json).** This
+> table is the human summary; when they disagree, the catalog wins and this table
+> gets corrected. Update the catalog, not just this table.
 
 | Model | Task | Status | Next action |
 | --- | --- | --- | --- |
@@ -58,6 +78,12 @@ All four Phase-4 datasets come from the same $0 local generator in kudbee-music
 ---
 
 ## Phase 1 — KUDBEESCRIBEV1: convert, verify, serve (DO THIS FIRST)
+
+**Budget: ≤ 6 GPU-hours / ≤ $15** (catalog line `P1-scribe-v1-serve`; ~$2/hr RTX 6000
+estimate — correct the catalog if the real bill disagrees). Conversion + one verify
+pass + serving setup fits comfortably; if you're past 80% with the endpoint not yet
+live, stop and report instead of grinding. This phase is KUDBEE-GATE **G2-verify →
+G5-serve** for SCRIBE v1 (G0/G1 already happened; G6-promote is the founder's hand).
 
 Training is done. The blocker is format: the checkpoint is a 56GB litgpt
 `lit_model.pth`; the serving loader needs HF/PEFT. Exact pre-staged commands are in
@@ -102,8 +128,13 @@ wall-clock, adapter size, the verification prompt + raw output, endpoint URL
 
 ## Phase 2 — KUDBEECODEV0: confirm the eval, then wire it in
 
+**Budget: ≤ 5 GPU-hours / ≤ $12** (catalog line `P2-codev0-confirm`) — that covers
+eval runs and wiring only; a below-bar retrain is a separate, founder-acked spend.
+This phase is KUDBEE-GATE **G3-eval → G4** for CODEV0.
+
 The `kudbee-code-v0-rehearsal` deployment is already live on RTX 6000. The 40%
-pass rate (47 test cases) is a single run — treat it as unconfirmed.
+pass rate (47 test cases) is a single run — treat it as unconfirmed
+(`confirmed: false` in the catalog until 3 total runs; the guard test enforces it).
 
 **1. Re-run the 47-case eval suite twice more.** Report all three pass rates and
    the per-category breakdown. If variance is high (>±10%), diagnose before
@@ -125,6 +156,10 @@ pass rate (47 test cases) is a single run — treat it as unconfirmed.
 ---
 
 ## Phase 3 — SCRIBE v2: grow the dataset, retrain
+
+**Budget: ≤ 8 GPU-hours / ≤ $20** (catalog line `P3-scribe-v2`) — dataset growth is
+$0/local and spends none of it. This phase is the full KUDBEE-GATE **G0 → G6** for
+KUDBEESCRIBEV2 and is the gate's worked example (Librarian doc §4).
 
 Only start after Phase 1 ships (a served v1 is the baseline v2 must beat).
 
@@ -149,6 +184,11 @@ Only start after Phase 1 ships (a served v1 is the baseline v2 must beat).
 ---
 
 ## Phase 4 — the rest of the HERMES family (lyrics, production, cover, video)
+
+**Budget: ≤ 16 GPU-hours / ≤ $40 for the first pass** (catalog line
+`P4-hermes-family`) — one multi-task LoRA + its evals; per-task splits (only on
+demonstrated task interference) are a new founder-acked line, not an extension of
+this one. Each model runs the full KUDBEE-GATE G0 → G6 individually.
 
 Same playbook, four times. For each task, in this order:
 
@@ -205,16 +245,26 @@ When you have idle time on that studio:
    and (b) a teacher for synthetic training data (e.g. generating SCRIBE
    alternatives or judging eval outputs). Teacher-generated data inherits the
    full safety contract: original-only, no living-artist mimicry, banned-word
-   screen — same as everything else.
+   screen — same as everything else. The full teacher workflow — per-row screening,
+   `source: "teacher-minimax"` lineage tagging, and the 30-row / ≥80%-approved
+   founder spot-check that must clear before any teacher row enters a training
+   set — is specified in [`lightning-librarian.md`](lightning-librarian.md) §8.
+   Budget rule: idle time on that studio only — the sidecar's catalog budget line
+   is $0 and stays $0; never spin up a paid session solely for it.
 
 ## Standing reporting loop
 
 At the end of every GPU session, before shutting the Studio down:
 
 1. Update the dated notes file for whatever ran.
-2. Post a short status back to the founder: what completed, val loss / pass
-   rate, what's blocked, what the next GPU session should do first.
-3. If anything in this roadmap turned out wrong (a command, a path, a bar),
+2. Update `brain/modelFamily.json` (the Librarian session-end step — ground
+   rule 8): status, evals with run counts, gate stage, spent budget,
+   `lastTouched`, `nextAction`, a history event; then `npx vitest run
+   modelFamily` and push the catalog change as a kudbee-music PR.
+3. Post a short status back to the founder: what completed, val loss / pass
+   rate, budget spent vs cap, what's blocked, what the next GPU session should
+   do first.
+4. If anything in this roadmap turned out wrong (a command, a path, a bar),
    say so explicitly so this file gets corrected in kudbee-music — this doc is
    the shared map and it must not drift from reality.
 
@@ -222,6 +272,10 @@ At the end of every GPU session, before shutting the Studio down:
 
 ## See also
 
+- [`lightning-librarian.md`](lightning-librarian.md) — the Librarian: the standing
+  overseer layer (KUDBEE-GATE, versioning, rollback, drift watch, the never-do list)
+- [`brain/modelFamily.json`](../brain/modelFamily.json) — the model-family card
+  catalog this work order executes against
 - [`scribe-training-next-steps.md`](scribe-training-next-steps.md) — Phase 1 in
   step-by-step detail (conversion, verification prompt, endpoint wiring)
 - [`scribe-real-training-v1.md`](scribe-real-training-v1.md) — how v1 was trained
