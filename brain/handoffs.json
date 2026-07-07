@@ -27,6 +27,20 @@
       "date": "2026-07-07",
       "from": "kudbee-music-session",
       "to": "lightning-agent",
+      "status": "active",
+      "summary": "EXPLICIT G2-VERIFY INSTRUCTION: Run the real KUDBEESCRIBEV1 adapter (scribe-real-qwen2.5-14b-lora-v1/final/lit_model.pth.lora) through the contract-prompt JSON-alternatives test via litgpt on this GPU. The smoke test passed; now verify the real 212-row-trained model. Use the exact litgpt command structure below (adapt for your CLI if needed), capture the raw model output, verify JSON structure, and confirm no banned words. On pass, update brain/modelFamily.json KUDBEESCRIBEV1 entry: set gate.G2.status='cleared', gate.G2.verifiedAt=<timestamp>, gate.G2.gpu='H100 Blackwell', nextAction='G5-serve: stand up LitServe endpoint'. Then commit + handoff back with the output and G2 status flip.",
+      "asks": [
+        "Run this exact litgpt command (adapt the checkpoint-dir path and generate.py location to match your litgpt install). The contract-prompt tests JSON-alternatives generation (the exact output shape needed for lyric rewrites):",
+        "cd /root/litgpt && python generate.py --checkpoint_dir /teamspace/studios/wifi-dj-agent/scribe-runs/scribe-real-qwen2.5-14b-lora-v1/final --max_new_tokens 150 --temperature 0.7 --prompt \"You are a lyricist helping rewrite song lyrics. The user provides an original line and context. Your job is to generate 3 alternative versions that fit the rhyme scheme, meter, and emotional tone.\\n\\nOriginal line: \\\"I was walking through the city late at night\\\"\\nContext: This is the opening line of a verse in an indie rock song about urban solitude. The rhyme scheme is AABB. The next line rhymes with this one.\\nVocal register: low, contemplative\\n\\nOutput ONLY a JSON object with an \\\"alternatives\\\" array containing exactly 3 rewrites:\\n{\\\"alternatives\\\": [\\\"alt1\\\", \\\"alt2\\\", \\\"alt3\\\"]}\"",
+        "Paste the raw model output here (the full generated text, not truncated).",
+        "Verify: (1) output is valid JSON, (2) has exactly one 'alternatives' array key, (3) array contains exactly 3 strings, (4) none of the 3 alternatives contain banned words (check brain/beliefs.json for the list).",
+        "On pass: update brain/modelFamily.json KUDBEESCRIBEV1.gate.G2 as noted above, commit with message 'G2-verify cleared: KUDBEESCRIBEV1 contract-prompt JSON-alternatives pass on H100 Blackwell via litgpt', push, and append a resolved handoff entry with the output."
+      ]
+    },
+    {
+      "date": "2026-07-07",
+      "from": "kudbee-music-session",
+      "to": "lightning-agent",
       "status": "resolved",
       "summary": "RESOLVED (self-answered, no action needed from you): the Blackwell reconciliation question below got answered directly — founder switched the smoke-test Lightning Studio to litgpt (the same tool that trained KUDBEESCRIBEV1 on 2026-07-05) and confirmed real GPU utilization on RTX PRO 6000 Blackwell during both training and inference. A litgpt-trained Qwen2.5-14B smoke adapter round-tripped the real contract prompt to valid JSON with GPU inference confirmed (exit 0, ~40s). Conclusion: litgpt's bundled stack supports Blackwell fine; the earlier 'no kernel image available' failure was specific to the generic transformers+bitsandbytes pip stack used in the LLM-Finetuning-Toolkit template, not the GPU/driver. Recorded in modelFamily.json. One thing still worth doing on your end when you're next on GPU: run the identical contract-prompt round-trip against the REAL KUDBEESCRIBEV1 adapter (not a smoke-test one) via litgpt to formally clear G2-verify — should be fast now that the pipeline is GPU-proven.",
       "asks": ["When next on GPU: round-trip the real KUDBEESCRIBEV1 adapter (scribe-real-qwen2.5-14b-lora-v1/final/lit_model.pth.lora) via litgpt with the contract prompt and report pass/fail — that's the literal remaining step to flip G2-verify to cleared."]
