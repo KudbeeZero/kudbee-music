@@ -233,7 +233,25 @@ A second-opinion review flagged real risks worth acting on (truth-first):
   disclaimer in the README + Uniqueness panel. _(#37)_
 
 ## 🌱 Fresh captures
-- 🔨 **Close the test-file type blind spot (the systemic root cause of the scheme bug)**
+- 💭 **Storage is the GPU gate — free disk + a small teacher model (the cheap-model plan, honest version)**
+  *(founder, 2026-07-07)* — the RTX 6000 won't attach; founder is over the ~200GB Lightning
+  storage quota (very plausibly the cause — Lightning gates GPU on quota/storage). Founder's
+  instinct: drop the big models, download the SMALLEST model, run it on a server, and have
+  the Claude agent direct it to "train our models." **What's exactly right:** (a) storage is
+  almost certainly the GPU blocker → freeing disk is the real unblock; (b) a small model is
+  the correct tool for the **teacher** role (generate/judge training rows) — cheap, runs on
+  CPU/T4, and Claude Code can direct it over HTTP (`studio/lightning.mjs --field` already
+  does this), matching the MINIMAX-TEACHER catalog entry + docs/lightning-librarian.md §8.
+  **The one constraint (physics):** a small chat model CANNOT *do* the fine-tune — training
+  our 14B models is a gradient-descent GPU job (litgpt/TRL) regardless of which model is
+  "directing." The small model directs DATA CREATION, not the training compute; the actual
+  train step still needs the GPU (which the disk cleanup gets back). **The smart synthesis:**
+  the trained models ARE the tiny LoRA adapters (25–35MB each) — the 56GB litgpt + 69GB HF
+  *merged* checkpoints are reconstructable from base+adapter and are the big space hogs.
+  Keep the tiny adapters (rollback rule), drop the giant merged weights + legacy Mistral-7B +
+  redundant base copies → back under quota → GPU returns. This is Lightning-agent lane (GPU
+  studio disk); kudbee-music side just records the teacher decision in modelFamily.json
+  (behind a handoffs claim). Do NOT delete the LoRA adapters (they are the rollback artifact).
   *(found 2026-07-07 by a repo scan)* — `tsconfig.json`'s `exclude` lists `lib/hermes/__tests__`
   (+ `studio`, `bin`), so **test files are never type-checked** by `npx tsc --noEmit`. That
   is exactly why the original invalid-rhyme-scheme literals slipped through, and the scan
