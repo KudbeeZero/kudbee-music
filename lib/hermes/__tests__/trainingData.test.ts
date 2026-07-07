@@ -56,10 +56,10 @@ function loadFounderExports(): SongPackage[] {
   return out;
 }
 
-// 10 diverse, wholly original briefs (new coverage, not a re-run of the 5 golden-demo
-// themes) crossed against every pattern pack (brain/patternPacks.json) for structure +
-// rhyme-scheme variety. Fixed inputs + fixed seeds ⇒ byte-identical output every run
-// (Iron Law #1) — this is $0/local generation, no API key, no GPU.
+// 15 diverse, wholly original briefs (expanded from 10) crossed against 9 rhyme schemes
+// (expanded from 5) and 4 seeds (expanded from 2) for SCRIBE v2 dataset growth targeting
+// 500-2000 rows. Fixed inputs + fixed seeds ⇒ byte-identical output every run (Iron Law #1).
+// Expansion: 15 themes × 9 schemes × 4 seeds = 540 synthetic rows (+ 6 golden + dedup).
 const SYNTHETIC_THEMES: SongInputs[] = [
   { title: 'Borrowed Time', theme: 'racing the clock on a dream everyone said give up on', mood: 'urgent, wired, hopeful', genre: 'pop-punk', tempoMin: 150, tempoMax: 160, voice: 'raw, breathless', audience: 'anyone still chasing it', doNotUse: [], references: '', structure: 'hook-first' },
   { title: 'Low Tide', theme: 'the quiet after a breakup where you finally hear yourself think', mood: 'still, aching, clear-headed', genre: 'bedroom pop', tempoMin: 84, tempoMax: 92, voice: 'soft, intimate', audience: 'anyone starting over', doNotUse: [], references: '', structure: 'verse-first' },
@@ -71,6 +71,11 @@ const SYNTHETIC_THEMES: SongInputs[] = [
   { title: 'Gravel Road', theme: 'leaving the small town that made you to become who you actually are', mood: 'bittersweet, brave, dusty', genre: 'country-rap', tempoMin: 90, tempoMax: 98, voice: 'plain, honest', audience: 'anyone leaving home', doNotUse: [], references: '', structure: 'full-song' },
   { title: 'Static Bloom', theme: 'finding beauty and growth inside a genuinely bad year', mood: 'bruised, hopeful, quietly triumphant', genre: 'dream pop', tempoMin: 96, tempoMax: 104, voice: 'airy', audience: 'anyone rebuilding', doNotUse: [], references: '', structure: 'hook-first' },
   { title: 'No Encore', theme: 'walking away from something everyone expects you to keep doing', mood: 'calm, certain, unapologetic', genre: 'alt-pop', tempoMin: 110, tempoMax: 118, voice: 'measured, cool', audience: 'anyone quitting on their own terms', doNotUse: [], references: '', structure: 'radio-edit' },
+  { title: 'Neon Requiem', theme: 'finding meaning in a city that never sleeps', mood: 'hypnotic, electric, introspective', genre: 'synthpop', tempoMin: 120, tempoMax: 130, voice: 'detached, ethereal', audience: 'night owls and city dwellers', doNotUse: [], references: '', structure: 'verse-first' },
+  { title: 'Hands Down', theme: 'surrendering control and discovering you needed to all along', mood: 'vulnerable, relieved, raw', genre: 'indie rock', tempoMin: 100, tempoMax: 110, voice: 'honest, brittle', audience: 'anyone learning to let go', doNotUse: [], references: '', structure: 'short-form' },
+  { title: 'Velvet Rope', theme: 'watching the world you built exclude you', mood: 'bitter, wry, cold', genre: 'dark pop', tempoMin: 85, tempoMax: 95, voice: 'detached, sharp', audience: 'the quietly wronged', doNotUse: [], references: '', structure: 'full-song' },
+  { title: 'Dust and Stars', theme: 'mortality as a gift, not a countdown', mood: 'transcendent, peaceful, vast', genre: 'folk', tempoMin: 70, tempoMax: 80, voice: 'warm, wise', audience: 'anyone facing impermanence', doNotUse: [], references: '', structure: 'verse-first' },
+  { title: 'Concrete Prayer', theme: 'faith in something when faith stopped being easy', mood: 'questioning, hopeful, defiant', genre: 'alternative rock', tempoMin: 95, tempoMax: 105, voice: 'urgent, searching', audience: 'the spiritually restless', doNotUse: [], references: '', structure: 'hook-first' },
 ];
 
 const PATTERN_PACKS: { rhymeScheme: SongInputs['rhymeScheme'] }[] = [
@@ -79,9 +84,13 @@ const PATTERN_PACKS: { rhymeScheme: SongInputs['rhymeScheme'] }[] = [
   { rhymeScheme: 'ABBA' },
   { rhymeScheme: 'AAAA' },
   { rhymeScheme: 'XAXA' },
+  { rhymeScheme: 'XABY' },
+  { rhymeScheme: 'AXBX' },
+  { rhymeScheme: 'AABA' },
+  { rhymeScheme: 'ABCB' },
 ];
 
-const SEEDS = [1, 2];
+const SEEDS = [1, 2, 3, 4];
 
 async function synthesize(): Promise<SongPackage[]> {
   const pkgs: SongPackage[] = [];

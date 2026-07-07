@@ -239,12 +239,12 @@
       "id": "KUDBEESCRIBEV2",
       "family": "SCRIBE",
       "task": "lyric line rewrites, bigger dataset (successor to KUDBEESCRIBEV1)",
-      "status": "planned",
+      "status": "dataset-ready",
       "baseModel": "Qwen/Qwen2.5-14B-Instruct",
       "recipe": "v1 recipe as baseline \u2014 one variable at a time",
       "dataset": {
-        "id": null,
-        "rows": null,
+        "id": "scribe-line-rewrite@2026-07-07+r558",
+        "rows": 558,
         "sources": [
           "golden",
           "synthetic",
@@ -274,13 +274,17 @@
         "note": null
       },
       "trainingNotes": [],
-      "nextAction": "Wait for KUDBEESCRIBEV1 to serve; meanwhile dataset growth is $0 and can proceed in kudbee-music",
+      "nextAction": "Dataset expanded and regenerated (15 themes \u00d7 9 schemes \u00d7 4 seeds \u2192 558 rows, 2.6\u00d7 v1 baseline). Ready for training once KUDBEESCRIBEV1 serves (G4-head-to-head gate requirement). Grow further toward 800-1500 rows if needed before first training run.",
       "lastTouched": "2026-07-07",
       "staleAfterDays": 45,
       "history": [
         {
           "date": "2026-07-07",
           "event": "entered the catalog as planned, gated on a served v1"
+        },
+        {
+          "date": "2026-07-07",
+          "event": "Dataset expanded: 15 themes \u00d7 9 rhyme schemes \u00d7 4 seeds \u2192 558 rows (2.6\u00d7 v1's 212-row baseline). Status: dataset-ready, awaits v1 promotion for G4 comparison."
         }
       ]
     },
