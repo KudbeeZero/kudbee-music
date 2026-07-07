@@ -75,22 +75,23 @@
       "id": "KUDBEESCRIBEV1",
       "family": "SCRIBE",
       "task": "lyric line rewrites — 3 alternatives, meaning/meter/rhyme-slot preserved",
-      "status": "trained-unconverted",
+      "status": "converted-unverified",
       "baseModel": "Qwen/Qwen2.5-14B-Instruct",
       "recipe": "LoRA r=8 α=16 · 5 epochs · bf16-mixed · global batch 4 (litgpt finetune_lora)",
       "dataset": { "id": "scribe-line-rewrite@2026-07-05+r212", "rows": 212, "sources": ["golden", "synthetic"], "generator": "GEN_TRAINING_DATA=1 npx vitest run trainingData ($0, local, kudbee-music)" },
-      "training": { "valLoss": 0.082, "date": "2026-07-05", "note": "checkpoint is a 56GB litgpt lit_model.pth — HF/PEFT conversion is the standing blocker" },
-      "artifacts": { "checkpoint": "/teamspace/studios/this_studio/scribe-runs/scribe-real-qwen2.5-14b-lora-v1 (Lightning side, never in git)", "adapter": null },
+      "training": { "valLoss": 0.082, "date": "2026-07-05", "note": "perplexity 1.086; litgpt-native artifacts are lit_model.pth (56GB) + lit_model.pth.lora (25MB)" },
+      "artifacts": { "checkpoint": "/teamspace/studios/this_studio/scribe-runs/scribe-real-qwen2.5-14b-lora-v1/final/ (litgpt-native) + hf-converted/ (69GB pytorch_model.bin, HF format — Lightning side, never in git)", "adapter": "scribe-runs/.../20260705-194802/adapter/ (35MB PEFT LoRA)" },
       "evals": [],
-      "gate": { "stage": "G1-train", "cleared": false, "blockedOn": "G2-verify: litgpt → HF/PEFT conversion (RTX 6000, ≥120GB free disk; exact commands in kudbee-code-v0/training-notes/NEXT_RTX6000_SCRIBE_TEST.md)" },
+      "gate": { "stage": "G2-verify", "cleared": false, "blockedOn": "identity gate in hermes-lyric-server server.py doesn't recognize the merged checkpoint — a ~1-5 line fix; then round-trip one real SCRIBE contract prompt. HF conversion itself is DONE (Phase 1, 2026-07-07: merged checkpoint loads on RTX 6000 Blackwell, 10.3GB peak VRAM). See hermes-lyric-server/kudbee-code-v0/training-notes/2026-07-07_phase1_scribe_litgpt_conversion.md" },
       "endpoint": { "served": false, "url": null, "note": "record the URL here after G5 — the bearer key never (gitignored .env.local only)" },
-      "trainingNotes": ["kudbee-code-v0/training-notes/NEXT_RTX6000_SCRIBE_TEST.md"],
-      "nextAction": "Roadmap Phase 1: convert → verify one real SCRIBE contract prompt → serve behind /scribe/rewrite → write SCRIBE_V1_CONVERSION_RESULT.md",
+      "trainingNotes": ["kudbee-code-v0/training-notes/NEXT_RTX6000_SCRIBE_TEST.md", "hermes-lyric-server/kudbee-code-v0/training-notes/2026-07-07_phase1_scribe_litgpt_conversion.md"],
+      "nextAction": "G2-verify: fix the server.py identity gate (~1-5 lines) so it recognizes the merged checkpoint, then round-trip one real SCRIBE contract prompt (buildLightningLineRewritePrompt format → valid {\"alternatives\":[...]} JSON) before serving behind /scribe/rewrite",
       "lastTouched": "2026-07-07",
       "staleAfterDays": 14,
       "history": [
         { "date": "2026-07-05", "event": "trained on RTX PRO 6000 Blackwell — val loss 0.082 on 212 rows" },
-        { "date": "2026-07-07", "event": "entered the Librarian catalog; conversion recorded as the standing blocker" }
+        { "date": "2026-07-07", "event": "entered the Librarian catalog; conversion recorded as the standing blocker" },
+        { "date": "2026-07-07", "event": "Phase 1 conversion COMPLETE (litgpt → HF, 69GB, loads on GPU at 10.3GB VRAM); blocker moved from conversion to a ~1-5 line server.py identity-gate fix at G2-verify (per Lightning-agent report, unverified from kudbee-music side)" }
       ]
     },
     {

@@ -11,7 +11,7 @@ import family from '../../brain/modelFamily.json';
 
 export const MODEL_STATUSES = [
   'planned', 'dataset-ready', 'training', 'trained-unconverted',
-  'evaluating', 'candidate', 'promoted', 'retired', 'teacher',
+  'converted-unverified', 'evaluating', 'candidate', 'promoted', 'retired', 'teacher',
 ] as const;
 export type ModelStatus = (typeof MODEL_STATUSES)[number];
 
