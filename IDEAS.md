@@ -233,6 +233,19 @@ A second-opinion review flagged real risks worth acting on (truth-first):
   disclaimer in the README + Uniqueness panel. _(#37)_
 
 ## 🌱 Fresh captures
+- 🔨 **Free-CPU stand-in endpoint for Scribe — decouple wiring from the GPU debugging**
+  *(founder, 2026-07-07)* — while SCRIBE-14B's GPU loading issue gets debugged, stand up a
+  genuinely small instruct model (Qwen2.5-1.5B-Instruct class, NOT MiniMax — too large/MoE
+  for CPU) on a SEPARATE, always-on, $0 CPU Lightning Studio, fronted by a tiny Ollama-backed
+  proxy. Real finding: the browser's existing `lightningLyricsProvider.ts` POSTs
+  `{"prompt":"..."}` and its response parser already checks a `.response` field — which is
+  EXACTLY Ollama's native `/api/generate` shape. So this needs ZERO client-side changes, just
+  a ~20-line proxy injecting the model name. Paste the resulting URL into the already-shipped
+  Engine Rack Lightning slot (#233) and the whole browser→endpoint→UI pipeline is
+  provably working with a cheap stand-in TODAY, fully decoupled from the real trained model.
+  Directive posted directly to `brain/handoffs.json` (not just relayed in chat) so the
+  Lightning agent can act on it without a manual round-trip — part of the founder's push
+  to minimize Claude Code usage by making the handoff log the primary instruction channel.
 - 💭 **Storage is the GPU gate — free disk + a small teacher model (the cheap-model plan, honest version)**
   *(founder, 2026-07-07)* — the RTX 6000 won't attach; founder is over the ~200GB Lightning
   storage quota (very plausibly the cause — Lightning gates GPU on quota/storage). Founder's
