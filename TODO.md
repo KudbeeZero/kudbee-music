@@ -496,6 +496,18 @@ Board** governance / Solana / token / NFT layer integrates with this engine via 
 later (kept out of this repo's core so it stays free + local).
 
 ## ✅ Shipped (newest first)
+- [x] **🔓 Agent autonomy + 🧠 trajectory dataset + 🤝 cross-agent handoff log (roadmap 10.4–10.6)** —
+      three founder directives in one PR. **Autonomy:** `.claude/settings.json` allowlist so
+      the training agents run the safe repeated commands without asking (deny keeps
+      force-push/push-to-main/`reset --hard`/`rm -rf`/secret-reads gated) + `docs/agent-autonomy.md`
+      with the Lightning agent's run-autonomously preamble. **Trajectory dataset:**
+      `lib/hermes/agentDecisions.ts` captures the program's own decisions as KUDBEECODEV0
+      rows (harvested from the catalog `history[]`, secret-scrubbed, gate-discipline
+      instruction) + `docs/agent-trajectory-dataset.md`. **Handoff log:** `brain/handoffs.json`
+      — the explicit async comms channel between the kudbee-music session and the Lightning
+      GPU agent (read at session start, append at session end), so neither works blind.
+      +tests, golden eval unaffected. Also captured 2 more founder ideas (architecture-prediction
+      training target; local agent dashboard) in IDEAS.md. _(this PR)_
 - [x] **🎼 Two new rhyme schemes (AABA, AXAX) + a fake-variety guard** — the Lightning
       agent's SCRIBE v2 dataset PR added 4 "rhyme schemes" that weren't real `RhymeSchemeId`
       values; `pipeline.ts` silently sanitized them to the AABB default, inflating the

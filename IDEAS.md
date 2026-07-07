@@ -233,6 +233,36 @@ A second-opinion review flagged real risks worth acting on (truth-first):
   disclaimer in the README + Uniqueness panel. _(#37)_
 
 ## 🌱 Fresh captures
+- 💭 **Architecture-prediction training target — teach a model to predict what gets built**
+  *(founder, 2026-07-07)* — "our models are gonna be different… trained on architecture
+  building segments, like GitHub does with workflows… plan/architect the architecture and
+  predict what's going to be created based on the response and the prompting of the engine."
+  The idea: don't just train on final artifacts — train on the *architectural plan* that
+  precedes them, so a model can predict the file tree / module design / PR plan from a
+  prompt. A direct extension of the agent-trajectory dataset (10.5,
+  `lib/hermes/agentDecisions.ts` + `docs/agent-trajectory-dataset.md`): that captures
+  *decisions*; this captures *plans → predicted structure*. Buildable the same $0/local way
+  — a new `DecisionSource: 'architecture-plan'` (or sibling record) whose **input** is the
+  prompt/spec + repo state and whose **output** is the structured plan that actually shipped
+  (files touched, tests added, gate stages), harvested from merged PRs (the diff IS the
+  ground-truth "what got created", the PR body is the plan). Every KUDBEE PR already pairs a
+  plan with its realized diff, so the training pairs write themselves. Feeds KUDBEECODEV0.
+  Honest boundary same as 10.5: externalized plans (PR bodies + diffs), not hidden CoT; no
+  server; the diff is ground truth so the label is never fabricated. Design next.
+- 💭 **Local agent-tracking dashboard — all our agents + graphs, on a local port**
+  *(founder, 2026-07-07)* — a detailed, integrated dashboard tracking every KUDBEE agent
+  (pipeline agents, the Librarian, the Lightning GPU agent, the hermes-* studio agents,
+  future coding agents) with graphs, pulled up locally through a port. Note: the app is a
+  **static export** (`$0`/no-server iron law), so a live localhost dashboard is a
+  founder-side ops tool, NOT the shipped client — same boundary as the Kestra idea in
+  `docs/lightning-plan.md` and the watchdog. Two honest paths: (a) extend the existing
+  **`/tde` cockpit** (already the "all our agents/repos/models/GPU" surface, 9.x) to read
+  real state from `brain/modelFamily.json` (10.3 queued) + `brain/roadmap.json` +
+  `brain/branches.json` + the agent-decision log, rendered with the repo's existing
+  chart/particle infra, still static/$0; or (b) a separate local Node dashboard server
+  (founder-side ops, `.env.local` boundary, never the client bundle) that live-polls
+  git/PRs/GPU-job status. Recommend (a) first — most data already lives in the spine and
+  `/tde` is the honest home. A standalone spike prompt was handed to the founder.
 - ✅ **The Librarian — an overseer for the model-training team** *(founder, 2026-07-07;
   designed + shipped same session, roadmap 10.1)* — Conductor routes one song's agent
   pipeline; the Librarian sits one level up and oversees the *model family itself*
