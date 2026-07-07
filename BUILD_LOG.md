@@ -8,7 +8,7 @@ is generated from it and drift-tested, so it can never silently rot again.
 ## Video-studio track
 
 <!-- STATUS:BEGIN generated: edit brain/roadmap.json, then GEN_DOCS=1 npx vitest run status -->
-**📊 Status board:** ✅ 93 shipped · 🔨 4 in build · 💤 9 queued (106 tracked) — full tables in [`STATUS.md`](STATUS.md), source of truth [`brain/roadmap.json`](brain/roadmap.json).
+**📊 Status board:** ✅ 94 shipped · 🔨 3 in build · 💤 9 queued (106 tracked) — full tables in [`STATUS.md`](STATUS.md), source of truth [`brain/roadmap.json`](brain/roadmap.json).
 
 | | Item | Where it lives | PR |
 |---|------|----------------|----|

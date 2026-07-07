@@ -291,10 +291,10 @@
         {
           "id": "10.3",
           "title": "🖥️ TDE Models panel reads brain/modelFamily.json (real state replaces the mock model cards)",
-          "status": "building",
+          "status": "shipped",
           "home": "components/tde/TrainingProgressPanel.tsx",
-          "pr": "TBD",
-          "note": "Slice 1 shipped: TrainingProgressPanel.tsx with gate-progress 7-step track, training-volume sequential-hue bar chart (cyan ramp), and eval-quality gauges per model + unconfirmed-run badges. HTML/SVG charts, no new deps, uses familyTrainingProgress() data source + table-view fallback. All gates green. Slice 2 queued: budget (GPU-hours and $ gauges, separate charts), iterations (activity bar/sparkline), and roster (stat row with counts). The dashboard stays suggest-only / read-only per TDE rules — a window, not a lever."
+          "pr": "#231",
+          "note": "SHIPPED: TrainingProgressPanel.tsx with six data-rich sections reading live familyTrainingProgress() state. Slice 1: gate-progress 7-step track (G0–G6 pipeline), training-volume sequential-hue bar chart (cyan ramp), eval-quality gauges per model + unconfirmed-run badges (3-run honesty rule). Slice 2: budget utilization (per-phase GPU-hours + USD gauges, 80% amber / 100% red thresholds), training-activity iterations bar (decision-trail depth), roster stat-row (model counts by status, served, stale, total rows). HTML/SVG charts, zero new deps, table-view fallback for accessibility, responsive on mobile. All gates green. The dashboard stays suggest-only / read-only per TDE rules — a window, not a lever."
         },
         {
           "id": "10.4",
