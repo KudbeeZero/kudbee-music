@@ -1,8 +1,8 @@
 {
-  "note": "The model-family card catalog — the Librarian's ledger. Standing state for the KUDBEE/HERMES model-training program: per-model status, checkpoint/adapter + dataset lineage, eval scores WITH run counts (a single unconfirmed run is never settled), KUDBEE-GATE promotion state, budgets, train order, and next actions. Read by lib/hermes/modelFamily.ts (invariants CI-enforced by modelFamily.test.ts) and by the Lightning agent at every GPU-session start/end (protocol: docs/lightning-librarian.md). See brain/README.md for the full brain/ folder index.",
+  "note": "The model-family card catalog \u2014 the Librarian's ledger. Standing state for the KUDBEE/HERMES model-training program: per-model status, checkpoint/adapter + dataset lineage, eval scores WITH run counts (a single unconfirmed run is never settled), KUDBEE-GATE promotion state, budgets, train order, and next actions. Read by lib/hermes/modelFamily.ts (invariants CI-enforced by modelFamily.test.ts) and by the Lightning agent at every GPU-session start/end (protocol: docs/lightning-librarian.md). See brain/README.md for the full brain/ folder index.",
   "updated": "2026-07-07",
   "librarian": {
-    "what": "The overseer role for the model-training team — one level above the phases. Conductor routes one song's agents; the Librarian oversees the model family itself. It is a role either side (a kudbee-music session or the Lightning agent) puts on when touching this file, not a new process.",
+    "what": "The overseer role for the model-training team \u2014 one level above the phases. Conductor routes one song's agents; the Librarian oversees the model family itself. It is a role either side (a kudbee-music session or the Lightning agent) puts on when touching this file, not a new process.",
     "owns": [
       "the model registry: every model's status, lineage, and next action live here and nowhere else",
       "KUDBEE-GATE enforcement: no model is promoted without every stage cleared (CI-checked, not honor-system)",
@@ -13,59 +13,102 @@
       "drift audits on promoted models (the driftWatch cadence below)"
     ],
     "never": [
-      "spend past a phase usdCap or start a paid GPU session past the monthlyUsdCap without an explicit founder go — raising a cap is a founder decision",
+      "spend past a phase usdCap or start a paid GPU session past the monthlyUsdCap without an explicit founder go \u2014 raising a cap is a founder decision",
       "promote a model without KUDBEE-GATE fully cleared (modelFamily.test.ts fails CI on the attempt)",
-      "treat a single eval run as a result — confirmed requires promotionGate.confirmRuns runs",
+      "treat a single eval run as a result \u2014 confirmed requires promotionGate.confirmRuns runs",
       "write a secret anywhere in git: endpoint URLs may be recorded here, bearer tokens NEVER (gitignored .env.local / Studio env only)",
-      "fine-tune the MiniMax teacher (MoE, far too large for a single RTX 6000) — teacher and comparison provider only",
-      "delete a previous adapter — rollback depends on every promoted version staying on disk",
+      "fine-tune the MiniMax teacher (MoE, far too large for a single RTX 6000) \u2014 teacher and comparison provider only",
+      "delete a previous adapter \u2014 rollback depends on every promoted version staying on disk",
       "let the sidecar stall the main phases"
     ]
   },
   "promotionGate": {
     "name": "KUDBEE-GATE",
     "confirmRuns": 3,
-    "what": "The one pipeline every model in the family must clear, end to end, before it serves kudbee-music. Generalized from the SCRIBE v1→v2 pattern; the worked example lives in docs/lightning-librarian.md.",
+    "what": "The one pipeline every model in the family must clear, end to end, before it serves kudbee-music. Generalized from the SCRIBE v1\u2192v2 pattern; the worked example lives in docs/lightning-librarian.md.",
     "stages": {
       "G0-dataset": "dataset regenerated fresh, $0, locally (GEN_TRAINING_DATA=1 npx vitest run trainingData); row count meets the task's floor; out/training-data/REPORT.md checked for dupes; dataset id + rows pinned in this file",
       "G1-train": "recipe recorded verbatim (base model, LoRA config, precision, epochs, batch); val loss beats the family baseline or the miss is explained in the run's notes file",
       "G2-verify": "checkpoint in a servable format (HF/PEFT); one real contract prompt round-trips with valid output (for SCRIBE: the buildLightningLineRewritePrompt() format returning {\"alternatives\":[...]} JSON)",
-      "G3-eval": "the task's eval suite run at least confirmRuns times; all pass rates recorded here with run counts; variance past ±10% means diagnose (sampling/harness/model) before anything else",
+      "G3-eval": "the task's eval suite run at least confirmRuns times; all pass rates recorded here with run counts; variance past \u00b110% means diagnose (sampling/harness/model) before anything else",
       "G4-head-to-head": "beats the currently promoted model of its family on held-out golden examples (or the base model, if nothing is promoted yet); a loss means grow the dataset and return to G0",
-      "G5-serve": "endpoint live behind LitServe; ping + one real round-trip via studio/lightning.mjs; endpoint URL recorded here — the bearer token never",
+      "G5-serve": "endpoint live behind LitServe; ping + one real round-trip via studio/lightning.mjs; endpoint URL recorded here \u2014 the bearer token never",
       "G6-promote": "founder acknowledges; endpoint + key go in kudbee-music's gitignored .env.local by the founder's hand; status flips to promoted here; the previous adapter's path stays recorded for rollback"
     }
   },
   "versioning": {
-    "modelIds": "KUDBEE<TASK>V<major> (KUDBEESCRIBEV1, KUDBEECODEV0, …) or HERMES-<TASK> before a first major. Major bumps only when dataset or recipe changes materially; an identical-recipe re-run is a new run notes file, not a new version.",
-    "adapters": "one immutable directory per run under /teamspace/studios/this_studio/<family>-runs/<modelId>-r<runNumber>-<base-short>-lora — never overwritten, never deleted",
+    "modelIds": "KUDBEE<TASK>V<major> (KUDBEESCRIBEV1, KUDBEECODEV0, \u2026) or HERMES-<TASK> before a first major. Major bumps only when dataset or recipe changes materially; an identical-recipe re-run is a new run notes file, not a new version.",
+    "adapters": "one immutable directory per run under /teamspace/studios/this_studio/<family>-runs/<modelId>-r<runNumber>-<base-short>-lora \u2014 never overwritten, never deleted",
     "datasets": "<task>@<YYYY-MM-DD>+r<rows> (e.g. scribe-line-rewrite@2026-07-05+r212), pinned from out/training-data/REPORT.md at G0",
-    "trainingNotes": "kudbee-code-v0/training-notes/<YYYY-MM-DD>_<MODELID>_<what>.md — every run's receipt; each references the exact dataset id + adapter directory it produced"
+    "trainingNotes": "kudbee-code-v0/training-notes/<YYYY-MM-DD>_<MODELID>_<what>.md \u2014 every run's receipt; each references the exact dataset id + adapter directory it produced"
   },
   "trainOrder": {
-    "queue": ["KUDBEESCRIBEV1", "KUDBEECODEV0", "KUDBEESCRIBEV2", "HERMES-LYRICS", "HERMES-PRODUCTION", "HERMES-VIDEO", "HERMES-COVER"],
+    "queue": [
+      "KUDBEESCRIBEV1",
+      "KUDBEECODEV0",
+      "KUDBEESCRIBEV2",
+      "HERMES-LYRICS",
+      "HERMES-PRODUCTION",
+      "HERMES-VIDEO",
+      "HERMES-COVER"
+    ],
     "rules": [
       "unblock served baselines before training anything new (a served v1 is the thing a v2 must beat)",
       "confirm unconfirmed evals before new GPU spend",
       "richest dataset + clearest eval first; the most subjective task (cover) goes last",
-      "the founder can reorder by editing this queue — the agent never reorders silently"
+      "the founder can reorder by editing this queue \u2014 the agent never reorders silently"
     ]
   },
   "budget": {
-    "assumptions": "RTX 6000 Lightning Studio ≈ $2/GPU-hour — a founder-adjustable ESTIMATE; correct it here the first time a real bill disagrees",
+    "assumptions": "RTX 6000 Lightning Studio \u2248 $2/GPU-hour \u2014 a founder-adjustable ESTIMATE; correct it here the first time a real bill disagrees",
     "monthlyUsdCap": 100,
-    "rule": "Flag to the founder at 80% of any cap; hard-stop at 100%. spentUsd above usdCap fails CI on purpose — an overrun must be resolved by a founder raising the cap, never by the agent running on.",
+    "rule": "Flag to the founder at 80% of any cap; hard-stop at 100%. spentUsd above usdCap fails CI on purpose \u2014 an overrun must be resolved by a founder raising the cap, never by the agent running on.",
     "phases": [
-      { "id": "P1-scribe-v1-serve", "gpuHoursCap": 6, "usdCap": 15, "spentGpuHours": 0, "spentUsd": 0, "covers": "conversion + verify + serve (roadmap Phase 1)" },
-      { "id": "P2-codev0-confirm", "gpuHoursCap": 5, "usdCap": 12, "spentGpuHours": 0, "spentUsd": 0, "covers": "2 more eval runs + wiring (roadmap Phase 2); a below-bar retrain draws from P4's style of budget, not this one" },
-      { "id": "P3-scribe-v2", "gpuHoursCap": 8, "usdCap": 20, "spentGpuHours": 0, "spentUsd": 0, "covers": "dataset growth is $0/local; train + 3-run eval + head-to-head (roadmap Phase 3)" },
-      { "id": "P4-hermes-family", "gpuHoursCap": 16, "usdCap": 40, "spentGpuHours": 0, "spentUsd": 0, "covers": "one multi-task LoRA first, per-task splits only on demonstrated interference (roadmap Phase 4)" },
-      { "id": "SIDECAR-minimax", "gpuHoursCap": 0, "usdCap": 0, "spentGpuHours": 0, "spentUsd": 0, "covers": "idle time on the second studio ONLY — this line stays 0; a paid session that exists solely for the sidecar is out of policy" }
+      {
+        "id": "P1-scribe-v1-serve",
+        "gpuHoursCap": 6,
+        "usdCap": 15,
+        "spentGpuHours": 0.5,
+        "spentUsd": 1,
+        "covers": "conversion + verify + serve (roadmap Phase 1)"
+      },
+      {
+        "id": "P2-codev0-confirm",
+        "gpuHoursCap": 5,
+        "usdCap": 12,
+        "spentGpuHours": 0,
+        "spentUsd": 0,
+        "covers": "2 more eval runs + wiring (roadmap Phase 2); a below-bar retrain draws from P4's style of budget, not this one"
+      },
+      {
+        "id": "P3-scribe-v2",
+        "gpuHoursCap": 8,
+        "usdCap": 20,
+        "spentGpuHours": 0,
+        "spentUsd": 0,
+        "covers": "dataset growth is $0/local; train + 3-run eval + head-to-head (roadmap Phase 3)"
+      },
+      {
+        "id": "P4-hermes-family",
+        "gpuHoursCap": 16,
+        "usdCap": 40,
+        "spentGpuHours": 0,
+        "spentUsd": 0,
+        "covers": "one multi-task LoRA first, per-task splits only on demonstrated interference (roadmap Phase 4)"
+      },
+      {
+        "id": "SIDECAR-minimax",
+        "gpuHoursCap": 0,
+        "usdCap": 0,
+        "spentGpuHours": 0,
+        "spentUsd": 0,
+        "covers": "idle time on the second studio ONLY \u2014 this line stays 0; a paid session that exists solely for the sidecar is out of policy"
+      }
     ]
   },
   "driftWatch": {
-    "owner": "the Librarian (whichever agent wears the role that session) — a missed check is a stall and gets escalated like one",
-    "monthly": "light check on every promoted model: pull ~20 logged outputs, screen for banned words + famous phrases (lib/hermes/safety.ts) and cliché drift; verdict recorded in a dated notes file + a history event here",
+    "owner": "the Librarian (whichever agent wears the role that session) \u2014 a missed check is a stall and gets escalated like one",
+    "monthly": "light check on every promoted model: pull ~20 logged outputs, screen for banned words + famous phrases (lib/hermes/safety.ts) and clich\u00e9 drift; verdict recorded in a dated notes file + a history event here",
     "quarterly": "deep audit: re-run the model's full eval suite confirmRuns times against the scores recorded at promotion; a regression triggers the rollback path in docs/lightning-librarian.md",
     "lastMonthly": null,
     "lastQuarterly": null
@@ -74,24 +117,64 @@
     {
       "id": "KUDBEESCRIBEV1",
       "family": "SCRIBE",
-      "task": "lyric line rewrites — 3 alternatives, meaning/meter/rhyme-slot preserved",
+      "task": "lyric line rewrites \u2014 3 alternatives, meaning/meter/rhyme-slot preserved",
       "status": "converted-unverified",
       "baseModel": "Qwen/Qwen2.5-14B-Instruct",
-      "recipe": "LoRA r=8 α=16 · 5 epochs · bf16-mixed · global batch 4 (litgpt finetune_lora)",
-      "dataset": { "id": "scribe-line-rewrite@2026-07-05+r212", "rows": 212, "sources": ["golden", "synthetic"], "generator": "GEN_TRAINING_DATA=1 npx vitest run trainingData ($0, local, kudbee-music)" },
-      "training": { "valLoss": 0.082, "date": "2026-07-05", "note": "perplexity 1.086; litgpt-native artifacts are lit_model.pth (56GB) + lit_model.pth.lora (25MB)" },
-      "artifacts": { "checkpoint": "/teamspace/studios/this_studio/scribe-runs/scribe-real-qwen2.5-14b-lora-v1/final/ (litgpt-native) + hf-converted/ (69GB pytorch_model.bin, HF format — Lightning side, never in git)", "adapter": "scribe-runs/.../20260705-194802/adapter/ (35MB PEFT LoRA)" },
+      "recipe": "LoRA r=8 \u03b1=16 \u00b7 5 epochs \u00b7 bf16-mixed \u00b7 global batch 4 (litgpt finetune_lora)",
+      "dataset": {
+        "id": "scribe-line-rewrite@2026-07-05+r212",
+        "rows": 212,
+        "sources": [
+          "golden",
+          "synthetic"
+        ],
+        "generator": "GEN_TRAINING_DATA=1 npx vitest run trainingData ($0, local, kudbee-music)"
+      },
+      "training": {
+        "valLoss": 0.082,
+        "date": "2026-07-05",
+        "note": "perplexity 1.086; litgpt-native artifacts are lit_model.pth (56GB) + lit_model.pth.lora (25MB)"
+      },
+      "artifacts": {
+        "checkpoint": "/teamspace/studios/this_studio/scribe-runs/scribe-real-qwen2.5-14b-lora-v1/final/ (litgpt-native) + hf-converted/ (69GB pytorch_model.bin, HF format \u2014 Lightning side, never in git)",
+        "adapter": "scribe-runs/.../20260705-194802/adapter/ (35MB PEFT LoRA)"
+      },
       "evals": [],
-      "gate": { "stage": "G2-verify", "cleared": false, "blockedOn": "identity gate in hermes-lyric-server server.py doesn't recognize the merged checkpoint — a ~1-5 line fix; then round-trip one real SCRIBE contract prompt. HF conversion itself is DONE (Phase 1, 2026-07-07: merged checkpoint loads on RTX 6000 Blackwell, 10.3GB peak VRAM). See hermes-lyric-server/kudbee-code-v0/training-notes/2026-07-07_phase1_scribe_litgpt_conversion.md" },
-      "endpoint": { "served": false, "url": null, "note": "record the URL here after G5 — the bearer key never (gitignored .env.local only)" },
-      "trainingNotes": ["kudbee-code-v0/training-notes/NEXT_RTX6000_SCRIBE_TEST.md", "hermes-lyric-server/kudbee-code-v0/training-notes/2026-07-07_phase1_scribe_litgpt_conversion.md"],
-      "nextAction": "G2-verify: fix the server.py identity gate (~1-5 lines) so it recognizes the merged checkpoint, then round-trip one real SCRIBE contract prompt (buildLightningLineRewritePrompt format → valid {\"alternatives\":[...]} JSON) before serving behind /scribe/rewrite",
+      "gate": {
+        "stage": "G2-verify",
+        "cleared": false,
+        "blockedOn": "Identity-gate fix committed (hermes-lyric-server commit 8da1af5, CPU-tested). G2-verify now requires GPU round-trip with one real contract prompt (buildLightningLineRewritePrompt format \u2192 {\"alternatives\":[...]} JSON). No round-trip yet \u2014 G2 cleared only when GPU confirms output format + banned-word check pass."
+      },
+      "endpoint": {
+        "served": false,
+        "url": null,
+        "note": "record the URL here after G5 \u2014 the bearer key never (gitignored .env.local only)"
+      },
+      "trainingNotes": [
+        "kudbee-code-v0/training-notes/NEXT_RTX6000_SCRIBE_TEST.md",
+        "hermes-lyric-server/kudbee-code-v0/training-notes/2026-07-07_phase1_scribe_litgpt_conversion.md",
+        "hermes-lyric-server/kudbee-code-v0/training-notes/2026-07-07_phase3_scribe_v2_dataset_baseline.md"
+      ],
+      "nextAction": "G2-verify: fix the server.py identity gate (~1-5 lines) so it recognizes the merged checkpoint, then round-trip one real SCRIBE contract prompt (buildLightningLineRewritePrompt format \u2192 valid {\"alternatives\":[...]} JSON) before serving behind /scribe/rewrite",
       "lastTouched": "2026-07-07",
       "staleAfterDays": 14,
       "history": [
-        { "date": "2026-07-05", "event": "trained on RTX PRO 6000 Blackwell — val loss 0.082 on 212 rows" },
-        { "date": "2026-07-07", "event": "entered the Librarian catalog; conversion recorded as the standing blocker" },
-        { "date": "2026-07-07", "event": "Phase 1 conversion COMPLETE (litgpt → HF, 69GB, loads on GPU at 10.3GB VRAM); blocker moved from conversion to a ~1-5 line server.py identity-gate fix at G2-verify (per Lightning-agent report, unverified from kudbee-music side)" }
+        {
+          "date": "2026-07-05",
+          "event": "trained on RTX PRO 6000 Blackwell \u2014 val loss 0.082 on 212 rows"
+        },
+        {
+          "date": "2026-07-07",
+          "event": "entered the Librarian catalog; conversion recorded as the standing blocker"
+        },
+        {
+          "date": "2026-07-07",
+          "event": "Phase 1 conversion COMPLETE (litgpt \u2192 HF, 69GB, loads on GPU at 10.3GB VRAM); blocker moved from conversion to a ~1-5 line server.py identity-gate fix at G2-verify (per Lightning-agent report, unverified from kudbee-music side)"
+        },
+        {
+          "date": "2026-07-07",
+          "event": "Identity-gate fix committed (server.py, recognize merged HF checkpoint as valid real-SCRIBE). G2-verify now CPU-complete; GPU round-trip deferred \u2014 GPU not available this session."
+        }
       ]
     },
     {
@@ -101,20 +184,55 @@
       "status": "evaluating",
       "baseModel": "Qwen/Qwen2.5-14B-Instruct",
       "recipe": "LoRA (kudbee-code-v0 recipe; see its training-notes for the exact config)",
-      "dataset": { "id": "kudbee-code@2026-07+r376", "rows": 376, "sources": ["synthetic"], "generator": "kudbee-code-v0 dataset pipeline (other repo)" },
-      "training": { "valLoss": null, "date": null, "note": "rehearsal_candidate deployment live on the RTX 6000 studio" },
-      "artifacts": { "checkpoint": "kudbee-code-v0 side (see its training-notes)", "adapter": "rehearsal_candidate (live)" },
+      "dataset": {
+        "id": "kudbee-code@2026-07+r376",
+        "rows": 376,
+        "sources": [
+          "synthetic"
+        ],
+        "generator": "kudbee-code-v0 dataset pipeline (other repo)"
+      },
+      "training": {
+        "valLoss": null,
+        "date": null,
+        "note": "rehearsal_candidate deployment live on the RTX 6000 studio"
+      },
+      "artifacts": {
+        "checkpoint": "kudbee-code-v0 side (see its training-notes)",
+        "adapter": "rehearsal_candidate (live)"
+      },
       "evals": [
-        { "metric": "47-case eval-suite pass rate", "value": 0.4, "runs": 1, "confirmed": false, "cases": 47, "date": "2026-07-07", "note": "single run — unconfirmed until 3 total; variance past ±10% means diagnose sampling/harness/model before anything else" }
+        {
+          "metric": "47-case eval-suite pass rate",
+          "value": 0.4,
+          "runs": 1,
+          "confirmed": false,
+          "cases": 47,
+          "date": "2026-07-07",
+          "note": "single run \u2014 unconfirmed until 3 total; variance past \u00b110% means diagnose sampling/harness/model before anything else"
+        }
       ],
-      "gate": { "stage": "G2-verify", "cleared": false, "blockedOn": "G3-eval: two more runs of the 47-case suite; bar for opt-in suggest-only wiring = ≥40% confirmed across 3 runs AND zero destructive-command failures; below bar → grow dataset to 800–1500 rows and retrain" },
-      "endpoint": { "served": false, "url": null, "note": "rehearsal deployment is live on the studio; the promote-facing URL gets recorded at G5" },
-      "trainingNotes": ["kudbee-code-v0/training-notes/ (dated files; add KUDBEECODEV0_EVAL_CONFIRMATION.md at G3)"],
+      "gate": {
+        "stage": "G2-verify",
+        "cleared": false,
+        "blockedOn": "G3-eval: two more runs of the 47-case suite; bar for opt-in suggest-only wiring = \u226540% confirmed across 3 runs AND zero destructive-command failures; below bar \u2192 grow dataset to 800\u20131500 rows and retrain"
+      },
+      "endpoint": {
+        "served": false,
+        "url": null,
+        "note": "rehearsal deployment is live on the studio; the promote-facing URL gets recorded at G5"
+      },
+      "trainingNotes": [
+        "kudbee-code-v0/training-notes/ (dated files; add KUDBEECODEV0_EVAL_CONFIRMATION.md at G3)"
+      ],
       "nextAction": "Roadmap Phase 2: re-run the 47-case suite twice, report all three pass rates + per-category breakdown, then decide against the promotion bar",
       "lastTouched": "2026-07-07",
       "staleAfterDays": 14,
       "history": [
-        { "date": "2026-07-07", "event": "entered the catalog with a live rehearsal_candidate and one unconfirmed 40% eval run" }
+        {
+          "date": "2026-07-07",
+          "event": "entered the catalog with a live rehearsal_candidate and one unconfirmed 40% eval run"
+        }
       ]
     },
     {
@@ -123,75 +241,192 @@
       "task": "lyric line rewrites, bigger dataset (successor to KUDBEESCRIBEV1)",
       "status": "planned",
       "baseModel": "Qwen/Qwen2.5-14B-Instruct",
-      "recipe": "v1 recipe as baseline — one variable at a time",
-      "dataset": { "id": null, "rows": null, "sources": ["golden", "synthetic", "founder-export", "teacher-minimax (only if its quality bar clears)"], "generator": "GEN_TRAINING_DATA=1 npx vitest run trainingData after growing the synthetic matrix (15–20 themes, 8–10 schemes, 3–5 seeds → 500–2000 rows)" },
-      "training": { "valLoss": null, "date": null, "note": "target: beat v1's 0.082 or explain why not" },
-      "artifacts": { "checkpoint": null, "adapter": null },
+      "recipe": "v1 recipe as baseline \u2014 one variable at a time",
+      "dataset": {
+        "id": null,
+        "rows": null,
+        "sources": [
+          "golden",
+          "synthetic",
+          "founder-export",
+          "teacher-minimax (only if its quality bar clears)"
+        ],
+        "generator": "GEN_TRAINING_DATA=1 npx vitest run trainingData after growing the synthetic matrix (15\u201320 themes, 8\u201310 schemes, 3\u20135 seeds \u2192 500\u20132000 rows)"
+      },
+      "training": {
+        "valLoss": null,
+        "date": null,
+        "note": "target: beat v1's 0.082 or explain why not"
+      },
+      "artifacts": {
+        "checkpoint": null,
+        "adapter": null
+      },
       "evals": [],
-      "gate": { "stage": null, "cleared": false, "blockedOn": "a SERVED v1 (the baseline v2 must beat head-to-head at G4) — do not start before roadmap Phase 1 ships" },
-      "endpoint": { "served": false, "url": null, "note": null },
+      "gate": {
+        "stage": null,
+        "cleared": false,
+        "blockedOn": "a SERVED v1 (the baseline v2 must beat head-to-head at G4) \u2014 do not start before roadmap Phase 1 ships"
+      },
+      "endpoint": {
+        "served": false,
+        "url": null,
+        "note": null
+      },
       "trainingNotes": [],
       "nextAction": "Wait for KUDBEESCRIBEV1 to serve; meanwhile dataset growth is $0 and can proceed in kudbee-music",
       "lastTouched": "2026-07-07",
       "staleAfterDays": 45,
-      "history": [{ "date": "2026-07-07", "event": "entered the catalog as planned, gated on a served v1" }]
+      "history": [
+        {
+          "date": "2026-07-07",
+          "event": "entered the catalog as planned, gated on a served v1"
+        }
+      ]
     },
     {
       "id": "HERMES-LYRICS",
       "family": "HERMES",
-      "task": "full song generation (brief → finalLyrics)",
+      "task": "full song generation (brief \u2192 finalLyrics)",
       "status": "dataset-ready",
       "baseModel": "Qwen/Qwen2.5-14B-Instruct",
       "recipe": "SCRIBE recipe reused unless a run gives a reason to deviate",
-      "dataset": { "id": null, "rows": null, "sources": ["golden", "synthetic", "founder-export"], "generator": "lyrics.alpaca.jsonl from GEN_TRAINING_DATA=1 npx vitest run trainingData — regenerate fresh before every run" },
-      "training": { "valLoss": null, "date": null, "note": "default plan: one multi-task LoRA on all-tasks.alpaca.jsonl first; split per-task only on demonstrated interference" },
-      "artifacts": { "checkpoint": null, "adapter": null },
+      "dataset": {
+        "id": null,
+        "rows": null,
+        "sources": [
+          "golden",
+          "synthetic",
+          "founder-export"
+        ],
+        "generator": "lyrics.alpaca.jsonl from GEN_TRAINING_DATA=1 npx vitest run trainingData \u2014 regenerate fresh before every run"
+      },
+      "training": {
+        "valLoss": null,
+        "date": null,
+        "note": "default plan: one multi-task LoRA on all-tasks.alpaca.jsonl first; split per-task only on demonstrated interference"
+      },
+      "artifacts": {
+        "checkpoint": null,
+        "adapter": null
+      },
       "evals": [],
-      "gate": { "stage": null, "cleared": false, "blockedOn": "roadmap Phase 4 start (after Phases 1–2)" },
-      "endpoint": { "served": false, "url": null, "note": null },
+      "gate": {
+        "stage": null,
+        "cleared": false,
+        "blockedOn": "roadmap Phase 4 start (after Phases 1\u20132)"
+      },
+      "endpoint": {
+        "served": false,
+        "url": null,
+        "note": null
+      },
       "trainingNotes": [],
       "nextAction": "First of the Phase-4 four (richest dataset, clearest eval: structure compliance, rhyme-scheme adherence, banned-word respect, originality screen)",
       "lastTouched": "2026-07-07",
       "staleAfterDays": 60,
-      "history": [{ "date": "2026-07-07", "event": "entered the catalog — dataset pipeline ready, never trained" }]
+      "history": [
+        {
+          "date": "2026-07-07",
+          "event": "entered the catalog \u2014 dataset pipeline ready, never trained"
+        }
+      ]
     },
     {
       "id": "HERMES-PRODUCTION",
       "family": "HERMES",
-      "task": "brief+lyrics → tempo/drums/bass/arrangement/mix",
+      "task": "brief+lyrics \u2192 tempo/drums/bass/arrangement/mix",
       "status": "dataset-ready",
       "baseModel": "Qwen/Qwen2.5-14B-Instruct",
       "recipe": "SCRIBE recipe reused unless a run gives a reason to deviate",
-      "dataset": { "id": null, "rows": null, "sources": ["golden", "synthetic", "founder-export"], "generator": "production.alpaca.jsonl from GEN_TRAINING_DATA=1 npx vitest run trainingData — regenerate fresh before every run" },
-      "training": { "valLoss": null, "date": null, "note": null },
-      "artifacts": { "checkpoint": null, "adapter": null },
+      "dataset": {
+        "id": null,
+        "rows": null,
+        "sources": [
+          "golden",
+          "synthetic",
+          "founder-export"
+        ],
+        "generator": "production.alpaca.jsonl from GEN_TRAINING_DATA=1 npx vitest run trainingData \u2014 regenerate fresh before every run"
+      },
+      "training": {
+        "valLoss": null,
+        "date": null,
+        "note": null
+      },
+      "artifacts": {
+        "checkpoint": null,
+        "adapter": null
+      },
       "evals": [],
-      "gate": { "stage": null, "cleared": false, "blockedOn": "roadmap Phase 4, after HERMES-LYRICS" },
-      "endpoint": { "served": false, "url": null, "note": null },
+      "gate": {
+        "stage": null,
+        "cleared": false,
+        "blockedOn": "roadmap Phase 4, after HERMES-LYRICS"
+      },
+      "endpoint": {
+        "served": false,
+        "url": null,
+        "note": null
+      },
       "trainingNotes": [],
       "nextAction": "Second of the Phase-4 four (eval: field completeness + genre-plausible values)",
       "lastTouched": "2026-07-07",
       "staleAfterDays": 60,
-      "history": [{ "date": "2026-07-07", "event": "entered the catalog — dataset pipeline ready, never trained" }]
+      "history": [
+        {
+          "date": "2026-07-07",
+          "event": "entered the catalog \u2014 dataset pipeline ready, never trained"
+        }
+      ]
     },
     {
       "id": "HERMES-VIDEO",
       "family": "HERMES",
-      "task": "video-treatment generation (brief+concept → cinematic scene direction)",
+      "task": "video-treatment generation (brief+concept \u2192 cinematic scene direction)",
       "status": "dataset-ready",
       "baseModel": "Qwen/Qwen2.5-14B-Instruct",
       "recipe": "SCRIBE recipe reused unless a run gives a reason to deviate",
-      "dataset": { "id": null, "rows": null, "sources": ["golden", "synthetic", "founder-export"], "generator": "video-treatment.alpaca.jsonl from GEN_TRAINING_DATA=1 npx vitest run trainingData — regenerate fresh before every run" },
-      "training": { "valLoss": null, "date": null, "note": null },
-      "artifacts": { "checkpoint": null, "adapter": null },
+      "dataset": {
+        "id": null,
+        "rows": null,
+        "sources": [
+          "golden",
+          "synthetic",
+          "founder-export"
+        ],
+        "generator": "video-treatment.alpaca.jsonl from GEN_TRAINING_DATA=1 npx vitest run trainingData \u2014 regenerate fresh before every run"
+      },
+      "training": {
+        "valLoss": null,
+        "date": null,
+        "note": null
+      },
+      "artifacts": {
+        "checkpoint": null,
+        "adapter": null
+      },
       "evals": [],
-      "gate": { "stage": null, "cleared": false, "blockedOn": "roadmap Phase 4, after HERMES-PRODUCTION" },
-      "endpoint": { "served": false, "url": null, "note": null },
+      "gate": {
+        "stage": null,
+        "cleared": false,
+        "blockedOn": "roadmap Phase 4, after HERMES-PRODUCTION"
+      },
+      "endpoint": {
+        "served": false,
+        "url": null,
+        "note": null
+      },
       "trainingNotes": [],
-      "nextAction": "Third of the Phase-4 four (eval: prompt usability — 5 outputs fed to the downstream tool, judged usable without hand-editing)",
+      "nextAction": "Third of the Phase-4 four (eval: prompt usability \u2014 5 outputs fed to the downstream tool, judged usable without hand-editing)",
       "lastTouched": "2026-07-07",
       "staleAfterDays": 60,
-      "history": [{ "date": "2026-07-07", "event": "entered the catalog — dataset pipeline ready, never trained" }]
+      "history": [
+        {
+          "date": "2026-07-07",
+          "event": "entered the catalog \u2014 dataset pipeline ready, never trained"
+        }
+      ]
     },
     {
       "id": "HERMES-COVER",
@@ -200,36 +435,90 @@
       "status": "dataset-ready",
       "baseModel": "Qwen/Qwen2.5-14B-Instruct",
       "recipe": "SCRIBE recipe reused unless a run gives a reason to deviate",
-      "dataset": { "id": null, "rows": null, "sources": ["golden", "synthetic", "founder-export"], "generator": "album-cover-prompt.alpaca.jsonl from GEN_TRAINING_DATA=1 npx vitest run trainingData — regenerate fresh before every run" },
-      "training": { "valLoss": null, "date": null, "note": null },
-      "artifacts": { "checkpoint": null, "adapter": null },
+      "dataset": {
+        "id": null,
+        "rows": null,
+        "sources": [
+          "golden",
+          "synthetic",
+          "founder-export"
+        ],
+        "generator": "album-cover-prompt.alpaca.jsonl from GEN_TRAINING_DATA=1 npx vitest run trainingData \u2014 regenerate fresh before every run"
+      },
+      "training": {
+        "valLoss": null,
+        "date": null,
+        "note": null
+      },
+      "artifacts": {
+        "checkpoint": null,
+        "adapter": null
+      },
       "evals": [],
-      "gate": { "stage": null, "cleared": false, "blockedOn": "roadmap Phase 4 — deliberately last (most subjective eval)" },
-      "endpoint": { "served": false, "url": null, "note": null },
+      "gate": {
+        "stage": null,
+        "cleared": false,
+        "blockedOn": "roadmap Phase 4 \u2014 deliberately last (most subjective eval)"
+      },
+      "endpoint": {
+        "served": false,
+        "url": null,
+        "note": null
+      },
       "trainingNotes": [],
       "nextAction": "Last of the Phase-4 four (eval: prompt usability, same as video)",
       "lastTouched": "2026-07-07",
       "staleAfterDays": 60,
-      "history": [{ "date": "2026-07-07", "event": "entered the catalog — dataset pipeline ready, never trained" }]
+      "history": [
+        {
+          "date": "2026-07-07",
+          "event": "entered the catalog \u2014 dataset pipeline ready, never trained"
+        }
+      ]
     },
     {
       "id": "MINIMAX-TEACHER",
       "family": "SIDECAR",
-      "task": "teacher + comparison provider — generates candidate training rows and judges eval outputs; NEVER a fine-tune target",
+      "task": "teacher + comparison provider \u2014 generates candidate training rows and judges eval outputs; NEVER a fine-tune target",
       "status": "teacher",
-      "baseModel": "MiniMax 2.5 (exact build/size unidentified — first sidecar task)",
-      "recipe": "n/a — inference only",
-      "dataset": { "id": null, "rows": null, "sources": [], "generator": "n/a — it PRODUCES candidate rows (tagged teacher-minimax) rather than consuming them" },
-      "training": { "valLoss": null, "date": null, "note": "MoE, far too large for single-RTX-6000 LoRA — do not attempt" },
-      "artifacts": { "checkpoint": null, "adapter": null },
+      "baseModel": "MiniMax 2.5 (exact build/size unidentified \u2014 first sidecar task)",
+      "recipe": "n/a \u2014 inference only",
+      "dataset": {
+        "id": null,
+        "rows": null,
+        "sources": [],
+        "generator": "n/a \u2014 it PRODUCES candidate rows (tagged teacher-minimax) rather than consuming them"
+      },
+      "training": {
+        "valLoss": null,
+        "date": null,
+        "note": "MoE, far too large for single-RTX-6000 LoRA \u2014 do not attempt"
+      },
+      "artifacts": {
+        "checkpoint": null,
+        "adapter": null
+      },
       "evals": [],
-      "gate": { "stage": null, "cleared": false, "blockedOn": "identify the exact build + whether the chat window fronts an HTTP API; then the teacher quality bar in docs/lightning-librarian.md before any row enters a training set" },
-      "endpoint": { "served": false, "url": null, "note": "if HTTP-fronted it plugs into studio/lightning.mjs with zero new code (--field for its body key)" },
+      "gate": {
+        "stage": null,
+        "cleared": false,
+        "blockedOn": "identify the exact build + whether the chat window fronts an HTTP API; then the teacher quality bar in docs/lightning-librarian.md before any row enters a training set"
+      },
+      "endpoint": {
+        "served": false,
+        "url": null,
+        "note": "if HTTP-fronted it plugs into studio/lightning.mjs with zero new code (--field for its body key)"
+      },
       "trainingNotes": [],
       "nextAction": "Idle-time only: identify build/API, record it in a dated notes file, then trial 30 teacher rows through the quality bar",
       "lastTouched": "2026-07-07",
       "staleAfterDays": 90,
-      "history": [{ "date": "2026-07-07", "event": "entered the catalog as the teacher sidecar (founder stood up MiniMax 2.5 on a second studio)" }]
+      "history": [
+        {
+          "date": "2026-07-07",
+          "event": "entered the catalog as the teacher sidecar (founder stood up MiniMax 2.5 on a second studio)"
+        }
+      ]
     }
   ]
 }
