@@ -62,6 +62,20 @@ node scripts/mobile-matrix.mjs   # anything touching layout (build the export fi
   path — dispatch a research agent if needed. "Known, ignorable" is only acceptable WITH a
   tracked deletion/fix item attached. (Founder directive, 2026-07-02 — the Workers Builds
   check was skipped 30+ times before being tracked. Once is enough.)
+- **Two agents, one repo — coordinate or collide.** Two agents work this program in
+  parallel: the **kudbee-music session** (this repo — the app + the shared living-state
+  files) and the **Lightning GPU agent** (`hermes-lyric-server` — training/GPU + the
+  checkpoints). **Lane ownership:** the kudbee-music session owns the app and the shared
+  living-state files (`TODO.md` · `IDEAS.md` · `brain/roadmap.json` · `brain/modelFamily.json`);
+  the Lightning agent owns training/GPU + `hermes-lyric-server`. **Before either edits a
+  shared kudbee-music living-state file, it CLAIMS the work in `brain/handoffs.json`**
+  (append-only, so it never conflicts) and does not edit those files concurrently — the
+  Lightning agent updates `modelFamily.json` at session end behind a handoffs claim, not in
+  a race. The Lightning agent does not pick up kudbee-music app features unprompted; further
+  app work routes through the kudbee-music session. (Learned 2026-07-07 — both agents
+  independently edited `TODO.md` + `IDEAS.md` + `handoffs.json` in the same window →
+  merge conflicts + duplicate entries. Once is enough.) See `docs/agent-autonomy.md` and the
+  protocol inside `brain/handoffs.json`.
 - **Status lives ONLY in `brain/roadmap.json`.** Every status table (STATUS.md + the
   STATUS-marker blocks in this file, README.md, BUILD_LOG.md) is GENERATED from the spine —
   never hand-edit between `STATUS:BEGIN`/`STATUS:END` markers, never add a hand checklist to

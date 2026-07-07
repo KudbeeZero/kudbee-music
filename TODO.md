@@ -506,7 +506,12 @@ later (kept out of this repo's core so it stays free + local).
       sync (silent when clean or already synced — low false-positive, pipe-tested across
       4 scenarios). Documented in `docs/agent-autonomy.md` + CLAUDE.md; hard enforcement
       stays CI (`statusBoard.test.ts`). Also fixed a stale checkbox (auth Phase 1 is
-      shipped, not in-progress). _(this PR)_
+      shipped, not in-progress). **Plus** — after two agents collided editing the same
+      living-state files (2026-07-07), documented the **"two agents, one repo" lane rule**
+      in all three memory layers (CLAUDE.md law + `brain/handoffs.json` protocol +
+      `docs/agent-autonomy.md`): kudbee-music session owns the app + shared living-state
+      files, the Lightning agent owns training/GPU + `hermes-lyric-server`, and either
+      **claims work in the append-only `handoffs.json` before editing a shared file**. _(this PR)_
 - [x] **📊 Training-progress metrics layer (roadmap 10.7)** — `trainingProgress()` /
       `familyTrainingProgress()` in `lib/hermes/modelFamily.ts`: pure, deterministic
       projections of the catalog into the "how much has each model been trained" numbers a

@@ -122,6 +122,30 @@ fails the build on any living-state drift, and the memory-index guards fail if a
 rots. Hooks catch it early (per session); CI catches it hard (at the PR). To review or
 disable the hooks, open `/hooks`.
 
+## Two agents, one repo — the lane rule (coordinate or collide)
+
+Two agents run this program in parallel and **can be active in overlapping windows** — they
+are not strictly serial. On 2026-07-07 both edited `TODO.md` + `IDEAS.md` + `brain/handoffs.json`
+in the same window and collided: merge conflicts and duplicate entries. The fix is
+ownership + a claim step (now also in CLAUDE.md's "Two agents, one repo" rule and the
+protocol block of `brain/handoffs.json`):
+
+- **Lane ownership.** The **kudbee-music session** owns the app and the shared living-state
+  files — `TODO.md`, `IDEAS.md`, `brain/roadmap.json`, `brain/modelFamily.json`. The
+  **Lightning GPU agent** owns training/GPU and the `hermes-lyric-server` repo (whose PRs
+  never collide with kudbee-music).
+- **Claim before you edit a shared file.** `brain/handoffs.json` is **append-only**, so
+  writing to it never conflicts. Before either agent edits a shared kudbee-music living-state
+  file, it appends a claim entry there and does not edit those files concurrently with the
+  other agent. The Lightning agent updates `modelFamily.json` at session end *behind a
+  claim*, not in a race.
+- **App features route through the kudbee-music session.** The Lightning agent doesn't pick
+  up kudbee-music app work unprompted — that's how the collision started (it built an app
+  feature in this repo while this session was also editing it).
+
+`hermes-lyric-server` is the pressure valve: anything the Lightning agent can do in *its own*
+repo has zero collision surface, so prefer that when both agents are live.
+
 ## See also
 
 - [`.claude/settings.json`](../.claude/settings.json) — the allowlist + the hooks

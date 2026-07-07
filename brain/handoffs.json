@@ -1,18 +1,25 @@
 {
-  "note": "The cross-agent handoff log — the async comms channel between the two KUDBEE agents that never run at the same time and share only git: the kudbee-music session (this repo / app + Librarian catalog side) and the Lightning GPU agent (hermes-lyric-server / training side). Each agent READS this at session start and APPENDS one entry at session end: what I did, what's blocked, what you should do next. Model-specific state lives in brain/modelFamily.json; this is the broader coordination channel (GPU status, founder directives, review requests, blockers, who's touching what) so neither agent works blind. See brain/README.md for the full brain/ folder index.",
+  "note": "The cross-agent handoff log — the async comms channel between the two KUDBEE agents that share this repo but CAN run in overlapping windows (they are NOT strictly serial — learned 2026-07-07 when both edited TODO/IDEAS/handoffs at once and collided): the kudbee-music session (this repo / app + Librarian catalog side) and the Lightning GPU agent (hermes-lyric-server / training side). Each agent READS this at session start and APPENDS one entry at session end (and CLAIMS shared-file work here before editing — see protocol.laneOwnership): what I did, what's blocked, what you should do next. Model-specific state lives in brain/modelFamily.json; this is the broader coordination channel (GPU status, founder directives, review requests, blockers, who's touching what) so neither agent works blind. See brain/README.md and CLAUDE.md's 'Two agents, one repo' rule.",
   "updated": "2026-07-07",
   "protocol": {
     "readWhen": "at session start, before doing anything — know what the other agent last did and asked of you",
     "appendWhen": "at session end, before shutting down — one entry summarizing what you did, what's blocked, and the asks for the other side",
+    "laneOwnership": {
+      "why": "2026-07-07 the two agents independently edited TODO.md + IDEAS.md + handoffs.json in the same window → merge conflicts + duplicate entries. Lanes + a claim step prevent it. Also in CLAUDE.md ('Two agents, one repo — coordinate or collide').",
+      "kudbee-music-session-owns": "the app + the shared living-state files: TODO.md, IDEAS.md, brain/roadmap.json, brain/modelFamily.json. Further kudbee-music app features route through this session.",
+      "lightning-agent-owns": "training/GPU + the hermes-lyric-server repo (its own PRs never collide with kudbee-music).",
+      "claimRule": "Before editing ANY shared kudbee-music living-state file, append a claim entry here (this file is append-only, so claims never conflict) and do not edit those files concurrently with the other agent. The Lightning agent updates brain/modelFamily.json at session end behind a claim, not in a race."
+    },
     "rules": [
       "newest entry FIRST; never delete or rewrite a past entry (append-only, like git history)",
       "from = your agent id; to = the other agent (or 'founder'); status = active until the asks are done, then flip to resolved in a later entry",
+      "CLAIM shared kudbee-music living-state files here before editing them (see laneOwnership) — never edit TODO.md/IDEAS.md/roadmap.json/modelFamily.json concurrently with the other agent",
       "no secrets, ever — endpoint URLs are recordable, bearer tokens never (same rule as modelFamily.json)",
       "keep it short — this is a coordination note, not a report; the real receipts are PRs, commits, and training-notes files"
     ],
     "agentIds": {
-      "kudbee-music-session": "the app/repo + Librarian-catalog side (kudbee-music) — reviews training PRs, keeps brain/modelFamily.json honest, owns the app",
-      "lightning-agent": "the GPU/training side (hermes-lyric-server) — runs conversion/train/eval/serve on the Lightning Studio, owns the checkpoints/adapters"
+      "kudbee-music-session": "the app/repo + Librarian-catalog side (kudbee-music) — reviews training PRs, keeps brain/modelFamily.json honest, owns the app + the shared living-state files",
+      "lightning-agent": "the GPU/training side (hermes-lyric-server) — runs conversion/train/eval/serve on the Lightning Studio, owns the checkpoints/adapters; claims before touching kudbee-music living-state"
     }
   },
   "handoffs": [
