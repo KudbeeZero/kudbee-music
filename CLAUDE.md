@@ -129,6 +129,63 @@ node scripts/mobile-matrix.mjs   # anything touching layout (build the export fi
   activates it — merging server-side code must not change live behavior.
 - `IDEAS.md` founder-narrative privacy rule: never publish personal/medical specifics.
 
+## Command generation and verification (learned 2026-07-07)
+
+When generating CLI commands (especially for external tools like litgpt, Lightning Studio, or custom
+workflows), **always verify the command structure against the tool's actual behavior before relying on it:**
+
+- For tools with `--help`, ask Claude to run `<tool> --help` and confirm the exact flags/syntax work
+- For unfamiliar environments (a Lightning Studio, a container, a remote GPU setup), provide your **environment
+  details upfront** (tool version, directory structure, runtime setup) so Claude gets it right the first pass
+  instead of needing screenshot corrections
+- If a command fails, don't iterate on the command structure alone — include the actual error output
+  (stdout/stderr) so Claude can diagnose root causes and fix them, not just guess syntax
+- For critical commands (test runners, training jobs, deployment steps), ask Claude to include a **dry-run or
+  validation pass** before the real invocation
+
+**Template for command generation requests:**
+```
+Generate [command type]. My environment:
+- Tool: [name + version]
+- Location: [directory/path]
+- Runtime: [studio type / container / GPU setup]
+- Constraints: [packing disabled? no quantization? etc.]
+
+Before finalizing: validate against --help and show me the exact flags you're using.
+If the command fails when I run it, I'll send you the error output, and you iterate until exit 0.
+```
+
+## Agent handoff completion (learned 2026-07-07)
+
+Every agent handoff (entries in `brain/handoffs.json` or structured docs) must include an **explicit
+verification step** so the receiving agent knows exactly what "done" means:
+
+- Handoff entries from `kudbee-music-session` to `lightning-agent` must include: what to run, what success looks like
+  (exit codes, output shape, file locations), and what to update/report back on completion
+- Handoff receiving agent confirms: (1) command runs to completion (exit 0), (2) output shape matches spec,
+  (3) any files/artifacts created are in the expected locations, (4) side-effect updates (modelFamily.json, etc.)
+  are applied correctly
+- Handoff is complete only when the receiving agent appends a resolved entry with the actual output/results
+  and confirmation of side effects
+
+**Do NOT ship a handoff without:**
+- Exact command(s) the agent should run (not pseudocode)
+- Expected output format or success criteria
+- File/artifact paths that should exist after completion
+- Any living-state updates the agent should apply (e.g., "set gate.G2.status = 'cleared'")
+- A note asking the agent to append a resolved handoff entry with results
+
+## Environment details capture (learned 2026-07-07)
+
+Share your environment context early, not as late corrections:
+
+- **Studio setup**: tool version (litgpt@X.Y.Z), runtime (H100/CPU/RTX 6000), OS, available packages
+- **Directory structure**: where litgpt is installed, where checkpoints live, where temp files should go
+- **Known constraints**: packing disabled for small datasets, quantization disabled for Blackwell, etc.
+- **Previous successful runs**: "the smoke test used this exact command structure and worked"
+
+This lets Claude generate the right command upfront instead of learning via trial-and-error screenshots.
+
 ## Deploy facts
 
 - Cloudflare Pages project **`wifi-dj-meme`** → https://wifi-dj-meme.pages.dev (auto-deploys
