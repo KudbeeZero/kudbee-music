@@ -311,12 +311,14 @@ function pickFresh(pool: string[], used: Set<string>, rng: () => number): string
 // Lines sharing a family id land on rhyming end-words; distinct ids don't rhyme with
 // each other. A 4-line verse is the smallest unit where these read as genuinely
 // different from sequential couplets — see the RhymeSchemeId doc comment in types.ts.
-const SCHEME_LAYOUTS: Record<RhymeSchemeId, number[]> = {
+export const SCHEME_LAYOUTS: Record<RhymeSchemeId, number[]> = {
   AABB: [0, 0, 1, 1],
   ABAB: [0, 1, 0, 1],
   ABBA: [0, 1, 1, 0],
   AAAA: [0, 0, 0, 0],
   XAXA: [0, 1, 2, 1], // lines 2 & 4 rhyme (family 1); lines 1 & 3 are free (distinct singleton families)
+  AABA: [0, 0, 1, 0], // lines 1, 2 & 4 rhyme (family 0); line 3 breaks free (the classic AABA turn)
+  AXAX: [0, 1, 0, 2], // lines 1 & 3 rhyme (family 0); lines 2 & 4 are free — the mirror of XAXA
 };
 const FALLBACK_RHYME_WORDS = ['road', 'gold', 'light', 'time'];
 

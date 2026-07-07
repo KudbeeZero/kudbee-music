@@ -33,14 +33,16 @@ export type SongStructure =
  *   ABBA — enclosed/mirrored (lines 1&4 rhyme, 2&3 rhyme)
  *   AAAA — monorhyme (all four lines share one rhyme family)
  *   XAXA — ballad/common-meter convention (only lines 2&4 rhyme; 1&3 are free)
+ *   AABA — lines 1,2&4 rhyme; line 3 breaks free (the classic pop/AABA turn)
+ *   AXAX — only lines 1&3 rhyme; 2&4 are free (the mirror of XAXA)
  * See docs/pattern-packs.md for the research this is grounded in.
  */
-export type RhymeSchemeId = 'AABB' | 'ABAB' | 'ABBA' | 'AAAA' | 'XAXA';
+export type RhymeSchemeId = 'AABB' | 'ABAB' | 'ABBA' | 'AAAA' | 'XAXA' | 'AABA' | 'AXAX';
 
 /** Canonical runtime list of valid rhyme schemes — the single source of truth every
  *  untrusted-input boundary (pipeline normalize, share decode, vault import) validates
  *  against, so an out-of-enum string can never reach the generation path. */
-export const RHYME_SCHEME_IDS: readonly RhymeSchemeId[] = ['AABB', 'ABAB', 'ABBA', 'AAAA', 'XAXA'];
+export const RHYME_SCHEME_IDS: readonly RhymeSchemeId[] = ['AABB', 'ABAB', 'ABBA', 'AAAA', 'XAXA', 'AABA', 'AXAX'];
 
 /** What the user types into the Song Lab. */
 export interface SongInputs {
@@ -57,7 +59,7 @@ export interface SongInputs {
   structure: SongStructure;
   culture?: string;    // where you're from / what shaped you — your OWN background, as craft
   rhymeTemp?: 'tight' | 'balanced' | 'loose';  // rhyme strictness dial (perfect ↔ slant); default balanced
-  rhymeScheme?: RhymeSchemeId;  // verse rhyme-pattern dial (AABB/ABAB/ABBA/AAAA/XAXA); default AABB
+  rhymeScheme?: RhymeSchemeId;  // verse rhyme-pattern dial (AABB/ABAB/ABBA/AAAA/XAXA/AABA/AXAX); default AABB
   /** Occasion Pack id (brain/occasionPacks.json) — genuinely NEW vocabulary (stocking,
    *  sleigh, mistletoe…) that mood/genre/references text alone can't express, unlike
    *  pattern packs which just recombine existing dials. Validated against
