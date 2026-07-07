@@ -1,5 +1,13 @@
 # Lightning AI agent roadmap — training the KUDBEE model family
 
+**Originally authored by Fable 5** — the initial 4-phase GPU work order (SCRIBE v1
+convert/serve, confirm KUDBEECODEV0, grow SCRIBE v2, then the four HERMES tasks) is
+Fable 5's design. The Librarian layer (below, and in
+[`lightning-librarian.md`](lightning-librarian.md)) **extends it, not replaces it** —
+same relationship as the founder's other credited pitches in this project (e.g.
+`brain/roadmap.json` 5.8's Song Gifts). This doc keeps evolving as the work order
+churns; the phase structure and priority order stay Fable 5's original shape.
+
 **Who reads this:** the Claude Code agent running inside the founder's Lightning AI
 Studio (the GPU side), plus the founder. This is the cross-repo work order: what to
 train, convert, evaluate, and deploy — in what order, on what hardware — for every
