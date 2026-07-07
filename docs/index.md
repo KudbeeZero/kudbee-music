@@ -17,6 +17,7 @@ entirely from code — no paid software.
 - [Claude Engine (opt-in)](claude-engine.md) — bring-your-own-key real-AI lyrics
 - [SCRIBE Lightning training](scribe-training.md) — fine-tuning data for the line-rewrite engine
 - [SCRIBE Real LoRA v1](scribe-real-training-v1.md) — evaluation prompts and real test cases
+- [SCRIBE checkpoint conversion](scribe-training-next-steps.md) — litgpt → HF/PEFT → endpoint deployment workflow
 - [SCRIBE evaluation prompts](scribe-evaluation-prompts.md) — test cases for line-rewrite quality
 - [Watchdog](watchdog.md) — the scheduled Claude security/quality review
 - [OG unfurl](og-unfurl.md) — per-song link previews *(inert until founder-activated)*
