@@ -291,9 +291,10 @@
         {
           "id": "10.3",
           "title": "🖥️ TDE Models panel reads brain/modelFamily.json (real state replaces the mock model cards)",
-          "status": "queued",
-          "home": "components/tde/",
-          "note": "The TDE Model/GPU panel (9.6) renders hand-mocked model cards today; the catalog now holds the same facts for real. Import it read-only (suggest-only rule unchanged — the dashboard stays a window, not a lever) so /tde shows live gate stages, eval run counts, and budget lines."
+          "status": "building",
+          "home": "components/tde/TrainingProgressPanel.tsx",
+          "pr": "TBD",
+          "note": "Slice 1 shipped: TrainingProgressPanel.tsx with gate-progress 7-step track, training-volume sequential-hue bar chart (cyan ramp), and eval-quality gauges per model + unconfirmed-run badges. HTML/SVG charts, no new deps, uses familyTrainingProgress() data source + table-view fallback. All gates green. Slice 2 queued: budget (GPU-hours and $ gauges, separate charts), iterations (activity bar/sparkline), and roster (stat row with counts). The dashboard stays suggest-only / read-only per TDE rules — a window, not a lever."
         },
         {
           "id": "10.4",
