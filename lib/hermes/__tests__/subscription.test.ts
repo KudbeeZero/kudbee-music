@@ -1,4 +1,4 @@
-import { describe, it, expect, beforeEach, afterEach } from 'vitest';
+import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
 import {
   currentSubscription,
   getTierFeatures,
@@ -302,15 +302,24 @@ describe('subscription', () => {
     });
 
     it('handles edge case at exact expiry time', () => {
+      // Pin the clock: currentSubscription() reads Date.now() internally, so an
+      // unmocked clock races the two calls below against real elapsed time —
+      // flaky whenever a scheduling hiccup lands between them (observed in CI).
       const now = Date.now();
-      upgradeSubscription('pro', now);
-      const sub = currentSubscription();
-      // Subscription is still valid at exact expiry moment (uses > not >=)
-      expect(sub.tier).toBe('pro');
-      // But expires one millisecond later
-      upgradeSubscription('pro', now - 1);
-      const expired = currentSubscription();
-      expect(expired.tier).toBe('free');
+      vi.useFakeTimers();
+      vi.setSystemTime(now);
+      try {
+        upgradeSubscription('pro', now);
+        const sub = currentSubscription();
+        // Subscription is still valid at exact expiry moment (uses > not >=)
+        expect(sub.tier).toBe('pro');
+        // But expires one millisecond later
+        upgradeSubscription('pro', now - 1);
+        const expired = currentSubscription();
+        expect(expired.tier).toBe('free');
+      } finally {
+        vi.useRealTimers();
+      }
     });
   });
 
