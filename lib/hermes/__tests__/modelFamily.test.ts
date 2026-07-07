@@ -3,6 +3,7 @@ import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import {
   models, modelById, catalogViolations, staleModels, trainOrder, budgetPhases, CONFIRM_RUNS,
+  trainingProgress, familyTrainingProgress, GATE_STAGES,
 } from '../modelFamily';
 
 // The Librarian's lock. brain/modelFamily.json is the model-family card catalog —
@@ -76,5 +77,39 @@ describe('modelFamily — secrets lint (endpoint URLs allowed, tokens never)', (
     ]) {
       expect(raw, `modelFamily.json must never contain a secret matching ${pattern}`).not.toMatch(pattern);
     }
+  });
+});
+
+describe('modelFamily — training-progress metrics (the dashboard data source)', () => {
+  it('projects every model into an honest progress row', () => {
+    const rows = familyTrainingProgress();
+    expect(rows.length).toBe(models().length);
+    for (const r of rows) {
+      expect(r.gatePercent).toBeGreaterThanOrEqual(0);
+      expect(r.gatePercent).toBeLessThanOrEqual(100);
+      expect(r.iterations).toBeGreaterThanOrEqual(1); // every model has ≥1 history event
+      expect(r.nextAction.trim().length).toBeGreaterThan(0);
+    }
+  });
+
+  it('maps a real gate stage to a pipeline percent', () => {
+    // KUDBEESCRIBEV1 is at G2-verify (index 2 of 0..6) → round(2/6*100) = 33.
+    const scribe = trainingProgress('KUDBEESCRIBEV1')!;
+    expect(GATE_STAGES[scribe.gateIndex]).toBe(scribe.gateStage);
+    expect(scribe.gatePercent).toBe(33);
+    expect(scribe.datasetRows).toBe(212);
+    expect(scribe.valLoss).toBe(0.082);
+  });
+
+  it('never reports an unconfirmed eval as confirmed (the run-count honesty rule)', () => {
+    const codev0 = trainingProgress('KUDBEECODEV0')!;
+    expect(codev0.evalRuns).toBe(1);
+    expect(codev0.evalPassRate).toBe(0.4);
+    expect(codev0.evalConfirmed).toBe(false); // 1 run < CONFIRM_RUNS
+  });
+
+  it('is deterministic and returns null for an unknown id', () => {
+    expect(familyTrainingProgress()).toEqual(familyTrainingProgress());
+    expect(trainingProgress('NOPE')).toBeNull();
   });
 });

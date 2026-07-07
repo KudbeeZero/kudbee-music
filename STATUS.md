@@ -2,7 +2,7 @@
 
 > **Generated from [`brain/roadmap.json`](brain/roadmap.json) — do not hand-edit.** Status lives ONLY in the spine; edit it there, then regenerate with `GEN_DOCS=1 npx vitest run status`. `statusBoard.test.ts` fails CI if this file drifts.
 
-**Scoreboard:** ✅ 92 shipped · 🔨 3 in build · 💤 10 queued — 105 tracked items
+**Scoreboard:** ✅ 93 shipped · 🔨 3 in build · 💤 10 queued — 106 tracked items
 (legend: ✅ shipped · 🔌 scaffold shipped, founder-gated · 🔨 in build · ⏭️ next · 💤 queued · 💭 idea · 🚧 blocked on founder)
 
 ## Tracks
@@ -153,7 +153,7 @@
 | ✅ | **✨ TDE Branch 11 — Polish + navigation** | `components/tde/` | #217 |
 | ✅ | **🌉 TDE Branch 12 — Backend bridge plan** | `docs/kudbee-tde-backend-bridge.md` | #218 |
 
-### Phase 10 — Model-family Librarian — `▰▰▰▰▰▰▰▱▱▱` 4/6
+### Phase 10 — Model-family Librarian — `▰▰▰▰▰▰▰▱▱▱` 5/7
 
 | | Item | Where it lives | PR |
 |---|------|----------------|----|
@@ -163,6 +163,7 @@
 | ✅ | **🔓 Agent autonomy config — .claude/settings.json allowlist + run-without-approval preamble** | `.claude/settings.json + docs/agent-autonomy.md` | — |
 | ✅ | **🧠 Agent-trajectory dataset — capture the training program's own process as KUDBEECODEV0 rows** | `lib/hermes/agentDecisions.ts + docs/agent-trajectory-dataset.md` | — |
 | ✅ | **🤝 Cross-agent handoff log — brain/handoffs.json comms channel between the two KUDBEE agents** | `brain/handoffs.json` | — |
+| ✅ | **📊 Training-progress metrics layer — trainingProgress() (the dashboard data source)** | `lib/hermes/modelFamily.ts` | — |
 
 ### Video studio — `▰▰▰▰▰▱▱▱▱▱` 4/8
 

@@ -315,6 +315,13 @@
           "status": "shipped",
           "home": "brain/handoffs.json",
           "note": "SHIPPED (this PR). Founder ask: 'do you have a document the other agent is aware of, following what you're doing and updating too — a communication layer?' The catalog + PRs were only an IMPLICIT channel; this makes it explicit. brain/handoffs.json is an append-only, newest-first log both agents READ at session start and APPEND to at session end (protocol embedded in the file): what I did, what's blocked, the asks for the other side. Broader than modelFamily.json (which is per-model): GPU status, blockers, review requests, founder directives, who's touching what. Seeded with the real current handoff (kudbee-music → lightning-agent: shipped the Librarian + autonomy + trajectory dataset, fixed the v2 schemes; asks: run autonomously, do G2-verify/G5-serve when GPU is up without overclaiming the gate, confirm CODEV0 across 3 runs). Registered in brain/README.md + the CLAUDE.md memory-layers table (both guard-tested). No-secrets rule carries over (endpoint URLs recordable, tokens never)."
+        },
+        {
+          "id": "10.7",
+          "title": "📊 Training-progress metrics layer — trainingProgress() (the dashboard data source)",
+          "status": "shipped",
+          "home": "lib/hermes/modelFamily.ts",
+          "note": "SHIPPED (this PR). The data foundation for the founder's 'how much has each agent been trained' dashboard (10.3): trainingProgress(id) / familyTrainingProgress() are pure projections of the catalog into the numbers a dataviz dashboard renders — gateIndex + gatePercent over the 7 KUDBEE-GATE stages (G0→G6), datasetRows (training volume), valLoss, the most-repeated eval's run count + pass rate + a confirmed flag (never reports a single run as confirmed — the honesty rule, tested), iterations (length of the decision trail), served, nextAction. GATE_STAGES exported as the ordered pipeline. Deterministic, no clock. +4 tests. Wiring these into the /tde Models panel with graphs is the dashboard build itself (10.3, queued) — a detailed build prompt using the /dataviz skill was handed to the founder."
         }
       ]
     }
