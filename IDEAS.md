@@ -233,6 +233,24 @@ A second-opinion review flagged real risks worth acting on (truth-first):
   disclaimer in the README + Uniqueness panel. _(#37)_
 
 ## 🌱 Fresh captures
+- 💭 **Rack "flip to the back" cable view + teach-the-Rack onboarding + a real Autotune plugin**
+  *(founder, 2026-07-07)* — three linked asks on top of the just-shipped Rack audit
+  (`docs/plugin-rack-architecture.md`, roadmap 11.2): (1) explain to the visitor how the
+  Engine Rack actually works — an onboarding/tooltip layer over `Rack.tsx`; (2) a
+  skeuomorphic flourish where the rack panel flips around (like Reason's back-of-rack
+  patch view 20 years ago, or a ProTools chassis) to show dangling cables/plugs
+  connecting each engine — pure CSS/SVG, no new deps, fits the $0 rule; (3) build "our
+  own Autotune" — real pitch-correction, not just a marketplace metadata entry. Sized
+  very differently: (1) is cheap and already flagged as unfinished work in
+  `docs/awakening-onboarding-roadmap.md` Feature 3.4 (GuidedTour never extended past
+  ScribeEditor) — extending it to the Rack is the natural next slice. (2) is a
+  self-contained visual feature (CSS 3D flip + SVG bezier cables), doable client-side,
+  no audio/DSP work required — a good hermes-ui-agent slice once scoped. (3) is the real
+  lift: actual pitch detection/correction (e.g. autocorrelation or YIN for pitch
+  tracking, PSOLA/WSOLA for shifting) via Web Audio API, client-side to stay $0 — a new
+  audio-DSP capability, not a UI feature, and adjacent to but bigger than the existing
+  `mastering-assistant` plugin stub in `plugins.ts`. Not yet scoped into a roadmap phase;
+  awaiting founder priority on which piece to build first.
 - ✅ **Plugin/Rack/Marketplace architecture audit + security fix — banked into memory**
   *(founder, 2026-07-07)* — "deploy an agent that specializes in the rack mounting and
   plug-ins... how are the contracts written, we need to be very careful with this with
