@@ -233,6 +233,22 @@ A second-opinion review flagged real risks worth acting on (truth-first):
   disclaimer in the README + Uniqueness panel. _(#37)_
 
 ## 🌱 Fresh captures
+- 💭 **MiniMax 2.5 on a second Lightning Studio — tap it into the KUDBEE stack**
+  *(founder, 2026-07-07 — demo video was too large to transmit; captured from the
+  description)* — the founder has MiniMax 2.5 downloaded and running with a chat
+  window on a separate Lightning Studio. Three candidate roles, cheapest first:
+  **(a) provider behind the existing seam** — if it's exposed as a LitServe or
+  OpenAI-compatible HTTPS endpoint, `studio/lightning.mjs` can already talk to it
+  today (`--field`/`extractText` handle both shapes), zero new code, just endpoint +
+  token in gitignored `.env.local`; **(b) teacher model** — generate synthetic
+  SCRIBE alternatives / eval judgments to grow the training set for the KUDBEE
+  LoRAs (safety contract applies to teacher output too: original-only, banned-word
+  screen); **(c) NOT a fine-tune target** — MiniMax-class MoE models are far too
+  large for single-RTX-6000 LoRA runs; treat it as inference/teacher only. Next
+  step: the Lightning agent confirms exactly which MiniMax build/size it is and
+  whether the window has an HTTP API behind it, then runs
+  `node studio/lightning.mjs --ping` against it. See
+  `docs/lightning-agent-roadmap.md` → "Sidecar: the MiniMax studio".
 - ✅ **Kudbee TDE / HERMES Workbench — the agent cockpit inside the app** (v1 shipped, 13 branches, #206–#217 + bridge plan)
   *(founder directive, 2026-07-05)* — a Task-Driven Environment side route (`/tde`)
   that renders the whole Kudbee operation as five panels: Missions (suggest-only
