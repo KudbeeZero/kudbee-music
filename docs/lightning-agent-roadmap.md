@@ -64,7 +64,7 @@ Ground rules that apply to every phase below:
 
 | Model | Task | Status | Next action |
 | --- | --- | --- | --- |
-| **KUDBEESCRIBEV1** | Lyric line rewrites (SCRIBE) | ✅ Trained (val loss 0.082), checkpoint stuck in litgpt format | Phase 1: convert → verify → serve |
+| **KUDBEESCRIBEV1** | Lyric line rewrites (SCRIBE) | ✅ Trained (val loss 0.082) · ✅ converted to HF (loads on GPU) · blocked on a ~1-5 line server.py identity-gate fix | Phase 1: fix identity gate → verify → serve |
 | **KUDBEECODEV0** | Code generation / repo-agent behavior | 🔨 `rehearsal_candidate` live on RTX 6000; 40% eval pass (single run, 47 cases) | Phase 2: re-run eval → wire into kudbee-music |
 | **SCRIBE v2** | Line rewrites, bigger dataset | 💤 Planned | Phase 3: grow dataset to 500–2000 rows, retrain |
 | **HERMES-LYRICS** | Full song generation (brief → finalLyrics) | 💤 Dataset pipeline ready, never trained | Phase 4 |
