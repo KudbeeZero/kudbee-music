@@ -1,7 +1,7 @@
 'use client';
 
 import styles from './tde.module.css';
-import { familyTrainingProgress, GATE_STAGES, CONFIRM_RUNS } from '@/lib/hermes/modelFamily';
+import { familyTrainingProgress, GATE_STAGES, CONFIRM_RUNS, budgetPhases, staleModels, BudgetPhase } from '@/lib/hermes/modelFamily';
 
 // TDE Training Progress dashboard — the cockpit's view into how much each KUDBEE
 // model has been trained. Slice 1: gate progress + training volume + eval quality.
@@ -236,6 +236,198 @@ export default function TrainingProgressPanel() {
               </div>
             );
           })}
+        </div>
+      </div>
+
+      {/* Section 4: BUDGET — GPU-hours and $ spent vs cap */}
+      <div className={styles.dashboardSection}>
+        <h3 className={styles.sectionTitle}>Budget Utilization</h3>
+        <p className={styles.sectionNote}>Per-phase GPU hours and USD spent vs caps</p>
+        <div className={styles.budgetGrid}>
+          {budgetPhases()
+            .filter((p: BudgetPhase) => p.gpuHoursCap > 0 || p.usdCap > 0) // Hide zero-cap phases (SIDECAR)
+            .map((phase: BudgetPhase) => {
+                const gpuRatio = phase.gpuHoursCap > 0 ? phase.spentGpuHours / phase.gpuHoursCap : 0;
+                const usdRatio = phase.usdCap > 0 ? phase.spentUsd / phase.usdCap : 0;
+                const gpuStatus = gpuRatio >= 1 ? 'bad' : gpuRatio >= 0.8 ? 'warn' : 'good';
+                const usdStatus = usdRatio >= 1 ? 'bad' : usdRatio >= 0.8 ? 'warn' : 'good';
+                return (
+                  <div key={phase.id} className={styles.budgetPhase}>
+                    <h4 className={styles.phaseTitle}>{phase.id}</h4>
+                    <p className={styles.phaseNote}>{phase.covers}</p>
+
+                    {/* GPU Hours gauge */}
+                    {phase.gpuHoursCap > 0 && (
+                      <div className={styles.budgetLine}>
+                        <span className={styles.budgetLabel}>GPU Hours</span>
+                        <div className={styles.gaugeContainer}>
+                          <svg
+                            width="100%"
+                            height="20"
+                            viewBox="0 0 200 20"
+                            className={styles.budgetGaugeSvg}
+                          >
+                            {/* Background */}
+                            <rect
+                              x="0"
+                              y="4"
+                              width="200"
+                              height="12"
+                              fill="var(--line-strong)"
+                              rx="6"
+                              ry="6"
+                            />
+                            {/* Filled bar */}
+                            <rect
+                              x="0"
+                              y="4"
+                              width={Math.min(200, (gpuRatio * 200))}
+                              height="12"
+                              fill={
+                                gpuStatus === 'bad'
+                                  ? 'var(--bad)'
+                                  : gpuStatus === 'warn'
+                                    ? 'var(--warn)'
+                                    : 'var(--good)'
+                              }
+                              rx="6"
+                              ry="6"
+                            />
+                          </svg>
+                        </div>
+                        <span
+                          className={styles.budgetValue}
+                          style={{
+                            color:
+                              gpuStatus === 'bad'
+                                ? 'var(--bad)'
+                                : gpuStatus === 'warn'
+                                  ? 'var(--warn)'
+                                  : 'var(--good)',
+                          }}
+                        >
+                          {phase.spentGpuHours.toFixed(1)} / {phase.gpuHoursCap}h
+                        </span>
+                      </div>
+                    )}
+
+                    {/* USD gauge */}
+                    {phase.usdCap > 0 && (
+                      <div className={styles.budgetLine}>
+                        <span className={styles.budgetLabel}>USD</span>
+                        <div className={styles.gaugeContainer}>
+                          <svg
+                            width="100%"
+                            height="20"
+                            viewBox="0 0 200 20"
+                            className={styles.budgetGaugeSvg}
+                          >
+                            {/* Background */}
+                            <rect
+                              x="0"
+                              y="4"
+                              width="200"
+                              height="12"
+                              fill="var(--line-strong)"
+                              rx="6"
+                              ry="6"
+                            />
+                            {/* Filled bar */}
+                            <rect
+                              x="0"
+                              y="4"
+                              width={Math.min(200, (usdRatio * 200))}
+                              height="12"
+                              fill={
+                                usdStatus === 'bad'
+                                  ? 'var(--bad)'
+                                  : usdStatus === 'warn'
+                                    ? 'var(--warn)'
+                                    : 'var(--good)'
+                              }
+                              rx="6"
+                              ry="6"
+                            />
+                          </svg>
+                        </div>
+                        <span
+                          className={styles.budgetValue}
+                          style={{
+                            color:
+                              usdStatus === 'bad'
+                                ? 'var(--bad)'
+                                : usdStatus === 'warn'
+                                  ? 'var(--warn)'
+                                  : 'var(--good)',
+                          }}
+                        >
+                          ${phase.spentUsd} / ${phase.usdCap}
+                        </span>
+                      </div>
+                    )}
+                  </div>
+                );
+              })}
+        </div>
+      </div>
+
+      {/* Section 5: ITERATIONS — activity bar per model */}
+      <div className={styles.dashboardSection}>
+        <h3 className={styles.sectionTitle}>Training Activity (Decision Depth)</h3>
+        <p className={styles.sectionNote}>Number of logged decisions per model</p>
+        <div className={styles.iterationsList}>
+          {trainedModels.map((m) => {
+            const maxIterations = Math.max(...trainedModels.map((x) => x.iterations), 1);
+            const ratio = m.iterations / maxIterations;
+            return (
+              <div key={m.id} className={styles.iterationRow}>
+                <span className={styles.iterModelId}>{m.id}</span>
+                <div className={styles.iterationBar}>
+                  <div
+                    className={styles.iterationFill}
+                    style={{
+                      width: `${ratio * 100}%`,
+                      backgroundColor: ratio > 0.6 ? 'var(--good)' : ratio > 0.3 ? 'var(--cyan)' : 'var(--line-strong)',
+                    }}
+                  />
+                </div>
+                <span className={styles.iterationCount}>{m.iterations}</span>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+
+      {/* Section 6: ROSTER — summary stat row */}
+      <div className={styles.dashboardSection}>
+        <h3 className={styles.sectionTitle}>Model Family Roster</h3>
+        <div className={styles.rosterRow}>
+          {(() => {
+            const byStatus: Record<string, number> = {};
+            let served = 0;
+            let totalRows = 0;
+            const staleCount = staleModels('2026-07-07').length; // Use current date
+
+            for (const m of trainedModels) {
+              byStatus[m.status] = (byStatus[m.status] || 0) + 1;
+              if (m.served) served++;
+              if (m.datasetRows) totalRows += m.datasetRows;
+            }
+
+            return [
+              { label: 'Total Models', value: trainedModels.length, icon: '📊' },
+              { label: 'Trained', value: Object.keys(byStatus).length, icon: '✓' },
+              { label: 'Served', value: served, icon: '🚀' },
+              { label: 'Stale', value: staleCount, icon: '⏸️' },
+              { label: 'Total Training Rows', value: totalRows, icon: '📈' },
+            ].map((stat, idx) => (
+              <div key={idx} className={styles.rosterStat}>
+                <span className={styles.rosterIcon}>{stat.icon}</span>
+                <div className={styles.rosterValue}>{stat.value}</div>
+                <div className={styles.rosterLabel}>{stat.label}</div>
+              </div>
+            ));
+          })()}
         </div>
       </div>
 
