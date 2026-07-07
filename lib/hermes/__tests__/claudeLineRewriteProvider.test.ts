@@ -1,4 +1,4 @@
-// Lightning Line Rewrite Provider tests — FULLY OFFLINE. Every test injects a fake
+// Claude Line Rewrite Provider tests — FULLY OFFLINE. Every test injects a fake
 // fetchImpl; global fetch is replaced with a tripwire that throws, so no test in
 // this file can ever make a real network call.
 //
@@ -74,7 +74,7 @@ afterEach(() => {
   else process.env.ANTHROPIC_API_KEY = savedKey;
 });
 
-describe('suggestLightningLineRewrites — Scribe line editor (roadmap 5.5)', () => {
+describe('suggestLineRewrites — Claude Scribe line editor (roadmap 5.5)', () => {
   it('returns 3 alternatives successfully from a well-formed response', async () => {
     const { impl } = fakeFetch(LINE_REWRITE_RESPONSE_BODY);
     const alts = await suggestLineRewrites({ apiKey: 'k', fetchImpl: impl }, lineCtx, 3);
