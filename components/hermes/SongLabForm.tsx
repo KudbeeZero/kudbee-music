@@ -28,6 +28,8 @@ const RHYME_SCHEMES: { value: RhymeSchemeId; label: string }[] = [
   { value: 'ABBA', label: 'ABBA — enclosed' },
   { value: 'AAAA', label: 'AAAA — monorhyme' },
   { value: 'XAXA', label: 'XAXA — ballad meter' },
+  { value: 'AABA', label: 'AABA — pop turn' },
+  { value: 'AXAX', label: 'AXAX — odd-line rhyme' },
 ];
 
 // A new visitor starts with a blank page — no preloaded words. Only neutral

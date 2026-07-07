@@ -11,7 +11,9 @@ import {
   dedupeByOutput,
   type TrainingExample,
 } from '../trainingData';
-import type { SongInputs, SongPackage } from '../types';
+import type { SongInputs, SongPackage, RhymeSchemeId } from '../types';
+import { RHYME_SCHEME_IDS } from '../types';
+import { SCHEME_LAYOUTS } from '../providers/mockLyricsProvider';
 
 const NOW = '2026-01-01T00:00:00Z';
 
@@ -56,10 +58,12 @@ function loadFounderExports(): SongPackage[] {
   return out;
 }
 
-// 10 diverse, wholly original briefs (new coverage, not a re-run of the 5 golden-demo
-// themes) crossed against every pattern pack (brain/patternPacks.json) for structure +
-// rhyme-scheme variety. Fixed inputs + fixed seeds ⇒ byte-identical output every run
-// (Iron Law #1) — this is $0/local generation, no API key, no GPU.
+// 15 diverse, wholly original briefs (expanded from 10) crossed against all 7 real rhyme
+// schemes (RHYME_SCHEME_IDS — AABA + AXAX added as genuinely-distinct layouts) and 4 seeds
+// (expanded from 2) for SCRIBE v2 dataset growth. Fixed inputs + fixed seeds ⇒ byte-identical
+// output every run (Iron Law #1). Every scheme here MUST be a real RhymeSchemeId with a
+// distinct layout — the guard test below enforces it, so no invented/duplicate scheme can
+// silently collapse to the AABB default and inflate the apparent variety.
 const SYNTHETIC_THEMES: SongInputs[] = [
   { title: 'Borrowed Time', theme: 'racing the clock on a dream everyone said give up on', mood: 'urgent, wired, hopeful', genre: 'pop-punk', tempoMin: 150, tempoMax: 160, voice: 'raw, breathless', audience: 'anyone still chasing it', doNotUse: [], references: '', structure: 'hook-first' },
   { title: 'Low Tide', theme: 'the quiet after a breakup where you finally hear yourself think', mood: 'still, aching, clear-headed', genre: 'bedroom pop', tempoMin: 84, tempoMax: 92, voice: 'soft, intimate', audience: 'anyone starting over', doNotUse: [], references: '', structure: 'verse-first' },
@@ -71,17 +75,24 @@ const SYNTHETIC_THEMES: SongInputs[] = [
   { title: 'Gravel Road', theme: 'leaving the small town that made you to become who you actually are', mood: 'bittersweet, brave, dusty', genre: 'country-rap', tempoMin: 90, tempoMax: 98, voice: 'plain, honest', audience: 'anyone leaving home', doNotUse: [], references: '', structure: 'full-song' },
   { title: 'Static Bloom', theme: 'finding beauty and growth inside a genuinely bad year', mood: 'bruised, hopeful, quietly triumphant', genre: 'dream pop', tempoMin: 96, tempoMax: 104, voice: 'airy', audience: 'anyone rebuilding', doNotUse: [], references: '', structure: 'hook-first' },
   { title: 'No Encore', theme: 'walking away from something everyone expects you to keep doing', mood: 'calm, certain, unapologetic', genre: 'alt-pop', tempoMin: 110, tempoMax: 118, voice: 'measured, cool', audience: 'anyone quitting on their own terms', doNotUse: [], references: '', structure: 'radio-edit' },
+  { title: 'Neon Requiem', theme: 'finding meaning in a city that never sleeps', mood: 'hypnotic, electric, introspective', genre: 'synthpop', tempoMin: 120, tempoMax: 130, voice: 'detached, ethereal', audience: 'night owls and city dwellers', doNotUse: [], references: '', structure: 'verse-first' },
+  { title: 'Hands Down', theme: 'surrendering control and discovering you needed to all along', mood: 'vulnerable, relieved, raw', genre: 'indie rock', tempoMin: 100, tempoMax: 110, voice: 'honest, brittle', audience: 'anyone learning to let go', doNotUse: [], references: '', structure: 'short-form' },
+  { title: 'Velvet Rope', theme: 'watching the world you built exclude you', mood: 'bitter, wry, cold', genre: 'dark pop', tempoMin: 85, tempoMax: 95, voice: 'detached, sharp', audience: 'the quietly wronged', doNotUse: [], references: '', structure: 'full-song' },
+  { title: 'Dust and Stars', theme: 'mortality as a gift, not a countdown', mood: 'transcendent, peaceful, vast', genre: 'folk', tempoMin: 70, tempoMax: 80, voice: 'warm, wise', audience: 'anyone facing impermanence', doNotUse: [], references: '', structure: 'verse-first' },
+  { title: 'Concrete Prayer', theme: 'faith in something when faith stopped being easy', mood: 'questioning, hopeful, defiant', genre: 'alternative rock', tempoMin: 95, tempoMax: 105, voice: 'urgent, searching', audience: 'the spiritually restless', doNotUse: [], references: '', structure: 'hook-first' },
 ];
 
-const PATTERN_PACKS: { rhymeScheme: SongInputs['rhymeScheme'] }[] = [
+const PATTERN_PACKS: { rhymeScheme: RhymeSchemeId }[] = [
   { rhymeScheme: 'AABB' },
   { rhymeScheme: 'ABAB' },
   { rhymeScheme: 'ABBA' },
   { rhymeScheme: 'AAAA' },
   { rhymeScheme: 'XAXA' },
+  { rhymeScheme: 'AABA' },
+  { rhymeScheme: 'AXAX' },
 ];
 
-const SEEDS = [1, 2];
+const SEEDS = [1, 2, 3, 4];
 
 async function synthesize(): Promise<SongPackage[]> {
   const pkgs: SongPackage[] = [];
@@ -97,6 +108,38 @@ async function synthesize(): Promise<SongPackage[]> {
   }
   return pkgs;
 }
+
+// The guard that closes the hole a real PR opened: the dataset generator lives in a
+// test file (outside `tsc --noEmit`), so an agent once added rhyme schemes 'XABY'/'AXBX'/
+// 'ABCB' that aren't real RhymeSchemeIds — pipeline.ts silently sanitized them back to the
+// AABB default, inflating the *apparent* scheme variety of the v2 set. These run in CI
+// UNGATED (unlike the generator itself), so an invalid or duplicate scheme fails the build
+// instead of quietly skewing the training data.
+describe('training-data — rhyme-scheme variety is real, not inflated', () => {
+  it('every PATTERN_PACK scheme is a real RhymeSchemeId (none silently collapses to AABB)', () => {
+    for (const { rhymeScheme } of PATTERN_PACKS) {
+      expect(RHYME_SCHEME_IDS, `PATTERN_PACKS scheme "${rhymeScheme}" is not a real RhymeSchemeId`)
+        .toContain(rhymeScheme);
+    }
+  });
+
+  it('every real scheme has a distinct 4-line layout (no two schemes are the same pattern)', () => {
+    // Canonical form: relabel families by first appearance, so 'ABCB' and 'XAXA' (both
+    // [0,1,2,1]) collide here — exactly the redundancy that would fake variety.
+    const canonical = (layout: number[]): string => {
+      const seen = new Map<number, number>();
+      return layout.map((f) => (seen.has(f) ? seen : seen.set(f, seen.size)).get(f)).join('');
+    };
+    const byShape = new Map<string, RhymeSchemeId>();
+    for (const id of RHYME_SCHEME_IDS) {
+      const layout = SCHEME_LAYOUTS[id];
+      expect(layout, `SCHEME_LAYOUTS is missing a 4-line layout for ${id}`).toHaveLength(4);
+      const shape = canonical(layout);
+      expect(byShape.has(shape), `${id} duplicates the rhyme structure of ${byShape.get(shape)}`).toBe(false);
+      byShape.set(shape, id);
+    }
+  });
+});
 
 describe('training-data extraction (Lightning AI fine-tuning prep)', () => {
   it('extracts a lyrics example with the real brief and finalLyrics', async () => {

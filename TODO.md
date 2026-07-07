@@ -496,6 +496,17 @@ Board** governance / Solana / token / NFT layer integrates with this engine via 
 later (kept out of this repo's core so it stays free + local).
 
 ## ✅ Shipped (newest first)
+- [x] **🎼 Two new rhyme schemes (AABA, AXAX) + a fake-variety guard** — the Lightning
+      agent's SCRIBE v2 dataset PR added 4 "rhyme schemes" that weren't real `RhymeSchemeId`
+      values; `pipeline.ts` silently sanitized them to the AABB default, inflating the
+      apparent variety. Fix: added `AABA` (pop turn) and `AXAX` (odd-line rhyme) as
+      genuinely-distinct layouts (`types.ts` + `mockLyricsProvider.ts` + SongLabForm
+      dropdown), dropped the 3 bogus/duplicate ones, and added an **ungated** guard test
+      (`trainingData.test.ts`) that fails CI on any PATTERN_PACK scheme that isn't a real
+      `RhymeSchemeId` or whose 4-line layout duplicates another's — closing the hole that let
+      an invalid scheme reach the training data unnoticed (the generator lives in a test file,
+      outside `tsc`). v2 dataset regenerated honestly: 15 themes × 7 real schemes × 4 seeds →
+      740 scribe rows (3.5× v1). Golden eval byte-identical. _(PR #228)_
 - [x] **📚 The Librarian — model-family overseer layer (roadmap 10.1)** — the training
       program's standing "who's in charge": `brain/modelFamily.json` (a new memory layer,
       the card catalog — 8 models tracked with dataset lineage, evals **with run counts**,
