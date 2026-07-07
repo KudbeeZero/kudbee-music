@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react';
 import { ENGINE_UNITS } from '@/lib/hermes/engines';
 import { getClaudeKey, setClaudeKey, clearClaudeKey, isClaudeEngineActive, setClaudeEngineActive } from '@/lib/hermes/claudeKey';
+import { getLightningEndpoint, setLightningEndpoint, getLightningApiKey, setLightningApiKey, clearLightningConfig, lightningConfigured } from '@/lib/hermes/lightningKey';
 import { testClaudeKey, type ClaudeKeyTestResult } from '@/lib/hermes/providers/claudeLyricsProvider';
 import styles from './hermes.module.css';
 
@@ -13,54 +14,78 @@ import styles from './hermes.module.css';
 export default function Rack() {
   // Read from localStorage after mount only — server-rendered HTML has no
   // localStorage, so this starts "locked" and hydrates to the real state.
-  const [hasKey, setHasKey] = useState(false);
-  const [active, setActive] = useState(false);
-  const [keyInput, setKeyInput] = useState('');
-  const [editing, setEditing] = useState(false);
-  const [testing, setTesting] = useState(false);
-  const [testResult, setTestResult] = useState<ClaudeKeyTestResult | null>(null);
+  const [hasClaudeKey, setHasClaudeKey] = useState(false);
+  const [claudeActive, setClaudeActive] = useState(false);
+  const [claudeKeyInput, setClaudeKeyInput] = useState('');
+  const [claudeEditing, setClaudeEditing] = useState(false);
+  const [claudeTesting, setClaudeTesting] = useState(false);
+  const [claudeTestResult, setClaudeTestResult] = useState<ClaudeKeyTestResult | null>(null);
+
+  const [hasLightningConfig, setHasLightningConfig] = useState(false);
+  const [lightningEndpointInput, setLightningEndpointInput] = useState('');
+  const [lightningKeyInput, setLightningKeyInput] = useState('');
+  const [lightningEditing, setLightningEditing] = useState(false);
 
   useEffect(() => {
-    setHasKey(!!getClaudeKey());
-    setActive(isClaudeEngineActive());
+    setHasClaudeKey(!!getClaudeKey());
+    setClaudeActive(isClaudeEngineActive());
+    setHasLightningConfig(lightningConfigured());
   }, []);
 
-  function unlock() {
-    const trimmed = keyInput.trim();
+  function unlockClaude() {
+    const trimmed = claudeKeyInput.trim();
     if (!trimmed) return;
     setClaudeKey(trimmed);
     setClaudeEngineActive(true);
-    setHasKey(true);
-    setActive(true);
-    setKeyInput('');
-    setEditing(false);
+    setHasClaudeKey(true);
+    setClaudeActive(true);
+    setClaudeKeyInput('');
+    setClaudeEditing(false);
   }
 
-  function toggleActive() {
-    const next = !active;
+  function toggleClaudeActive() {
+    const next = !claudeActive;
     setClaudeEngineActive(next);
-    setActive(next);
+    setClaudeActive(next);
   }
 
-  function forget() {
+  function forgetClaude() {
     clearClaudeKey();
-    setHasKey(false);
-    setActive(false);
-    setEditing(false);
-    setTestResult(null);
+    setHasClaudeKey(false);
+    setClaudeActive(false);
+    setClaudeEditing(false);
+    setClaudeTestResult(null);
+  }
+
+  function unlockLightning() {
+    const endpoint = lightningEndpointInput.trim();
+    const key = lightningKeyInput.trim();
+    if (!endpoint || !key) return;
+    setLightningEndpoint(endpoint);
+    setLightningApiKey(key);
+    setHasLightningConfig(true);
+    setLightningEndpointInput('');
+    setLightningKeyInput('');
+    setLightningEditing(false);
+  }
+
+  function forgetLightning() {
+    clearLightningConfig();
+    setHasLightningConfig(false);
+    setLightningEditing(false);
   }
 
   // Explicit, opt-in only — never runs automatically. A real network call from
   // this browser to Anthropic using the visitor's own key, so they can confirm
   // "does my key actually work" before generating a full song with it.
-  async function testKey() {
-    setTesting(true);
-    setTestResult(null);
+  async function testClaudeKeyFn() {
+    setClaudeTesting(true);
+    setClaudeTestResult(null);
     try {
       const result = await testClaudeKey({ apiKey: getClaudeKey() ?? undefined });
-      setTestResult(result);
+      setClaudeTestResult(result);
     } finally {
-      setTesting(false);
+      setClaudeTesting(false);
     }
   }
 
@@ -71,8 +96,11 @@ export default function Rack() {
       <div style={{ marginTop: 8, display: 'flex', flexDirection: 'column', gap: 8 }}>
         {ENGINE_UNITS.map((u) => {
           const isClaude = u.id === 'claude-engine';
-          const locked = isClaude ? !hasKey : u.locked;
-          const isActive = isClaude ? hasKey && active : u.active;
+          const isLightning = u.id === 'lightning-engine';
+
+          const locked = isClaude ? !hasClaudeKey : isLightning ? !hasLightningConfig : u.locked;
+          const isActive = isClaude ? hasClaudeKey && claudeActive : isLightning ? false : u.active;
+
           return (
             <div
               key={u.id}
@@ -93,42 +121,83 @@ export default function Rack() {
                 <div className={styles.hint} style={{ marginTop: 2, color: 'var(--amber)' }}>↑ {u.unlockHint}</div>
               )}
 
-              {isClaude && locked && !editing && (
-                <button className={styles.ghostBtn} style={{ marginTop: 6 }} onClick={() => setEditing(true)}>
+              {/* Claude Engine Key Input */}
+              {isClaude && locked && !claudeEditing && (
+                <button className={styles.ghostBtn} style={{ marginTop: 6 }} onClick={() => setClaudeEditing(true)}>
                   🔑 Enter your Anthropic key
                 </button>
               )}
-              {isClaude && locked && editing && (
+              {isClaude && locked && claudeEditing && (
                 <div style={{ marginTop: 6, display: 'flex', gap: 6 }}>
                   <input
                     type="password"
                     autoComplete="off"
                     className={styles.input}
                     placeholder="sk-ant-..."
-                    value={keyInput}
-                    onChange={(e) => setKeyInput(e.target.value)}
-                    onKeyDown={(e) => { if (e.key === 'Enter') unlock(); }}
+                    value={claudeKeyInput}
+                    onChange={(e) => setClaudeKeyInput(e.target.value)}
+                    onKeyDown={(e) => { if (e.key === 'Enter') unlockClaude(); }}
                     style={{ flex: 1 }}
                   />
-                  <button className={styles.ghostBtn} onClick={unlock} disabled={!keyInput.trim()}>Unlock</button>
-                  <button className={styles.ghostBtn} onClick={() => { setEditing(false); setKeyInput(''); }}>Cancel</button>
+                  <button className={styles.ghostBtn} onClick={unlockClaude} disabled={!claudeKeyInput.trim()}>Unlock</button>
+                  <button className={styles.ghostBtn} onClick={() => { setClaudeEditing(false); setClaudeKeyInput(''); }}>Cancel</button>
                 </div>
               )}
-              {isClaude && hasKey && (
+              {isClaude && hasClaudeKey && (
                 <>
                   <div style={{ marginTop: 6, display: 'flex', gap: 6, flexWrap: 'wrap' }}>
-                    <button className={styles.ghostBtn} onClick={toggleActive}>{active ? 'Turn off' : 'Turn on'}</button>
-                    <button className={styles.ghostBtn} onClick={testKey} disabled={testing} title="Makes one small, real request to api.anthropic.com with your key to confirm it works">
-                      {testing ? 'Testing…' : '🔌 Test key'}
+                    <button className={styles.ghostBtn} onClick={toggleClaudeActive}>{claudeActive ? 'Turn off' : 'Turn on'}</button>
+                    <button className={styles.ghostBtn} onClick={testClaudeKeyFn} disabled={claudeTesting} title="Makes one small, real request to api.anthropic.com with your key to confirm it works">
+                      {claudeTesting ? 'Testing…' : '🔌 Test key'}
                     </button>
-                    <button className={styles.ghostBtn} onClick={forget}>Forget key</button>
+                    <button className={styles.ghostBtn} onClick={forgetClaude}>Forget key</button>
                   </div>
-                  {testResult && (
-                    <div className={styles.hint} style={{ marginTop: 4, color: testResult.ok ? 'var(--good)' : 'var(--bad)' }}>
-                      {testResult.ok ? '✓ Claude API is working — connection confirmed.' : `✗ ${testResult.message}`}
+                  {claudeTestResult && (
+                    <div className={styles.hint} style={{ marginTop: 4, color: claudeTestResult.ok ? 'var(--good)' : 'var(--bad)' }}>
+                      {claudeTestResult.ok ? '✓ Claude API is working — connection confirmed.' : `✗ ${claudeTestResult.message}`}
                     </div>
                   )}
                 </>
+              )}
+
+              {/* Lightning Engine Configuration */}
+              {isLightning && locked && !lightningEditing && (
+                <button className={styles.ghostBtn} style={{ marginTop: 6 }} onClick={() => setLightningEditing(true)}>
+                  ⚡ Enter your Lightning endpoint
+                </button>
+              )}
+              {isLightning && locked && lightningEditing && (
+                <div style={{ marginTop: 6, display: 'flex', flexDirection: 'column', gap: 6 }}>
+                  <input
+                    type="url"
+                    autoComplete="off"
+                    className={styles.input}
+                    placeholder="https://your-lightning-endpoint.com/predict"
+                    value={lightningEndpointInput}
+                    onChange={(e) => setLightningEndpointInput(e.target.value)}
+                    style={{ width: '100%' }}
+                  />
+                  <input
+                    type="password"
+                    autoComplete="off"
+                    className={styles.input}
+                    placeholder="your-api-key"
+                    value={lightningKeyInput}
+                    onChange={(e) => setLightningKeyInput(e.target.value)}
+                    onKeyDown={(e) => { if (e.key === 'Enter') unlockLightning(); }}
+                    style={{ width: '100%' }}
+                  />
+                  <div style={{ display: 'flex', gap: 6 }}>
+                    <button className={styles.ghostBtn} onClick={unlockLightning} disabled={!lightningEndpointInput.trim() || !lightningKeyInput.trim()}>Unlock</button>
+                    <button className={styles.ghostBtn} onClick={() => { setLightningEditing(false); setLightningEndpointInput(''); setLightningKeyInput(''); }}>Cancel</button>
+                  </div>
+                </div>
+              )}
+              {isLightning && hasLightningConfig && (
+                <div style={{ marginTop: 6, display: 'flex', gap: 6, flexWrap: 'wrap' }}>
+                  <button className={styles.ghostBtn} onClick={forgetLightning}>Disconnect endpoint</button>
+                  <span className={styles.hint} style={{ marginTop: 0 }}>🟢 Lightning endpoint configured</span>
+                </div>
               )}
             </div>
           );

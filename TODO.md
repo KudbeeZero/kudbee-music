@@ -37,7 +37,7 @@ with a songwriting brain that learns them over time.
 ## 🚀 $1M Trajectory — Five-Phase Build Plan
 
 **Phase 1: Authentication (Email/password, session carryover)** — Foundational layer for user accounts.
-- [ ] Email/password sign-up + sign-in (PBKDF2, no external deps) — in progress on `claude/auth-phase-1`
+- [x] Email/password sign-up + sign-in (PBKDF2, no external deps) — shipped in #197
 
 **Phase 2: Creator Marketplace — Revenue Foundation ($18/mo–$45/mo tiers + plugin ecosystem)**
 

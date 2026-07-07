@@ -1206,6 +1206,9 @@ A second-opinion review flagged real risks worth acting on (truth-first):
   branch-per-change + `brain/branches.json` ledger + CI gates already do; not a new pattern
   to build. No action item, captured so it isn't re-researched later.
 
+- 🔨 **Duplicate Lightning provider exports (tech debt)** — `lightningLineRewriteProvider.ts` and `lightningLyricsProvider.ts` both export `buildLightningLineRewritePrompt` and `parseLightningLineRewrites` (exact duplicate implementations). When refactoring the Lightning provider layer (likely as part of a broader provider consolidation), extract these to a shared `lightningProviderUtils.ts` and have both import from there. No behavioral impact — just DRY cleanup.
+- 💭 **Playwright browser availability (environment setup)** — `node scripts/mobile-matrix.mjs` fails with "Executable doesn't exist at /home/zeus/.cache/ms-playwright/..." CLAUDE.md says browsers are preinstalled at `/opt/pw-browsers`, but that path doesn't exist in this environment. Not a code blocker (all web/node/build tests pass) — investigate/resolve when it halts a session.
+
 ## ✅ Captured → shipped
 - ✅ **Nervous system + short-term/long-term memory** — `brain map` (regions + nerves,
   `lib/hermes/brainMap.ts`), a signal bus (`lib/hermes/nervousSystem.ts`), and decaying
