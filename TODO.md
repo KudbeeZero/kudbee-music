@@ -496,6 +496,20 @@ Board** governance / Solana / token / NFT layer integrates with this engine via 
 later (kept out of this repo's core so it stays free + local).
 
 ## ✅ Shipped (newest first)
+- [x] **📜 The Awakening — Council onboarding + Lego unlock architecture roadmap (roadmap 11.1)** —
+      planning only, no feature code yet. `docs/awakening-onboarding-roadmap.md`: a 12-system
+      verified audit found Story Mode's `CHAPTERS`+`badges.ts` is half of this exact spec already
+      (IDEAS.md names the onboarding surface as still-open), `PluginMarketplace.tsx` is fully
+      built but never imported anywhere, `agentLifecycle.ts` has zero UI, `GuidedTour` was meant
+      to cover onboarding and shipped scoped to one editor, and the Rack's Lightning-slot unlock
+      is dead code (only Claude's works). 5 features × 5 sub-items: a shared `Brick` contract
+      generalizing `StoryProgress`+`hasFeature()` into one unlock system every plugin/Council-voice
+      /engine-slot snaps into (the "Lego" architecture, explicit founder requirement); the actual
+      Awakening sequence (scripted `BrainScan` boot, a 2-3-seat mini-Council via the existing
+      `CouncilVoice` interface, `LyricLab`'s step-wizard shell reused, landing in the existing
+      Chapter-1 "First Spark"); wiring up the orphaned built-but-unused systems; ongoing unlock
+      content; and a recommended feature-flagged MVP button as the actual first PR. Awaiting
+      founder direction on which feature to build first. _(this PR)_
 - [x] **⚙️ Living-state automation — SessionStart + Stop hooks (roadmap 10.8)** — the
       living-state-sync discipline was instruction-only (relied on the agent remembering);
       now `.claude/settings.json` carries two hooks the harness runs mechanically every

@@ -233,6 +233,22 @@ A second-opinion review flagged real risks worth acting on (truth-first):
   disclaimer in the README + Uniqueness panel. _(#37)_
 
 ## 🌱 Fresh captures
+- 🔨 **The Awakening — Council-driven onboarding + a modular ("Lego") unlock architecture**
+  *(founder, 2026-07-07)* — "the brain having a really cool interactive startup where it
+  asks a series of questions... taking me into a council that doesn't have everything in
+  it... things should be able to unlock... this all has to tie in to a [modular/"Lego"]
+  system in regards to the data." Designed and captured as a full roadmap this session —
+  see `docs/awakening-onboarding-roadmap.md` (roadmap phase 11) rather than duplicating the
+  design here. Key reframe: this completes the still-open third piece of the 2026-07-03
+  "Becoming You" onboarding idea above, not a new feature. A 12-system codebase audit
+  grounded every recommendation (Council's `CouncilVoice` seam, `LyricLab`'s step-wizard,
+  `BrainScan`'s boot animation, the Rack's unlock pattern, Story Mode's `CHAPTERS`) and
+  surfaced that `PluginMarketplace.tsx` and `agentLifecycle.ts` are fully built but
+  completely unwired into the app — real prerequisite work, not assumptions. The "Lego"
+  requirement became a dedicated architecture feature: a shared `Brick` contract every
+  plugin/Council-voice/engine-slot/onboarding-module implements, so nothing new invents its
+  own gating logic. Recommended first PR (not yet built, awaiting founder go-ahead): a
+  feature-flagged testable button — the smallest slice that proves the mechanism end to end.
 - 🔨 **Free-CPU stand-in endpoint for Scribe — decouple wiring from the GPU debugging**
   *(founder, 2026-07-07)* — while SCRIBE-14B's GPU loading issue gets debugged, stand up a
   genuinely small instruct model (Qwen2.5-1.5B-Instruct class, NOT MiniMax — too large/MoE
@@ -983,8 +999,13 @@ A second-opinion review flagged real risks worth acting on (truth-first):
   retroactively detected from vault data the way the other badges are; would
   need new tracking (e.g. a flag recorded at save time), which is exactly
   the "don't invent new tracking yet" line this pass was scoped to respect.
-  Still open from the fuller vision: more chapters, the onboarding-surface
-  walkthrough, Runway moments — all bigger, separately-scoped work.
+  Still open from the fuller vision: more chapters, Runway moments — separately-scoped
+  work. **The onboarding-surface walkthrough now has a full roadmap** (2026-07-07):
+  see `docs/awakening-onboarding-roadmap.md` — a Council-driven, animated first-run
+  onboarding (reusing `CouncilVoice`, `LyricLab`'s step-wizard shell, a scripted
+  `BrainScan` boot) that lands the visitor formally in this exact `CHAPTERS` system,
+  plus a shared modular unlock architecture ("Lego" bricks) tying plugins/Council
+  voices/engine slots together. 5 features × 5 sub-items, queued as roadmap phase 11.
 - 🔨 **Agent personality plug-ins** *(founder idea, 2026-07-03 — "some sort of
   personality feature... some sort of plug-in people could select for each
   agent")* — related to but distinct from the Council-voice-registry above:
@@ -1292,7 +1313,9 @@ A second-opinion review flagged real risks worth acting on (truth-first):
   branch-per-change + `brain/branches.json` ledger + CI gates already do; not a new pattern
   to build. No action item, captured so it isn't re-researched later.
 
-- 🔨 **Duplicate Lightning provider exports (tech debt)** — `lightningLineRewriteProvider.ts` and `lightningLyricsProvider.ts` both export `buildLightningLineRewritePrompt` and `parseLightningLineRewrites` (exact duplicate implementations). When refactoring the Lightning provider layer (likely as part of a broader provider consolidation), extract these to a shared `lightningProviderUtils.ts` and have both import from there. No behavioral impact — just DRY cleanup.
+- 🔨 **Duplicate Lightning provider exports** — superseded by the more precise, verified
+  finding above (`lightningLineRewriteProvider.ts` is dead code, not just a duplicate — see
+  "Delete the dead lightningLineRewriteProvider.ts" entry).
 - 💭 **Playwright browser availability (environment setup)** — `node scripts/mobile-matrix.mjs` fails with "Executable doesn't exist at /home/zeus/.cache/ms-playwright/..." CLAUDE.md says browsers are preinstalled at `/opt/pw-browsers`, but that path doesn't exist in this environment. Not a code blocker (all web/node/build tests pass) — investigate/resolve when it halts a session.
 
 ## ✅ Captured → shipped

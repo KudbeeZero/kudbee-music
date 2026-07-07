@@ -32,6 +32,9 @@ entirely from code — no paid software.
   TDE / HERMES Workbench side cockpit (suggest-only, mock-state v1)
 - [Kudbee TDE backend bridge](kudbee-tde-backend-bridge.md) — the permission layer
   required before any TDE panel goes live (the lever the window doesn't have)
+- [The Awakening — onboarding roadmap](awakening-onboarding-roadmap.md) — a Council-driven,
+  animated first-run onboarding + the shared "Lego" unlock architecture underneath it,
+  completing the still-open onboarding-surface arc from Story Mode/badges
 
 ## 🎬 Video Studio
 

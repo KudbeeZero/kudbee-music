@@ -2,7 +2,7 @@
 
 > **Generated from [`brain/roadmap.json`](brain/roadmap.json) — do not hand-edit.** Status lives ONLY in the spine; edit it there, then regenerate with `GEN_DOCS=1 npx vitest run status`. `statusBoard.test.ts` fails CI if this file drifts.
 
-**Scoreboard:** ✅ 94 shipped · 🔨 3 in build · 💤 10 queued — 107 tracked items
+**Scoreboard:** ✅ 95 shipped · 🔨 3 in build · 💤 10 queued — 108 tracked items
 (legend: ✅ shipped · 🔌 scaffold shipped, founder-gated · 🔨 in build · ⏭️ next · 💤 queued · 💭 idea · 🚧 blocked on founder)
 
 ## Tracks
@@ -165,6 +165,12 @@
 | ✅ | **🤝 Cross-agent handoff log — brain/handoffs.json comms channel between the two KUDBEE agents** | `brain/handoffs.json` | — |
 | ✅ | **📊 Training-progress metrics layer — trainingProgress() (the dashboard data source)** | `lib/hermes/modelFamily.ts` | — |
 | ✅ | **⚙️ Living-state automation — SessionStart + Stop hooks in .claude/settings.json** | `.claude/settings.json + docs/agent-autonomy.md` | — |
+
+### Phase 11 — The Awakening — Council onboarding + the Lego unlock architecture — `▰▰▰▰▰▰▰▰▰▰` 1/1
+
+| | Item | Where it lives | PR |
+|---|------|----------------|----|
+| ✅ | **📜 Roadmap doc — docs/awakening-onboarding-roadmap.md** | `docs/awakening-onboarding-roadmap.md` | — |
 
 ### Video studio — `▰▰▰▰▰▱▱▱▱▱` 4/8
 
