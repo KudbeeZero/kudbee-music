@@ -352,6 +352,34 @@
           "status": "shipped",
           "home": "docs/plugin-rack-architecture.md",
           "note": "SHIPPED (this PR). Founder asked for a dedicated agent to map the plugin/Rack/marketplace import + contract system with a security pass behind it and 'the proper adjustments' if issues were found, banked into memory for recall. Code-verified findings: the plugin/tier-gating system (plugins.ts, subscription.ts) is real, tested code but 100% inert — nothing reachable calls hasFeature()/checkMonthlyQuota()/checkVaultQuota()/tierCanAccessPlugin() except PluginMarketplace.tsx, which is never imported by any route (confirmed via repo-wide grep). No code-execution risk anywhere — a 'plugin' is a metadata record, not loadable code. Tier bypass via localStorage is real but by-design for a $0 client-only app with no payment backend yet (matches every other localStorage-gated feature in this repo). Confirmed the Rack's Claude slot is a real functional gate; the Lightning slot (previously dead per 11.1's audit) is now also real and functional as of PR #233. One genuine, mechanically-confirmed defect found and fixed: installPlugin('constructor')/installPlugin('__proto__') bypassed the null-check because FIRST_PARTY_PLUGINS is a plain object literal resolving inherited Object.prototype members — fixed via a lookupPlugin() hasOwnProperty guard mirroring shareLink.ts's existing DANGEROUS-set pattern, with 6 new regression tests in lib/hermes/__tests__/plugins.test.ts (all 36 pass). Not exploitable as real prototype pollution (nothing writes through the returned value) but a real contract violation, now closed. Full map banked in docs/plugin-rack-architecture.md, cross-referenced from this phase's roadmap doc (feeds Feature 1's Brick contract + Feature 3.1/3.3)."
+        },
+        {
+          "id": "11.3",
+          "title": "🔌 Rack back-panel cable-flip view (backlog)",
+          "status": "queued",
+          "home": "components/hermes/Rack.tsx",
+          "note": "QUEUED — founder idea, 2026-07-07 (IDEAS.md fresh captures). The Rack panel flips around (CSS 3D flip) to reveal a back-of-chassis view with SVG bezier patch cables connecting each engine unit — the Reason/ProTools skeuomorphic look. Pure CSS/SVG, no new deps, no audio/DSP work, fits the $0 rule. Not yet scoped or built; a good hermes-ui slice once prioritized."
+        },
+        {
+          "id": "11.4",
+          "title": "🎚️ Real Autotune — pitch detection + correction (backlog)",
+          "status": "queued",
+          "home": "lib/hermes/",
+          "note": "QUEUED — founder idea, 2026-07-07 (IDEAS.md fresh captures). Real pitch-correction (e.g. autocorrelation/YIN for tracking, PSOLA/WSOLA for shifting) via the Web Audio API, client-side to stay $0/no-server. A genuinely new audio-DSP capability class for this repo — nothing here does real-time audio manipulation yet. Adjacent to but bigger than the existing mastering-assistant plugin stub in lib/hermes/plugins.ts (currently metadata-only, no DSP behind it). Deserves its own dedicated scoping pass, not a quick add."
+        },
+        {
+          "id": "11.5",
+          "title": "🎛️ Rack visual overhaul — metal rack-mount look, onboarding, BYOK flow dedup",
+          "status": "shipped",
+          "home": "components/hermes/Rack.tsx",
+          "note": "SHIPPED. Metal rack-mount CSS (.rackChassis/.rackUnit/.rackPower) with rack-ear screw accents and a decorative power-strip fixture; a dismissible first-visit explainer (lib/hermes/rackTour.ts, hermes.rackTourSeen.v1). Extracted the Claude/Lightning unlock prompt->editing->unlock JSX into a shared components/hermes/KeyUnlockRow.tsx used by THREE call sites — Rack's two engine slots plus a second, previously-undiscovered duplicate in YourAgent.tsx's early-access Claude entry point. hermes-ui polish pass fixed a real bug: the engine-unit status chip used the unstyled-for-this-context .chip default (red), now overridden per state (good/cyan/amber) matching YourAgent.tsx's existing pattern. Verified via real-browser walkthroughs, desktop + mobile, zero new console errors."
+        },
+        {
+          "id": "11.6",
+          "title": "🚀 Public \"What's Coming\" feature page — /features",
+          "status": "shipped",
+          "home": "app/features/page.tsx",
+          "note": "SHIPPED. Server-rendered, static-export-compatible page generated live from brain/roadmap.json via lib/hermes/statusBoard.ts's existing tracks()/scoreboard() reader — no second hand-maintained feature list. Shows shipped/building/queued counts + grouped cards, reuses components/landing/landing.module.css's section chrome for brand consistency. Not yet linked from navigation, pending founder review."
         }
       ]
     }

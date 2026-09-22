@@ -2,7 +2,7 @@
 
 > **Generated from [`brain/roadmap.json`](brain/roadmap.json) — do not hand-edit.** Status lives ONLY in the spine; edit it there, then regenerate with `GEN_DOCS=1 npx vitest run status`. `statusBoard.test.ts` fails CI if this file drifts.
 
-**Scoreboard:** ✅ 97 shipped · 🔨 3 in build · 💤 9 queued — 109 tracked items
+**Scoreboard:** ✅ 99 shipped · 🔨 3 in build · 💤 11 queued — 113 tracked items
 (legend: ✅ shipped · 🔌 scaffold shipped, founder-gated · 🔨 in build · ⏭️ next · 💤 queued · 💭 idea · 🚧 blocked on founder)
 
 ## Tracks
@@ -166,12 +166,16 @@
 | ✅ | **📊 Training-progress metrics layer — trainingProgress() (the dashboard data source)** | `lib/hermes/modelFamily.ts` | — |
 | ✅ | **⚙️ Living-state automation — SessionStart + Stop hooks in .claude/settings.json** | `.claude/settings.json + docs/agent-autonomy.md` | — |
 
-### Phase 11 — The Awakening — Council onboarding + the Lego unlock architecture — `▰▰▰▰▰▰▰▰▰▰` 2/2
+### Phase 11 — The Awakening — Council onboarding + the Lego unlock architecture — `▰▰▰▰▰▰▰▱▱▱` 4/6
 
 | | Item | Where it lives | PR |
 |---|------|----------------|----|
 | ✅ | **📜 Roadmap doc — docs/awakening-onboarding-roadmap.md** | `docs/awakening-onboarding-roadmap.md` | — |
 | ✅ | **🔌 Plugin/Rack/Marketplace architecture audit + security fix — banked into memory** | `docs/plugin-rack-architecture.md` | — |
+| 💤 | **🔌 Rack back-panel cable-flip view (backlog)** | `components/hermes/Rack.tsx` | — |
+| 💤 | **🎚️ Real Autotune — pitch detection + correction (backlog)** | `lib/hermes/` | — |
+| ✅ | **🎛️ Rack visual overhaul — metal rack-mount look, onboarding, BYOK flow dedup** | `components/hermes/Rack.tsx` | — |
+| ✅ | **🚀 Public "What's Coming" feature page — /features** | `app/features/page.tsx` | — |
 
 ### Video studio — `▰▰▰▰▰▱▱▱▱▱` 4/8
 
