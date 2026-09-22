@@ -34,7 +34,70 @@ with a songwriting brain that learns them over time.
 
 ---
 
-## 🚀 $1M Trajectory — Five-Phase Build Plan
+## 🚀 $1M Trajectory — reframed around revenue, not features (2026-07-07)
+
+**Reality check:** ~100 features have shipped and the engine + model-training program are
+genuinely ahead of most projects at this stage. But $1M is a **distribution + monetization**
+problem, not a features problem, and right now the app has shipped almost no revenue
+infrastructure and zero go-to-market motion. The math: $1M ARR ÷ 12 = ~$83K MRR. At the
+existing $18–45/mo tiers (blended ARPU ≈ $25), that's **~3,300 paying subscribers**. At a
+realistic 2–5% free→paid conversion, that means **65,000–165,000 people need to actually
+try this.** `LAUNCH.md` has never been executed — that gap, not more engineering, is the
+binding constraint. The phases below are ordered by what actually drives revenue.
+
+**Phase 0 — Revenue plumbing (blocks everything below; nothing is sellable without this)**
+- [ ] **Real payments** — Stripe Checkout + webhook wired to the existing tier system
+  (`subscription.ts` already models Free/Pro/Premium/Enterprise; it has no way to
+  collect money or verify who paid)
+- [ ] **Server-side tier enforcement** — today `hasFeature()`/`checkMonthlyQuota()` are
+  client-only and trivially bypassed via localStorage (documented, by design, for a $0
+  core with no backend yet) — needs a real gate once money is involved
+- [ ] **Finish the 2 remaining Supabase steps** (already scaffolded, see `docs/accounts.md`):
+  create the `brains` table, turn on Google or turn off email-confirm — unblocks real
+  cross-device accounts, which paying users expect
+- [ ] **One pricing page** tied to the tiers that already exist
+
+**Phase 1 — Launch (the actual missing phase everything else assumes already happened)**
+- [ ] **Run the existing `LAUNCH.md` pre-flight checklist** — built, never executed
+- [ ] **Pick ONE wedge to lead with**, not the whole feature list — recommend the
+  originality/craft-DNA angle ("an AI co-writer that learns your voice and never
+  plagiarizes a real song") since it's a real differentiator against Suno/Udio's
+  black-box + copyright-risk positioning, and the Brain Scan visual is a strong
+  demo hook for short-form video
+- [ ] **Ship to one real channel and get the first 100 external users** — Product Hunt,
+  a songwriter/musician community, a Brain-Scan demo video — then watch what they
+  actually do before building anything else
+
+**Phase 2 — Retention (keep the first 100 before chasing the next 10,000)**
+- [ ] **Ship the Awakening onboarding MVP** (fully designed in
+  `docs/awakening-onboarding-roadmap.md`, never built) — first-session activation is
+  where most SaaS loses users
+- [ ] **Email capture + re-engagement** — currently zero email infrastructure exists
+- [ ] Confirm the vault/brain genuinely brings people back on a second visit
+
+**Phase 3 — Monetize what retention data proves people want**
+- [ ] Once real usage data exists, double down pricing/packaging on whichever feature
+  people actually use (candidates already built: SCRIBE AI rewrites, stem export,
+  unlimited generations) rather than the full 8-plugin catalog
+- [ ] **Stem export + multi-track downloads** — a concrete deliverable people pay for
+- [ ] Usage limits actually enforced server-side per Stripe tier (needs Phase 0)
+
+**Phase 4 — Growth loop (compounding, not paid ads)**
+- [ ] **Public shareable song pages** — the share-card/PNG infra already exists; make a
+  shared song a public page with a "made with HERMES" link back (today share cards are
+  downloads, not a public growth surface)
+- [ ] **Discord community** (already queued in the ecosystem backlog)
+- [ ] Referral incentive (free month for referring a paying friend)
+
+**Phase 5 — Scale to the $1M crossing point**
+- [ ] Real MRR/conversion/churn dashboard (impossible without Phase 0's backend)
+- [ ] Iterate pricing off real cohort data
+- [ ] At current tier pricing, ~3,300 paying subscribers = $1M ARR — that's the number
+  to hold in your head, not a feature count
+
+**Original five-phase build plan (superseded in ordering by the reframe above — Phase 1
+auth + Phase 2A–2D1 below are genuinely shipped, valuable work; Phases 3–5 below are
+folded into the reframed Phase 3 above, sequenced *after* proof people will pay):**
 
 **Phase 1: Authentication (Email/password, session carryover)** — Foundational layer for user accounts.
 - [x] Email/password sign-up + sign-in (PBKDF2, no external deps) — shipped in #197 (`lib/hermes/auth.ts` + `EmailAuth.tsx`, 21 tests)

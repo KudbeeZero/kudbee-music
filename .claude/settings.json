@@ -1,5 +1,5 @@
 {
-  "$comment": "Project permissions for the KUDBEE/HERMES training loop. Goal: the model-training agents (this repo + the Lightning GPU agent) run the safe, repeated commands WITHOUT stopping to ask, while the genuinely dangerous ones stay gated. This is the opt-in-per-command discipline from CLAUDE.md's security section made mechanical — NOT a blanket bypass. `deny` always wins over `allow`. Docs: docs/agent-autonomy.md.",
+  "$comment": "Project permissions for the KUDBEE/HERMES training loop. Goal: the model-training agents (this repo + the Lightning GPU agent) run the safe, repeated commands WITHOUT stopping to ask, while the genuinely dangerous ones stay gated. This is the opt-in-per-command discipline from CLAUDE.md's security section made mechanical — NOT a blanket bypass. `deny` always wins over `allow`. Docs: docs/agent-autonomy.md. VERIFICATION DISCIPLINE (2026-07-07): CLI commands for external tools (litgpt, Lightning Studio) are validated via /test-command skill before shipping. Handoffs use /handoff skill and include explicit verification checklists. See CLAUDE.md 'Command generation' and 'Agent handoff completion' sections.",
   "permissions": {
     "defaultMode": "acceptEdits",
     "allow": [
